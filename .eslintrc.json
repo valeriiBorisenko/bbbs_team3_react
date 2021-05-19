@@ -28,6 +28,8 @@
             "exports": "never",
             "functions": "never"
         }],
-        "linebreak-style": "off"
+        "linebreak-style": "off",
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off"
     }
 }
