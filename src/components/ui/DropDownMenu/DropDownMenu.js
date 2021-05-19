@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // import { NavLink } from 'react-router-dom';
-import NavItem from './NavItem';
+import NavItem from '../NavItem/NavItem';
 
 function DropDownMenu({ wrapperClasses, textsForLinks }) {
   return (
