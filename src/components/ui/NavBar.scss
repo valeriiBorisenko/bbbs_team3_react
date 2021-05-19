@@ -1,10 +1,10 @@
-@import './base/variables.scss';
-@import './base/mixins.scss';
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
 
-@import './paragraph.scss';
-@import './link.scss';
-@import './search.scss';
-@import './section-title.scss';
+@import '../../styles/paragraph.scss';
+@import '../../styles/link.scss';
+@import '../../styles/search.scss';
+@import '../../styles/section-title.scss';
 
 .menu {
   width: 100%;
@@ -153,15 +153,15 @@
     outline: none;
 
     &_type_search {
-      background-image: url('../ui/assets/search-icon.svg');
+      background-image: url('../../assets/search-icon.svg');
     }
 
     &_type_user {
-      background-image: url('../ui/assets/user-icon.svg');
+      background-image: url('../../assets/user-icon.svg');
     }
 
     &_type_active-user {
-      background-image: url('../ui/assets/user-icon_active.svg');
+      background-image: url('../../assets/user-icon_active.svg');
     }
   }
 

@@ -1,7 +1,7 @@
 import './CardCalendar.scss';
 import PropTypes from 'prop-types';
-import ButtonDots from './ButtonDots';
-import Button from './Button';
+import ButtonDots from '../ButtonDots/ButtonDots';
+import Button from '../Button/Button';
 
 /* TO DO */
 /* нужно будет добавить пропсы с функциями открытия для кнопок */

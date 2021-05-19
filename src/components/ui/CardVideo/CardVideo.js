@@ -1,7 +1,7 @@
 import './CardVideo.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Rubric from './Rubric';
+import Rubric from '../Rubric/Rubric';
 
 function CardVideo({
   imageUrl, title, info

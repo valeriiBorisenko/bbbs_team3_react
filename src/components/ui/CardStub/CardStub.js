@@ -1,5 +1,5 @@
 import './CardStub.scss';
-import logoPath from './assets/calendar_logo.svg';
+import logoPath from '../../../assets/calendar_logo.svg';
 
 function CardStub() {
   return (

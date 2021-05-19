@@ -1,12 +1,12 @@
-@import './base/variables.scss';
-@import './base/mixins.scss';
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
 
 .header {
   padding-top: 40px;
   transition: 0.2s linear;
 
   &_displayed {
-    background-color: #fff;
+    background-color: $white;
     border-radius: 0px 0px 30px 30px;
   }
 }

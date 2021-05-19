@@ -1,6 +1,6 @@
 import './CardPlace.scss';
 import PropTypes from 'prop-types';
-import Rubric from './Rubric';
+import Rubric from '../Rubric/Rubric';
 
 function CardPlace({
   isChosen, color, title, name, imageUrl
