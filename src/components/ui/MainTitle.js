@@ -8,7 +8,7 @@ function MainTitle({ title }) {
 }
 
 MainTitle.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired
 };
 
 export default MainTitle;

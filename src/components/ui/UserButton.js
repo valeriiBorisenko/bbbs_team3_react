@@ -10,12 +10,16 @@ function UserButton({ isAuthorized }) {
       type="button"
       aria-label="Личный кабинет"
       title="Личный кабинет"
-    ></button>
+    />
   );
 }
 
 UserButton.propTypes = {
-  isAuthorized: PropTypes.bool,
+  isAuthorized: PropTypes.bool
+};
+
+UserButton.defaultProps = {
+  isAuthorized: false
 };
 
 export default UserButton;

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import ButtonDots from './ButtonDots';
 import Button from './Button';
 
-/*TO DO*/
-/*нужно будет добавить пропсы с функциями открытия для кнопок*/
-/*Также понять, как лучше сделать закрытие записи - пропс isDisabled*/
+/* TO DO */
+/* нужно будет добавить пропсы с функциями открытия для кнопок */
+/* Также понять, как лучше сделать закрытие записи - пропс isDisabled */
 
 function CardCalendar({
   tag,
@@ -21,15 +21,17 @@ function CardCalendar({
   description,
   isBooked,
   isDisabled,
-  isModal,
+  isModal
 }) {
   return (
-    <article className={`calendar ${isSelected ? 'calendar_selected' : ''}`}>
+    <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">{tag}</p>
           <p className="calendar__weekday">
-            {month} / {weekday}
+            {month}
+            {' / '}
+            {weekday}
           </p>
         </div>
         <div className="calendar__about">
@@ -41,7 +43,9 @@ function CardCalendar({
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
             <p className="calendar__time">
-              {startAt}–{endAt}
+              {startAt}
+              –
+              {endAt}
             </p>
           </li>
           <li className="calendar__info-item">
@@ -52,8 +56,8 @@ function CardCalendar({
           </li>
         </ul>
         {isModal && (
-          <div class="calendar__description">
-            <p class="calendar__desc-paragraph">{description}</p>
+          <div className="calendar__description">
+            <p className="calendar__desc-paragraph">{description}</p>
           </div>
         )}
         <div className="calendar__submit">
@@ -66,8 +70,8 @@ function CardCalendar({
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
-            {(isDisabled && 'Запись закрыта') ||
-              (!isBooked && `Осталось ${remainSeats} мест`)}
+            {(isDisabled && 'Запись закрыта')
+              || (!isBooked && `Осталось ${remainSeats} мест`)}
           </p>
           <ButtonDots />
         </div>
@@ -77,20 +81,25 @@ function CardCalendar({
 }
 
 CardCalendar.propTypes = {
-  tag: PropTypes.string,
-  month: PropTypes.string,
-  weekday: PropTypes.string,
-  title: PropTypes.string,
-  day: PropTypes.string,
-  startAt: PropTypes.string,
-  endAt: PropTypes.string,
-  address: PropTypes.string,
-  contact: PropTypes.string,
-  remainSeats: PropTypes.number,
+  tag: PropTypes.string.isRequired,
+  month: PropTypes.string.isRequired,
+  weekday: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  day: PropTypes.string.isRequired,
+  startAt: PropTypes.string.isRequired,
+  endAt: PropTypes.string.isRequired,
+  address: PropTypes.string.isRequired,
+  contact: PropTypes.string.isRequired,
+  remainSeats: PropTypes.number.isRequired,
   description: PropTypes.string,
-  isBooked: PropTypes.bool,
+  isBooked: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool,
-  isModal: PropTypes.bool,
+  isModal: PropTypes.bool.isRequired
+};
+
+CardCalendar.defaultProps = {
+  isDisabled: false,
+  description: ''
 };
 
 export default CardCalendar;
