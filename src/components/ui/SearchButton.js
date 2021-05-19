@@ -7,7 +7,7 @@ function SearchButton() {
       type="submit"
       aria-label="Поиск"
       title="Поиск"
-    ></button>
+    />
   );
 }
 
