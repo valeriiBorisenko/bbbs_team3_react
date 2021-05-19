@@ -1,10 +1,10 @@
 @import '../../styles/variables.scss';
 @import '../../styles/mixins.scss';
 
-@import '../../styles/paragraph.scss';
-@import '../../styles/link.scss';
-@import '../../styles/search.scss';
-@import '../../styles/section-title.scss';
+@import '../../styles/blocks/paragraph.scss';
+@import '../../styles/blocks/link.scss';
+@import '../../styles/blocks/search.scss';
+@import '../../styles/blocks/section-title.scss';
 
 .menu {
   width: 100%;
