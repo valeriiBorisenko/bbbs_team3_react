@@ -1,7 +1,7 @@
 import './NavBar.scss';
 // import { NavLink } from 'react-router-dom';
-import NavItem from './NavItem';
-import NavItemWithDropdown from './NavItemWithDropdown';
+import NavItem from '../NavItem/NavItem';
+import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 
 function NavBar() {
   return (

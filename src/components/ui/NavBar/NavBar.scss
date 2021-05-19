@@ -1,10 +1,10 @@
-@import '../../styles/variables.scss';
-@import '../../styles/mixins.scss';
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
 
-@import '../../styles/blocks/paragraph.scss';
-@import '../../styles/blocks/link.scss';
-@import '../../styles/blocks/search.scss';
-@import '../../styles/blocks/section-title.scss';
+@import '../../../styles/blocks/paragraph.scss';
+@import '../../../styles/blocks/link.scss';
+@import '../../../styles/blocks/search.scss';
+@import '../../../styles/blocks/section-title.scss';
 
 .menu {
   width: 100%;
@@ -153,15 +153,15 @@
     outline: none;
 
     &_type_search {
-      background-image: url('../../assets/search-icon.svg');
+      background-image: url('../../../assets/search-icon.svg');
     }
 
     &_type_user {
-      background-image: url('../../assets/user-icon.svg');
+      background-image: url('../../../assets/user-icon.svg');
     }
 
     &_type_active-user {
-      background-image: url('../../assets/user-icon_active.svg');
+      background-image: url('../../../assets/user-icon_active.svg');
     }
   }
 

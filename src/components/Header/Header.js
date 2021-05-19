@@ -1,5 +1,5 @@
 import './Header.scss';
-import NavBar from './NavBar';
+import NavBar from '../ui/NavBar/NavBar';
 // import PropTypes from 'prop-types';
 
 function Header() {
