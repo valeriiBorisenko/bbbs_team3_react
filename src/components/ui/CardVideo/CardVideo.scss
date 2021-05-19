@@ -1,6 +1,6 @@
-@import './base/variables.scss';
-@import './base/mixins.scss';
-@import './base/card-pagination.scss';
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+@import '../../../styles/card-pagination.scss';
 
 .card-video {
   position: relative;
@@ -11,7 +11,6 @@
   background-color: $white;
   box-sizing: border-box;
   margin: 0 auto;
-  border: 1px solid red;
 }
 
 .card-video__video {
