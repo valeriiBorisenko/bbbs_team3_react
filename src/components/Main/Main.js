@@ -1,17 +1,17 @@
 import './Main.scss';
-import PropTypes from 'prop-types';
+import { Route, Switch } from 'react-router-dom';
+import MainPage from '../MainPage/MainPage';
 
-function Main({ children }) {
+function Main() {
   return (
-    <main>
-      {children}
+    <main className="main">
+      <Switch>
+        <Route exact path="/">
+          <MainPage />
+        </Route>
+      </Switch>
     </main>
   );
 }
-
-Main.propTypes = {
-  // eslint-disable-next-line react/require-default-props
-  children: PropTypes.node
-};
 
 export default Main;
