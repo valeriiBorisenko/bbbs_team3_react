@@ -1,17 +1,18 @@
 import './CardStub.scss';
+import { Link } from 'react-router-dom';
 import logoPath from '../../../assets/calendar_logo.svg';
 
 function CardStub() {
   return (
     <article className="stub">
       <div className="stub__upper-element">
-        <a href="./index.html" rel="noopener noreferrer">
+        <Link to="/" rel="noopener noreferrer">
           <img
             src={logoPath}
             alt="Логотип Старшие Братья Старшие Сестры России"
             className="stub__logo"
           />
-        </a>
+        </Link>
       </div>
       <div className="stub__content">
         <h2 className="section-title stub__text">
