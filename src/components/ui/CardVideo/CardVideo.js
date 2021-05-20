@@ -2,7 +2,6 @@ import './CardVideo.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Rubric from '../Rubric/Rubric';
-import CardVideoInfo from '../CardVideoInfo/CardVideoInfo';
 
 function CardVideo({
   imageUrl, title, info, link, tags
@@ -25,7 +24,15 @@ function CardVideo({
           </ul>
         </Link>
       </div>
-      <CardVideoInfo title={title} info={info} link={link} />
+      <div className="card-video__video-info">
+        <div className="card-video__title-wrap">
+          <h2 className="section-title card-video__title">{title}</h2>
+          <p className="caption card-video__info">{info}</p>
+        </div>
+        <a href={link} className="card-video__link">
+          смотреть трейлер
+        </a>
+      </div>
     </article>
   );
 }

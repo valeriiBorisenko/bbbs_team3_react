@@ -5,7 +5,7 @@ import CardPlace from '../ui/CardPlace/CardPlace';
 import CardAnnotation from '../ui/CardAnnotation/CardAnnotation';
 import CardArticleBig from '../ui/CardArticleBig/CardArticleBig';
 import CardVideo from '../ui/CardVideo/CardVideo';
-import CardVideoInfo from '../ui/CardVideoInfo/CardVideoInfo';
+import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 /* файл для имитации прихода даты с сервера */
 import MainPageData from '../../utils/constants';
 /*------------------------------------------*/
@@ -75,20 +75,12 @@ function MainPage() {
           className="card-container card-container_type_main-video"
           key={data.video.id}
         >
-          <CardVideoInfo
+          <CardVideoMain
             title={data.video.title}
             info={data.video.info}
             link={data.video.link}
-            isChosen
+            imageUrl={data.video.imageUrl}
           />
-          <div className="video">
-            <Link to="/video" className="video__overlay" />
-            <img
-              src={data.video.imageUrl}
-              alt="Превью видео"
-              className="video__image video__image_main"
-            />
-          </div>
         </article>
       </section>
     </>

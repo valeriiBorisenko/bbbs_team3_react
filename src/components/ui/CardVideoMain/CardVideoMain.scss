@@ -1,6 +1,6 @@
 @import './styles/utils.scss';
 
-.card-video-info {
+.card-video-main {
   box-sizing: border-box;
   padding: 15px 30px;
   text-align: center;
@@ -9,19 +9,16 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  &_main {
-    padding: 30px;
-    border-radius: 30px;
-    background-color: $yellow;
-  }
+  padding: 30px;
+  border-radius: 30px;
+  background-color: $yellow;
 }
 
-.card-video-info__title-wrap {
+.card-video-main__title-wrap {
   text-align: center;
 }
 
-.card-video-info__title {
+.card-video-main__title {
   margin: 0 auto 5px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -34,7 +31,7 @@
   box-orient: vertical;
 }
 
-.card-video-info__info {
+.card-video-main__info {
   margin: 0 auto;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -47,42 +44,74 @@
   box-orient: vertical;
 }
 
-.card-video-info__link {
+.card-video-main__link {
   display: block;
   margin: 0 auto;
   text-decoration: none;
 }
 
+.card-video-main__video {
+  position: relative;
+  border-radius: 30px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card-video-main__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  max-height: 675px;
+}
+
 @include atDesktop1440 {
-  .card-video-info {
+  .card-video-main {
     min-height: 147px;
   }
 }
 
 @include atDesktop1024 {
-  .card-video-info {
-    &_main {
-      border-radius: 0 0 30px 30px;
-      padding: 15px;
-    }
+  .card-video-main {
+    border-radius: 0 0 30px 30px;
+    padding: 15px;
   }
 
-  .card-video-info__video-info {
+  .card-video-main__video-info {
     padding: 15px;
     min-height: 147px;
   }
 
-  .card-video-info__title {
+  .card-video-main__title {
     font-size: 19px;
     line-height: 1.2;
   }
 
-  .card-video-info__info {
+  .card-video-main__info {
     font-size: 12px;
   }
 
-  .card-video-info__link {
+  .card-video-main__link {
     font-size: 12px;
     line-height: 1.4;
+  }
+
+  .card-video-main__video {
+    border-radius: 30px 30px 0 0;
+    grid-row: 1;
+  }
+}
+
+@include atMobile {
+  .card-video-main__video {
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  .card-video-main__image {
+    &_main {
+      min-height: 165px;
+    }
   }
 }
