@@ -1,0 +1,10 @@
+.footer {
+  padding-top: 90px;
+  padding-bottom: 82px;
+  display: grid;
+  grid-template-columns: 500px 300px 200px 156px;
+  grid-template-rows: 135px 130px;
+  justify-content: center;
+  background-color: $darkBlue;
+  font-family: $ptRootUI;
+}
