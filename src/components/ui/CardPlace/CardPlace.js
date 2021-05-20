@@ -1,9 +1,10 @@
 import './CardPlace.scss';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Rubric from '../Rubric/Rubric';
 
 function CardPlace({
-  isChosen, color, title, name, imageUrl
+  isChosen, color, title, name, imageUrl, link
 }) {
   return (
     <div
@@ -13,22 +14,23 @@ function CardPlace({
     >
       <Rubric title="Выбор наставника" />
       <div className="card-place__title-wrap">
-        <a href="./place.html" className="card-place__link-wrap">
+        <Link to="/place" className="card-place__link-wrap">
           <h2 className="section-title card-place__title">{title}</h2>
-        </a>
+        </Link>
         <p className="caption card-place__name">{name}</p>
       </div>
-      <a
-        href="./place.html"
+      <Link
+        to="/place"
         className="card-place__link-wrap card-place__link-wrap_content_article-img"
       >
-        <img
-          src={imageUrl}
-          alt="Сплав на байдарках"
-          className="card-place__image"
-        />
-      </a>
-      <a href="/" className="link card-place__link">
+        <img src={imageUrl} alt={title} className="card-place__image" />
+      </Link>
+      <a
+        href={link}
+        className="link card-place__link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         перейти на сайт
       </a>
     </div>
@@ -40,7 +42,8 @@ CardPlace.propTypes = {
   color: PropTypes.string,
   title: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  imageUrl: PropTypes.string.isRequired
+  imageUrl: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired
 };
 
 CardPlace.defaultProps = {

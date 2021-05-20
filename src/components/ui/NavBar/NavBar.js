@@ -1,16 +1,18 @@
 import './NavBar.scss';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import NavItem from '../NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
 import UserButton from '../UserButton/UserButton';
 
-function NavBar() {
+function NavBar({ isAuthorized, handleUserButtonClick }) {
   return (
     <nav className="menu">
       {/* логотип */}
-      <a href="./index.html" target="_self" className="menu__logo">
+      <Link to="/" target="_self" className="menu__logo">
         наставники.про
-      </a>
+      </Link>
       {/* обычное меню */}
       <div className="menu__lists-wrap menu__lists-wrap_hidden">
         <ul className="menu__list">
@@ -109,11 +111,21 @@ function NavBar() {
           </form>
         </li>
         <li className="menu__button-item">
-          <UserButton isAuthorized={false} />
+          <UserButton isAuthorized={isAuthorized} handleClick={handleUserButtonClick} />
         </li>
       </ul>
     </nav>
   );
 }
+
+NavBar.propTypes = {
+  isAuthorized: PropTypes.bool,
+  handleUserButtonClick: PropTypes.func
+};
+
+NavBar.defaultProps = {
+  isAuthorized: false,
+  handleUserButtonClick: undefined
+};
 
 export default NavBar;

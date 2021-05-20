@@ -8,10 +8,7 @@ import Button from '../Button/Button';
 /* Также понять, как лучше сделать закрытие записи - пропс isDisabled */
 
 function CardCalendar({
-  tag,
-  month,
-  weekday,
-  day,
+  tags,
   startAt,
   endAt,
   title,
@@ -23,29 +20,57 @@ function CardCalendar({
   isDisabled,
   isModal
 }) {
+  const startDay = new Date(startAt);
+  const endDay = new Date(endAt);
+  const months = {
+    0: 'январь',
+    1: 'февраль',
+    2: 'март',
+    3: 'апрель',
+    4: 'май',
+    5: 'июнь',
+    6: 'июль',
+    7: 'август',
+    8: 'сентябрь',
+    9: 'октябрь',
+    10: 'ноябрь',
+    11: 'декабрь'
+  };
+  const weekdays = {
+    1: 'понедельник',
+    2: 'вторник',
+    3: 'среда',
+    4: 'четверг',
+    5: 'пятница',
+    6: 'суббота',
+    7: 'воскресенье'
+  };
   return (
     <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
-          <p className="calendar__type">{tag}</p>
+          <p className="calendar__type">
+            {tags.map((tag, idx) => {
+              if (idx !== tags.length - 1) {
+                return `${tag.name} + `;
+              }
+              return `${tag.name.toLowerCase()}`;
+            })}
+          </p>
           <p className="calendar__weekday">
-            {month}
-            {' / '}
-            {weekday}
+            {`${months[startDay.getMonth()]} / ${weekdays[startDay.getDay()]}`}
           </p>
         </div>
         <div className="calendar__about">
           <h2 className="section-title calendar__title">{title}</h2>
-          <p className="calendar__date">{day}</p>
+          <p className="calendar__date">{startDay.getDate()}</p>
         </div>
       </div>
       <div className="calendar__meetup">
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
             <p className="calendar__time">
-              {startAt}
-              –
-              {endAt}
+              {`${startDay.getHours()}:${startDay.getMinutes()} - ${endDay.getHours()}:${endDay.getMinutes()}`}
             </p>
           </li>
           <li className="calendar__info-item">
@@ -71,7 +96,7 @@ function CardCalendar({
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
-              || (!isBooked && `Осталось ${remainSeats} мест`)}
+            || (!isBooked && `Осталось ${remainSeats} мест`)}
           </p>
           <ButtonDots />
         </div>
@@ -81,11 +106,8 @@ function CardCalendar({
 }
 
 CardCalendar.propTypes = {
-  tag: PropTypes.string.isRequired,
-  month: PropTypes.string.isRequired,
-  weekday: PropTypes.string.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string.isRequired,
-  day: PropTypes.string.isRequired,
   startAt: PropTypes.string.isRequired,
   endAt: PropTypes.string.isRequired,
   address: PropTypes.string.isRequired,

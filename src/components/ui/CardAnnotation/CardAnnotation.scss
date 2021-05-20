@@ -47,6 +47,14 @@
   }
 }
 
+@include atDesktop1199 {
+  .card-annotation__desc {  
+    &_main {
+      margin-top: 0;
+    }
+  }
+}
+
 @include atDesktop1024 {
   .card-annotation {
     padding-right: 7px;
@@ -55,11 +63,5 @@
 
   .card-annotation__caption {
     margin-bottom: 5px;
-  }
-
-  .card-annotation__desc {  
-    &_main {
-      margin-top: 0;
-    }
   }
 }

@@ -1,16 +1,17 @@
 import React from 'react';
 import './CardArticleBig.scss';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 function CardArticleBig({ color, title }) {
   return (
     <article className="card-article" style={{ backgroundColor: color }}>
-      <a href="./articles.html" className="card-article__link-wrap">
+      <Link to="/articles" className="card-article__link-wrap">
         <h3 className="chapter-title card-article__title">{title}</h3>
-      </a>
-      <a href="./articles.html" className="link card-article__link">
+      </Link>
+      <Link to="/articles" className="link card-article__link">
         читать статью
-      </a>
+      </Link>
     </article>
   );
 }

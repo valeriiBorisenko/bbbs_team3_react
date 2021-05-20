@@ -73,14 +73,17 @@
 
 }
 
-@include atDesktop1024 {
+@include atDesktop1199 {
   .card-container {
-
     &_type_main-article {
       grid-template-columns: 1fr;
       grid-template-rows: 1fr 188px;
     }
+  }
+}
 
+@include atDesktop1024 {
+  .card-container {
     &_type_main-video {
       grid-template-columns: 1fr;
       grid-template-rows: 1fr 147px;
