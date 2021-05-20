@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import CardStub from '../ui/CardStub/CardStub';
 import CardPlace from '../ui/CardPlace/CardPlace';
 import CardAnnotation from '../ui/CardAnnotation/CardAnnotation';
+import CardArticleBig from '../ui/CardArticleBig/CardArticleBig';
 /* файл для имитации прихода даты с сервера */
 import MainPageData from '../../utils/constants';
 /*------------------------------------------*/
@@ -46,6 +47,16 @@ function MainPage() {
             description={data['place']['description']}
           />
         </article>
+      </section>
+
+      <section
+        className="main-section page__section"
+        key={data['articles'][0]['id']}
+      >
+        <CardArticleBig
+          color={data['articles'][0]['color']}
+          title={data['articles'][0]['title']}
+        />
       </section>
     </>
   );
