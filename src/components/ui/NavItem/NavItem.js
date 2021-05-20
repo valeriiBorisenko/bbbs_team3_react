@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
+import './NavItem.scss';
 
 function NavItem({
   wrapperClasses, linkClasses, href, text, rel, target

@@ -1,23 +1,22 @@
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import DropDownMenu from '../DropDownMenu/DropDownMenu';
+import './NavItemWithDropdown.scss';
 
-function NavItemWithDropdown({ wrapperClasses, mainText, textsForLinks }) {
+function NavItemWithDropdown({ wrapperClasses, text }) {
   return (
     <li className={wrapperClasses}>
       <NavLink className="menu__link" to="#">
-        {mainText}
+        {text}
       </NavLink>
-      <DropDownMenu wrapperClasses="menu__dropdown-list" textsForLinks={textsForLinks} />
+      <DropDownMenu wrapperClasses="menu__dropdown-list" textsForLinks={['Справочник', 'Видео', 'Статьи', 'Фильмы', 'Книги']} />
     </li>
   );
 }
 
 NavItemWithDropdown.propTypes = {
   wrapperClasses: PropTypes.string.isRequired,
-  mainText: PropTypes.string.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  textsForLinks: PropTypes.array.isRequired
+  text: PropTypes.string.isRequired
 };
 
 export default NavItemWithDropdown;

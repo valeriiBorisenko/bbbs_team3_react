@@ -1,7 +1,8 @@
 import './NavBar.scss';
-// import { NavLink } from 'react-router-dom';
 import NavItem from '../NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
+import SearchButton from '../SearchButton/SearchButton';
+import UserButton from '../UserButton/UserButton';
 
 function NavBar() {
   return (
@@ -20,7 +21,7 @@ function NavBar() {
           {/* Вопросы */}
           <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href="#" text="Вопросы" />
           {/* выпадающее меню  "Читать и смотреть" */}
-          <NavItemWithDropdown wrapperClasses="menu__list-item menu__dropdown-item" mainText="Читать и смотреть" textsForLinks={['Справочник', 'Видео', 'Статьи', 'Фильмы', 'Книги']} />
+          <NavItemWithDropdown wrapperClasses="menu__list-item menu__dropdown-item" text="Читать и смотреть" />
           {/* Права детей */}
           <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href="#" text="Права детей" />
           {/* Истории */}
@@ -48,12 +49,7 @@ function NavBar() {
       <ul className="menu__button-list">
         <li className="menu__button-item">
           <form className="search" name="search-form">
-            <button
-              className="menu__button menu__button_type_search search__button"
-              type="submit"
-              aria-label="Поиск"
-              title="Поиск"
-            />
+            <SearchButton />
             <div className="search__options menu__search-options">
               <input
                 type="text"
@@ -113,12 +109,7 @@ function NavBar() {
           </form>
         </li>
         <li className="menu__button-item">
-          <button
-            className="menu__button menu__button_type_user"
-            type="button"
-            aria-label="Личный кабинет"
-            title="Личный кабинет"
-          />
+          <UserButton isAuthorized={false} />
         </li>
       </ul>
     </nav>
