@@ -1,8 +1,4 @@
-@import '../../../styles/variables.scss';
-@import '../../../styles/mixins.scss';
-@import '../../../styles/blocks/section-title.scss';
-@import '../../../styles/blocks/caption.scss';
-@import '../../../styles/blocks/link.scss';
+@import './styles/utils.scss';
 
 .card-place {
   position: relative;
