@@ -3,6 +3,7 @@ import './App.scss';
 import { BrowserRouter } from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
+import Footer from '../Footer/Footer';
 
 function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -15,6 +16,7 @@ function App() {
       <div className="page">
         <Header isAuthorized={isAuthorized} handleUserButtonClick={handleUserButtonClick} />
         <Main isAuthorized={isAuthorized} />
+        <Footer />
       </div>
     </BrowserRouter>
   );
