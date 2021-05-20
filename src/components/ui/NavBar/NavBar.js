@@ -1,4 +1,5 @@
 import './NavBar.scss';
+import { Link } from 'react-router-dom';
 import NavItem from '../NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
@@ -8,9 +9,9 @@ function NavBar() {
   return (
     <nav className="menu">
       {/* логотип */}
-      <a href="./index.html" target="_self" className="menu__logo">
+      <Link to="/" target="_self" className="menu__logo">
         наставники.про
-      </a>
+      </Link>
       {/* обычное меню */}
       <div className="menu__lists-wrap menu__lists-wrap_hidden">
         <ul className="menu__list">
