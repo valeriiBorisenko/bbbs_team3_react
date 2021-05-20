@@ -1,24 +1,41 @@
 import './MainPage.scss';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import CardStub from '../ui/CardStub/CardStub';
+import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import CardPlace from '../ui/CardPlace/CardPlace';
 import CardAnnotation from '../ui/CardAnnotation/CardAnnotation';
 import CardArticleBig from '../ui/CardArticleBig/CardArticleBig';
 import CardVideo from '../ui/CardVideo/CardVideo';
 import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
-/* файл для имитации прихода даты с сервера */
-import MainPageData from '../../utils/constants';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
+/* файл для имитации прихода даты с сервера */
+import MainPageData from '../../utils/constants';
 /*------------------------------------------*/
 
-function MainPage() {
+function MainPage({ isAuthorized }) {
   const data = MainPageData;
   return (
     <>
       <section className="lead page__section">
         <article className="card-container card-container_type_identical">
-          <CardStub />
+          {isAuthorized ? (
+            <CardCalendar
+              key={data.event.id}
+              tags={data.event.tags}
+              startAt={data.event.startAt}
+              endAt={data.event.endAt}
+              title={data.event.title}
+              address={data.event.address}
+              contact={data.event.contact}
+              remainSeats={data.event.remainSeats}
+              description={data.event.description}
+              isBooked={!data.event.booked}
+            />
+          ) : (
+            <CardStub />
+          )}
           <article className="lead__media" key={data.history.id}>
             <img
               src={data.history.imageUrl}
@@ -115,5 +132,13 @@ function MainPage() {
     </>
   );
 }
+
+MainPage.propTypes = {
+  isAuthorized: PropTypes.bool
+};
+
+MainPage.defaultProps = {
+  isAuthorized: false
+};
 
 export default MainPage;

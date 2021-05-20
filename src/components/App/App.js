@@ -14,7 +14,7 @@ function App() {
     <BrowserRouter>
       <div className="page">
         <Header isAuthorized={isAuthorized} handleUserButtonClick={handleUserButtonClick} />
-        <Main />
+        <Main isAuthorized={isAuthorized} />
       </div>
     </BrowserRouter>
   );
