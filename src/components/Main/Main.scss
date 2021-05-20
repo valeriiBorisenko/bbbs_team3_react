@@ -1,18 +1,20 @@
 @import './styles/utils.scss';
 
 .main {
-  padding-top: 70px;
+  padding-top: 85px;
   padding-bottom: 120px;
 }
 
 @include atDesktop1024 {
   .main {
+    padding-top: 49px;
     padding-bottom: 100px;
   }
 }
 
 @include atMobile {
   .main {
+    padding-top: 29px;
     padding-bottom: 50px;
   }
 }

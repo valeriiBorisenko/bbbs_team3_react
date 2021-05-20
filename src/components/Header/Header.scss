@@ -1,7 +1,7 @@
 @import './styles/utils.scss';
 
 .header {
-  padding-top: 40px;
+  padding-top: 47px;
   transition: 0.2s linear;
 
   &_displayed {
@@ -12,12 +12,12 @@
 
 @include atDesktop1024 {
   .header {
-    padding-top: 30px;
+    padding-top: 44px;
   }
 }
 
 @include atMobile {
   .header {
-    padding-top: 15px;
+    padding-top: 14px;
   }
 }
