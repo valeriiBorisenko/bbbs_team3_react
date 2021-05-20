@@ -1,4 +1,3 @@
-/* eslint-disable dot-notation */
 import './CardVideo.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -18,8 +17,8 @@ function CardVideo({
           />
           <ul className="card-video__rubric-list">
             {tags.map((tag) => (
-              <li key={tag['id']}>
-                <Rubric title={tag['name']} />
+              <li key={tag.id}>
+                <Rubric title={tag.name} />
               </li>
             ))}
           </ul>

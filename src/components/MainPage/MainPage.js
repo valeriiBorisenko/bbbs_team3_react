@@ -1,4 +1,3 @@
-/* eslint-disable dot-notation */
 import './MainPage.scss';
 import { Link } from 'react-router-dom';
 import CardStub from '../ui/CardStub/CardStub';
@@ -17,14 +16,14 @@ function MainPage() {
       <section className="lead page__section">
         <article className="card-container card-container_type_identical">
           <CardStub />
-          <article className="lead__media" key={data['history']['id']}>
+          <article className="lead__media" key={data.history.id}>
             <img
-              src={data['history']['imageUrl']}
-              alt={data['history']['title']}
+              src={data.history.imageUrl}
+              alt={data.history.title}
               className="card__media-img"
             />
             <Link to="/stories" className="lead__link">
-              {data['history']['title']}
+              {data.history.title}
             </Link>
           </article>
         </article>
@@ -33,42 +32,42 @@ function MainPage() {
       <section className="main-section page__section">
         <article
           className="card-container card-container_type_main-article"
-          key={data['place']['id']}
+          key={data.place.id}
         >
           <CardPlace
-            isChosen={data['place']['chosen']}
-            title={data['place']['title']}
-            name={data['place']['name']}
-            imageUrl={data['place']['imageUrl']}
-            link={data['place']['link']}
+            isChosen={data.place.chosen}
+            title={data.place.title}
+            name={data.place.name}
+            imageUrl={data.place.imageUrl}
+            link={data.place.link}
           />
           <CardAnnotation
-            isChosen={data['place']['chosen']}
-            info={data['place']['info']}
-            description={data['place']['description']}
+            isChosen={data.place.chosen}
+            info={data.place.info}
+            description={data.place.description}
           />
         </article>
       </section>
 
       <section
         className="main-section page__section"
-        key={data['articles'][0]['id']}
+        key={data.articles[0].id}
       >
         <CardArticleBig
-          color={data['articles'][0]['color']}
-          title={data['articles'][0]['title']}
+          color={data.articles[0].color}
+          title={data.articles[0].title}
         />
       </section>
 
       <section className="main-section page__section cards-grid cards-grid_content_small-cards">
-        {data['movies'].map((item) => (
+        {data.movies.map((item) => (
           <CardVideo
-            key={item['id']}
-            imageUrl={item['imageUrl']}
-            title={item['title']}
-            info={item['info']}
-            link={item['link']}
-            tags={item['tags']}
+            key={item.id}
+            imageUrl={item.imageUrl}
+            title={item.title}
+            info={item.info}
+            link={item.link}
+            tags={item.tags}
           />
         ))}
       </section>
