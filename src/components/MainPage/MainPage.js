@@ -5,6 +5,7 @@ import CardStub from '../ui/CardStub/CardStub';
 import CardPlace from '../ui/CardPlace/CardPlace';
 import CardAnnotation from '../ui/CardAnnotation/CardAnnotation';
 import CardArticleBig from '../ui/CardArticleBig/CardArticleBig';
+import CardVideo from '../ui/CardVideo/CardVideo';
 /* файл для имитации прихода даты с сервера */
 import MainPageData from '../../utils/constants';
 /*------------------------------------------*/
@@ -57,6 +58,19 @@ function MainPage() {
           color={data['articles'][0]['color']}
           title={data['articles'][0]['title']}
         />
+      </section>
+
+      <section className="main-section page__section cards-grid cards-grid_content_small-cards">
+        {data['movies'].map((item) => (
+          <CardVideo
+            key={item['id']}
+            imageUrl={item['imageUrl']}
+            title={item['title']}
+            info={item['info']}
+            link={item['link']}
+            tags={item['tags']}
+          />
+        ))}
       </section>
     </>
   );
