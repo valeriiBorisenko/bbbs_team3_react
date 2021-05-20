@@ -11,6 +11,7 @@
   justify-content: space-between;
 
   &_main {
+    padding: 30px;
     border-radius: 30px;
     background-color: $yellow;
   }
@@ -62,6 +63,7 @@
   .card-video-info {
     &_main {
       border-radius: 0 0 30px 30px;
+      padding: 15px;
     }
   }
 
