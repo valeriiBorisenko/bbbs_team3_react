@@ -17,6 +17,7 @@
   & .rubric {
     align-self: flex-start;
     background-color: $background;
+    margin-top: 17px;
   }
 }
 
@@ -27,7 +28,6 @@
 
 .card-question__title {
   max-width: 770px;
-  padding-bottom: 17px;
 }
 
 @include atDesktop1400 {
