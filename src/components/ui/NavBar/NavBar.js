@@ -1,11 +1,12 @@
 import './NavBar.scss';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import NavItem from '../NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
 import UserButton from '../UserButton/UserButton';
 
-function NavBar() {
+function NavBar({ isAuthorized, handleUserButtonClick }) {
   return (
     <nav className="menu">
       {/* логотип */}
@@ -110,11 +111,21 @@ function NavBar() {
           </form>
         </li>
         <li className="menu__button-item">
-          <UserButton isAuthorized={false} />
+          <UserButton isAuthorized={isAuthorized} handleClick={handleUserButtonClick} />
         </li>
       </ul>
     </nav>
   );
 }
+
+NavBar.propTypes = {
+  isAuthorized: PropTypes.bool,
+  handleUserButtonClick: PropTypes.func
+};
+
+NavBar.defaultProps = {
+  isAuthorized: false,
+  handleUserButtonClick: undefined
+};
 
 export default NavBar;
