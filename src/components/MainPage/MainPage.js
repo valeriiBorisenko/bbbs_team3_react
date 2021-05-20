@@ -8,6 +8,8 @@ import CardVideo from '../ui/CardVideo/CardVideo';
 import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 /* файл для имитации прихода даты с сервера */
 import MainPageData from '../../utils/constants';
+import Widget from '../ui/Widget/Widget';
+import CardQuestion from '../ui/CardQuestion/CardQuestion';
 /*------------------------------------------*/
 
 function MainPage() {
@@ -30,7 +32,7 @@ function MainPage() {
         </article>
       </section>
 
-      <section className="main-section page__section">
+      <section className="place main-section page__section">
         <article
           className="card-container card-container_type_main-article"
           key={data.place.id}
@@ -50,14 +52,17 @@ function MainPage() {
         </article>
       </section>
 
-      <section className="main-section page__section" key={data.articles[0].id}>
+      <section
+        className="articles main-section page__section"
+        key={data.articles[0].id}
+      >
         <CardArticleBig
           color={data.articles[0].color}
           title={data.articles[0].title}
         />
       </section>
 
-      <section className="main-section page__section cards-grid cards-grid_content_small-cards">
+      <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {data.movies.map((item) => (
           <CardVideo
             key={item.id}
@@ -70,7 +75,7 @@ function MainPage() {
         ))}
       </section>
 
-      <section className="main-section page__section">
+      <section className="video main-section page__section">
         <article
           className="card-container card-container_type_main-video"
           key={data.video.id}
@@ -81,6 +86,20 @@ function MainPage() {
             link={data.video.link}
             imageUrl={data.video.imageUrl}
           />
+        </article>
+      </section>
+
+      <section className="main-questions main-section page__section">
+        <article className="card-container card-container_type_iframe">
+          <Widget
+            title="Facebook"
+            link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook&tabs=timeline&width=630&height=630&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+          />
+          <div className="main-questions__container">
+            {data.questions.map((item) => (
+              <CardQuestion key={item.id} title={item.title} tags={item.tags} />
+            ))}
+          </div>
         </article>
       </section>
     </>
