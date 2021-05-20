@@ -23,8 +23,8 @@ function CardVideo({
       </div>
       <div className="card-video__video-info">
         <div className="card-video__title-wrap">
-          <h2 className="card-video__title">{title}</h2>
-          <p className="card-video__info">
+          <h2 className="section-title card-video__title">{title}</h2>
+          <p className="caption card-video__info">
             {info}
           </p>
         </div>

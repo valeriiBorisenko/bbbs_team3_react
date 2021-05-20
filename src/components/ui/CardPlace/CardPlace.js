@@ -14,9 +14,9 @@ function CardPlace({
       <Rubric title="Выбор наставника" />
       <div className="card-place__title-wrap">
         <a href="./place.html" className="card-place__link-wrap">
-          <h2 className="card-place__title">{title}</h2>
+          <h2 className="section-title card-place__title">{title}</h2>
         </a>
-        <p className="card-place__name">{name}</p>
+        <p className="caption card-place__name">{name}</p>
       </div>
       <a
         href="./place.html"
@@ -28,7 +28,7 @@ function CardPlace({
           className="card-place__image"
         />
       </a>
-      <a href="/" className="card-place__link">
+      <a href="/" className="link card-place__link">
         перейти на сайт
       </a>
     </div>

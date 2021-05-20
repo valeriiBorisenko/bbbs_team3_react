@@ -6,9 +6,9 @@ function CardArticleBig({ color, title }) {
   return (
     <article className="card-article" style={{ backgroundColor: color }}>
       <a href="./articles.html" className="card-article__link-wrap">
-        <h3 className="card-article__title">{title}</h3>
+        <h3 className="chapter-title card-article__title">{title}</h3>
       </a>
-      <a href="./articles.html" className="link card__link card-article__link">
+      <a href="./articles.html" className="link card-article__link">
         читать статью
       </a>
     </article>

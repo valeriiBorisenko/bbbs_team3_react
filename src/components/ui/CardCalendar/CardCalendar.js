@@ -35,7 +35,7 @@ function CardCalendar({
           </p>
         </div>
         <div className="calendar__about">
-          <h2 className="calendar__title">{title}</h2>
+          <h2 className="section-title calendar__title">{title}</h2>
           <p className="calendar__date">{day}</p>
         </div>
       </div>
