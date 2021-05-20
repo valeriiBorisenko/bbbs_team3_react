@@ -102,6 +102,16 @@ function MainPage() {
           </div>
         </article>
       </section>
+
+      <section
+        className="articles main-section page__section"
+        key={data.articles[1].id}
+      >
+        <CardArticleBig
+          color={data.articles[1].color}
+          title={data.articles[1].title}
+        />
+      </section>
     </>
   );
 }
