@@ -13,10 +13,10 @@
   transition: .3s ease;
   
   &_unauthorized {
-    background-image: url('./assets/user-icon.svg');
+    background-image: url('../../../assets/user-icon.svg');
   }
 
   &_authorized {
-    background-image: url('./assets/user-icon_active.svg');
+    background-image: url('../../../assets/user-icon_active.svg');
   }
 }
