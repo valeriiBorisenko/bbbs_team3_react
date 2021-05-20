@@ -20,11 +20,12 @@
   max-height: 76px;
 }
 
-.footer .button {
+.footer__button {
   margin-top: 20px;
   max-width: 169px;
   border-color: $background;
   color: $background;
+  text-decoration: none;
 
   &:hover {
     background-color: transparent;
@@ -182,7 +183,7 @@
     margin-bottom: 40px;
   }
 
-  .footer .button {
+  .footer__button {
     margin-top: 0;
     justify-self: center;
     grid-row: 4/5;
@@ -206,7 +207,7 @@
     font-size: 12px;
   }
 
-  .footer .button {
+  .footer__button {
     font-size: 12px;
   }
 }

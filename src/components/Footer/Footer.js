@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './Footer.scss';
 import footerLogoPath from '../../assets/footer-logo.svg';
-import Button from '../ui/Button/Button';
+// import Button from '../ui/Button/Button';
 import NavItem from '../ui/NavItem/NavItem';
 
 function Footer() {
@@ -10,7 +10,9 @@ function Footer() {
       <Link to="/" className="footer__logo" target="_self">
         <img className="footer__logo-image" src={footerLogoPath} alt="Логотип Старшие Братья Старшие Сестры России" />
       </Link>
-      <Button className="footer__button" title="Помочь деньгами" color="white" isDisabled={false} />
+      {/* <Button className="footer__button"
+      title="Помочь деньгами" color="white" isDisabled={false} /> */}
+      <a className="button footer__button" href="https://www.nastavniki.org/campaign/pomoch-dengami/">Помочь деньгами</a>
       <div className="footer__column footer__column_content_concept">
         <p className="footer__brand">&copy; Старшие Братья Старшие Сестры</p>
         <div className="footer__copyright">
