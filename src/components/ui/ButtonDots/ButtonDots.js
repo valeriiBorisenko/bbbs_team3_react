@@ -1,11 +1,20 @@
 import './ButtonDots.scss';
+import PropTypes from 'prop-types';
 
-function ButtonDots() {
+function ButtonDots({ handleClick }) {
   return (
-    <button className="button-dots" type="button">
+    <button
+      className="button-dots"
+      type="button"
+      onClick={handleClick}
+    >
       &#8226;&#8226;&#8226;
     </button>
   );
 }
+
+ButtonDots.propTypes = {
+  handleClick: PropTypes.func.isRequired
+};
 
 export default ButtonDots;

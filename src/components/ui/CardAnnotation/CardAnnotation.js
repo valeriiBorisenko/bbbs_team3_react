@@ -1,12 +1,11 @@
 import './CardAnnotation.scss';
 import PropTypes from 'prop-types';
 
-// description и info не обязательны, если нужно убрать какой-то элемент
-// вместо description можно передать children со своими стилями
-// isChosen отвечает за то, будет ли компонент рядом с главной карточкой (отличаются отступы)
+// info не обязателен
+// isChosen отвечает за то, будет ли компонент рядом с главной карточкой места (отличаются отступы)
 
 function CardAnnotation({
-  isChosen, info, description, children
+  isChosen, info, description
 }) {
   return (
     <div
@@ -20,13 +19,7 @@ function CardAnnotation({
             info && isChosen ? 'card-annotation__desc_main' : ''
           }`}
         >
-          {description && (
-            <p className="paragraph card-annotation__paragraph">
-              {description}
-            </p>
-          )}
-
-          {children}
+          <p className="paragraph card-annotation__paragraph">{description}</p>
         </div>
       </div>
     </div>
@@ -36,15 +29,13 @@ function CardAnnotation({
 CardAnnotation.propTypes = {
   info: PropTypes.string,
   description: PropTypes.string,
-  isChosen: PropTypes.bool,
-  children: PropTypes.node
+  isChosen: PropTypes.bool
 };
 
 CardAnnotation.defaultProps = {
   info: undefined,
   description: undefined,
-  isChosen: false,
-  children: ''
+  isChosen: false
 };
 
 export default CardAnnotation;
