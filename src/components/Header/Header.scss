@@ -1,8 +1,16 @@
 @import './styles/utils.scss';
 
 .header {
+  position: fixed;
+	width: 100%;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
   padding-top: 47px;
-  transition: 0.2s linear;
+  padding-bottom: 15px;
+  background-color: $background;
+  transition: 0.4s linear;
+  z-index: 10;
 
   &_displayed {
     background-color: $white;
@@ -16,35 +24,12 @@
   }
 }
 
-@include atMobile {
+@include atTabletL {
   .header {
     padding-top: 14px;
   }
 }
 
-// попытка сделать липкое меню
-.header {
-	position: fixed;
-  background-color: #f3f2f2;
-	width: 100%;
-  padding: 40px 75px 15px 75px;
-	transition: all 0.4s linear;
-  box-sizing: border-box;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
-
 .header__on-scroll-up {
-  // position: fixed;
-  // top: 0;
-  // left: 0;
-  padding: 40px 75px 15px 75px;
-  width: 100%;
-  z-index: 10;
-  // padding-top: 40px;
-  // padding-left: 75px;
-  // padding-right: 75px;
-  background-color: #f3f2f2;
   transform: translateY(-100%);
 }
