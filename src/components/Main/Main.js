@@ -2,6 +2,7 @@ import './Main.scss';
 import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MainPage from '../MainPage/MainPage';
+import AboutUs from '../AboutUs/AboutUs';
 
 function Main({ isAuthorized }) {
   return (
@@ -9,6 +10,9 @@ function Main({ isAuthorized }) {
       <Switch>
         <Route exact path="/">
           <MainPage isAuthorized={isAuthorized} />
+        </Route>
+        <Route exact path="/about-us">
+          <AboutUs isAuthorized={isAuthorized} />
         </Route>
       </Switch>
     </main>
