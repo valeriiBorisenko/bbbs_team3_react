@@ -11,10 +11,12 @@
   background-color: $background;
   transition: 0.4s linear;
   z-index: 10;
-
-  &_displayed {
-    background-color: $white;
-    border-radius: 0px 0px 30px 30px;
+  
+  @include atDesktop1380 {
+    &_displayed {
+      background-color: $white;
+      border-radius: 0px 0px 30px 30px;
+    }
   }
 }
 
