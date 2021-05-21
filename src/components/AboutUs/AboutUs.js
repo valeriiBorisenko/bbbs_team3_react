@@ -4,8 +4,8 @@ import TitleH3 from '../ui/TitleH3/TitleH3';
 import Blockquote from '../ui/Blockquote/Blockquote';
 import LogoBlue from '../ui/LogoBlue/LogoBlue';
 import CardFigure from '../ui/CardFigure/CardFigure';
-import CardAnnotation from '../ui/CardAnnotation/CardAnnotation';
 import CardAbout from '../ui/CardAbout/CardAbout';
+import CardAnnotationEmpty from '../ui/CardAnnotation/CardAnnotationEmpty';
 // import { Link } from 'react-router-dom';
 
 //! В НЕКОТОРЫХ МЕСТАХ НАДО ПРАВИТЬ СТИЛИ
@@ -31,7 +31,7 @@ function AboutUs({ isAuthorized }) {
       <div className="about__us">
         <CardFigure title="Об организации" color="yellow" shape="circle" />
         <article className="about__annotation">
-          <CardAnnotation>
+          <CardAnnotationEmpty>
             <p className="paragraph about__paragraph">
               «Старшие Братья Старшие Сестры» — межрегиональная общественная
               организация содействия воспитанию подрастающего поколения. Мы
@@ -52,7 +52,7 @@ function AboutUs({ isAuthorized }) {
               элементарные вещи о жизни, адаптироваться и полноценно участвовать
               в жизни общества.
             </p>
-          </CardAnnotation>
+          </CardAnnotationEmpty>
         </article>
       </div>
 
