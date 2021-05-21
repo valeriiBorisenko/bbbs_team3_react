@@ -39,14 +39,6 @@
   }
 }
 
-.card-annotation__paragraph {
-  margin-bottom: 30px;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
-}
-
 @include atDesktop1199 {
   .card-annotation__desc {  
     &_main {
