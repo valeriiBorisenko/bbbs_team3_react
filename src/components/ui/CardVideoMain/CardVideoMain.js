@@ -14,7 +14,12 @@ function CardVideoMain({
           </Link>
           <p className="caption card-video-main__info">{info}</p>
         </div>
-        <a href={link} className="link card-video-main__link">
+        <a
+          href={link}
+          className="link card-video-main__link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           смотреть видео
         </a>
       </div>
