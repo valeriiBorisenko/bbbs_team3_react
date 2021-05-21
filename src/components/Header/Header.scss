@@ -24,18 +24,21 @@
 
 // попытка сделать липкое меню
 .header {
-	// position: fixed;
+	position: fixed;
   background-color: #f3f2f2;
 	width: 100%;
   padding: 40px 75px 15px 75px;
-	transition: all 0.3s linear;
+	transition: all 0.4s linear;
   box-sizing: border-box;
+  top: 0;
+  left: 0;
+  z-index: 10;
 }
 
 .header__on-scroll-up {
-  position: fixed;
-  top: 0;
-  left: 0;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
   padding: 40px 75px 15px 75px;
   width: 100%;
   z-index: 10;
@@ -43,4 +46,5 @@
   // padding-left: 75px;
   // padding-right: 75px;
   background-color: #f3f2f2;
+  transform: translateY(-100%);
 }

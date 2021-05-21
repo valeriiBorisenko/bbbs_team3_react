@@ -9,9 +9,9 @@ function Header({ isAuthorized, handleUserButtonClick }) {
     const currentScrollPos = window.pageYOffset;
     // если prevScrollpos больше currentScrollPos значит мы скролим наверх уже
     if (prevScrollpos > currentScrollPos) {
-      document.querySelector('.header').classList.add('header__on-scroll-up');
-    } else {
       document.querySelector('.header').classList.remove('header__on-scroll-up');
+    } else {
+      document.querySelector('.header').classList.add('header__on-scroll-up');
     }
 
     if (currentScrollPos === 0) {
