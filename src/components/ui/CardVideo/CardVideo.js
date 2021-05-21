@@ -29,7 +29,12 @@ function CardVideo({
           <h2 className="section-title card-video__title">{title}</h2>
           <p className="caption card-video__info">{info}</p>
         </div>
-        <a href={link} className="card-video__link">
+        <a
+          href={link}
+          className="card-video__link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           смотреть трейлер
         </a>
       </div>
