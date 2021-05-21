@@ -1,0 +1,30 @@
+@import './styles/utils.scss';
+
+.about__card-container {
+  grid-template-rows: 120px minmax(265px, 1fr);
+}
+
+.about__card {
+  padding: 0;
+  justify-content: center;
+  border-radius: 70px;
+}
+
+.about__card-content {
+  margin-bottom: 30px;
+}
+
+.about__card-link {
+  align-self: center;
+}
+
+@include atDesktop1024 {
+  .about__card-container {
+    max-width: 570px;
+    grid-template-rows: 70px 1fr;
+  }
+
+  .about__card-content {
+    margin-bottom: 15px;
+  }
+}

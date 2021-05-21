@@ -31,7 +31,7 @@ function Footer() {
       <div className="footer__column footer__column_content_info">
         <ul className="footer__column-list">
           {/* о проекте */}
-          <NavItem wrapperClasses="footer__column-links" linkClasses="footer__column-link" href="/" text="о проекте" />
+          <NavItem wrapperClasses="footer__column-links" linkClasses="footer__column-link" href="about-us" text="о проекте" />
           {/* каленарь */}
           <NavItem wrapperClasses="footer__column-links" linkClasses="footer__column-link" href="/" text="календарь" />
           {/* куда пойти */}
