@@ -32,6 +32,10 @@
   &_hidden {
     display: none;
   }
+
+  &_type_social {
+    display: none;
+  }
 }
 
 .menu__burger {
@@ -204,6 +208,7 @@
     align-items: flex-start;
 
     &_type_social {
+      display: block;
       padding-right: 17px;
     }
   }
