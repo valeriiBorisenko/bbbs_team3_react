@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function TitleH3({ title, sectionClass }) {
   return (
-    <h1 className={`chapter-title ${sectionClass}`}>{title}</h1>
+    <h3 className={`chapter-title ${sectionClass}`}>{title}</h3>
   );
 }
 

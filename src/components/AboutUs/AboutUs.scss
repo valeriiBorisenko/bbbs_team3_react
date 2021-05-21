@@ -1,119 +1,46 @@
 @import './styles/utils.scss';
 
-.about {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-//блог заголовка
+//блок заголовка
 .about__title {
-  padding-bottom: 50px;
+  margin-bottom: 50px;
   max-width: 1170px;
   text-align: center;
 }
 
 .about__logo {
   width: 357px;
-  object-fit: contain;
+  margin: 0 auto 80px;
 }
 
 // блок круга с текстом
 .about__us {
-  padding: 80px 0;
   display: grid;
   grid-template-columns: 570px 600px;
   grid-template-rows: 570px;
   justify-content: center;
-}
+  margin: 0 auto 80px;
 
-// желткая карточка
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 37px 30px 15px;
-  border-radius: 30px;
-  background-color: #fff;
-  box-sizing: border-box;
-  overflow: hidden;
-
-  // цвета карточек
-  &_color_yellow {
-    background-color: $yellow;
+  & .card-figure {
+    margin: 0 auto;
   }
 
-  &_content_annotation {
-    align-items: flex-start;
-    padding: 30px;
-  }
-
-  &_color_green {
-    background-color: $green;
-  }
-
-  &_color_pink {
-    background-color: $pink;
-  }
-
-  &_color_blue {
-    background-color: $lightBlue;
+  & .card-annotation {
+    height: 100%;
+    padding: 52px 27px;
   }
 }
 
-.about__circle {
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 100%;
-}
+.about__paragraph {
+  margin-bottom: 30px;
 
-.about__caption {
-  padding-top: 50px;
-  padding-right: 25px;
-  padding-bottom: 50px;
-}
-
-.about__main-text {
-  margin-top: 30px;
-
-  &:first-of-type {
-    margin-top: 0;
-  }
-}
-
-// карточка с аннотацией
-.card__content {
-  overflow-y: scroll;
-  scrollbar-width: thin;
-  scrollbar-color: #e8e6e6 transparent;
-  &::-webkit-scrollbar {
-    width: 3px;
-  }
-  &::-webkit-scrollbar-thumb {
-    height: 30px;
-    background-color: #e8e6e6;
-    border-radius: 5px;
-  }
-}
-
-.card__annotation {
-  padding-right: 5px;
-
-  &_position_main-card {
-    margin-top: 95px;
-  }
-
-  &_type_main-article {
-    margin-top: 120px;
+  &:last-of-type {
+    margin-bottom: 0;
   }
 }
 
 //блок цитаты
 .about__quote {
-  margin: 0;
+  margin: 0 auto 80px;
   padding: 60px 0;
   width: 100%;
   text-align: center;
@@ -124,17 +51,16 @@
 .about__quote-text {
   display: inline-block;
   max-width: 1170px;
-  color: #1a1a1a;
+  color: $lightBlack;
 }
 
 // блок карточек
 .about__cards {
-  padding-top: 80px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  column-gap: 30px;
+  margin: 0 auto;
 }
-
 
 @include atDesktop1440 {
   .about__title {
@@ -150,15 +76,14 @@
   .about__us {
     grid-template-columns: 570px;
     grid-template-rows: 358px 373px;
-  }
 
-  .about__circle {
-    width: 370px;
-    justify-self: center;
-  }
+    & .card-figure {
+      width: 370px;
+    }
 
-  .about__caption {
-    padding: 30px 15px;
+    & .card-annotation {
+      padding: 30px 15px;
+    }
   }
 }
 
@@ -166,14 +91,15 @@
 @include atDesktop1024 {
   .about__logo {
     width: 252px;
+    margin-bottom: 50px;
   }
 
   .about__title {
-    padding-bottom: 30px;
+    margin-bottom: 30px;
   }
 
   .about__us {
-    padding: 50px 0;
+    margin-bottom: 50px;
   }
 
   .about__quote {
@@ -184,33 +110,41 @@
     max-width: 770px;
   }
 
+  .about__quote {
+    margin-bottom: 50px;
+  }
+
   .about__cards {
+    max-width: 570px;
     grid-template-columns: 1fr;
-    padding-top: 50px;
+    row-gap: 30px;
   }
 }
 
 @include atTablet {
   .about__us {
-    padding-top: 30px;
     grid-template-columns: 1fr;
   }
 }
 
 @include atMobile {
+  .about-logo {
+    margin-bottom: 30px;
+  }
+
   .about__us {
     grid-template-rows: 280px 1fr;
-  }
 
-  .about__caption {
-    max-height: 688px;
-  }
+    & .card-annotation {
+      max-height: 688px;
+    }
 
-  .about__circle {
-    width: 290px;
+    & .card-figure {
+      width: 290px;
+    }
   }
 
   .about__title {
-    padding-bottom: 20px;
+    margin-bottom: 20px;
   }
 }

@@ -5,17 +5,17 @@ function CardAbout({
   title, text, color, linkText, href
 }) {
   return (
-    <article className="card-container about__card-container">
-      <div className={`card card_color_${color} about__card`}>
+    <article className="card-container card-about">
+      <div className={`card-about__heading card-about__heading_color_${color}`}>
         <h2 className="section-title">{title}</h2>
       </div>
-      <div className="card card_content_annotation">
-        <div className="card__content about__card-content">
-          <div className="card__annotation">
-            <p className="paragraph card__paragraph">{text}</p>
+      <div className="card-about__container">
+        <div className="card-about__content">
+          <div className="card-about__annotation">
+            <p className="paragraph">{text}</p>
           </div>
         </div>
-        <a href={href} target="_blank" className="link card__link about__card-link" rel="noreferrer">{linkText}</a>
+        <a href={href} target="_blank" className="link card-about__card-link" rel="noopener noreferrer">{linkText}</a>
       </div>
     </article>
   );
