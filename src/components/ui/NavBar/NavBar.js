@@ -1,4 +1,5 @@
 import './NavBar.scss';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import NavItem from '../NavItem/NavItem';
@@ -7,6 +8,14 @@ import SearchButton from '../SearchButton/SearchButton';
 import UserButton from '../UserButton/UserButton';
 
 function NavBar({ isAuthorized, handleUserButtonClick }) {
+  // временное решение по открытию бургера
+  function burgerClickHandler() {
+    document.querySelector('.header').classList.toggle('header_displayed');
+    document.querySelector('.menu__burger').classList.toggle('menu__burger_active');
+    document.querySelector('.menu__lists-wrap').classList.toggle('menu__lists-wrap_hidden');
+    document.querySelector('.menu__list_type_social').classList.toggle('menu__list_hidden');
+  }
+
   return (
     <nav className="menu">
       {/* логотип */}
@@ -42,7 +51,7 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
         </ul>
       </div>
 
-      <button className="menu__burger" type="button">
+      <button onClick={burgerClickHandler} className="menu__burger" type="button">
         <span className="menu__burger-line" />
         <span className="menu__burger-line" />
         <span className="menu__burger-line" />
