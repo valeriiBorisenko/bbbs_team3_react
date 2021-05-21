@@ -18,7 +18,14 @@ function AboutUs({ isAuthorized }) {
         sectionClass="about__title"
         title="Наставники.про – цифровая информационная платформа организации «Старшие Братья Старшие Сестры». Созданная для поддержки наставников программы."
       />
-      <LogoBlue sectionClass="about__logo" />
+      <a
+        className="about__logo"
+        href="https://www.nastavniki.org/o-nas/ob-organizaczii/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <LogoBlue />
+      </a>
 
       {/* желтый круг + белая карточка */}
       <div className="about__us">
@@ -78,7 +85,7 @@ function AboutUs({ isAuthorized }) {
           title="Партнерство"
           text="Компании поддерживают нас не только деньгами, но и делами. Мы собрали все возможные способы поддержки и сотрудничества: профессиональная помощь Pro Bono, организационная помощь, корпоративное волонтерство, мастер-классы, лекции, учебные программы."
           linkText="сделать пожертвование"
-          href="/"
+          href="https://www.nastavniki.org/oficzialno/nashi-partneryi/"
           color="green"
         />
       </div>

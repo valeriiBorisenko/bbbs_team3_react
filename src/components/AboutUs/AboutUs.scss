@@ -8,8 +8,10 @@
 }
 
 .about__logo {
-  width: 357px;
+  display: block;
+  max-width: 357px;
   margin: 0 auto 80px;
+  text-decoration: none;
 }
 
 // блок круга с текстом
@@ -19,10 +21,6 @@
   grid-template-rows: 570px;
   justify-content: center;
   margin: 0 auto 80px;
-
-  & .card-figure {
-    margin: 0 auto;
-  }
 
   & .card-annotation {
     height: 100%;
@@ -79,6 +77,7 @@
 
     & .card-figure {
       width: 370px;
+      margin: 0 auto;
     }
 
     & .card-annotation {
@@ -90,7 +89,7 @@
 
 @include atDesktop1024 {
   .about__logo {
-    width: 252px;
+    max-width: 252px;
     margin-bottom: 50px;
   }
 
