@@ -11,7 +11,7 @@ function CardVideoMain({
       <div className="card-video-main">
         <div className="card-video-main__title-wrap">
           <h2 className="section-title card-video-main__title">{title}</h2>
-          <p className="caption card-video-main__info">{info + duration}</p>
+          <p className="caption card-video-main__info">{info}</p>
         </div>
         <button
           href={link}
