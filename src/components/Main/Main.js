@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MainPage from '../MainPage/MainPage';
 import AboutUs from '../AboutUs/AboutUs';
+import Account from '../Account/Account';
 
 function Main({ isAuthorized }) {
   return (
@@ -13,6 +14,9 @@ function Main({ isAuthorized }) {
         </Route>
         <Route exact path="/about-us">
           <AboutUs isAuthorized={isAuthorized} />
+        </Route>
+        <Route path="/account">
+          <Account />
         </Route>
       </Switch>
     </main>

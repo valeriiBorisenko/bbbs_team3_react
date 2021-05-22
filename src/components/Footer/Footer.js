@@ -56,6 +56,8 @@ function Footer() {
           <NavItem wrapperClasses="footer__column-links" linkClasses="footer__column-link" href={{ path: 'https://www.instagram.com/nastavniki_org/' }} text="instagram" rel="noreferrer" />
           {/* youtube */}
           <NavItem wrapperClasses="footer__column-links" linkClasses="footer__column-link" href={{ path: 'https://www.youtube.com/user/Nastavniki/' }} text="youtube" rel="noreferrer" />
+          {/* youtube */}
+          <NavItem wrapperClasses="footer__column-links" linkClasses="footer__column-link" href="/account" text="ЛК (для теста)" />
         </ul>
       </div>
     </footer>

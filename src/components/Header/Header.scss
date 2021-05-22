@@ -6,8 +6,7 @@
   box-sizing: border-box;
   top: 0;
   left: 0;
-  padding-top: 47px;
-  padding-bottom: 15px;
+  padding: 47px 75px 15px;
   background-color: $background;
   transition: 0.4s linear;
   z-index: 10;
@@ -20,15 +19,36 @@
   }
 }
 
+@include atDesktop1440 {
+  .header {
+    padding-left: 135px;
+    padding-right: 135px;
+  }
+}
+
 @include atDesktop1024 {
   .header {
-    padding-top: 44px;
+    padding: 44px 127px 15px;
   }
 }
 
 @include atTabletL {
   .header {
     padding-top: 14px;
+  }
+}
+
+@include atTablet {
+  .header {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+}
+
+@include atMobile {
+  .header {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 
