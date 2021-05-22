@@ -1,20 +1,20 @@
-import './CardVideo.scss';
+import './CardFilm.scss';
 import PropTypes from 'prop-types';
 import Rubric from '../Rubric/Rubric';
 
-function CardVideo({
+function CardFilm({
   imageUrl, title, info, link, tags, handleClick
 }) {
   return (
-    <article className="card-video">
-      <div className="card-video__video">
-        <button className="card-video__button" type="button" onClick={handleClick}>
+    <article className="card-film">
+      <div className="card-film__video">
+        <button className="card-film__button" type="button" onClick={handleClick}>
           <img
             src={`${imageUrl}`}
             alt="Превью видео"
-            className="card-video__preview"
+            className="card-film__preview"
           />
-          <ul className="card-video__rubric-list">
+          <ul className="card-film__rubric-list">
             {tags.map((tag) => (
               <li key={tag.id}>
                 <Rubric title={tag.name} />
@@ -24,14 +24,14 @@ function CardVideo({
         </button>
       </div>
 
-      <div className="card-video__video-info">
-        <div className="card-video__title-wrap">
-          <h2 className="section-title card-video__title">{title}</h2>
-          <p className="caption card-video__info">{info}</p>
+      <div className="card-film__video-info">
+        <div className="card-film__title-wrap">
+          <h2 className="section-title card-film__title">{title}</h2>
+          <p className="caption card-film__info">{info}</p>
         </div>
         <button
           type="button"
-          className="link card-video__button"
+          className="link card-film__button"
           href={link}
           onClick={handleClick}
         >
@@ -42,7 +42,7 @@ function CardVideo({
   );
 }
 
-CardVideo.propTypes = {
+CardFilm.propTypes = {
   imageUrl: PropTypes.string,
   title: PropTypes.string,
   info: PropTypes.string,
@@ -51,7 +51,7 @@ CardVideo.propTypes = {
   handleClick: PropTypes.func
 };
 
-CardVideo.defaultProps = {
+CardFilm.defaultProps = {
   imageUrl: '',
   title: '',
   info: '',
@@ -60,4 +60,4 @@ CardVideo.defaultProps = {
   handleClick: undefined
 };
 
-export default CardVideo;
+export default CardFilm;

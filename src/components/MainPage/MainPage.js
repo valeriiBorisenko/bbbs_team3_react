@@ -6,7 +6,7 @@ import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import CardPlace from '../ui/CardPlace/CardPlace';
 import CardAnnotation from '../ui/CardAnnotation/CardAnnotation';
 import CardArticleBig from '../ui/CardArticleBig/CardArticleBig';
-import CardVideo from '../ui/CardVideo/CardVideo';
+import CardFilm from '../ui/CardFilm/CardFilm';
 import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
@@ -86,7 +86,7 @@ function MainPage({ isAuthorized }) {
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {data.movies.map((item) => (
           <Link to="/films" className="main-section__link card-pagination_page_main" key={item.id}>
-            <CardVideo
+            <CardFilm
               imageUrl={item.imageUrl}
               title={item.title}
               info={item.info}
