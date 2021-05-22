@@ -95,6 +95,11 @@
   .card-video-main {
     min-height: 147px;
   }
+
+  .card-video-main__duration {
+    bottom: 8px;
+    font-size: 25px;
+  }
 }
 
 @include atDesktop1024 {
@@ -123,6 +128,15 @@
   }
 }
 
+@include atTabletL {
+  .card-video-main__duration {
+    bottom: 8px;
+    font-size: 18px;
+    padding: 0 4px;
+  }
+}
+
+
 @include atMobile {
   .card-video-main__video {
     max-width: 450px;
@@ -133,5 +147,11 @@
     &_main {
       min-height: 165px;
     }
+  }
+
+  .card-video-main__duration {
+    bottom: 6px;
+    right: 6px;
+    font-size: 14px;
   }
 }
