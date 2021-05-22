@@ -44,10 +44,17 @@
   box-orient: vertical;
 }
 
-.card-video-main__link {
+.card-video-main__button {
   display: block;
   margin: 0 auto;
-  text-decoration: none;
+  padding: 0;
+  border: none;
+  outline: none;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .card-video-main__video {
@@ -56,6 +63,10 @@
   box-sizing: border-box;
   overflow: hidden;
   background-color: $yellow;
+}
+
+.card-video-main__preview {
+  cursor: pointer;
 }
 
 .card-video-main__image {
@@ -91,11 +102,6 @@
 
   .card-video-main__info {
     font-size: 12px;
-  }
-
-  .card-video-main__link {
-    font-size: 12px;
-    line-height: 1.4;
   }
 
   .card-video-main__video {

@@ -1,14 +1,11 @@
 import './CardQuestion.scss';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Rubric from '../Rubric/Rubric';
 
 function CardQuestion({ title, tags }) {
   return (
     <article className="card-question">
-      <Link to="/questions" className="card-question__link">
-        <h2 className="section-title card-question__title">{title}</h2>
-      </Link>
+      <h2 className="section-title card-question__title">{title}</h2>
       {tags.map((tag) => (
         <Rubric key={tag.id} title={tag.name} />
       ))}
@@ -17,8 +14,13 @@ function CardQuestion({ title, tags }) {
 }
 
 CardQuestion.propTypes = {
-  title: PropTypes.string.isRequired,
-  tags: PropTypes.arrayOf(PropTypes.object).isRequired
+  title: PropTypes.string,
+  tags: PropTypes.arrayOf(PropTypes.object)
+};
+
+CardQuestion.defaultProps = {
+  title: '',
+  tags: []
 };
 
 export default CardQuestion;

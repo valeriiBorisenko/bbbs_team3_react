@@ -8,7 +8,11 @@ function Rubric({ title }) {
 }
 
 Rubric.propTypes = {
-  title: PropTypes.string.isRequired
+  title: PropTypes.string
+};
+
+Rubric.defaultProps = {
+  title: ''
 };
 
 export default Rubric;

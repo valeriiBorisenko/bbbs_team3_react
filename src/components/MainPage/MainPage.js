@@ -60,11 +60,13 @@ function MainPage({ isAuthorized }) {
             name={data.place.name}
             imageUrl={data.place.imageUrl}
             link={data.place.link}
+            color="yellow"
+            mix="card-place_main"
           />
           <CardAnnotation
-            isChosen={data.place.chosen}
             info={data.place.info}
             description={data.place.description}
+            mix="card-annotation_main"
           />
         </article>
       </section>
@@ -73,36 +75,42 @@ function MainPage({ isAuthorized }) {
         className="articles main-section page__section"
         key={data.articles[0].id}
       >
-        <CardArticleBig
-          color={data.articles[0].color}
-          title={data.articles[0].title}
-        />
+        <Link to="/articles" className="main-section__link">
+          <CardArticleBig
+            color={data.articles[0].color}
+            title={data.articles[0].title}
+          />
+        </Link>
       </section>
 
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {data.movies.map((item) => (
-          <CardVideo
-            key={item.id}
-            imageUrl={item.imageUrl}
-            title={item.title}
-            info={item.info}
-            link={item.link}
-            tags={item.tags}
-          />
+          <Link to="/films" className="main-section__link card-pagination_page_main" key={item.id}>
+            <CardVideo
+              imageUrl={item.imageUrl}
+              title={item.title}
+              info={item.info}
+              link={item.link}
+              tags={item.tags}
+            />
+          </Link>
         ))}
       </section>
 
       <section className="video main-section page__section">
-        <article
-          className="card-container card-container_type_main-video"
-          key={data.video.id}
-        >
-          <CardVideoMain
-            title={data.video.title}
-            info={data.video.info}
-            link={data.video.link}
-            imageUrl={data.video.imageUrl}
-          />
+        <article>
+          <Link
+            to="/video"
+            className="card-container card-container_type_main-video"
+            key={data.video.id}
+          >
+            <CardVideoMain
+              title={data.video.title}
+              info={data.video.info}
+              link={data.video.link}
+              imageUrl={data.video.imageUrl}
+            />
+          </Link>
         </article>
       </section>
 
@@ -114,7 +122,13 @@ function MainPage({ isAuthorized }) {
           />
           <div className="main-questions__container">
             {data.questions.map((item) => (
-              <CardQuestion key={item.id} title={item.title} tags={item.tags} />
+              <Link
+                to="/questions"
+                className="main-section__link main-section__link_el_question"
+                key={item.id}
+              >
+                <CardQuestion title={item.title} tags={item.tags} />
+              </Link>
             ))}
           </div>
         </article>
@@ -124,10 +138,12 @@ function MainPage({ isAuthorized }) {
         className="articles main-section page__section"
         key={data.articles[1].id}
       >
-        <CardArticleBig
-          color={data.articles[1].color}
-          title={data.articles[1].title}
-        />
+        <Link to="/articles" className="main-section__link">
+          <CardArticleBig
+            color={data.articles[1].color}
+            title={data.articles[1].title}
+          />
+        </Link>
       </section>
     </>
   );

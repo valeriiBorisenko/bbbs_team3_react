@@ -1,46 +1,57 @@
 import './CardVideoMain.scss';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 function CardVideoMain({
-  title, info, link, imageUrl
+  title, info, link, imageUrl, handleClick
 }) {
   return (
     <>
       <div className="card-video-main">
         <div className="card-video-main__title-wrap">
-          <Link to="/video" className="card-video-main__link">
-            <h2 className="section-title card-video-main__title">{title}</h2>
-          </Link>
+          <h2 className="section-title card-video-main__title">{title}</h2>
           <p className="caption card-video-main__info">{info}</p>
         </div>
-        <a
+        <button
           href={link}
-          className="link card-video-main__link"
-          target="_blank"
-          rel="noopener noreferrer"
+          className="link card-video-main__button"
+          type="button"
+          onClick={handleClick}
         >
           смотреть видео
-        </a>
+        </button>
       </div>
+
       <div className="card-video-main__video">
-        <Link to="/video" className="card-video-main__link">
+        <button
+          className="card-video-main__button"
+          type="button"
+          onClick={handleClick}
+        >
           <img
             src={imageUrl}
             alt="Превью видео"
             className="card-video-main__image"
           />
-        </Link>
+        </button>
       </div>
     </>
   );
 }
 
 CardVideoMain.propTypes = {
-  title: PropTypes.string.isRequired,
-  info: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  imageUrl: PropTypes.string.isRequired
+  title: PropTypes.string,
+  info: PropTypes.string,
+  link: PropTypes.string,
+  imageUrl: PropTypes.string,
+  handleClick: PropTypes.func
+};
+
+CardVideoMain.defaultProps = {
+  title: '',
+  info: '',
+  link: '',
+  imageUrl: '',
+  handleClick: undefined
 };
 
 export default CardVideoMain;
