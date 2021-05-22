@@ -85,7 +85,7 @@ function MainPage({ isAuthorized }) {
 
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {data.movies.map((item) => (
-          <Link to="/films" className="main-section__link" key={item.id}>
+          <Link to="/films" className="main-section__link card-pagination_page_main" key={item.id}>
             <CardVideo
               imageUrl={item.imageUrl}
               title={item.title}

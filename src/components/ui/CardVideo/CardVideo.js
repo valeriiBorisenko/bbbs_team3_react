@@ -6,7 +6,7 @@ function CardVideo({
   imageUrl, title, info, link, tags, handleClick
 }) {
   return (
-    <article className="card-video card-pagination_page_main">
+    <article className="card-video">
       <div className="card-video__video">
         <button className="card-video__button" type="button" onClick={handleClick}>
           <img

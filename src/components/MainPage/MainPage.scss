@@ -13,6 +13,22 @@
   }
 }
 
+@include atDesktop1400 {
+  .main-questions__container .main-section__link {
+    &:nth-last-of-type(-n+1) {
+      display: none;
+    }
+  }
+}
+
+@include atTabletL {
+  .main-questions__container .main-section__link {
+    &:nth-last-of-type(-n+1) {
+      display: flex;
+    }
+  }
+}
+
 .lead__text {
   margin: 40px auto 0;
   max-width: 1170px;

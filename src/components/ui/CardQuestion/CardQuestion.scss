@@ -21,24 +21,8 @@
   margin-bottom: 17px;
 }
 
-@include atDesktop1400 {
-  .main-questions__container .card-question {
-    &:nth-last-of-type(-n+1) {
-      display: none;
-    }
-  }
-}
-
 @include atDesktop1024 {
   .card-question {
     padding: 30px 15px;
-  }
-}
-
-@include atTabletL {
-  .main-questions__container .card-question {
-    &:nth-last-of-type(-n+1) {
-      display: flex;
-    }
   }
 }
