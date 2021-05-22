@@ -1,9 +1,6 @@
 import './CardAnnotation.scss';
 import PropTypes from 'prop-types';
 
-// карточка по типу аннотации с вертикальным скроллом
-// пустая для добавления множественных элементов со своими стилями через пропс children
-
 function CardAnnotationEmpty({ children }) {
   return (
     <div className="card-annotation">
