@@ -10,7 +10,7 @@ function CardAnnotation({
     >
       <div className="card-annotation__content">
 
-        {info && <p className="caption">{info}</p>}
+        {info && <p className="caption card-annotation__info">{info}</p>}
 
         <div className="card-annotation__desc">
           <p className="paragraph card-annotation__paragraph">{description}</p>

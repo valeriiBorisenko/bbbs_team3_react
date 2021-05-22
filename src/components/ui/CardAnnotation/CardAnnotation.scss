@@ -35,14 +35,22 @@
   }
 }
 
+.card-annotation__info {
+  margin-bottom: 5px;
+}
+
 .card-annotation__desc {
   padding-right: 5px;
 }
 
 @include atDesktop1199 {
-  .card-annotation__desc {  
+  .card-annotation {
     &_main {
-      margin-top: 0;
+      padding: 30px 15px;
+  
+      & .card-annotation__desc {
+        margin-top: 0;
+      }
     }
   }
 }
