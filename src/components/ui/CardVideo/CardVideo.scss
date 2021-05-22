@@ -18,11 +18,6 @@
   position: relative;
 }
 
-.card-video__link-wrap {
-  width: 100%;
-  text-decoration: none;
-}
-
 .card-video__preview {
   display: block;
   width: 100%;
@@ -88,16 +83,18 @@
   box-orient: vertical;
 }
 
-.card-video__link {
+.card-video__button {
   display: block;
+  width: 100%;
   margin: 0 auto;
-  font-family: $protoGrotesk;
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 1.3;
-  text-decoration: none;
-  letter-spacing: 0.2px;
-  color: $blue;
+  padding: 0;
+  border: none;
+  outline: none;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 @include atDesktop1440 {
@@ -119,11 +116,6 @@
 
   .card-video__info {
     font-size: 12px;
-  }
-
-  .card-video__link {
-    font-size: 12px;
-    line-height: 1.4;
   }
 }
 

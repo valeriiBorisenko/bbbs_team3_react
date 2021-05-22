@@ -1,15 +1,8 @@
 import './Button.scss';
 import PropTypes from 'prop-types';
 
-// кнопка находится в 2-х состояниях: обычное и по типу чекбокса (пропс isSelected)
-// для обычной кнопки пропсы isSelected и titleSelected не передаются
-// пропс titleSelected отвечает за изменение текста выделенной кнопки
-// если не нужно делать выделение для кнопки, то пропс titleSelected не передаётся,
-// на его место встает пропс title
-// по умолчанию кнопка активна, на неё можно кликнуть
-
 function Button({
-  title, titleSelected, color, isSelected, isDisabled, onClick
+  title, titleSelected, color, isSelected, isDisabled, handleClick
 }) {
   return (
     <button
@@ -18,7 +11,7 @@ function Button({
       }`}
       type="button"
       disabled={isDisabled}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {!isSelected ? title : (titleSelected || title)}
     </button>
@@ -26,18 +19,21 @@ function Button({
 }
 
 Button.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   titleSelected: PropTypes.string,
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   isSelected: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  onClick: PropTypes.func.isRequired
+  handleClick: PropTypes.func
 };
 
 Button.defaultProps = {
+  title: '',
+  color: 'blue',
   titleSelected: undefined,
   isSelected: false,
-  isDisabled: false
+  isDisabled: false,
+  handleClick: undefined
 };
 
 export default Button;

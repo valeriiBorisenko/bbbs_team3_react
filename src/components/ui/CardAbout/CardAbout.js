@@ -22,11 +22,19 @@ function CardAbout({
 }
 
 CardAbout.propTypes = {
-  title: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
-  linkText: PropTypes.string.isRequired,
-  href: PropTypes.string.isRequired
+  title: PropTypes.string,
+  color: PropTypes.string,
+  text: PropTypes.string,
+  linkText: PropTypes.string,
+  href: PropTypes.string
+};
+
+CardAbout.defaultProps = {
+  title: '',
+  color: '',
+  text: '',
+  linkText: '',
+  href: '#'
 };
 
 export default CardAbout;

@@ -17,8 +17,13 @@ function Widget({ link, title }) {
 }
 
 Widget.propTypes = {
-  link: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired
+  link: PropTypes.string,
+  title: PropTypes.string
+};
+
+Widget.defaultProps = {
+  link: '#',
+  title: ''
 };
 
 export default Widget;

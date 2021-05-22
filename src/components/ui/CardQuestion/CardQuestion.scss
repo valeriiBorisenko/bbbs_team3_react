@@ -1,6 +1,7 @@
 @import './styles/utils.scss';
 
 .card-question {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -8,21 +9,11 @@
   padding: 50px 50px 47px;
   background-color: $white;
   border-radius: 30px;
-  margin-bottom: 30px;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
 
   & .rubric {
     align-self: flex-start;
     background-color: $background;
   }
-}
-
-.card-question__link {
-  display: block;
-  text-decoration: none;
 }
 
 .card-question__title {

@@ -1,15 +1,14 @@
 import './CardVideo.scss';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Rubric from '../Rubric/Rubric';
 
 function CardVideo({
-  imageUrl, title, info, link, tags
+  imageUrl, title, info, link, tags, handleClick
 }) {
   return (
     <article className="card-video card-pagination_page_main">
       <div className="card-video__video">
-        <Link to="/films" className="card-video__link-wrap">
+        <button className="card-video__button" type="button" onClick={handleClick}>
           <img
             src={`${imageUrl}`}
             alt="Превью видео"
@@ -22,36 +21,43 @@ function CardVideo({
               </li>
             ))}
           </ul>
-        </Link>
+        </button>
       </div>
+
       <div className="card-video__video-info">
         <div className="card-video__title-wrap">
           <h2 className="section-title card-video__title">{title}</h2>
           <p className="caption card-video__info">{info}</p>
         </div>
-        <a
+        <button
+          type="button"
+          className="link card-video__button"
           href={link}
-          className="card-video__link"
-          target="_blank"
-          rel="noopener noreferrer"
+          onClick={handleClick}
         >
           смотреть трейлер
-        </a>
+        </button>
       </div>
     </article>
   );
 }
 
 CardVideo.propTypes = {
-  imageUrl: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  info: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  tags: PropTypes.arrayOf(PropTypes.object)
+  imageUrl: PropTypes.string,
+  title: PropTypes.string,
+  info: PropTypes.string,
+  link: PropTypes.string,
+  tags: PropTypes.arrayOf(PropTypes.object),
+  handleClick: PropTypes.func
 };
 
 CardVideo.defaultProps = {
-  tags: []
+  imageUrl: '',
+  title: '',
+  info: '',
+  link: '',
+  tags: [],
+  handleClick: undefined
 };
 
 export default CardVideo;

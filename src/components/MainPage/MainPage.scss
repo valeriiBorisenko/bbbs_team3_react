@@ -1,5 +1,18 @@
 @import './styles/utils.scss';
 
+.main-section__link {
+  display: block;
+  text-decoration: none;
+
+  &_el_question {
+    margin-bottom: 30px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
+
 .lead__text {
   margin: 40px auto 0;
   max-width: 1170px;

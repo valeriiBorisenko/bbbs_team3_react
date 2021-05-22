@@ -14,9 +14,15 @@ function AccountEventCard({ day, month, title }) {
 }
 
 AccountEventCard.propTypes = {
-  day: PropTypes.string.isRequired,
-  month: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired
+  day: PropTypes.string,
+  month: PropTypes.string,
+  title: PropTypes.string
+};
+
+AccountEventCard.defaultProps = {
+  day: '',
+  month: '',
+  title: ''
 };
 
 export default AccountEventCard;
