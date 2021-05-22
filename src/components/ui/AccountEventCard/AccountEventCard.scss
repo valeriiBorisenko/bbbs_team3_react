@@ -53,6 +53,10 @@
 @include atTablet {
   .account-event-card {
     padding: 15px;
+
+    &:first-of-type {
+      margin-left: 60px;
+    }
   }
 
   .account-event-card__day {
@@ -68,5 +72,13 @@
   .account-event-card__title {
     font-size: 12px;
     line-height: 1.41;
+  }
+}
+
+@include atMobile {
+  .account-event-card {
+    &:first-of-type {
+      margin-left: 15px;
+    }
   }
 }
