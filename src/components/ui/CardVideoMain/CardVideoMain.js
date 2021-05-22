@@ -1,15 +1,17 @@
 import './CardVideoMain.scss';
 import PropTypes from 'prop-types';
+import formatDuration from '../../../utils/utils';
 
 function CardVideoMain({
-  title, info, link, imageUrl, handleClick
+  title, info, link, imageUrl, duration, handleClick
 }) {
+  const { hours, minutes, seconds } = formatDuration(duration);
   return (
     <>
       <div className="card-video-main">
         <div className="card-video-main__title-wrap">
           <h2 className="section-title card-video-main__title">{title}</h2>
-          <p className="caption card-video-main__info">{info}</p>
+          <p className="caption card-video-main__info">{info + duration}</p>
         </div>
         <button
           href={link}
@@ -32,6 +34,11 @@ function CardVideoMain({
             alt="Превью видео"
             className="card-video-main__image"
           />
+          {hours > 0 ? (
+            <span className="card-video-main__duration paragraph">{`${hours}:${minutes}:${seconds}`}</span>
+          ) : (
+            <span className="card-video-main__duration paragraph">{`${minutes}:${seconds}`}</span>
+          )}
         </button>
       </div>
     </>
@@ -43,6 +50,7 @@ CardVideoMain.propTypes = {
   info: PropTypes.string,
   link: PropTypes.string,
   imageUrl: PropTypes.string,
+  duration: PropTypes.number,
   handleClick: PropTypes.func
 };
 
@@ -51,6 +59,7 @@ CardVideoMain.defaultProps = {
   info: '',
   link: '',
   imageUrl: '',
+  duration: 0,
   handleClick: undefined
 };
 

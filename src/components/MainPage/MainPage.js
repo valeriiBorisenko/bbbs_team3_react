@@ -109,6 +109,7 @@ function MainPage({ isAuthorized }) {
               info={data.video.info}
               link={data.video.link}
               imageUrl={data.video.imageUrl}
+              duration={data.video.duration}
             />
           </Link>
         </article>

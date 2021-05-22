@@ -45,6 +45,7 @@
 }
 
 .card-video-main__button {
+  position: relative;
   display: block;
   margin: 0 auto;
   padding: 0;
@@ -65,10 +66,6 @@
   background-color: $yellow;
 }
 
-.card-video-main__preview {
-  cursor: pointer;
-}
-
 .card-video-main__image {
   display: block;
   width: 100%;
@@ -76,6 +73,22 @@
   object-fit: cover;
   cursor: pointer;
   max-height: 675px;
+}
+
+.card-video-main__duration {
+  position: absolute;
+  bottom: 12px;
+  right: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border-radius: 5px;
+  background-color: rgba($black, .8);
+  font-weight: 700;
+  font-size: 40px;
+  color: $white;
 }
 
 @include atDesktop1440 {
