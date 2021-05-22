@@ -21,7 +21,7 @@ function Header({ isAuthorized, handleUserButtonClick }) {
   });
 
   return (
-    <header className="header page__section">
+    <header className="header">
       <NavBar isAuthorized={isAuthorized} handleUserButtonClick={handleUserButtonClick} />
     </header>
   );

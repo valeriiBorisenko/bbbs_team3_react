@@ -1,0 +1,93 @@
+@import './styles/utils.scss';
+
+.account {
+  
+}
+
+.account__user-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.account__user-button {
+  color: $lightGray;
+  margin-right: 30px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.account__events-area {
+  box-sizing: border-box;
+  padding-bottom: 50px;
+  border-bottom: 1px solid $darkGray;
+}
+
+.account__title {
+  margin: 0 auto 30px;
+  width: fit-content;
+  text-align: center;
+  color: $lightBlack;
+}
+
+.account__events {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  grid-auto-rows: 158px;
+  gap: 30px;
+}
+
+@include atDesktop1199 {
+  .account__events {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@include atDesktop1024 {
+  .account__events {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@include atTablet {
+  .account__events {
+    margin-right: -60px;
+    display: flex;
+    gap: 0;
+    overflow-x: scroll;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  
+    & .account-event-card {
+      max-width: 205px;
+      max-height: 108px;
+      flex-shrink: 0;
+      margin-right: 30px;
+  
+      &:last-of-type{
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+@include atMobile {
+  .account__events {
+    margin-right: -15px;
+  }
+}
