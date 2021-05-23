@@ -21,11 +21,11 @@
   grid-template-rows: 570px;
   justify-content: center;
   margin: 0 auto 80px;
+}
 
-  & .card-annotation {
-    height: 100%;
-    padding: 52px 27px;
-  }
+.about__annotation {
+  padding: 52px 27px;
+  height: 100%;
 }
 
 .about__paragraph {
@@ -73,16 +73,16 @@
 @include atDesktop1380 {
   .about__us {
     grid-template-columns: 570px;
-    grid-template-rows: 358px 373px;
+    grid-template-rows: 358px 1fr;
 
     & .card-figure {
       width: 370px;
       margin: 0 auto;
     }
+  }
 
-    & .card-annotation {
-      padding: 30px 15px;
-    }
+  .about__annotation {
+    padding: 30px 15px;
   }
 
   .about__paragraph {
@@ -138,10 +138,6 @@
 
   .about__us {
     grid-template-rows: 280px 1fr;
-
-    & .card-annotation {
-      max-height: 688px;
-    }
 
     & .card-figure {
       width: 290px;

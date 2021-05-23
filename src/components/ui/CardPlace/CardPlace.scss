@@ -1,40 +1,21 @@
 @import './styles/utils.scss';
 
 .card-place {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   padding: 37px 30px 15px;
-  border-radius: 30px;
-  box-sizing: border-box;
   overflow: hidden;
 
   &_main { 
-    padding-top: 47px;
-    padding-bottom: 30px;
+    padding: 47px 30px 30px;
   }
+}
 
-  &_color_yellow {
-    background-color: $yellow;
-  }
-
-  &_color_green {
-    background-color: $green;
-  }
-
-  &_color_pink {
-    background-color: $pink;
-  }
-
-  &_color_blue {
-    background-color: $lightBlue;
-  }
-
-  & .rubric {
-    position: absolute;
-    top: 15px;
-  }
+.card-place__rubric {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .card-place__title-wrap {
@@ -85,18 +66,13 @@
   object-position: center;
 }
 
-.card-place__link {
-  display: block;
-}
-
 @include atDesktop1024 {
   .card-place {
     padding-left: 15px;
     padding-right: 15px;
 
     &_main {
-      padding-top: 37px;
-      padding-bottom: 15px;
+      padding: 37px 15px 15px;
     }
   }
 

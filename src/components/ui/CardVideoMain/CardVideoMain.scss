@@ -1,17 +1,11 @@
 @import './styles/utils.scss';
 
 .card-video-main {
-  box-sizing: border-box;
-  padding: 15px 30px;
   text-align: center;
   width: 100%;
   min-height: 169px;
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
   padding: 30px;
-  border-radius: 30px;
-  background-color: $yellow;
 }
 
 .card-video-main__title-wrap {
@@ -59,11 +53,7 @@
 }
 
 .card-video-main__video {
-  position: relative;
-  border-radius: 30px;
-  box-sizing: border-box;
   overflow: hidden;
-  background-color: $yellow;
 }
 
 .card-video-main__image {

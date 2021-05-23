@@ -1,24 +1,17 @@
 @import './styles/utils.scss';
 
 .card-question {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  position: relative;
   padding: 50px 50px 47px;
-  background-color: $white;
-  border-radius: 30px;
+}
 
-  & .rubric {
-    align-self: flex-start;
-    background-color: $background;
-  }
+.card-question__rubric {
+  align-self: flex-start;
+  background-color: $background;
 }
 
 .card-question__title {
   max-width: 770px;
-  margin-bottom: 17px;
+  margin: 0 0 17px;
 }
 
 @include atDesktop1024 {

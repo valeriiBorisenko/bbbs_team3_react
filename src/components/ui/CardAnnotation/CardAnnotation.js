@@ -1,35 +1,30 @@
 import './CardAnnotation.scss';
 import PropTypes from 'prop-types';
+import Card from '../Card/Card';
+import CardAnnotationContainer from './CardAnnotationContainer';
 
 function CardAnnotation({
-  info, description, mix
+  info, description, isMain
 }) {
   return (
-    <div
-      className={`card-annotation ${mix}`}
-    >
-      <div className="card-annotation__content">
-
-        {info && <p className="caption card-annotation__info">{info}</p>}
-
-        <div className="card-annotation__desc">
-          <p className="paragraph card-annotation__paragraph">{description}</p>
-        </div>
-      </div>
-    </div>
+    <Card sectionClass={`card-annotation ${isMain ? 'card-annotation_main' : ''}`}>
+      <CardAnnotationContainer caption={info}>
+        <p className="paragraph card-annotation__paragraph">{description}</p>
+      </CardAnnotationContainer>
+    </Card>
   );
 }
 
 CardAnnotation.propTypes = {
   info: PropTypes.string,
   description: PropTypes.string,
-  mix: PropTypes.string
+  isMain: PropTypes.bool
 };
 
 CardAnnotation.defaultProps = {
   info: undefined,
   description: undefined,
-  mix: ''
+  isMain: false
 };
 
 export default CardAnnotation;

@@ -1,14 +1,7 @@
 @import './styles/utils.scss';
 
 .card-annotation {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   padding: 30px;
-  border-radius: 30px;
-  background-color: $white;
-  box-sizing: border-box;
   overflow: hidden;
 
   &_main {
@@ -33,10 +26,6 @@
     background-color: $backgroundAnnotation;
     border-radius: 5px;
   }
-}
-
-.card-annotation__info {
-  margin-bottom: 5px;
 }
 
 .card-annotation__desc {

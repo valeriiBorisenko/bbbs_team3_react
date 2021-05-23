@@ -42,25 +42,8 @@
   overflow: hidden;
 }
 
-.card-about__content {
+.card-about__paragraph {
   margin-bottom: 30px;
-  overflow-y: scroll;
-  scrollbar-width: thin;
-  scrollbar-color: $backgroundAnnotation transparent;
-
-  &::-webkit-scrollbar {
-    width: 3px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    height: 30px;
-    background-color: $backgroundAnnotation;
-    border-radius: 5px;
-  }
-}
-
-.card-about__annotation {
-  padding-right: 5px;
 }
 
 .card-about__card-link {

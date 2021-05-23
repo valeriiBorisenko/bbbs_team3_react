@@ -1,4 +1,3 @@
-import './TitleH3.scss';
 import PropTypes from 'prop-types';
 
 function TitleH3({ title, sectionClass }) {

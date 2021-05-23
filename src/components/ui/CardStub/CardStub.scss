@@ -1,15 +1,7 @@
 @import './styles/utils.scss';
 
 .stub {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  border-radius: 30px;
-  box-sizing: border-box;
   overflow: hidden;
-  padding: 0;
-  background-color: $green;
 }
 
 .stub__upper-element {
@@ -41,7 +33,6 @@
 .stub__text {
   max-width: 570px;
   text-align: center;
-  margin: 0 auto;
 }
 
 @include atDesktop1440 {

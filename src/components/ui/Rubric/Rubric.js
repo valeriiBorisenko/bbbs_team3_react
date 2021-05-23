@@ -1,18 +1,20 @@
 import './Rubric.scss';
 import PropTypes from 'prop-types';
 
-function Rubric({ title }) {
+function Rubric({ title, sectionClass }) {
   return (
-    <span className="rubric">{title}</span>
+    <span className={`rubric ${sectionClass}`}>{title}</span>
   );
 }
 
 Rubric.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  sectionClass: PropTypes.string
 };
 
 Rubric.defaultProps = {
-  title: ''
+  title: '',
+  sectionClass: ''
 };
 
 export default Rubric;
