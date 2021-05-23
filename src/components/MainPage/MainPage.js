@@ -1,92 +1,95 @@
 import './MainPage.scss';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import CardStub from '../ui/CardStub/CardStub';
-import CardCalendar from '../ui/CardCalendar/CardCalendar';
+import { useState, useEffect } from 'react';
+// import { Link } from 'react-router-dom';
+// import PropTypes from 'prop-types';
+// import Card from '../ui/Card/Card';
+// import CardStub from '../ui/CardStub/CardStub';
+// import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import CardPlace from '../ui/CardPlace/CardPlace';
 import CardAnnotation from '../ui/CardAnnotation/CardAnnotation';
-import CardArticleBig from '../ui/CardArticleBig/CardArticleBig';
-import CardFilm from '../ui/CardFilm/CardFilm';
-import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
-import Widget from '../ui/Widget/Widget';
-import CardQuestion from '../ui/CardQuestion/CardQuestion';
-/* файл для имитации прихода даты с сервера */
-import MainPageData from '../../utils/constants';
-import Card from '../ui/Card/Card';
-/*------------------------------------------*/
+// import CardArticleBig from '../ui/CardArticleBig/CardArticleBig';
+// import CardFilm from '../ui/CardFilm/CardFilm';
+// import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
+// import Widget from '../ui/Widget/Widget';
+// import CardQuestion from '../ui/CardQuestion/CardQuestion';
+import { dataMain } from '../../utils/constants';
+import getMainPageData from '../../utils/api';
 
-function MainPage({ isAuthorized }) {
-  const data = MainPageData;
+function MainPage() {
+  const [data, setDataMain] = useState({});
+  useEffect(() => {
+    getMainPageData()
+      .then((res) => setDataMain({ ...data, res }))
+      .catch((err) => alert(err));
+  }, [setDataMain]);
   return (
     <>
-      <section className="lead page__section">
+      {console.log('im rendering')}
+      {/* <section className="lead page__section">
         <div className="card-container card-container_type_identical">
-          {isAuthorized ? (
+          {!isAuthorized ? (
             <CardCalendar
-              key={data.event.id}
-              tags={data.event.tags}
-              startAt={data.event.startAt}
-              endAt={data.event.endAt}
-              title={data.event.title}
-              address={data.event.address}
-              contact={data.event.contact}
-              remainSeats={data.event.remainSeats}
-              description={data.event.description}
-              isBooked={!data.event.booked}
+              data={data}
             />
           ) : (
             <CardStub />
           )}
-          <Card sectionClass="lead__media" key={data.history.id}>
+          <Card sectionClass="lead__media" key={dataMain.history.id}>
             <img
-              src={data.history.imageUrl}
-              alt={data.history.title}
+              src={dataMain.history.imageUrl}
+              alt={dataMain.history.title}
               className="card__media-img"
             />
             <Link to="/stories" className="lead__link">
-              {data.history.title}
+              {dataMain.history.title}
             </Link>
           </Card>
         </div>
-      </section>
+      </section> */}
 
       <section className="place main-section page__section">
         <div
           className="card-container card-container_type_main-article"
-          key={data.place.id}
+          key={dataMain.place.id}
         >
           <CardPlace
-            isChosen={data.place.chosen}
-            title={data.place.title}
-            name={data.place.name}
-            imageUrl={data.place.imageUrl}
-            link={data.place.link}
+            data={data}
+            // isChosen={dataMain.place.chosen}
+            // title={dataMain.place.title}
+            // name={dataMain.place.name}
+            // imageUrl={dataMain.place.imageUrl}
+            // link={dataMain.place.link}
             color="yellow"
             sectionClass="card-place_main"
           />
           <CardAnnotation
-            info={data.place.info}
-            description={data.place.description}
+            // info={dataMain.place.info}
+            // description={dataMain.place.description}
             isMain
           />
         </div>
       </section>
 
-      <section
+      {/* <section
         className="articles main-section page__section"
-        key={data.articles[0].id}
+        key={dataMain.articles[0].id}
       >
         <Link to="/articles" className="main-section__link">
           <CardArticleBig
-            color={data.articles[0].color}
-            title={data.articles[0].title}
+            color={dataMain.articles[0].color}
+            title={dataMain.articles[0].title}
           />
         </Link>
       </section>
 
-      <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
-        {data.movies.map((item) => (
-          <Link to="/films" className="main-section__link card-pagination_page_main" key={item.id}>
+      <section
+      className="movies main-section page__section cards-grid cards-grid_content_small-cards">
+        {dataMain.movies.map((item) => (
+          <Link
+            to="/films"
+            className="main-section__link card-pagination_page_main"
+            key={item.id}
+          >
             <CardFilm
               imageUrl={item.imageUrl}
               title={item.title}
@@ -101,15 +104,15 @@ function MainPage({ isAuthorized }) {
       <section className="video main-section page__section">
         <Link
           to="/video"
-          key={data.video.id}
+          key={dataMain.video.id}
           className="main-section__link"
         >
           <CardVideoMain
-            title={data.video.title}
-            info={data.video.info}
-            link={data.video.link}
-            imageUrl={data.video.imageUrl}
-            duration={data.video.duration}
+            title={dataMain.video.title}
+            info={dataMain.video.info}
+            link={dataMain.video.link}
+            imageUrl={dataMain.video.imageUrl}
+            duration={dataMain.video.duration}
           />
         </Link>
       </section>
@@ -121,7 +124,7 @@ function MainPage({ isAuthorized }) {
             link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook&tabs=timeline&width=630&height=630&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
           />
           <div className="main-questions__container">
-            {data.questions.map((item) => (
+            {dataMain.questions.map((item) => (
               <Link
                 to="/questions"
                 className="main-section__link main-section__link_el_question"
@@ -136,25 +139,25 @@ function MainPage({ isAuthorized }) {
 
       <section
         className="articles main-section page__section"
-        key={data.articles[1].id}
+        key={dataMain.articles[1].id}
       >
         <Link to="/articles" className="main-section__link">
           <CardArticleBig
-            color={data.articles[1].color}
-            title={data.articles[1].title}
+            color={dataMain.articles[1].color}
+            title={dataMain.articles[1].title}
           />
         </Link>
-      </section>
+      </section> */}
     </>
   );
 }
 
-MainPage.propTypes = {
-  isAuthorized: PropTypes.bool
-};
+// MainPage.propTypes = {
+//   // isAuthorized: PropTypes.bool
+// };
 
-MainPage.defaultProps = {
-  isAuthorized: false
-};
+// MainPage.defaultProps = {
+//   isAuthorized: false
+// };
 
 export default MainPage;

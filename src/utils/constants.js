@@ -2,7 +2,7 @@
 // eslint-disable-next-line quote-props
 // eslint-disable-next-line quotes
 
-const MainPageData = {
+const dataMain = {
   event: {
       id: 11,
       tags: [
@@ -176,4 +176,178 @@ const MainPageData = {
   ]
 };
 
-export default MainPageData;
+const dataMainEmpty = {
+    event: {
+        id: 0,
+        tags: [
+            {
+                id: 0,
+                name: '',
+                slug: ''
+            },
+            {
+                id: 0,
+                name: '',
+                slug: ''
+            }
+        ],
+        title: '',
+        startAt: '',
+        endAt: '',
+        address: '',
+        contact: '',
+        remainSeats: 0,
+        description: '',
+        booked: false
+    },
+    history: {
+        id: 0,
+        imageUrl: '',
+        title: ''
+    },
+    place: {
+        chosen: false,
+        id: 0,
+        title: '',
+        name: '',
+        info: '',
+        description: '',
+        imageUrl: '',
+        link: ''
+    },
+    articles: [
+        {
+            id: 0,
+            color: '',
+            title: ''
+        },
+        {
+            id: 0,
+            color: '',
+            title: ''
+        }
+    ],
+    movies: [
+        {
+            id: 0,
+            imageUrl: '',
+            title: '',
+            info: '',
+            link: '',
+            tags: [
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                },
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                }
+            ]
+        },
+        {
+            id: 0,
+            imageUrl: '',
+            title: '',
+            info: '',
+            link: '',
+            tags: [
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                },
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                }
+            ]
+        },
+        {
+            id: 0,
+            imageUrl: '',
+            title: '',
+            info: '',
+            link: '',
+            tags: [
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                },
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                }
+            ]
+        },
+        {
+            id: 0,
+            imageUrl: '',
+            title: '',
+            info: '',
+            link: '',
+            tags: [
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                },
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                }
+            ]
+        }
+    ],
+    video: {
+        id: 0,
+        title: '',
+        info: '',
+        link: '',
+        imageUrl: '',
+        duration: 0
+    },
+    questions: [
+        {
+            id: 0,
+            tags: [
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                }
+            ],
+            title: ''
+        },
+        {
+            id: 0,
+            tags: [
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                }
+            ],
+            title: ''
+        },
+        {
+            id: 0,
+            tags: [
+                {
+                    id: 0,
+                    name: '',
+                    slug: ''
+                }
+            ],
+            title: ''
+        }
+    ]
+  };
+
+export { dataMain, dataMainEmpty };
