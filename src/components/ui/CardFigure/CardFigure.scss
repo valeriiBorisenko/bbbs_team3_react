@@ -1,0 +1,37 @@
+@import './styles/utils.scss';
+
+.card-figure {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  &_color_yellow {
+    background-color: $yellow;
+  }
+
+  &_color_green {
+    background-color: $green;
+  }
+
+  &_color_pink {
+    background-color: $pink;
+  }
+
+  &_color_blue {
+    background-color: $lightBlue;
+  }
+
+  &_form_square {
+    border-radius: 3px;
+  }
+
+  &_form_circle {
+    border-radius: 100%;
+  }
+
+  &_form_arch {
+    border-radius: 300px 300px 3px 3px;
+  }
+}
