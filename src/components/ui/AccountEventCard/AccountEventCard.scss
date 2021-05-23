@@ -1,0 +1,81 @@
+@import './styles/utils.scss';
+
+.account-event-card {
+  padding: 30px;
+}
+
+.account-event-card__date {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.account-event-card__day {
+  margin-right: 10px;
+  font-family: $protoGrotesk;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 44px;
+  line-height: 1.13;  
+}
+
+.account-event-card__month {
+  font-family: $ptRootUI;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.36;
+  letter-spacing: 0.2px;
+}
+
+.account-event-card__title {
+  margin: 0;
+  font-family: $ptRootUI;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.36;
+  letter-spacing: 0.2px;
+  color: $black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  box-orient: vertical;
+}
+
+@include atTablet {
+  .account-event-card {
+    padding: 15px;
+
+    &:first-of-type {
+      margin-left: 60px;
+    }
+  }
+
+  .account-event-card__day {
+    font-size: 37px;
+    line-height: 1.05;
+  }
+
+  .account-event-card__month {
+    font-size: 12px;
+    line-height: 1.41;
+  }
+
+  .account-event-card__title {
+    font-size: 12px;
+    line-height: 1.41;
+  }
+}
+
+@include atMobile {
+  .account-event-card {
+    &:first-of-type {
+      margin-left: 15px;
+    }
+  }
+}

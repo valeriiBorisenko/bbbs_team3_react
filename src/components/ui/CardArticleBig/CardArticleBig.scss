@@ -1,0 +1,52 @@
+@import './styles/utils.scss';
+
+.card-article {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 120px 30px 30px;
+  border-radius: 30px;
+  box-sizing: border-box;
+  min-height: 490px;
+}
+
+.card-article__link-wrap {
+  width: 100%;
+  text-decoration: none;
+}
+
+.card-article__title {
+  color: $lightBlack;
+  max-width: 970px;
+  text-align: center;
+}
+
+.card-article__link {
+  display: block;
+  margin: 0 auto;
+}
+
+@include atDesktop1024 {
+  .card-article {
+    padding: 30px 15px 15px;
+    min-height: 312px;
+  }
+
+  .card-article__title {
+    max-width: 690px;
+  }
+}
+
+@include atMobile {
+  .card-article {
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  .card-article__title {
+    font-size: 19px;
+    line-height: 1.2;
+  }
+}

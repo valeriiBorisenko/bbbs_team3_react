@@ -1,0 +1,66 @@
+@import './styles/utils.scss';
+
+.card-about {
+  grid-template-rows: 120px minmax(265px, 1fr);
+}
+
+.card-about__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 70px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  &_color_yellow {
+    background-color: $yellow;
+  }
+
+  &_color_green {
+    background-color: $green;
+  }
+
+  &_color_pink {
+    background-color: $pink;
+  }
+
+  &_color_blue {
+    background-color: $lightBlue;
+  }
+}
+
+.card-about__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  border-radius: 30px;
+  background-color: $white;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card-about__paragraph {
+  margin-bottom: 30px;
+}
+
+.card-about__card-link {
+  align-self: center;
+}
+
+@include atDesktop1024 {
+  .card-about {
+    max-width: 570px;
+    grid-template-rows: 70px 1fr;
+  }
+
+  .card-about__container {
+    padding: 30px 15px;
+  }
+
+  .card-about__content {
+    margin-bottom: 15px;
+  }
+}
