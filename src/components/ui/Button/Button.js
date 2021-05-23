@@ -1,9 +1,15 @@
 import './Button.scss';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 function Button({
-  title, titleSelected, color, isSelected, isDisabled, handleClick
+  title, titleSelected, color, isDisabled
 }) {
+  const [isSelected, setiISelected] = useState(false);
+  const handleClick = () => {
+    if (isSelected) setiISelected(false);
+    else setiISelected(true);
+  };
   return (
     <button
       className={`button button_color_${color} ${
@@ -22,18 +28,14 @@ Button.propTypes = {
   title: PropTypes.string,
   titleSelected: PropTypes.string,
   color: PropTypes.string,
-  isSelected: PropTypes.bool,
-  isDisabled: PropTypes.bool,
-  handleClick: PropTypes.func
+  isDisabled: PropTypes.bool
 };
 
 Button.defaultProps = {
   title: '',
   color: 'blue',
   titleSelected: undefined,
-  isSelected: false,
-  isDisabled: false,
-  handleClick: undefined
+  isDisabled: false
 };
 
 export default Button;

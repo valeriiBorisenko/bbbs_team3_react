@@ -5,6 +5,7 @@ import MainPage from '../MainPage/MainPage';
 import AboutUs from '../AboutUs/AboutUs';
 import Account from '../Account/Account';
 import PageNotFound from '../PageNotFound/PageNotFound';
+import Calendar from '../Calendar/Calendar';
 
 function Main({ isAuthorized }) {
   return (
@@ -18,6 +19,9 @@ function Main({ isAuthorized }) {
         </Route>
         <Route path="/account">
           <Account />
+        </Route>
+        <Route>
+          <Calendar exact path="/calendar" isAuthorized={isAuthorized} />
         </Route>
         <Route path="*">
           <PageNotFound />
