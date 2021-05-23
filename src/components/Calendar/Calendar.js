@@ -17,7 +17,7 @@ function Calendar() {
           ))}
         </ul>
       </div>
-      <section className="calendar-container"></section>
+      <section className="calendar-container">
         { CalendarePageData.event.map((data) => (
           <CardCalendar
             key={data.id}
