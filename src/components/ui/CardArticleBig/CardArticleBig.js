@@ -1,11 +1,12 @@
 import React from 'react';
 import './CardArticleBig.scss';
 import PropTypes from 'prop-types';
+import TitleH3 from '../TitleH3/TitleH3';
 
 function CardArticleBig({ color, title }) {
   return (
     <article className="card-article" style={{ backgroundColor: color }}>
-      <h3 className="chapter-title card-article__title">{title}</h3>
+      <TitleH3 sectionClass="card-article__title" title={title} />
       <span className="link card-article__link">читать статью</span>
     </article>
   );

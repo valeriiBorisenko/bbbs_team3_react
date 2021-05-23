@@ -1,9 +1,10 @@
 import './Widget.scss';
 import PropTypes from 'prop-types';
+import Card from '../Card/Card';
 
 function Widget({ link, title }) {
   return (
-    <div className="widget">
+    <Card sectionClass="widget" color="blue">
       <iframe
         className="widget__iframe"
         title={title}
@@ -12,7 +13,7 @@ function Widget({ link, title }) {
         allowFullScreen="true"
         allow="clipboard-write; encrypted-media; picture-in-picture; web-share"
       />
-    </div>
+    </Card>
   );
 }
 

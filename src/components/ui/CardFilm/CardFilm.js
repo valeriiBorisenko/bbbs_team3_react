@@ -1,12 +1,14 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
 import Rubric from '../Rubric/Rubric';
+import TitleH2 from '../TitleH2/TitleH2';
+import Card from '../Card/Card';
 
 function CardFilm({
   imageUrl, title, info, link, tags, handleClick
 }) {
   return (
-    <article className="card-film">
+    <Card sectionClass="card-film">
       <div className="card-film__video">
         <button className="card-film__button" type="button" onClick={handleClick}>
           <img
@@ -17,7 +19,7 @@ function CardFilm({
           <ul className="card-film__rubric-list">
             {tags.map((tag) => (
               <li key={tag.id}>
-                <Rubric title={tag.name} />
+                <Rubric title={tag.name} sectionClass="card-film__rubric" />
               </li>
             ))}
           </ul>
@@ -26,7 +28,7 @@ function CardFilm({
 
       <div className="card-film__video-info">
         <div className="card-film__title-wrap">
-          <h2 className="section-title card-film__title">{title}</h2>
+          <TitleH2 sectionClass="card-film__title" title={title} />
           <p className="caption card-film__info">{info}</p>
         </div>
         <button
@@ -38,7 +40,7 @@ function CardFilm({
           смотреть трейлер
         </button>
       </div>
-    </article>
+    </Card>
   );
 }
 

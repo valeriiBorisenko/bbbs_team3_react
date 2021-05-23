@@ -1,9 +1,11 @@
+import Card from '../Card/Card';
 import LogoBlue from '../LogoBlue/LogoBlue';
+import TitleH2 from '../TitleH2/TitleH2';
 import './CardStub.scss';
 
 function CardStub() {
   return (
-    <article className="stub">
+    <Card sectionClass="stub" color="green">
       <div className="stub__upper-element">
         <a
           className="stub__logo"
@@ -15,13 +17,12 @@ function CardStub() {
         </a>
       </div>
       <div className="stub__content">
-        <h2 className="section-title stub__text">
-          Наставники.про – цифровая информационная платформа организации
-          «Старшие Братья Старшие Сестры». Созданная для поддержки наставников
-          программы.
-        </h2>
+        <TitleH2
+          sectionClass="stub__text"
+          title="Наставники.про – цифровая информационная платформа организации «Старшие Братья Старшие Сестры». Созданная для поддержки наставников программы."
+        />
       </div>
-    </article>
+    </Card>
   );
 }
 

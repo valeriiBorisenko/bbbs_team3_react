@@ -2,6 +2,9 @@ import './CardPlace.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Rubric from '../Rubric/Rubric';
+import TitleH2 from '../TitleH2/TitleH2';
+import Card from '../Card/Card';
+import Caption from '../Caption/Caption';
 
 function CardPlace({
   isChosen,
@@ -10,18 +13,18 @@ function CardPlace({
   name,
   imageUrl,
   link,
-  mix
+  sectionClass
 }) {
   return (
-    <div className={`card-place card-place_color_${color} ${mix}`}>
+    <Card sectionClass={sectionClass} color={color}>
 
-      {isChosen && <Rubric title="Выбор наставника" />}
+      {isChosen && <Rubric title="Выбор наставника" sectionClass="card-place__rubric" />}
 
       <div className="card-place__title-wrap">
         <Link to="/place" className="card-place__link-wrap">
-          <h2 className="section-title card-place__title">{title}</h2>
+          <TitleH2 sectionClass="card-place__title" title={title} />
         </Link>
-        <p className="caption card-place__name">{name}</p>
+        <Caption sectionClass="card-place__name" title={name} />
       </div>
 
       {isChosen && (
@@ -41,7 +44,7 @@ function CardPlace({
       >
         перейти на сайт
       </a>
-    </div>
+    </Card>
   );
 }
 
@@ -52,7 +55,7 @@ CardPlace.propTypes = {
   name: PropTypes.string,
   imageUrl: PropTypes.string,
   link: PropTypes.string,
-  mix: PropTypes.string
+  sectionClass: PropTypes.string
 };
 
 CardPlace.defaultProps = {
@@ -62,7 +65,7 @@ CardPlace.defaultProps = {
   name: '',
   imageUrl: '',
   link: '',
-  mix: ''
+  sectionClass: ''
 };
 
 export default CardPlace;

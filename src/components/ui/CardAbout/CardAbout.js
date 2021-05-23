@@ -1,5 +1,7 @@
 import './CardAbout.scss';
 import PropTypes from 'prop-types';
+import TitleH2 from '../TitleH2/TitleH2';
+import CardAnnotationContainer from '../CardAnnotation/CardAnnotationContainer';
 
 function CardAbout({
   title, text, color, linkText, href
@@ -7,14 +9,12 @@ function CardAbout({
   return (
     <article className="card-container card-about">
       <div className={`card-about__heading card-about__heading_color_${color}`}>
-        <h2 className="section-title">{title}</h2>
+        <TitleH2 title={title} />
       </div>
       <div className="card-about__container">
-        <div className="card-about__content">
-          <div className="card-about__annotation">
-            <p className="paragraph">{text}</p>
-          </div>
-        </div>
+        <CardAnnotationContainer>
+          <p className="paragraph card-about__paragraph">{text}</p>
+        </CardAnnotationContainer>
         <a href={href} target="_blank" className="link card-about__card-link" rel="noopener noreferrer">{linkText}</a>
       </div>
     </article>

@@ -1,14 +1,8 @@
 @import './styles/utils.scss';
 
 .widget {
-  position: relative;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 30px;
-  background-color: $blue;
-  box-sizing: border-box;
   overflow: hidden;
 }
 

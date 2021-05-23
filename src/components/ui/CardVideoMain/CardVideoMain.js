@@ -1,16 +1,18 @@
 import './CardVideoMain.scss';
 import PropTypes from 'prop-types';
 import formatDuration from '../../../utils/utils';
+import Card from '../Card/Card';
+import TitleH2 from '../TitleH2/TitleH2';
 
 function CardVideoMain({
   title, info, link, imageUrl, duration, handleClick
 }) {
   const { hours, minutes, seconds } = formatDuration(duration);
   return (
-    <>
-      <div className="card-video-main">
+    <div className="card-container card-container_type_main-video">
+      <Card sectionClass="card-video-main" color="yellow">
         <div className="card-video-main__title-wrap">
-          <h2 className="section-title card-video-main__title">{title}</h2>
+          <TitleH2 sectionClass="card-video-main__title" title={title} />
           <p className="caption card-video-main__info">{info}</p>
         </div>
         <button
@@ -21,9 +23,9 @@ function CardVideoMain({
         >
           смотреть видео
         </button>
-      </div>
+      </Card>
 
-      <div className="card-video-main__video">
+      <Card sectionClass="card-video-main__video">
         <button
           className="card-video-main__button"
           type="button"
@@ -40,8 +42,8 @@ function CardVideoMain({
             <span className="card-video-main__duration paragraph">{`${minutes}:${seconds}`}</span>
           )}
         </button>
-      </div>
-    </>
+      </Card>
+    </div>
   );
 }
 

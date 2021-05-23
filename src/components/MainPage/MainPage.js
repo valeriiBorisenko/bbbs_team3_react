@@ -12,6 +12,7 @@ import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
 /* файл для имитации прихода даты с сервера */
 import MainPageData from '../../utils/constants';
+import Card from '../ui/Card/Card';
 /*------------------------------------------*/
 
 function MainPage({ isAuthorized }) {
@@ -19,7 +20,7 @@ function MainPage({ isAuthorized }) {
   return (
     <>
       <section className="lead page__section">
-        <article className="card-container card-container_type_identical">
+        <div className="card-container card-container_type_identical">
           {isAuthorized ? (
             <CardCalendar
               key={data.event.id}
@@ -36,7 +37,7 @@ function MainPage({ isAuthorized }) {
           ) : (
             <CardStub />
           )}
-          <article className="lead__media" key={data.history.id}>
+          <Card sectionClass="lead__media" key={data.history.id}>
             <img
               src={data.history.imageUrl}
               alt={data.history.title}
@@ -45,12 +46,12 @@ function MainPage({ isAuthorized }) {
             <Link to="/stories" className="lead__link">
               {data.history.title}
             </Link>
-          </article>
-        </article>
+          </Card>
+        </div>
       </section>
 
       <section className="place main-section page__section">
-        <article
+        <div
           className="card-container card-container_type_main-article"
           key={data.place.id}
         >
@@ -61,14 +62,14 @@ function MainPage({ isAuthorized }) {
             imageUrl={data.place.imageUrl}
             link={data.place.link}
             color="yellow"
-            mix="card-place_main"
+            sectionClass="card-place_main"
           />
           <CardAnnotation
             info={data.place.info}
             description={data.place.description}
-            mix="card-annotation_main"
+            isMain
           />
-        </article>
+        </div>
       </section>
 
       <section
@@ -98,25 +99,23 @@ function MainPage({ isAuthorized }) {
       </section>
 
       <section className="video main-section page__section">
-        <article>
-          <Link
-            to="/video"
-            className="card-container card-container_type_main-video"
-            key={data.video.id}
-          >
-            <CardVideoMain
-              title={data.video.title}
-              info={data.video.info}
-              link={data.video.link}
-              imageUrl={data.video.imageUrl}
-              duration={data.video.duration}
-            />
-          </Link>
-        </article>
+        <Link
+          to="/video"
+          key={data.video.id}
+          className="main-section__link"
+        >
+          <CardVideoMain
+            title={data.video.title}
+            info={data.video.info}
+            link={data.video.link}
+            imageUrl={data.video.imageUrl}
+            duration={data.video.duration}
+          />
+        </Link>
       </section>
 
       <section className="main-questions main-section page__section">
-        <article className="card-container card-container_type_iframe">
+        <div className="card-container card-container_type_iframe">
           <Widget
             title="Facebook"
             link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook&tabs=timeline&width=630&height=630&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
@@ -132,7 +131,7 @@ function MainPage({ isAuthorized }) {
               </Link>
             ))}
           </div>
-        </article>
+        </div>
       </section>
 
       <section
