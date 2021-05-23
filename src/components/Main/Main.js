@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import MainPage from '../MainPage/MainPage';
 import AboutUs from '../AboutUs/AboutUs';
 import Account from '../Account/Account';
+import PageNotFound from '../PageNotFound/PageNotFound';
 
 function Main({ isAuthorized }) {
   return (
@@ -17,6 +18,9 @@ function Main({ isAuthorized }) {
         </Route>
         <Route path="/account">
           <Account />
+        </Route>
+        <Route path="*">
+          <PageNotFound />
         </Route>
       </Switch>
     </main>
