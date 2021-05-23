@@ -12,20 +12,23 @@ import CardAnnotation from '../ui/CardAnnotation/CardAnnotation';
 // import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 // import Widget from '../ui/Widget/Widget';
 // import CardQuestion from '../ui/CardQuestion/CardQuestion';
-import { dataMain } from '../../utils/constants';
+// import { dataMain } from '../../utils/constants';
 import getMainPageData from '../../utils/api';
 
 function MainPage() {
-  const [data, setDataMain] = useState({});
+  const [data, setDataMain] = useState();
   useEffect(() => {
     getMainPageData()
-      .then((res) => setDataMain({ ...data, res }))
+      .then((res) => setDataMain(res))
       .catch((err) => alert(err));
   }, [setDataMain]);
-  return (
-    <>
-      {console.log('im rendering')}
-      {/* <section className="lead page__section">
+  return (data
+    ? (
+      <>
+        {console.log('im rendering')}
+        {console.log(data)}
+        {console.log(data.data.dataMain.place)}
+        {/* <section className="lead page__section">
         <div className="card-container card-container_type_identical">
           {!isAuthorized ? (
             <CardCalendar
@@ -47,30 +50,26 @@ function MainPage() {
         </div>
       </section> */}
 
-      <section className="place main-section page__section">
-        <div
-          className="card-container card-container_type_main-article"
-          key={dataMain.place.id}
-        >
-          <CardPlace
-            data={data}
-            // isChosen={dataMain.place.chosen}
-            // title={dataMain.place.title}
-            // name={dataMain.place.name}
-            // imageUrl={dataMain.place.imageUrl}
-            // link={dataMain.place.link}
-            color="yellow"
-            sectionClass="card-place_main"
-          />
-          <CardAnnotation
+        <section className="place main-section page__section">
+          <div className="card-container card-container_type_main-article">
+            <CardPlace
+              isChosen={data.data.dataMain.place.chosen}
+              title={data.data.dataMain.place.title}
+              name={data.data.dataMain.place.name}
+              imageUrl={data.data.dataMain.place.imageUrl}
+              link={data.data.dataMain.place.link}
+              color="yellow"
+              sectionClass="card-place_main"
+            />
+            <CardAnnotation
             // info={dataMain.place.info}
             // description={dataMain.place.description}
-            isMain
-          />
-        </div>
-      </section>
+              isMain
+            />
+          </div>
+        </section>
 
-      {/* <section
+        {/* <section
         className="articles main-section page__section"
         key={dataMain.articles[0].id}
       >
@@ -148,7 +147,8 @@ function MainPage() {
           />
         </Link>
       </section> */}
-    </>
+      </>
+    ) : <p>Loading</p>
   );
 }
 

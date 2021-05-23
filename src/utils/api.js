@@ -10,7 +10,7 @@ const server = axios.create({
   } // Заголовок запроса
 });
 const mock = new MockAdapter(server);
-const baseURL = 'http://localhost:3000/';
+const baseURL = 'http://localhost:3000';
 
 // arguments for reply are (status, data, headers)
 mock.onGet(`${baseURL}/main/`).reply(200, {
