@@ -31,24 +31,12 @@
   grid-template-rows: 414px;
   grid-auto-rows: 414px;
   gap: 30px;
+  padding-top: 50px;
 }
 
 @include atDesktop1440 {
   .calendar-container {
     grid-template-columns: repeat(2, minmax(370px, 1fr));
-  }
-}
-
-@include atDesktop1279 {
-  .calendar-container {
-    grid-template-rows: 382px;
-    grid-auto-rows: 382px;
-  }
-}
-
-@include atDesktop1024 {
-  .calendar-container {
-    padding-top: 50px;
   }
 }
 
