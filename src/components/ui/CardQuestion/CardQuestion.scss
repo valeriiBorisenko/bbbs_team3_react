@@ -1,0 +1,21 @@
+@import './styles/utils.scss';
+
+.card-question {
+  padding: 50px 50px 47px;
+}
+
+.card-question__rubric {
+  align-self: flex-start;
+  background-color: $background;
+}
+
+.card-question__title {
+  max-width: 770px;
+  margin: 0 0 17px;
+}
+
+@include atDesktop1024 {
+  .card-question {
+    padding: 30px 15px;
+  }
+}

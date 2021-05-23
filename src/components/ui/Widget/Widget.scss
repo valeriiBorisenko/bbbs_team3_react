@@ -1,0 +1,19 @@
+@import './styles/utils.scss';
+
+.widget {
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.widget__iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+@include atMobile {
+  .widget {
+    max-width: 450px;
+  }
+}
