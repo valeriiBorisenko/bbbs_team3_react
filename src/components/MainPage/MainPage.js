@@ -11,7 +11,7 @@ import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
 /* файл для имитации прихода даты с сервера */
-import MainPageData from '../../utils/constants';
+import { MainPageData } from '../../utils/constants';
 import Card from '../ui/Card/Card';
 /*------------------------------------------*/
 

@@ -40,7 +40,7 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link"
-            href="#"
+            href="/calendar"
             linkText="Календарь"
           />
           {/* Куда пойти */}
