@@ -29,7 +29,6 @@ function Calendar() {
             contact={data.contact}
             remainSeats={data.remainSeats}
             description={data.description}
-            isBooked={!data.booked}
           />
         ))}
       </section>

@@ -21,7 +21,11 @@ function Main({ isAuthorized }) {
           <Account />
         </Route>
         <Route>
-          <Calendar exact path="/calendar" isAuthorized={isAuthorized} />
+          <Calendar
+            exact
+            path="/calendar"
+            isAuthorized={isAuthorized}
+          />
         </Route>
         <Route path="*">
           <PageNotFound />

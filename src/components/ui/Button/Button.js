@@ -3,13 +3,21 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 function Button({
-  title, titleSelected, color, isDisabled
+  title, titleSelected, color, isDisabled, onClick
 }) {
-  const [isSelected, setiISelected] = useState(false);
-  const handleClick = () => {
-    if (isSelected) setiISelected(false);
-    else setiISelected(true);
+  const [isSelected, setIsISelectedMouth] = useState(false);
+  const handleClickMouth = () => {
+    if (isSelected) setIsISelectedMouth(false);
+    else setIsISelectedMouth(true);
   };
+
+  const handleClickButton = () => {
+    if (onClick !== undefined) {
+      onClick();
+      handleClickMouth();
+    } else handleClickMouth();
+  };
+
   return (
     <button
       className={`button button_color_${color} ${
@@ -17,7 +25,7 @@ function Button({
       }`}
       type="button"
       disabled={isDisabled}
-      onClick={handleClick}
+      onClick={handleClickButton}
     >
       {!isSelected ? title : (titleSelected || title)}
     </button>
@@ -28,13 +36,15 @@ Button.propTypes = {
   title: PropTypes.string,
   titleSelected: PropTypes.string,
   color: PropTypes.string,
-  isDisabled: PropTypes.bool
+  isDisabled: PropTypes.bool,
+  onClick: PropTypes.func
 };
 
 Button.defaultProps = {
   title: '',
   color: 'blue',
   titleSelected: undefined,
+  onClick: undefined,
   isDisabled: false
 };
 

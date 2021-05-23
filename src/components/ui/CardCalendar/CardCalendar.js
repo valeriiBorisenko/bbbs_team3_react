@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './CardCalendar.scss';
 import PropTypes from 'prop-types';
 import ButtonDots from '../ButtonDots/ButtonDots';
@@ -16,8 +17,6 @@ function CardCalendar({
   contact,
   remainSeats,
   description,
-  isBooked,
-  isDisabled,
   isModal
 }) {
   const startDay = new Date(startAt);
@@ -45,6 +44,16 @@ function CardCalendar({
     5: 'пятница',
     6: 'суббота'
   };
+
+  const [isBooked, setIsBooked] = useState(false);
+
+  function handleClickButtonBooked() {
+    if (isBooked) setIsBooked(false);
+    else setIsBooked(true);
+  }
+
+  const isDisabled = (remainSeats < 1 ? true : '');
+
   return (
     <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
@@ -90,8 +99,8 @@ function CardCalendar({
             title="Записаться"
             titleSelected="Отменить запись"
             color="blue"
-            isSelected={isBooked}
             isDisabled={isDisabled}
+            onClick={handleClickButtonBooked}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
@@ -114,13 +123,10 @@ CardCalendar.propTypes = {
   contact: PropTypes.string.isRequired,
   remainSeats: PropTypes.number.isRequired,
   description: PropTypes.string,
-  isBooked: PropTypes.bool.isRequired,
-  isDisabled: PropTypes.bool,
   isModal: PropTypes.bool.isRequired
 };
 
 CardCalendar.defaultProps = {
-  isDisabled: false,
   description: ''
 };
 
