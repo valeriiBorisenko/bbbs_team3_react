@@ -222,21 +222,20 @@
 # CardAbout
 ЗАЧЕМ
 ### Пропсы:
-* 
-* 
+* __title__ - string, заголовок карточки на цветной плашке
+* __text__ - string, текст карточки на белом фоне
+* __color__ - string, цвет плашки-заголовка
+* __linkText__ - string, текст ссылки в карточке
+* __href__ - string, URL путь в ссылке
+
 
 --- 
 
 # Blockquote
 Подзаголовок-цитата. Используется на нескольких страницах. Тег h3 обернут в тег blockquote
 ### Пропсы:
-* sectionWrapperClass - string, класс-миксин секций для тега blockquote 
-* sectionTitleClass - string, класс-миксин секций для заголовка h3
-* text - string, текст внутри h3
----
+* __sectionWrapperClass__ - string, класс-миксин секций для тега blockquote 
+* __sectionTitleClass__ - string, класс-миксин секций для заголовка h3
+* __text__ - string, текст внутри h3
 
-# TitleH2
-Компонент используется на разных страницах в качестве заголовка h3 (section-title).
-### Пропсы:
-* 
-* 
+---
