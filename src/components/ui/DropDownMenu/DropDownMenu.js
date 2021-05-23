@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import NavItem from '../NavItem/NavItem';
 import './DropDownMenu.scss';
 
-function DropDownMenu({ wrapperClasses, textsForLinks }) {
+function DropDownMenu({ sectionWrapperClass, textsForLinks }) {
   return (
-    <ul className={wrapperClasses}>
+    <ul className={sectionWrapperClass}>
       {textsForLinks.map((text) => (
         <NavItem
-          wrapperClasses="menu__dropdown-list-item"
-          linkClasses="link menu__dropdown-link"
+          sectionWrapperClass="menu__dropdown-list-item"
+          sectionLinkClass="link menu__dropdown-link"
           href="#"
-          text={text}
+          linkText={text}
         />
       ))}
     </ul>
@@ -19,7 +19,7 @@ function DropDownMenu({ wrapperClasses, textsForLinks }) {
 }
 
 DropDownMenu.propTypes = {
-  wrapperClasses: PropTypes.string.isRequired,
+  sectionWrapperClass: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   textsForLinks: PropTypes.array.isRequired
 };
