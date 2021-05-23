@@ -1,25 +1,29 @@
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import './NavItem.scss';
 
 function NavItem({
-  wrapperClasses, linkClasses, href, text, rel, target
+  sectionWrapperClass, sectionLinkClass, href, linkText, rel, target
 }) {
   return (
-    <li className={wrapperClasses}>
-      <NavLink className={linkClasses} to={href} rel={rel} target={target}>
-        {text}
+    <li className={sectionWrapperClass}>
+      <NavLink
+        className={sectionLinkClass}
+        to={href}
+        rel={rel}
+        target={target}
+      >
+        {linkText}
       </NavLink>
     </li>
   );
 }
 
 NavItem.propTypes = {
-  wrapperClasses: PropTypes.string.isRequired,
-  linkClasses: PropTypes.string.isRequired,
+  sectionWrapperClass: PropTypes.string.isRequired,
+  sectionLinkClass: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   href: PropTypes.any.isRequired,
-  text: PropTypes.string.isRequired,
+  linkText: PropTypes.string.isRequired,
   rel: PropTypes.string,
   target: PropTypes.string
 };

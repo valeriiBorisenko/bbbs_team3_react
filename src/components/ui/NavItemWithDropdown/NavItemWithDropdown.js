@@ -3,20 +3,29 @@ import { NavLink } from 'react-router-dom';
 import DropDownMenu from '../DropDownMenu/DropDownMenu';
 import './NavItemWithDropdown.scss';
 
-function NavItemWithDropdown({ wrapperClasses, text }) {
+function NavItemWithDropdown({ sectionWrapperClass, linkText }) {
   return (
-    <li className={wrapperClasses}>
-      <NavLink className="menu__link" to="#">
-        {text}
+    <li className={sectionWrapperClass}>
+      <NavLink
+        className="menu__link"
+        to="#"
+      >
+        {linkText}
       </NavLink>
-      <DropDownMenu wrapperClasses="menu__dropdown-list" textsForLinks={['Справочник', 'Видео', 'Статьи', 'Фильмы', 'Книги']} />
+
+      <DropDownMenu
+        sectionWrapperClass="menu__dropdown-list"
+        textsForLinks={
+          ['Справочник', 'Видео', 'Статьи', 'Фильмы', 'Книги']
+        }
+      />
     </li>
   );
 }
 
 NavItemWithDropdown.propTypes = {
-  wrapperClasses: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired
+  sectionWrapperClass: PropTypes.string.isRequired,
+  linkText: PropTypes.string.isRequired
 };
 
 export default NavItemWithDropdown;

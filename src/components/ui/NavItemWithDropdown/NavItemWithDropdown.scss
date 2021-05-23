@@ -23,6 +23,10 @@
   }
 }
 
+.menu__list-item_hidden {
+  display: none;
+}
+
 .menu__dropdown-item {
   position: relative;
 
@@ -41,6 +45,10 @@
     &:first-of-type {
       margin-top: 0;
     }
+  }
+
+  .menu__list-item_hidden {
+    display: block;
   }
 
   .menu__dropdown-item {
