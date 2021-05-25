@@ -46,8 +46,6 @@ function MainPage({ isAuthorized }) {
         <CardPlaceMain
           key={dataMain.place.id}
           data={dataMain.place}
-          color="yellow"
-          sectionClass="card-place_main"
         />
       </section>
 
@@ -65,8 +63,9 @@ function MainPage({ isAuthorized }) {
           <Link
             to="/films"
             className="main-section__link card-pagination_page_main"
+            key={item.id}
           >
-            <CardFilm key={item.id} data={item} />
+            <CardFilm data={item} />
           </Link>
         ))}
       </section>
@@ -88,8 +87,9 @@ function MainPage({ isAuthorized }) {
               <Link
                 to="/questions"
                 className="main-section__link main-section__link_el_question"
+                key={item.id}
               >
-                <CardQuestion key={item.id} data={item} />
+                <CardQuestion data={item} />
               </Link>
             ))}
           </div>
