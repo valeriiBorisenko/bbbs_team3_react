@@ -20,7 +20,10 @@ function CardCalendar({
     description,
     booked
   },
-  isModal
+  isModal,
+  onClick,
+  clickButton,
+  isSelected
 }) {
   const startDay = new Date(startAt);
   const endDay = new Date(endAt);
@@ -106,7 +109,10 @@ function CardCalendar({
             titleSelected="Отменить запись"
             color="blue"
             isDisabled={isDisabled}
-            onClick={handleClickButtonBooked}
+            onClick={onClick}
+            handleClickButtonBooked={handleClickButtonBooked}
+            clickButton={clickButton}
+            isSelected={isSelected}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
@@ -131,7 +137,10 @@ CardCalendar.propTypes = {
   remainSeats: PropTypes.number,
   description: PropTypes.string,
   booked: PropTypes.bool,
-  isModal: PropTypes.bool
+  isModal: PropTypes.bool,
+  onClick: PropTypes.func,
+  clickButton: PropTypes.func,
+  isSelected: PropTypes.bool
 };
 
 CardCalendar.defaultProps = {
@@ -145,7 +154,10 @@ CardCalendar.defaultProps = {
   tags: [],
   description: '',
   booked: false,
-  isModal: false
+  isModal: false,
+  onClick: undefined,
+  clickButton: undefined,
+  isSelected: false
 };
 
 export default CardCalendar;
