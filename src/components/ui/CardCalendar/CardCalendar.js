@@ -8,15 +8,17 @@ import Button from '../Button/Button';
 /* Также понять, как лучше сделать закрытие записи - пропс isDisabled */
 
 function CardCalendar({
-  tags,
-  startAt,
-  endAt,
-  title,
-  address,
-  contact,
-  remainSeats,
-  description,
-  isBooked,
+  data: {
+    tags,
+    startAt,
+    endAt,
+    title,
+    address,
+    contact,
+    remainSeats,
+    description,
+    booked
+  },
   isDisabled,
   isModal
 }) {
@@ -46,7 +48,7 @@ function CardCalendar({
     7: 'воскресенье'
   };
   return (
-    <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
+    <article className={`calendar ${booked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -90,13 +92,13 @@ function CardCalendar({
             title="Записаться"
             titleSelected="Отменить запись"
             color="blue"
-            isSelected={isBooked}
+            isSelected={booked}
             isDisabled={isDisabled}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
-            || (!isBooked && `Осталось ${remainSeats} мест`)}
+            || (!booked && `Осталось ${remainSeats} мест`)}
           </p>
           <ButtonDots />
         </div>
@@ -106,6 +108,7 @@ function CardCalendar({
 }
 
 CardCalendar.propTypes = {
+  data: PropTypes.objectOf(PropTypes.any).isRequired,
   tags: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string.isRequired,
   startAt: PropTypes.string.isRequired,
@@ -114,7 +117,7 @@ CardCalendar.propTypes = {
   contact: PropTypes.string.isRequired,
   remainSeats: PropTypes.number.isRequired,
   description: PropTypes.string,
-  isBooked: PropTypes.bool.isRequired,
+  booked: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool,
   isModal: PropTypes.bool.isRequired
 };

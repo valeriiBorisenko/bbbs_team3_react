@@ -4,7 +4,7 @@ import Rubric from '../Rubric/Rubric';
 import TitleH2 from '../TitleH2/TitleH2';
 import Card from '../Card/Card';
 
-function CardQuestion({ title, tags }) {
+function CardQuestion({ data: { title, tags } }) {
   return (
     <Card sectionClass="card-question">
       <TitleH2 sectionClass="card-question__title" title={title} />
@@ -16,11 +16,13 @@ function CardQuestion({ title, tags }) {
 }
 
 CardQuestion.propTypes = {
+  data: PropTypes.objectOf(PropTypes.any),
   title: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.object)
 };
 
 CardQuestion.defaultProps = {
+  data: {},
   title: '',
   tags: []
 };
