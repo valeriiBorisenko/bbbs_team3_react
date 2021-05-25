@@ -2,13 +2,16 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
 function NavItem({
-  sectionWrapperClass, sectionLinkClass, href, linkText, rel, target
+  sectionWrapperClass, sectionLinkClass, href, linkText, rel, target, closeMobileMenu
 }) {
   const handleSmoothScrollUp = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    if (closeMobileMenu) closeMobileMenu(false);
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }, 500);
   };
   return (
     <li className={sectionWrapperClass}>
@@ -31,13 +34,15 @@ NavItem.propTypes = {
   href: PropTypes.string || PropTypes.objectOf(PropTypes.any),
   linkText: PropTypes.string.isRequired,
   rel: PropTypes.string,
-  target: PropTypes.string
+  target: PropTypes.string,
+  closeMobileMenu: PropTypes.func
 };
 
 NavItem.defaultProps = {
   rel: '',
   target: '_self',
-  href: ''
+  href: '',
+  closeMobileMenu: undefined
 };
 
 export default NavItem;

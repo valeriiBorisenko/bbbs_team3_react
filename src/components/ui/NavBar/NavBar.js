@@ -29,8 +29,9 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item menu__list-item_hidden"
             sectionLinkClass="menu__link"
-            href="about-us"
+            href="/about-us"
             linkText="О проекте"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* Календарь */}
           <NavItem
@@ -38,6 +39,7 @@ function NavBar({
             sectionLinkClass="menu__link"
             href="/calendar"
             linkText="Календарь"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* Куда пойти */}
           <NavItem
@@ -45,6 +47,7 @@ function NavBar({
             sectionLinkClass="menu__link"
             href="#"
             linkText="Куда пойти"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* Вопросы */}
           <NavItem
@@ -52,6 +55,7 @@ function NavBar({
             sectionLinkClass="menu__link"
             href="#"
             linkText="Вопросы"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* выпадающее меню  "Читать и смотреть" */}
           <NavItemWithDropdown
@@ -64,6 +68,7 @@ function NavBar({
             sectionLinkClass="menu__link"
             href="#"
             linkText="Права детей"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* Истории */}
           <NavItem
@@ -71,6 +76,7 @@ function NavBar({
             sectionLinkClass="menu__link"
             href="#"
             linkText="Истории"
+            closeMobileMenu={handleBurgerClick}
           />
         </ul>
 
@@ -89,7 +95,8 @@ function NavBar({
             }}
             linkText="facebook"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* vkontakte */}
           <NavItem
@@ -98,7 +105,8 @@ function NavBar({
             href={{ pathname: 'https://vk.com/big.brothers.big.sisters' }}
             linkText="vkontakte"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* instagram */}
           <NavItem
@@ -107,7 +115,8 @@ function NavBar({
             href={{ pathname: 'https://www.instagram.com/nastavniki_org/' }}
             linkText="instagram"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* youtube */}
           <NavItem
@@ -116,7 +125,8 @@ function NavBar({
             href={{ pathname: 'https://www.youtube.com/user/Nastavniki/' }}
             linkText="youtube"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            closeMobileMenu={handleBurgerClick}
           />
         </ul>
       </div>
