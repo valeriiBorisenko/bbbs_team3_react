@@ -9,14 +9,17 @@ import Button from '../Button/Button';
 /* Также понять, как лучше сделать закрытие записи - пропс isDisabled */
 
 function CardCalendar({
-  tags,
-  startAt,
-  endAt,
-  title,
-  address,
-  contact,
-  remainSeats,
-  description,
+  data: {
+    tags,
+    startAt,
+    endAt,
+    title,
+    address,
+    contact,
+    remainSeats,
+    description,
+    booked
+  },
   isModal
 }) {
   const startDay = new Date(startAt);
@@ -115,6 +118,7 @@ function CardCalendar({
 }
 
 CardCalendar.propTypes = {
+  data: PropTypes.objectOf(PropTypes.any).isRequired,
   tags: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string.isRequired,
   startAt: PropTypes.string.isRequired,
@@ -123,11 +127,13 @@ CardCalendar.propTypes = {
   contact: PropTypes.string.isRequired,
   remainSeats: PropTypes.number.isRequired,
   description: PropTypes.string,
+  booked: PropTypes.bool,
   isModal: PropTypes.bool.isRequired
 };
 
 CardCalendar.defaultProps = {
-  description: ''
+  description: '',
+  booked: false
 };
 
 export default CardCalendar;

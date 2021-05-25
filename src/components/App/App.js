@@ -14,7 +14,10 @@ function App() {
   return (
     <BrowserRouter>
       <div className="page">
-        <Header isAuthorized={isAuthorized} handleUserButtonClick={handleUserButtonClick} />
+        <Header
+          isAuthorized={isAuthorized}
+          handleUserButtonClick={handleUserButtonClick}
+        />
         <Main isAuthorized={isAuthorized} />
         <Footer />
       </div>

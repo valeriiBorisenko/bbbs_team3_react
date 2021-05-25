@@ -5,7 +5,9 @@ import TitleH2 from '../TitleH2/TitleH2';
 import Card from '../Card/Card';
 
 function CardFilm({
-  imageUrl, title, info, link, tags, handleClick
+  data: {
+    imageUrl, title, info, link, tags
+  }, handleClick
 }) {
   return (
     <Card sectionClass="card-film">
@@ -45,6 +47,7 @@ function CardFilm({
 }
 
 CardFilm.propTypes = {
+  data: PropTypes.objectOf(PropTypes.any),
   imageUrl: PropTypes.string,
   title: PropTypes.string,
   info: PropTypes.string,
@@ -54,6 +57,7 @@ CardFilm.propTypes = {
 };
 
 CardFilm.defaultProps = {
+  data: {},
   imageUrl: '',
   title: '',
   info: '',

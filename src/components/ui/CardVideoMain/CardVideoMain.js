@@ -5,7 +5,9 @@ import Card from '../Card/Card';
 import TitleH2 from '../TitleH2/TitleH2';
 
 function CardVideoMain({
-  title, info, link, imageUrl, duration, handleClick
+  data: {
+    title, info, link, imageUrl, duration
+  }, handleClick
 }) {
   const { hours, minutes, seconds } = formatDuration(duration);
   return (
@@ -48,6 +50,7 @@ function CardVideoMain({
 }
 
 CardVideoMain.propTypes = {
+  data: PropTypes.objectOf(PropTypes.any),
   title: PropTypes.string,
   info: PropTypes.string,
   link: PropTypes.string,
@@ -57,6 +60,7 @@ CardVideoMain.propTypes = {
 };
 
 CardVideoMain.defaultProps = {
+  data: {},
   title: '',
   info: '',
   link: '',
