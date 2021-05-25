@@ -19,39 +19,113 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
   return (
     <nav className="menu">
       {/* логотип */}
-      <Link to="/" target="_self" className="menu__logo">
+      <Link
+        to="/"
+        target="_self"
+        className="menu__logo"
+      >
         наставники.про
       </Link>
       {/* обычное меню */}
       <div className="menu__lists-wrap menu__lists-wrap_hidden">
         <ul className="menu__list">
+          {/* О проекте, скрытый */}
+          <NavItem
+            sectionWrapperClass="menu__list-item menu__list-item_hidden"
+            sectionLinkClass="menu__link"
+            href="about-us"
+            linkText="О проекте"
+          />
           {/* Календарь */}
-          <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href="#" text="Календарь" />
+          <NavItem
+            sectionWrapperClass="menu__list-item"
+            sectionLinkClass="menu__link"
+            href="/calendar"
+            linkText="Календарь"
+          />
           {/* Куда пойти */}
-          <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href="#" text="Куда пойти" />
+          <NavItem
+            sectionWrapperClass="menu__list-item"
+            sectionLinkClass="menu__link"
+            href="#"
+            linkText="Куда пойти"
+          />
           {/* Вопросы */}
-          <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href="#" text="Вопросы" />
+          <NavItem
+            sectionWrapperClass="menu__list-item"
+            sectionLinkClass="menu__link"
+            href="#"
+            linkText="Вопросы"
+          />
           {/* выпадающее меню  "Читать и смотреть" */}
-          <NavItemWithDropdown wrapperClasses="menu__list-item menu__dropdown-item" text="Читать и смотреть" />
+          <NavItemWithDropdown
+            sectionWrapperClass="menu__list-item menu__dropdown-item"
+            linkText="Читать и смотреть"
+          />
           {/* Права детей */}
-          <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href="#" text="Права детей" />
+          <NavItem
+            sectionWrapperClass="menu__list-item"
+            sectionLinkClass="menu__link"
+            href="#"
+            linkText="Права детей"
+          />
           {/* Истории */}
-          <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href="#" text="Истории" />
+          <NavItem
+            sectionWrapperClass="menu__list-item"
+            sectionLinkClass="menu__link"
+            href="#"
+            linkText="Истории"
+          />
         </ul>
 
         <ul className="menu__list menu__list_type_social menu__list_hidden">
           {/* facebook */}
-          <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href={{ pathname: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/' }} text="facebook" target="_blank" rel="noreferrer" />
+          <NavItem
+            sectionWrapperClass="menu__list-item"
+            sectionLinkClass="menu__link"
+            href={{
+              pathname:
+                'https://www.facebook.com/BigBrothers.BigSisters.Russia/'
+            }}
+            linkText="facebook"
+            target="_blank"
+            rel="noreferrer"
+          />
           {/* vkontakte */}
-          <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href={{ pathname: 'https://vk.com/big.brothers.big.sisters' }} text="vkontakte" target="_blank" rel="noreferrer" />
+          <NavItem
+            sectionWrapperClass="menu__list-item"
+            sectionLinkClass="menu__link"
+            href={{ pathname: 'https://vk.com/big.brothers.big.sisters' }}
+            linkText="vkontakte"
+            target="_blank"
+            rel="noreferrer"
+          />
           {/* instagram */}
-          <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href={{ pathname: 'https://www.instagram.com/nastavniki_org/' }} text="instagram" target="_blank" rel="noreferrer" />
+          <NavItem
+            sectionWrapperClass="menu__list-item"
+            sectionLinkClass="menu__link"
+            href={{ pathname: 'https://www.instagram.com/nastavniki_org/' }}
+            linkText="instagram"
+            target="_blank"
+            rel="noreferrer"
+          />
           {/* youtube */}
-          <NavItem wrapperClasses="menu__list-item" linkClasses="menu__link" href={{ pathname: 'https://www.youtube.com/user/Nastavniki/' }} text="youtube" target="_blank" rel="noreferrer" />
+          <NavItem
+            sectionWrapperClass="menu__list-item"
+            sectionLinkClass="menu__link"
+            href={{ pathname: 'https://www.youtube.com/user/Nastavniki/' }}
+            linkText="youtube"
+            target="_blank"
+            rel="noreferrer"
+          />
         </ul>
       </div>
 
-      <button onClick={burgerClickHandler} className="menu__burger" type="button">
+      <button
+        onClick={burgerClickHandler}
+        className="menu__burger"
+        type="button"
+      >
         <span className="menu__burger-line" />
         <span className="menu__burger-line" />
         <span className="menu__burger-line" />
@@ -97,8 +171,8 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
                     href="./questions.html"
                     className="search__title-link section-title section-title_clickable"
                   >
-                    Что делать если ваш младший агрессивно себя ведет, решил закрыть
-                    пару?
+                    Что делать если ваш младший агрессивно себя ведет, решил
+                    закрыть пару?
                   </a>
                   <a href="./questions.html" className="link search__link">
                     вопросы
@@ -120,7 +194,10 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
           </form>
         </li>
         <li className="menu__button-item">
-          <UserButton isAuthorized={isAuthorized} handleClick={handleUserButtonClick} />
+          <UserButton
+            isAuthorized={isAuthorized}
+            handleClick={handleUserButtonClick}
+          />
         </li>
       </ul>
     </nav>

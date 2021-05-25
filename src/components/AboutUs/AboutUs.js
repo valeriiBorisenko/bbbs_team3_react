@@ -7,9 +7,6 @@ import CardFigure from '../ui/CardFigure/CardFigure';
 import CardAbout from '../ui/CardAbout/CardAbout';
 import Card from '../ui/Card/Card';
 import CardAnnotationContainer from '../ui/CardAnnotation/CardAnnotationContainer';
-// import { Link } from 'react-router-dom';
-
-//! В НЕКОТОРЫХ МЕСТАХ НАДО ПРАВИТЬ СТИЛИ
 
 function AboutUs({ isAuthorized }) {
   console.log(isAuthorized); // !выкинуть потом
@@ -60,8 +57,8 @@ function AboutUs({ isAuthorized }) {
 
       {/* цитата */}
       <Blockquote
-        wrapperClasses="about__quote"
-        h3classes="chapter-title about__quote-text"
+        sectionWrapperClass="about__quote"
+        sectionTitleClass="about__quote-text"
         text="Мы хотим, чтобы наставник был у каждого ребенка, который в нем нуждается"
       />
 

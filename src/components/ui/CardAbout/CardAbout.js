@@ -15,7 +15,14 @@ function CardAbout({
         <CardAnnotationContainer>
           <p className="paragraph card-about__paragraph">{text}</p>
         </CardAnnotationContainer>
-        <a href={href} target="_blank" className="link card-about__card-link" rel="noopener noreferrer">{linkText}</a>
+        <a
+          className="link card-about__card-link"
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {linkText}
+        </a>
       </div>
     </article>
   );

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './CardCalendar.scss';
 import PropTypes from 'prop-types';
 import ButtonDots from '../ButtonDots/ButtonDots';
@@ -19,7 +20,6 @@ function CardCalendar({
     description,
     booked
   },
-  isDisabled,
   isModal
 }) {
   const startDay = new Date(startAt);
@@ -39,16 +39,26 @@ function CardCalendar({
     11: 'декабрь'
   };
   const weekdays = {
+    0: 'воскресенье',
     1: 'понедельник',
     2: 'вторник',
     3: 'среда',
     4: 'четверг',
     5: 'пятница',
-    6: 'суббота',
-    7: 'воскресенье'
+    6: 'суббота'
   };
+
+  const [isBooked, setIsBooked] = useState(false);
+
+  function handleClickButtonBooked() {
+    if (isBooked) setIsBooked(false);
+    else setIsBooked(true);
+  }
+
+  const isDisabled = (remainSeats < 1 ? true : '');
+
   return (
-    <article className={`calendar ${booked ? 'calendar_selected' : ''}`}>
+    <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -92,13 +102,13 @@ function CardCalendar({
             title="Записаться"
             titleSelected="Отменить запись"
             color="blue"
-            isSelected={booked}
             isDisabled={isDisabled}
+            onClick={handleClickButtonBooked}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
-            || (!booked && `Осталось ${remainSeats} мест`)}
+            || (!isBooked && `Осталось ${remainSeats} мест`)}
           </p>
           <ButtonDots />
         </div>
@@ -117,14 +127,13 @@ CardCalendar.propTypes = {
   contact: PropTypes.string.isRequired,
   remainSeats: PropTypes.number.isRequired,
   description: PropTypes.string,
-  booked: PropTypes.bool.isRequired,
-  isDisabled: PropTypes.bool,
+  booked: PropTypes.bool,
   isModal: PropTypes.bool.isRequired
 };
 
 CardCalendar.defaultProps = {
-  isDisabled: false,
-  description: ''
+  description: '',
+  booked: false
 };
 
 export default CardCalendar;
