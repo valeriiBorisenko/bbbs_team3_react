@@ -11,7 +11,7 @@ function Calendar() {
       <div className="tags">
         <ul className="tags__list">
           {MounthData.mounth.map((data) => (
-            <li className="tags__list-item">
+            <li className="tags__list-item" key={data.id}>
               <Button title={data.name} color="black" />
             </li>
           ))}
@@ -21,14 +21,7 @@ function Calendar() {
         { CalendarePageData.event.map((data) => (
           <CardCalendar
             key={data.id}
-            tags={data.tags}
-            startAt={data.startAt}
-            endAt={data.endAt}
-            title={data.title}
-            address={data.address}
-            contact={data.contact}
-            remainSeats={data.remainSeats}
-            description={data.description}
+            data={data}
           />
         ))}
       </section>

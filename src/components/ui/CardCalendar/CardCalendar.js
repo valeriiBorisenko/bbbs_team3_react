@@ -48,7 +48,7 @@ function CardCalendar({
     6: 'суббота'
   };
 
-  const [isBooked, setIsBooked] = useState(false);
+  const [isBooked, setIsBooked] = useState(booked);
 
   function handleClickButtonBooked() {
     if (isBooked) setIsBooked(false);
@@ -63,6 +63,9 @@ function CardCalendar({
         <div className="calendar__info">
           <p className="calendar__type">
             {tags.map((tag, idx) => {
+              if (tags.length === 1) {
+                return `${tag.name}`;
+              }
               if (idx !== tags.length - 1) {
                 return `${tag.name} + `;
               }
@@ -118,22 +121,31 @@ function CardCalendar({
 }
 
 CardCalendar.propTypes = {
-  data: PropTypes.objectOf(PropTypes.any).isRequired,
-  tags: PropTypes.arrayOf(PropTypes.object).isRequired,
-  title: PropTypes.string.isRequired,
-  startAt: PropTypes.string.isRequired,
-  endAt: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
-  contact: PropTypes.string.isRequired,
-  remainSeats: PropTypes.number.isRequired,
+  data: PropTypes.objectOf(PropTypes.any),
+  tags: PropTypes.arrayOf(PropTypes.object),
+  title: PropTypes.string,
+  startAt: PropTypes.string,
+  endAt: PropTypes.string,
+  address: PropTypes.string,
+  contact: PropTypes.string,
+  remainSeats: PropTypes.number,
   description: PropTypes.string,
   booked: PropTypes.bool,
-  isModal: PropTypes.bool.isRequired
+  isModal: PropTypes.bool
 };
 
 CardCalendar.defaultProps = {
+  data: {},
+  title: '',
+  startAt: '',
+  endAt: '',
+  address: '',
+  contact: '',
+  remainSeats: 0,
+  tags: [],
   description: '',
-  booked: false
+  booked: false,
+  isModal: false
 };
 
 export default CardCalendar;
