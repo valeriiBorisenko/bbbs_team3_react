@@ -5,6 +5,7 @@ import NavItem from '../NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
 import UserButton from '../UserButton/UserButton';
+import UserMenuButton from '../UserMenuButton/UserMenuButton';
 
 function NavBar({
   isAuthorized,
@@ -129,6 +130,11 @@ function NavBar({
             closeMobileMenu={handleBurgerClick}
           />
         </ul>
+      </div>
+
+      <div className="menu__user-info">
+        <UserMenuButton title="Изменить город" />
+        <UserMenuButton title="Выйти" />
       </div>
 
       <button
