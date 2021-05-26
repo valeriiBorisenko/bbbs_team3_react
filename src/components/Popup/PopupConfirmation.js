@@ -12,7 +12,7 @@ function PopupConfirmation({ isOpen, onClose, onClick }) {
       onClose={onClose}
     >
       <TitleH2
-        sectionClass="popup__title_type_calendar popup__title_type_confirmation"
+        sectionClass="popup__title_type_calendar"
         title="Подтвердить запись на мероприятие «Субботний meet up: учимся проходить интервью» 5 декабря с 12:00–14:00"
       />
       <div className="popup__buttons_type_calendar">
