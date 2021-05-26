@@ -28,7 +28,7 @@ function Main({ isAuthorized }) {
   }
 
   function handleClickPopupConfirmationOpened(data) {
-    setIsPopupConfirmation(true);
+    setIsPopupConfirmationOpen(true);
     setSelectedDataCalendar(data);
   }
 

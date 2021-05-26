@@ -2,8 +2,7 @@
 // eslint-disable-next-line quote-props
 // eslint-disable-next-line quotes
 
-export const MounthData = {
-    mounth: [
+export const MonthData = [
         {
             id: 0,
             name: 'январь'
@@ -52,8 +51,7 @@ export const MounthData = {
             id: 11,
             name: 'декабрь'
         }
-    ]
-};
+    ];
 
 export const months = {
     0: 'январь',

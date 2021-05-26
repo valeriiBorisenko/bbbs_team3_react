@@ -3,7 +3,7 @@ import TitleH1 from '../ui/TitleH1/TitleH1';
 import ButtonTags from '../ui/Button/ButtonTags';
 import './Calendar.scss';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
-import MonthData from '../../utils/constants';
+import { MonthData } from '../../utils/constants';
 
 function Calendar({
   onClick,

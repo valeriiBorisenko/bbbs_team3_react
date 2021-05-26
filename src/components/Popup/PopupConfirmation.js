@@ -4,7 +4,12 @@ import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
-function PopupConfirmation({ isOpen, onClose, onConfirmFormSubmit, data }) {
+function PopupConfirmation({
+  isOpen,
+  onClose,
+  onConfirmFormSubmit,
+  data
+}) {
   function submitHandler(event) {
     event.preventDefault();
     onConfirmFormSubmit();
