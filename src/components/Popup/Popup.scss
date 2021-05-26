@@ -8,8 +8,8 @@
   right: 0;
   left: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, .5);
-  transition: visibility .3s, opacity .3s linear;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: visibility 0.3s, opacity 0.3s linear;
 
   &__container {
     position: relative;
@@ -17,7 +17,7 @@
     flex-direction: column;
     justify-content: space-between;
     z-index: 2;
-    margin: 75px auto 0;
+    margin: auto;
     padding: 50px 100px;
     border-radius: 30px;
     max-width: 770px;
@@ -139,9 +139,21 @@
   cursor: pointer;
 }
 
-.popup__title_type_sign-in {
-  padding-bottom: 15px;
-  text-align: center;
+.popup__title {
+  &_type_sign-in {
+    padding-bottom: 15px;
+    text-align: center;
+  }
+
+  &_type_calendar {
+    max-width: 570px;
+    text-align: start;
+    margin-bottom: 40px;
+  }
+
+  &_type_calendar {
+    text-align: center;
+  }
 }
 
 .popup__sign-in {
@@ -192,6 +204,16 @@
   width: 85px;
 }
 
+.popup__buttons {
+  width: 170px;
+
+  &_type_calendar {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+}
+
 @include atDesktop1440 {
   .popup__container {
     &_type_video {
@@ -208,12 +230,8 @@
     }
 
     &_type_middle {
-      width: 200px
+      width: 200px;
     }
-  }
-
-  .popup__buttons {
-    width: 170px;
   }
 
   .popup__container {
@@ -257,7 +275,6 @@
 @include atMobile {
   .popup__container {
     max-width: 290px;
-    margin-top: 10px;
 
     &_type_recommendation {
       justify-content: flex-start;

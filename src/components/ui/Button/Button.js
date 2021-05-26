@@ -2,11 +2,11 @@ import './Button.scss';
 import PropTypes from 'prop-types';
 
 function Button({
-  title, titleSelected, color, isDisabled, onClick, isSelected
+  title, titleSelected, color, isDisabled, onClick, isSelected, sectionClass
 }) {
   return (
     <button
-      className={`button button_color_${color} ${
+      className={`button button_color_${color} ${sectionClass} ${
         isSelected ? `button_color_${color}_selected` : ''
       }`}
       type="button"
@@ -24,7 +24,8 @@ Button.propTypes = {
   color: PropTypes.string,
   isDisabled: PropTypes.bool,
   onClick: PropTypes.func,
-  isSelected: PropTypes.bool
+  isSelected: PropTypes.bool,
+  sectionClass: PropTypes.string
 };
 
 Button.defaultProps = {
@@ -33,7 +34,8 @@ Button.defaultProps = {
   titleSelected: undefined,
   onClick: undefined,
   isDisabled: false,
-  isSelected: false
+  isSelected: false,
+  sectionClass: ''
 };
 
 export default Button;

@@ -12,11 +12,11 @@
   font-family: $protoGrotesk;
   font-size: 15px;
   line-height: 1.3;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   white-space: nowrap;
   background-color: transparent;
   cursor: pointer;
-  transition: .3s ease;
+  transition: 0.3s ease;
 
   &:disabled {
     color: $lightGray;
@@ -92,8 +92,18 @@
     color: $background;
 
     &:hover {
-      opacity: .8;
+      opacity: 0.8;
     }
+  }
+
+  &_color_blackwhite {
+    border-color: $black;
+    color: $black;
+  }
+
+  &__calendar_type_confirm {
+    max-width: 191px;
+    margin-right: 15px;
   }
 }
 

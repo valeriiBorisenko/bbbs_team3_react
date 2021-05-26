@@ -8,21 +8,28 @@ import Account from '../Account/Account';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import Calendar from '../Calendar/Calendar';
 import PopupConfirmation from '../Popup/PopupConfirmation';
+import PopupSuccessfully from '../Popup/PopupSuccessfully';
 
 function Main({ isAuthorized }) {
-  const [isPopupConfirmation, setIsPopupConfirmation] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
-
-  function handleClickPopupConfirmationOpened() {
-    setIsPopupConfirmation(true);
-  }
+  const [isPopupConfirmation, setIsPopupConfirmation] = useState(false);
+  const [isPopupSuccessfully, setIsPopupSuccessfully] = useState(false);
 
   function handleClickSelectedButton() {
     setIsSelected(true);
   }
 
+  function handleClickPopupConfirmationOpened() {
+    setIsPopupConfirmation(true);
+  }
+
+  function handleClickPopupSuccessfullyOpened() {
+    setIsPopupSuccessfully(true);
+  }
+
   function closeAllPopups() {
     setIsPopupConfirmation(false);
+    setIsPopupSuccessfully(false);
   }
 
   useEffect(() => {
@@ -72,6 +79,11 @@ function Main({ isAuthorized }) {
       </Switch>
       <PopupConfirmation
         isOpen={isPopupConfirmation}
+        onClose={closeAllPopups}
+        onClick={handleClickPopupSuccessfullyOpened}
+      />
+      <PopupSuccessfully
+        isOpen={isPopupSuccessfully}
         onClose={closeAllPopups}
       />
     </main>

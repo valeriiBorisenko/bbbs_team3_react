@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import TitleH1 from '../ui/TitleH1/TitleH1';
-import Button from '../ui/Button/Button';
+import ButtonTags from '../ui/Button/ButtonTags';
 import './Calendar.scss';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import { CalendarePageData, MounthData } from '../../utils/constants';
@@ -13,7 +13,7 @@ function Calendar({ onClick, clickButton, isSelected }) {
         <ul className="tags__list">
           {MounthData.mounth.map((data) => (
             <li className="tags__list-item" key={data.id}>
-              <Button title={data.name} color="black" />
+              <ButtonTags title={data.name} color="black" />
             </li>
           ))}
         </ul>
