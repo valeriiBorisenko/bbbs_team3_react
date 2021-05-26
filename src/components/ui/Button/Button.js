@@ -9,8 +9,13 @@ function Button({
   isDisabled,
   onClick,
   isSelected,
-  sectionClass
+  sectionClass,
+  data
 }) {
+  function handleClickButtonConfirm() {
+    onClick(data);
+  }
+
   return (
     <button
       className={`button button_color_${color} ${sectionClass} ${
@@ -18,7 +23,7 @@ function Button({
       }`}
       type={isSubmittable ? 'submit' : 'button'}
       disabled={isDisabled}
-      onClick={onClick}
+      onClick={handleClickButtonConfirm}
     >
       {!isSelected ? title : titleSelected || title}
     </button>
@@ -33,7 +38,8 @@ Button.propTypes = {
   isDisabled: PropTypes.bool,
   onClick: PropTypes.func,
   isSelected: PropTypes.bool,
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
+  data: PropTypes.objectOf(PropTypes.any)
 };
 
 Button.defaultProps = {
@@ -44,7 +50,8 @@ Button.defaultProps = {
   onClick: undefined,
   isDisabled: false,
   isSelected: false,
-  sectionClass: ''
+  sectionClass: '',
+  data: {}
 };
 
 export default Button;
