@@ -4,10 +4,15 @@ import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
-function PopupConfirmation({ isOpen, onClose, onClick }) {
+function PopupConfirmation({ isOpen, onClose, onConfirmFormSubmit }) {
+  function submitHandler(event) {
+    event.preventDefault();
+    onConfirmFormSubmit();
+  }
+
   return (
     <Popup type="confirmation" isOpen={isOpen} onClose={onClose}>
-      {/* пропс title должен приходить из-вне
+      {/* пропс title и время должны приходить из-вне
       ((клик по карточке подтягивает инфу в конфирм-попап))
       так же осложняет то что в строке еще дата есть, которую так
       же надо подтягивать (еще 1 пропс нужен)
@@ -21,7 +26,7 @@ function PopupConfirmation({ isOpen, onClose, onClick }) {
           color="blue"
           title="Подтвердить запись"
           sectionClass="button__calendar_type_confirm"
-          onClick={onClick}
+          onClick={submitHandler}
           isSubmittable
         />
         <Button
@@ -37,13 +42,13 @@ function PopupConfirmation({ isOpen, onClose, onClick }) {
 PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onClick: PropTypes.func
+  onConfirmFormSubmit: PropTypes.func
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: undefined,
-  onClick: undefined
+  onConfirmFormSubmit: undefined
 };
 
 export default PopupConfirmation;
