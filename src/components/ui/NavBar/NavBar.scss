@@ -46,7 +46,6 @@
   }
 }
 
-
 .menu__list-item_hidden {
   display: none;
 }
@@ -158,10 +157,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 123px;
     margin-bottom: 15px;
+    transition: .3s ease;
 
     &_hidden {
-      display: none;
+      visibility: hidden;
+      opacity: 0;
+      height: 0;
+      margin: 0;
     }
   }
 
@@ -218,7 +222,7 @@
     max-width: 290px;
     width: 100%;
     padding-top: 35px;
-    margin-bottom: 158px;
+    margin-bottom: 35px;
     display: flex;
     justify-content: center;
     transition: 0.5s ease;
@@ -305,11 +309,7 @@
 }
 
 @include atMobileL {
-  .menu__lists-wrap {
-    margin-bottom: 50px;
-  }
-
-  .menu__lists-wrap_hidden.menu__lists-wrap {
-    margin: 0;
+  .menu__user-info {
+    margin-top: 15px;
   }
 }

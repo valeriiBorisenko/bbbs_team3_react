@@ -132,6 +132,7 @@ function NavBar({
         </ul>
       </div>
 
+      {isAuthorized && (
       <div className={`menu__user-info ${
         !isNavMenuOpen ? 'menu__user-info_hidden' : ''
       }`}
@@ -139,6 +140,7 @@ function NavBar({
         <UserMenuButton title="Изменить город" />
         <UserMenuButton title="Выйти" />
       </div>
+      )}
 
       <button
         onClick={handleBurgerClick}
