@@ -1,5 +1,4 @@
 import './NavBar.scss';
-import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import NavItem from '../NavItem/NavItem';
@@ -7,34 +6,32 @@ import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
 import UserButton from '../UserButton/UserButton';
 
-function NavBar({ isAuthorized, handleUserButtonClick }) {
-  // временное решение по открытию бургера
-  function burgerClickHandler() {
-    document.querySelector('.header').classList.toggle('header_displayed');
-    document.querySelector('.menu__burger').classList.toggle('menu__burger_active');
-    document.querySelector('.menu__lists-wrap').classList.toggle('menu__lists-wrap_hidden');
-    document.querySelector('.menu__list_type_social').classList.toggle('menu__list_hidden');
-  }
-
+function NavBar({
+  isAuthorized,
+  handleUserButtonClick,
+  handleBurgerClick,
+  isNavMenuOpen
+}) {
   return (
     <nav className="menu">
       {/* логотип */}
-      <Link
-        to="/"
-        target="_self"
-        className="menu__logo"
-      >
+      <Link to="/" target="_self" className="menu__logo">
         наставники.про
       </Link>
       {/* обычное меню */}
-      <div className="menu__lists-wrap menu__lists-wrap_hidden">
+      <div
+        className={`menu__lists-wrap ${
+          !isNavMenuOpen ? 'menu__lists-wrap_hidden' : ''
+        }`}
+      >
         <ul className="menu__list">
           {/* О проекте, скрытый */}
           <NavItem
             sectionWrapperClass="menu__list-item menu__list-item_hidden"
             sectionLinkClass="menu__link"
-            href="about-us"
+            href="/about-us"
             linkText="О проекте"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* Календарь */}
           <NavItem
@@ -42,6 +39,7 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
             sectionLinkClass="menu__link"
             href="/calendar"
             linkText="Календарь"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* Куда пойти */}
           <NavItem
@@ -49,6 +47,7 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
             sectionLinkClass="menu__link"
             href="#"
             linkText="Куда пойти"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* Вопросы */}
           <NavItem
@@ -56,6 +55,7 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
             sectionLinkClass="menu__link"
             href="#"
             linkText="Вопросы"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* выпадающее меню  "Читать и смотреть" */}
           <NavItemWithDropdown
@@ -68,6 +68,7 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
             sectionLinkClass="menu__link"
             href="#"
             linkText="Права детей"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* Истории */}
           <NavItem
@@ -75,10 +76,15 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
             sectionLinkClass="menu__link"
             href="#"
             linkText="Истории"
+            closeMobileMenu={handleBurgerClick}
           />
         </ul>
 
-        <ul className="menu__list menu__list_type_social menu__list_hidden">
+        <ul
+          className={`menu__list menu__list_type_social ${
+            !isNavMenuOpen ? 'menu__list_hidden' : ''
+          }`}
+        >
           {/* facebook */}
           <NavItem
             sectionWrapperClass="menu__list-item"
@@ -89,7 +95,8 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
             }}
             linkText="facebook"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* vkontakte */}
           <NavItem
@@ -98,7 +105,8 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
             href={{ pathname: 'https://vk.com/big.brothers.big.sisters' }}
             linkText="vkontakte"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* instagram */}
           <NavItem
@@ -107,7 +115,8 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
             href={{ pathname: 'https://www.instagram.com/nastavniki_org/' }}
             linkText="instagram"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            closeMobileMenu={handleBurgerClick}
           />
           {/* youtube */}
           <NavItem
@@ -116,14 +125,15 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
             href={{ pathname: 'https://www.youtube.com/user/Nastavniki/' }}
             linkText="youtube"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            closeMobileMenu={handleBurgerClick}
           />
         </ul>
       </div>
 
       <button
-        onClick={burgerClickHandler}
-        className="menu__burger"
+        onClick={handleBurgerClick}
+        className={`menu__burger ${isNavMenuOpen ? 'menu__burger_active' : ''}`}
         type="button"
       >
         <span className="menu__burger-line" />
@@ -206,12 +216,16 @@ function NavBar({ isAuthorized, handleUserButtonClick }) {
 
 NavBar.propTypes = {
   isAuthorized: PropTypes.bool,
-  handleUserButtonClick: PropTypes.func
+  handleUserButtonClick: PropTypes.func,
+  handleBurgerClick: PropTypes.func,
+  isNavMenuOpen: PropTypes.bool
 };
 
 NavBar.defaultProps = {
   isAuthorized: false,
-  handleUserButtonClick: undefined
+  handleUserButtonClick: undefined,
+  handleBurgerClick: undefined,
+  isNavMenuOpen: false
 };
 
 export default NavBar;
