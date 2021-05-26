@@ -9,7 +9,6 @@ const cities = require('./server-responses/cities.json');
 
 const calendarPageData = require('./server-responses/calendar-page.json');
 
-
 const baseURL = 'http://localhost:3000';
 
 // mock
@@ -59,6 +58,9 @@ mock.onDelete(`${baseURL}/afisha/events/:id`).reply(
   200,
   {
     booked: false
+  },
+  'Content-Type: application/json'
+);
 
 // functions
 export const getMainPageData = () => axios.get(`${baseURL}/main/`);
