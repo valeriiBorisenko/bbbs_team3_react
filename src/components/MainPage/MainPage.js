@@ -11,7 +11,7 @@ import CardFilm from '../ui/CardFilm/CardFilm';
 import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
-import getMainPageData from '../../utils/api';
+import { getMainPageData } from '../../utils/api';
 
 function MainPage({ isAuthorized }) {
   const [dataMain, setDataMain] = useState(null);

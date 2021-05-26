@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './CardCalendar.scss';
 import PropTypes from 'prop-types';
 import ButtonDots from '../ButtonDots/ButtonDots';
@@ -51,17 +50,10 @@ function CardCalendar({
     6: 'суббота'
   };
 
-  const [isBooked, setIsBooked] = useState(booked);
-
-  function handleClickButtonBooked() {
-    if (isBooked) setIsBooked(false);
-    else setIsBooked(true);
-  }
-
   const isDisabled = (remainSeats < 1 ? true : '');
 
   return (
-    <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
+    <article className={`calendar ${booked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -110,14 +102,14 @@ function CardCalendar({
             color="blue"
             isDisabled={isDisabled}
             onClick={onClick}
-            handleClickButtonBooked={handleClickButtonBooked}
             clickButton={clickButton}
             isSelected={isSelected}
+            data={{ data: title, startAt, endAt }}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
-            || (!isBooked && `Осталось ${remainSeats} мест`)}
+            || (!booked && `Осталось ${remainSeats} мест`)}
           </p>
           <ButtonDots />
         </div>

@@ -3,6 +3,7 @@ const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 
 const mainPageData = require('./server-responses/main-page.json');
+const calendarPageData = require('./server-responses/calendar-page.json');
 
 const baseURL = 'http://localhost:3000';
 
@@ -17,7 +18,32 @@ mock.onGet(`${baseURL}/main/`).reply(
   'Content-Type: application/json'
 );
 
-// functions
-const getMainPageData = () => axios.get(`${baseURL}/main/`);
+mock.onGet(`${baseURL}/afisha/events/`).reply(
+  200,
+  {
+    calendarPageData
+  },
+  'Content-Type: application/json'
+);
 
-export default getMainPageData;
+mock.onPut(`${baseURL}/afisha/events/:id`).reply(
+  200,
+  {
+    booked: true
+  },
+  'Content-Type: application/json'
+);
+
+mock.onDelete(`${baseURL}/afisha/events/:id`).reply(
+  200,
+  {
+    booked: false
+  },
+  'Content-Type: application/json'
+);
+
+// functions
+export const getMainPageData = () => axios.get(`${baseURL}/main/`);
+export const getCalendarPageData = () => axios.get(`${baseURL}/afisha/events/`);
+export const putBookedEvent = () => axios.put(`${baseURL}/afisha/events/:id}`);
+export const deleteBookedEvent = () => axios.put(`${baseURL}/afisha/events/:id}`);

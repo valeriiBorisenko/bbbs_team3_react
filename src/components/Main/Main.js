@@ -2,6 +2,7 @@ import './Main.scss';
 import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { getCalendarPageData } from '../../utils/api';
 // страницы
 import MainPage from '../MainPage/MainPage';
 import Calendar from '../Calendar/Calendar';
@@ -18,13 +19,16 @@ function Main({ isAuthorized }) {
   const [isPopupConfirmation, setIsPopupConfirmation] = useState(false);
   const [isPopupSuccessfully, setIsPopupSuccessfully] = useState(false);
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
+  const [dataCalendar, setDataCalendar] = useState(null);
+  const [selectedDataCalendar, setSelectedDataCalendar] = useState('');
 
   function handleClickSelectedButton() {
     setIsSelected(true);
   }
 
-  function handleClickPopupConfirmationOpened() {
+  function handleClickPopupConfirmationOpened(data) {
     setIsPopupConfirmation(true);
+    setSelectedDataCalendar(data);
   }
 
   function handleClickPopupSuccessfullyOpened() {
@@ -62,6 +66,12 @@ function Main({ isAuthorized }) {
     };
   }, [isPopupConfirmation]);
 
+  useEffect(() => {
+    getCalendarPageData()
+      .then((res) => setDataCalendar(res.data.calendarPageData))
+      .catch((err) => console.log(err));
+  }, [setDataCalendar]);
+
   return (
     <main className="main">
       <Switch>
@@ -80,6 +90,7 @@ function Main({ isAuthorized }) {
             onClick={handleClickPopupConfirmationOpened}
             clickButton={handleClickSelectedButton}
             isSelected={isSelected}
+            dataCalendar={dataCalendar}
           />
         </Route>
         <Route path="*">
@@ -90,6 +101,7 @@ function Main({ isAuthorized }) {
         isOpen={isPopupConfirmation}
         onClose={closeAllPopups}
         onClick={handleClickPopupSuccessfullyOpened}
+        data={selectedDataCalendar}
       />
       <PopupSuccessfully
         isOpen={isPopupSuccessfully}
