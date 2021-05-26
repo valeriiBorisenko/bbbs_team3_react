@@ -1,30 +1,45 @@
 @import './styles/utils.scss';
 
 .popup {
-  visibility: hidden;
-  opacity: 0;
   position: fixed;
   top: 0;
-  right: 0;
   left: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.5);
+  opacity: 0;
+  visibility: hidden;
   transition: visibility 0.3s, opacity 0.3s linear;
 
   &__container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    z-index: 2;
-    margin: auto;
+    // position: relative;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: space-between;
+    // z-index: 2;
+    // margin: auto;
+
     padding: 50px 100px;
     border-radius: 30px;
-    max-width: 770px;
-    max-height: 80vh;
+    // max-width: 770px;
+    // max-height: 80vh;
     background-color: $white;
     font-family: $ptRootUI;
     box-sizing: border-box;
+
+    position: relative;
+    // top: auto;
+    // left: auto;
+    
+    box-sizing: border-box;
+    // padding: 32px 36px 40px;
+    // border-radius: 10px;
 
     &_type_recommendation {
       justify-content: flex-start;
@@ -38,28 +53,36 @@
 
     &_type_done {
       justify-content: center;
-      height: 670px;
+      // height: 670px;
+      width: 770px;
     }
 
     &_type_confirmation {
-      height: 670px;
+      // height: 670px;
+      width: 770px;
       justify-content: center;
     }
 
     &_type_sign-in {
-      justify-content: space-between;
-      height: 559px;
+      // justify-content: space-between;
+      width: 770px;
+
+      & .popup__submit-btn {
+        align-self: flex-start;
+      }
     }
 
     &_type_calendar {
-      height: 670px;
+      // height: 670px;
+      width: 770px;
     }
 
     &_type_cities {
       padding: 50px 85px 0;
       align-items: center;
       justify-content: flex-start;
-      max-width: 400px;
+      // max-width: 400px;
+      width: 400px;
       max-height: 547px;
     }
 
@@ -70,6 +93,12 @@
       width: 470px;
       height: 238px;
     }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-between;
   }
 
   &__box {
@@ -120,6 +149,7 @@
   display: flex;
   opacity: 1;
   visibility: visible;
+  z-index: 15;
 }
 
 .popup__close {
@@ -141,7 +171,7 @@
 
 .popup__title {
   &_type_sign-in {
-    padding-bottom: 15px;
+    margin-bottom: 15px;
     text-align: center;
   }
 
@@ -158,10 +188,10 @@
 
 .popup__sign-in {
   text-align: center;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
 
   &:nth-of-type(2) {
-    padding-bottom: 50px;
+    margin-bottom: 50px;
   }
 }
 
@@ -194,10 +224,15 @@
 
 .popup__forgot-password {
   margin: 0;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
   font-size: 14px;
   line-height: 1.5;
   color: $darkGray;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .popup__enter {
@@ -236,10 +271,10 @@
 
   .popup__container {
     padding: 50px;
-    max-width: 570px;
+    width: 570px;
 
     &_type_cities {
-      max-width: 320px;
+      width: 320px;
     }
 
     &_type_lk {
@@ -261,7 +296,7 @@
   }
 
   .popup__container {
-    max-width: 450px;
+    width: 450px;
     padding: 60px 15px 30px;
   }
 
@@ -274,7 +309,7 @@
 
 @include atMobile {
   .popup__container {
-    max-width: 290px;
+    width: 290px;
 
     &_type_recommendation {
       justify-content: flex-start;
@@ -292,10 +327,10 @@
   }
 
   .popup__sign-in {
-    padding-bottom: 20px;
+    margin-bottom: 20px;
 
     &:nth-of-type(2) {
-      padding-bottom: 30px;
+      margin-bottom: 30px;
     }
   }
 
