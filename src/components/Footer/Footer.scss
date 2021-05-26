@@ -9,6 +9,7 @@
   justify-content: center;
   background-color: $darkBlue;
   font-family: $ptRootUI;
+  flex-shrink: 0;
 }
 
 .footer__logo-image {
