@@ -1,0 +1,11 @@
+@import './styles/utils.scss';
+
+.popup__image-successfully {
+  background-image: url('../../assets/popup_done.svg');
+  background-repeat: no-repeat;
+  align-self: center;
+  margin-bottom: 30px;
+  width: 413px;
+  height: 169px;
+  background-size: 413px 169px;
+}
