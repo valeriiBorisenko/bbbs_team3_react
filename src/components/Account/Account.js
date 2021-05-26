@@ -1,23 +1,42 @@
-import AccountEventCard from '../ui/AccountEventCard/AccountEventCard';
+import { useEffect, useState } from 'react';
 import './Account.scss';
+import { getAccountData } from '../../utils/api';
+import { formatDate } from '../../utils/utils';
+import AccountEventCard from '../ui/AccountEventCard/AccountEventCard';
 
 function Account() {
-  return (
+  const [events, setEvents] = useState(null);
+
+  useEffect(() => {
+    getAccountData()
+      .then((res) => setEvents(res.data.accountData))
+      .catch((err) => console.log(err));
+  }, []);
+  return events ? (
     <section className="account">
       <div className="account__events-area page__section">
-        <h2 className="section-title account__title">Вы записаны на мероприятия:</h2>
+        <h2 className="section-title account__title">
+          {events.length > 0
+            ? 'Вы записаны на мероприятия:'
+            : 'У вас нет записи на мероприятия'}
+        </h2>
         <div className="account__events">
-          <AccountEventCard day="05" month="декабрь" title="Субботний meet up: учимся проходить интервью учимся проходить интервью учимся проходить интервью" />
-          <AccountEventCard day="16" month="декабрь" title="Ресурсная группа «Вовлечение в волонтёрство» учимся проходить интервью учимся проходить интервью" />
-          <AccountEventCard day="05" month="декабрь" title="Субботний meet up: учимся проходить интервью учимся проходить интервью учимся проходить интервью" />
-          <AccountEventCard day="16" month="декабрь" title="Ресурсная группа «Вовлечение в волонтёрство» учимся проходить интервью учимся проходить интервью" />
-          <AccountEventCard day="05" month="декабрь" title="Субботний meet up: учимся проходить интервью учимся проходить интервью учимся проходить интервью" />
-          <AccountEventCard day="05" month="декабрь" title="Субботний meet up: учимся проходить интервью учимся проходить интервью учимся проходить интервью" />
-          <AccountEventCard day="16" month="декабрь" title="Ресурсная группа «Вовлечение в волонтёрство» учимся проходить интервью учимся проходить интервью" />
-          <AccountEventCard day="05" month="декабрь" title="Субботний meet up: учимся проходить интервью учимся проходить интервью учимся проходить интервью" />
+          {events.length > 0
+            && events.map((item) => (
+              <AccountEventCard
+                key={item.id}
+                day={formatDate(item.startAt).day}
+                month={formatDate(item.startAt).month}
+                title={item.title}
+              />
+            ))}
         </div>
       </div>
     </section>
+  ) : (
+    <p style={{ color: 'red', margin: '0 auto', textAlign: 'center' }}>
+      Loading
+    </p>
   );
 }
 
