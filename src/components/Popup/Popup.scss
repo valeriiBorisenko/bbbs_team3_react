@@ -53,8 +53,12 @@
 
     &_type_done {
       justify-content: center;
-      // height: 670px;
+      min-height: 670px;
       width: 770px;
+
+      & .popup__submit-btn {
+        align-self: center;
+      }
     }
 
     &_type_confirmation {
@@ -67,7 +71,7 @@
       align-items: center;
       /* flex-direction: column; */
       // min-height: 670px;
-      min-height: 380px;
+      min-height: 500px;
     }
 
     &_type_sign-in {
@@ -185,7 +189,7 @@
   &_type_calendar {
     max-width: 570px;
     text-align: start;
-    // margin-bottom: 40px;
+    margin-bottom: 40px;
   }
 
   &_type_calendar {
@@ -232,6 +236,7 @@
 .popup__forgot-password {
   margin: 0;
   margin-bottom: 30px;
+  margin-top: 20px;
   font-size: 14px;
   line-height: 1.5;
   color: $darkGray;
@@ -252,7 +257,7 @@
   &_type_calendar {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
+    // margin-top: 30px;
   }
 }
 
@@ -305,6 +310,10 @@
   .popup__container {
     width: 450px;
     padding: 60px 15px 30px;
+
+    &_type_sign-in {
+      padding-bottom: 50px;
+    }
   }
 
   .popup__input {
