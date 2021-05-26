@@ -4,6 +4,7 @@ const MockAdapter = require('axios-mock-adapter');
 
 const mainPageData = require('./server-responses/main-page.json');
 const accountData = require('./server-responses/account.json');
+const cities = require('./server-responses/cities.json');
 
 const baseURL = 'http://localhost:3000';
 
@@ -26,7 +27,17 @@ mock.onGet(`${baseURL}/account/`).reply(
   'Content-Type: application/json'
 );
 
+mock.onGet(`${baseURL}/cities/`).reply(
+  200,
+  {
+    cities
+  },
+  'Content-Type: application/json'
+);
+
 // functions
 export const getMainPageData = () => axios.get(`${baseURL}/main/`);
 
 export const getAccountData = () => axios.get(`${baseURL}/account/`);
+
+export const getCities = () => axios.get(`${baseURL}/cities/`);

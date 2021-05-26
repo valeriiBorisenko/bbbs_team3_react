@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import NavBar from '../ui/NavBar/NavBar';
 import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
 
-function Header({ isAuthorized, handleUserButtonClick }) {
+function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
   const { pathname } = useLocation();
 
   // меню бургер
@@ -53,7 +53,7 @@ function Header({ isAuthorized, handleUserButtonClick }) {
 
       {pathname === '/account' && (
         <div className="header__user-info">
-          <UserMenuButton title="Изменить город" />
+          <UserMenuButton title="Изменить город" handleClick={handleChangeCity} />
           <UserMenuButton title="Выйти" />
         </div>
       )}
@@ -63,12 +63,14 @@ function Header({ isAuthorized, handleUserButtonClick }) {
 
 Header.propTypes = {
   isAuthorized: PropTypes.bool,
-  handleUserButtonClick: PropTypes.func
+  handleUserButtonClick: PropTypes.func,
+  handleChangeCity: PropTypes.func
 };
 
 Header.defaultProps = {
   isAuthorized: false,
-  handleUserButtonClick: undefined
+  handleUserButtonClick: undefined,
+  handleChangeCity: undefined
 };
 
 export default Header;
