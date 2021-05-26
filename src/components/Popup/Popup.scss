@@ -18,8 +18,8 @@
   transition: visibility 0.3s, opacity 0.3s linear;
 
   &__container {
+    display: flex;
     // position: relative;
-    // display: flex;
     // flex-direction: column;
     // justify-content: space-between;
     // z-index: 2;
@@ -59,8 +59,15 @@
 
     &_type_confirmation {
       // height: 670px;
-      width: 770px;
       justify-content: center;
+
+      width: 770px;
+      // display: flex;
+      justify-content: center;
+      align-items: center;
+      /* flex-direction: column; */
+      // min-height: 670px;
+      min-height: 380px;
     }
 
     &_type_sign-in {
@@ -178,7 +185,7 @@
   &_type_calendar {
     max-width: 570px;
     text-align: start;
-    margin-bottom: 40px;
+    // margin-bottom: 40px;
   }
 
   &_type_calendar {
