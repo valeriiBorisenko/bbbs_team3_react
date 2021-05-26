@@ -4,7 +4,11 @@ import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
-function PopupLogin({ isOpen, onClose, onClick }) {
+function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
+  function submitHandler(event) {
+    event.preventDefault();
+    onLoginFormSubmit();
+  }
   return (
     <Popup
       type="sign-in"
@@ -42,7 +46,7 @@ function PopupLogin({ isOpen, onClose, onClick }) {
       <Button
         color="blue"
         title="Войти"
-        onClick={onClick}
+        onClick={submitHandler}
         isSubmittable
         isDisabled
         sectionClass="popup__submit-btn"
@@ -54,7 +58,7 @@ function PopupLogin({ isOpen, onClose, onClick }) {
 PopupLogin.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onClick: PropTypes.func.isRequired
+  onLoginFormSubmit: PropTypes.func.isRequired
 };
 
 export default PopupLogin;

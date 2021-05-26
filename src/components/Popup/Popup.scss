@@ -18,8 +18,8 @@
   transition: visibility 0.3s, opacity 0.3s linear;
 
   &__container {
+    display: flex;
     // position: relative;
-    // display: flex;
     // flex-direction: column;
     // justify-content: space-between;
     // z-index: 2;
@@ -53,14 +53,25 @@
 
     &_type_done {
       justify-content: center;
-      // height: 670px;
+      min-height: 670px;
       width: 770px;
+
+      & .popup__submit-btn {
+        align-self: center;
+      }
     }
 
     &_type_confirmation {
       // height: 670px;
-      width: 770px;
       justify-content: center;
+
+      width: 770px;
+      // display: flex;
+      justify-content: center;
+      align-items: center;
+      /* flex-direction: column; */
+      // min-height: 670px;
+      min-height: 500px;
     }
 
     &_type_sign-in {
@@ -225,6 +236,7 @@
 .popup__forgot-password {
   margin: 0;
   margin-bottom: 30px;
+  margin-top: 20px;
   font-size: 14px;
   line-height: 1.5;
   color: $darkGray;
@@ -245,7 +257,7 @@
   &_type_calendar {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
+    // margin-top: 30px;
   }
 }
 
@@ -298,6 +310,10 @@
   .popup__container {
     width: 450px;
     padding: 60px 15px 30px;
+
+    &_type_sign-in {
+      padding-bottom: 50px;
+    }
   }
 
   .popup__input {
