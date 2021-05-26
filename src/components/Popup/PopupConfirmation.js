@@ -4,12 +4,16 @@ import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
-function PopupConfirmation({ isOpen, onClose, onConfirmFormSubmit }) {
+function PopupConfirmation({
+  isOpen,
+  onClose,
+  onConfirmFormSubmit,
+  data
+}) {
   function submitHandler(event) {
     event.preventDefault();
     onConfirmFormSubmit();
   }
-
   return (
     <Popup
       type="confirmation"
@@ -23,7 +27,7 @@ function PopupConfirmation({ isOpen, onClose, onConfirmFormSubmit }) {
       */}
       <TitleH2
         sectionClass="popup__title_type_calendar"
-        title="Подтвердить запись на мероприятие «Субботний meet up: учимся проходить интервью» 5 декабря с 12:00–14:00"
+        title={`Подтвердить запись на мероприятие ${data} 5 декабря с 12:00–14:00`}
       />
       <div className="popup__buttons_type_calendar">
         <Button
@@ -46,13 +50,15 @@ function PopupConfirmation({ isOpen, onClose, onConfirmFormSubmit }) {
 PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onConfirmFormSubmit: PropTypes.func
+  onConfirmFormSubmit: PropTypes.func,
+  data: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: undefined,
-  onConfirmFormSubmit: undefined
+  onConfirmFormSubmit: undefined,
+  data: {}
 };
 
 export default PopupConfirmation;
