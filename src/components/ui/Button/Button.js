@@ -2,18 +2,25 @@ import './Button.scss';
 import PropTypes from 'prop-types';
 
 function Button({
-  title, titleSelected, color, isDisabled, onClick, isSelected, sectionClass
+  title,
+  titleSelected,
+  color,
+  isSubmittable,
+  isDisabled,
+  onClick,
+  isSelected,
+  sectionClass
 }) {
   return (
     <button
       className={`button button_color_${color} ${sectionClass} ${
         isSelected ? `button_color_${color}_selected` : ''
       }`}
-      type="button"
+      type={isSubmittable ? 'submit' : 'button'}
       disabled={isDisabled}
       onClick={onClick}
     >
-      {!isSelected ? title : (titleSelected || title)}
+      {!isSelected ? title : titleSelected || title}
     </button>
   );
 }
@@ -22,6 +29,7 @@ Button.propTypes = {
   title: PropTypes.string,
   titleSelected: PropTypes.string,
   color: PropTypes.string,
+  isSubmittable: PropTypes.bool,
   isDisabled: PropTypes.bool,
   onClick: PropTypes.func,
   isSelected: PropTypes.bool,
@@ -31,6 +39,7 @@ Button.propTypes = {
 Button.defaultProps = {
   title: '',
   color: 'blue',
+  isSubmittable: false,
   titleSelected: undefined,
   onClick: undefined,
   isDisabled: false,
