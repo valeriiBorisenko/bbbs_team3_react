@@ -1,5 +1,7 @@
-// форматирует секунды в часы, минуты и секунды
-const formatDuration = (duration) => {
+import { months, weekdays } from './constants';
+
+// форматирует секунды в часы, минуты и секунды, принимает на вход number
+export const formatDuration = (duration) => {
   let hours = Math.floor(duration / 3600);
   let minutes = Math.floor(duration / 60);
   let seconds = Math.floor(duration % 60);
@@ -23,6 +25,8 @@ const formatDuration = (duration) => {
   }
 
   hours = String(hours);
+  minutes = String(minutes);
+  seconds = String(seconds);
 
   return {
     hours,
@@ -31,4 +35,24 @@ const formatDuration = (duration) => {
   };
 };
 
-export default formatDuration;
+// форматирует дату в объект по разным ключам, принимает на вход string вида "2021-05-08T21:22:00Z"
+export const formatDate = (date) => {
+  const parsedDate = new Date(date);
+  const day = String(parsedDate.getDate());
+  const weekday = weekdays[parsedDate.getDay()];
+  const month = months[parsedDate.getMonth()];
+  const hour = String(parsedDate.getHours());
+  let minutes = parsedDate.getMinutes();
+
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+
+  return {
+    day,
+    weekday,
+    month,
+    hour,
+    minutes
+  };
+};

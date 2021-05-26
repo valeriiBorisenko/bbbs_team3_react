@@ -1,13 +1,14 @@
 import './CardVideoMain.scss';
 import PropTypes from 'prop-types';
-import formatDuration from '../../../utils/utils';
+import { formatDuration } from '../../../utils/utils';
 import Card from '../Card/Card';
 import TitleH2 from '../TitleH2/TitleH2';
 
 function CardVideoMain({
   data: {
     title, info, link, imageUrl, duration
-  }, handleClick
+  },
+  handleClick
 }) {
   const { hours, minutes, seconds } = formatDuration(duration);
   return (
