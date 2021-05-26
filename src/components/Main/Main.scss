@@ -3,6 +3,7 @@
 .main {
   padding-top: 150px;
   padding-bottom: 120px;
+  flex: 1;
 }
 
 @include atDesktop1024 {
