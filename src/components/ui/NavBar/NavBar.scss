@@ -159,6 +159,10 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+
+    &_hidden {
+      display: none;
+    }
   }
 
   .menu__burger {
@@ -261,15 +265,6 @@
     }
   }
 
-  .menu__burger_active ~ .menu__user-info {
-    grid-column: 1 / 4;
-    grid-row: 3;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 30px;
-  }
-
   .menu__user-link {
     color: $lightGray;
     text-decoration: none;
@@ -312,5 +307,9 @@
 @include atMobileL {
   .menu__lists-wrap {
     margin-bottom: 50px;
+  }
+
+  .menu__lists-wrap_hidden.menu__lists-wrap {
+    margin: 0;
   }
 }

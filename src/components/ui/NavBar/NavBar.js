@@ -132,7 +132,10 @@ function NavBar({
         </ul>
       </div>
 
-      <div className="menu__user-info">
+      <div className={`menu__user-info ${
+        !isNavMenuOpen ? 'menu__user-info_hidden' : ''
+      }`}
+      >
         <UserMenuButton title="Изменить город" />
         <UserMenuButton title="Выйти" />
       </div>
