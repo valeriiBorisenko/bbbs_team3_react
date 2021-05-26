@@ -2,18 +2,22 @@ import './Main.scss';
 import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+// страницы
 import MainPage from '../MainPage/MainPage';
+import Calendar from '../Calendar/Calendar';
 import AboutUs from '../AboutUs/AboutUs';
 import Account from '../Account/Account';
 import PageNotFound from '../PageNotFound/PageNotFound';
-import Calendar from '../Calendar/Calendar';
+// попапы
 import PopupConfirmation from '../Popup/PopupConfirmation';
 import PopupSuccessfully from '../Popup/PopupSuccessfully';
+import PopupLogin from '../Popup/PopupLogin';
 
 function Main({ isAuthorized }) {
   const [isSelected, setIsSelected] = useState(false);
   const [isPopupConfirmation, setIsPopupConfirmation] = useState(false);
   const [isPopupSuccessfully, setIsPopupSuccessfully] = useState(false);
+  const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
 
   function handleClickSelectedButton() {
     setIsSelected(true);
@@ -27,9 +31,14 @@ function Main({ isAuthorized }) {
     setIsPopupSuccessfully(true);
   }
 
+  function handleClickPopupLoginOpened() {
+    setIsPopupLoginOpen(true);
+  }
+
   function closeAllPopups() {
     setIsPopupConfirmation(false);
     setIsPopupSuccessfully(false);
+    setIsPopupLoginOpen(false);
   }
 
   useEffect(() => {
@@ -85,6 +94,11 @@ function Main({ isAuthorized }) {
       <PopupSuccessfully
         isOpen={isPopupSuccessfully}
         onClose={closeAllPopups}
+      />
+      <PopupLogin
+        isOpen={isPopupLoginOpen}
+        onClose={closeAllPopups}
+        onClick={handleClickPopupLoginOpened}
       />
     </main>
   );

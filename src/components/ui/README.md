@@ -13,6 +13,7 @@
 * __title__ - string, текст кнопки.
 * __titleSelected__ - string, текст кнопки во время того, когда она выбрана как чекбокс.
 * __color__ - string, цвет кнопки (blue, black, white).
+* __isSubmittable__ - boolean. Определяет type кнопки. Когда true - type=submit, когда false type=button. Передавать true не надо, сразу передаем пропс isSubmittable. По умолчанию PropTypes - false.
 * __isSelected__ - boolean, если true, то кнопка является выделенной (как чекбокс), она становится полностью цветной, её текст меняется на titleSelected, если он передан. По умолчанию false.
 * __isDisabled__ - boolean, можно ли нажать на кнопку. По умолчанию false, кнопка всегда нажимается.
 * __handleClick__ - function, функция-обработчик клика на кнопку.
