@@ -5,6 +5,7 @@ import NavItem from '../NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
 import UserButton from '../UserButton/UserButton';
+import UserMenuButton from '../UserMenuButton/UserMenuButton';
 
 function NavBar({
   isAuthorized,
@@ -130,6 +131,16 @@ function NavBar({
           />
         </ul>
       </div>
+
+      {isAuthorized && (
+      <div className={`menu__user-info ${
+        !isNavMenuOpen ? 'menu__user-info_hidden' : ''
+      }`}
+      >
+        <UserMenuButton title="Изменить город" />
+        <UserMenuButton title="Выйти" />
+      </div>
+      )}
 
       <button
         onClick={handleBurgerClick}

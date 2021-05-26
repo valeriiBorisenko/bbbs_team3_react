@@ -3,7 +3,11 @@ const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 
 const mainPageData = require('./server-responses/main-page.json');
+
+const accountData = require('./server-responses/account.json');
+
 const calendarPageData = require('./server-responses/calendar-page.json');
+
 
 const baseURL = 'http://localhost:3000';
 
@@ -14,6 +18,14 @@ mock.onGet(`${baseURL}/main/`).reply(
   200,
   {
     mainPageData
+  },
+  'Content-Type: application/json'
+);
+
+mock.onGet(`${baseURL}/account/`).reply(
+  200,
+  {
+    accountData
   },
   'Content-Type: application/json'
 );

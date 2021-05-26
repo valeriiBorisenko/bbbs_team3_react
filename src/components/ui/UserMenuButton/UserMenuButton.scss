@@ -1,0 +1,29 @@
+@import './styles/utils.scss';
+
+.user-menu-button {
+  display: block;
+  margin-right: 30px;
+  font-family: $ptRootUI;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.4;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+  color: $lightGray;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@include atDesktop1024 {
+  .user-menu-button {
+    font-size: 15px;
+  }
+}

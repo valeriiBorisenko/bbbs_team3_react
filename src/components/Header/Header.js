@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
 import NavBar from '../ui/NavBar/NavBar';
+import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
 
 function Header({ isAuthorized, handleUserButtonClick }) {
+  const { pathname } = useLocation();
+
   // меню бургер
   const [isNavMenuOpen, setNavMenuOpen] = useState(false);
 
@@ -46,6 +50,13 @@ function Header({ isAuthorized, handleUserButtonClick }) {
         handleBurgerClick={toggleNavMenu}
         isNavMenuOpen={isNavMenuOpen}
       />
+
+      {pathname === '/account' && (
+        <div className="header__user-info">
+          <UserMenuButton title="Изменить город" />
+          <UserMenuButton title="Выйти" />
+        </div>
+      )}
     </header>
   );
 }

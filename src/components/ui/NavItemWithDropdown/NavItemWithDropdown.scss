@@ -15,18 +15,6 @@
   }
 }
 
-.menu__list-item {
-  margin-left: 30px;
-
-  &:first-of-type {
-    margin-left: 0;
-  }
-}
-
-.menu__list-item_hidden {
-  display: none;
-}
-
 .menu__dropdown-item {
   position: relative;
 
@@ -36,21 +24,8 @@
   }
 }
 
-
 @include atDesktop1380 {
-  .menu__list-item {
-    margin-left: 0;
-    margin-top: 15px;
-
-    &:first-of-type {
-      margin-top: 0;
-    }
-  }
-
-  .menu__list-item_hidden {
-    display: block;
-  }
-
+  
   .menu__dropdown-item {
     &:hover .menu__dropdown-list{
       display: none;
