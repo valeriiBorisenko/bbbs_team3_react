@@ -12,6 +12,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import PopupConfirmation from '../Popup/PopupConfirmation';
 import PopupSuccessfully from '../Popup/PopupSuccessfully';
 import PopupLogin from '../Popup/PopupLogin';
+import PopupAboutEvent from '../Popup/PopupAboutEvent';
 
 function Main({ isAuthorized }) {
   const [isSelected, setIsSelected] = useState(false);
@@ -100,6 +101,7 @@ function Main({ isAuthorized }) {
         onClose={closeAllPopups}
         onLoginFormSubmit={handleClickPopupLoginOpened}
       />
+      <PopupAboutEvent />
     </main>
   );
 }

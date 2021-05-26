@@ -11,7 +11,11 @@ function PopupConfirmation({ isOpen, onClose, onConfirmFormSubmit }) {
   }
 
   return (
-    <Popup type="confirmation" isOpen={isOpen} onClose={onClose}>
+    <Popup
+      type="confirmation"
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       {/* пропс title и время должны приходить из-вне
       ((клик по карточке подтягивает инфу в конфирм-попап))
       так же осложняет то что в строке еще дата есть, которую так
