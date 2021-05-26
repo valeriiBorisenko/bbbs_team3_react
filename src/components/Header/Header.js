@@ -48,6 +48,7 @@ function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
         isAuthorized={isAuthorized}
         handleUserButtonClick={handleUserButtonClick}
         handleBurgerClick={toggleNavMenu}
+        handleChangeCity={handleChangeCity}
         isNavMenuOpen={isNavMenuOpen}
       />
 
