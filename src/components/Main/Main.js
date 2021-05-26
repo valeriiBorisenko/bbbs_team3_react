@@ -15,8 +15,8 @@ import PopupLogin from '../Popup/PopupLogin';
 
 function Main({ isAuthorized }) {
   const [isSelected, setIsSelected] = useState(false);
-  const [isPopupConfirmation, setIsPopupConfirmation] = useState(false);
-  const [isPopupSuccessfully, setIsPopupSuccessfully] = useState(false);
+  const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
+  const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
 
   function handleClickSelectedButton() {
@@ -24,11 +24,11 @@ function Main({ isAuthorized }) {
   }
 
   function handleClickPopupConfirmationOpened() {
-    setIsPopupConfirmation(true);
+    setIsPopupConfirmationOpen(true);
   }
 
   function handleClickPopupSuccessfullyOpened() {
-    setIsPopupSuccessfully(true);
+    setIsPopupSuccessfullyOpen(true);
   }
 
   function handleClickPopupLoginOpened() {
@@ -36,8 +36,8 @@ function Main({ isAuthorized }) {
   }
 
   function closeAllPopups() {
-    setIsPopupConfirmation(false);
-    setIsPopupSuccessfully(false);
+    setIsPopupConfirmationOpen(false);
+    setIsPopupSuccessfullyOpen(false);
     setIsPopupLoginOpen(false);
   }
 
@@ -52,7 +52,7 @@ function Main({ isAuthorized }) {
         closeAllPopups();
       }
     };
-    if (isPopupConfirmation) {
+    if (isPopupConfirmationOpen) {
       window.addEventListener('click', clickOverlay);
       window.addEventListener('keyup', clickEscape);
     }
@@ -60,7 +60,7 @@ function Main({ isAuthorized }) {
       window.removeEventListener('click', clickOverlay);
       window.removeEventListener('keyup', clickEscape);
     };
-  }, [isPopupConfirmation]);
+  }, [isPopupConfirmationOpen]);
 
   return (
     <main className="main">
@@ -87,18 +87,18 @@ function Main({ isAuthorized }) {
         </Route>
       </Switch>
       <PopupConfirmation
-        isOpen={isPopupConfirmation}
+        isOpen={isPopupConfirmationOpen}
         onClose={closeAllPopups}
-        onClick={handleClickPopupSuccessfullyOpened}
+        onConfirmFormSubmit={handleClickPopupSuccessfullyOpened}
       />
       <PopupSuccessfully
-        isOpen={isPopupSuccessfully}
+        isOpen={isPopupSuccessfullyOpen}
         onClose={closeAllPopups}
       />
       <PopupLogin
         isOpen={isPopupLoginOpen}
         onClose={closeAllPopups}
-        onClick={handleClickPopupLoginOpened}
+        onLoginFormSubmit={handleClickPopupLoginOpened}
       />
     </main>
   );
