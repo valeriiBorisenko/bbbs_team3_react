@@ -88,15 +88,6 @@
       width: 770px;
     }
 
-    &_type_cities {
-      padding: 50px 85px 0;
-      align-items: center;
-      justify-content: flex-start;
-      // max-width: 400px;
-      width: 400px;
-      max-height: 547px;
-    }
-
     &_type_lk {
       justify-content: space-between;
       align-items: center;
@@ -284,10 +275,6 @@
   .popup__container {
     padding: 50px;
     width: 570px;
-
-    &_type_cities {
-      width: 320px;
-    }
 
     &_type_lk {
       padding: 50px 15px;

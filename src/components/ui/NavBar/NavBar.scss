@@ -311,5 +311,9 @@
 @include atMobileL {
   .menu__user-info {
     margin-top: 15px;
+
+    &_hidden {
+      margin: 0;
+    }
   }
 }

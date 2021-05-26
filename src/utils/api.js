@@ -5,6 +5,7 @@ const MockAdapter = require('axios-mock-adapter');
 const mainPageData = require('./server-responses/main-page.json');
 
 const accountData = require('./server-responses/account.json');
+const cities = require('./server-responses/cities.json');
 
 const calendarPageData = require('./server-responses/calendar-page.json');
 
@@ -30,6 +31,14 @@ mock.onGet(`${baseURL}/account/`).reply(
   'Content-Type: application/json'
 );
 
+mock.onGet(`${baseURL}/cities/`).reply(
+  200,
+  {
+    cities
+  },
+  'Content-Type: application/json'
+);
+
 mock.onGet(`${baseURL}/afisha/events/`).reply(
   200,
   {
@@ -50,12 +59,11 @@ mock.onDelete(`${baseURL}/afisha/events/:id`).reply(
   200,
   {
     booked: false
-  },
-  'Content-Type: application/json'
-);
 
 // functions
 export const getMainPageData = () => axios.get(`${baseURL}/main/`);
+export const getAccountData = () => axios.get(`${baseURL}/account/`);
+export const getCities = () => axios.get(`${baseURL}/cities/`);
 export const getCalendarPageData = () => axios.get(`${baseURL}/afisha/events/`);
 export const putBookedEvent = () => axios.put(`${baseURL}/afisha/events/:id}`);
 export const deleteBookedEvent = () => axios.put(`${baseURL}/afisha/events/:id}`);
