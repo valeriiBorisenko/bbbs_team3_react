@@ -13,7 +13,7 @@ function Account() {
       .catch((err) => console.log(err));
   }, []);
   return events ? (
-    <section className="account">
+    <section className="account fade-in">
       <div className="account__events-area page__section">
         <h2 className="section-title account__title">
           {events.length > 0

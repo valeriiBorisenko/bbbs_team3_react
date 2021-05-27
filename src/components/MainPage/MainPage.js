@@ -12,6 +12,7 @@ import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
 import { getMainPageData } from '../../utils/api';
+import Loader from '../ui/Loader/Loader';
 
 function MainPage({ isAuthorized }) {
   const [dataMain, setDataMain] = useState(null);
@@ -22,7 +23,7 @@ function MainPage({ isAuthorized }) {
   }, [setDataMain]);
   return dataMain ? (
     <>
-      <section className="lead page__section">
+      <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
           {isAuthorized ? (
             <CardCalendar key={dataMain.event.id} data={dataMain.event} />
@@ -42,14 +43,14 @@ function MainPage({ isAuthorized }) {
         </div>
       </section>
 
-      <section className="place main-section page__section">
+      <section className="place main-section page__section fade-in">
         <CardPlaceMain
           key={dataMain.place.id}
           data={dataMain.place}
         />
       </section>
 
-      <section className="articles main-section page__section">
+      <section className="articles main-section page__section fade-in">
         <Link to="/articles" className="main-section__link">
           <CardArticleBig
             key={dataMain.articles[0].id}
@@ -58,7 +59,7 @@ function MainPage({ isAuthorized }) {
         </Link>
       </section>
 
-      <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
+      <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
         {dataMain.movies.map((item) => (
           <Link
             to="/films"
@@ -70,13 +71,13 @@ function MainPage({ isAuthorized }) {
         ))}
       </section>
 
-      <section className="video main-section page__section">
+      <section className="video main-section page__section fade-in">
         <Link to="/video" className="main-section__link">
           <CardVideoMain key={dataMain.video.id} data={dataMain.video} />
         </Link>
       </section>
 
-      <section className="main-questions main-section page__section">
+      <section className="main-questions main-section page__section fade-in">
         <div className="card-container card-container_type_iframe">
           <Widget
             title="Facebook"
@@ -96,7 +97,7 @@ function MainPage({ isAuthorized }) {
         </div>
       </section>
 
-      <section className="articles main-section page__section">
+      <section className="articles main-section page__section fade-in">
         <Link to="/articles" className="main-section__link">
           <CardArticleBig
             key={dataMain.articles[1].id}
@@ -106,7 +107,7 @@ function MainPage({ isAuthorized }) {
       </section>
     </>
   ) : (
-    <p style={{ color: 'red', margin: '0 auto', textAlign: 'center' }}>Loading</p>
+    <Loader />
   );
 }
 

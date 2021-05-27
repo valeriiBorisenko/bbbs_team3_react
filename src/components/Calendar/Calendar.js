@@ -14,7 +14,7 @@ function Calendar({
   isBooked
 }) {
   return dataCalendar ? (
-    <section className="lead page__section">
+    <section className="lead page__section fade-in">
       <TitleH1 title="Календарь" />
       <div className="tags">
         <ul className="tags__list">
