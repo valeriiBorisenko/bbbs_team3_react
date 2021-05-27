@@ -3,7 +3,7 @@ import './Account.scss';
 
 function Account() {
   return (
-    <section className="account">
+    <section className="account fade-in">
       {/* по идее эти кнопки должны прилипнуть к хедеру и
       показываться на нём, придумать, как это реализовать */}
       <div className="account__user-info page__section">
