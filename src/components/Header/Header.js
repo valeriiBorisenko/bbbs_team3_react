@@ -9,15 +9,15 @@ function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
   const { pathname } = useLocation();
 
   // меню бургер
-  const [isNavMenuOpen, setNavMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleNavMenu = () => {
-    if (isNavMenuOpen) setNavMenuOpen(false);
-    else setNavMenuOpen(true);
+    if (isMobileMenuOpen) setIsMobileMenuOpen(false);
+    else setIsMobileMenuOpen(true);
   };
 
   // липкий хедер
-  const [isHeaderActive, setHeaderActive] = useState(true);
+  const [isHeaderActive, setIsHeaderActive] = useState(true);
   let prevScrollpos = 0;
 
   useEffect(() => {
@@ -25,14 +25,14 @@ function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
       const currentScrollPos = window.pageYOffset;
       // если prevScrollpos больше currentScrollPos значит мы скролим наверх уже
       if (prevScrollpos > currentScrollPos) {
-        setHeaderActive(true);
+        setIsHeaderActive(true);
       } else {
-        setHeaderActive(false);
-        setNavMenuOpen(false);
+        setIsHeaderActive(false);
+        setIsMobileMenuOpen(false);
       }
 
       if (currentScrollPos === 0) {
-        setHeaderActive(true);
+        setIsHeaderActive(true);
       }
       prevScrollpos = currentScrollPos;
     });
@@ -40,7 +40,7 @@ function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
 
   return (
     <header
-      className={`header ${isNavMenuOpen ? 'header_displayed' : ''} ${
+      className={`header ${isMobileMenuOpen ? 'header_displayed' : ''} ${
         !isHeaderActive ? 'header__on-scroll-up' : ''
       }`}
     >
@@ -49,7 +49,7 @@ function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
         handleUserButtonClick={handleUserButtonClick}
         handleBurgerClick={toggleNavMenu}
         handleChangeCity={handleChangeCity}
-        isNavMenuOpen={isNavMenuOpen}
+        isNavMenuOpen={isMobileMenuOpen}
       />
 
       {pathname === '/account' && (
