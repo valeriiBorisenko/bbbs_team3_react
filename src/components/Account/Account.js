@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './Account.scss';
 import { getAccountData } from '../../utils/api';
 import { formatDate } from '../../utils/utils';
+import Loader from '../ui/Loader/Loader';
 import AccountEventCard from '../ui/AccountEventCard/AccountEventCard';
 
 function Account() {
@@ -34,9 +35,7 @@ function Account() {
       </div>
     </section>
   ) : (
-    <p style={{ color: 'red', margin: '0 auto', textAlign: 'center' }}>
-      Loading
-    </p>
+    <Loader />
   );
 }
 

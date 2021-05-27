@@ -2,6 +2,7 @@ import './MainPage.scss';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Loader from '../ui/Loader/Loader';
 import Card from '../ui/Card/Card';
 import CardStub from '../ui/CardStub/CardStub';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
@@ -12,7 +13,6 @@ import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
 import { getMainPageData } from '../../utils/api';
-import Loader from '../ui/Loader/Loader';
 
 function MainPage({ isAuthorized }) {
   const [dataMain, setDataMain] = useState(null);
