@@ -11,7 +11,7 @@ import CardAnnotationContainer from '../ui/CardAnnotation/CardAnnotationContaine
 function AboutUs({ isAuthorized }) {
   console.log(isAuthorized); // !выкинуть потом
   return (
-    <section className="about page__section">
+    <section className="about page__section fade-in">
       <TitleH3
         sectionClass="about__title"
         title="Наставники.про – цифровая информационная платформа организации «Старшие Братья Старшие Сестры». Созданная для поддержки наставников программы."
