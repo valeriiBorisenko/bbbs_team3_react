@@ -7,6 +7,7 @@ import TitleH2 from '../ui/TitleH2/TitleH2';
 function PopupAboutEvent({
   isOpen,
   onClose,
+  onEventSignUpClick,
   data: {
     title,
     description,
@@ -33,6 +34,7 @@ function PopupAboutEvent({
   });
   function submitHandler(event) {
     event.preventDefault();
+    onEventSignUpClick();
   }
   return (
     <Popup
@@ -95,15 +97,15 @@ function PopupAboutEvent({
 PopupAboutEvent.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
+  onEventSignUpClick: PropTypes.func,
   data: PropTypes.objectOf(PropTypes.string)
-  // onOpenConfirmationPopup: PropTypes.func
 };
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
   onClose: undefined,
+  onEventSignUpClick: undefined,
   data: PropTypes.objectOf(PropTypes.string)
-  // onOpenConfirmationPopup: undefined
 };
 
 export default PopupAboutEvent;
