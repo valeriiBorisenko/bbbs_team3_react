@@ -6,8 +6,17 @@ import Popup from './Popup';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 import Button from '../ui/Button/Button';
 
-function PopupSuccessfully({ isOpen, onClose }) {
+function PopupSuccessfully({
+  isOpen,
+  onClose,
+  data: {
+    title,
+    startAt,
+    endAt
+  }
+}) {
   return (
+    //! поработать над представлением даты в нормальном виде (startAt и endsAt)
     <Popup
       type="done"
       isOpen={isOpen}
@@ -21,7 +30,7 @@ function PopupSuccessfully({ isOpen, onClose }) {
       <img className="popup__image-successfully" src={svgPic} alt="красивые бесмысленные фигурки" />
       <TitleH2
         sectionClass="popup__title_type_calendar"
-        title="Вы записаны на мероприятие «Субботний meet up: учимся проходить интервью» 5 декабря с 12:00–14:00."
+        title={`Подтвердить запись на мероприятие "${title}" ${startAt} ${endAt}`}
       />
       <TitleH2
         sectionClass="popup__title_type_calendar"
@@ -39,12 +48,14 @@ function PopupSuccessfully({ isOpen, onClose }) {
 
 PopupSuccessfully.propTypes = {
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  data: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupSuccessfully.defaultProps = {
   isOpen: false,
-  onClose: undefined
+  onClose: undefined,
+  data: {}
 };
 
 export default PopupSuccessfully;
