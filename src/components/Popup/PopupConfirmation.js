@@ -7,27 +7,27 @@ import TitleH2 from '../ui/TitleH2/TitleH2';
 function PopupConfirmation({
   isOpen,
   onClose,
-  onConfirmFormSubmit,
-  data
+  onConfirmButtonClick,
+  data: {
+    title,
+    startAt,
+    endAt
+  }
 }) {
   function submitHandler(event) {
     event.preventDefault();
-    onConfirmFormSubmit();
+    onConfirmButtonClick();
   }
   return (
+    //! поработать над представлением даты в нормальном виде (startAt и endsAt)
     <Popup
       type="confirmation"
       isOpen={isOpen}
       onClose={onClose}
     >
-      {/* пропс title и время должны приходить из-вне
-      ((клик по карточке подтягивает инфу в конфирм-попап))
-      так же осложняет то что в строке еще дата есть, которую так
-      же надо подтягивать (еще 1 пропс нужен)
-      */}
       <TitleH2
         sectionClass="popup__title_type_calendar"
-        title={`Подтвердить запись на мероприятие ${data} 5 декабря с 12:00–14:00`}
+        title={`Подтвердить запись на мероприятие "${title}" ${startAt} ${endAt}`}
       />
       <div className="popup__buttons_type_calendar">
         <Button
@@ -50,14 +50,14 @@ function PopupConfirmation({
 PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onConfirmFormSubmit: PropTypes.func,
+  onConfirmButtonClick: PropTypes.func,
   data: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: undefined,
-  onConfirmFormSubmit: undefined,
+  onConfirmButtonClick: undefined,
   data: {}
 };
 
