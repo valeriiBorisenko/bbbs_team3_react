@@ -94,6 +94,7 @@
 
 .calendar__desc-paragraph {
   margin: 0 auto;
+  // margin-bottom: 30px;
   font-family: $ptRootUI;
   font-weight: 400;
   font-size: 18px;
@@ -141,6 +142,7 @@
 }
 
 .calendar__submit {
+  margin-top: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
