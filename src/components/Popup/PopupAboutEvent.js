@@ -4,10 +4,35 @@ import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
-function PopupAboutEvent({ isOpen, onClose, onOpenConfirmationPopup }) {
+function PopupAboutEvent({
+  isOpen,
+  onClose,
+  data: {
+    title,
+    description,
+    address,
+    booked,
+    contact,
+    startAt,
+    endAt,
+    remainSeats,
+    tags
+  }
+}) {
+  //! временно
+  console.log({
+    title,
+    description,
+    address,
+    booked,
+    contact,
+    startAt,
+    endAt,
+    remainSeats,
+    tags
+  });
   function submitHandler(event) {
     event.preventDefault();
-    onOpenConfirmationPopup();
   }
   return (
     <Popup
@@ -59,7 +84,7 @@ function PopupAboutEvent({ isOpen, onClose, onOpenConfirmationPopup }) {
             onClick={submitHandler}
             isSubmittable
           />
-          {/* заменить на пропс или считать тут же */}
+          {/* заменить на пропс */}
           <p className="calendar__place-left">Осталось 5 мест</p>
         </div>
       </div>
@@ -70,13 +95,15 @@ function PopupAboutEvent({ isOpen, onClose, onOpenConfirmationPopup }) {
 PopupAboutEvent.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onOpenConfirmationPopup: PropTypes.func
+  data: PropTypes.objectOf(PropTypes.string)
+  // onOpenConfirmationPopup: PropTypes.func
 };
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
   onClose: undefined,
-  onOpenConfirmationPopup: undefined
+  data: PropTypes.objectOf(PropTypes.string)
+  // onOpenConfirmationPopup: undefined
 };
 
 export default PopupAboutEvent;
