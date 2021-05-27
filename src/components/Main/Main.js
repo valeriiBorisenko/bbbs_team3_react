@@ -26,6 +26,7 @@ function Main({ isAuthorized }) {
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
+  // записан ли
   const [isBooked, setIsBooked] = useState(false);
 
   function handleClickBooked() {
@@ -36,12 +37,21 @@ function Main({ isAuthorized }) {
     setIsSelected(true);
   }
 
+  // управление попапами
+  function closeAllPopups() {
+    setIsPopupConfirmationOpen(false);
+    setIsPopupSuccessfullyOpen(false);
+    setIsPopupLoginOpen(false);
+    setIsPopupAboutDescriptionOpen(false);
+  }
+
   function handleClickPopupConfirmationOpened(cardData) {
     setIsPopupConfirmationOpen(true);
     setSelectedCalendarCard(cardData);
   }
 
   function handleClickPopupSuccessfullyOpened() {
+    closeAllPopups();
     setIsPopupSuccessfullyOpen(true);
   }
 
@@ -52,13 +62,6 @@ function Main({ isAuthorized }) {
   function handleClickPopupAboutEventOpened(cardData) {
     setIsPopupAboutDescriptionOpen(true);
     setSelectedCalendarCard(cardData);
-  }
-
-  function closeAllPopups() {
-    setIsPopupConfirmationOpen(false);
-    setIsPopupSuccessfullyOpen(false);
-    setIsPopupLoginOpen(false);
-    setIsPopupAboutDescriptionOpen(false);
   }
 
   useEffect(() => {
@@ -72,7 +75,10 @@ function Main({ isAuthorized }) {
         closeAllPopups();
       }
     };
-    if (isPopupConfirmationOpen || isPopupSuccessfullyOpen || isPopupLoginOpen) {
+    if (isPopupConfirmationOpen
+      || isPopupSuccessfullyOpen
+      || isPopupLoginOpen
+      || isPopupAboutDescriptionOpen) {
       window.addEventListener('click', clickOverlay);
       window.addEventListener('keyup', clickEscape);
     }
@@ -80,7 +86,13 @@ function Main({ isAuthorized }) {
       window.removeEventListener('click', clickOverlay);
       window.removeEventListener('keyup', clickEscape);
     };
-  }, [isPopupConfirmationOpen, isPopupSuccessfullyOpen, isPopupLoginOpen]);
+  },
+  [
+    isPopupConfirmationOpen,
+    isPopupSuccessfullyOpen,
+    isPopupLoginOpen,
+    isPopupAboutDescriptionOpen
+  ]);
 
   useEffect(() => {
     getCalendarPageData()
@@ -135,6 +147,7 @@ function Main({ isAuthorized }) {
       <PopupAboutEvent
         isOpen={isPopupAboutDescriptionOpen}
         onClose={closeAllPopups}
+        onEventSignUpClick={handleClickPopupSuccessfullyOpened}
         data={selectedCalendarCard}
       />
     </main>
