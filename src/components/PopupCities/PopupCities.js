@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './PopupCities.scss';
@@ -20,9 +22,15 @@ function PopupCities({ isOpen, onClose }) {
     onClose();
   };
 
+  const closeAllPopupsOnOverlay = (evt) => {
+    if (evt.target === evt.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
     cities && (
-      <article className={`popup ${isOpen ? 'popup_opened' : ''}`}>
+      <article className={`popup ${isOpen ? 'popup_opened' : ''}`} onClick={closeAllPopupsOnOverlay}>
         <div className="popup__container popup__container_type_cities">
           <form className="cities" onSubmit={handleSubmit}>
             <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />

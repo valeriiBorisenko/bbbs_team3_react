@@ -9,90 +9,17 @@ import Calendar from '../Calendar/Calendar';
 import AboutUs from '../AboutUs/AboutUs';
 import Account from '../Account/Account';
 import PageNotFound from '../PageNotFound/PageNotFound';
-// попапы
-import PopupConfirmation from '../Popup/PopupConfirmation';
-import PopupSuccessfully from '../Popup/PopupSuccessfully';
-import PopupLogin from '../Popup/PopupLogin';
-import PopupAboutEvent from '../Popup/PopupAboutEvent';
 
-function Main({ isAuthorized }) {
+function Main({
+  isAuthorized, isBooked, openConfirmationPopup, openAboutEventPopup
+}) {
   const [isSelected, setIsSelected] = useState(false);
   // данные всей страницы с сервера
   const [dataCalendar, setDataCalendar] = useState(null);
-  // выбранная карточка (дата)
-  const [selectedCalendarCard, setSelectedCalendarCard] = useState('');
-  // стейт переменные попапов
-  const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
-  const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
-  const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
-  const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
-  // записан ли
-  const [isBooked, setIsBooked] = useState(false);
-
-  function handleClickBooked() {
-    setIsBooked(true);
-  }
 
   function handleClickSelectedButton() {
     setIsSelected(true);
   }
-
-  // управление попапами
-  function closeAllPopups() {
-    setIsPopupConfirmationOpen(false);
-    setIsPopupSuccessfullyOpen(false);
-    setIsPopupLoginOpen(false);
-    setIsPopupAboutDescriptionOpen(false);
-  }
-
-  function handleClickPopupConfirmationOpened(cardData) {
-    setIsPopupConfirmationOpen(true);
-    setSelectedCalendarCard(cardData);
-  }
-
-  function handleClickPopupSuccessfullyOpened() {
-    closeAllPopups();
-    setIsPopupSuccessfullyOpen(true);
-  }
-
-  function handleClickPopupLoginOpened() {
-    setIsPopupLoginOpen(true);
-  }
-
-  function handleClickPopupAboutEventOpened(cardData) {
-    setIsPopupAboutDescriptionOpen(true);
-    setSelectedCalendarCard(cardData);
-  }
-
-  useEffect(() => {
-    const clickOverlay = (evt) => {
-      if (evt.target.classList.contains('popup_opened')) {
-        closeAllPopups();
-      }
-    };
-    const clickEscape = (evt) => {
-      if (evt.key === 'Escape') {
-        closeAllPopups();
-      }
-    };
-    if (isPopupConfirmationOpen
-      || isPopupSuccessfullyOpen
-      || isPopupLoginOpen
-      || isPopupAboutDescriptionOpen) {
-      window.addEventListener('click', clickOverlay);
-      window.addEventListener('keyup', clickEscape);
-    }
-    return () => {
-      window.removeEventListener('click', clickOverlay);
-      window.removeEventListener('keyup', clickEscape);
-    };
-  },
-  [
-    isPopupConfirmationOpen,
-    isPopupSuccessfullyOpen,
-    isPopupLoginOpen,
-    isPopupAboutDescriptionOpen
-  ]);
 
   useEffect(() => {
     getCalendarPageData()
@@ -115,8 +42,8 @@ function Main({ isAuthorized }) {
         <Route path="/calendar">
           <Calendar
             isAuthorized={isAuthorized}
-            onEventSignUpClick={handleClickPopupConfirmationOpened}
-            onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+            onEventSignUpClick={openConfirmationPopup}
+            onEventFullDescriptionClick={openAboutEventPopup}
             clickButton={handleClickSelectedButton}
             isSelected={isSelected}
             dataCalendar={dataCalendar}
@@ -127,7 +54,7 @@ function Main({ isAuthorized }) {
           <PageNotFound />
         </Route>
       </Switch>
-      <PopupConfirmation
+      {/* <PopupConfirmation
         isOpen={isPopupConfirmationOpen}
         onClose={closeAllPopups}
         onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
@@ -149,17 +76,23 @@ function Main({ isAuthorized }) {
         onClose={closeAllPopups}
         onEventSignUpClick={handleClickPopupSuccessfullyOpened}
         data={selectedCalendarCard}
-      />
+      /> */}
     </main>
   );
 }
 
 Main.propTypes = {
-  isAuthorized: PropTypes.bool
+  isAuthorized: PropTypes.bool,
+  isBooked: PropTypes.bool,
+  openConfirmationPopup: PropTypes.func,
+  openAboutEventPopup: PropTypes.func
 };
 
 Main.defaultProps = {
-  isAuthorized: false
+  isAuthorized: false,
+  isBooked: false,
+  openConfirmationPopup: undefined,
+  openAboutEventPopup: undefined
 };
 
 export default Main;
