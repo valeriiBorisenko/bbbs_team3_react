@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import './Popup.scss';
 import PropTypes from 'prop-types';
 
@@ -9,8 +11,13 @@ function Popup({
   isOpen,
   onClose
 }) {
+  const closeAllPopupsOnOverlay = (evt) => {
+    if (evt.target === evt.currentTarget) {
+      onClose();
+    }
+  };
   return (
-    <div className={`popup popup_type_${type} ${isOpen ? 'popup_opened' : ''}`}>
+    <div className={`popup popup_type_${type} ${isOpen ? 'popup_opened' : ''}`} onClick={closeAllPopupsOnOverlay}>
       <div className={`popup__container popup__container_type_${type}`}>
         <form className="popup__form">
           <button className="popup__close" type="button" aria-label="закрыть попап" onClick={onClose} />
