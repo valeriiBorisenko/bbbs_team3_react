@@ -6,7 +6,8 @@ import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import { MonthData } from '../../utils/constants';
 
 function Calendar({
-  onClick,
+  onEventSignUpClick,
+  onEventFullDescriptionClick,
   clickButton,
   isSelected,
   dataCalendar
@@ -28,7 +29,8 @@ function Calendar({
           <CardCalendar
             key={data.id}
             data={data}
-            onClick={onClick}
+            onEventSignUpClick={onEventSignUpClick}
+            onEventFullDescriptionClick={onEventFullDescriptionClick}
             clickButton={clickButton}
             isSelected={isSelected}
           />
@@ -41,14 +43,16 @@ function Calendar({
 }
 
 Calendar.propTypes = {
-  onClick: PropTypes.func,
+  onEventSignUpClick: PropTypes.func,
+  onEventFullDescriptionClick: PropTypes.func,
   clickButton: PropTypes.func,
   isSelected: PropTypes.bool,
   dataCalendar: PropTypes.objectOf(PropTypes.any)
 };
 
 Calendar.defaultProps = {
-  onClick: undefined,
+  onEventSignUpClick: undefined,
+  onEventFullDescriptionClick: undefined,
   clickButton: undefined,
   isSelected: false,
   dataCalendar: {}
