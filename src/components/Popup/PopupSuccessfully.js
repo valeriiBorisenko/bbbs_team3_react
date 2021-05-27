@@ -5,6 +5,7 @@ import svgPic from '../../assets/popup_done.svg';
 import Popup from './Popup';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 import Button from '../ui/Button/Button';
+import { formatDate } from '../../utils/utils';
 
 function PopupSuccessfully({
   isOpen,
@@ -15,22 +16,18 @@ function PopupSuccessfully({
     endAt
   }
 }) {
+  const startDay = formatDate(startAt);
+  const endDay = formatDate(endAt);
   return (
-    //! поработать над представлением даты в нормальном виде (startAt и endsAt)
     <Popup
       type="done"
       isOpen={isOpen}
       onClose={onClose}
     >
-      {/* пропс title и время должны приходить из-вне
-      ((клик по карточке подтягивает инфу в конфирм-попап))
-      так же осложняет то что в строке еще дата есть, которую так
-      же надо подтягивать (еще 1 пропс нужен)
-      */}
       <img className="popup__image-successfully" src={svgPic} alt="красивые бесмысленные фигурки" />
       <TitleH2
         sectionClass="popup__title_type_calendar"
-        title={`Подтвердить запись на мероприятие "${title}" ${startAt} ${endAt}`}
+        title={`Вы записаны на мероприятие «${title}» ${startDay.day} ${startDay.month} с ${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
       />
       <TitleH2
         sectionClass="popup__title_type_calendar"
