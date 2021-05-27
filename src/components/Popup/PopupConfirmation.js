@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
+import { formatDate } from '../../utils/utils';
 
 function PopupConfirmation({
   isOpen,
@@ -12,12 +13,17 @@ function PopupConfirmation({
     title,
     startAt,
     endAt
-  }
+  },
+  putBookedEvent
 }) {
-  function submitHandler(event) {
+  const startDay = formatDate(startAt);
+  const endDay = formatDate(endAt);
+
+  const submitHandler = (event) => {
     event.preventDefault();
     onConfirmButtonClick();
-  }
+    putBookedEvent();
+  };
   return (
     //! поработать над представлением даты в нормальном виде (startAt и endsAt)
     <Popup
@@ -27,7 +33,7 @@ function PopupConfirmation({
     >
       <TitleH2
         sectionClass="popup__title_type_calendar"
-        title={`Подтвердить запись на мероприятие "${title}" ${startAt} ${endAt}`}
+        title={`Подтвердить запись на мероприятие «${title}» ${startDay.day} ${startDay.month} с ${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
       />
       <div className="popup__buttons_type_calendar">
         <Button
@@ -51,14 +57,16 @@ PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onConfirmButtonClick: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.any)
+  data: PropTypes.objectOf(PropTypes.any),
+  putBookedEvent: PropTypes.func
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: undefined,
   onConfirmButtonClick: undefined,
-  data: {}
+  data: {},
+  putBookedEvent: undefined
 };
 
 export default PopupConfirmation;

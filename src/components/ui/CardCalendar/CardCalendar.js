@@ -17,14 +17,14 @@ function CardCalendar({
     address,
     contact,
     remainSeats,
-    description,
-    booked
+    description
   },
   isModal,
   onEventSignUpClick,
   onEventFullDescriptionClick,
   clickButton,
-  isSelected
+  isSelected,
+  isBooked
 }) {
   const startDay = formatDate(startAt);
   const endDay = formatDate(endAt);
@@ -41,7 +41,7 @@ function CardCalendar({
       contact,
       remainSeats,
       description,
-      booked
+      isBooked
     });
   }
 
@@ -55,12 +55,12 @@ function CardCalendar({
       contact,
       remainSeats,
       description,
-      booked
+      isBooked
     });
   }
 
   return (
-    <article className={`calendar ${booked ? 'calendar_selected' : ''}`}>
+    <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -111,12 +111,12 @@ function CardCalendar({
             onClick={prepareDataForConfirmationPopup}
             clickButton={clickButton}
             isSelected={isSelected}
-            data={{ data: title, startAt, endAt }}
+            data={{ title, startAt, endAt }}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
-            || (!booked && `Осталось ${remainSeats} мест`)}
+            || (!isBooked && `Осталось ${remainSeats} мест`)}
           </p>
           <ButtonDots
             handleClick={prepareDataForAboutEventPopup}
@@ -137,12 +137,12 @@ CardCalendar.propTypes = {
   contact: PropTypes.string,
   remainSeats: PropTypes.number,
   description: PropTypes.string,
-  booked: PropTypes.bool,
   isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
   clickButton: PropTypes.func,
-  isSelected: PropTypes.bool
+  isSelected: PropTypes.bool,
+  isBooked: PropTypes.bool
 };
 
 CardCalendar.defaultProps = {
@@ -155,12 +155,12 @@ CardCalendar.defaultProps = {
   remainSeats: 0,
   tags: [],
   description: '',
-  booked: false,
   isModal: false,
   onEventSignUpClick: undefined,
   onEventFullDescriptionClick: undefined,
   clickButton: undefined,
-  isSelected: false
+  isSelected: false,
+  isBooked: PropTypes.bool
 };
 
 export default CardCalendar;

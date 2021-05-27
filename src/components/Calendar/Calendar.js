@@ -10,7 +10,8 @@ function Calendar({
   onEventFullDescriptionClick,
   clickButton,
   isSelected,
-  dataCalendar
+  dataCalendar,
+  isBooked
 }) {
   return dataCalendar ? (
     <section className="lead page__section">
@@ -33,6 +34,7 @@ function Calendar({
             onEventFullDescriptionClick={onEventFullDescriptionClick}
             clickButton={clickButton}
             isSelected={isSelected}
+            isBooked={isBooked}
           />
         ))}
       </section>
@@ -47,7 +49,8 @@ Calendar.propTypes = {
   onEventFullDescriptionClick: PropTypes.func,
   clickButton: PropTypes.func,
   isSelected: PropTypes.bool,
-  dataCalendar: PropTypes.objectOf(PropTypes.any)
+  dataCalendar: PropTypes.objectOf(PropTypes.any),
+  isBooked: PropTypes.bool
 };
 
 Calendar.defaultProps = {
@@ -55,7 +58,8 @@ Calendar.defaultProps = {
   onEventFullDescriptionClick: undefined,
   clickButton: undefined,
   isSelected: false,
-  dataCalendar: {}
+  dataCalendar: {},
+  isBooked: false
 };
 
 export default Calendar;

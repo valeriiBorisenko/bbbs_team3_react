@@ -46,26 +46,8 @@ mock.onGet(`${baseURL}/afisha/events/`).reply(
   'Content-Type: application/json'
 );
 
-mock.onPut(`${baseURL}/afisha/events/:id`).reply(
-  200,
-  {
-    booked: true
-  },
-  'Content-Type: application/json'
-);
-
-mock.onDelete(`${baseURL}/afisha/events/:id`).reply(
-  200,
-  {
-    booked: false
-  },
-  'Content-Type: application/json'
-);
-
 // functions
 export const getMainPageData = () => axios.get(`${baseURL}/main/`);
 export const getAccountData = () => axios.get(`${baseURL}/account/`);
 export const getCities = () => axios.get(`${baseURL}/cities/`);
 export const getCalendarPageData = () => axios.get(`${baseURL}/afisha/events/`);
-export const putBookedEvent = () => axios.put(`${baseURL}/afisha/events/:id}`);
-export const deleteBookedEvent = () => axios.put(`${baseURL}/afisha/events/:id}`);
