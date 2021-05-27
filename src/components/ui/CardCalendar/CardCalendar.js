@@ -21,7 +21,8 @@ function CardCalendar({
     booked
   },
   isModal,
-  onClick,
+  onEventSignUpClick,
+  onEventFullDescriptionClick,
   clickButton,
   isSelected
 }) {
@@ -29,6 +30,34 @@ function CardCalendar({
   const endDay = formatDate(endAt);
 
   const isDisabled = (remainSeats < 1 ? true : '');
+
+  function prepareDataForConfirmationPopup() {
+    onEventSignUpClick({
+      tags,
+      startAt,
+      endAt,
+      title,
+      address,
+      contact,
+      remainSeats,
+      description,
+      booked
+    });
+  }
+
+  function prepareDataForAboutEventPopup() {
+    onEventFullDescriptionClick({
+      tags,
+      startAt,
+      endAt,
+      title,
+      address,
+      contact,
+      remainSeats,
+      description,
+      booked
+    });
+  }
 
   return (
     <article className={`calendar ${booked ? 'calendar_selected' : ''}`}>
@@ -79,7 +108,7 @@ function CardCalendar({
             titleSelected="Отменить запись"
             color="blue"
             isDisabled={isDisabled}
-            onClick={onClick}
+            onClick={prepareDataForConfirmationPopup}
             clickButton={clickButton}
             isSelected={isSelected}
             data={{ data: title, startAt, endAt }}
@@ -89,7 +118,9 @@ function CardCalendar({
             {(isDisabled && 'Запись закрыта')
             || (!booked && `Осталось ${remainSeats} мест`)}
           </p>
-          <ButtonDots />
+          <ButtonDots
+            handleClick={prepareDataForAboutEventPopup}
+          />
         </div>
       </div>
     </article>
@@ -108,7 +139,8 @@ CardCalendar.propTypes = {
   description: PropTypes.string,
   booked: PropTypes.bool,
   isModal: PropTypes.bool,
-  onClick: PropTypes.func,
+  onEventSignUpClick: PropTypes.func,
+  onEventFullDescriptionClick: PropTypes.func,
   clickButton: PropTypes.func,
   isSelected: PropTypes.bool
 };
@@ -125,7 +157,8 @@ CardCalendar.defaultProps = {
   description: '',
   booked: false,
   isModal: false,
-  onClick: undefined,
+  onEventSignUpClick: undefined,
+  onEventFullDescriptionClick: undefined,
   clickButton: undefined,
   isSelected: false
 };
