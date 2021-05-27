@@ -5,11 +5,13 @@ import NavItem from '../NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
 import UserButton from '../UserButton/UserButton';
+import UserMenuButton from '../UserMenuButton/UserMenuButton';
 
 function NavBar({
   isAuthorized,
   handleUserButtonClick,
   handleBurgerClick,
+  handleChangeCity,
   isNavMenuOpen
 }) {
   return (
@@ -131,6 +133,16 @@ function NavBar({
         </ul>
       </div>
 
+      {isAuthorized && (
+      <div className={`menu__user-info ${
+        !isNavMenuOpen ? 'menu__user-info_hidden' : ''
+      }`}
+      >
+        <UserMenuButton title="Изменить город" handleClick={handleChangeCity} />
+        <UserMenuButton title="Выйти" />
+      </div>
+      )}
+
       <button
         onClick={handleBurgerClick}
         className={`menu__burger ${isNavMenuOpen ? 'menu__burger_active' : ''}`}
@@ -218,6 +230,7 @@ NavBar.propTypes = {
   isAuthorized: PropTypes.bool,
   handleUserButtonClick: PropTypes.func,
   handleBurgerClick: PropTypes.func,
+  handleChangeCity: PropTypes.func,
   isNavMenuOpen: PropTypes.bool
 };
 
@@ -225,6 +238,7 @@ NavBar.defaultProps = {
   isAuthorized: false,
   handleUserButtonClick: undefined,
   handleBurgerClick: undefined,
+  handleChangeCity: undefined,
   isNavMenuOpen: false
 };
 

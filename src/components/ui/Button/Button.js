@@ -1,33 +1,26 @@
 import './Button.scss';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
 function Button({
-  title, titleSelected, color, isDisabled, onClick
+  title,
+  titleSelected,
+  color,
+  isSubmittable,
+  isDisabled,
+  onClick,
+  isSelected,
+  sectionClass
 }) {
-  const [isSelected, setIsISelectedMouth] = useState(false);
-  const handleClickMouth = () => {
-    if (isSelected) setIsISelectedMouth(false);
-    else setIsISelectedMouth(true);
-  };
-
-  const handleClickButton = () => {
-    if (onClick !== undefined) {
-      onClick();
-      handleClickMouth();
-    } else handleClickMouth();
-  };
-
   return (
     <button
-      className={`button button_color_${color} ${
+      className={`button button_color_${color} ${sectionClass} ${
         isSelected ? `button_color_${color}_selected` : ''
       }`}
-      type="button"
+      type={isSubmittable ? 'submit' : 'button'}
       disabled={isDisabled}
-      onClick={handleClickButton}
+      onClick={onClick}
     >
-      {!isSelected ? title : (titleSelected || title)}
+      {!isSelected ? title : titleSelected || title}
     </button>
   );
 }
@@ -36,16 +29,22 @@ Button.propTypes = {
   title: PropTypes.string,
   titleSelected: PropTypes.string,
   color: PropTypes.string,
+  isSubmittable: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  isSelected: PropTypes.bool,
+  sectionClass: PropTypes.string
 };
 
 Button.defaultProps = {
   title: '',
   color: 'blue',
+  isSubmittable: false,
   titleSelected: undefined,
   onClick: undefined,
-  isDisabled: false
+  isDisabled: false,
+  isSelected: false,
+  sectionClass: ''
 };
 
 export default Button;

@@ -14,10 +14,6 @@
   align-items: center;
   list-style-type: none;
   flex-wrap: wrap;
-
-  &_type_long {
-    flex-wrap: wrap;
-  }
 }
 
 .tags__list-item {
@@ -49,6 +45,27 @@
 @include atTablet {
   .calendar-container {
     grid-template-columns: 1fr;
+  }
+
+  .tags {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -1px;
+      width: 40px;
+      height: 100%;
+      background: linear-gradient(90deg, transparent 0%, $background 100%);
+    }
+  }
+  .tags__list {
+    justify-content: flex-start;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    flex-wrap: nowrap;
   }
 }
 

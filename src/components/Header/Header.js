@@ -1,19 +1,23 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
 import NavBar from '../ui/NavBar/NavBar';
+import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
 
-function Header({ isAuthorized, handleUserButtonClick }) {
+function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
+  const { pathname } = useLocation();
+
   // меню бургер
-  const [isNavMenuOpen, setNavMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleNavMenu = () => {
-    if (isNavMenuOpen) setNavMenuOpen(false);
-    else setNavMenuOpen(true);
+    if (isMobileMenuOpen) setIsMobileMenuOpen(false);
+    else setIsMobileMenuOpen(true);
   };
 
   // липкий хедер
-  const [isHeaderActive, setHeaderActive] = useState(true);
+  const [isHeaderActive, setIsHeaderActive] = useState(true);
   let prevScrollpos = 0;
 
   useEffect(() => {
@@ -21,14 +25,14 @@ function Header({ isAuthorized, handleUserButtonClick }) {
       const currentScrollPos = window.pageYOffset;
       // если prevScrollpos больше currentScrollPos значит мы скролим наверх уже
       if (prevScrollpos > currentScrollPos) {
-        setHeaderActive(true);
+        setIsHeaderActive(true);
       } else {
-        setHeaderActive(false);
-        setNavMenuOpen(false);
+        setIsHeaderActive(false);
+        setIsMobileMenuOpen(false);
       }
 
       if (currentScrollPos === 0) {
-        setHeaderActive(true);
+        setIsHeaderActive(true);
       }
       prevScrollpos = currentScrollPos;
     });
@@ -36,7 +40,7 @@ function Header({ isAuthorized, handleUserButtonClick }) {
 
   return (
     <header
-      className={`header ${isNavMenuOpen ? 'header_displayed' : ''} ${
+      className={`header ${isMobileMenuOpen ? 'header_displayed' : ''} ${
         !isHeaderActive ? 'header__on-scroll-up' : ''
       }`}
     >
@@ -44,20 +48,30 @@ function Header({ isAuthorized, handleUserButtonClick }) {
         isAuthorized={isAuthorized}
         handleUserButtonClick={handleUserButtonClick}
         handleBurgerClick={toggleNavMenu}
-        isNavMenuOpen={isNavMenuOpen}
+        handleChangeCity={handleChangeCity}
+        isNavMenuOpen={isMobileMenuOpen}
       />
+
+      {pathname === '/account' && (
+        <div className="header__user-info">
+          <UserMenuButton title="Изменить город" handleClick={handleChangeCity} />
+          <UserMenuButton title="Выйти" />
+        </div>
+      )}
     </header>
   );
 }
 
 Header.propTypes = {
   isAuthorized: PropTypes.bool,
-  handleUserButtonClick: PropTypes.func
+  handleUserButtonClick: PropTypes.func,
+  handleChangeCity: PropTypes.func
 };
 
 Header.defaultProps = {
   isAuthorized: false,
-  handleUserButtonClick: undefined
+  handleUserButtonClick: undefined,
+  handleChangeCity: undefined
 };
 
 export default Header;

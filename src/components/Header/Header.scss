@@ -19,10 +19,23 @@
   }
 }
 
+.header__user-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-top: 33px;
+}
+
 @include atDesktop1440 {
   .header {
     padding-left: 135px;
     padding-right: 135px;
+  }
+}
+
+@include atDesktop1380 {
+  .header__user-info {
+    display: none;
   }
 }
 

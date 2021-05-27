@@ -1,32 +1,5 @@
 @import './styles/utils.scss';
 
-.account {
-  
-}
-
-.account__user-info {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-}
-
-.account__user-button {
-  color: $lightGray;
-  margin-right: 30px;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  padding: 0;
-
-  &:last-of-type {
-    margin-right: 0;
-  }
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
 .account__events-area {
   box-sizing: border-box;
   padding-bottom: 50px;
