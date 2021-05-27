@@ -2,7 +2,7 @@ import './Main.scss';
 import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { getCalendarPageData } from '../../utils/api';
+import { getCalendarPageData, putBookedEvent } from '../../utils/api';
 // страницы
 import MainPage from '../MainPage/MainPage';
 import Calendar from '../Calendar/Calendar';
@@ -22,6 +22,7 @@ function Main({ isAuthorized }) {
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
   const [dataCalendar, setDataCalendar] = useState(null);
   const [selectedDataCalendar, setSelectedDataCalendar] = useState('');
+  const [isBooked, setIsBooked] = useState(false);
 
   function handleClickSelectedButton() {
     setIsSelected(true);
@@ -73,6 +74,14 @@ function Main({ isAuthorized }) {
       .catch((err) => console.log(err));
   }, [setDataCalendar]);
 
+  function bookedEvent() {
+    useEffect(() => {
+      putBookedEvent()
+        .then(() => setIsBooked({ booked: true }))
+        .catch((err) => console.log(err));
+    }, [setIsBooked]);
+  }
+
   return (
     <main className="main">
       <Switch>
@@ -92,6 +101,7 @@ function Main({ isAuthorized }) {
             clickButton={handleClickSelectedButton}
             isSelected={isSelected}
             dataCalendar={dataCalendar}
+            isBooked={isBooked}
           />
         </Route>
         <Route path="*">
@@ -103,6 +113,7 @@ function Main({ isAuthorized }) {
         onClose={closeAllPopups}
         onConfirmFormSubmit={handleClickPopupSuccessfullyOpened}
         data={selectedDataCalendar}
+        putBookedEvent={bookedEvent}
       />
       <PopupSuccessfully
         isOpen={isPopupSuccessfullyOpen}

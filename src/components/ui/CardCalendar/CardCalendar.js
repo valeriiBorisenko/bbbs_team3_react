@@ -82,7 +82,7 @@ function CardCalendar({
             onClick={onClick}
             clickButton={clickButton}
             isSelected={isSelected}
-            data={{ data: title, startAt, endAt }}
+            data={{ title, startAt, endAt }}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
