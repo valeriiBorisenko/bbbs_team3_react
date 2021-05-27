@@ -17,13 +17,13 @@ function CardCalendar({
     address,
     contact,
     remainSeats,
-    description,
-    booked
+    description
   },
   isModal,
   onClick,
   clickButton,
-  isSelected
+  isSelected,
+  isBooked
 }) {
   const startDay = formatDate(startAt);
   const endDay = formatDate(endAt);
@@ -31,7 +31,7 @@ function CardCalendar({
   const isDisabled = (remainSeats < 1 ? true : '');
 
   return (
-    <article className={`calendar ${booked ? 'calendar_selected' : ''}`}>
+    <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -87,7 +87,7 @@ function CardCalendar({
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
-            || (!booked && `Осталось ${remainSeats} мест`)}
+            || (!isBooked && `Осталось ${remainSeats} мест`)}
           </p>
           <ButtonDots />
         </div>
@@ -106,11 +106,11 @@ CardCalendar.propTypes = {
   contact: PropTypes.string,
   remainSeats: PropTypes.number,
   description: PropTypes.string,
-  booked: PropTypes.bool,
   isModal: PropTypes.bool,
   onClick: PropTypes.func,
   clickButton: PropTypes.func,
-  isSelected: PropTypes.bool
+  isSelected: PropTypes.bool,
+  isBooked: PropTypes.bool
 };
 
 CardCalendar.defaultProps = {
@@ -123,11 +123,11 @@ CardCalendar.defaultProps = {
   remainSeats: 0,
   tags: [],
   description: '',
-  booked: false,
   isModal: false,
   onClick: undefined,
   clickButton: undefined,
-  isSelected: false
+  isSelected: false,
+  isBooked: PropTypes.bool
 };
 
 export default CardCalendar;

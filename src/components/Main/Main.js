@@ -2,7 +2,7 @@ import './Main.scss';
 import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { getCalendarPageData, putBookedEvent } from '../../utils/api';
+import { getCalendarPageData } from '../../utils/api';
 // страницы
 import MainPage from '../MainPage/MainPage';
 import Calendar from '../Calendar/Calendar';
@@ -23,6 +23,10 @@ function Main({ isAuthorized }) {
   const [dataCalendar, setDataCalendar] = useState(null);
   const [selectedDataCalendar, setSelectedDataCalendar] = useState('');
   const [isBooked, setIsBooked] = useState(false);
+
+  function handleClickBooked() {
+    setIsBooked(true);
+  }
 
   function handleClickSelectedButton() {
     setIsSelected(true);
@@ -58,7 +62,7 @@ function Main({ isAuthorized }) {
         closeAllPopups();
       }
     };
-    if (isPopupConfirmationOpen) {
+    if (isPopupConfirmationOpen || isPopupSuccessfullyOpen || isPopupLoginOpen) {
       window.addEventListener('click', clickOverlay);
       window.addEventListener('keyup', clickEscape);
     }
@@ -66,21 +70,13 @@ function Main({ isAuthorized }) {
       window.removeEventListener('click', clickOverlay);
       window.removeEventListener('keyup', clickEscape);
     };
-  }, [isPopupConfirmationOpen]);
+  }, [isPopupConfirmationOpen, isPopupSuccessfullyOpen, isPopupLoginOpen]);
 
   useEffect(() => {
     getCalendarPageData()
       .then((res) => setDataCalendar(res.data.calendarPageData))
       .catch((err) => console.log(err));
   }, [setDataCalendar]);
-
-  function bookedEvent() {
-    useEffect(() => {
-      putBookedEvent()
-        .then(() => setIsBooked({ booked: true }))
-        .catch((err) => console.log(err));
-    }, [setIsBooked]);
-  }
 
   return (
     <main className="main">
@@ -113,7 +109,7 @@ function Main({ isAuthorized }) {
         onClose={closeAllPopups}
         onConfirmFormSubmit={handleClickPopupSuccessfullyOpened}
         data={selectedDataCalendar}
-        putBookedEvent={bookedEvent}
+        putBookedEvent={handleClickBooked}
       />
       <PopupSuccessfully
         isOpen={isPopupSuccessfullyOpen}

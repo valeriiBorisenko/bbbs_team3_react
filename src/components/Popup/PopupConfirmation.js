@@ -13,7 +13,8 @@ function PopupConfirmation({
     title,
     startAt,
     endAt
-  }
+  },
+  putBookedEvent
 }) {
   const startDay = formatDate(startAt);
   const endDay = formatDate(endAt);
@@ -21,6 +22,7 @@ function PopupConfirmation({
   const submitHandler = (event) => {
     event.preventDefault();
     onConfirmFormSubmit();
+    putBookedEvent();
   };
   return (
     <Popup
@@ -54,14 +56,16 @@ PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onConfirmFormSubmit: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.any)
+  data: PropTypes.objectOf(PropTypes.any),
+  putBookedEvent: PropTypes.func
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: undefined,
   onConfirmFormSubmit: undefined,
-  data: {}
+  data: {},
+  putBookedEvent: undefined
 };
 
 export default PopupConfirmation;
