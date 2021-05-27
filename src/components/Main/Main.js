@@ -22,6 +22,11 @@ function Main({ isAuthorized }) {
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
   const [dataCalendar, setDataCalendar] = useState(null);
   const [selectedDataCalendar, setSelectedDataCalendar] = useState('');
+  const [isBooked, setIsBooked] = useState(false);
+
+  function handleClickBooked() {
+    setIsBooked(true);
+  }
 
   function handleClickSelectedButton() {
     setIsSelected(true);
@@ -57,7 +62,7 @@ function Main({ isAuthorized }) {
         closeAllPopups();
       }
     };
-    if (isPopupConfirmationOpen) {
+    if (isPopupConfirmationOpen || isPopupSuccessfullyOpen || isPopupLoginOpen) {
       window.addEventListener('click', clickOverlay);
       window.addEventListener('keyup', clickEscape);
     }
@@ -65,7 +70,7 @@ function Main({ isAuthorized }) {
       window.removeEventListener('click', clickOverlay);
       window.removeEventListener('keyup', clickEscape);
     };
-  }, [isPopupConfirmationOpen]);
+  }, [isPopupConfirmationOpen, isPopupSuccessfullyOpen, isPopupLoginOpen]);
 
   useEffect(() => {
     getCalendarPageData()
@@ -92,6 +97,7 @@ function Main({ isAuthorized }) {
             clickButton={handleClickSelectedButton}
             isSelected={isSelected}
             dataCalendar={dataCalendar}
+            isBooked={isBooked}
           />
         </Route>
         <Route path="*">
@@ -103,6 +109,7 @@ function Main({ isAuthorized }) {
         onClose={closeAllPopups}
         onConfirmFormSubmit={handleClickPopupSuccessfullyOpened}
         data={selectedDataCalendar}
+        putBookedEvent={handleClickBooked}
       />
       <PopupSuccessfully
         isOpen={isPopupSuccessfullyOpen}

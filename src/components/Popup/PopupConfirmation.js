@@ -3,31 +3,36 @@ import PropTypes from 'prop-types';
 import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
+import { formatDate } from '../../utils/utils';
 
 function PopupConfirmation({
   isOpen,
   onClose,
   onConfirmFormSubmit,
-  data
+  data: {
+    title,
+    startAt,
+    endAt
+  },
+  putBookedEvent
 }) {
-  function submitHandler(event) {
+  const startDay = formatDate(startAt);
+  const endDay = formatDate(endAt);
+
+  const submitHandler = (event) => {
     event.preventDefault();
     onConfirmFormSubmit();
-  }
+    putBookedEvent();
+  };
   return (
     <Popup
       type="confirmation"
       isOpen={isOpen}
       onClose={onClose}
     >
-      {/* пропс title и время должны приходить из-вне
-      ((клик по карточке подтягивает инфу в конфирм-попап))
-      так же осложняет то что в строке еще дата есть, которую так
-      же надо подтягивать (еще 1 пропс нужен)
-      */}
       <TitleH2
         sectionClass="popup__title_type_calendar"
-        title={`Подтвердить запись на мероприятие ${data} 5 декабря с 12:00–14:00`}
+        title={`Подтвердить запись на мероприятие «${title}» ${startDay.day} ${startDay.month} с ${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
       />
       <div className="popup__buttons_type_calendar">
         <Button
@@ -51,14 +56,16 @@ PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onConfirmFormSubmit: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.any)
+  data: PropTypes.objectOf(PropTypes.any),
+  putBookedEvent: PropTypes.func
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: undefined,
   onConfirmFormSubmit: undefined,
-  data: {}
+  data: {},
+  putBookedEvent: undefined
 };
 
 export default PopupConfirmation;
