@@ -17,19 +17,23 @@ import PopupAboutEvent from '../Popup/PopupAboutEvent';
 
 function Main({ isAuthorized }) {
   const [isSelected, setIsSelected] = useState(false);
-  const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
-  const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
-  const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
+  // данные всей страницы с сервера
   const [dataCalendar, setDataCalendar] = useState(null);
-  const [selectedDataCalendar, setSelectedDataCalendar] = useState('');
+  // выбранная карточка (дата)
+  const [selectedCalendarCard, setSelectedCalendarCard] = useState('');
+  // стейт переменные попапов
+  const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
+  const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
+  const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
+  const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
 
   function handleClickSelectedButton() {
     setIsSelected(true);
   }
 
-  function handleClickPopupConfirmationOpened(data) {
+  function handleClickPopupConfirmationOpened(cardData) {
     setIsPopupConfirmationOpen(true);
-    setSelectedDataCalendar(data);
+    setSelectedCalendarCard(cardData);
   }
 
   function handleClickPopupSuccessfullyOpened() {
@@ -40,10 +44,16 @@ function Main({ isAuthorized }) {
     setIsPopupLoginOpen(true);
   }
 
+  function handleClickPopupAboutEventOpened(cardData) {
+    setIsPopupAboutDescriptionOpen(true);
+    setSelectedCalendarCard(cardData);
+  }
+
   function closeAllPopups() {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(false);
     setIsPopupLoginOpen(false);
+    setIsPopupAboutDescriptionOpen(false);
   }
 
   useEffect(() => {
@@ -88,7 +98,8 @@ function Main({ isAuthorized }) {
         <Route path="/calendar">
           <Calendar
             isAuthorized={isAuthorized}
-            onClick={handleClickPopupConfirmationOpened}
+            onEventSignUpClick={handleClickPopupConfirmationOpened}
+            onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
             clickButton={handleClickSelectedButton}
             isSelected={isSelected}
             dataCalendar={dataCalendar}
@@ -101,19 +112,24 @@ function Main({ isAuthorized }) {
       <PopupConfirmation
         isOpen={isPopupConfirmationOpen}
         onClose={closeAllPopups}
-        onConfirmFormSubmit={handleClickPopupSuccessfullyOpened}
-        data={selectedDataCalendar}
+        onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
+        data={selectedCalendarCard}
       />
       <PopupSuccessfully
         isOpen={isPopupSuccessfullyOpen}
         onClose={closeAllPopups}
+        data={selectedCalendarCard}
       />
       <PopupLogin
         isOpen={isPopupLoginOpen}
         onClose={closeAllPopups}
         onLoginFormSubmit={handleClickPopupLoginOpened}
       />
-      <PopupAboutEvent />
+      <PopupAboutEvent
+        isOpen={isPopupAboutDescriptionOpen}
+        onClose={closeAllPopups}
+        data={selectedCalendarCard}
+      />
     </main>
   );
 }
