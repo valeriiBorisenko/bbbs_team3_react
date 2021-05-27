@@ -1,0 +1,41 @@
+@import './styles/utils.scss';
+
+.page {
+  position: relative;
+  max-width: 1920px;
+  min-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.page__section {
+  margin: 0 75px;
+}
+
+@include atDesktop1440 {
+  .page__section {
+    margin: 0 135px;
+  }
+}
+
+@include atDesktop1024 {
+  .page__section {
+    margin: 0 127px;
+  }
+}
+
+@include atTablet {
+  .page__section {
+    margin: 0 60px;
+  }
+}
+
+@include atMobile {
+  .page__section {
+    margin: 0 15px;
+  }
+}
