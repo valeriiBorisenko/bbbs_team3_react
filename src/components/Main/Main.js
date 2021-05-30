@@ -54,29 +54,6 @@ function Main({
           <PageNotFound />
         </Route>
       </Switch>
-      {/* <PopupConfirmation
-        isOpen={isPopupConfirmationOpen}
-        onClose={closeAllPopups}
-        onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
-        data={selectedCalendarCard}
-        putBookedEvent={handleClickBooked}
-      />
-      <PopupSuccessfully
-        isOpen={isPopupSuccessfullyOpen}
-        onClose={closeAllPopups}
-        data={selectedCalendarCard}
-      />
-      <PopupLogin
-        isOpen={isPopupLoginOpen}
-        onClose={closeAllPopups}
-        onLoginFormSubmit={handleClickPopupLoginOpened}
-      />
-      <PopupAboutEvent
-        isOpen={isPopupAboutDescriptionOpen}
-        onClose={closeAllPopups}
-        onEventSignUpClick={handleClickPopupSuccessfullyOpened}
-        data={selectedCalendarCard}
-      /> */}
     </main>
   );
 }
