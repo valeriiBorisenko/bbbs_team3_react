@@ -39,13 +39,13 @@ function Header({
 
   // липкий хедер
   const [isHeaderActive, setIsHeaderActive] = useState(true);
-  const [scrollPos, setScrollPos] = useState(0);
+  let prevScrollPos = 0;
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
       const currentScrollPos = window.pageYOffset;
-      // если scrollPos больше currentScrollPos значит мы скролим наверх
-      if (scrollPos > currentScrollPos) {
+      // если prevScrollPos больше currentScrollPos значит мы скролим наверх
+      if (prevScrollPos > currentScrollPos) {
         setIsHeaderActive(true);
       } else {
         setIsHeaderActive(false);
@@ -55,7 +55,7 @@ function Header({
       if (currentScrollPos === 0) {
         setIsHeaderActive(true);
       }
-      setScrollPos(currentScrollPos);
+      prevScrollPos = currentScrollPos;
     });
   }, []);
 
