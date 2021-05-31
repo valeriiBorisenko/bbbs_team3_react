@@ -26,7 +26,7 @@ function Calendar({
         </ul>
       </div>
       <section className="calendar-container">
-        { dataCalendar.events.map((data) => (
+        { dataCalendar.map((data) => (
           <CardCalendar
             key={data.id}
             data={data}
@@ -49,7 +49,7 @@ Calendar.propTypes = {
   onEventFullDescriptionClick: PropTypes.func,
   clickButton: PropTypes.func,
   isSelected: PropTypes.bool,
-  dataCalendar: PropTypes.objectOf(PropTypes.any),
+  dataCalendar: PropTypes.arrayOf(PropTypes.object),
   isBooked: PropTypes.bool
 };
 
@@ -58,7 +58,7 @@ Calendar.defaultProps = {
   onEventFullDescriptionClick: undefined,
   clickButton: undefined,
   isSelected: false,
-  dataCalendar: {},
+  dataCalendar: [],
   isBooked: false
 };
 
