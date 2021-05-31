@@ -43,6 +43,22 @@ function PopupAboutEvent({
     onEventSignUpClick();
   }
 
+  // волонтеры + дети
+  function getCardType() {
+    if (tags) {
+      return tags.map((tag, idx) => {
+        if (tags.length === 1) {
+          return `${tag.name}`;
+        }
+        if (idx !== tags.length - 1) {
+          return `${tag.name} + `;
+        }
+        return `${tag.name.toLowerCase()}`;
+      });
+    }
+    return '';
+  }
+
   // падеж слова
   function formatWordCase() {
     // если кончается на 1 - окончание О
@@ -69,7 +85,7 @@ function PopupAboutEvent({
         <div className="calendar__info">
           {/* заменить на пропс */}
           <p className="calendar__type">
-            
+            {getCardType()}
           </p>
           {/* заменить на пропс */}
           <p className="calendar__weekday">
@@ -79,11 +95,11 @@ function PopupAboutEvent({
         <div className="calendar__about">
           {/* заменить на пропс title */}
           <TitleH2
-            title=
+            title={title}
             sectionClass="calendar__title calendar__title_type_popup"
           />
           {/* заменить на пропс */}
-          <p className="calendar__date"></p>
+          <p className="calendar__date">{}</p>
         </div>
       </div>
       <div className="calendar__meetup">
