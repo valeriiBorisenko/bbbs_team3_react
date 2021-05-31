@@ -2,6 +2,7 @@ import './MainPage.scss';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import Loader from '../ui/Loader/Loader';
 import Card from '../ui/Card/Card';
 import CardStub from '../ui/CardStub/CardStub';
@@ -22,6 +23,8 @@ function MainPage({ isAuthorized }) {
       .then((res) => setDataMain(res.data.mainPageData))
       .catch((err) => console.log(err));
   }, [setDataMain]);
+
+  useSmoothScrollOnWindow({ top: 0 });
 
   return dataMain ? (
     <>

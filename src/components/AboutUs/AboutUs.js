@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import './AboutUs.scss';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import TitleH3 from '../ui/TitleH3/TitleH3';
 import Blockquote from '../ui/Blockquote/Blockquote';
 import LogoBlue from '../ui/LogoBlue/LogoBlue';
@@ -10,6 +11,9 @@ import CardAnnotationContainer from '../ui/CardAnnotation/CardAnnotationContaine
 
 function AboutUs({ isAuthorized }) {
   console.log(isAuthorized); // !выкинуть потом
+
+  useSmoothScrollOnWindow({ top: 0 });
+
   return (
     <section className="about page__section fade-in">
       <TitleH3

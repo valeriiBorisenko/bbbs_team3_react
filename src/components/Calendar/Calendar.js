@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 import ButtonTags from '../ui/Button/ButtonTags';
 import './Calendar.scss';
@@ -13,6 +14,8 @@ function Calendar({
   dataCalendar,
   isBooked
 }) {
+  useSmoothScrollOnWindow({ top: 0 });
+
   return dataCalendar ? (
     <section className="lead page__section fade-in">
       <TitleH1 title="Календарь" />

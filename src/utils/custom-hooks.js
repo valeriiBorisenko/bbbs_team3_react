@@ -21,7 +21,7 @@ const useClickOutside = (callback) => {
 };
 
 // плавный скролл при монтировании компонента
-const useSmoothScroll = (coordinate) => {
+const useSmoothScrollOnWindow = (coordinate) => {
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo({
@@ -58,4 +58,4 @@ const useSmoothHorizontalScroll = ({ step }) => {
   return ref;
 };
 
-export { useClickOutside, useSmoothScroll, useSmoothHorizontalScroll };
+export { useClickOutside, useSmoothScrollOnWindow, useSmoothHorizontalScroll };
