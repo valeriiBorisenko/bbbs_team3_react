@@ -39,7 +39,7 @@ function App() {
   const [isBooked, setIsBooked] = useState(false);
 
   // данные страницы-календаря с сервера
-  const [dataCalendar, setDataCalendar] = useState(null);
+  const [dataCalendar, setDataCalendar] = useState([]);
 
   function handleClickBooked() {
     setIsBooked(true);
@@ -134,12 +134,6 @@ function App() {
             </Route>
           </Switch>
         </main>
-        {/* <Main
-          isAuthorized={isAuthorized}
-          isBooked={isBooked}
-          openConfirmationPopup={handleClickPopupConfirmationOpened}
-          openAboutEventPopup={handleClickPopupAboutEventOpened}
-        /> */}
         <Footer />
         <PopupConfirmation
           isOpen={isPopupConfirmationOpen}
@@ -164,7 +158,10 @@ function App() {
           onEventSignUpClick={handleClickPopupSuccessfullyOpened}
           data={selectedCalendarCard}
         />
-        <PopupCities isOpen={isPopupCitiesOpen} onClose={closeAllPopups} />
+        <PopupCities
+          isOpen={isPopupCitiesOpen}
+          onClose={closeAllPopups}
+        />
       </div>
     </BrowserRouter>
   );
