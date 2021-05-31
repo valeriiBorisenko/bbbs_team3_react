@@ -89,7 +89,7 @@ function PopupAboutEvent({
           </p>
           {/* заменить на пропс */}
           <p className="calendar__weekday">
-            
+            {`${startDateParts.month} / ${startDateParts.weekday}`}
           </p>
         </div>
         <div className="calendar__about">
@@ -99,7 +99,7 @@ function PopupAboutEvent({
             sectionClass="calendar__title calendar__title_type_popup"
           />
           {/* заменить на пропс */}
-          <p className="calendar__date">{}</p>
+          <p className="calendar__date">{startDateParts.day}</p>
         </div>
       </div>
       <div className="calendar__meetup">
@@ -107,25 +107,26 @@ function PopupAboutEvent({
           <li className="calendar__info-item">
             {/* заменить на пропс */}
             <p className="calendar__time">
-              
+              {`${startDateParts.hour}:${startDateParts.minutes} - ${endDayParts.hour}:${endDayParts.minutes}`}
             </p>
           </li>
           <li className="calendar__info-item">
-            <p className="calendar__place">{}</p>
+            {/* заменить на пропс address */}
+            <p className="calendar__place">{address}</p>
           </li>
           <li className="calendar__info-item">
-            <p className="calendar__contact">{}</p>
+            <p className="calendar__contact">{contact}</p>
           </li>
         </ul>
         <div className="calendar__description">
-          <p className="paragraph calendar__desc-paragraph">{}</p>
+          <p className="paragraph calendar__desc-paragraph">{description}</p>
         </div>
         <div className="calendar__submit">
           <Button
             color="blue"
             title="Записаться"
             sectionClass="button_action_confirm"
-            onClick={}
+            onClick={submitHandler}
             isSubmittable
           />
           <p className="calendar__place-left">
