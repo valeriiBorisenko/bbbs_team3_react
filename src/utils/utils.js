@@ -39,8 +39,8 @@ export const formatDuration = (duration) => {
 export const formatDate = (date) => {
   const parsedDate = new Date(date);
   const day = String(parsedDate.getDate());
-  const weekday = weekdays[parsedDate.getDay()];
-  const month = months[parsedDate.getMonth()];
+  const weekdayName = weekdays[parsedDate.getDay()];
+  const monthName = months[parsedDate.getMonth()];
   const hour = String(parsedDate.getHours());
   let minutes = parsedDate.getMinutes();
 
@@ -50,9 +50,12 @@ export const formatDate = (date) => {
 
   return {
     day,
-    weekday,
-    month,
+    weekdayName,
+    monthName,
     hour,
     minutes
   };
 };
+
+// падеж слова "место" в зависимости от числа мест
+// нужно в карточках, попапах
