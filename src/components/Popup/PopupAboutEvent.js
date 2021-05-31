@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
-import { formatDate } from '../../utils/utils';
+import { formatDate, formatWordCase } from '../../utils/utils';
 
 function PopupAboutEvent({
   isOpen,
@@ -35,7 +35,6 @@ function PopupAboutEvent({
   });
 
   const startDateParts = formatDate(startAt);
-  // console.log(startDateParts);
   const endDayParts = formatDate(endAt);
 
   function submitHandler(event) {
@@ -59,22 +58,6 @@ function PopupAboutEvent({
     return '';
   }
 
-  // падеж слова
-  function formatWordCase() {
-    // если кончается на 1 - окончание О
-    // если кончается на 2 3 4 - окончание A
-    // если кончается на другое - окончания нет
-    const lastDigit = remainSeats % 10;
-
-    if (lastDigit === 1) {
-      return 'место';
-    }
-    if (lastDigit === 2 || lastDigit === 3 || lastDigit === 4) {
-      return 'местa';
-    }
-    return 'мест';
-  }
-
   return (
     <Popup
       type="calendar"
@@ -83,35 +66,29 @@ function PopupAboutEvent({
     >
       <div className="calendar__caption">
         <div className="calendar__info">
-          {/* заменить на пропс */}
           <p className="calendar__type">
             {getCardType()}
           </p>
-          {/* заменить на пропс */}
           <p className="calendar__weekday">
-            {`${startDateParts.month} / ${startDateParts.weekday}`}
+            {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
           </p>
         </div>
         <div className="calendar__about">
-          {/* заменить на пропс title */}
           <TitleH2
             title={title}
             sectionClass="calendar__title calendar__title_type_popup"
           />
-          {/* заменить на пропс */}
           <p className="calendar__date">{startDateParts.day}</p>
         </div>
       </div>
       <div className="calendar__meetup">
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
-            {/* заменить на пропс */}
             <p className="calendar__time">
               {`${startDateParts.hour}:${startDateParts.minutes} - ${endDayParts.hour}:${endDayParts.minutes}`}
             </p>
           </li>
           <li className="calendar__info-item">
-            {/* заменить на пропс address */}
             <p className="calendar__place">{address}</p>
           </li>
           <li className="calendar__info-item">
@@ -130,7 +107,7 @@ function PopupAboutEvent({
             isSubmittable
           />
           <p className="calendar__place-left">
-            {`Осталось ${remainSeats} ${formatWordCase()}`}
+            {`Осталось ${remainSeats} ${formatWordCase(remainSeats)}`}
           </p>
         </div>
       </div>
@@ -142,14 +119,14 @@ PopupAboutEvent.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onEventSignUpClick: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.string)
+  data: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
   onClose: undefined,
   onEventSignUpClick: undefined,
-  data: PropTypes.objectOf(PropTypes.string)
+  data: {}
 };
 
 export default PopupAboutEvent;
