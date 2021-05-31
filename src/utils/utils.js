@@ -59,3 +59,17 @@ export const formatDate = (date) => {
 
 // падеж слова "место" в зависимости от числа мест
 // нужно в карточках, попапах
+export const formatWordCase = (remainSeats) => {
+  // если кончается на 1 - окончание О
+  // если кончается на 2 3 4 - окончание A
+  // если кончается на другое - окончания нет
+  const lastDigit = remainSeats % 10;
+
+  if (lastDigit === 1) {
+    return 'место';
+  }
+  if (lastDigit === 2 || lastDigit === 3 || lastDigit === 4) {
+    return 'местa';
+  }
+  return 'мест';
+};
