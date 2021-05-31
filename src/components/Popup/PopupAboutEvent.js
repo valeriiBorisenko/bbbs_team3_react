@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
+import { formatDate } from '../../utils/utils';
 
 function PopupAboutEvent({
   isOpen,
@@ -32,10 +33,32 @@ function PopupAboutEvent({
     remainSeats,
     tags
   });
+
+  const startDateParts = formatDate(startAt);
+  // console.log(startDateParts);
+  const endDayParts = formatDate(endAt);
+
   function submitHandler(event) {
     event.preventDefault();
     onEventSignUpClick();
   }
+
+  // падеж слова
+  function formatWordCase() {
+    // если кончается на 1 - окончание О
+    // если кончается на 2 3 4 - окончание A
+    // если кончается на другое - окончания нет
+    const lastDigit = remainSeats % 10;
+
+    if (lastDigit === 1) {
+      return 'место';
+    }
+    if (lastDigit === 2 || lastDigit === 3 || lastDigit === 4) {
+      return 'местa';
+    }
+    return 'мест';
+  }
+
   return (
     <Popup
       type="calendar"
@@ -45,49 +68,53 @@ function PopupAboutEvent({
       <div className="calendar__caption">
         <div className="calendar__info">
           {/* заменить на пропс */}
-          <p className="calendar__type">Волонтёры + дети</p>
+          <p className="calendar__type">
+            
+          </p>
           {/* заменить на пропс */}
-          <p className="calendar__weekday">Декабрь / понедельник</p>
+          <p className="calendar__weekday">
+            
+          </p>
         </div>
         <div className="calendar__about">
-          {/* заменить на пропс */}
+          {/* заменить на пропс title */}
           <TitleH2
-            title="Занятие с выпускниками: как составить резюме"
+            title=
             sectionClass="calendar__title calendar__title_type_popup"
           />
           {/* заменить на пропс */}
-          <p className="calendar__date">20</p>
+          <p className="calendar__date"></p>
         </div>
       </div>
       <div className="calendar__meetup">
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
             {/* заменить на пропс */}
-            <p className="calendar__time">12:00–14:00</p>
+            <p className="calendar__time">
+              
+            </p>
           </li>
           <li className="calendar__info-item">
-            {/* заменить на пропс */}
-            <p className="calendar__place">Садовническая наб., д. 77 стр. 1 (офис компании Ernst&Young)</p>
+            <p className="calendar__place">{}</p>
           </li>
           <li className="calendar__info-item">
-            {/* заменить на пропс */}
-            <p className="calendar__contact">Александра, +7 926 356-78-90</p>
+            <p className="calendar__contact">{}</p>
           </li>
         </ul>
         <div className="calendar__description">
-          {/* заменить на пропс */}
-          <p className="paragraph calendar__desc-paragraph">Наконец-то наступила весна и мы пережили эту долгую зиму! И возможно, что внутренних сил и ресурса сейчас не так много, а до окончания учебного года ещё целых несколько месяцев. Поэтому приглашаем вас на встречу нашего ресурсного клуба &quot;Наставник PRO&quot;, которую мы хотим посвятить теме поиска моральных сил, смыслов и внутреннего ресурса для общения и взаимодействия с нашими подопечными.</p>
+          <p className="paragraph calendar__desc-paragraph">{}</p>
         </div>
         <div className="calendar__submit">
           <Button
             color="blue"
             title="Записаться"
             sectionClass="button_action_confirm"
-            onClick={submitHandler}
+            onClick={}
             isSubmittable
           />
-          {/* заменить на пропс */}
-          <p className="calendar__place-left">Осталось 5 мест</p>
+          <p className="calendar__place-left">
+            {`Осталось ${remainSeats} ${formatWordCase()}`}
+          </p>
         </div>
       </div>
     </Popup>
