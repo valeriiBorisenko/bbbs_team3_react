@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useRef } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef
+} from 'react';
 
 // отслеживает, что клик произошёл вне контейнера-рефа и запускает колбэк
 const useClickOutside = (callback) => {
@@ -35,10 +40,10 @@ const useSmoothScrollOnWindow = (coordinate) => {
 // горизонтальная плавная прокрутка
 // step: number
 const useSmoothHorizontalScroll = ({ step }) => {
-  const ref = useRef(null);
+  const ref = useRef();
 
   const scrollByWheel = useCallback((evt) => {
-    if (ref.current) {
+    if (ref && ref.current) {
       evt.preventDefault();
       ref.current.scrollTo({
         left: ref.current.scrollLeft + evt.deltaY * step,
@@ -48,8 +53,8 @@ const useSmoothHorizontalScroll = ({ step }) => {
   }, [ref.current]);
 
   // eslint-disable-next-line consistent-return
-  useEffect(() => {
-    if (ref.current) {
+  useLayoutEffect(() => {
+    if (ref && ref.current) {
       ref.current.addEventListener('wheel', scrollByWheel);
       return () => ref.current.removeEventListener('wheel', scrollByWheel);
     }
