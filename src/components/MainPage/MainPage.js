@@ -16,11 +16,13 @@ import { getMainPageData } from '../../utils/api';
 
 function MainPage({ isAuthorized }) {
   const [dataMain, setDataMain] = useState(null);
+
   useEffect(() => {
     getMainPageData()
       .then((res) => setDataMain(res.data.mainPageData))
       .catch((err) => console.log(err));
   }, [setDataMain]);
+
   return dataMain ? (
     <>
       <section className="lead page__section fade-in">

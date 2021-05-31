@@ -1,10 +1,11 @@
 import './UserMenuButton.scss';
 import PropTypes from 'prop-types';
 
-function UserMenuButton({ title, handleClick }) {
+function UserMenuButton({ title, handleClick, sectionClass }) {
+  const classNames = ['user-menu-button', sectionClass].join(' ').trim();
   return (
     <button
-      className="user-menu-button"
+      className={classNames}
       type="button"
       onClick={handleClick}
     >
@@ -15,12 +16,14 @@ function UserMenuButton({ title, handleClick }) {
 
 UserMenuButton.propTypes = {
   title: PropTypes.string,
-  handleClick: PropTypes.func
+  handleClick: PropTypes.func,
+  sectionClass: PropTypes.string
 };
 
 UserMenuButton.defaultProps = {
   title: '',
-  handleClick: undefined
+  handleClick: undefined,
+  sectionClass: ''
 };
 
 export default UserMenuButton;

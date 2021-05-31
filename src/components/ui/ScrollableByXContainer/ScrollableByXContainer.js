@@ -1,29 +1,11 @@
-/* eslint-disable consistent-return */
 import './ScrollableByXContainer.scss';
 import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
+import { useSmoothHorizontalScroll } from '../../../utils/custom-hooks';
 
 function ScrollableByXContainer({ children, sectionClass }) {
   const classNames = ['x-scrollable-container', sectionClass].join(' ').trim();
 
-  const containerRef = useRef();
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (el) {
-      const scrollByWheel = (evt) => {
-        evt.preventDefault();
-        el.scrollTo({
-          left: el.scrollLeft + evt.deltaY * 3,
-          behavior: 'smooth'
-        });
-      };
-
-      el.addEventListener('wheel', scrollByWheel);
-
-      return () => el.removeEventListener('wheel', scrollByWheel);
-    }
-  });
+  const containerRef = useSmoothHorizontalScroll({ step: 3 });
 
   return (
     <div className={classNames} ref={containerRef}>
