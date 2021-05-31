@@ -2,7 +2,7 @@ import './CardCalendar.scss';
 import PropTypes from 'prop-types';
 import ButtonDots from '../ButtonDots/ButtonDots';
 import Button from '../Button/Button';
-import { formatDate, formatWordCase } from '../../../utils/utils';
+import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
 
 /* TO DO */
 /* нужно будет добавить пропсы с функциями открытия для кнопок */
@@ -70,15 +70,7 @@ function CardCalendar({
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
-            {tags.map((tag, idx) => {
-              if (tags.length === 1) {
-                return `${tag.name}`;
-              }
-              if (idx !== tags.length - 1) {
-                return `${tag.name} + `;
-              }
-              return `${tag.name.toLowerCase()}`;
-            })}
+            {getCardType(tags)}
           </p>
           <p className="calendar__weekday">
             {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}

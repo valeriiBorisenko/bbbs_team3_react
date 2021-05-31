@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Popup from './Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
-import { formatDate, formatWordCase } from '../../utils/utils';
+import { formatDate, formatWordCase, getCardType } from '../../utils/utils';
 
 function PopupAboutEvent({
   isOpen,
@@ -42,22 +42,6 @@ function PopupAboutEvent({
     onEventSignUpClick();
   }
 
-  // волонтеры + дети
-  function getCardType() {
-    if (tags) {
-      return tags.map((tag, idx) => {
-        if (tags.length === 1) {
-          return `${tag.name}`;
-        }
-        if (idx !== tags.length - 1) {
-          return `${tag.name} + `;
-        }
-        return `${tag.name.toLowerCase()}`;
-      });
-    }
-    return '';
-  }
-
   return (
     <Popup
       type="calendar"
@@ -67,7 +51,7 @@ function PopupAboutEvent({
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
-            {getCardType()}
+            {getCardType(tags)}
           </p>
           <p className="calendar__weekday">
             {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}

@@ -58,6 +58,7 @@ export const formatDate = (date) => {
 };
 
 // падеж слова "место" в зависимости от числа мест
+// принимает на вход количество оставшихся мест из чего формирует падеж слова
 // нужно в карточках, попапах
 export const formatWordCase = (remainSeats) => {
   // если кончается на 1 - окончание О
@@ -72,4 +73,21 @@ export const formatWordCase = (remainSeats) => {
     return 'местa';
   }
   return 'мест';
+};
+
+// вернет заголовок состоящий из тегов
+// принимает массив тегов
+export const getCardType = (tags) => {
+  if (tags) {
+    return tags.map((tag, idx) => {
+      if (tags.length === 1) {
+        return `${tag.name}`;
+      }
+      if (idx !== tags.length - 1) {
+        return `${tag.name} + `;
+      }
+      return `${tag.name.toLowerCase()}`;
+    });
+  }
+  return undefined;
 };
