@@ -1,27 +1,32 @@
+/* eslint-disable consistent-return */
 import './ScrollableByXContainer.scss';
 import PropTypes from 'prop-types';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 function ScrollableByXContainer({ children, sectionClass }) {
   const classNames = ['x-scrollable-container', sectionClass].join(' ').trim();
 
   const containerRef = useRef();
 
-  const scrollByWheel = (evt) => {
-    evt.preventDefault();
+  useEffect(() => {
     const el = containerRef.current;
-    el.scrollTo({
-      left: el.scrollLeft + evt.deltaY * 5,
-      behavior: 'smooth'
-    });
-  };
+    if (el) {
+      const scrollByWheel = (evt) => {
+        evt.preventDefault();
+        el.scrollTo({
+          left: el.scrollLeft + evt.deltaY * 3,
+          behavior: 'smooth'
+        });
+      };
+
+      el.addEventListener('wheel', scrollByWheel);
+
+      return () => el.removeEventListener('wheel', scrollByWheel);
+    }
+  });
 
   return (
-    <div
-      className={classNames}
-      ref={containerRef}
-      onWheel={scrollByWheel}
-    >
+    <div className={classNames} ref={containerRef}>
       {children}
     </div>
   );
