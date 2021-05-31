@@ -10,14 +10,16 @@ import { formatDate } from '../../../utils/utils';
 
 function CardCalendar({
   data: {
+    address,
+    contact,
+    title,
+    description,
     tags,
     startAt,
     endAt,
-    title,
-    address,
-    contact,
     remainSeats,
-    description
+    booked
+    // id
   },
   isModal,
   onEventSignUpClick,
@@ -29,7 +31,7 @@ function CardCalendar({
   const startDay = formatDate(startAt);
   const endDay = formatDate(endAt);
 
-  const isDisabled = (remainSeats < 1 ? true : '');
+  const isDisabled = (remainSeats < 1);
 
   function prepareDataForConfirmationPopup() {
     onEventSignUpClick({
@@ -59,8 +61,12 @@ function CardCalendar({
     });
   }
 
+  /* //!если ответ сервера обновленный массив, то нам не нужны никакие isBooked и другие стейты,
+  мы сменим состояние просто посмотрев на поле объекта */
+  //! Если ответ сервера - "вы записались", то нужно вводить стейты и менять самим классы
+
   return (
-    <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
+    <article className={`calendar ${booked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -111,7 +117,7 @@ function CardCalendar({
             onClick={prepareDataForConfirmationPopup}
             clickButton={clickButton}
             isSelected={isSelected} //! завязать на isBooked
-            data={{ title, startAt, endAt }}
+            //! data={{ title, startAt, endAt }}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
