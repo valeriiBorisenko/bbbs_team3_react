@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import './Account.scss';
 import { getAccountData } from '../../utils/api';
-import { formatDate } from '../../utils/utils';
 import Loader from '../ui/Loader/Loader';
 import AccountEventCard from '../ui/AccountEventCard/AccountEventCard';
+import ScrollableByXContainer from '../ui/ScrollableByXContainer/ScrollableByXContainer';
 
 function Account() {
   const [events, setEvents] = useState(null);
@@ -13,6 +13,7 @@ function Account() {
       .then((res) => setEvents(res.data.accountData))
       .catch((err) => console.log(err));
   }, []);
+
   return events ? (
     <section className="account fade-in">
       <div className="account__events-area page__section">
@@ -21,17 +22,12 @@ function Account() {
             ? 'Вы записаны на мероприятия:'
             : 'У вас нет записи на мероприятия'}
         </h2>
-        <div className="account__events">
+        <ScrollableByXContainer sectionClass="account__events">
           {events.length > 0
             && events.map((item) => (
-              <AccountEventCard
-                key={item.id}
-                day={formatDate(item.startAt).day}
-                month={formatDate(item.startAt).month}
-                title={item.title}
-              />
+              <AccountEventCard key={item.id} data={item} />
             ))}
-        </div>
+        </ScrollableByXContainer>
       </div>
     </section>
   ) : (
