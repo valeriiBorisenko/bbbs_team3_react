@@ -2,7 +2,7 @@ import './CardCalendar.scss';
 import PropTypes from 'prop-types';
 import ButtonDots from '../ButtonDots/ButtonDots';
 import Button from '../Button/Button';
-import { formatDate } from '../../../utils/utils';
+import { formatDate, formatWordCase } from '../../../utils/utils';
 
 /* TO DO */
 /* нужно будет добавить пропсы с функциями открытия для кнопок */
@@ -28,8 +28,8 @@ function CardCalendar({
   isSelected, //! завязать на isBooked
   isBooked
 }) {
-  const startDay = formatDate(startAt);
-  const endDay = formatDate(endAt);
+  const startDateParts = formatDate(startAt);
+  const endDayParts = formatDate(endAt);
 
   const isDisabled = (remainSeats < 1);
 
@@ -81,19 +81,19 @@ function CardCalendar({
             })}
           </p>
           <p className="calendar__weekday">
-            {`${startDay.month} / ${startDay.weekday}`}
+            {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
           </p>
         </div>
         <div className="calendar__about">
           <h2 className="section-title calendar__title">{title}</h2>
-          <p className="calendar__date">{startDay.day}</p>
+          <p className="calendar__date">{startDateParts.day}</p>
         </div>
       </div>
       <div className="calendar__meetup">
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
             <p className="calendar__time">
-              {`${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
+              {`${startDateParts.hour}:${startDateParts.minutes} - ${endDayParts.hour}:${endDayParts.minutes}`}
             </p>
           </li>
           <li className="calendar__info-item">
@@ -122,7 +122,7 @@ function CardCalendar({
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
-            || (!isBooked && `Осталось ${remainSeats} мест`)}
+            || (!isBooked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
           </p>
           <ButtonDots
             handleClick={prepareDataForAboutEventPopup}
