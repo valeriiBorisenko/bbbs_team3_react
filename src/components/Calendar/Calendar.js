@@ -9,7 +9,7 @@ function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
   clickButton,
-  isSelected,
+  isSelected, //! завязать на isBooked
   dataCalendar,
   isBooked
 }) {
@@ -33,7 +33,7 @@ function Calendar({
             onEventSignUpClick={onEventSignUpClick}
             onEventFullDescriptionClick={onEventFullDescriptionClick}
             clickButton={clickButton}
-            isSelected={isSelected}
+            isSelected={isSelected} //! завязать на isBooked
             isBooked={isBooked}
           />
         ))}

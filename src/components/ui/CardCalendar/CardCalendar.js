@@ -23,7 +23,7 @@ function CardCalendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
   clickButton,
-  isSelected,
+  isSelected, //! завязать на isBooked
   isBooked
 }) {
   const startDay = formatDate(startAt);
@@ -110,7 +110,7 @@ function CardCalendar({
             isDisabled={isDisabled}
             onClick={prepareDataForConfirmationPopup}
             clickButton={clickButton}
-            isSelected={isSelected}
+            isSelected={isSelected} //! завязать на isBooked
             data={{ title, startAt, endAt }}
           />
           <p className="calendar__place-left">
