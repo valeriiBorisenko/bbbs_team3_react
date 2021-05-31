@@ -18,7 +18,7 @@ function AccountEventCard({ data }) {
 }
 
 AccountEventCard.propTypes = {
-  data: PropTypes.objectOf(PropTypes.string).isRequired
+  data: PropTypes.objectOf(PropTypes.any).isRequired
 };
 
 export default AccountEventCard;
