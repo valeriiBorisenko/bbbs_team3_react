@@ -41,6 +41,7 @@ function PopupConfirmation({
           title="Подтвердить запись"
           sectionClass="button__calendar_type_confirm"
           onClick={submitHandler}
+          isSubmittable
         />
         <Button
           color="black"

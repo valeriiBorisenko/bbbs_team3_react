@@ -19,7 +19,9 @@ function PopupAboutEvent({
     endAt,
     remainSeats,
     tags,
-    setIsBooked
+    setIsBooked,
+    isBooked,
+    isDisabled
   }
 }) {
   //! временно
@@ -39,15 +41,21 @@ function PopupAboutEvent({
   const endDayParts = formatDate(endAt);
 
   function submitHandler(event) {
-    event.preventDefault();
-    onEventSignUpClick();
-    setIsBooked(true);
+    if (isBooked) {
+      event.preventDefault();
+      setIsBooked(false);
+      onClose();
+    } else {
+      event.preventDefault();
+      onEventSignUpClick();
+      setIsBooked(true);
+    }
   }
 
   return (
     <Popup
       type="calendar"
-      typeBooked="calendar-booked"
+      sectionClass={isBooked ? 'popup__container_booked' : ''}
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -89,12 +97,17 @@ function PopupAboutEvent({
           <Button
             color="blue"
             title="Записаться"
+            titleSelected="Отменить запись"
             sectionClass="button_action_confirm"
             onClick={submitHandler}
             isSubmittable
+            isBooked={isBooked}
+            isDisabled={isDisabled}
           />
           <p className="calendar__place-left">
-            {`Осталось ${remainSeats} ${formatWordCase(remainSeats)}`}
+            {/* если запись закрыта, то карточка не должна быть выделенной */}
+            {(isDisabled && 'Запись закрыта')
+            || (!isBooked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
           </p>
         </div>
       </div>

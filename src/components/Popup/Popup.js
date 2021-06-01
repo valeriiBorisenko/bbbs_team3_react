@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import './Popup.scss';
+import '../PopupAboutEvent/PopupAboutEvent.scss';
 import PropTypes from 'prop-types';
 
 // наверное стоит переименовать данный Popup в
@@ -9,7 +10,8 @@ function Popup({
   children,
   type,
   isOpen,
-  onClose
+  onClose,
+  sectionClass
 }) {
   const closeAllPopupsOnOverlay = (evt) => {
     if (evt.target === evt.currentTarget) {
@@ -17,8 +19,8 @@ function Popup({
     }
   };
   return (
-    <div className={`popup popup_type_${type} ${isOpen ? 'popup_opened' : ''}`} onClick={closeAllPopupsOnOverlay}>
-      <div className={`popup__container popup__container_type_${type}`}>
+    <div className={`popup popup_type_${type} ${isOpen ? 'popup_opened' : ''} `} onClick={closeAllPopupsOnOverlay}>
+      <div className={`popup__container popup__container_type_${type} ${sectionClass}`}>
         <form className="popup__form">
           <button className="popup__close" type="button" aria-label="закрыть попап" onClick={onClose} />
           {children}
@@ -32,13 +34,15 @@ Popup.propTypes = {
   children: PropTypes.element.isRequired,
   type: PropTypes.string,
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  sectionClass: PropTypes.string
 };
 
 Popup.defaultProps = {
   type: '',
   isOpen: false,
-  onClose: undefined
+  onClose: undefined,
+  sectionClass: ''
 };
 
 export default Popup;
