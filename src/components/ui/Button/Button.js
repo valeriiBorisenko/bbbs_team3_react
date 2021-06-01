@@ -8,19 +8,19 @@ function Button({
   isSubmittable,
   isDisabled,
   onClick,
-  isSelected,
+  isBooked,
   sectionClass
 }) {
   return (
     <button
       className={`button button_color_${color} ${sectionClass} ${
-        isSelected ? `button_color_${color}_selected` : ''
+        isBooked ? `button_color_${color}_selected` : ''
       }`}
       type={isSubmittable ? 'submit' : 'button'}
       disabled={isDisabled}
       onClick={onClick}
     >
-      {!isSelected ? title : titleSelected || title}
+      {!isBooked ? title : titleSelected || title}
     </button>
   );
 }
@@ -32,7 +32,7 @@ Button.propTypes = {
   isSubmittable: PropTypes.bool,
   isDisabled: PropTypes.bool,
   onClick: PropTypes.func,
-  isSelected: PropTypes.bool,
+  isBooked: PropTypes.bool,
   sectionClass: PropTypes.string
 };
 
@@ -43,7 +43,7 @@ Button.defaultProps = {
   titleSelected: undefined,
   onClick: undefined,
   isDisabled: false,
-  isSelected: false,
+  isBooked: false,
   sectionClass: ''
 };
 

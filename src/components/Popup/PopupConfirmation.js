@@ -12,9 +12,9 @@ function PopupConfirmation({
   data: {
     title,
     startAt,
-    endAt
-  },
-  putBookedEvent
+    endAt,
+    setIsBooked
+  }
 }) {
   const startDay = formatDate(startAt);
   const endDay = formatDate(endAt);
@@ -22,7 +22,7 @@ function PopupConfirmation({
   const submitHandler = (event) => {
     event.preventDefault();
     onConfirmButtonClick();
-    putBookedEvent();
+    setIsBooked(true);
   };
   return (
     //! поработать над представлением даты в нормальном виде (startAt и endsAt)
@@ -41,7 +41,6 @@ function PopupConfirmation({
           title="Подтвердить запись"
           sectionClass="button__calendar_type_confirm"
           onClick={submitHandler}
-          isSubmittable
         />
         <Button
           color="black"
@@ -57,16 +56,14 @@ PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onConfirmButtonClick: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.any),
-  putBookedEvent: PropTypes.func
+  data: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: undefined,
   onConfirmButtonClick: undefined,
-  data: {},
-  putBookedEvent: undefined
+  data: {}
 };
 
 export default PopupConfirmation;
