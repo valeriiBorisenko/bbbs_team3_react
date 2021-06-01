@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import './AccountForm.scss';
 import Card from '../Card/Card';
 import Input from '../Input/Input';
