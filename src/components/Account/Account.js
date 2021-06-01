@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './Account.scss';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import { getAccountData } from '../../utils/api';
 import Loader from '../ui/Loader/Loader';
 import AccountEventCard from '../ui/AccountEventCard/AccountEventCard';
@@ -13,6 +14,8 @@ function Account() {
       .then((res) => setEvents(res.data.accountData))
       .catch((err) => console.log(err));
   }, []);
+
+  useSmoothScrollOnWindow({ top: 0 });
 
   return events ? (
     <section className="account fade-in">

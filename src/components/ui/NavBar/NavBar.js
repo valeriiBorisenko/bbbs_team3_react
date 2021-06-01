@@ -17,7 +17,7 @@ function NavBar({
   return (
     <nav className="menu">
       {/* логотип */}
-      <Link to="/" target="_self" className="menu__logo">
+      <Link to="/" target="_self" className="menu__logo mobile-link">
         наставники.про
       </Link>
       {/* обычное меню */}
@@ -30,34 +30,30 @@ function NavBar({
           {/* О проекте, скрытый */}
           <NavItem
             sectionWrapperClass="menu__list-item menu__list-item_hidden"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href="/about-us"
             linkText="О проекте"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* Календарь */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href="/calendar"
             linkText="Календарь"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* Куда пойти */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href="#"
             linkText="Куда пойти"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* Вопросы */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href="#"
             linkText="Вопросы"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* выпадающее меню  "Читать и смотреть" */}
           <NavItemWithDropdown
@@ -67,18 +63,16 @@ function NavBar({
           {/* Права детей */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href="#"
             linkText="Права детей"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* Истории */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href="#"
             linkText="Истории"
-            closeMobileMenu={handleBurgerClick}
           />
         </ul>
 
@@ -90,7 +84,7 @@ function NavBar({
           {/* facebook */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href={{
               pathname:
                 'https://www.facebook.com/BigBrothers.BigSisters.Russia/'
@@ -98,37 +92,33 @@ function NavBar({
             linkText="facebook"
             target="_blank"
             rel="noopener noreferrer"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* vkontakte */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href={{ pathname: 'https://vk.com/big.brothers.big.sisters' }}
             linkText="vkontakte"
             target="_blank"
             rel="noopener noreferrer"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* instagram */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href={{ pathname: 'https://www.instagram.com/nastavniki_org/' }}
             linkText="instagram"
             target="_blank"
             rel="noopener noreferrer"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* youtube */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href={{ pathname: 'https://www.youtube.com/user/Nastavniki/' }}
             linkText="youtube"
             target="_blank"
             rel="noopener noreferrer"
-            closeMobileMenu={handleBurgerClick}
           />
         </ul>
       </div>
@@ -138,8 +128,8 @@ function NavBar({
         !isNavMenuOpen ? 'menu__user-info_hidden' : ''
       }`}
       >
-        <UserMenuButton title="Изменить город" handleClick={handleChangeCity} />
-        <UserMenuButton title="Выйти" />
+        <UserMenuButton title="Изменить город" handleClick={handleChangeCity} sectionClass="mobile-link" />
+        <UserMenuButton title="Выйти" sectionClass="mobile-link" />
       </div>
       )}
 

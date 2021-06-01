@@ -1,11 +1,21 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+// !onClick в <header> используется исключительно для
+// !делегирования функции закрытия мобильного меню по клику на ссылки
+// !https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/no-static-element-interactions.md#case-the-event-handler-is-only-being-used-to-capture-bubbled-events
+
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
+import { useClickOutside } from '../../utils/custom-hooks';
 import NavBar from '../ui/NavBar/NavBar';
 import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
 
-function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
+function Header({
+  isAuthorized,
+  handleUserButtonClick,
+  handleChangeCity
+}) {
   const { pathname } = useLocation();
 
   // меню бургер
@@ -16,15 +26,26 @@ function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
     else setIsMobileMenuOpen(true);
   };
 
+  // закрытие мобильного меню по клику вне хедера
+  const headerRef = useClickOutside(() => setIsMobileMenuOpen(false));
+
+  // закрытие мобильного меню по клику на ссылки
+  const handleCloseMobileMenu = (evt) => {
+    const el = evt.target;
+    if (isMobileMenuOpen && el.classList.contains('mobile-link')) {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   // липкий хедер
   const [isHeaderActive, setIsHeaderActive] = useState(true);
-  let prevScrollpos = 0;
+  let prevScrollPos = 0;
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
       const currentScrollPos = window.pageYOffset;
-      // если prevScrollpos больше currentScrollPos значит мы скролим наверх уже
-      if (prevScrollpos > currentScrollPos) {
+      // если prevScrollPos больше currentScrollPos значит мы скролим наверх
+      if (prevScrollPos > currentScrollPos) {
         setIsHeaderActive(true);
       } else {
         setIsHeaderActive(false);
@@ -34,15 +55,22 @@ function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
       if (currentScrollPos === 0) {
         setIsHeaderActive(true);
       }
-      prevScrollpos = currentScrollPos;
+      prevScrollPos = currentScrollPos;
     });
   }, []);
 
+  const classNamesHeader = [
+    'header',
+    isMobileMenuOpen ? 'header_displayed' : '',
+    !isHeaderActive ? 'header__on-scroll-up' : ''
+  ].join(' ').trim();
+
   return (
     <header
-      className={`header ${isMobileMenuOpen ? 'header_displayed' : ''} ${
-        !isHeaderActive ? 'header__on-scroll-up' : ''
-      }`}
+      className={classNamesHeader}
+      ref={headerRef}
+      onClick={handleCloseMobileMenu}
+      onKeyPress={handleCloseMobileMenu}
     >
       <NavBar
         isAuthorized={isAuthorized}
@@ -53,10 +81,24 @@ function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
       />
 
       {pathname === '/account' && (
-        <div className="header__user-info">
-          <UserMenuButton title="Изменить город" handleClick={handleChangeCity} />
-          <UserMenuButton title="Выйти" />
-        </div>
+      <div className="header__user-info">
+        <UserMenuButton
+          title="Изменить город"
+          handleClick={handleChangeCity}
+          sectionClass="mobile-link"
+        />
+        <UserMenuButton title="Выйти" sectionClass="mobile-link" />
+      </div>
+      )}
+
+      {pathname === '/calendar' && (
+      <div className="header__user-info">
+        <UserMenuButton
+          title="Изменить город"
+          handleClick={handleChangeCity}
+          sectionClass="mobile-link"
+        />
+      </div>
       )}
     </header>
   );
