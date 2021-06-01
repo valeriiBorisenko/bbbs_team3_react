@@ -4,6 +4,7 @@ import TitleH1 from '../ui/TitleH1/TitleH1';
 import ButtonTags from '../ui/Button/ButtonTags';
 import './Calendar.scss';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
+import Loader from '../ui/Loader/Loader';
 
 function Calendar({
   onEventSignUpClick,
@@ -12,7 +13,8 @@ function Calendar({
   dataCalendar,
   isBooked,
   isAuthorized,
-  onLoginFormSubmit
+  onLoginFormSubmit,
+  isLoding
 }) {
   const months = [
     'январь', // 0
@@ -103,7 +105,7 @@ function Calendar({
 
   const whatToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
 
-  return (
+  return !isLoding ? (
     <section className="lead page__section fade-in">
       <TitleH1 title="Календарь" />
       <div className="tags">
@@ -125,6 +127,8 @@ function Calendar({
       </section>
       { isAuthorized ? '' : onLoginFormSubmit()}
     </section>
+  ) : (
+    <Loader />
   );
 }
 
@@ -135,7 +139,8 @@ Calendar.propTypes = {
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
   isBooked: PropTypes.bool,
   isAuthorized: PropTypes.bool,
-  onLoginFormSubmit: PropTypes.func
+  onLoginFormSubmit: PropTypes.func,
+  isLoding: PropTypes.bool
 };
 
 Calendar.defaultProps = {
@@ -145,7 +150,8 @@ Calendar.defaultProps = {
   dataCalendar: [],
   isBooked: false,
   isAuthorized: false,
-  onLoginFormSubmit: undefined
+  onLoginFormSubmit: undefined,
+  isLoding: false
 };
 
 export default Calendar;

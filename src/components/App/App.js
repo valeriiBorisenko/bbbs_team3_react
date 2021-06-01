@@ -32,6 +32,7 @@ function App() {
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
+  const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
@@ -84,6 +85,7 @@ function App() {
   useEffect(() => {
     getCalendarPageData()
       .then((res) => setDataCalendar(res.data.calendarPageData))
+      .then(() => setIsLoding(false))
       .catch((err) => console.log(err));
   }, [setDataCalendar]);
 
@@ -117,6 +119,7 @@ function App() {
                 onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
                 onLoginFormSubmit={handleClickPopupLoginOpened}
                 dataCalendar={dataCalendar}
+                isLoding={isLoding}
               />
             </Route>
             <Route path="*">
