@@ -6,7 +6,6 @@ import Loader from '../ui/Loader/Loader';
 import AccountEventCard from '../ui/AccountEventCard/AccountEventCard';
 import ScrollableByXContainer from '../ui/ScrollableByXContainer/ScrollableByXContainer';
 import TitleH2 from '../ui/TitleH2/TitleH2';
-import Loader from '../ui/Loader/Loader';
 import AccountForm from '../ui/AccountForm/AccountForm';
 import AccountDiary from '../ui/AccountDiary/AccountDiary';
 
@@ -23,11 +22,11 @@ function Account() {
       .catch((err) => console.log(err));
   }, []);
 
+  useSmoothScrollOnWindow({ top: 0 });
+
   if (!events || !diaries) {
     return <Loader />;
   }
-
-  useSmoothScrollOnWindow({ top: 0 });
 
   return (
     <section className="account fade-in">
