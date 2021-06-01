@@ -3,10 +3,9 @@ const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 
 const mainPageData = require('./server-responses/main-page.json');
-
 const accountData = require('./server-responses/account.json');
+const accountDiaryData = require('./server-responses/account-diary.json');
 const cities = require('./server-responses/cities.json');
-
 const calendarPageData = require('./server-responses/calendar-page.json');
 
 const baseURL = 'http://localhost:3000';
@@ -30,6 +29,14 @@ mock.onGet(`${baseURL}/account/`).reply(
   'Content-Type: application/json'
 );
 
+mock.onGet(`${baseURL}/account/diary/`).reply(
+  200,
+  {
+    accountDiaryData
+  },
+  'Content-Type: application/json'
+);
+
 mock.onGet(`${baseURL}/cities/`).reply(
   200,
   {
@@ -49,5 +56,6 @@ mock.onGet(`${baseURL}/afisha/events/`).reply(
 // functions
 export const getMainPageData = () => axios.get(`${baseURL}/main/`);
 export const getAccountData = () => axios.get(`${baseURL}/account/`);
+export const getAccountDiaryData = () => axios.get(`${baseURL}/account/diary/`);
 export const getCities = () => axios.get(`${baseURL}/cities/`);
 export const getCalendarPageData = () => axios.get(`${baseURL}/afisha/events/`);

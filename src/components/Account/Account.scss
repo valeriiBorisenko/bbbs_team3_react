@@ -2,27 +2,18 @@
 
 .account__events-area {
   box-sizing: border-box;
-  padding-bottom: 50px;
   border-bottom: 1px solid $darkGray;
 }
 
 .account__title {
-  margin: 0 auto 30px;
+  margin-bottom: 50px;
   width: fit-content;
   text-align: center;
   color: $lightBlack;
 }
 
 .account__events {
-  // display: flex;
-  // flex-wrap: nowrap;
-  // overflow-x: scroll;
-  // scrollbar-width: none;
-  // -ms-overflow-style: none;
-  // &::-webkit-scrollbar {
-  //   width: 0;
-  //   height: 0;
-  // }
+  margin-bottom: 50px;
 }
 
 .account-event-card {
@@ -38,6 +29,10 @@
   }
 }
 
+.account__diaries {
+  padding-top: 50px;
+}
+
 @include atTablet {
   .account__events {
     margin-right: -60px;
@@ -51,9 +46,14 @@
 }
 
 @include atMobile {
+  .account__title {
+    margin-bottom: 20px;
+  }
+
   .account__events {
     margin-right: -15px;
     margin-left: -15px;
+    margin-bottom: 20px;
   }
 
   .account-event-card {

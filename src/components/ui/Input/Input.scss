@@ -1,0 +1,42 @@
+@import './styles/utils.scss';
+
+.input {
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  border-radius: 30px;
+  padding: 13px 20px 16px;
+  background-color: $background;
+  font-family: $protoGrotesk;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: 0.2px;
+  color: $black;
+
+  &::placeholder {
+    color: $lightGray;
+  }
+
+  &:invalid {
+    .input::placeholder {
+      color: $error;
+    }
+  }
+}
+
+.textarea {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+@include atMobile {
+  .input {
+    font-size: 12px;
+  }
+}

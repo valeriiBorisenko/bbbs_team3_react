@@ -33,13 +33,8 @@
 
   &_type_personal-area {
     max-width: 1170px;
-    padding-top: 80px;
     grid-template-columns: 40% 60%;
     grid-template-rows: 470px;
-
-    &:first-of-type {
-      padding-top: 50px;
-    }
   }
 }
 
