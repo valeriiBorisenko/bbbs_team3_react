@@ -52,6 +52,7 @@
   font-size: 18px;
   line-height: 1.4;
   color: $black;
+  padding-right: 5px;
 }
 
 .account-diary__card-date {
@@ -122,7 +123,7 @@
     max-width: 600px;
     grid-template-columns: 1fr;
     grid-template-rows: 290px 1fr;
-    padding-top: 30px;
+    margin-bottom: 30px;
   }
 
   .account-diary__date-container {
@@ -140,6 +141,7 @@
 
   .account-diary__paragraph {
     font-size: 15px;
+    padding-right: 17px;
   }
 
   .account-diary__card-date {
