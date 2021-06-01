@@ -1,0 +1,60 @@
+@import './styles/utils.scss';
+
+.rating {
+  display: inline-block;
+  position: relative;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.rating__checkbox {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.rating__pseudo-button {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  &_type_good_default {
+    background-image: url(../../../assets/icon-rating_1_default.svg);
+  }
+
+  &_type_neutral_default {
+    background-image: url(../../../assets/icon-rating_2_default.svg);
+  }
+
+  &_type_bad_default {
+    background-image: url(../../../assets/icon-rating_3_default.svg);
+  }
+}
+
+.rating__checkbox:checked + .rating__pseudo-button {
+  &_type_good_default {
+    background-image: url(../../../assets/icon-rating_1_active.svg);
+  }
+
+  &_type_neutral_default {
+    background-image: url(../../../assets/icon-rating_2_active.svg);
+  }
+
+  &_type_bad_default {
+    background-image: url(../../../assets/icon-rating_3_active.svg);
+  }
+}
+
+@include atMobile {
+  .rating__pseudo-button {
+    width: 23px;
+    height: 23px;
+  }
+}

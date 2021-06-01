@@ -1,0 +1,103 @@
+@import './styles/utils.scss';
+
+.account-form {
+  max-width: 1170px;
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 470px;
+}
+
+.account-form__photo-upload {
+  justify-content: center;
+  align-items: center;
+}
+
+.account-form__form-container {
+  box-sizing: border-box;
+  padding: 30px 30px 20px;
+}
+
+.account-form__form {
+  width: 100%;
+  display: grid;
+  gap: 20px 30px;
+  grid-template-columns: 1fr minmax(180px, 240px);
+  grid-template-rows: auto;
+}
+
+.account-form__input_el_file {
+  margin-bottom: 15px;
+}
+
+.account-form__caption {
+  color: $lightGray;
+  font-size: 15px;
+  line-height: 1.27;
+}
+
+.account-form__input_el_date:not(:focus):not(.has-value):before {
+  color: $lightGray;
+  content: attr(placeholder);
+}
+
+.account-form__input_el_textarea {
+  grid-column: 1 / -1;
+  min-height: 286px;
+  resize: none;
+}
+
+.account-form__submit-zone {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.account-form__ratings {
+  display: flex;
+  align-items: center;
+}
+
+.account-form__ratings-text {
+  margin-left: 15px;
+  color: $lightGray;
+}
+
+.account-form__rating {
+  margin-right: 15px;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+@include atDesktop1024 {
+  .account-form {
+    grid-template-columns: 1fr;
+    grid-template-rows: 290px 1fr;
+  }
+}
+
+@include atTabletL {
+  .account-form__form {
+    grid-template-columns: 1fr;
+  }
+
+  .account-form__input_el_textarea {
+    min-height: 120px;
+  }
+}
+
+@include atMobile {
+  .account-form__form-container {
+    padding: 30px 15px;
+  }
+
+  .account-form__caption {
+    font-size: 12px;
+    line-height: 1.42;
+  }
+
+  .account-form__rating {
+    margin-right: 10px;
+  }
+}
