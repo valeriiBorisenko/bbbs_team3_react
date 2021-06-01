@@ -33,8 +33,8 @@ function Calendar({
     console.log('year', year);
     console.log('monthNumber', monthNumber);
     // надо из ивента подставить год и месяц ивента
-    // const min = new Date(this._year, this._monthNumber);
-    // const max = new Date(this._year, this._monthNumber + 1);
+    // const min = new Date(year, monthNumber);
+    // const max = new Date(year, monthNumber + 1);
   }
 
   //! сортируем все ивенты по хронологии

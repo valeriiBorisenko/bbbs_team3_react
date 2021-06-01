@@ -5,7 +5,8 @@ import { useState } from 'react';
 function ButtonTags({
   title,
   color,
-  enableFiltation
+  enableFiltation,
+  filters
 }) {
   const [isSelected, setSelected] = useState(false);
   function handleClickButton() {
@@ -15,7 +16,7 @@ function ButtonTags({
       setSelected(true);
     }
 
-    enableFiltation(title); //!
+    enableFiltation(filters); //!
   }
 
   return (
@@ -34,13 +35,15 @@ function ButtonTags({
 ButtonTags.propTypes = {
   title: PropTypes.string,
   color: PropTypes.string,
+  filters: PropTypes.objectOf(PropTypes.number),
   enableFiltation: PropTypes.func
 };
 
 ButtonTags.defaultProps = {
   title: '',
   color: 'blue',
-  enableFiltation: undefined
+  enableFiltation: undefined,
+  filters: {}
 };
 
 export default ButtonTags;
