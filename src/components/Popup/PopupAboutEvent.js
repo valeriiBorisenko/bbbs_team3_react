@@ -18,7 +18,8 @@ function PopupAboutEvent({
     startAt,
     endAt,
     remainSeats,
-    tags
+    tags,
+    setIsBooked
   }
 }) {
   //! временно
@@ -40,11 +41,13 @@ function PopupAboutEvent({
   function submitHandler(event) {
     event.preventDefault();
     onEventSignUpClick();
+    setIsBooked(true);
   }
 
   return (
     <Popup
       type="calendar"
+      typeBooked="calendar-booked"
       isOpen={isOpen}
       onClose={onClose}
     >

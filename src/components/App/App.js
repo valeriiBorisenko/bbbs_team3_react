@@ -35,15 +35,9 @@ function App() {
 
   // выбранная карточка при открытии попапа
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
-  // записан ли ты на событие
-  const [isBooked, setIsBooked] = useState(false);
 
   // данные страницы-календаря с сервера
   const [dataCalendar, setDataCalendar] = useState([]);
-
-  function handleClickBooked() {
-    setIsBooked(true);
-  }
 
   // управление попапами
   function closeAllPopups() {
@@ -93,12 +87,6 @@ function App() {
       .catch((err) => console.log(err));
   }, [setDataCalendar]);
 
-  //! завязать на isBooked и выкинуть
-  const [isSelected, setIsSelected] = useState(false);
-  function handleClickSelectedButton() {
-    setIsSelected(true);
-  }
-
   return (
     <BrowserRouter>
       <div className="page">
@@ -110,7 +98,11 @@ function App() {
         <main className="main">
           <Switch>
             <Route exact path="/">
-              <MainPage isAuthorized={isAuthorized} />
+              <MainPage
+                isAuthorized={isAuthorized}
+                onEventSignUpClick={handleClickPopupConfirmationOpened}
+                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+              />
             </Route>
             <Route exact path="/about-us">
               <AboutUs isAuthorized={isAuthorized} />
@@ -123,10 +115,7 @@ function App() {
                 isAuthorized={isAuthorized}
                 onEventSignUpClick={handleClickPopupConfirmationOpened}
                 onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                clickButton={handleClickSelectedButton}
-                isSelected={isSelected}
                 dataCalendar={dataCalendar}
-                isBooked={isBooked}
               />
             </Route>
             <Route path="*">
@@ -140,7 +129,6 @@ function App() {
           onClose={closeAllPopups}
           onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
           data={selectedCalendarCard}
-          putBookedEvent={handleClickBooked}
         />
         <PopupSuccessfully
           isOpen={isPopupSuccessfullyOpen}
