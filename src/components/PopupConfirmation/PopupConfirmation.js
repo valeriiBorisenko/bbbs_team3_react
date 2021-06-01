@@ -26,26 +26,26 @@ function PopupConfirmation({
     setIsBooked(true);
   };
   return (
-    //! поработать над представлением даты в нормальном виде (startAt и endsAt)
     <Popup
       type="confirmation"
+      typeContainer="calendar"
       isOpen={isOpen}
       onClose={onClose}
     >
-      <p className="section-title popup__title_type_confirmation">Подтвердить запись на мероприятие</p>
+      <p className="section-title popup__title_type_calendar">Подтвердить запись на мероприятие</p>
       <TitleH2
-        sectionClass="popup__title_type_confirmation"
+        sectionClass="popup__title_type_calendar"
         title={`«${title}»`}
       />
       <TitleH2
-        sectionClass="popup__title_type_confirmation"
+        sectionClass="popup__title_type_calendar"
         title={`${startDay.day} ${startDay.monthName} с ${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
       />
-      <div className="popup__buttons_type_confirmation">
+      <div className="popup__buttons_type_calendar">
         <Button
           color="blue"
           title="Подтвердить запись"
-          sectionClass="button__popup_type_confirmation"
+          sectionClass="popup__button_type_calendar"
           onClick={submitHandler}
           isSubmittable
         />

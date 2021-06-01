@@ -6,9 +6,9 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 // попапы
 import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
-import PopupSuccessfully from '../Popup/PopupSuccessfully';
-import PopupLogin from '../Popup/PopupLogin';
-import PopupAboutEvent from '../Popup/PopupAboutEvent';
+import PopupSuccessfully from '../PopupSuccessfully/PopupSuccessfully';
+import PopupLogin from '../PopupLogin/PopupLogin';
+import PopupAboutEvent from '../PopupAboutEvent/PopupAboutEvent';
 import PopupCities from '../PopupCities/PopupCities';
 // страницы
 import MainPage from '../MainPage/MainPage';

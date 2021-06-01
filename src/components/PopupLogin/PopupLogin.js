@@ -1,6 +1,7 @@
-import './Popup.scss';
+import '../Popup/Popup.scss';
+import './PopupLogin.scss';
 import PropTypes from 'prop-types';
-import Popup from './Popup';
+import Popup from '../Popup/Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
@@ -12,6 +13,7 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
   return (
     <Popup
       type="sign-in"
+      typeContainer="sign-in"
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -49,7 +51,7 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
         onClick={submitHandler}
         isSubmittable
         isDisabled
-        sectionClass="popup__submit-btn"
+        sectionClass="popup__button_type_sign-in"
       />
     </Popup>
   );
