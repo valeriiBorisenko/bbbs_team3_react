@@ -5,10 +5,10 @@ import Header from '../Header/Header';
 // import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 // попапы
-import PopupConfirmation from '../Popup/PopupConfirmation';
-import PopupSuccessfully from '../Popup/PopupSuccessfully';
-import PopupLogin from '../Popup/PopupLogin';
-import PopupAboutEvent from '../Popup/PopupAboutEvent';
+import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
+import PopupSuccessfully from '../PopupSuccessfully/PopupSuccessfully';
+import PopupLogin from '../PopupLogin/PopupLogin';
+import PopupAboutEvent from '../PopupAboutEvent/PopupAboutEvent';
 import PopupCities from '../PopupCities/PopupCities';
 // страницы
 import MainPage from '../MainPage/MainPage';
@@ -32,6 +32,7 @@ function App() {
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
+  const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
@@ -84,6 +85,7 @@ function App() {
   useEffect(() => {
     getCalendarPageData()
       .then((res) => setDataCalendar(res.data.calendarPageData))
+      .then(() => setIsLoding(false))
       .catch((err) => console.log(err));
   }, [setDataCalendar]);
 
@@ -115,7 +117,9 @@ function App() {
                 isAuthorized={isAuthorized}
                 onEventSignUpClick={handleClickPopupConfirmationOpened}
                 onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                onLoginFormSubmit={handleClickPopupLoginOpened}
                 dataCalendar={dataCalendar}
+                isLoding={isLoding}
               />
             </Route>
             <Route path="*">
@@ -138,7 +142,6 @@ function App() {
         <PopupLogin
           isOpen={isPopupLoginOpen}
           onClose={closeAllPopups}
-          onLoginFormSubmit={handleClickPopupLoginOpened}
         />
         <PopupAboutEvent
           isOpen={isPopupAboutDescriptionOpen}

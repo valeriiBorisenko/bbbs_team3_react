@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 function Popup({
   children,
   type,
+  typeContainer,
   isOpen,
   onClose,
   sectionClass
@@ -20,7 +21,7 @@ function Popup({
   };
   return (
     <div className={`popup popup_type_${type} ${isOpen ? 'popup_opened' : ''} `} onClick={closeAllPopupsOnOverlay}>
-      <div className={`popup__container popup__container_type_${type} ${sectionClass}`}>
+      <div className={`popup__container popup__container_type_${typeContainer} ${sectionClass}`}>
         <form className="popup__form">
           <button className="popup__close" type="button" aria-label="закрыть попап" onClick={onClose} />
           {children}
@@ -33,6 +34,7 @@ function Popup({
 Popup.propTypes = {
   children: PropTypes.element.isRequired,
   type: PropTypes.string,
+  typeContainer: PropTypes.string,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   sectionClass: PropTypes.string
@@ -40,6 +42,7 @@ Popup.propTypes = {
 
 Popup.defaultProps = {
   type: '',
+  typeContainer: '',
   isOpen: false,
   onClose: undefined,
   sectionClass: ''

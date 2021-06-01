@@ -100,11 +100,6 @@
     border-color: $black;
     color: $black;
   }
-
-  &__calendar_type_confirm {
-    max-width: 191px;
-    margin-right: 15px;
-  }
 }
 
 @include atDesktop1024 {

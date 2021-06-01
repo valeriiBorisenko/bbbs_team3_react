@@ -1,6 +1,7 @@
-import './Popup.scss';
+import '../Popup/Popup.scss';
+import './PopupConfirmation.scss';
 import PropTypes from 'prop-types';
-import Popup from './Popup';
+import Popup from '../Popup/Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 import { formatDate } from '../../utils/utils';
@@ -25,21 +26,26 @@ function PopupConfirmation({
     setIsBooked(true);
   };
   return (
-    //! поработать над представлением даты в нормальном виде (startAt и endsAt)
     <Popup
       type="confirmation"
+      typeContainer="calendar"
       isOpen={isOpen}
       onClose={onClose}
     >
+      <p className="section-title popup__title_type_calendar">Подтвердить запись на мероприятие</p>
       <TitleH2
         sectionClass="popup__title_type_calendar"
-        title={`Подтвердить запись на мероприятие «${title}» ${startDay.day} ${startDay.month} с ${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
+        title={`«${title}»`}
+      />
+      <TitleH2
+        sectionClass="popup__title_type_calendar"
+        title={`${startDay.day} ${startDay.monthName} с ${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
       />
       <div className="popup__buttons_type_calendar">
         <Button
           color="blue"
           title="Подтвердить запись"
-          sectionClass="button__calendar_type_confirm"
+          sectionClass="popup__button_type_calendar"
           onClick={submitHandler}
           isSubmittable
         />
