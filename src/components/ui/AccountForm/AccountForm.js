@@ -66,8 +66,8 @@ function AccountForm() {
               />
             </div>
             <div className="account-form__buttons">
-              <Button title="Удалить" />
-              <Button title="Добавить" />
+              <Button title="Удалить" color="gray-borderless" />
+              <Button title="Добавить" isSubmittable isDisabled sectionClass="account-form__button_el_add" />
             </div>
           </div>
         </form>

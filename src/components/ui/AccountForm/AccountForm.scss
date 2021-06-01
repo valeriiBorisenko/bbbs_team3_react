@@ -3,7 +3,7 @@
 .account-form {
   max-width: 1170px;
   grid-template-columns: 40% 60%;
-  grid-template-rows: 470px;
+  grid-template-rows: 475px;
 }
 
 .account-form__photo-upload {
@@ -70,6 +70,11 @@
   }
 }
 
+.account-form__buttons {
+  display: flex;
+  align-items: center;
+}
+
 @include atDesktop1024 {
   .account-form {
     grid-template-columns: 1fr;
@@ -84,6 +89,24 @@
 
   .account-form__input_el_textarea {
     min-height: 120px;
+  }
+
+  .account-form__submit-zone {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .account-form__ratings {
+    margin-bottom: 30px;
+    justify-content: flex-start;
+  }
+
+  .account-form__buttons {
+    justify-content: space-between;
+  }
+
+  .account-form__button_el_add {
+    order: -1;
   }
 }
 
