@@ -20,7 +20,7 @@
   width: 100%;
   display: grid;
   gap: 20px 30px;
-  grid-template-columns: 1fr minmax(180px, 240px);
+  grid-template-columns: minmax(200px, 1fr) minmax(180px, 240px);
   grid-template-rows: auto;
 }
 
