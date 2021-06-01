@@ -1,10 +1,13 @@
 // import PropTypes from 'prop-types';
 import './PageNotFound.scss';
 import { Link } from 'react-router-dom';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import shapes from '../../assets/page-not-found-shapes.svg';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
 function PageNotFound() {
+  useSmoothScrollOnWindow({ top: 0 });
+
   return (
     <div className="page-not-found">
       <img src={shapes} alt="фигурки" className="page-not-found__picture" />
