@@ -9,7 +9,6 @@ function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
   clickButton,
-  isSelected, //! завязать на isBooked
   dataCalendar,
   isBooked
 }) {
@@ -118,8 +117,7 @@ function Calendar({
             onEventSignUpClick={onEventSignUpClick}
             onEventFullDescriptionClick={onEventFullDescriptionClick}
             clickButton={clickButton}
-            isSelected={isSelected} //! завязать на isBooked
-            isBooked={isBooked} //! выкинуть
+            isBooked={isBooked}
           />
         ))}
       </section>
@@ -133,7 +131,6 @@ Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
   clickButton: PropTypes.func,
-  isSelected: PropTypes.bool,
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
   isBooked: PropTypes.bool
 };
@@ -142,7 +139,6 @@ Calendar.defaultProps = {
   onEventSignUpClick: undefined,
   onEventFullDescriptionClick: undefined,
   clickButton: undefined,
-  isSelected: false,
   dataCalendar: [],
   isBooked: false
 };

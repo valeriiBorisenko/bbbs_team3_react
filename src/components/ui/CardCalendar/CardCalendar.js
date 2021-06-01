@@ -60,7 +60,8 @@ function CardCalendar({
       remainSeats,
       description,
       isBooked,
-      setIsBooked
+      setIsBooked,
+      isDisabled
     });
   }
 
