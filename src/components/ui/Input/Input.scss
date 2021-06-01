@@ -17,6 +17,12 @@
   &::placeholder {
     color: $lightGray;
   }
+
+  &:invalid {
+    .input::placeholder {
+      color: $error;
+    }
+  }
 }
 
 .textarea {

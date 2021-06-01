@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable react/jsx-props-no-spreading */
 import './AccountForm.scss';
 import Card from '../Card/Card';
 import Input from '../Input/Input';
@@ -20,21 +20,21 @@ function AccountForm() {
             type="text"
             name="place"
             placeholder="Место встречи"
-            isRequred
+            required
           />
           <Input
             type="date"
             name="date"
             placeholder="Дата&emsp;"
             sectionClass="account-form__input_el_date"
-            isRequred
+            required
           />
           <Input
             type="text"
             name="story"
             placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
             sectionClass="account-form__input_el_textarea"
-            isRequred
+            required
             isTextarea
           />
           <div className="account-form__submit-zone">
@@ -67,7 +67,7 @@ function AccountForm() {
             </div>
             <div className="account-form__buttons">
               <Button title="Удалить" color="gray-borderless" />
-              <Button title="Добавить" isSubmittable isDisabled sectionClass="account-form__button_el_add" />
+              <Button title="Добавить" isSubmittable sectionClass="account-form__button_el_add" />
             </div>
           </div>
         </form>
