@@ -10,7 +10,9 @@ function Calendar({
   onEventFullDescriptionClick,
   clickButton,
   dataCalendar,
-  isBooked
+  isBooked,
+  isAuthorized,
+  onLoginFormSubmit
 }) {
   const months = [
     'январь', // 0
@@ -101,7 +103,7 @@ function Calendar({
 
   const whatToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
 
-  return dataCalendar ? (
+  return (
     <section className="lead page__section fade-in">
       <TitleH1 title="Календарь" />
       <div className="tags">
@@ -121,9 +123,8 @@ function Calendar({
           />
         ))}
       </section>
+      { isAuthorized ? '' : onLoginFormSubmit()}
     </section>
-  ) : (
-    <p style={{ color: 'red', margin: '0 auto', textAlign: 'center' }}>Loading</p>
   );
 }
 
@@ -132,7 +133,9 @@ Calendar.propTypes = {
   onEventFullDescriptionClick: PropTypes.func,
   clickButton: PropTypes.func,
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
-  isBooked: PropTypes.bool
+  isBooked: PropTypes.bool,
+  isAuthorized: PropTypes.bool,
+  onLoginFormSubmit: PropTypes.func
 };
 
 Calendar.defaultProps = {
@@ -140,7 +143,9 @@ Calendar.defaultProps = {
   onEventFullDescriptionClick: undefined,
   clickButton: undefined,
   dataCalendar: [],
-  isBooked: false
+  isBooked: false,
+  isAuthorized: false,
+  onLoginFormSubmit: undefined
 };
 
 export default Calendar;

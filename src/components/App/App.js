@@ -115,6 +115,7 @@ function App() {
                 isAuthorized={isAuthorized}
                 onEventSignUpClick={handleClickPopupConfirmationOpened}
                 onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                onLoginFormSubmit={handleClickPopupLoginOpened}
                 dataCalendar={dataCalendar}
               />
             </Route>
@@ -138,7 +139,6 @@ function App() {
         <PopupLogin
           isOpen={isPopupLoginOpen}
           onClose={closeAllPopups}
-          onLoginFormSubmit={handleClickPopupLoginOpened}
         />
         <PopupAboutEvent
           isOpen={isPopupAboutDescriptionOpen}

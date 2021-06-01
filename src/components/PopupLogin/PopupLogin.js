@@ -1,6 +1,7 @@
 import '../Popup/Popup.scss';
 import './PopupLogin.scss';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import Popup from '../Popup/Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
@@ -10,12 +11,18 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
     event.preventDefault();
     onLoginFormSubmit();
   }
+
+  const history = useHistory();
+  function closePopup() {
+    history.push('/');
+    onClose();
+  }
   return (
     <Popup
       type="sign-in"
       typeContainer="sign-in"
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={closePopup}
     >
       {/* popup__container_type_sign-in */}
       <TitleH2 sectionClass="popup__title_type_sign-in" title="Вход" />
