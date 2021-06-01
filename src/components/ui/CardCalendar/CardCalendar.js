@@ -1,4 +1,5 @@
 import './CardCalendar.scss';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import ButtonDots from '../ButtonDots/ButtonDots';
 import Button from '../Button/Button';
@@ -23,13 +24,13 @@ function CardCalendar({
   },
   isModal,
   onEventSignUpClick,
-  onEventFullDescriptionClick,
-  clickButton,
-  isSelected, //! завязать на isBooked
-  isBooked //! выкинуть
+  onEventFullDescriptionClick
 }) {
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
+
+  // записан ли ты на событие
+  const [isBooked, setIsBooked] = useState(booked);
 
   const isDisabled = (remainSeats < 1);
 
@@ -43,7 +44,8 @@ function CardCalendar({
       contact,
       remainSeats,
       description,
-      isBooked
+      isBooked,
+      setIsBooked
     });
   }
 
@@ -57,8 +59,17 @@ function CardCalendar({
       contact,
       remainSeats,
       description,
-      isBooked
+      isBooked,
+      setIsBooked
     });
+  }
+
+  function clickButton() {
+    if (isBooked) {
+      setIsBooked(false);
+    } else {
+      prepareDataForConfirmationPopup();
+    }
   }
 
   /* //!если ответ сервера обновленный массив, то нам не нужны никакие isBooked и другие стейты,
@@ -66,7 +77,7 @@ function CardCalendar({
   //! Если ответ сервера - "вы записались", то нужно вводить стейты и менять самим классы
 
   return (
-    <article className={`calendar ${booked ? 'calendar_selected' : ''}`}>
+    <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -106,10 +117,9 @@ function CardCalendar({
             titleSelected="Отменить запись"
             color="blue"
             isDisabled={isDisabled}
-            onClick={prepareDataForConfirmationPopup}
-            clickButton={clickButton}
-            isSelected={isSelected} //! завязать на isBooked
-            //! data={{ title, startAt, endAt }}
+            onClick={clickButton}
+            isBooked={isBooked}
+            setIsBooked={setIsBooked}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
@@ -137,10 +147,7 @@ CardCalendar.propTypes = {
   description: PropTypes.string,
   isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
-  clickButton: PropTypes.func,
-  isSelected: PropTypes.bool,
-  isBooked: PropTypes.bool
+  onEventFullDescriptionClick: PropTypes.func
 };
 
 CardCalendar.defaultProps = {
@@ -155,10 +162,7 @@ CardCalendar.defaultProps = {
   description: '',
   isModal: false,
   onEventSignUpClick: undefined,
-  onEventFullDescriptionClick: undefined,
-  clickButton: undefined,
-  isSelected: false,
-  isBooked: PropTypes.bool
+  onEventFullDescriptionClick: undefined
 };
 
 export default CardCalendar;
