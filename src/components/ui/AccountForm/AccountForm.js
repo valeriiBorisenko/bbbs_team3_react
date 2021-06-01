@@ -8,7 +8,7 @@ import Button from '../Button/Button';
 
 function AccountForm() {
   return (
-    <article className="card-container account-form">
+    <div className="card-container account-form">
       <Card sectionClass="account-form__photo-upload">
         <InputFileUpload sectionClass="account-form__input_el_file" />
         <Caption title="Загрузить фото" sectionClass="account-form__caption" />
@@ -71,7 +71,7 @@ function AccountForm() {
           </div>
         </form>
       </Card>
-    </article>
+    </div>
   );
 }
 
