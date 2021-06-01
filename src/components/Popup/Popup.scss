@@ -19,27 +19,12 @@
 
   &__container {
     display: flex;
-    // position: relative;
-    // flex-direction: column;
-    // justify-content: space-between;
-    // z-index: 2;
-    // margin: auto;
-
     padding: 50px 100px;
     border-radius: 30px;
-    // max-width: 770px;
-    // max-height: 80vh;
     background-color: $white;
     font-family: $ptRootUI;
     box-sizing: border-box;
-
     position: relative;
-    // top: auto;
-    // left: auto;
-    
-    box-sizing: border-box;
-    // padding: 32px 36px 40px;
-    // border-radius: 10px;
 
     &_type_recommendation {
       justify-content: flex-start;
@@ -61,21 +46,7 @@
       }
     }
 
-    &_type_confirmation {
-      // height: 670px;
-      justify-content: center;
-
-      width: 770px;
-      // display: flex;
-      justify-content: center;
-      align-items: center;
-      /* flex-direction: column; */
-      // min-height: 670px;
-      min-height: 500px;
-    }
-
     &_type_sign-in {
-      // justify-content: space-between;
       width: 770px;
 
       & .popup__submit-btn {
@@ -84,7 +55,6 @@
     }
 
     &_type_calendar {
-      // height: 670px;
       width: 770px;
     }
 
@@ -95,12 +65,19 @@
       width: 470px;
       height: 238px;
     }
+
+    &_type_confirmation {
+      justify-content: center;
+      width: 770px;
+      height: 50vh;
+      justify-content: center;
+      align-items: center;
+}
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    // justify-content: space-between;
   }
 
   &__box {
@@ -176,16 +153,6 @@
     margin-bottom: 15px;
     text-align: center;
   }
-
-  &_type_calendar {
-    max-width: 570px;
-    text-align: start;
-    margin-bottom: 40px;
-  }
-
-  &_type_calendar {
-    text-align: center;
-  }
 }
 
 .popup__sign-in {
@@ -244,12 +211,6 @@
 
 .popup__buttons {
   width: 170px;
-
-  &_type_calendar {
-    display: flex;
-    justify-content: center;
-    // margin-top: 30px;
-  }
 }
 
 @include atDesktop1440 {

@@ -1,0 +1,18 @@
+@import './styles/utils.scss';
+
+.popup__title_type_confirmation {
+    max-width: 570px;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+.popup__buttons_type_confirmation {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+
+.button__popup_type_confirmation {
+    max-width: 191px;
+    margin-right: 15px;
+  }

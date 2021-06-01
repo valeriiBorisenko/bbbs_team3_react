@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 // import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 // попапы
-import PopupConfirmation from '../Popup/PopupConfirmation';
+import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
 import PopupSuccessfully from '../Popup/PopupSuccessfully';
 import PopupLogin from '../Popup/PopupLogin';
 import PopupAboutEvent from '../Popup/PopupAboutEvent';
