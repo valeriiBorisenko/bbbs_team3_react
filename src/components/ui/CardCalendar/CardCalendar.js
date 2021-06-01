@@ -26,7 +26,7 @@ function CardCalendar({
   onEventFullDescriptionClick,
   clickButton,
   isSelected, //! завязать на isBooked
-  isBooked
+  isBooked //! выкинуть
 }) {
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
