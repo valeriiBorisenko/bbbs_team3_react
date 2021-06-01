@@ -10,6 +10,7 @@ import PopupSuccessfully from '../PopupSuccessfully/PopupSuccessfully';
 import PopupLogin from '../PopupLogin/PopupLogin';
 import PopupAboutEvent from '../PopupAboutEvent/PopupAboutEvent';
 import PopupCities from '../PopupCities/PopupCities';
+import PopupError from '../PopupError/PopupError';
 // страницы
 import MainPage from '../MainPage/MainPage';
 import Calendar from '../Calendar/Calendar';
@@ -32,6 +33,7 @@ function App() {
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
+  const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
   const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
@@ -47,6 +49,7 @@ function App() {
     setIsPopupLoginOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupCitiesOpen(false);
+    setIsPopupErrorOpen(false);
   }
 
   function handleClickPopupConfirmationOpened(cardData) {
@@ -72,6 +75,10 @@ function App() {
     setIsPopupCitiesOpen(true);
   }
 
+  function handleClickPopupErrorOpened() {
+    setIsPopupErrorOpen(true);
+  }
+
   // эффект закрытия модалок по Escape
   useEffect(() => {
     window.addEventListener('keyup', (evt) => {
@@ -86,7 +93,10 @@ function App() {
     getCalendarPageData()
       .then((res) => setDataCalendar(res.data.calendarPageData))
       .then(() => setIsLoding(false))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsPopupErrorOpen(true);
+        console.log(err);
+      });
   }, [setDataCalendar]);
 
   return (
@@ -132,6 +142,7 @@ function App() {
           isOpen={isPopupConfirmationOpen}
           onClose={closeAllPopups}
           onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
+          onErrorClick={handleClickPopupErrorOpened}
           data={selectedCalendarCard}
         />
         <PopupSuccessfully
@@ -147,10 +158,15 @@ function App() {
           isOpen={isPopupAboutDescriptionOpen}
           onClose={closeAllPopups}
           onEventSignUpClick={handleClickPopupSuccessfullyOpened}
+          onErrorClick={handleClickPopupErrorOpened}
           data={selectedCalendarCard}
         />
         <PopupCities
           isOpen={isPopupCitiesOpen}
+          onClose={closeAllPopups}
+        />
+        <PopupError
+          isOpen={isPopupErrorOpen}
           onClose={closeAllPopups}
         />
       </div>
