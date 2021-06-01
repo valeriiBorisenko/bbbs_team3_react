@@ -3,7 +3,7 @@ import './Rating.scss';
 import PropTypes from 'prop-types';
 
 function Rating({
-  type, name, value, ratingType, sectionClass
+  type, name, value, ratingType, sectionClass, checked
 }) {
   const classNames = ['rating', sectionClass].join(' ').trim();
 
@@ -14,7 +14,7 @@ function Rating({
 
   return (
     <label className={classNames}>
-      <input className="rating__checkbox" type={type} name={name} value={value} />
+      <input className="rating__checkbox" type={type} name={name} value={value} checked={checked} />
       <span className={pseudoButtonClassNames} />
     </label>
   );
@@ -25,11 +25,13 @@ Rating.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   ratingType: PropTypes.string.isRequired,
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
+  checked: PropTypes.bool
 };
 
 Rating.defaultProps = {
-  sectionClass: ''
+  sectionClass: '',
+  checked: false
 };
 
 export default Rating;

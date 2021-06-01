@@ -3,6 +3,8 @@
 .rating {
   display: inline-block;
   position: relative;
+  width: 26px;
+  height: 26px;
 
   &:hover {
     cursor: pointer;
@@ -53,6 +55,11 @@
 }
 
 @include atMobile {
+  .rating {
+    width: 23px;
+    height: 23px;
+  }
+  
   .rating__pseudo-button {
     width: 23px;
     height: 23px;
