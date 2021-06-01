@@ -27,25 +27,40 @@ function Calendar({
     'ноябрь', // 10
     'декабрь' // 11
   ];
+  const [isFiltersUsed, setIsFiltersUsed] = React.useState(false);
+  const [filteredCardData, setFilteredCardData] = React.useState([]);
+  // const [cardsData, setCardsData] = React.useState(() => dataCalendar);
+
+  //! ШАГ 1 = сортируем все ивенты по хронологии
+  const arrayOfSortedEvents = dataCalendar.sort((a, b) => {
+    const date1 = new Date(a.startAt);
+    const date2 = new Date(b.startAt);
+    return date1 - date2;
+  });
+  // setCardsData(arrayOfSortedEvents);
+  // console.log('NEW arrayOfSortedEvents', arrayOfSortedEvents);
 
   //! фильтрация ивентов при нажатии на тагс
   function handleFiltration({ year, monthNumber }) {
     console.log('year', year);
     console.log('monthNumber', monthNumber);
     // надо из ивента подставить год и месяц ивента
-    // const min = new Date(year, monthNumber);
-    // const max = new Date(year, monthNumber + 1);
+    const min = new Date(year, monthNumber);
+    const max = new Date(year, monthNumber + 1);
+
+    const filteredArrayOfEvents = arrayOfSortedEvents.filter((eventItem) => {
+      const date = new Date(eventItem.startAt);
+
+      return date >= min && date <= max;
+    });
+    // console.log('filteredArrayOfEvents', filteredArrayOfEvents);
+
+    setFilteredCardData(filteredArrayOfEvents);
+    setIsFiltersUsed(true);
+    // console.log('cardsData', cardsData);
   }
 
-  //! сортируем все ивенты по хронологии
-  const arrayOfSortedEvents = dataCalendar.sort((a, b) => {
-    const date1 = new Date(a.startAt);
-    const date2 = new Date(b.startAt);
-    return date1 - date2;
-  });
-  // console.log('NEW arrayOfSortedEvents', arrayOfSortedEvents);
-
-  //! начинаем сбор тагсов-кнопок
+  //! ШАГ 2 = из массива ивентов делаем массив вида [месяц, год] на каждый ивент
   const arrayOfDatesWithEvents = arrayOfSortedEvents.map((someEvent) => {
     // взяли дату ивента, переделали в дату-объект
     const dateObj = new Date(someEvent.startAt);
@@ -56,15 +71,15 @@ function Calendar({
   });
   // console.log('arrayOfAllMonthsWithEvents', arrayOfDatesWithEvents);
 
-  //! выкидываем из массива arrayOfDatesWithEvents повторы
-  const finalArray = Object.values(arrayOfDatesWithEvents.reduce((res, item) => ({
+  //! ШАГ 3 = выкидываем из массива arrayOfDatesWithEvents повторы
+  const arrayOfUniqueDates = Object.values(arrayOfDatesWithEvents.reduce((res, item) => ({
     ...res,
     [item.join('-')]: item
   }), {}));
   // console.log('finalArray', finalArray);
 
-  //! на основании хронологического массива без дубликатов строим кнопки
-  const filtrationButtons = finalArray.map((date) => {
+  //! ШАГ 4 = на основании хронологического массива без дубликатов генерируем кнопки
+  const tagsButtons = arrayOfUniqueDates.map((date) => {
     const tagTitle = months[date[0]];
     const monthNumber = months.indexOf(months[date[0]]);
     const year = date[1];
@@ -85,16 +100,18 @@ function Calendar({
     );
   });
 
+  const whatToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
+
   return dataCalendar ? (
     <section className="lead page__section fade-in">
       <TitleH1 title="Календарь" />
       <div className="tags">
         <ul className="tags__list">
-          {filtrationButtons}
+          {tagsButtons}
         </ul>
       </div>
       <section className="calendar-container">
-        {dataCalendar.map((data) => (
+        {whatToRender.map((data) => (
           <CardCalendar
             key={data.id}
             data={data}

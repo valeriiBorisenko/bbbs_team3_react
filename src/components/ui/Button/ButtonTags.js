@@ -16,7 +16,7 @@ function ButtonTags({
       setSelected(true);
     }
 
-    enableFiltation(filters); //!
+    enableFiltation(filters);
   }
 
   return (
