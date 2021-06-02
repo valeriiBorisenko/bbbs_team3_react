@@ -142,7 +142,7 @@ function App() {
               isAuthorized={isAuthorized}
               onEventSignUpClick={handleClickPopupConfirmationOpened}
               onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-              onLoginFormSubmit={handleLogin}
+              onOpenLoginPopup={handleClickPopupLoginOpened}
               dataCalendar={dataCalendar}
               isLoding={isLoding}
             />
@@ -168,6 +168,7 @@ function App() {
       <PopupLogin
         isOpen={isPopupLoginOpen}
         onClose={closeAllPopups}
+        onLoginFormSubmit={handleLogin}
       />
       <PopupAboutEvent
         isOpen={isPopupAboutDescriptionOpen}

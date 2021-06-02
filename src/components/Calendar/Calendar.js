@@ -14,7 +14,7 @@ function Calendar({
   dataCalendar,
   isBooked,
   isAuthorized,
-  onLoginFormSubmit,
+  onOpenLoginPopup,
   isLoding
 }) {
   useSmoothScrollOnWindow({ top: 0 });
@@ -145,7 +145,7 @@ function Calendar({
           />
         ))}
       </section>
-      { isAuthorized ? '' : onLoginFormSubmit()}
+      { isAuthorized ? '' : onOpenLoginPopup()}
     </section>
   ) : (
     <Loader />
@@ -159,7 +159,7 @@ Calendar.propTypes = {
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
   isBooked: PropTypes.bool,
   isAuthorized: PropTypes.bool,
-  onLoginFormSubmit: PropTypes.func,
+  onOpenLoginPopup: PropTypes.func,
   isLoding: PropTypes.bool
 };
 
@@ -170,7 +170,7 @@ Calendar.defaultProps = {
   dataCalendar: [],
   isBooked: false,
   isAuthorized: false,
-  onLoginFormSubmit: undefined,
+  onOpenLoginPopup: undefined,
   isLoding: false
 };
 
