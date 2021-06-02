@@ -15,7 +15,7 @@ import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
 import { getMainPageData } from '../../utils/api';
 
-function MainPage({ isAuthorized }) {
+function MainPage({ isAuthorized, onEventSignUpClick, onEventFullDescriptionClick }) {
   const [dataMain, setDataMain] = useState(null);
 
   useEffect(() => {
@@ -31,7 +31,12 @@ function MainPage({ isAuthorized }) {
       <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
           {isAuthorized ? (
-            <CardCalendar key={dataMain.event.id} data={dataMain.event} />
+            <CardCalendar
+              key={dataMain.event.id}
+              data={dataMain.event}
+              onEventSignUpClick={onEventSignUpClick}
+              onEventFullDescriptionClick={onEventFullDescriptionClick}
+            />
           ) : (
             <CardStub />
           )}
@@ -117,11 +122,15 @@ function MainPage({ isAuthorized }) {
 }
 
 MainPage.propTypes = {
-  isAuthorized: PropTypes.bool
+  isAuthorized: PropTypes.bool,
+  onEventSignUpClick: PropTypes.func,
+  onEventFullDescriptionClick: PropTypes.func
 };
 
 MainPage.defaultProps = {
-  isAuthorized: false
+  isAuthorized: false,
+  onEventSignUpClick: undefined,
+  onEventFullDescriptionClick: undefined
 };
 
 export default MainPage;

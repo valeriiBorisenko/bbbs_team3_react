@@ -1,8 +1,9 @@
 import './CardCalendar.scss';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import ButtonDots from '../ButtonDots/ButtonDots';
 import Button from '../Button/Button';
-import { formatDate } from '../../../utils/utils';
+import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
 
 /* TO DO */
 /* нужно будет добавить пропсы с функциями открытия для кнопок */
@@ -10,26 +11,28 @@ import { formatDate } from '../../../utils/utils';
 
 function CardCalendar({
   data: {
+    address,
+    contact,
+    title,
+    description,
     tags,
     startAt,
     endAt,
-    title,
-    address,
-    contact,
     remainSeats,
-    description
+    booked
+    // id
   },
   isModal,
   onEventSignUpClick,
-  onEventFullDescriptionClick,
-  clickButton,
-  isSelected, //! завязать на isBooked
-  isBooked
+  onEventFullDescriptionClick
 }) {
-  const startDay = formatDate(startAt);
-  const endDay = formatDate(endAt);
+  const startDateParts = formatDate(startAt);
+  const endDayParts = formatDate(endAt);
 
-  const isDisabled = (remainSeats < 1 ? true : '');
+  // записан ли ты на событие
+  const [isBooked, setIsBooked] = useState(booked);
+
+  const isDisabled = (remainSeats < 1);
 
   function prepareDataForConfirmationPopup() {
     onEventSignUpClick({
@@ -41,7 +44,8 @@ function CardCalendar({
       contact,
       remainSeats,
       description,
-      isBooked
+      isBooked,
+      setIsBooked
     });
   }
 
@@ -55,39 +59,45 @@ function CardCalendar({
       contact,
       remainSeats,
       description,
-      isBooked
+      isBooked,
+      setIsBooked,
+      isDisabled
     });
   }
+
+  function clickButton() {
+    if (isBooked) {
+      setIsBooked(false);
+    } else {
+      prepareDataForConfirmationPopup();
+    }
+  }
+
+  /* //!если ответ сервера обновленный массив, то нам не нужны никакие isBooked и другие стейты,
+  мы сменим состояние просто посмотрев на поле объекта */
+  //! Если ответ сервера - "вы записались", то нужно вводить стейты и менять самим классы
 
   return (
     <article className={`calendar ${isBooked ? 'calendar_selected' : ''}`}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
-            {tags.map((tag, idx) => {
-              if (tags.length === 1) {
-                return `${tag.name}`;
-              }
-              if (idx !== tags.length - 1) {
-                return `${tag.name} + `;
-              }
-              return `${tag.name.toLowerCase()}`;
-            })}
+            {getCardType(tags)}
           </p>
           <p className="calendar__weekday">
-            {`${startDay.month} / ${startDay.weekday}`}
+            {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
           </p>
         </div>
         <div className="calendar__about">
           <h2 className="section-title calendar__title">{title}</h2>
-          <p className="calendar__date">{startDay.day}</p>
+          <p className="calendar__date">{startDateParts.day}</p>
         </div>
       </div>
       <div className="calendar__meetup">
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
             <p className="calendar__time">
-              {`${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
+              {`${startDateParts.hour}:${startDateParts.minutes} - ${endDayParts.hour}:${endDayParts.minutes}`}
             </p>
           </li>
           <li className="calendar__info-item">
@@ -108,15 +118,14 @@ function CardCalendar({
             titleSelected="Отменить запись"
             color="blue"
             isDisabled={isDisabled}
-            onClick={prepareDataForConfirmationPopup}
-            clickButton={clickButton}
-            isSelected={isSelected} //! завязать на isBooked
-            data={{ title, startAt, endAt }}
+            onClick={clickButton}
+            isBooked={isBooked}
+            setIsBooked={setIsBooked}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
-            || (!isBooked && `Осталось ${remainSeats} мест`)}
+            || (!isBooked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
           </p>
           <ButtonDots
             handleClick={prepareDataForAboutEventPopup}
@@ -139,10 +148,7 @@ CardCalendar.propTypes = {
   description: PropTypes.string,
   isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
-  clickButton: PropTypes.func,
-  isSelected: PropTypes.bool,
-  isBooked: PropTypes.bool
+  onEventFullDescriptionClick: PropTypes.func
 };
 
 CardCalendar.defaultProps = {
@@ -157,10 +163,7 @@ CardCalendar.defaultProps = {
   description: '',
   isModal: false,
   onEventSignUpClick: undefined,
-  onEventFullDescriptionClick: undefined,
-  clickButton: undefined,
-  isSelected: false,
-  isBooked: PropTypes.bool
+  onEventFullDescriptionClick: undefined
 };
 
 export default CardCalendar;

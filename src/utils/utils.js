@@ -39,8 +39,8 @@ export const formatDuration = (duration) => {
 export const formatDate = (date) => {
   const parsedDate = new Date(date);
   const day = String(parsedDate.getDate());
-  const weekday = weekdays[parsedDate.getDay()];
-  const month = months[parsedDate.getMonth()];
+  const weekdayName = weekdays[parsedDate.getDay()];
+  const monthName = months[parsedDate.getMonth()];
   const hour = String(parsedDate.getHours());
   let minutes = parsedDate.getMinutes();
 
@@ -50,9 +50,44 @@ export const formatDate = (date) => {
 
   return {
     day,
-    weekday,
-    month,
+    weekdayName,
+    monthName,
     hour,
     minutes
   };
+};
+
+// падеж слова "место" в зависимости от числа мест
+// принимает на вход количество оставшихся мест из чего формирует падеж слова
+// нужно в карточках, попапах
+export const formatWordCase = (remainSeats) => {
+  // если кончается на 1 - окончание О
+  // если кончается на 2 3 4 - окончание A
+  // если кончается на другое - окончания нет
+  const lastDigit = remainSeats % 10;
+
+  if (lastDigit === 1) {
+    return 'место';
+  }
+  if (lastDigit === 2 || lastDigit === 3 || lastDigit === 4) {
+    return 'местa';
+  }
+  return 'мест';
+};
+
+// вернет заголовок состоящий из тегов
+// принимает массив тегов
+export const getCardType = (tags) => {
+  if (tags) {
+    return tags.map((tag, idx) => {
+      if (tags.length === 1) {
+        return `${tag.name}`;
+      }
+      if (idx !== tags.length - 1) {
+        return `${tag.name} + `;
+      }
+      return `${tag.name.toLowerCase()}`;
+    });
+  }
+  return undefined;
 };

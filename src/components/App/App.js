@@ -5,11 +5,12 @@ import Header from '../Header/Header';
 // import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 // попапы
-import PopupConfirmation from '../Popup/PopupConfirmation';
-import PopupSuccessfully from '../Popup/PopupSuccessfully';
-import PopupLogin from '../Popup/PopupLogin';
-import PopupAboutEvent from '../Popup/PopupAboutEvent';
+import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
+import PopupSuccessfully from '../PopupSuccessfully/PopupSuccessfully';
+import PopupLogin from '../PopupLogin/PopupLogin';
+import PopupAboutEvent from '../PopupAboutEvent/PopupAboutEvent';
 import PopupCities from '../PopupCities/PopupCities';
+import PopupError from '../PopupError/PopupError';
 // страницы
 import MainPage from '../MainPage/MainPage';
 import Calendar from '../Calendar/Calendar';
@@ -32,18 +33,14 @@ function App() {
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
+  const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
+  const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
-  // записан ли ты на событие
-  const [isBooked, setIsBooked] = useState(false);
 
   // данные страницы-календаря с сервера
-  const [dataCalendar, setDataCalendar] = useState(null);
-
-  function handleClickBooked() {
-    setIsBooked(true);
-  }
+  const [dataCalendar, setDataCalendar] = useState([]);
 
   // управление попапами
   function closeAllPopups() {
@@ -52,6 +49,7 @@ function App() {
     setIsPopupLoginOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupCitiesOpen(false);
+    setIsPopupErrorOpen(false);
   }
 
   function handleClickPopupConfirmationOpened(cardData) {
@@ -77,6 +75,10 @@ function App() {
     setIsPopupCitiesOpen(true);
   }
 
+  function handleClickPopupErrorOpened() {
+    setIsPopupErrorOpen(true);
+  }
+
   // эффект закрытия модалок по Escape
   useEffect(() => {
     window.addEventListener('keyup', (evt) => {
@@ -90,14 +92,12 @@ function App() {
   useEffect(() => {
     getCalendarPageData()
       .then((res) => setDataCalendar(res.data.calendarPageData))
-      .catch((err) => console.log(err));
+      .then(() => setIsLoding(false))
+      .catch((err) => {
+        setIsPopupErrorOpen(true);
+        console.log(err);
+      });
   }, [setDataCalendar]);
-
-  //! завязать на isBooked и выкинуть
-  const [isSelected, setIsSelected] = useState(false);
-  function handleClickSelectedButton() {
-    setIsSelected(true);
-  }
 
   return (
     <BrowserRouter>
@@ -110,7 +110,11 @@ function App() {
         <main className="main">
           <Switch>
             <Route exact path="/">
-              <MainPage isAuthorized={isAuthorized} />
+              <MainPage
+                isAuthorized={isAuthorized}
+                onEventSignUpClick={handleClickPopupConfirmationOpened}
+                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+              />
             </Route>
             <Route exact path="/about-us">
               <AboutUs isAuthorized={isAuthorized} />
@@ -123,10 +127,9 @@ function App() {
                 isAuthorized={isAuthorized}
                 onEventSignUpClick={handleClickPopupConfirmationOpened}
                 onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                clickButton={handleClickSelectedButton}
-                isSelected={isSelected}
+                onLoginFormSubmit={handleClickPopupLoginOpened}
                 dataCalendar={dataCalendar}
-                isBooked={isBooked}
+                isLoding={isLoding}
               />
             </Route>
             <Route path="*">
@@ -134,19 +137,13 @@ function App() {
             </Route>
           </Switch>
         </main>
-        {/* <Main
-          isAuthorized={isAuthorized}
-          isBooked={isBooked}
-          openConfirmationPopup={handleClickPopupConfirmationOpened}
-          openAboutEventPopup={handleClickPopupAboutEventOpened}
-        /> */}
         <Footer />
         <PopupConfirmation
           isOpen={isPopupConfirmationOpen}
           onClose={closeAllPopups}
           onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
+          onErrorClick={handleClickPopupErrorOpened}
           data={selectedCalendarCard}
-          putBookedEvent={handleClickBooked}
         />
         <PopupSuccessfully
           isOpen={isPopupSuccessfullyOpen}
@@ -156,15 +153,22 @@ function App() {
         <PopupLogin
           isOpen={isPopupLoginOpen}
           onClose={closeAllPopups}
-          onLoginFormSubmit={handleClickPopupLoginOpened}
         />
         <PopupAboutEvent
           isOpen={isPopupAboutDescriptionOpen}
           onClose={closeAllPopups}
           onEventSignUpClick={handleClickPopupSuccessfullyOpened}
+          onErrorClick={handleClickPopupErrorOpened}
           data={selectedCalendarCard}
         />
-        <PopupCities isOpen={isPopupCitiesOpen} onClose={closeAllPopups} />
+        <PopupCities
+          isOpen={isPopupCitiesOpen}
+          onClose={closeAllPopups}
+        />
+        <PopupError
+          isOpen={isPopupErrorOpen}
+          onClose={closeAllPopups}
+        />
       </div>
     </BrowserRouter>
   );

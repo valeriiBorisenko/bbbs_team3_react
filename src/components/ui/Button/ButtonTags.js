@@ -3,17 +3,22 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 function ButtonTags({
-  title, color
+  title,
+  color,
+  onFiltation,
+  filters
 }) {
   const [isSelected, setSelected] = useState(false);
-
   function handleClickButton() {
     if (isSelected) {
       setSelected(false);
     } else {
       setSelected(true);
     }
+    // console.log(!isSelected);
+    onFiltation(filters, !isSelected);
   }
+  // console.log(isSelected);
 
   return (
     <button
@@ -30,12 +35,16 @@ function ButtonTags({
 
 ButtonTags.propTypes = {
   title: PropTypes.string,
-  color: PropTypes.string
+  color: PropTypes.string,
+  filters: PropTypes.objectOf(PropTypes.number),
+  onFiltation: PropTypes.func
 };
 
 ButtonTags.defaultProps = {
   title: '',
-  color: 'blue'
+  color: 'blue',
+  onFiltation: undefined,
+  filters: {}
 };
 
 export default ButtonTags;

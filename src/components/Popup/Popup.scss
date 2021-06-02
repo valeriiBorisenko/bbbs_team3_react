@@ -12,138 +12,39 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,.5);
+  background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
   transition: visibility 0.3s, opacity 0.3s linear;
 
   &__container {
     display: flex;
-    // position: relative;
-    // flex-direction: column;
-    // justify-content: space-between;
-    // z-index: 2;
-    // margin: auto;
-
     padding: 50px 100px;
     border-radius: 30px;
-    // max-width: 770px;
-    // max-height: 80vh;
     background-color: $white;
     font-family: $ptRootUI;
     box-sizing: border-box;
-
     position: relative;
-    // top: auto;
-    // left: auto;
-    
-    box-sizing: border-box;
-    // padding: 32px 36px 40px;
-    // border-radius: 10px;
-
-    &_type_recommendation {
-      justify-content: flex-start;
-      height: 618px;
-
-      &-finish {
-        justify-content: center;
-        align-items: center;
-      }
-    }
-
-    &_type_done {
-      justify-content: center;
-      min-height: 670px;
-      width: 770px;
-
-      & .popup__submit-btn {
-        align-self: center;
-      }
-    }
-
-    &_type_confirmation {
-      // height: 670px;
-      justify-content: center;
-
-      width: 770px;
-      // display: flex;
-      justify-content: center;
-      align-items: center;
-      /* flex-direction: column; */
-      // min-height: 670px;
-      min-height: 500px;
-    }
+    justify-content: center;
+    align-items: center;
 
     &_type_sign-in {
-      // justify-content: space-between;
       width: 770px;
-
-      & .popup__submit-btn {
-        align-self: flex-start;
-      }
     }
 
     &_type_calendar {
-      // height: 670px;
+      min-height: 670px;
       width: 770px;
-    }
-
-    &_type_lk {
-      justify-content: space-between;
-      align-items: center;
-      padding: 50px 30px;
-      width: 470px;
-      height: 238px;
     }
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    // justify-content: space-between;
-  }
-
-  &__box {
-    margin: 150px auto 0;
-    box-sizing: border-box;
-    position: relative;
-    max-width: 75vw;
-    max-height: 75vh;
-
-    &_type_video {
-      padding: 30px 30px 50px;
-      margin-top: 50px;
-      width: 1770px;
-      height: 1770px;
-    }
   }
 
   &_type_sign-in {
     backdrop-filter: blur(7px);
-  }
-
-  &__box-inputs {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &__textarea {
-    box-sizing: border-box;
-    resize: none;
-    padding: 15px 20px;
-    margin-bottom: 10px;
-    min-height: 50px;
-    max-height: 100px;
-    background-color: $background;
-    border-radius: 30px;
-    border: none;
-    outline: none;
-  }
-
-  &__buttons {
-    display: flex;
-    justify-content: space-between;
-    width: 228px;
   }
 }
 
@@ -179,21 +80,8 @@
 
   &_type_calendar {
     max-width: 570px;
-    text-align: start;
-    margin-bottom: 40px;
-  }
-
-  &_type_calendar {
+    margin-bottom: 5px;
     text-align: center;
-  }
-}
-
-.popup__sign-in {
-  text-align: center;
-  margin-bottom: 30px;
-
-  &:nth-of-type(2) {
-    margin-bottom: 50px;
   }
 }
 
@@ -209,18 +97,6 @@
 
   &_required::placeholder {
     color: red;
-  }
-
-  &_type_low {
-    width: 170px;
-  }
-
-  &_type_middle {
-    width: 270px;
-  }
-
-  &_type_radio {
-    padding-left: 50px;
   }
 }
 
@@ -238,49 +114,18 @@
   }
 }
 
-.popup__enter {
-  width: 85px;
-}
-
-.popup__buttons {
-  width: 170px;
-
+.popup__button {
   &_type_calendar {
-    display: flex;
-    justify-content: center;
-    // margin-top: 30px;
-  }
-}
-
-@include atDesktop1440 {
-  .popup__container {
-    &_type_video {
-      width: 1170px;
-      height: 1125px;
-    }
+    max-width: 191px;
+    margin-right: 15px;
   }
 }
 
 @include atDesktop1024 {
-  .popup__input {
-    &_type_low {
-      width: 155px;
-    }
-
-    &_type_middle {
-      width: 200px;
-    }
-  }
-
   .popup__container {
     padding: 50px;
     width: 570px;
-
-    &_type_lk {
-      padding: 50px 15px;
-      width: 320px;
-      height: 216px;
-    }
+    min-height: 470px;
   }
 }
 
@@ -288,10 +133,6 @@
   .popup__close {
     top: 15px;
     right: 15px;
-  }
-
-  .popup_type_video {
-    display: none;
   }
 
   .popup__container {
@@ -302,38 +143,14 @@
       padding-bottom: 50px;
     }
   }
-
-  .popup__input {
-    &_type_low {
-      width: 135px;
-    }
-  }
 }
 
 @include atMobile {
   .popup__container {
     width: 290px;
 
-    &_type_recommendation {
-      justify-content: flex-start;
-      min-height: 800px;
-    }
-
     &_type_cities {
       max-width: 320px;
-    }
-  }
-
-  .popup__box-inputs {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .popup__sign-in {
-    margin-bottom: 20px;
-
-    &:nth-of-type(2) {
-      margin-bottom: 30px;
     }
   }
 
@@ -341,13 +158,5 @@
     width: 100%;
     height: 40px;
     margin-bottom: 10px;
-  }
-
-  .popup__enter {
-    width: 65px;
-  }
-
-  .popup__box-inputs {
-    justify-content: flex-start;
   }
 }
