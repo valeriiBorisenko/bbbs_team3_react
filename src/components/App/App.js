@@ -19,6 +19,8 @@ import Calendar from '../Calendar/Calendar';
 import AboutUs from '../AboutUs/AboutUs';
 import Account from '../Account/Account';
 import PageNotFound from '../PageNotFound/PageNotFound';
+// логины, авторизация
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 // работа с API
 import { getCalendarPageData } from '../../utils/api';
 // import { postUserDataOnLogin } from '../../utils/api'; // соедини с прошлым
@@ -134,9 +136,14 @@ function App() {
           <Route exact path="/about-us">
             <AboutUs isAuthorized={isAuthorized} />
           </Route>
-          <Route path="/account">
+          <ProtectedRoute
+            path="/"
+            component={Account}
+            isAuthorized={isAuthorized}
+          />
+          {/* <Route path="/account">
             <Account />
-          </Route>
+          </Route> */}
           <Route path="/calendar">
             <Calendar
               isAuthorized={isAuthorized}
