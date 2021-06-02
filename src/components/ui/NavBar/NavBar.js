@@ -9,10 +9,10 @@ import UserMenuButton from '../UserMenuButton/UserMenuButton';
 
 function NavBar({
   isAuthorized,
+  isNavMenuOpen,
   handleUserButtonClick,
   handleBurgerClick,
-  handleChangeCity,
-  isNavMenuOpen
+  handleChangeCity
 }) {
   return (
     <nav className="menu">
@@ -124,12 +124,16 @@ function NavBar({
       </div>
 
       {isAuthorized && (
-      <div className={`menu__user-info ${
-        !isNavMenuOpen ? 'menu__user-info_hidden' : ''
-      }`}
-      >
-        <UserMenuButton title="Изменить город" handleClick={handleChangeCity} sectionClass="mobile-link" />
-        <UserMenuButton title="Выйти" sectionClass="mobile-link" />
+      <div className={`menu__user-info ${!isNavMenuOpen ? 'menu__user-info_hidden' : ''}`}>
+        <UserMenuButton
+          title="Изменить город"
+          handleClick={handleChangeCity}
+          sectionClass="mobile-link"
+        />
+        <UserMenuButton
+          title="Выйти"
+          sectionClass="mobile-link"
+        />
       </div>
       )}
 
