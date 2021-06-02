@@ -30,7 +30,7 @@ export const useSmoothScrollOnWindow = (coordinate) => {
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo({
-        coordinate,
+        ...coordinate,
         behavior: 'smooth'
       });
     }, 500);
