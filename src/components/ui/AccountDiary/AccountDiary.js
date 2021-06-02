@@ -10,10 +10,11 @@ import Caption from '../Caption/Caption';
 import Button from '../Button/Button';
 
 function AccountDiary({
-  data: {
-    imageUrl, title, description, rate, date
-  }
+  data, onEdit
 }) {
+  const {
+    imageUrl, title, description, rate, date
+  } = data;
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
 
@@ -22,6 +23,10 @@ function AccountDiary({
     if (rate === 'neutral') setCaption('Нормально');
     if (rate === 'bad') setCaption('Что-то пошло не так');
   }, []);
+
+  const handleEditButtonClick = () => {
+    onEdit(data);
+  };
 
   return (
     <div className="card-container account-diary">
@@ -50,9 +55,22 @@ function AccountDiary({
             />
           </div>
           <div className="account-diary__action-elements">
-            <Button title="Поделиться с куратором" color="gray-borderless" sectionClass="account-diary__button" />
-            <Button title="Редактировать" color="gray-borderless" sectionClass="account-diary__button" />
-            <Button title="Удалить" color="gray-borderless" sectionClass="account-diary__button" />
+            <Button
+              title="Поделиться с куратором"
+              color="gray-borderless"
+              sectionClass="account-diary__button"
+            />
+            <Button
+              title="Редактировать"
+              color="gray-borderless"
+              sectionClass="account-diary__button"
+              onClick={handleEditButtonClick}
+            />
+            <Button
+              title="Удалить"
+              color="gray-borderless"
+              sectionClass="account-diary__button"
+            />
           </div>
         </div>
       </Card>
@@ -66,7 +84,8 @@ AccountDiary.propTypes = {
   description: PropTypes.string,
   title: PropTypes.string,
   rate: PropTypes.string,
-  date: PropTypes.string
+  date: PropTypes.string,
+  onEdit: PropTypes.func
 };
 
 AccountDiary.defaultProps = {
@@ -75,7 +94,8 @@ AccountDiary.defaultProps = {
   description: '',
   title: '',
   rate: 'neutral',
-  date: ''
+  date: '',
+  onEdit: undefined
 };
 
 export default AccountDiary;

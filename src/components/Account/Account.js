@@ -13,6 +13,7 @@ function Account() {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [formDataToEdit, setFormDataToEdit] = useState(null);
 
   useEffect(() => {
     Promise.all([getAccountData(), getAccountDiaryData()])
@@ -26,11 +27,17 @@ function Account() {
   useSmoothScrollOnWindow({ top: 0 });
 
   const handleOpenForm = () => {
+    setFormDataToEdit({});
     setIsFormOpen(true);
   };
 
   const handleCancelForm = () => {
     setIsFormOpen(false);
+  };
+
+  const handleEditDiaryCard = (data) => {
+    setFormDataToEdit(data);
+    setIsFormOpen(true);
   };
 
   if (!events || !diaries) {
@@ -69,12 +76,14 @@ function Account() {
               </button>
               <AccountForm
                 sectionClass={`${isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'}`}
+                isOpen={isFormOpen}
+                data={formDataToEdit || {}}
                 onCancel={handleCancelForm}
               />
             </div>
 
             {diaries.map((diary) => (
-              <AccountDiary key={diary.id} data={diary} />
+              <AccountDiary key={diary.id} data={diary} onEdit={handleEditDiaryCard} />
             ))}
           </div>
         ) : (

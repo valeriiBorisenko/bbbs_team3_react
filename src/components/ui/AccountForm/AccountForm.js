@@ -1,4 +1,5 @@
 import './AccountForm.scss';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../Card/Card';
 import Input from '../Input/Input';
@@ -7,8 +8,37 @@ import Caption from '../Caption/Caption';
 import Rating from '../Rating/Rating';
 import Button from '../Button/Button';
 
-function AccountForm({ sectionClass, onCancel }) {
+function AccountForm({
+  data, sectionClass, isOpen, onCancel
+}) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
+  const [inputValues, setInputValues] = useState({});
+
+  const parseDateHandler = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    if (day < 10) {
+      day = `0${day}`;
+    }
+    if (month < 10) {
+      month = `0${month}`;
+    }
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleInputChange = (evt) => {
+    const { name, value } = evt.target;
+    setInputValues({
+      ...inputValues,
+      [name]: value
+    });
+  };
+
+  useEffect(() => {
+    setInputValues(data);
+  }, [isOpen]);
 
   return (
     <div className={classNames}>
@@ -20,8 +50,10 @@ function AccountForm({ sectionClass, onCancel }) {
         <form name="addStoryForm" className="account-form__form">
           <Input
             type="text"
-            name="place"
+            name="title"
             placeholder="Место встречи"
+            onChange={handleInputChange}
+            value={inputValues.title || ''}
             required
           />
           <Input
@@ -29,13 +61,17 @@ function AccountForm({ sectionClass, onCancel }) {
             name="date"
             placeholder="Дата&emsp;"
             sectionClass="account-form__input_el_date"
+            onChange={handleInputChange}
+            value={parseDateHandler(inputValues.date) || ''}
             required
           />
           <Input
             type="text"
-            name="story"
+            name="description"
             placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
             sectionClass="account-form__input_el_textarea"
+            onChange={handleInputChange}
+            value={inputValues.description || ''}
             required
             isTextarea
           />
@@ -84,13 +120,17 @@ function AccountForm({ sectionClass, onCancel }) {
 }
 
 AccountForm.propTypes = {
+  data: PropTypes.objectOf(PropTypes.any),
   sectionClass: PropTypes.string,
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func,
+  isOpen: PropTypes.bool
 };
 
 AccountForm.defaultProps = {
+  data: {},
   sectionClass: '',
-  onCancel: undefined
+  onCancel: undefined,
+  isOpen: false
 };
 
 export default AccountForm;
