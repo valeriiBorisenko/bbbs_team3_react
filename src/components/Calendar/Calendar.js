@@ -111,7 +111,6 @@ function Calendar({
           name="months"
           value={tagTitle}
           title={tagTitle}
-          valueNumber={monthNumber}
           datasetForFilter={String(monthNumber)}
           filters={filters}
           onChange={handleCheckboxChange}
