@@ -21,7 +21,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import { getCalendarPageData } from '../../utils/api';
 
 function App() {
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(true);
   const handleUserButtonClick = () => {
     if (isAuthorized) setIsAuthorized(false);
     else setIsAuthorized(true);
