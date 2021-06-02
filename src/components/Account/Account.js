@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import './Account.scss';
 import PropTypes from 'prop-types';
 import { getAccountData, getAccountDiaryData } from '../../utils/api';
@@ -27,10 +27,20 @@ function Account({ onDiaryDelete }) {
 
   useSmoothScrollOnWindow({ top: 0 });
 
-  // для анимации плавной прокрутки к форме при нажатии на "Редактировать" в карточке дневника
-  const diaryContainerRef = useRef(null);
-  const scrollTo = () => {
-    diaryContainerRef.current.scrollIntoView({
+  const scrollToForm = () => {
+    const windowWidth = window.innerWidth;
+    let position;
+
+    if (windowWidth < 576) {
+      position = 280;
+    } else if (windowWidth > 576 && windowWidth < 769) {
+      position = 390;
+    } else {
+      position = 430;
+    }
+
+    window.scrollTo({
+      top: position,
       behavior: 'smooth'
     });
   };
@@ -38,7 +48,7 @@ function Account({ onDiaryDelete }) {
   const handleOpenForm = () => {
     setFormDataToEdit({});
     setIsFormOpen(true);
-    scrollTo();
+    scrollToForm();
   };
 
   const handleCancelForm = () => {
@@ -48,7 +58,7 @@ function Account({ onDiaryDelete }) {
   const handleEditDiaryCard = (data) => {
     setFormDataToEdit(data);
     setIsFormOpen(true);
-    scrollTo();
+    scrollToForm();
   };
 
   const handleDeleteDiaryCard = (card) => {
@@ -80,7 +90,7 @@ function Account({ onDiaryDelete }) {
 
       <div className="account__diaries page__section">
         {diaries.length > 0 ? (
-          <div ref={diaryContainerRef} className="account__diaries-container">
+          <div className="account__diaries-container">
             <div className="account__form-container">
               <button
                 className="account__button-add-diary"

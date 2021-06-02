@@ -131,7 +131,9 @@ function App() {
               <AboutUs isAuthorized={isAuthorized} />
             </Route>
             <Route path="/account">
-              <Account onDiaryDelete={handleClickPopupConfirmDeleteDiary} />
+              <Account
+                onDiaryDelete={handleClickPopupConfirmDeleteDiary}
+              />
             </Route>
             <Route path="/calendar">
               <Calendar
