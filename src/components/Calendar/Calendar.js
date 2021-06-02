@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import TitleH1 from '../ui/TitleH1/TitleH1';
-// import ButtonTags from '../ui/Button/ButtonTags';
 import './Calendar.scss';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
@@ -31,8 +30,7 @@ function Calendar({
     'ноябрь', // 10
     'декабрь' // 11
   ];
-  //! попробовать утром
-  // const [isAnyFilterWorkingNow, setIsAnyFilterWorkingNow] = React.useState(false);
+
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [filteredCardData, setFilteredCardData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
@@ -44,28 +42,8 @@ function Calendar({
     const date2 = new Date(b.startAt);
     return date1 - date2;
   });
-  // console.log('NEW arrayOfSortedEvents', arrayOfSortedEvents);
 
-  //! фильтрация ивентов при нажатии на тагс
-  // function handleFiltration({ year, monthNumber }) {
-  //   // console.log(evt);
-  //   // const { target } = evt;
-  //   // setIsChecked(target.checked);
-  //   // надо из ивента подставить год и месяц ивента
-  //   const min = new Date(year, monthNumber);
-  //   const max = new Date(year, monthNumber + 1);
-
-  //   const filteredArrayOfEvents = arrayOfSortedEvents.filter((eventItem) => {
-  //     const date = new Date(eventItem.startAt);
-
-  //     return date >= min && date <= max;
-  //   });
-  //   // console.log(isChecked);
-
-  //   setFilteredCardData(filteredArrayOfEvents);
-  //   setIsFiltersUsed(isChecked);
-  // }
-
+  //! функция фильтрации ивентов под нажатый фильтр
   useEffect(() => {
     if (filterSettings) {
       const { year, monthNumber } = filterSettings;
@@ -109,14 +87,12 @@ function Calendar({
     // в массив вернулся НОМЕР месяца и ГОД
     return [month, year];
   });
-  // console.log('arrayOfAllMonthsWithEvents', arrayOfDatesWithEvents);
 
   //! ШАГ 3 = выкидываем из массива arrayOfDatesWithEvents повторы
   const arrayOfUniqueDates = Object.values(arrayOfDatesWithEvents.reduce((res, item) => ({
     ...res,
     [item.join('-')]: item
   }), {}));
-  // console.log('finalArray', finalArray);
 
   //! ШАГ 4 = на основании хронологического массива без дубликатов генерируем кнопки
   const tagsButtons = arrayOfUniqueDates.map((date) => {
@@ -138,24 +114,11 @@ function Calendar({
           valueNumber={monthNumber}
           datasetForFilter={String(monthNumber)}
           filters={filters}
-          // onFiltration={handleFiltration}
-          // isFiltersUsed={isFiltersUsed}
           onChange={handleCheckboxChange}
           onClick={handleCheckboxClick}
         />
       </li>
     );
-
-    // return (
-    //   <li className="tags__list-item" key={monthNumber}>
-    //     <ButtonTags
-    //       title={tagTitle}
-    //       color="black"
-    //       onFiltation={handleFiltration}
-    //       filters={filters}
-    //     />
-    //   </li>
-    // );
   });
 
   const whatToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
