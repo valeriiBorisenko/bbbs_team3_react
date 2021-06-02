@@ -122,7 +122,7 @@ function App() {
             <Route path="/account">
               <Account />
             </Route>
-            <Route path="/calendar">
+            <Route path="/afisha">
               <Calendar
                 isAuthorized={isAuthorized}
                 onEventSignUpClick={handleClickPopupConfirmationOpened}
