@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import './PseudoButtonCheckbox.scss';
 import PropTypes from 'prop-types';
 
@@ -20,11 +19,14 @@ function PseudoButtonCheckbox({
     onClick(evt, evt.target.dataset.filter);
   };
 
+  const id = `filter-button${datasetForFilter}`;
   return (
     <label
       className="pseudo-button-label"
+      htmlFor={id}
     >
       <input
+        id={id}
         className="pseudo-button-checkbox"
         type={type}
         name={name}
