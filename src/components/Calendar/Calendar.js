@@ -5,13 +5,17 @@ import TitleH1 from '../ui/TitleH1/TitleH1';
 import './Calendar.scss';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
+import Loader from '../ui/Loader/Loader';
 
 function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
   clickButton,
   dataCalendar,
-  isBooked
+  isBooked,
+  isAuthorized,
+  onLoginFormSubmit,
+  isLoding
 }) {
   const months = [
     'январь', // 0
@@ -27,7 +31,7 @@ function Calendar({
     'ноябрь', // 10
     'декабрь' // 11
   ];
-  //! новая идея перед сном
+  //! попробовать утром
   // const [isAnyFilterWorkingNow, setIsAnyFilterWorkingNow] = React.useState(false);
   const [isFiltersUsed, setIsFiltersUsed] = React.useState(false);
   const [filteredCardData, setFilteredCardData] = React.useState([]);
@@ -113,7 +117,7 @@ function Calendar({
 
   const whatToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
 
-  return dataCalendar ? (
+  return !isLoding ? (
     <section className="lead page__section fade-in">
       <TitleH1 title="Календарь" />
       <div className="tags">
@@ -133,9 +137,10 @@ function Calendar({
           />
         ))}
       </section>
+      { isAuthorized ? '' : onLoginFormSubmit()}
     </section>
   ) : (
-    <p style={{ color: 'red', margin: '0 auto', textAlign: 'center' }}>Loading</p>
+    <Loader />
   );
 }
 
@@ -144,7 +149,10 @@ Calendar.propTypes = {
   onEventFullDescriptionClick: PropTypes.func,
   clickButton: PropTypes.func,
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
-  isBooked: PropTypes.bool
+  isBooked: PropTypes.bool,
+  isAuthorized: PropTypes.bool,
+  onLoginFormSubmit: PropTypes.func,
+  isLoding: PropTypes.bool
 };
 
 Calendar.defaultProps = {
@@ -152,7 +160,10 @@ Calendar.defaultProps = {
   onEventFullDescriptionClick: undefined,
   clickButton: undefined,
   dataCalendar: [],
-  isBooked: false
+  isBooked: false,
+  isAuthorized: false,
+  onLoginFormSubmit: undefined,
+  isLoding: false
 };
 
 export default Calendar;

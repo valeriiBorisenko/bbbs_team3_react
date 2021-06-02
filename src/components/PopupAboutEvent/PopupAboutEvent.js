@@ -1,6 +1,7 @@
-import './Popup.scss';
+import '../Popup/Popup.scss';
+import './PopupAboutEvent.scss';
 import PropTypes from 'prop-types';
-import Popup from './Popup';
+import Popup from '../Popup/Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 import { formatDate, formatWordCase, getCardType } from '../../utils/utils';
@@ -54,7 +55,8 @@ function PopupAboutEvent({
 
   return (
     <Popup
-      type="calendar"
+      type="about-event"
+      typeContainer="calendar"
       sectionClass={isBooked ? 'popup__container_booked' : ''}
       isOpen={isOpen}
       onClose={onClose}

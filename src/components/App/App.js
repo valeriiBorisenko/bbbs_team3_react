@@ -5,11 +5,12 @@ import Header from '../Header/Header';
 // import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 // попапы
-import PopupConfirmation from '../Popup/PopupConfirmation';
-import PopupSuccessfully from '../Popup/PopupSuccessfully';
-import PopupLogin from '../Popup/PopupLogin';
-import PopupAboutEvent from '../Popup/PopupAboutEvent';
+import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
+import PopupSuccessfully from '../PopupSuccessfully/PopupSuccessfully';
+import PopupLogin from '../PopupLogin/PopupLogin';
+import PopupAboutEvent from '../PopupAboutEvent/PopupAboutEvent';
 import PopupCities from '../PopupCities/PopupCities';
+import PopupError from '../PopupError/PopupError';
 // страницы
 import MainPage from '../MainPage/MainPage';
 import Calendar from '../Calendar/Calendar';
@@ -32,6 +33,8 @@ function App() {
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
+  const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
+  const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
@@ -46,6 +49,7 @@ function App() {
     setIsPopupLoginOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupCitiesOpen(false);
+    setIsPopupErrorOpen(false);
   }
 
   function handleClickPopupConfirmationOpened(cardData) {
@@ -71,6 +75,10 @@ function App() {
     setIsPopupCitiesOpen(true);
   }
 
+  function handleClickPopupErrorOpened() {
+    setIsPopupErrorOpen(true);
+  }
+
   // эффект закрытия модалок по Escape
   useEffect(() => {
     window.addEventListener('keyup', (evt) => {
@@ -84,7 +92,11 @@ function App() {
   useEffect(() => {
     getCalendarPageData()
       .then((res) => setDataCalendar(res.data.calendarPageData))
-      .catch((err) => console.log(err));
+      .then(() => setIsLoding(false))
+      .catch((err) => {
+        setIsPopupErrorOpen(true);
+        console.log(err);
+      });
   }, [setDataCalendar]);
 
   return (
@@ -115,7 +127,9 @@ function App() {
                 isAuthorized={isAuthorized}
                 onEventSignUpClick={handleClickPopupConfirmationOpened}
                 onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                onLoginFormSubmit={handleClickPopupLoginOpened}
                 dataCalendar={dataCalendar}
+                isLoding={isLoding}
               />
             </Route>
             <Route path="*">
@@ -128,6 +142,7 @@ function App() {
           isOpen={isPopupConfirmationOpen}
           onClose={closeAllPopups}
           onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
+          onErrorClick={handleClickPopupErrorOpened}
           data={selectedCalendarCard}
         />
         <PopupSuccessfully
@@ -138,16 +153,20 @@ function App() {
         <PopupLogin
           isOpen={isPopupLoginOpen}
           onClose={closeAllPopups}
-          onLoginFormSubmit={handleClickPopupLoginOpened}
         />
         <PopupAboutEvent
           isOpen={isPopupAboutDescriptionOpen}
           onClose={closeAllPopups}
           onEventSignUpClick={handleClickPopupSuccessfullyOpened}
+          onErrorClick={handleClickPopupErrorOpened}
           data={selectedCalendarCard}
         />
         <PopupCities
           isOpen={isPopupCitiesOpen}
+          onClose={closeAllPopups}
+        />
+        <PopupError
+          isOpen={isPopupErrorOpen}
           onClose={closeAllPopups}
         />
       </div>
