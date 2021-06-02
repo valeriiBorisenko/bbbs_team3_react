@@ -96,6 +96,14 @@
     }
   }
 
+  &_color_gray {
+    color: $lightGray;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
   &_color_gray-borderless {
     border-color: transparent;
     color: $lightGray;

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import './Account.scss';
+import PropTypes from 'prop-types';
 import { getAccountData, getAccountDiaryData } from '../../utils/api';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import Loader from '../ui/Loader/Loader';
@@ -9,7 +10,7 @@ import TitleH2 from '../ui/TitleH2/TitleH2';
 import AccountForm from '../ui/AccountForm/AccountForm';
 import AccountDiary from '../ui/AccountDiary/AccountDiary';
 
-function Account() {
+function Account({ onDiaryDelete }) {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -48,6 +49,10 @@ function Account() {
     setFormDataToEdit(data);
     setIsFormOpen(true);
     scrollTo();
+  };
+
+  const handleDeleteDiaryCard = (card) => {
+    onDiaryDelete(card);
   };
 
   if (!events || !diaries) {
@@ -93,7 +98,12 @@ function Account() {
             </div>
 
             {diaries.map((diary) => (
-              <AccountDiary key={diary.id} data={diary} onEdit={handleEditDiaryCard} />
+              <AccountDiary
+                key={diary.id}
+                data={diary}
+                onEdit={handleEditDiaryCard}
+                onDelete={handleDeleteDiaryCard}
+              />
             ))}
           </div>
         ) : (
@@ -109,5 +119,13 @@ function Account() {
     </section>
   );
 }
+
+Account.propTypes = {
+  onDiaryDelete: PropTypes.func
+};
+
+Account.defaultProps = {
+  onDiaryDelete: undefined
+};
 
 export default Account;

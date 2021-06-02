@@ -10,7 +10,7 @@ import Caption from '../Caption/Caption';
 import Button from '../Button/Button';
 
 function AccountDiary({
-  data, onEdit
+  data, onEdit, onDelete
 }) {
   const {
     imageUrl, title, description, rate, date
@@ -26,6 +26,10 @@ function AccountDiary({
 
   const handleEditButtonClick = () => {
     onEdit(data);
+  };
+
+  const handleDeleteButtonClick = () => {
+    onDelete(data);
   };
 
   return (
@@ -70,6 +74,7 @@ function AccountDiary({
               title="Удалить"
               color="gray-borderless"
               sectionClass="account-diary__button"
+              onClick={handleDeleteButtonClick}
             />
           </div>
         </div>
@@ -85,7 +90,8 @@ AccountDiary.propTypes = {
   title: PropTypes.string,
   rate: PropTypes.string,
   date: PropTypes.string,
-  onEdit: PropTypes.func
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func
 };
 
 AccountDiary.defaultProps = {
@@ -95,7 +101,8 @@ AccountDiary.defaultProps = {
   title: '',
   rate: 'neutral',
   date: '',
-  onEdit: undefined
+  onEdit: undefined,
+  onDelete: undefined
 };
 
 export default AccountDiary;

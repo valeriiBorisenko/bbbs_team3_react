@@ -19,6 +19,7 @@ import Account from '../Account/Account';
 import PageNotFound from '../PageNotFound/PageNotFound';
 // серверная дата
 import { getCalendarPageData } from '../../utils/api';
+import PopupConfirmDeleteDiary from '../PopupConfirmDeleteDiary/PopupConfirmDeleteDiary';
 
 function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -34,6 +35,7 @@ function App() {
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
+  const [isPopupConfirmDeleteDiaryOpen, setIsPopupConfirmDeleteDiaryOpen] = useState(false);
   const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
@@ -41,6 +43,9 @@ function App() {
 
   // данные страницы-календаря с сервера
   const [dataCalendar, setDataCalendar] = useState([]);
+
+  // выбранная карточка дневника при открытии попапа подтверждения
+  const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
 
   // управление попапами
   function closeAllPopups() {
@@ -50,6 +55,7 @@ function App() {
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupCitiesOpen(false);
     setIsPopupErrorOpen(false);
+    setIsPopupConfirmDeleteDiaryOpen(false);
   }
 
   function handleClickPopupConfirmationOpened(cardData) {
@@ -77,6 +83,11 @@ function App() {
 
   function handleClickPopupErrorOpened() {
     setIsPopupErrorOpen(true);
+  }
+
+  function handleClickPopupConfirmDeleteDiary(cardData) {
+    setIsPopupConfirmDeleteDiaryOpen(true);
+    setSelectedDiaryCard(cardData);
   }
 
   // эффект закрытия модалок по Escape
@@ -120,7 +131,7 @@ function App() {
               <AboutUs isAuthorized={isAuthorized} />
             </Route>
             <Route path="/account">
-              <Account />
+              <Account onDiaryDelete={handleClickPopupConfirmDeleteDiary} />
             </Route>
             <Route path="/calendar">
               <Calendar
@@ -168,6 +179,11 @@ function App() {
         <PopupError
           isOpen={isPopupErrorOpen}
           onClose={closeAllPopups}
+        />
+        <PopupConfirmDeleteDiary
+          isOpen={isPopupConfirmDeleteDiaryOpen}
+          onClose={closeAllPopups}
+          data={selectedDiaryCard}
         />
       </div>
     </BrowserRouter>
