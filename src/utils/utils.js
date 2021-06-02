@@ -38,7 +38,7 @@ export const formatDuration = (duration) => {
 // форматирует дату в объект по разным ключам, принимает на вход string вида "2021-05-08T21:22:00Z"
 export const formatDate = (date) => {
   const parsedDate = new Date(date);
-  const day = String(parsedDate.getDate());
+  let day = parsedDate.getDate();
   const weekdayName = weekdays[parsedDate.getDay()];
   const monthName = months[parsedDate.getMonth()];
   const hour = String(parsedDate.getHours());
@@ -47,6 +47,10 @@ export const formatDate = (date) => {
 
   if (minutes < 10) {
     minutes = `0${minutes}`;
+  }
+
+  if (day < 10) {
+    day = `0${day}`;
   }
 
   return {

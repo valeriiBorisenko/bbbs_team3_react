@@ -46,6 +46,7 @@ function Account() {
       <div className="account__diaries page__section">
         {diaries.length > 0 ? (
           <div className="account__diaries-container">
+            <AccountForm sectionClass="account__diaries-form" />
             {diaries.map((diary) => (
               <AccountDiary key={diary.id} data={diary} />
             ))}

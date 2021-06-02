@@ -121,6 +121,10 @@
 .account-diary__button {
   margin-right: 30px;
 
+  &:first-of-type {
+    margin-left: 10px;
+  }
+
   &:last-of-type {
     margin-right: 0;
   }
@@ -128,7 +132,7 @@
 
 @include atDesktop1024 {
   .account-diary {
-    max-width: 600px;
+    max-width: 700px;
     grid-template-columns: 1fr;
     grid-template-rows: 290px 1fr;
     margin-bottom: 30px;
