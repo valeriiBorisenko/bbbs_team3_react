@@ -7,7 +7,7 @@ import Caption from '../Caption/Caption';
 import Rating from '../Rating/Rating';
 import Button from '../Button/Button';
 
-function AccountForm({ sectionClass }) {
+function AccountForm({ sectionClass, onCancel }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
 
   return (
@@ -68,7 +68,12 @@ function AccountForm({ sectionClass }) {
               />
             </div>
             <div className="account-form__buttons">
-              <Button title="Удалить" color="gray-borderless" sectionClass="account-form__button_el_delete" />
+              <Button
+                title="Удалить"
+                color="gray-borderless"
+                sectionClass="account-form__button_el_delete"
+                onClick={onCancel}
+              />
               <Button title="Добавить" isSubmittable sectionClass="account-form__button_el_add" />
             </div>
           </div>
@@ -79,11 +84,13 @@ function AccountForm({ sectionClass }) {
 }
 
 AccountForm.propTypes = {
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
+  onCancel: PropTypes.func
 };
 
 AccountForm.defaultProps = {
-  sectionClass: ''
+  sectionClass: '',
+  onCancel: undefined
 };
 
 export default AccountForm;

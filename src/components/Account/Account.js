@@ -12,6 +12,7 @@ import AccountDiary from '../ui/AccountDiary/AccountDiary';
 function Account() {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([getAccountData(), getAccountDiaryData()])
@@ -24,6 +25,14 @@ function Account() {
 
   useSmoothScrollOnWindow({ top: 0 });
 
+  const handleOpenForm = () => {
+    setIsFormOpen(true);
+  };
+
+  const handleCancelForm = () => {
+    setIsFormOpen(false);
+  };
+
   if (!events || !diaries) {
     return <Loader />;
   }
@@ -33,7 +42,11 @@ function Account() {
       <div className="account__events-area page__section">
         <TitleH2
           sectionClass="account__title"
-          title={events.length > 0 ? 'Вы записаны на мероприятия:' : 'У вас нет записи на мероприятия'}
+          title={
+            events.length > 0
+              ? 'Вы записаны на мероприятия:'
+              : 'У вас нет записи на мероприятия'
+          }
         />
         <ScrollableByXContainer sectionClass="account__events">
           {events.length > 0
@@ -46,7 +59,20 @@ function Account() {
       <div className="account__diaries page__section">
         {diaries.length > 0 ? (
           <div className="account__diaries-container">
-            <AccountForm sectionClass="account__diaries-form" />
+            <div className="account__form-container">
+              <button
+                className="account__button-add-diary"
+                type="button"
+                onClick={handleOpenForm}
+              >
+                Добавить встречу
+              </button>
+              <AccountForm
+                sectionClass={`${isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'}`}
+                onCancel={handleCancelForm}
+              />
+            </div>
+
             {diaries.map((diary) => (
               <AccountDiary key={diary.id} data={diary} />
             ))}
