@@ -10,7 +10,7 @@ function AccountEventCard({ data }) {
     <Card sectionClass="account-event-card">
       <div className="account-event-card__date">
         <span className="account-event-card__day">{startDay.day}</span>
-        <span className="account-event-card__month">{startDay.month}</span>
+        <span className="account-event-card__month">{startDay.monthName}</span>
       </div>
       <p className="account-event-card__title">{data.title}</p>
     </Card>

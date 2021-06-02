@@ -14,7 +14,7 @@ function Rating({
 
   return (
     <label className={classNames}>
-      <input className="rating__checkbox" type={type} name={name} value={value} checked={checked} />
+      <input className="rating__checkbox" type={type} name={name} value={value} defaultChecked={checked} />
       <span className={pseudoButtonClassNames} />
     </label>
   );
@@ -22,7 +22,7 @@ function Rating({
 
 Rating.propTypes = {
   type: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   value: PropTypes.string.isRequired,
   ratingType: PropTypes.string.isRequired,
   sectionClass: PropTypes.string,
@@ -30,6 +30,7 @@ Rating.propTypes = {
 };
 
 Rating.defaultProps = {
+  name: '',
   sectionClass: '',
   checked: false
 };

@@ -42,6 +42,7 @@ export const formatDate = (date) => {
   const weekdayName = weekdays[parsedDate.getDay()];
   const monthName = months[parsedDate.getMonth()];
   const hour = String(parsedDate.getHours());
+  const year = String(parsedDate.getFullYear());
   let minutes = parsedDate.getMinutes();
 
   if (minutes < 10) {
@@ -49,6 +50,7 @@ export const formatDate = (date) => {
   }
 
   return {
+    year,
     day,
     weekdayName,
     monthName,

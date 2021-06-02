@@ -25,7 +25,7 @@
 .account-diary__date-container {
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 1fr 94px;
+  grid-template-columns: 1fr 100px;
   grid-template-rows: 346px;
   grid-auto-rows: auto;
   align-items: start;
@@ -86,6 +86,14 @@
 .account-diary__rating {
   display: flex;
   align-items: center;
+}
+
+.account-diary__rate {
+  pointer-events: none;
+  
+  &:hover {
+    cursor: default;
+  }
 }
 
 .account-diary__ratings-text {
