@@ -86,7 +86,23 @@ function App() {
   }
 
   //!
-  
+  function handleLogin({ login, password }) {
+    console.log(login);
+    console.log(password);
+    postUserDataOnLogin(login, password).then((data) => {
+      const { access, refresh } = data.token;
+      console.log(access);
+      if (refresh && access) {
+        localStorage.setItem('jwt', access);
+        getCalendarPageData().then((eventsArray) => {
+          console.log('tyt');
+          setDataCalendar(eventsArray);
+          setIsAuthorized(true);
+          closeAllPopups();
+        });
+      }
+    }).catch((error) => console.log(error));
+  }
 
   function handleClickPopupAboutEventOpened(cardData) {
     setIsPopupAboutDescriptionOpen(true);
