@@ -1,0 +1,33 @@
+@import './styles/utils.scss';
+
+.pseudo-button-label {
+  display: inline-block;
+  position: relative;
+}
+
+.pseudo-button-checkbox {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.pseudo-button {
+  box-sizing: border-box;
+
+  &:hover {
+    background-color: $lightGray;
+  }
+}
+
+.pseudo-button-checkbox:checked + .pseudo-button {
+  background-color: $black;
+  color: $background;
+
+  &:hover {
+    background-color: $darkBlue;
+    color: $background;
+    border-color: $darkBlue;
+  }
+}
