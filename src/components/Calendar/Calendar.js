@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 // import ButtonTags from '../ui/Button/ButtonTags';
@@ -33,8 +33,10 @@ function Calendar({
   ];
   //! попробовать утром
   // const [isAnyFilterWorkingNow, setIsAnyFilterWorkingNow] = React.useState(false);
-  const [isFiltersUsed, setIsFiltersUsed] = React.useState(false);
-  const [filteredCardData, setFilteredCardData] = React.useState([]);
+  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+  const [filteredCardData, setFilteredCardData] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
+  const [filterSettings, setFilterSettings] = useState(null);
 
   //! ШАГ 1 = сортируем все ивенты по хронологии
   const arrayOfSortedEvents = dataCalendar.sort((a, b) => {
@@ -45,21 +47,58 @@ function Calendar({
   // console.log('NEW arrayOfSortedEvents', arrayOfSortedEvents);
 
   //! фильтрация ивентов при нажатии на тагс
-  function handleFiltration({ year, monthNumber }, isChecked) {
-    // надо из ивента подставить год и месяц ивента
-    const min = new Date(year, monthNumber);
-    const max = new Date(year, monthNumber + 1);
+  // function handleFiltration({ year, monthNumber }) {
+  //   // console.log(evt);
+  //   // const { target } = evt;
+  //   // setIsChecked(target.checked);
+  //   // надо из ивента подставить год и месяц ивента
+  //   const min = new Date(year, monthNumber);
+  //   const max = new Date(year, monthNumber + 1);
 
-    const filteredArrayOfEvents = arrayOfSortedEvents.filter((eventItem) => {
-      const date = new Date(eventItem.startAt);
+  //   const filteredArrayOfEvents = arrayOfSortedEvents.filter((eventItem) => {
+  //     const date = new Date(eventItem.startAt);
 
-      return date >= min && date <= max;
-    });
-    console.log(isChecked);
+  //     return date >= min && date <= max;
+  //   });
+  //   // console.log(isChecked);
 
-    setFilteredCardData(filteredArrayOfEvents);
+  //   setFilteredCardData(filteredArrayOfEvents);
+  //   setIsFiltersUsed(isChecked);
+  // }
+
+  useEffect(() => {
+    if (filterSettings) {
+      const { year, monthNumber } = filterSettings;
+      const min = new Date(year, monthNumber);
+      const max = new Date(year, monthNumber + 1);
+      const filteredArrayOfEvents = arrayOfSortedEvents.filter((eventItem) => {
+        const date = new Date(eventItem.startAt);
+
+        return date >= min && date <= max;
+      });
+
+      setFilteredCardData(filteredArrayOfEvents);
+    }
+
     setIsFiltersUsed(isChecked);
-  }
+  }, [isChecked, filterSettings]);
+
+  const handleCheckboxChange = (evt, filters) => {
+    const { target } = evt;
+    setIsChecked(target.checked);
+    setFilterSettings(filters);
+  };
+
+  const handleCheckboxClick = (evt, dataset) => {
+    const { target } = evt;
+    if (filterSettings) {
+      if (target.checked && Number(dataset) === filterSettings.monthNumber) {
+        target.checked = false;
+        setIsChecked(target.checked);
+        setFilterSettings(null);
+      }
+    }
+  };
 
   //! ШАГ 2 = из массива ивентов делаем массив вида [месяц, год] на каждый ивент
   const arrayOfDatesWithEvents = arrayOfSortedEvents.map((someEvent) => {
@@ -96,9 +135,13 @@ function Calendar({
           name="months"
           value={tagTitle}
           title={tagTitle}
+          valueNumber={monthNumber}
+          datasetForFilter={String(monthNumber)}
           filters={filters}
-          onFiltration={handleFiltration}
-          isFiltersUsed={isFiltersUsed}
+          // onFiltration={handleFiltration}
+          // isFiltersUsed={isFiltersUsed}
+          onChange={handleCheckboxChange}
+          onClick={handleCheckboxClick}
         />
       </li>
     );
