@@ -14,7 +14,7 @@ function PopupAboutEvent({
     title,
     description,
     address,
-    booked,
+    // booked,
     contact,
     startAt,
     endAt,
@@ -25,19 +25,6 @@ function PopupAboutEvent({
     isDisabled
   }
 }) {
-  //! временно
-  console.log({
-    title,
-    description,
-    address,
-    booked,
-    contact,
-    startAt,
-    endAt,
-    remainSeats,
-    tags
-  });
-
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
 
@@ -60,6 +47,7 @@ function PopupAboutEvent({
       sectionClass={isBooked ? 'popup__container_booked' : ''}
       isOpen={isOpen}
       onClose={onClose}
+      onSubmit={submitHandler}
     >
       <div className="calendar__caption">
         <div className="calendar__info">
@@ -101,7 +89,6 @@ function PopupAboutEvent({
             title="Записаться"
             titleSelected="Отменить запись"
             sectionClass="button_action_confirm"
-            onClick={submitHandler}
             isSubmittable
             isBooked={isBooked}
             isDisabled={isDisabled}
