@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 // import ButtonTags from '../ui/Button/ButtonTags';
@@ -33,10 +33,10 @@ function Calendar({
   ];
   //! попробовать утром
   // const [isAnyFilterWorkingNow, setIsAnyFilterWorkingNow] = React.useState(false);
-  const [isFiltersUsed, setIsFiltersUsed] = React.useState(false);
-  const [filteredCardData, setFilteredCardData] = React.useState([]);
+  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+  const [filteredCardData, setFilteredCardData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
-  const [filter, setFilter] = useState(null);
+  const [filterSettings, setFilterSettings] = useState(null);
 
   //! ШАГ 1 = сортируем все ивенты по хронологии
   const arrayOfSortedEvents = dataCalendar.sort((a, b) => {
@@ -67,12 +67,8 @@ function Calendar({
   // }
 
   useEffect(() => {
-    // console.log(evt);
-    // const { target } = evt;
-    // setIsChecked(target.checked);
-    // надо из ивента подставить год и месяц ивента
-    if (filter) {
-      const { year, monthNumber } = filter;
+    if (filterSettings) {
+      const { year, monthNumber } = filterSettings;
       const min = new Date(year, monthNumber);
       const max = new Date(year, monthNumber + 1);
       const filteredArrayOfEvents = arrayOfSortedEvents.filter((eventItem) => {
@@ -80,26 +76,26 @@ function Calendar({
 
         return date >= min && date <= max;
       });
-        // console.log(isChecked);
 
       setFilteredCardData(filteredArrayOfEvents);
     }
-    setIsFiltersUsed(isChecked);
-  }, [isChecked, filter]);
 
-  const handleChange = (evt, filters) => {
+    setIsFiltersUsed(isChecked);
+  }, [isChecked, filterSettings]);
+
+  const handleCheckboxChange = (evt, filters) => {
     const { target } = evt;
     setIsChecked(target.checked);
-    setFilter(filters);
-    // handleFiltration(filters);
+    setFilterSettings(filters);
   };
 
-  const handleClick = (evt, valueNumber) => {
+  const handleCheckboxClick = (evt, dataset) => {
     const { target } = evt;
-    if (filter) {
-      if (target.checked && valueNumber === filter.monthNumber) {
+    if (filterSettings) {
+      if (target.checked && Number(dataset) === filterSettings.monthNumber) {
         target.checked = false;
         setIsChecked(target.checked);
+        setFilterSettings(null);
       }
     }
   };
@@ -140,12 +136,12 @@ function Calendar({
           value={tagTitle}
           title={tagTitle}
           valueNumber={monthNumber}
-          // dataFilter={String(monthNumber)}
+          datasetForFilter={String(monthNumber)}
           filters={filters}
           // onFiltration={handleFiltration}
           // isFiltersUsed={isFiltersUsed}
-          onChange={handleChange}
-          onClick={handleClick}
+          onChange={handleCheckboxChange}
+          onClick={handleCheckboxClick}
         />
       </li>
     );
