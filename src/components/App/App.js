@@ -4,7 +4,6 @@ import {
   Route, Switch, useHistory
 } from 'react-router-dom';
 import Header from '../Header/Header';
-// import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 // попапы
 import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
@@ -22,13 +21,13 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 // логины, авторизация
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 // работа с API
-import { getCalendarPageData } from '../../utils/api';
-// import { postUserDataOnLogin } from '../../utils/api'; // соедини с прошлым
+import { getCalendarPageData, postUserDataOnLogin, getMainPageData } from '../../utils/api';
 
 function App() {
-  const [isAuthorized, setIsAuthorized] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   console.log(setIsAuthorized);
   const history = useHistory();
+  console.log(postUserDataOnLogin);
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
@@ -42,8 +41,17 @@ function App() {
   // выбранная карточка при открытии попапа
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
 
-  // данные страницы-календаря с сервера
-  const [dataCalendar, setDataCalendar] = useState([]);
+  // данные страниц с сервера
+  const [dataCalendar, setDataCalendar] = useState([]); //! переименовать в eventsArray
+  const [dataMain, setDataMain] = useState(null);
+
+  // загрузка данных главной страницы с сервера
+  useEffect(() => {
+    getMainPageData()
+      .then((res) => setDataMain(res.data.mainPageData))
+      .then(() => setIsLoding(false))
+      .catch((err) => console.log(err));
+  }, [setDataMain]);
 
   // управление попапами
   function closeAllPopups() {
@@ -77,12 +85,8 @@ function App() {
     }
   }
 
-  function handleLogin({ login, password }) {
-    console.log(login);
-    console.log(password);
-    // const b = postUserDataOnLogin('hello', 'world').then((response) => console.log(response));
-    // console.log(b);
-  }
+  //!
+  
 
   function handleClickPopupAboutEventOpened(cardData) {
     setIsPopupAboutDescriptionOpen(true);
@@ -107,15 +111,15 @@ function App() {
   }, []);
 
   // эффект при монтировании, загрузка данных страницы Календарь с сервера
-  useEffect(() => {
-    getCalendarPageData()
-      .then((res) => setDataCalendar(res.data.calendarPageData))
-      .then(() => setIsLoding(false))
-      .catch((err) => {
-        setIsPopupErrorOpen(true);
-        console.log(err);
-      });
-  }, [setDataCalendar]);
+  // useEffect(() => {
+  //   getCalendarPageData()
+  //     .then((res) => setDataCalendar(res.data.calendarPageData))
+  //     .then(() => setIsLoding(false))
+  //     .catch((err) => {
+  //       setIsPopupErrorOpen(true);
+  //       console.log(err);
+  //     });
+  // }, [setDataCalendar]);
 
   return (
     <div className="page">
@@ -131,19 +135,12 @@ function App() {
               isAuthorized={isAuthorized}
               onEventSignUpClick={handleClickPopupConfirmationOpened}
               onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+              dataMain={dataMain}
             />
           </Route>
           <Route exact path="/about-us">
             <AboutUs isAuthorized={isAuthorized} />
           </Route>
-          <ProtectedRoute
-            path="/"
-            component={Account}
-            isAuthorized={isAuthorized}
-          />
-          {/* <Route path="/account">
-            <Account />
-          </Route> */}
           <Route path="/calendar">
             <Calendar
               isAuthorized={isAuthorized}
@@ -154,6 +151,11 @@ function App() {
               isLoding={isLoding}
             />
           </Route>
+          <ProtectedRoute
+            path="/"
+            component={Account}
+            isAuthorized={isAuthorized}
+          />
           <Route path="*">
             <PageNotFound />
           </Route>
