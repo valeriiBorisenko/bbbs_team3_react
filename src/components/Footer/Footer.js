@@ -142,13 +142,6 @@ function Footer() {
             linkText="youtube"
             rel="noreferrer"
           />
-          {/* youtube */}
-          <NavItem
-            sectionWrapperClass="footer__column-links"
-            sectionLinkClass="footer__column-link"
-            href="/account"
-            linkText="ЛК (для теста)"
-          />
         </ul>
       </div>
     </footer>
