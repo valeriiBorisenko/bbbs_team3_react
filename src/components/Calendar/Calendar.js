@@ -124,15 +124,19 @@ function Calendar({
   });
 
   const whatToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
-
-  return !isLoding ? (
-    <section className="lead page__section fade-in">
-      <TitleH1 title="Календарь" />
+  const tagsButtonRender = tagsButtons.length > 1
+    ? (
       <div className="tags">
         <ul className="tags__list">
           {tagsButtons}
         </ul>
       </div>
+    ) : '';
+
+  return !isLoding ? (
+    <section className="lead page__section fade-in">
+      <TitleH1 title="Календарь" />
+      {tagsButtonRender}
       <section className="calendar-container">
         {whatToRender.map((data) => (
           <CardCalendar
