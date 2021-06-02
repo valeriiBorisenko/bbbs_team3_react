@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TitleH1 from '../ui/TitleH1/TitleH1';
-import ButtonTags from '../ui/Button/ButtonTags';
+// import ButtonTags from '../ui/Button/ButtonTags';
 import './Calendar.scss';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
+import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 
 function Calendar({
   onEventSignUpClick,
@@ -26,9 +27,10 @@ function Calendar({
     'ноябрь', // 10
     'декабрь' // 11
   ];
+  //! новая идея перед сном
+  // const [isAnyFilterWorkingNow, setIsAnyFilterWorkingNow] = React.useState(false);
   const [isFiltersUsed, setIsFiltersUsed] = React.useState(false);
   const [filteredCardData, setFilteredCardData] = React.useState([]);
-  // const [cardsData, setCardsData] = React.useState(() => dataCalendar);
 
   //! ШАГ 1 = сортируем все ивенты по хронологии
   const arrayOfSortedEvents = dataCalendar.sort((a, b) => {
@@ -36,13 +38,10 @@ function Calendar({
     const date2 = new Date(b.startAt);
     return date1 - date2;
   });
-  // setCardsData(arrayOfSortedEvents);
   // console.log('NEW arrayOfSortedEvents', arrayOfSortedEvents);
 
   //! фильтрация ивентов при нажатии на тагс
-  function handleFiltration({ year, monthNumber }) {
-    console.log('year', year);
-    console.log('monthNumber', monthNumber);
+  function handleFiltration({ year, monthNumber }, isChecked) {
     // надо из ивента подставить год и месяц ивента
     const min = new Date(year, monthNumber);
     const max = new Date(year, monthNumber + 1);
@@ -52,11 +51,10 @@ function Calendar({
 
       return date >= min && date <= max;
     });
-    // console.log('filteredArrayOfEvents', filteredArrayOfEvents);
+    console.log(isChecked);
 
     setFilteredCardData(filteredArrayOfEvents);
-    setIsFiltersUsed(true);
-    // console.log('cardsData', cardsData);
+    setIsFiltersUsed(isChecked);
   }
 
   //! ШАГ 2 = из массива ивентов делаем массив вида [месяц, год] на каждый ивент
@@ -89,14 +87,28 @@ function Calendar({
 
     return (
       <li className="tags__list-item" key={monthNumber}>
-        <ButtonTags
+        <PseudoButtonCheckbox
+          type="radio"
+          name="months"
+          value={tagTitle}
           title={tagTitle}
-          color="black"
-          enableFiltation={handleFiltration}
           filters={filters}
+          onFiltration={handleFiltration}
+          isFiltersUsed={isFiltersUsed}
         />
       </li>
     );
+
+    // return (
+    //   <li className="tags__list-item" key={monthNumber}>
+    //     <ButtonTags
+    //       title={tagTitle}
+    //       color="black"
+    //       onFiltation={handleFiltration}
+    //       filters={filters}
+    //     />
+    //   </li>
+    // );
   });
 
   const whatToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
