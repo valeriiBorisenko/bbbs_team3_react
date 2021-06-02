@@ -10,12 +10,13 @@ const calendarPageData = require('./server-responses/calendar-page.json');
 const token = require('./server-responses/token.json');
 
 const baseURL = 'http://localhost:3000';
+const apiUrl = '/api/v1';
 
 // mock
-const mock = new MockAdapter(axios, { delayResponse: 3000 });
+const mock = new MockAdapter(axios, { delayResponse: 1000 });
 //! templated server responses
 // arguments for reply are (status, data, headers)
-mock.onGet(`${baseURL}/main/`).reply(
+mock.onGet(`${baseURL}${apiUrl}/main/`).reply(
   200,
   {
     mainPageData
@@ -23,7 +24,7 @@ mock.onGet(`${baseURL}/main/`).reply(
   'Content-Type: application/json'
 );
 
-mock.onGet(`${baseURL}/account/`).reply(
+mock.onGet(`${baseURL}${apiUrl}/account/`).reply(
   200,
   {
     accountData
@@ -31,7 +32,7 @@ mock.onGet(`${baseURL}/account/`).reply(
   'Content-Type: application/json'
 );
 
-mock.onGet(`${baseURL}/account/diary/`).reply(
+mock.onGet(`${baseURL}${apiUrl}/account/diary/`).reply(
   200,
   {
     accountDiaryData
@@ -39,7 +40,7 @@ mock.onGet(`${baseURL}/account/diary/`).reply(
   'Content-Type: application/json'
 );
 
-mock.onGet(`${baseURL}/cities/`).reply(
+mock.onGet(`${baseURL}${apiUrl}/cities/`).reply(
   200,
   {
     cities
@@ -47,7 +48,7 @@ mock.onGet(`${baseURL}/cities/`).reply(
   'Content-Type: application/json'
 );
 
-mock.onGet(`${baseURL}/afisha/events/`).reply(
+mock.onGet(`${baseURL}${apiUrl}/afisha/events/`).reply(
   200,
   {
     calendarPageData
@@ -55,7 +56,7 @@ mock.onGet(`${baseURL}/afisha/events/`).reply(
   'Content-Type: application/json'
 );
 
-mock.onGet(`${baseURL}/sign-in/`).reply(
+mock.onPost(`${baseURL}${apiUrl}/token/`).reply(
   200,
   {
     token
@@ -63,10 +64,23 @@ mock.onGet(`${baseURL}/sign-in/`).reply(
   'Content-Type: application/json'
 );
 
+mock.onGet(`${baseURL}${apiUrl}/profile/`).reply(
+  200,
+  {
+    calendarPageData
+  },
+  'Content-Type: application/json'
+);
+
 //! functions (new fetch-es)
-export const getMainPageData = () => axios.get(`${baseURL}/main/`);
-export const getAccountData = () => axios.get(`${baseURL}/account/`);
-export const getAccountDiaryData = () => axios.get(`${baseURL}/account/diary/`);
-export const getCities = () => axios.get(`${baseURL}/cities/`);
-export const getCalendarPageData = () => axios.get(`${baseURL}/afisha/events/`);
-export const getTokenOnLogin = () => axios.get(`${baseURL}/sign-in/`);
+// в режиме мок-адаптера все работает как (result) => result.data
+// когда будет нормальный сервер надо будет делать как (result) => result.json()
+export const getMainPageData = () => axios.get(`${baseURL}${apiUrl}/main/`);
+export const getAccountData = () => axios.get(`${baseURL}${apiUrl}/account/`);
+export const getAccountDiaryData = () => axios.get(`${baseURL}${apiUrl}/account/diary/`);
+export const getCities = () => axios.get(`${baseURL}${apiUrl}/cities/`);
+export const getCalendarPageData = () => axios.get(`${baseURL}${apiUrl}/afisha/events/`);
+// login
+export const postUserDataOnLogin = (userData) => axios.post(`${baseURL}${apiUrl}/token/`, userData).then((result) => result.data);
+// getUserData on login //! нужно замокать
+export const getUserData = () => axios.get(`${baseURL}${apiUrl}/profile/`).then((result) => result.data);

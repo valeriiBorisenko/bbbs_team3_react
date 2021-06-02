@@ -160,18 +160,17 @@ Calendar.propTypes = {
   isBooked: PropTypes.bool,
   isAuthorized: PropTypes.bool,
   onOpenLoginPopup: PropTypes.func,
-  isLoding: PropTypes.bool
+  isLoding: PropTypes.bool.isRequired
 };
 
 Calendar.defaultProps = {
   onEventSignUpClick: undefined,
+  dataCalendar: [],
   onEventFullDescriptionClick: undefined,
   clickButton: undefined,
-  dataCalendar: [],
   isBooked: false,
   isAuthorized: false,
-  onOpenLoginPopup: undefined,
-  isLoding: false
+  onOpenLoginPopup: undefined
 };
 
 export default Calendar;
