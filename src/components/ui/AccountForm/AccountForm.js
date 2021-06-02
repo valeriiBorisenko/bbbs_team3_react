@@ -1,6 +1,7 @@
 import './AccountForm.scss';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { parseDate } from '../../../utils/utils';
 import Card from '../Card/Card';
 import Input from '../Input/Input';
 import InputFileUpload from '../InputFileUpload/InputFileUpload';
@@ -13,20 +14,6 @@ function AccountForm({
 }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
   const [inputValues, setInputValues] = useState({});
-
-  const parseDateHandler = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    if (day < 10) {
-      day = `0${day}`;
-    }
-    if (month < 10) {
-      month = `0${month}`;
-    }
-    return `${year}-${month}-${day}`;
-  };
 
   const handleInputChange = (evt) => {
     const { name, value } = evt.target;
@@ -62,7 +49,7 @@ function AccountForm({
             placeholder="Дата&emsp;"
             sectionClass="account-form__input_el_date"
             onChange={handleInputChange}
-            value={parseDateHandler(inputValues.date) || ''}
+            value={parseDate(inputValues.date) || ''}
             required
           />
           <Input

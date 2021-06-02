@@ -6,7 +6,7 @@ import {
 } from 'react';
 
 // отслеживает, что клик произошёл вне контейнера-рефа и запускает колбэк
-const useClickOutside = (callback) => {
+export const useClickOutside = (callback) => {
   const ref = useRef(null);
 
   const clickListener = useCallback((evt) => {
@@ -26,11 +26,11 @@ const useClickOutside = (callback) => {
 };
 
 // плавный скролл при монтировании компонента
-const useSmoothScrollOnWindow = (coordinate) => {
+export const useSmoothScrollOnWindow = (coordinate) => {
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo({
-        ...coordinate,
+        coordinate,
         behavior: 'smooth'
       });
     }, 500);
@@ -39,7 +39,7 @@ const useSmoothScrollOnWindow = (coordinate) => {
 
 // горизонтальная плавная прокрутка
 // step: number
-const useSmoothHorizontalScroll = ({ step }) => {
+export const useSmoothHorizontalScroll = ({ step }) => {
   const ref = useRef();
 
   const scrollByWheel = useCallback((evt) => {
@@ -62,5 +62,3 @@ const useSmoothHorizontalScroll = ({ step }) => {
 
   return ref;
 };
-
-export { useClickOutside, useSmoothScrollOnWindow, useSmoothHorizontalScroll };

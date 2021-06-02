@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './Account.scss';
 import { getAccountData, getAccountDiaryData } from '../../utils/api';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
@@ -26,9 +26,18 @@ function Account() {
 
   useSmoothScrollOnWindow({ top: 0 });
 
+  // для анимации плавной прокрутки к форме при нажатии на "Редактировать" в карточке дневника
+  const diaryContainerRef = useRef(null);
+  const scrollTo = () => {
+    diaryContainerRef.current.scrollIntoView({
+      behavior: 'smooth'
+    });
+  };
+
   const handleOpenForm = () => {
     setFormDataToEdit({});
     setIsFormOpen(true);
+    scrollTo();
   };
 
   const handleCancelForm = () => {
@@ -38,6 +47,7 @@ function Account() {
   const handleEditDiaryCard = (data) => {
     setFormDataToEdit(data);
     setIsFormOpen(true);
+    scrollTo();
   };
 
   if (!events || !diaries) {
@@ -65,7 +75,7 @@ function Account() {
 
       <div className="account__diaries page__section">
         {diaries.length > 0 ? (
-          <div className="account__diaries-container">
+          <div ref={diaryContainerRef} className="account__diaries-container">
             <div className="account__form-container">
               <button
                 className="account__button-add-diary"
