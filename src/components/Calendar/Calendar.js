@@ -18,7 +18,6 @@ function Calendar({
   isLoding
 }) {
   useSmoothScrollOnWindow({ top: 0 });
-
   const months = [
     'январь', // 0
     'февраль', // 1
@@ -124,7 +123,6 @@ function Calendar({
   });
 
   const whatToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
-
   return !isLoding ? (
     <section className="lead page__section fade-in">
       <TitleH1 title="Календарь" />
@@ -151,7 +149,6 @@ function Calendar({
     <Loader />
   );
 }
-
 Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,

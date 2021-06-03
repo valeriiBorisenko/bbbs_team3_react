@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
-import {
-  Route, Switch, useHistory
-} from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 // попапы
@@ -25,9 +23,9 @@ import { getCalendarPageData, postUserDataOnLogin, getMainPageData } from '../..
 
 function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
-  console.log(setIsAuthorized);
+  // console.log(setIsAuthorized);
   const history = useHistory();
-  console.log(postUserDataOnLogin);
+  // console.log(postUserDataOnLogin);
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
@@ -55,6 +53,7 @@ function App() {
 
   // управление попапами
   function closeAllPopups() {
+    // console.log('tyt');
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(false);
     setIsPopupLoginOpen(false);
@@ -87,16 +86,18 @@ function App() {
 
   //!
   function handleLogin({ login, password }) {
-    console.log(login);
-    console.log(password);
+    // console.log(login);
+    // console.log(password);
     postUserDataOnLogin(login, password).then((data) => {
       const { access, refresh } = data.token;
-      console.log(access);
+      // console.log(access);
       if (refresh && access) {
         localStorage.setItem('jwt', access);
-        getCalendarPageData().then((eventsArray) => {
-          console.log('tyt');
-          setDataCalendar(eventsArray);
+        //! вместо одного вызова АПИ должно быть Promise.all и вызов инфы юзера так же для профиля
+        getCalendarPageData().then((response) => {
+          console.log(response);
+          console.log(response.data.calendarPageData);
+          setDataCalendar(response.data.calendarPageData);
           setIsAuthorized(true);
           closeAllPopups();
         });
