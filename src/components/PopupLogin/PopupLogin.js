@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../Popup/Popup.scss';
 import './PopupLogin.scss';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Popup from '../Popup/Popup';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
@@ -21,8 +21,11 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
 
   //! аварийный перевод на главную, если не хочешь логиниться
   const history = useHistory();
+  const location = useLocation();
   function closePopup() {
-    history.push('/');
+    if (location.pathname === '/calendar') {
+      history.push('/');
+    }
     onClose();
   }
 
