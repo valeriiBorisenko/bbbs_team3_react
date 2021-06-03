@@ -53,6 +53,20 @@ function App() {
       .catch((err) => console.log(err));
   }, [setDataMain]);
 
+  useEffect(() => {
+    if (isAuthorized) {
+      getCalendarPageData()
+        .then((res) => setDataCalendar(res.calendarPageData))
+        .then(() => setIsLoding(false))
+        .catch((err) => {
+          setIsPopupErrorOpen(true);
+          console.log(err);
+        });
+    } else {
+      setDataCalendar([]);
+    }
+  }, [setDataCalendar, isAuthorized]);
+
   // выбранная карточка дневника при открытии попапа подтверждения
   // const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
 
@@ -101,13 +115,10 @@ function App() {
         localStorage.setItem('jwt', access);
         //! вместо одного вызова АПИ должно быть Promise.all и вызовы:
         // инфаЮзера + списокИвентов
-        getCalendarPageData().then((response) => {
-          setDataCalendar(response.calendarPageData);
-          setIsAuthorized(true);
-          closeAllPopups();
-        });
+        setIsAuthorized(true);
+        closeAllPopups();
       }
-    }).catch((error) => console.log(error));
+    });
   }
 
   function handleLogout() {
