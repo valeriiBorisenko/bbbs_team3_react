@@ -21,7 +21,7 @@ CardAnnotationContainer.propTypes = {
 };
 
 CardAnnotationContainer.defaultProps = {
-  caption: false,
+  caption: null,
   children: null
 };
 

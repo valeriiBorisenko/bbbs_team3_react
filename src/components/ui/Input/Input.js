@@ -2,7 +2,7 @@ import './Input.scss';
 import PropTypes from 'prop-types';
 
 function Input({
-  type, name, placeholder, required, sectionClass, isTextarea
+  type, name, placeholder, required, sectionClass, isTextarea, onChange, value
 }) {
   const classNamesInput = ['input', sectionClass].join(' ').trim();
   const classNamesTextarea = ['input', 'textarea', sectionClass].join(' ').trim();
@@ -14,6 +14,8 @@ function Input({
         type={type}
         name={name}
         placeholder={placeholder}
+        onChange={onChange}
+        value={value}
         required={required}
       />
     );
@@ -25,6 +27,8 @@ function Input({
       type={type}
       name={name}
       placeholder={placeholder}
+      onChange={onChange}
+      value={value}
       required={required}
     />
   );
@@ -36,14 +40,18 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   sectionClass: PropTypes.string,
   isTextarea: PropTypes.bool,
-  required: PropTypes.bool
+  required: PropTypes.bool,
+  onChange: PropTypes.func,
+  value: PropTypes.string
 };
 
 Input.defaultProps = {
   placeholder: '',
   sectionClass: '',
   isTextarea: false,
-  required: false
+  required: false,
+  onChange: undefined,
+  value: ''
 };
 
 export default Input;

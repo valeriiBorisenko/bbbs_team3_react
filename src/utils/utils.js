@@ -38,23 +38,44 @@ export const formatDuration = (duration) => {
 // форматирует дату в объект по разным ключам, принимает на вход string вида "2021-05-08T21:22:00Z"
 export const formatDate = (date) => {
   const parsedDate = new Date(date);
-  const day = String(parsedDate.getDate());
+  let day = parsedDate.getDate();
   const weekdayName = weekdays[parsedDate.getDay()];
   const monthName = months[parsedDate.getMonth()];
   const hour = String(parsedDate.getHours());
+  const year = String(parsedDate.getFullYear());
   let minutes = parsedDate.getMinutes();
 
   if (minutes < 10) {
     minutes = `0${minutes}`;
   }
 
+  if (day < 10) {
+    day = `0${day}`;
+  }
+
   return {
+    year,
     day,
     weekdayName,
     monthName,
     hour,
     minutes
   };
+};
+
+// форматирует дату типа "2021-05-08T21:22:00Z" в 'YYYY/MM/DD'
+export const parseDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  if (day < 10) {
+    day = `0${day}`;
+  }
+  if (month < 10) {
+    month = `0${month}`;
+  }
+  return `${year}-${month}-${day}`;
 };
 
 // падеж слова "место" в зависимости от числа мест

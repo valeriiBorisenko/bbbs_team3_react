@@ -25,7 +25,7 @@
 .account-diary__date-container {
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 1fr 94px;
+  grid-template-columns: 1fr 100px;
   grid-template-rows: 346px;
   grid-auto-rows: auto;
   align-items: start;
@@ -88,6 +88,14 @@
   align-items: center;
 }
 
+.account-diary__rate {
+  pointer-events: none;
+  
+  &:hover {
+    cursor: default;
+  }
+}
+
 .account-diary__ratings-text {
   margin-left: 15px;
 
@@ -113,14 +121,18 @@
 .account-diary__button {
   margin-right: 30px;
 
+  &:first-of-type {
+    margin-left: 10px;
+  }
+
   &:last-of-type {
     margin-right: 0;
   }
 }
 
-@include atDesktop1024 {
+@include atDesktop1199 {
   .account-diary {
-    max-width: 600px;
+    max-width: 700px;
     grid-template-columns: 1fr;
     grid-template-rows: 290px 1fr;
     margin-bottom: 30px;

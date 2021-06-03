@@ -10,6 +10,7 @@ import PopupLogin from '../PopupLogin/PopupLogin';
 import PopupAboutEvent from '../PopupAboutEvent/PopupAboutEvent';
 import PopupCities from '../PopupCities/PopupCities';
 import PopupError from '../PopupError/PopupError';
+// import PopupConfirmDeleteDiary from '../PopupConfirmDeleteDiary/PopupConfirmDeleteDiary';
 // страницы
 import MainPage from '../MainPage/MainPage';
 import Calendar from '../Calendar/Calendar';
@@ -34,6 +35,7 @@ function App() {
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
+  // const [isPopupConfirmDeleteDiaryOpen, setIsPopupConfirmDeleteDiaryOpen] = useState(false);
   const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
@@ -51,6 +53,9 @@ function App() {
       .catch((err) => console.log(err));
   }, [setDataMain]);
 
+  // выбранная карточка дневника при открытии попапа подтверждения
+  // const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
+
   // управление попапами
   function closeAllPopups() {
     // console.log('tyt');
@@ -60,6 +65,7 @@ function App() {
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupCitiesOpen(false);
     setIsPopupErrorOpen(false);
+    // setIsPopupConfirmDeleteDiaryOpen(false);
   }
 
   function handleClickPopupConfirmationOpened(cardData) {
@@ -137,6 +143,11 @@ function App() {
   function handleClickPopupErrorOpened() {
     setIsPopupErrorOpen(true);
   }
+
+  // function handleClickPopupConfirmDeleteDiary(cardData) {
+  //   setIsPopupConfirmDeleteDiaryOpen(true);
+  //   setSelectedDiaryCard(cardData);
+  // }
 
   // эффект закрытия модалок по Escape
   useEffect(() => {
@@ -248,7 +259,10 @@ export default App;
               <AboutUs isAuthorized={isAuthorized} />
             </Route>
             <Route path="/account">
-              <Account />
+              <Account
+                onDiaryDelete={handleClickPopupConfirmDeleteDiary}
+                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+              />
             </Route>
             <Route path="/afisha">
               <Calendar
@@ -296,6 +310,11 @@ export default App;
         <PopupError
           isOpen={isPopupErrorOpen}
           onClose={closeAllPopups}
+        />
+        <PopupConfirmDeleteDiary
+          isOpen={isPopupConfirmDeleteDiaryOpen}
+          onClose={closeAllPopups}
+          data={selectedDiaryCard}
         />
       </div>
     </BrowserRouter>

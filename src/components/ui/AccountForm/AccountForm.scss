@@ -75,8 +75,14 @@
   align-items: center;
 }
 
-@include atDesktop1024 {
+.account-form__button_el_delete {
+  margin-right: 20px;
+  margin-left: 10px;
+}
+
+@include atDesktop1199 {
   .account-form {
+    max-width: 700px;
     grid-template-columns: 1fr;
     grid-template-rows: 290px 1fr;
   }
@@ -107,6 +113,10 @@
 
   .account-form__button_el_add {
     order: -1;
+  }
+
+  .account-form__button_el_delete {
+    margin: 0;
   }
 }
 

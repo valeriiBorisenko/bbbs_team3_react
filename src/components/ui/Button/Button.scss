@@ -96,6 +96,15 @@
     }
   }
 
+  &_color_gray {
+    color: $lightGray;
+
+    &:hover {
+      color: $black;
+      background-color: $lightGray;
+    }
+  }
+
   &_color_gray-borderless {
     border-color: transparent;
     color: $lightGray;

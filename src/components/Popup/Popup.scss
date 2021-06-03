@@ -36,6 +36,14 @@
       min-height: 670px;
       width: 770px;
     }
+
+    &_type_confirm-diary {
+      width: 100%;
+      height: 100%;
+      max-width: 470px;
+      max-height: 238px;
+      padding: 30px;
+    }
   }
 
   &__form {
@@ -126,6 +134,14 @@
     padding: 50px;
     width: 570px;
     min-height: 470px;
+
+    &_type_confirm-diary {
+      width: 100%;
+      max-width: 320px;
+      max-height: 216px;
+      min-height: 216px;
+      padding: 15px;
+    }
   }
 }
 
@@ -141,6 +157,10 @@
 
     &_type_sign-in {
       padding-bottom: 50px;
+    }
+
+    &_type_confirm-diary {
+      padding: 15px;
     }
   }
 }

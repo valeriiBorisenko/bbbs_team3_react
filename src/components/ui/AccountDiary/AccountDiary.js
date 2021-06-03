@@ -1,6 +1,7 @@
 import './AccountDiary.scss';
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { formatDate } from '../../../utils/utils';
 import Card from '../Card/Card';
 import TitleH2 from '../TitleH2/TitleH2';
 import CardAnnotationContainer from '../CardAnnotation/CardAnnotationContainer';
@@ -8,13 +9,13 @@ import Rating from '../Rating/Rating';
 import Caption from '../Caption/Caption';
 import Button from '../Button/Button';
 
-// TODO форматировать дату из входных данных
-
 function AccountDiary({
-  data: {
-    imageUrl, title, description, rate, id
-  }
+  data, onEdit, onDelete
 }) {
+  const {
+    imageUrl, title, description, rate, date
+  } = data;
+  const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
 
   useEffect(() => {
@@ -22,6 +23,14 @@ function AccountDiary({
     if (rate === 'neutral') setCaption('Нормально');
     if (rate === 'bad') setCaption('Что-то пошло не так');
   }, []);
+
+  const handleEditButtonClick = () => {
+    onEdit(data);
+  };
+
+  const handleDeleteButtonClick = () => {
+    onDelete(data);
+  };
 
   return (
     <div className="card-container account-diary">
@@ -38,21 +47,35 @@ function AccountDiary({
           </div>
         </div>
         <div className="account-diary__card-date">
-          <p className="account-diary__weekday">декабрь, 2020</p>
-          <p className="account-diary__day">05</p>
+          <p className="account-diary__weekday">{`${eventDay.monthName}, ${eventDay.year}`}</p>
+          <p className="account-diary__day">{eventDay.day}</p>
         </div>
         <div className="account-diary__actions">
           <div className="account-diary__rating">
-            <Rating type="radio" name={`${id}`} ratingType={rate} checked />
+            <Rating type="radio" ratingType={rate} value={rate} checked sectionClass="account-diary__rate" />
             <Caption
               title={caption}
               sectionClass={`account-diary__ratings-text account-diary__ratings-text_type_${rate}`}
             />
           </div>
           <div className="account-diary__action-elements">
-            <Button title="Поделиться с куратором" color="gray-borderless" sectionClass="account-diary__button" />
-            <Button title="Редактировать" color="gray-borderless" sectionClass="account-diary__button" />
-            <Button title="Удалить" color="gray-borderless" sectionClass="account-diary__button" />
+            <Button
+              title="Поделиться с куратором"
+              color="gray-borderless"
+              sectionClass="account-diary__button"
+            />
+            <Button
+              title="Редактировать"
+              color="gray-borderless"
+              sectionClass="account-diary__button"
+              onClick={handleEditButtonClick}
+            />
+            <Button
+              title="Удалить"
+              color="gray-borderless"
+              sectionClass="account-diary__button"
+              onClick={handleDeleteButtonClick}
+            />
           </div>
         </div>
       </Card>
@@ -66,7 +89,9 @@ AccountDiary.propTypes = {
   description: PropTypes.string,
   title: PropTypes.string,
   rate: PropTypes.string,
-  id: PropTypes.number.isRequired
+  date: PropTypes.string,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func
 };
 
 AccountDiary.defaultProps = {
@@ -74,7 +99,10 @@ AccountDiary.defaultProps = {
   imageUrl: '',
   description: '',
   title: '',
-  rate: 'neutral'
+  rate: 'neutral',
+  date: '',
+  onEdit: undefined,
+  onDelete: undefined
 };
 
 export default AccountDiary;
