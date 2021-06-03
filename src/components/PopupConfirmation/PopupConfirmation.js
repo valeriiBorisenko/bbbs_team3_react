@@ -31,6 +31,7 @@ function PopupConfirmation({
       typeContainer="calendar"
       isOpen={isOpen}
       onClose={onClose}
+      onSubmit={submitHandler}
     >
       <p className="section-title popup__title_type_calendar">Подтвердить запись на мероприятие</p>
       <TitleH2
@@ -46,7 +47,6 @@ function PopupConfirmation({
           color="blue"
           title="Подтвердить запись"
           sectionClass="popup__button_type_calendar"
-          onClick={submitHandler}
           isSubmittable
         />
         <Button

@@ -66,7 +66,7 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/calendar"
+            href="/afisha"
             linkText="календарь"
           />
           {/* куда пойти */}
@@ -141,13 +141,6 @@ function Footer() {
             href={{ path: 'https://www.youtube.com/user/Nastavniki/' }}
             linkText="youtube"
             rel="noreferrer"
-          />
-          {/* youtube */}
-          <NavItem
-            sectionWrapperClass="footer__column-links"
-            sectionLinkClass="footer__column-link"
-            href="/account"
-            linkText="ЛК (для теста)"
           />
         </ul>
       </div>

@@ -14,11 +14,10 @@ function Calendar({
   dataCalendar,
   isBooked,
   isAuthorized,
-  onLoginFormSubmit,
+  onOpenLoginPopup,
   isLoding
 }) {
   useSmoothScrollOnWindow({ top: 0 });
-
   const months = [
     'январь', // 0
     'февраль', // 1
@@ -149,13 +148,12 @@ function Calendar({
           />
         ))}
       </section>
-      { isAuthorized ? '' : onLoginFormSubmit()}
+      { isAuthorized ? '' : onOpenLoginPopup()}
     </section>
   ) : (
     <Loader />
   );
 }
-
 Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
@@ -163,19 +161,18 @@ Calendar.propTypes = {
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
   isBooked: PropTypes.bool,
   isAuthorized: PropTypes.bool,
-  onLoginFormSubmit: PropTypes.func,
-  isLoding: PropTypes.bool
+  onOpenLoginPopup: PropTypes.func,
+  isLoding: PropTypes.bool.isRequired
 };
 
 Calendar.defaultProps = {
   onEventSignUpClick: undefined,
+  dataCalendar: [],
   onEventFullDescriptionClick: undefined,
   clickButton: undefined,
-  dataCalendar: [],
   isBooked: false,
   isAuthorized: false,
-  onLoginFormSubmit: undefined,
-  isLoding: false
+  onOpenLoginPopup: undefined
 };
 
 export default Calendar;

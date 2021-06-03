@@ -9,10 +9,11 @@ import UserMenuButton from '../UserMenuButton/UserMenuButton';
 
 function NavBar({
   isAuthorized,
-  handleUserButtonClick,
-  handleBurgerClick,
-  handleChangeCity,
-  isNavMenuOpen
+  isNavMenuOpen,
+  onUserButtonClick,
+  onBurgerButtonClick,
+  onCityChangeClick,
+  onLogout
 }) {
   return (
     <nav className="menu">
@@ -38,7 +39,7 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="/calendar"
+            href="/afisha"
             linkText="Календарь"
           />
           {/* Куда пойти */}
@@ -124,17 +125,22 @@ function NavBar({
       </div>
 
       {isAuthorized && (
-      <div className={`menu__user-info ${
-        !isNavMenuOpen ? 'menu__user-info_hidden' : ''
-      }`}
-      >
-        <UserMenuButton title="Изменить город" handleClick={handleChangeCity} sectionClass="mobile-link" />
-        <UserMenuButton title="Выйти" sectionClass="mobile-link" />
+      <div className={`menu__user-info ${!isNavMenuOpen ? 'menu__user-info_hidden' : ''}`}>
+        <UserMenuButton
+          title="Изменить город"
+          handleClick={onCityChangeClick}
+          sectionClass="mobile-link"
+        />
+        <UserMenuButton
+          title="Выйти"
+          sectionClass="mobile-link"
+          handleClick={onLogout}
+        />
       </div>
       )}
 
       <button
-        onClick={handleBurgerClick}
+        onClick={onBurgerButtonClick}
         className={`menu__burger ${isNavMenuOpen ? 'menu__burger_active' : ''}`}
         type="button"
       >
@@ -208,7 +214,7 @@ function NavBar({
         <li className="menu__button-item">
           <UserButton
             isAuthorized={isAuthorized}
-            handleClick={handleUserButtonClick}
+            handleClick={onUserButtonClick}
           />
         </li>
       </ul>
@@ -218,17 +224,19 @@ function NavBar({
 
 NavBar.propTypes = {
   isAuthorized: PropTypes.bool,
-  handleUserButtonClick: PropTypes.func,
-  handleBurgerClick: PropTypes.func,
-  handleChangeCity: PropTypes.func,
+  onUserButtonClick: PropTypes.func,
+  onBurgerButtonClick: PropTypes.func,
+  onCityChangeClick: PropTypes.func,
+  onLogout: PropTypes.func,
   isNavMenuOpen: PropTypes.bool
 };
 
 NavBar.defaultProps = {
   isAuthorized: false,
-  handleUserButtonClick: undefined,
-  handleBurgerClick: undefined,
-  handleChangeCity: undefined,
+  onUserButtonClick: undefined,
+  onBurgerButtonClick: undefined,
+  onCityChangeClick: undefined,
+  onLogout: undefined,
   isNavMenuOpen: false
 };
 

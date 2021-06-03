@@ -13,8 +13,9 @@ import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
 
 function Header({
   isAuthorized,
-  handleUserButtonClick,
-  handleChangeCity
+  onUserButtonClick,
+  onLogout,
+  onCityChange
 }) {
   const { pathname } = useLocation();
 
@@ -74,9 +75,10 @@ function Header({
     >
       <NavBar
         isAuthorized={isAuthorized}
-        handleUserButtonClick={handleUserButtonClick}
-        handleBurgerClick={toggleNavMenu}
-        handleChangeCity={handleChangeCity}
+        onUserButtonClick={onUserButtonClick}
+        onBurgerButtonClick={toggleNavMenu}
+        onCityChangeClick={onCityChange}
+        onLogout={onLogout}
         isNavMenuOpen={isMobileMenuOpen}
       />
 
@@ -84,10 +86,14 @@ function Header({
       <div className="header__user-info">
         <UserMenuButton
           title="Изменить город"
-          handleClick={handleChangeCity}
+          handleClick={onCityChange}
           sectionClass="mobile-link"
         />
-        <UserMenuButton title="Выйти" sectionClass="mobile-link" />
+        <UserMenuButton
+          title="Выйти"
+          sectionClass="mobile-link"
+          handleClick={onLogout}
+        />
       </div>
       )}
 
@@ -95,7 +101,7 @@ function Header({
       <div className="header__user-info">
         <UserMenuButton
           title="Изменить город"
-          handleClick={handleChangeCity}
+          handleClick={onCityChange}
           sectionClass="mobile-link"
         />
       </div>
@@ -106,14 +112,16 @@ function Header({
 
 Header.propTypes = {
   isAuthorized: PropTypes.bool,
-  handleUserButtonClick: PropTypes.func,
-  handleChangeCity: PropTypes.func
+  onUserButtonClick: PropTypes.func,
+  onCityChange: PropTypes.func,
+  onLogout: PropTypes.func
 };
 
 Header.defaultProps = {
   isAuthorized: false,
-  handleUserButtonClick: undefined,
-  handleChangeCity: undefined
+  onUserButtonClick: undefined,
+  onCityChange: undefined,
+  onLogout: undefined
 };
 
 export default Header;

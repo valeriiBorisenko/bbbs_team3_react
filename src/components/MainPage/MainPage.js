@@ -1,5 +1,5 @@
 import './MainPage.scss';
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
@@ -13,16 +13,18 @@ import CardFilm from '../ui/CardFilm/CardFilm';
 import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
-import { getMainPageData } from '../../utils/api';
+// import { getMainPageData } from '../../utils/api';
 
-function MainPage({ isAuthorized, onEventSignUpClick, onEventFullDescriptionClick }) {
-  const [dataMain, setDataMain] = useState(null);
+function MainPage({
+  isAuthorized, onEventSignUpClick, onEventFullDescriptionClick, dataMain
+}) {
+  // const [dataMain, setDataMain] = useState(null);
 
-  useEffect(() => {
-    getMainPageData()
-      .then((res) => setDataMain(res.data.mainPageData))
-      .catch((err) => console.log(err));
-  }, [setDataMain]);
+  // useEffect(() => {
+  //   getMainPageData()
+  //     .then((res) => setDataMain(res.data.mainPageData))
+  //     .catch((err) => console.log(err));
+  // }, [setDataMain]);
 
   useSmoothScrollOnWindow({ top: 0 });
 
@@ -124,13 +126,15 @@ function MainPage({ isAuthorized, onEventSignUpClick, onEventFullDescriptionClic
 MainPage.propTypes = {
   isAuthorized: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func
+  onEventFullDescriptionClick: PropTypes.func,
+  dataMain: PropTypes.objectOf(PropTypes.any)
 };
 
 MainPage.defaultProps = {
   isAuthorized: false,
   onEventSignUpClick: undefined,
-  onEventFullDescriptionClick: undefined
+  onEventFullDescriptionClick: undefined,
+  dataMain: {}
 };
 
 export default MainPage;
