@@ -90,14 +90,12 @@ function App() {
     // console.log(password);
     postUserDataOnLogin(login, password).then((data) => {
       const { access, refresh } = data.token;
-      // console.log(access);
       if (refresh && access) {
         localStorage.setItem('jwt', access);
-        //! вместо одного вызова АПИ должно быть Promise.all и вызов инфы юзера так же для профиля
+        //! вместо одного вызова АПИ должно быть Promise.all и вызовы:
+        // инфаЮзера + списокИвентов
         getCalendarPageData().then((response) => {
-          console.log(response);
-          console.log(response.data.calendarPageData);
-          setDataCalendar(response.data.calendarPageData);
+          setDataCalendar(response.calendarPageData);
           setIsAuthorized(true);
           closeAllPopups();
         });

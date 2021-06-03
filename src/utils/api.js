@@ -73,14 +73,14 @@ mock.onGet(`${baseURL}${apiUrl}/profile/`).reply(
 );
 
 //! functions (new fetch-es)
-// в режиме мок-адаптера все работает как (result) => result.data
-// когда будет нормальный сервер надо будет делать как (result) => result.json()
+// в режиме мок-адаптера все работает как (response) => response.data
+// когда будет нормальный сервер надо будет делать как (response) => response.json()
 export const getMainPageData = () => axios.get(`${baseURL}${apiUrl}/main/`);
 export const getAccountData = () => axios.get(`${baseURL}${apiUrl}/account/`);
 export const getAccountDiaryData = () => axios.get(`${baseURL}${apiUrl}/account/diary/`);
 export const getCities = () => axios.get(`${baseURL}${apiUrl}/cities/`);
-export const getCalendarPageData = () => axios.get(`${baseURL}${apiUrl}/afisha/events/`);
+export const getCalendarPageData = () => axios.get(`${baseURL}${apiUrl}/afisha/events/`).then((response) => response.data);
 // login
-export const postUserDataOnLogin = (userData) => axios.post(`${baseURL}${apiUrl}/token/`, userData).then((result) => result.data);
+export const postUserDataOnLogin = (userData) => axios.post(`${baseURL}${apiUrl}/token/`, userData).then((response) => response.data);
 // getUserData on login //! нужно замокать
-export const getUserData = () => axios.get(`${baseURL}${apiUrl}/profile/`).then((result) => result.data);
+export const getUserData = () => axios.get(`${baseURL}${apiUrl}/profile/`).then((response) => response.data);
