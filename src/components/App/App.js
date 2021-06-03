@@ -84,7 +84,7 @@ function App() {
     }
   }
 
-  //!
+  //! api
   function handleLogin({ login, password }) {
     // console.log(login);
     // console.log(password);
@@ -101,6 +101,12 @@ function App() {
         });
       }
     }).catch((error) => console.log(error));
+  }
+
+  function handleLogout() {
+    setIsAuthorized(false); //! либо очистка объекта контекста юзера в дальнейшем
+    localStorage.removeItem('jwt');
+    history.push('/');
   }
 
   function handleClickPopupAboutEventOpened(cardData) {
@@ -125,23 +131,13 @@ function App() {
     });
   }, []);
 
-  // эффект при монтировании, загрузка данных страницы Календарь с сервера
-  // useEffect(() => {
-  //   getCalendarPageData()
-  //     .then((res) => setDataCalendar(res.data.calendarPageData))
-  //     .then(() => setIsLoding(false))
-  //     .catch((err) => {
-  //       setIsPopupErrorOpen(true);
-  //       console.log(err);
-  //     });
-  // }, [setDataCalendar]);
-
   return (
     <div className="page">
       <Header
         isAuthorized={isAuthorized}
-        handleUserButtonClick={handleUserButtonClick}
-        handleChangeCity={handleClickPopupCities}
+        onLogout={handleLogout}
+        onUserButtonClick={handleUserButtonClick}
+        onCityChange={handleClickPopupCities}
       />
       <main className="main">
         <Switch>
