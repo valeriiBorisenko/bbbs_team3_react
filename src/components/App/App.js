@@ -226,3 +226,77 @@ function App() {
 }
 
 export default App;
+
+/* //! старая версия из ДЕВ, я заменил своей, 13.30 03.06 Никита
+<BrowserRouter>
+      <div className="page">
+        <Header
+          isAuthorized={isAuthorized}
+          handleUserButtonClick={handleUserButtonClick}
+          handleChangeCity={handleClickPopupCities}
+        />
+        <main className="main">
+          <Switch>
+            <Route exact path="/">
+              <MainPage
+                isAuthorized={isAuthorized}
+                onEventSignUpClick={handleClickPopupConfirmationOpened}
+                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+              />
+            </Route>
+            <Route exact path="/about-us">
+              <AboutUs isAuthorized={isAuthorized} />
+            </Route>
+            <Route path="/account">
+              <Account />
+            </Route>
+            <Route path="/afisha">
+              <Calendar
+                isAuthorized={isAuthorized}
+                onEventSignUpClick={handleClickPopupConfirmationOpened}
+                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                onLoginFormSubmit={handleClickPopupLoginOpened}
+                dataCalendar={dataCalendar}
+                isLoding={isLoding}
+              />
+            </Route>
+            <Route path="*">
+              <PageNotFound />
+            </Route>
+          </Switch>
+        </main>
+        <Footer />
+        <PopupConfirmation
+          isOpen={isPopupConfirmationOpen}
+          onClose={closeAllPopups}
+          onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
+          onErrorClick={handleClickPopupErrorOpened}
+          data={selectedCalendarCard}
+        />
+        <PopupSuccessfully
+          isOpen={isPopupSuccessfullyOpen}
+          onClose={closeAllPopups}
+          data={selectedCalendarCard}
+        />
+        <PopupLogin
+          isOpen={isPopupLoginOpen}
+          onClose={closeAllPopups}
+        />
+        <PopupAboutEvent
+          isOpen={isPopupAboutDescriptionOpen}
+          onClose={closeAllPopups}
+          onEventSignUpClick={handleClickPopupSuccessfullyOpened}
+          onErrorClick={handleClickPopupErrorOpened}
+          data={selectedCalendarCard}
+        />
+        <PopupCities
+          isOpen={isPopupCitiesOpen}
+          onClose={closeAllPopups}
+        />
+        <PopupError
+          isOpen={isPopupErrorOpen}
+          onClose={closeAllPopups}
+        />
+      </div>
+    </BrowserRouter>
+*/

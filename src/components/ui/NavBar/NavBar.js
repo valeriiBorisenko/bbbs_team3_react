@@ -39,7 +39,7 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="/calendar"
+            href="/afisha"
             linkText="Календарь"
           />
           {/* Куда пойти */}

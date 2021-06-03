@@ -66,7 +66,7 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/calendar"
+            href="/afisha"
             linkText="календарь"
           />
           {/* куда пойти */}
