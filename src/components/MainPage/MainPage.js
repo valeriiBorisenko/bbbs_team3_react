@@ -1,5 +1,4 @@
 import './MainPage.scss';
-// import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
@@ -13,20 +12,15 @@ import CardFilm from '../ui/CardFilm/CardFilm';
 import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
-// import { getMainPageData } from '../../utils/api';
 
 function MainPage({
   isAuthorized, onEventSignUpClick, onEventFullDescriptionClick, dataMain
 }) {
-  // const [dataMain, setDataMain] = useState(null);
-
-  // useEffect(() => {
-  //   getMainPageData()
-  //     .then((res) => setDataMain(res.data.mainPageData))
-  //     .catch((err) => console.log(err));
-  // }, [setDataMain]);
-
   useSmoothScrollOnWindow({ top: 0 });
+
+  function eventSignUpHandler(cardData) {
+    onEventSignUpClick(cardData, cardData.booked);
+  }
 
   return dataMain ? (
     <>
@@ -35,8 +29,8 @@ function MainPage({
           {isAuthorized ? (
             <CardCalendar
               key={dataMain.event.id}
-              data={dataMain.event}
-              onEventSignUpClick={onEventSignUpClick}
+              cardData={dataMain.event}
+              onEventSignUpClick={eventSignUpHandler}
               onEventFullDescriptionClick={onEventFullDescriptionClick}
             />
           ) : (

@@ -132,6 +132,10 @@ function Calendar({
       </div>
     ) : '';
 
+  function eventSignUpHandler(cardData) {
+    onEventSignUpClick(cardData, cardData.booked);
+  }
+
   return !isLoding ? (
     <section className="lead page__section fade-in">
       <TitleH1 title="Календарь" />
@@ -140,8 +144,8 @@ function Calendar({
         {whatToRender.map((data) => (
           <CardCalendar
             key={data.id}
-            data={data}
-            onEventSignUpClick={onEventSignUpClick}
+            cardData={data}
+            onEventSignUpClick={eventSignUpHandler}
             onEventFullDescriptionClick={onEventFullDescriptionClick}
             clickButton={clickButton}
             isBooked={isBooked}
