@@ -29,9 +29,11 @@ function AccountForm({
   const [userImage, setUserImage] = useState(null);
 
   const onDrop = useCallback((acceptedFiles) => {
-    setUserImage(
-      { imageUrl: URL.createObjectURL(acceptedFiles[0]) }
-    );
+    if (acceptedFiles[0]) {
+      setUserImage(
+        { imageUrl: URL.createObjectURL(acceptedFiles[0]) }
+      );
+    }
   }, []);
 
   const { getInputProps } = useDropzone({
@@ -69,7 +71,7 @@ function AccountForm({
         description: ''
       });
     }
-  }, [isOpen, setInputValues]);
+  }, [isOpen]);
 
   return (
     <div className={classNames}>
