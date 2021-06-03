@@ -10,16 +10,28 @@ import TitleH2 from '../ui/TitleH2/TitleH2';
 import AccountForm from '../ui/AccountForm/AccountForm';
 import AccountDiary from '../ui/AccountDiary/AccountDiary';
 
-function Account({ onDiaryDelete }) {
+// TODO при отмене записи обновить массив карточек в стейте и перерендерить
+
+function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [formDataToEdit, setFormDataToEdit] = useState(null);
 
+  // сортируем все ивенты по хронологии
+  const sortAndFilterEvents = (data) => data
+    .filter((e) => e.booked)
+    .sort((a, b) => {
+      const date1 = new Date(a.startAt);
+      const date2 = new Date(b.startAt);
+      return date1 - date2;
+    });
+
   useEffect(() => {
     Promise.all([getAccountData(), getAccountDiaryData()])
-      .then(([accountData, diaryData]) => {
-        setEvents(accountData.data.accountData);
+      .then(([calendarData, diaryData]) => {
+        const bookedEvents = sortAndFilterEvents(calendarData.data.calendarPageData);
+        setEvents(bookedEvents);
         setDiaries(diaryData.data.accountDiaryData);
       })
       .catch((err) => console.log(err));
@@ -66,6 +78,10 @@ function Account({ onDiaryDelete }) {
     onDiaryDelete(card);
   };
 
+  const handleOpenEventCard = (data) => {
+    onEventFullDescriptionClick(data);
+  };
+
   if (!events || !diaries) {
     return <Loader />;
   }
@@ -84,7 +100,11 @@ function Account({ onDiaryDelete }) {
         <ScrollableByXContainer sectionClass="account__events">
           {events.length > 0
             && events.map((item) => (
-              <AccountEventCard key={item.id} data={item} />
+              <AccountEventCard
+                key={item.id}
+                data={item}
+                onOpen={handleOpenEventCard}
+              />
             ))}
         </ScrollableByXContainer>
       </div>
@@ -132,11 +152,13 @@ function Account({ onDiaryDelete }) {
 }
 
 Account.propTypes = {
-  onDiaryDelete: PropTypes.func
+  onDiaryDelete: PropTypes.func,
+  onEventFullDescriptionClick: PropTypes.func
 };
 
 Account.defaultProps = {
-  onDiaryDelete: undefined
+  onDiaryDelete: undefined,
+  onEventFullDescriptionClick: undefined
 };
 
 export default Account;

@@ -133,6 +133,7 @@ function App() {
             <Route path="/account">
               <Account
                 onDiaryDelete={handleClickPopupConfirmDeleteDiary}
+                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
               />
             </Route>
             <Route path="/calendar">

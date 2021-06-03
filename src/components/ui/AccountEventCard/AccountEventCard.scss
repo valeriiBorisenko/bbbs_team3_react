@@ -2,6 +2,10 @@
 
 .account-event-card {
   padding: 30px;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .account-event-card__date {
