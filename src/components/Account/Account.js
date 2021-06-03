@@ -28,12 +28,13 @@ function Account({ onDiaryDelete }) {
   useSmoothScrollOnWindow({ top: 0 });
 
   const scrollToForm = () => {
-    const windowWidth = window.innerWidth;
+    const isMobile = window.innerWidth < 576;
+    const isTablet = window.innerWidth > 576 && window.innerWidth < 769;
     let position;
 
-    if (windowWidth < 576) {
+    if (isMobile) {
       position = 280;
-    } else if (windowWidth > 576 && windowWidth < 769) {
+    } else if (isTablet) {
       position = 390;
     } else {
       position = 430;
