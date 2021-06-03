@@ -64,13 +64,13 @@ mock.onPost(`${baseURL}${apiUrl}/token/`).reply(
   'Content-Type: application/json'
 );
 
-mock.onGet(`${baseURL}${apiUrl}/profile/`).reply(
-  200,
-  {
-    calendarPageData
-  },
-  'Content-Type: application/json'
-);
+// будущий user prifle reply
+// mock.onGet(`${baseURL}${apiUrl}/profile/`).reply(
+//   200,
+//   {
+//   },
+//   'Content-Type: application/json'
+// );
 
 //! functions (new fetch-es)
 // в режиме мок-адаптера все работает как (response) => response.data
@@ -84,3 +84,20 @@ export const getCalendarPageData = () => axios.get(`${baseURL}${apiUrl}/afisha/e
 export const postUserDataOnLogin = (userData) => axios.post(`${baseURL}${apiUrl}/token/`, userData).then((response) => response.data);
 // getUserData on login //! нужно замокать
 export const getUserData = () => axios.get(`${baseURL}${apiUrl}/profile/`).then((response) => response.data);
+
+// фиксация заголовков, Headers -> Authorization
+export const setAuth = (accessToken) => {
+  axios.defaults.headers.get.Authorization = `Bearer ${accessToken}`;
+  axios.defaults.headers.post.Authorization = `Bearer ${accessToken}`;
+  console.log(axios.defaults.headers);
+};
+
+export const clearAuth = () => {
+  axios.defaults.headers.get.Authorization = '';
+  axios.defaults.headers.post.Authorization = '';
+  console.log(axios.defaults.headers);
+};
+
+// жесткая фиксация заголовков 'Content-Type'
+axios.defaults.headers.get['Content-Type'] = 'application/json';
+axios.defaults.headers.post['Content-Type'] = 'application/json';

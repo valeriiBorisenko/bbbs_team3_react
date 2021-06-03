@@ -19,13 +19,13 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 // логины, авторизация
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 // работа с API
-import { getCalendarPageData, postUserDataOnLogin, getMainPageData } from '../../utils/api';
+import {
+  getCalendarPageData, postUserDataOnLogin, getMainPageData, setAuth
+} from '../../utils/api';
 
 function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
-  // console.log(setIsAuthorized);
   const history = useHistory();
-  // console.log(postUserDataOnLogin);
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
@@ -91,6 +91,7 @@ function App() {
     postUserDataOnLogin(login, password).then((data) => {
       const { access, refresh } = data.token;
       if (refresh && access) {
+        setAuth(access); //! не работает пока
         localStorage.setItem('jwt', access);
         //! вместо одного вызова АПИ должно быть Promise.all и вызовы:
         // инфаЮзера + списокИвентов
@@ -108,6 +109,21 @@ function App() {
     localStorage.removeItem('jwt');
     history.push('/');
   }
+
+  //! кривая замена проверки токена между сессиями =(
+  function checkToken() {
+    // если у пользователя есть токен в localStorage,
+    // эта функция проверит валидность токена
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      // проверим токен
+      setIsAuthorized(true);
+    }
+  }
+  //! проверка токена при монтировании
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   function handleClickPopupAboutEventOpened(cardData) {
     setIsPopupAboutDescriptionOpen(true);
