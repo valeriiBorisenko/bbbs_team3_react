@@ -100,7 +100,8 @@
     color: $lightGray;
 
     &:hover {
-      opacity: 0.8;
+      color: $black;
+      background-color: $lightGray;
     }
   }
 
