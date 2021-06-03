@@ -23,7 +23,7 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
   const history = useHistory();
   const location = useLocation();
   function closePopup() {
-    if (location.pathname === '/calendar') {
+    if (location.pathname === '/afisha') {
       history.push('/');
     }
     onClose();

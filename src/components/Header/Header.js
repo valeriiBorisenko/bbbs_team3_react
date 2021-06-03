@@ -97,7 +97,7 @@ function Header({
       </div>
       )}
 
-      {pathname === '/calendar' && (
+      {pathname === '/afisha' && (
       <div className="header__user-info">
         <UserMenuButton
           title="Изменить город"
