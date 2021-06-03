@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import './AccountForm.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
 import { parseDate } from '../../../utils/utils';
 import Card from '../Card/Card';
 import Input from '../Input/Input';
@@ -14,33 +16,88 @@ function AccountForm({
 }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
   const [inputValues, setInputValues] = useState({});
+  console.log(inputValues);
 
-  const handleInputChange = (evt) => {
-    const { name, value } = evt.target;
-    setInputValues({
-      ...inputValues,
-      [name]: value
-    });
+  const {
+    register, handleSubmit, formState, reset, setValue
+  } = useForm({ mode: 'onChange' });
+  const { isValid } = formState;
+
+  const onSubmit = (values) => setInputValues(values);
+
+  // загрузка фото в контейнер
+  const imageContainerRef = useRef();
+  const [isImgUploaded, setIsImgUploaded] = useState(false);
+
+  const handleImageUpload = (evt) => {
+    const { target } = evt;
+    const file = target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result;
+        setIsImgUploaded(true);
+        imageContainerRef.current.textContent = '';
+        imageContainerRef.current.style.backgroundImage = 'url()';
+        imageContainerRef.current.append(img);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   useEffect(() => {
-    setInputValues(data);
-  }, [isOpen]);
+    if (imageContainerRef && imageContainerRef.current) {
+      if (isOpen) {
+        if (data) {
+          setInputValues(data);
+          setIsImgUploaded(true);
+          setValue('title', data.title, {
+            shouldValidate: true
+          });
+          setValue('date', parseDate(data.date), {
+            shouldValidate: true
+          });
+          setValue('description', data.description, {
+            shouldValidate: true
+          });
+          imageContainerRef.current.style.backgroundImage = `url(${data.imageUrl})`;
+        }
+      } else {
+        setInputValues({});
+        setIsImgUploaded(false);
+        imageContainerRef.current.textContent = '';
+        imageContainerRef.current.style.backgroundImage = 'url()';
+        reset({
+          title: '',
+          date: '',
+          description: ''
+        });
+      }
+    }
+  }, [isOpen, setInputValues, imageContainerRef.current]);
 
   return (
     <div className={classNames}>
       <Card sectionClass="account-form__photo-upload">
-        <InputFileUpload sectionClass="account-form__input_el_file" />
-        <Caption title="Загрузить фото" sectionClass="account-form__caption" />
+        <div className="account-form__image-container" ref={imageContainerRef} />
+        <div className={`account-form__input-upload-container ${isImgUploaded ? 'account-form__input-upload-container_hidden' : ''}`}>
+          <InputFileUpload
+            name="image"
+            onChange={handleImageUpload}
+          />
+          <Caption title="Загрузить фото" sectionClass="account-form__caption" />
+        </div>
       </Card>
       <Card sectionClass="account-form__form-container">
-        <form name="addStoryForm" className="account-form__form">
+        <form name="addStoryForm" className="account-form__form" onSubmit={handleSubmit(onSubmit)}>
           <Input
             type="text"
             name="title"
             placeholder="Место встречи"
-            onChange={handleInputChange}
-            value={inputValues.title || ''}
+            register={register}
+            minLength="5"
+            maxLength="20"
             required
           />
           <Input
@@ -48,8 +105,7 @@ function AccountForm({
             name="date"
             placeholder="Дата&emsp;"
             sectionClass="account-form__input_el_date"
-            onChange={handleInputChange}
-            value={parseDate(inputValues.date) || ''}
+            register={register}
             required
           />
           <Input
@@ -57,8 +113,8 @@ function AccountForm({
             name="description"
             placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
             sectionClass="account-form__input_el_textarea"
-            onChange={handleInputChange}
-            value={inputValues.description || ''}
+            register={register}
+            minLength="5"
             required
             isTextarea
           />
@@ -97,7 +153,7 @@ function AccountForm({
                 sectionClass="account-form__button_el_delete"
                 onClick={onCancel}
               />
-              <Button title="Добавить" isSubmittable sectionClass="account-form__button_el_add" />
+              <Button title="Добавить" isSubmittable sectionClass="account-form__button_el_add" isDisabled={!isValid} />
             </div>
           </div>
         </form>

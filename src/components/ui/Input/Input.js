@@ -1,8 +1,17 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import './Input.scss';
 import PropTypes from 'prop-types';
 
 function Input({
-  type, name, placeholder, required, sectionClass, isTextarea, onChange, value
+  type,
+  name,
+  placeholder,
+  register,
+  minLength,
+  maxLength,
+  required,
+  sectionClass,
+  isTextarea
 }) {
   const classNamesInput = ['input', sectionClass].join(' ').trim();
   const classNamesTextarea = ['input', 'textarea', sectionClass].join(' ').trim();
@@ -14,9 +23,7 @@ function Input({
         type={type}
         name={name}
         placeholder={placeholder}
-        onChange={onChange}
-        value={value}
-        required={required}
+        {...register(name, { required, minLength, maxLength })}
       />
     );
   }
@@ -27,9 +34,7 @@ function Input({
       type={type}
       name={name}
       placeholder={placeholder}
-      onChange={onChange}
-      value={value}
-      required={required}
+      {...register(name, { required, minLength, maxLength })}
     />
   );
 }
@@ -42,7 +47,10 @@ Input.propTypes = {
   isTextarea: PropTypes.bool,
   required: PropTypes.bool,
   onChange: PropTypes.func,
-  value: PropTypes.string
+  value: PropTypes.string,
+  register: PropTypes.func.isRequired,
+  minLength: PropTypes.string,
+  maxLength: PropTypes.string
 };
 
 Input.defaultProps = {
@@ -51,7 +59,9 @@ Input.defaultProps = {
   isTextarea: false,
   required: false,
   onChange: undefined,
-  value: ''
+  value: '',
+  minLength: undefined,
+  maxLength: undefined
 };
 
 export default Input;

@@ -59,7 +59,7 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
   };
 
   const handleOpenForm = () => {
-    setFormDataToEdit({});
+    setFormDataToEdit(null);
     setIsFormOpen(true);
     scrollToForm();
   };
@@ -123,7 +123,7 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
               <AccountForm
                 sectionClass={`${isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'}`}
                 isOpen={isFormOpen}
-                data={formDataToEdit || {}}
+                data={formDataToEdit}
                 onCancel={handleCancelForm}
               />
             </div>
