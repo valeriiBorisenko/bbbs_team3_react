@@ -15,7 +15,7 @@ function ProtectedRoute({ component: Component, ...props }) {
 }
 
 ProtectedRoute.propTypes = {
-  component: PropTypes.node.isRequired,
+  component: PropTypes.func.isRequired,
   isAuthorized: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired
 };
