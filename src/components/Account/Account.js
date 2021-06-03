@@ -16,6 +16,7 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [formDataToEdit, setFormDataToEdit] = useState(null);
 
   // сортируем все ивенты по хронологии
@@ -59,6 +60,7 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
   };
 
   const handleOpenForm = () => {
+    setIsEditMode(false);
     setFormDataToEdit(null);
     setIsFormOpen(true);
     scrollToForm();
@@ -69,6 +71,7 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
   };
 
   const handleEditDiaryCard = (data) => {
+    setIsEditMode(true);
     setFormDataToEdit(data);
     setIsFormOpen(true);
     scrollToForm();
@@ -122,6 +125,7 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
               </button>
               <AccountForm
                 sectionClass={`${isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'}`}
+                isEditMode={isEditMode}
                 isOpen={isFormOpen}
                 data={formDataToEdit}
                 onCancel={handleCancelForm}

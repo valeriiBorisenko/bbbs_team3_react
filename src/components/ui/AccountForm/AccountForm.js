@@ -1,12 +1,12 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-props-no-spreading */
 import './AccountForm.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import { parseDate } from '../../../utils/utils';
 import Card from '../Card/Card';
 import Input from '../Input/Input';
-import InputFileUpload from '../InputFileUpload/InputFileUpload';
 import Caption from '../Caption/Caption';
 import Rating from '../Rating/Rating';
 import Button from '../Button/Button';
@@ -23,72 +23,72 @@ function AccountForm({
   } = useForm({ mode: 'onChange' });
   const { isValid } = formState;
 
-  const onSubmit = (values) => setInputValues(values);
+  const onSubmit = (values) => setInputValues({ ...inputValues, ...values });
 
-  // загрузка фото в контейнер
-  const imageContainerRef = useRef();
-  const [isImgUploaded, setIsImgUploaded] = useState(false);
+  // добавление картинки
+  const [userImage, setUserImage] = useState(null);
 
-  const handleImageUpload = (evt) => {
-    const { target } = evt;
-    const file = target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const img = new Image();
-        img.src = reader.result;
-        setIsImgUploaded(true);
-        imageContainerRef.current.textContent = '';
-        imageContainerRef.current.style.backgroundImage = 'url()';
-        imageContainerRef.current.append(img);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const onDrop = useCallback((acceptedFiles) => {
+    setUserImage(
+      { imageUrl: URL.createObjectURL(acceptedFiles[0]) }
+    );
+  }, []);
+
+  const { getInputProps } = useDropzone({
+    accept: 'image/*',
+    onDrop
+  });
 
   useEffect(() => {
-    if (imageContainerRef && imageContainerRef.current) {
-      if (isOpen) {
-        if (data) {
-          setInputValues(data);
-          setIsImgUploaded(true);
-          setValue('title', data.title, {
-            shouldValidate: true
-          });
-          setValue('date', parseDate(data.date), {
-            shouldValidate: true
-          });
-          setValue('description', data.description, {
-            shouldValidate: true
-          });
-          imageContainerRef.current.style.backgroundImage = `url(${data.imageUrl})`;
-        }
-      } else {
-        setInputValues({});
-        setIsImgUploaded(false);
-        imageContainerRef.current.textContent = '';
-        imageContainerRef.current.style.backgroundImage = 'url()';
-        reset({
-          title: '',
-          date: '',
-          description: ''
+    setInputValues({ ...inputValues, ...userImage });
+  }, [userImage]);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (data) {
+        setInputValues({ ...inputValues, ...data });
+        setUserImage(
+          { imageUrl: data.imageUrl }
+        );
+        setValue('title', data.title, {
+          shouldValidate: true
+        });
+        setValue('date', parseDate(data.date), {
+          shouldValidate: true
+        });
+        setValue('description', data.description, {
+          shouldValidate: true
         });
       }
+    } else {
+      setInputValues({});
+      setUserImage(null);
+      reset({
+        title: '',
+        date: '',
+        description: ''
+      });
     }
-  }, [isOpen, setInputValues, imageContainerRef.current]);
+  }, [isOpen, setInputValues]);
 
   return (
     <div className={classNames}>
       <Card sectionClass="account-form__photo-upload">
-        <div className="account-form__image-container" ref={imageContainerRef} />
-        <div className={`account-form__input-upload-container ${isImgUploaded ? 'account-form__input-upload-container_hidden' : ''}`}>
-          <InputFileUpload
-            name="image"
-            onChange={handleImageUpload}
-          />
+        {userImage && <img src={userImage.imageUrl} alt={data?.title} className="account-form__uploaded-image" />}
+
+        <div className={`account-form__input-upload ${userImage ? 'account-form__input-upload_hidden' : ''}`}>
+          <label htmlFor="input-upload" className="account-form__label-file">
+            <input
+              id="input-upload"
+              className="account-form__input-file"
+              {...getInputProps()}
+            />
+            <span className="account-form__pseudo-button" />
+          </label>
           <Caption title="Загрузить фото" sectionClass="account-form__caption" />
         </div>
       </Card>
+
       <Card sectionClass="account-form__form-container">
         <form name="addStoryForm" className="account-form__form" onSubmit={handleSubmit(onSubmit)}>
           <Input
