@@ -10,14 +10,12 @@ import { formatDate } from '../../utils/utils';
 function PopupSuccessfully({
   isOpen,
   onClose,
-  data: {
-    title,
-    startAt,
-    endAt
-  }
+  cardData
 }) {
+  const { title, startAt, endAt } = cardData;
   const startDay = formatDate(startAt);
   const endDay = formatDate(endAt);
+
   return (
     <Popup
       type="successfully"
@@ -51,13 +49,13 @@ function PopupSuccessfully({
 PopupSuccessfully.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.any)
+  cardData: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupSuccessfully.defaultProps = {
   isOpen: false,
   onClose: undefined,
-  data: {}
+  cardData: {}
 };
 
 export default PopupSuccessfully;

@@ -100,3 +100,15 @@ export const clearAuth = () => {
 // жесткая фиксация заголовков 'Content-Type'
 axios.defaults.headers.get['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+// букд / не букд + обновление мест
+export const updateEventFetch = (eventData) => axios.patch(`${baseURL}${apiUrl}/afisha/event-participants/`, eventData).then((response) => response.data);
+
+const updateEventMock = (calendarCard) => {
+  const calendarData = JSON.parse(calendarCard.data);
+  calendarData.booked = !calendarData.booked;
+  calendarData.seats = calendarData.booked ? calendarData.seats - 1 : calendarData.seats + 1;
+  return [200, calendarData];
+};
+
+mock.onPatch(`${baseURL}${apiUrl}/afisha/event-participants/`).reply(updateEventMock);

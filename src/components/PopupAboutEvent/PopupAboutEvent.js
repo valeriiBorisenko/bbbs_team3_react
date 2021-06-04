@@ -10,41 +10,33 @@ function PopupAboutEvent({
   isOpen,
   onClose,
   onEventSignUpClick,
-  data: {
+  cardData
+}) {
+  const {
+    booked,
+    tags,
     title,
-    description,
-    address,
-    // booked,
-    contact,
     startAt,
     endAt,
+    address,
+    contact,
     remainSeats,
-    tags,
-    setIsBooked,
-    isBooked,
-    isDisabled
-  }
-}) {
+    description
+  } = cardData;
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
+  const isDisabled = (remainSeats < 1);
 
   function submitHandler(event) {
-    if (isBooked) {
-      event.preventDefault();
-      setIsBooked(false);
-      onClose();
-    } else {
-      event.preventDefault();
-      onEventSignUpClick();
-      setIsBooked(true);
-    }
+    event.preventDefault();
+    onEventSignUpClick(cardData, cardData.booked);
   }
 
   return (
     <Popup
       type="about-event"
       typeContainer="calendar"
-      sectionClass={isBooked ? 'popup__container_booked' : ''}
+      sectionClass={booked ? 'popup__container_booked' : ''}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={submitHandler}
@@ -90,13 +82,13 @@ function PopupAboutEvent({
             titleSelected="Отменить запись"
             sectionClass="button_action_confirm"
             isSubmittable
-            isBooked={isBooked}
+            isBooked={booked}
             isDisabled={isDisabled}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
-            || (!isBooked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
+            || (!booked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
           </p>
         </div>
       </div>
@@ -108,14 +100,14 @@ PopupAboutEvent.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onEventSignUpClick: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.any)
+  cardData: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
   onClose: undefined,
   onEventSignUpClick: undefined,
-  data: {}
+  cardData: {}
 };
 
 export default PopupAboutEvent;

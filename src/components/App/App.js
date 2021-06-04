@@ -21,7 +21,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 // работа с API
 import {
-  getCalendarPageData, postUserDataOnLogin, getMainPageData, setAuth
+  getCalendarPageData, postUserDataOnLogin, getMainPageData, setAuth, updateEventFetch
 } from '../../utils/api';
 
 function App() {
@@ -39,6 +39,7 @@ function App() {
   const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
+  // selectedCalendarCard содержит только те поля что пришли с сервера
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
 
   // данные страниц с сервера
@@ -53,6 +54,7 @@ function App() {
       .catch((err) => console.log(err));
   }, [setDataMain]);
 
+  // загрузка данных страницы календаря, если ты залогиненный
   useEffect(() => {
     if (isAuthorized) {
       getCalendarPageData()
@@ -72,7 +74,6 @@ function App() {
 
   // управление попапами
   function closeAllPopups() {
-    // console.log('tyt');
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(false);
     setIsPopupLoginOpen(false);
@@ -82,14 +83,44 @@ function App() {
     // setIsPopupConfirmDeleteDiaryOpen(false);
   }
 
-  function handleClickPopupConfirmationOpened(cardData) {
+  function handleClickPopupConfirmationOpened() {
     setIsPopupConfirmationOpen(true);
-    setSelectedCalendarCard(cardData);
   }
 
   function handleClickPopupSuccessfullyOpened() {
-    closeAllPopups();
+    setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(true);
+  }
+
+  // работает с запросом Api
+  function updateEvent(cardData) {
+    return updateEventFetch(cardData).then((updatedCardData) => {
+      setDataCalendar(
+        // eslint-disable-next-line max-len
+        dataCalendar.map((eventObj) => (eventObj.id === updatedCardData.id ? updatedCardData : eventObj))
+      );
+    });
+  }
+
+  function handleEventUpdate(cardData) {
+    // вызываем апи + при успехе показываем попап "успешно"
+    updateEvent(cardData).then(() => handleClickPopupSuccessfullyOpened());
+  }
+
+  function bookingHandler(cardData, isBooked) {
+    if (isBooked) {
+      // сразу вызываем апи, если все ок - закрываем попап "подробно"
+      // идем на сервер и патчим ивент (меняем на booked=false)
+      // закрываем модалку (по желанию)
+      updateEvent(cardData).then(() => setIsPopupAboutDescriptionOpen(false));
+    } else {
+      // запоминаем карточку
+      setSelectedCalendarCard(cardData);
+      // закрываем попап с подробностями карточки
+      setIsPopupAboutDescriptionOpen(false);
+      // открываем попап подтвердить
+      handleClickPopupConfirmationOpened();
+    }
   }
 
   function handleClickPopupLoginOpened() {
@@ -115,6 +146,9 @@ function App() {
         localStorage.setItem('jwt', access);
         //! вместо одного вызова АПИ должно быть Promise.all и вызовы:
         // инфаЮзера + списокИвентов
+        // getCalendarPageData().then((response) => {
+        // setDataCalendar(response.calendarPageData);
+        // });
         setIsAuthorized(true);
         closeAllPopups();
       }
@@ -143,8 +177,10 @@ function App() {
   }, []);
 
   function handleClickPopupAboutEventOpened(cardData) {
-    setIsPopupAboutDescriptionOpen(true);
+    // запоминаем карточку
     setSelectedCalendarCard(cardData);
+    // открываем попап подтвердить
+    setIsPopupAboutDescriptionOpen(true);
   }
 
   function handleClickPopupCities() {
@@ -182,7 +218,7 @@ function App() {
           <Route exact path="/">
             <MainPage
               isAuthorized={isAuthorized}
-              onEventSignUpClick={handleClickPopupConfirmationOpened}
+              onEventSignUpClick={bookingHandler}
               onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
               dataMain={dataMain}
             />
@@ -193,7 +229,7 @@ function App() {
           <Route path="/afisha">
             <Calendar
               isAuthorized={isAuthorized}
-              onEventSignUpClick={handleClickPopupConfirmationOpened}
+              onEventSignUpClick={bookingHandler}
               onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
               onOpenLoginPopup={handleClickPopupLoginOpened}
               dataCalendar={dataCalendar}
@@ -214,14 +250,14 @@ function App() {
       <PopupConfirmation
         isOpen={isPopupConfirmationOpen}
         onClose={closeAllPopups}
-        onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
+        onConfirmButtonClick={handleEventUpdate}
         onErrorClick={handleClickPopupErrorOpened}
-        data={selectedCalendarCard}
+        cardData={selectedCalendarCard}
       />
       <PopupSuccessfully
         isOpen={isPopupSuccessfullyOpen}
         onClose={closeAllPopups}
-        data={selectedCalendarCard}
+        cardData={selectedCalendarCard}
       />
       <PopupLogin
         isOpen={isPopupLoginOpen}
@@ -231,9 +267,9 @@ function App() {
       <PopupAboutEvent
         isOpen={isPopupAboutDescriptionOpen}
         onClose={closeAllPopups}
-        onEventSignUpClick={handleClickPopupSuccessfullyOpened}
+        onEventSignUpClick={bookingHandler}
         onErrorClick={handleClickPopupErrorOpened}
-        data={selectedCalendarCard}
+        cardData={selectedCalendarCard}
       />
       <PopupCities
         isOpen={isPopupCitiesOpen}
@@ -248,85 +284,3 @@ function App() {
 }
 
 export default App;
-
-/* //! старая версия из ДЕВ, я заменил своей, 13.30 03.06 Никита
-<BrowserRouter>
-      <div className="page">
-        <Header
-          isAuthorized={isAuthorized}
-          handleUserButtonClick={handleUserButtonClick}
-          handleChangeCity={handleClickPopupCities}
-        />
-        <main className="main">
-          <Switch>
-            <Route exact path="/">
-              <MainPage
-                isAuthorized={isAuthorized}
-                onEventSignUpClick={handleClickPopupConfirmationOpened}
-                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-              />
-            </Route>
-            <Route exact path="/about-us">
-              <AboutUs isAuthorized={isAuthorized} />
-            </Route>
-            <Route path="/account">
-              <Account
-                onDiaryDelete={handleClickPopupConfirmDeleteDiary}
-                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-              />
-            </Route>
-            <Route path="/afisha">
-              <Calendar
-                isAuthorized={isAuthorized}
-                onEventSignUpClick={handleClickPopupConfirmationOpened}
-                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                onLoginFormSubmit={handleClickPopupLoginOpened}
-                dataCalendar={dataCalendar}
-                isLoding={isLoding}
-              />
-            </Route>
-            <Route path="*">
-              <PageNotFound />
-            </Route>
-          </Switch>
-        </main>
-        <Footer />
-        <PopupConfirmation
-          isOpen={isPopupConfirmationOpen}
-          onClose={closeAllPopups}
-          onConfirmButtonClick={handleClickPopupSuccessfullyOpened}
-          onErrorClick={handleClickPopupErrorOpened}
-          data={selectedCalendarCard}
-        />
-        <PopupSuccessfully
-          isOpen={isPopupSuccessfullyOpen}
-          onClose={closeAllPopups}
-          data={selectedCalendarCard}
-        />
-        <PopupLogin
-          isOpen={isPopupLoginOpen}
-          onClose={closeAllPopups}
-        />
-        <PopupAboutEvent
-          isOpen={isPopupAboutDescriptionOpen}
-          onClose={closeAllPopups}
-          onEventSignUpClick={handleClickPopupSuccessfullyOpened}
-          onErrorClick={handleClickPopupErrorOpened}
-          data={selectedCalendarCard}
-        />
-        <PopupCities
-          isOpen={isPopupCitiesOpen}
-          onClose={closeAllPopups}
-        />
-        <PopupError
-          isOpen={isPopupErrorOpen}
-          onClose={closeAllPopups}
-        />
-        <PopupConfirmDeleteDiary
-          isOpen={isPopupConfirmDeleteDiaryOpen}
-          onClose={closeAllPopups}
-          data={selectedDiaryCard}
-        />
-      </div>
-    </BrowserRouter>
-*/

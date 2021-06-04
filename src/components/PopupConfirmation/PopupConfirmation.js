@@ -10,20 +10,15 @@ function PopupConfirmation({
   isOpen,
   onClose,
   onConfirmButtonClick,
-  data: {
-    title,
-    startAt,
-    endAt,
-    setIsBooked
-  }
+  cardData
 }) {
+  const { title, startAt, endAt } = cardData;
   const startDay = formatDate(startAt);
   const endDay = formatDate(endAt);
 
   const submitHandler = (event) => {
     event.preventDefault();
-    onConfirmButtonClick();
-    setIsBooked(true);
+    onConfirmButtonClick(cardData);
   };
   return (
     <Popup
@@ -63,14 +58,14 @@ PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onConfirmButtonClick: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.any)
+  cardData: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: undefined,
   onConfirmButtonClick: undefined,
-  data: {}
+  cardData: {}
 };
 
 export default PopupConfirmation;
