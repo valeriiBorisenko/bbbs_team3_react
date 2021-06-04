@@ -121,6 +121,18 @@
 .account-form__ratings-text {
   margin-left: 15px;
   color: $lightGray;
+  
+  &_type_good {
+    color: $green;
+  }
+
+  &_type_neutral {
+    color: $lightGray;
+  }
+
+  &_type_bad {
+    color: $error;
+  }
 }
 
 .account-form__rating {

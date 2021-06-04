@@ -16,6 +16,7 @@ function AccountForm({
 }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
   const [inputValues, setInputValues] = useState({});
+  const [caption, setCaption] = useState('');
   console.log(inputValues);
 
   const {
@@ -23,6 +24,19 @@ function AccountForm({
   } = useForm();
 
   const onSubmit = (values) => setInputValues({ ...inputValues, ...values });
+
+  // рейтинг встречи
+  const handleChangeRating = (evt) => {
+    const { target } = evt;
+    setInputValues({ ...inputValues, rate: target.value });
+  };
+
+  useEffect(() => {
+    if (inputValues?.rate === 'good') setCaption('Было классно');
+    if (inputValues?.rate === 'neutral') setCaption('Нормально');
+    if (inputValues?.rate === 'bad') setCaption('Что-то пошло не так');
+    if (!inputValues?.rate) setCaption('Оцените проведенное время');
+  }, [inputValues.rate]);
 
   // добавление картинки
   const [userImage, setUserImage] = useState(null);
@@ -124,6 +138,8 @@ function AccountForm({
                 ratingType="good"
                 value="good"
                 sectionClass="account-form__rating"
+                onClick={handleChangeRating}
+                checked={inputValues?.rate === 'good'}
               />
               <Rating
                 type="radio"
@@ -131,6 +147,8 @@ function AccountForm({
                 ratingType="neutral"
                 value="neutral"
                 sectionClass="account-form__rating"
+                onClick={handleChangeRating}
+                checked={inputValues?.rate === 'neutral'}
               />
               <Rating
                 type="radio"
@@ -138,10 +156,12 @@ function AccountForm({
                 ratingType="bad"
                 value="bad"
                 sectionClass="account-form__rating"
+                onClick={handleChangeRating}
+                checked={inputValues?.rate === 'bad'}
               />
               <Caption
-                title="Оцените проведенное время"
-                sectionClass="account-form__ratings-text"
+                title={caption}
+                sectionClass={`account-form__ratings-text account-form__ratings-text_type_${inputValues.rate}`}
               />
             </div>
             <div className="account-form__buttons">
