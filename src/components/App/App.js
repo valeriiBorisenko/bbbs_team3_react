@@ -34,10 +34,8 @@ import {
 function App() {
   const history = useHistory();
 
-  //! текущий юзер
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  // текущий юзер
   const [currentUser, setCurrentUser] = useState(null);
-  console.log(currentUser);
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
@@ -66,12 +64,11 @@ function App() {
       .then((res) => setDataMain(res.data.mainPageData))
       .then(() => setIsLoding(false))
       .catch((err) => console.log(err));
-  }, [setDataMain]);
+  }, []);
 
   // загрузка данных страницы календаря, если ты залогиненный
   useEffect(() => {
-    //! заменить на "пользователь из контекста !null"
-    if (isAuthorized) {
+    if (currentUser) {
       getCalendarPageData()
         .then((res) => setDataCalendar(res.calendarPageData))
         .then(() => setIsLoding(false))
@@ -82,7 +79,7 @@ function App() {
     } else {
       setDataCalendar([]);
     }
-  }, [setDataCalendar, isAuthorized]);
+  }, [currentUser]);
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
@@ -139,26 +136,18 @@ function App() {
           setAuth(access); //! работает, но бесполезно пока
           // сохраняем токен
           // localStorage.setItem('jwt', access); //! временно отменил запоминание юзера
-
-          // делаем запрос на календарь-дату и профиль юзера
-          Promise.all([
+          Promise.all([ // делаем запрос на календарь-дату и профиль юзера
             getUserData(),
             getCalendarPageData()
             // в дальнейшем сама страница календаря будет запрашивать АПИ напрямую
           ])
             .then(([userData, events]) => {
-              // проверка
-              console.log(events.calendarPageData);
-              console.log(userData.userData);
-
-              //! устанавливаем эти данные в стейты
               // стейт данных календаря
               setDataCalendar(events.calendarPageData);
-
               // стейт данных профиля
               setCurrentUser(userData.userData);
               //! заменить на наполнение переменной контекста юзера из userData
-              setIsAuthorized(true);
+              // setIsAuthorized(true);
             })
             .then(() => closeAllPopups())
             .catch((error) => console.log(error)); // при получении данных произошла ошибка
@@ -170,7 +159,7 @@ function App() {
 
   function handleLogout() {
     clearAuth();
-    setIsAuthorized(false);
+    setCurrentUser(null);
     //! заменить за очистку переменной контекста юзера
     localStorage.removeItem('jwt');
     history.push('/');
@@ -184,8 +173,9 @@ function App() {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
       // проверим токен
-      setIsAuthorized(true);
-      //! заменить за запрос юзера и заполнение контекста
+      getUserData()
+        .then((data) => setCurrentUser(data))
+        .catch((error) => console.log(error)); // при получении userData возникла проблема
     }
   }
 
@@ -226,7 +216,9 @@ function App() {
 
   // в теории можно вынести в хедер вместе с хуком истории
   function handleUserButtonClick() {
-    if (isAuthorized) {
+    console.log('tyt');
+    if (currentUser) {
+      console.log('tyt currentUser');
       history.push('/account');
     } else {
       handleClickPopupLoginOpened();
@@ -251,7 +243,6 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header
-          isAuthorized={isAuthorized}
           onLogout={handleLogout}
           onUserButtonClick={handleUserButtonClick}
           onCityChange={handleClickPopupCities}
@@ -260,18 +251,16 @@ function App() {
           <Switch>
             <Route exact path="/">
               <MainPage
-                isAuthorized={isAuthorized}
                 onEventSignUpClick={bookingHandler}
                 onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
                 dataMain={dataMain}
               />
             </Route>
             <Route exact path="/about-us">
-              <AboutUs isAuthorized={isAuthorized} />
+              <AboutUs />
             </Route>
             <Route path="/afisha">
               <Calendar
-                isAuthorized={isAuthorized}
                 onEventSignUpClick={bookingHandler}
                 onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
                 onOpenLoginPopup={handleClickPopupLoginOpened}
@@ -282,7 +271,7 @@ function App() {
             <ProtectedRoute
               path="/"
               component={Account}
-              isAuthorized={isAuthorized}
+              isAuthorized={currentUser} //! Алена
             />
             <Route path="*">
               <PageNotFound />
