@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Account.scss';
 import PropTypes from 'prop-types';
-import { getAccountData, getAccountDiaryData } from '../../utils/api';
+import { getProfileDiaryData } from '../../utils/api';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import Loader from '../ui/Loader/Loader';
 import AccountEventCard from '../ui/AccountEventCard/AccountEventCard';
@@ -10,9 +10,11 @@ import TitleH2 from '../ui/TitleH2/TitleH2';
 import AccountForm from '../ui/AccountForm/AccountForm';
 import AccountDiary from '../ui/AccountDiary/AccountDiary';
 
-// TODO при отмене записи обновить массив карточек в стейте и перерендерить
+//! Сейчас данные о мероприятиях приходят из App,
+//! чтобы синхронизировать отмену записи со стейтом данных календаря.
+//! Когда будет готов бэк, она будет приходить в GET-запросе и синхронизироваться через сервер
 
-function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
+function Account({ eventsData, onDiaryDelete, onEventFullDescriptionClick }) {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -20,26 +22,25 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
   const [formDataToEdit, setFormDataToEdit] = useState(null);
   const [diaryFormInputValues, setDiaryFormInputValues] = useState({});
 
-  console.log(diaryFormInputValues);
-
-  // сортируем все ивенты по хронологии
-  const sortAndFilterEvents = (data) => data
-    .filter((e) => e.booked)
-    .sort((a, b) => {
-      const date1 = new Date(a.startAt);
-      const date2 = new Date(b.startAt);
-      return date1 - date2;
-    });
+  console.log({ diaryFormInputValues });
 
   useEffect(() => {
-    Promise.all([getAccountData(), getAccountDiaryData()])
-      .then(([calendarData, diaryData]) => {
-        const bookedEvents = sortAndFilterEvents(calendarData.data.calendarPageData);
-        setEvents(bookedEvents);
-        setDiaries(diaryData.data.accountDiaryData);
+    getProfileDiaryData()
+      .then((diariesData) => {
+        setDiaries(diariesData.profileDiaryData);
       })
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    const sortedEvents = eventsData.filter((e) => e.booked)
+      .sort((a, b) => {
+        const date1 = new Date(a.startAt);
+        const date2 = new Date(b.startAt);
+        return date1 - date2;
+      });
+    setEvents(sortedEvents);
+  }, [eventsData]);
 
   useSmoothScrollOnWindow({ top: 0 });
 
@@ -88,6 +89,7 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
 
   const handleOpenEventCard = (data) => {
     onEventFullDescriptionClick(data);
+    console.log(data);
   };
 
   if (!events || !diaries) {
@@ -100,13 +102,13 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
         <TitleH2
           sectionClass="account__title"
           title={
-            events.length > 0
+            events && events.length > 0
               ? 'Вы записаны на мероприятия:'
               : 'У вас нет записи на мероприятия'
           }
         />
         <ScrollableByXContainer sectionClass="account__events">
-          {events.length > 0
+          {events && events.length > 0
             && events.map((item) => (
               <AccountEventCard
                 key={item.id}
@@ -118,7 +120,7 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
       </div>
 
       <div className="account__diaries page__section">
-        {diaries.length > 0 ? (
+        {diaries && diaries.length > 0 ? (
           <div className="account__diaries-container">
             <div className="account__form-container">
               <button
@@ -155,7 +157,15 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
               sectionClass="account__title"
               title="Составьте историю вашей дружбы с младшим. Эта страница доступна только вам."
             />
-            <AccountForm />
+            <AccountForm
+              sectionClass="account__diary-form"
+              isEditMode={isEditMode}
+              isOpen={isFormOpen}
+              data={formDataToEdit}
+              onCancel={handleCancelForm}
+              inputValues={diaryFormInputValues}
+              setInputValues={setDiaryFormInputValues}
+            />
           </>
         )}
       </div>
@@ -164,11 +174,13 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
 }
 
 Account.propTypes = {
+  eventsData: PropTypes.arrayOf(PropTypes.object),
   onDiaryDelete: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func
 };
 
 Account.defaultProps = {
+  eventsData: [],
   onDiaryDelete: undefined,
   onEventFullDescriptionClick: undefined
 };

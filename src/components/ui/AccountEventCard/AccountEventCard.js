@@ -4,32 +4,12 @@ import { formatDate } from '../../../utils/utils';
 import Card from '../Card/Card';
 
 function AccountEventCard({
-  data: {
-    address,
-    booked: isBooked,
-    contact,
-    description,
-    endAt,
-    remainSeats,
-    startAt,
-    tags,
-    title
-  }, onOpen
+  data, onOpen
 }) {
-  const startDay = formatDate(startAt);
+  const startDay = formatDate(data.startAt);
 
   const handleOpen = () => {
-    onOpen({
-      address,
-      isBooked,
-      contact,
-      description,
-      endAt,
-      remainSeats,
-      startAt,
-      tags,
-      title
-    });
+    onOpen(data);
   };
 
   return (
@@ -38,7 +18,7 @@ function AccountEventCard({
         <span className="account-event-card__day">{startDay.day}</span>
         <span className="account-event-card__month">{startDay.monthName}</span>
       </div>
-      <p className="account-event-card__title">{title}</p>
+      <p className="account-event-card__title">{data.title}</p>
     </Card>
   );
 }

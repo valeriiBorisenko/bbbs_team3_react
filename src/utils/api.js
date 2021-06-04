@@ -3,7 +3,7 @@ const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 //! data for server-responses
 const mainPageData = require('./server-responses/main-page.json');
-const accountDiaryData = require('./server-responses/account-diary.json');
+const profileDiaryData = require('./server-responses/profile-diary.json');
 const cities = require('./server-responses/cities.json');
 const calendarPageData = require('./server-responses/calendar-page.json');
 const token = require('./server-responses/token.json');
@@ -23,18 +23,10 @@ mock.onGet(`${baseURL}${apiUrl}/main/`).reply(
   'Content-Type: application/json'
 );
 
-mock.onGet(`${baseURL}${apiUrl}/account/`).reply(
+mock.onGet(`${baseURL}${apiUrl}/profile/diary/`).reply(
   200,
   {
-    calendarPageData
-  },
-  'Content-Type: application/json'
-);
-
-mock.onGet(`${baseURL}${apiUrl}/account/diary/`).reply(
-  200,
-  {
-    accountDiaryData
+    profileDiaryData
   },
   'Content-Type: application/json'
 );
@@ -75,8 +67,7 @@ mock.onPost(`${baseURL}${apiUrl}/token/`).reply(
 // в режиме мок-адаптера все работает как (response) => response.data
 // когда будет нормальный сервер надо будет делать как (response) => response.json()
 export const getMainPageData = () => axios.get(`${baseURL}${apiUrl}/main/`);
-export const getAccountData = () => axios.get(`${baseURL}${apiUrl}/account/`);
-export const getAccountDiaryData = () => axios.get(`${baseURL}${apiUrl}/account/diary/`);
+export const getProfileDiaryData = () => axios.get(`${baseURL}${apiUrl}/profile/diary/`).then((response) => response.data);
 export const getCities = () => axios.get(`${baseURL}${apiUrl}/cities/`);
 export const getCalendarPageData = () => axios.get(`${baseURL}${apiUrl}/afisha/events/`).then((response) => response.data);
 // login

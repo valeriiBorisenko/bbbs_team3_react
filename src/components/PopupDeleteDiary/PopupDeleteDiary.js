@@ -1,12 +1,11 @@
-import './PopupConfirmDeleteDiary.scss';
+import './PopupDeleteDiary.scss';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../utils/utils';
 import Popup from '../Popup/Popup';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 import Button from '../ui/Button/Button';
 
-function PopupConfirmDeleteDiary({ isOpen, onClose, data }) {
-  const { title, date } = data;
+function PopupDeleteDiary({ isOpen, onClose, data: { title, date } }) {
   const day = formatDate(date);
   return (
     <Popup
@@ -39,15 +38,16 @@ function PopupConfirmDeleteDiary({ isOpen, onClose, data }) {
   );
 }
 
-PopupConfirmDeleteDiary.propTypes = {
+PopupDeleteDiary.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.any).isRequired
+  data: PropTypes.objectOf(PropTypes.any)
 };
 
-PopupConfirmDeleteDiary.defaultProps = {
+PopupDeleteDiary.defaultProps = {
   isOpen: false,
-  onClose: undefined
+  onClose: undefined,
+  data: {}
 };
 
-export default PopupConfirmDeleteDiary;
+export default PopupDeleteDiary;

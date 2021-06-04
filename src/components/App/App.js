@@ -10,7 +10,7 @@ import PopupLogin from '../PopupLogin/PopupLogin';
 import PopupAboutEvent from '../PopupAboutEvent/PopupAboutEvent';
 import PopupCities from '../PopupCities/PopupCities';
 import PopupError from '../PopupError/PopupError';
-// import PopupConfirmDeleteDiary from '../PopupConfirmDeleteDiary/PopupConfirmDeleteDiary';
+import PopupDeleteDiary from '../PopupDeleteDiary/PopupDeleteDiary';
 // страницы
 import MainPage from '../MainPage/MainPage';
 import Calendar from '../Calendar/Calendar';
@@ -35,12 +35,16 @@ function App() {
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
-  // const [isPopupConfirmDeleteDiaryOpen, setIsPopupConfirmDeleteDiaryOpen] = useState(false);
+  const [isPopupDeleteDiaryOpen, setIsPopupDeleteDiaryOpen] = useState(false);
   const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
   // selectedCalendarCard содержит только те поля что пришли с сервера
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
+
+  // выбранная карточка дневника при открытии попапа подтверждения
+  const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
+  console.log(selectedDiaryCard);
 
   // данные страниц с сервера
   const [dataCalendar, setDataCalendar] = useState([]); //! переименовать в eventsArray
@@ -69,9 +73,6 @@ function App() {
     }
   }, [setDataCalendar, isAuthorized]);
 
-  // выбранная карточка дневника при открытии попапа подтверждения
-  // const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
-
   // управление попапами
   function closeAllPopups() {
     setIsPopupConfirmationOpen(false);
@@ -80,7 +81,7 @@ function App() {
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupCitiesOpen(false);
     setIsPopupErrorOpen(false);
-    // setIsPopupConfirmDeleteDiaryOpen(false);
+    setIsPopupDeleteDiaryOpen(false);
   }
 
   function handleClickPopupConfirmationOpened() {
@@ -191,10 +192,10 @@ function App() {
     setIsPopupErrorOpen(true);
   }
 
-  // function handleClickPopupConfirmDeleteDiary(cardData) {
-  //   setIsPopupConfirmDeleteDiaryOpen(true);
-  //   setSelectedDiaryCard(cardData);
-  // }
+  function handleClickPopupDeleteDiary(cardData) {
+    setIsPopupDeleteDiaryOpen(true);
+    setSelectedDiaryCard(cardData);
+  }
 
   // эффект закрытия модалок по Escape
   useEffect(() => {
@@ -239,6 +240,9 @@ function App() {
           <ProtectedRoute
             path="/"
             component={Account}
+            onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+            onDiaryDelete={handleClickPopupDeleteDiary}
+            eventsData={dataCalendar}
             isAuthorized={isAuthorized}
           />
           <Route path="*">
@@ -277,6 +281,10 @@ function App() {
       />
       <PopupError
         isOpen={isPopupErrorOpen}
+        onClose={closeAllPopups}
+      />
+      <PopupDeleteDiary
+        isOpen={isPopupDeleteDiaryOpen}
         onClose={closeAllPopups}
       />
     </div>
