@@ -1,5 +1,6 @@
 import './MainPage.scss';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import Loader from '../ui/Loader/Loader';
@@ -12,11 +13,15 @@ import CardFilm from '../ui/CardFilm/CardFilm';
 import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 function MainPage({
-  isAuthorized, onEventSignUpClick, onEventFullDescriptionClick, dataMain
+  onEventSignUpClick,
+  onEventFullDescriptionClick,
+  dataMain
 }) {
   useSmoothScrollOnWindow({ top: 0 });
+  const currentUser = useContext(CurrentUserContext);
 
   function eventSignUpHandler(cardData) {
     onEventSignUpClick(cardData, cardData.booked);
@@ -26,7 +31,7 @@ function MainPage({
     <>
       <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
-          {isAuthorized ? (
+          {currentUser ? (
             <CardCalendar
               key={dataMain.event.id}
               cardData={dataMain.event}
@@ -118,14 +123,12 @@ function MainPage({
 }
 
 MainPage.propTypes = {
-  isAuthorized: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
   dataMain: PropTypes.objectOf(PropTypes.any)
 };
 
 MainPage.defaultProps = {
-  isAuthorized: false,
   onEventSignUpClick: undefined,
   onEventFullDescriptionClick: undefined,
   dataMain: {}

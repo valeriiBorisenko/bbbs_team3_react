@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import TitleH1 from '../ui/TitleH1/TitleH1';
@@ -6,6 +6,7 @@ import './Calendar.scss';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import Loader from '../ui/Loader/Loader';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 function Calendar({
   onEventSignUpClick,
@@ -13,11 +14,13 @@ function Calendar({
   clickButton,
   dataCalendar,
   isBooked,
-  isAuthorized,
   onOpenLoginPopup,
   isLoding
 }) {
   useSmoothScrollOnWindow({ top: 0 });
+  const currentUser = useContext(CurrentUserContext);
+
+  //! вынести в константы
   const months = [
     'январь', // 0
     'февраль', // 1
@@ -33,6 +36,10 @@ function Calendar({
     'декабрь' // 11
   ];
 
+  // работа с апи-датой, будет на следующем этапе использоваться
+  // const [eventsArray, setEventsArray] = useState([]);
+
+  // работа с фильтрами
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [filteredCardData, setFilteredCardData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
@@ -152,7 +159,7 @@ function Calendar({
           />
         ))}
       </section>
-      { isAuthorized ? '' : onOpenLoginPopup()}
+      { currentUser ? '' : onOpenLoginPopup()}
     </section>
   ) : (
     <Loader />
@@ -164,7 +171,6 @@ Calendar.propTypes = {
   clickButton: PropTypes.func,
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
   isBooked: PropTypes.bool,
-  isAuthorized: PropTypes.bool,
   onOpenLoginPopup: PropTypes.func,
   isLoding: PropTypes.bool.isRequired
 };
@@ -175,7 +181,6 @@ Calendar.defaultProps = {
   onEventFullDescriptionClick: undefined,
   clickButton: undefined,
   isBooked: false,
-  isAuthorized: false,
   onOpenLoginPopup: undefined
 };
 

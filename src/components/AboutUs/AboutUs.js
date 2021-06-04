@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import './AboutUs.scss';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import TitleH3 from '../ui/TitleH3/TitleH3';
@@ -8,9 +7,7 @@ import CardFigure from '../ui/CardFigure/CardFigure';
 import CardAbout from '../ui/CardAbout/CardAbout';
 import Card from '../ui/Card/Card';
 
-function AboutUs({ isAuthorized }) {
-  console.log(isAuthorized); // !выкинуть потом
-
+function AboutUs() {
   useSmoothScrollOnWindow({ top: 0 });
 
   return (
@@ -92,13 +89,5 @@ function AboutUs({ isAuthorized }) {
     </section>
   );
 }
-
-AboutUs.propTypes = {
-  isAuthorized: PropTypes.bool
-};
-
-AboutUs.defaultProps = {
-  isAuthorized: false
-};
 
 export default AboutUs;
