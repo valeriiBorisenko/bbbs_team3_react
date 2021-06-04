@@ -35,6 +35,7 @@ function App() {
 
   // текущий юзер
   const [currentUser, setCurrentUser] = useState(null);
+  console.log(currentUser);
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
@@ -162,7 +163,7 @@ function App() {
     if (jwt) {
       // проверим токен
       getUserData()
-        .then((data) => setCurrentUser(data))
+        .then((data) => setCurrentUser(data.userData))
         .catch((error) => console.log(error)); // при получении userData возникла проблема
     }
   }
@@ -204,9 +205,7 @@ function App() {
 
   // в теории можно вынести в хедер вместе с хуком истории
   function handleUserButtonClick() {
-    console.log('tyt');
     if (currentUser) {
-      console.log('tyt currentUser');
       history.push('/account');
     } else {
       handleClickPopupLoginOpened();
@@ -257,10 +256,12 @@ function App() {
               />
             </Route>
             <ProtectedRoute
-              path="/"
+              exact
+              path="/account"
               component={Account}
               onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
               eventsData={dataCalendar}
+              isAuth={currentUser}
             />
             <Route path="*">
               <PageNotFound />
