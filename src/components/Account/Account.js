@@ -71,11 +71,11 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
     let position;
 
     if (isMobile) {
-      position = 280;
+      position = 240;
     } else if (isTablet) {
-      position = 390;
+      position = 320;
     } else {
-      position = 430;
+      position = 390;
     }
 
     window.scrollTo({
@@ -137,45 +137,30 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
         </div>
 
         <div className="account__diaries page__section">
-          {diaries && diaries.length > 0 ? (
-            <div className="account__diaries-container">
-              <div className="account__form-container">
+          <div className="account__diaries-container">
+            <div className="account__form-container">
+
+              {!isFormOpen
+                && (
                 <button
                   className="account__button-add-diary"
                   type="button"
                   onClick={handleOpenForm}
-                  disabled={isEditMode}
                 >
                   Добавить встречу
                 </button>
-                <AccountForm
-                  sectionClass={`${isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'}`}
-                  isEditMode={isEditMode}
-                  isOpen={isFormOpen}
-                  data={formDataToEdit}
-                  onCancel={handleCancelForm}
-                  inputValues={diaryFormInputValues}
-                  setInputValues={setDiaryFormInputValues}
-                />
-              </div>
+                )}
 
-              {diaries.map((diary) => (
-                <AccountDiary
-                  key={diary.id}
-                  data={diary}
-                  onEdit={handleEditDiaryCard}
-                  onDelete={handleClickPopupDeleteDiary}
+              {!isEditMode && isFormOpen
+                && (
+                <TitleH2
+                  sectionClass="account__title"
+                  title="Составьте историю вашей дружбы с младшим. Эта страница доступна только вам."
                 />
-              ))}
-            </div>
-          ) : (
-            <>
-              <TitleH2
-                sectionClass="account__title"
-                title="Составьте историю вашей дружбы с младшим. Эта страница доступна только вам."
-              />
+                )}
+
               <AccountForm
-                sectionClass="account__diary-form"
+                sectionClass={`${isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'}`}
                 isEditMode={isEditMode}
                 isOpen={isFormOpen}
                 data={formDataToEdit}
@@ -183,8 +168,17 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
                 inputValues={diaryFormInputValues}
                 setInputValues={setDiaryFormInputValues}
               />
-            </>
-          )}
+            </div>
+
+            {diaries && diaries.length > 0 && diaries.map((diary) => (
+              <AccountDiary
+                key={diary.id}
+                data={diary}
+                onEdit={handleEditDiaryCard}
+                onDelete={handleClickPopupDeleteDiary}
+              />
+            ))}
+          </div>
         </div>
       </section>
       <PopupDeleteDiary
