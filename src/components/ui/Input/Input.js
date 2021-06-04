@@ -1,11 +1,22 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import './Input.scss';
 import PropTypes from 'prop-types';
 
 function Input({
-  type, name, placeholder, required, sectionClass, isTextarea, onChange, value
+  type,
+  name,
+  placeholder,
+  register,
+  required,
+  error,
+  errorMessage,
+  sectionClass,
+  isTextarea
 }) {
-  const classNamesInput = ['input', sectionClass].join(' ').trim();
-  const classNamesTextarea = ['input', 'textarea', sectionClass].join(' ').trim();
+  const message = error ? errorMessage : '';
+
+  const classNamesInput = ['input', message ? 'input__error' : '', sectionClass].join(' ').trim();
+  const classNamesTextarea = ['input', message ? 'input__error' : '', 'textarea', sectionClass].join(' ').trim();
 
   if (isTextarea) {
     return (
@@ -13,10 +24,8 @@ function Input({
         className={classNamesTextarea}
         type={type}
         name={name}
-        placeholder={placeholder}
-        onChange={onChange}
-        value={value}
-        required={required}
+        placeholder={message || placeholder}
+        {...register(name, { required })}
       />
     );
   }
@@ -26,10 +35,8 @@ function Input({
       className={classNamesInput}
       type={type}
       name={name}
-      placeholder={placeholder}
-      onChange={onChange}
-      value={value}
-      required={required}
+      placeholder={message || placeholder}
+      {...register(name, { required })}
     />
   );
 }
@@ -40,18 +47,21 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   sectionClass: PropTypes.string,
   isTextarea: PropTypes.bool,
-  required: PropTypes.bool,
   onChange: PropTypes.func,
-  value: PropTypes.string
+  register: PropTypes.func.isRequired,
+  required: PropTypes.bool,
+  error: PropTypes.objectOf(PropTypes.any),
+  errorMessage: PropTypes.string
 };
 
 Input.defaultProps = {
   placeholder: '',
   sectionClass: '',
   isTextarea: false,
-  required: false,
   onChange: undefined,
-  value: ''
+  required: false,
+  error: undefined,
+  errorMessage: ''
 };
 
 export default Input;

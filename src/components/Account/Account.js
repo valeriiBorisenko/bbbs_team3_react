@@ -16,7 +16,11 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [formDataToEdit, setFormDataToEdit] = useState(null);
+  const [diaryFormInputValues, setDiaryFormInputValues] = useState({});
+
+  console.log(diaryFormInputValues);
 
   // сортируем все ивенты по хронологии
   const sortAndFilterEvents = (data) => data
@@ -58,20 +62,24 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
     });
   };
 
-  const handleOpenForm = () => {
-    setFormDataToEdit({});
+  const handleOpenForm = (data) => {
+    if (!data) {
+      setIsEditMode(false);
+    }
     setIsFormOpen(true);
     scrollToForm();
   };
 
   const handleCancelForm = () => {
     setIsFormOpen(false);
+    setIsEditMode(false);
+    setFormDataToEdit(null);
   };
 
   const handleEditDiaryCard = (data) => {
+    setIsEditMode(true);
     setFormDataToEdit(data);
-    setIsFormOpen(true);
-    scrollToForm();
+    handleOpenForm(data);
   };
 
   const handleDeleteDiaryCard = (card) => {
@@ -117,14 +125,18 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
                 className="account__button-add-diary"
                 type="button"
                 onClick={handleOpenForm}
+                disabled={isEditMode}
               >
                 Добавить встречу
               </button>
               <AccountForm
                 sectionClass={`${isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'}`}
+                isEditMode={isEditMode}
                 isOpen={isFormOpen}
-                data={formDataToEdit || {}}
+                data={formDataToEdit}
                 onCancel={handleCancelForm}
+                inputValues={diaryFormInputValues}
+                setInputValues={setDiaryFormInputValues}
               />
             </div>
 
