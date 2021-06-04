@@ -12,16 +12,15 @@ import Rating from '../Rating/Rating';
 import Button from '../Button/Button';
 
 function AccountForm({
-  data, sectionClass, isOpen, onCancel
+  data, sectionClass, isEditMode, isOpen, onCancel
 }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
   const [inputValues, setInputValues] = useState({});
   console.log(inputValues);
 
   const {
-    register, handleSubmit, formState, reset, setValue
-  } = useForm({ mode: 'onChange' });
-  const { isValid } = formState;
+    register, handleSubmit, formState: { errors }, reset, setValue
+  } = useForm();
 
   const onSubmit = (values) => setInputValues({ ...inputValues, ...values });
 
@@ -52,15 +51,9 @@ function AccountForm({
         setUserImage(
           { imageUrl: data.imageUrl }
         );
-        setValue('title', data.title, {
-          shouldValidate: true
-        });
-        setValue('date', parseDate(data.date), {
-          shouldValidate: true
-        });
-        setValue('description', data.description, {
-          shouldValidate: true
-        });
+        setValue('title', data.title);
+        setValue('date', parseDate(data.date));
+        setValue('description', data.description);
       }
     } else {
       setInputValues({});
@@ -98,17 +91,19 @@ function AccountForm({
             name="title"
             placeholder="Место встречи"
             register={register}
-            minLength="5"
-            maxLength="20"
             required
+            error={errors?.title}
+            errorMessage="Место встречи*"
           />
           <Input
             type="date"
             name="date"
             placeholder="Дата&emsp;"
-            sectionClass="account-form__input_el_date"
+            sectionClass={`account-form__input_el_date ${errors.date ? 'account-form__input_el_date-error' : ''}`}
             register={register}
             required
+            error={errors?.date}
+            errorMessage="Дата*&emsp;"
           />
           <Input
             type="text"
@@ -116,8 +111,9 @@ function AccountForm({
             placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
             sectionClass="account-form__input_el_textarea"
             register={register}
-            minLength="5"
             required
+            error={errors?.description}
+            errorMessage="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось*"
             isTextarea
           />
           <div className="account-form__submit-zone">
@@ -150,12 +146,17 @@ function AccountForm({
             </div>
             <div className="account-form__buttons">
               <Button
-                title="Удалить"
+                title={`${isEditMode ? 'Отмена' : 'Удалить'}`}
                 color="gray-borderless"
                 sectionClass="account-form__button_el_delete"
                 onClick={onCancel}
               />
-              <Button title="Добавить" isSubmittable sectionClass="account-form__button_el_add" isDisabled={!isValid} />
+              <Button
+                title={`${isEditMode ? 'Сохранить' : 'Добавить'}`}
+                sectionClass="account-form__button_el_add"
+                isDisabled={!!(errors.title || errors.date || errors.description)}
+                isSubmittable
+              />
             </div>
           </div>
         </form>
@@ -168,14 +169,16 @@ AccountForm.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   sectionClass: PropTypes.string,
   onCancel: PropTypes.func,
-  isOpen: PropTypes.bool
+  isOpen: PropTypes.bool,
+  isEditMode: PropTypes.bool
 };
 
 AccountForm.defaultProps = {
   data: {},
   sectionClass: '',
   onCancel: undefined,
-  isOpen: false
+  isOpen: false,
+  isEditMode: false
 };
 
 export default AccountForm;

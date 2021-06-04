@@ -95,6 +95,11 @@
   content: attr(placeholder);
 }
 
+.account-form__input_el_date-error:not(:focus):not(.has-value):before {
+  color: $error;
+  content: attr(placeholder);
+}
+
 .account-form__input_el_textarea {
   grid-column: 1 / -1;
   min-height: 286px;
