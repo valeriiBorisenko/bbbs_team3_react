@@ -3,6 +3,7 @@ import './App.scss';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import Loader from '../ui/Loader/Loader';
 // попапы
 import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
 import PopupSuccessfully from '../PopupSuccessfully/PopupSuccessfully';
@@ -29,7 +30,6 @@ import {
   clearAuth,
   getUserData
 } from '../../utils/api';
-import Loader from '../ui/Loader/Loader';
 
 function App() {
   const history = useHistory();
@@ -250,13 +250,15 @@ function App() {
               <AboutUs />
             </Route>
             <Route path="/afisha">
-              <Calendar
-                onEventSignUpClick={bookingHandler}
-                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                onOpenLoginPopup={handleClickPopupLoginOpened}
-                dataCalendar={dataCalendar}
-                isLoding={isLoding}
-              />
+              {!isCheckingToken ? (
+                <Calendar
+                  onEventSignUpClick={bookingHandler}
+                  onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                  onOpenLoginPopup={handleClickPopupLoginOpened}
+                  dataCalendar={dataCalendar}
+                  isLoding={isLoding}
+                />
+              ) : <Loader />}
             </Route>
 
             {!isCheckingToken ? (
