@@ -18,6 +18,9 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formDataToEdit, setFormDataToEdit] = useState(null);
+  const [diaryFormInputValues, setDiaryFormInputValues] = useState({});
+
+  console.log(diaryFormInputValues);
 
   // сортируем все ивенты по хронологии
   const sortAndFilterEvents = (data) => data
@@ -132,6 +135,8 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
                 isOpen={isFormOpen}
                 data={formDataToEdit}
                 onCancel={handleCancelForm}
+                inputValues={diaryFormInputValues}
+                setInputValues={setDiaryFormInputValues}
               />
             </div>
 

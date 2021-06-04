@@ -12,18 +12,20 @@ import Rating from '../Rating/Rating';
 import Button from '../Button/Button';
 
 function AccountForm({
-  data, sectionClass, isEditMode, isOpen, onCancel
+  data, sectionClass, isEditMode, isOpen, onCancel, inputValues, setInputValues
 }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
-  const [inputValues, setInputValues] = useState({});
+  // const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
-  console.log(inputValues);
+  // console.log({ inputValues });
 
   const {
     register, handleSubmit, formState: { errors }, reset, setValue
   } = useForm();
 
-  const onSubmit = (values) => setInputValues({ ...inputValues, ...values });
+  const onFormSubmit = (values) => {
+    setInputValues({ ...inputValues, ...values });
+  };
 
   // рейтинг встречи
   const handleChangeRating = (evt) => {
@@ -99,7 +101,7 @@ function AccountForm({
       </Card>
 
       <Card sectionClass="account-form__form-container">
-        <form name="addStoryForm" className="account-form__form" onSubmit={handleSubmit(onSubmit)}>
+        <form name="addStoryForm" className="account-form__form" onSubmit={handleSubmit(onFormSubmit)}>
           <Input
             type="text"
             name="title"
@@ -139,7 +141,7 @@ function AccountForm({
                 value="good"
                 sectionClass="account-form__rating"
                 onClick={handleChangeRating}
-                checked={inputValues?.rate === 'good'}
+                checked={inputValues.rate === 'good'}
               />
               <Rating
                 type="radio"
@@ -148,7 +150,7 @@ function AccountForm({
                 value="neutral"
                 sectionClass="account-form__rating"
                 onClick={handleChangeRating}
-                checked={inputValues?.rate === 'neutral'}
+                checked={inputValues.rate === 'neutral'}
               />
               <Rating
                 type="radio"
@@ -157,7 +159,7 @@ function AccountForm({
                 value="bad"
                 sectionClass="account-form__rating"
                 onClick={handleChangeRating}
-                checked={inputValues?.rate === 'bad'}
+                checked={inputValues.rate === 'bad'}
               />
               <Caption
                 title={caption}
@@ -190,7 +192,10 @@ AccountForm.propTypes = {
   sectionClass: PropTypes.string,
   onCancel: PropTypes.func,
   isOpen: PropTypes.bool,
-  isEditMode: PropTypes.bool
+  isEditMode: PropTypes.bool,
+  onSubmit: PropTypes.func,
+  inputValues: PropTypes.objectOf(PropTypes.any),
+  setInputValues: PropTypes.func
 };
 
 AccountForm.defaultProps = {
@@ -198,7 +203,10 @@ AccountForm.defaultProps = {
   sectionClass: '',
   onCancel: undefined,
   isOpen: false,
-  isEditMode: false
+  isEditMode: false,
+  onSubmit: undefined,
+  inputValues: {},
+  setInputValues: undefined
 };
 
 export default AccountForm;
