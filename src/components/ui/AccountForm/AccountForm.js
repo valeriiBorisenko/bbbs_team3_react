@@ -78,7 +78,7 @@ function AccountForm({
         description: ''
       });
     }
-  }, [isOpen]);
+  }, [isOpen, data]);
 
   return (
     <div className={classNames}>

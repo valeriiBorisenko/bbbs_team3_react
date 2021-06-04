@@ -63,6 +63,12 @@
   &:hover {
     cursor: pointer;
   }
+
+  &:disabled {
+    opacity: .5;
+    pointer-events: none;
+    cursor: default;
+  }
 }
 
 .account__diary-form {

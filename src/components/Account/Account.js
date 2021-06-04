@@ -59,22 +59,24 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
     });
   };
 
-  const handleOpenForm = () => {
-    setIsEditMode(false);
-    setFormDataToEdit(null);
+  const handleOpenForm = (data) => {
+    if (!data) {
+      setIsEditMode(false);
+    }
     setIsFormOpen(true);
     scrollToForm();
   };
 
   const handleCancelForm = () => {
     setIsFormOpen(false);
+    setIsEditMode(false);
+    setFormDataToEdit(null);
   };
 
   const handleEditDiaryCard = (data) => {
     setIsEditMode(true);
     setFormDataToEdit(data);
-    setIsFormOpen(true);
-    scrollToForm();
+    handleOpenForm(data);
   };
 
   const handleDeleteDiaryCard = (card) => {
@@ -120,6 +122,7 @@ function Account({ onDiaryDelete, onEventFullDescriptionClick }) {
                 className="account__button-add-diary"
                 type="button"
                 onClick={handleOpenForm}
+                disabled={isEditMode}
               >
                 Добавить встречу
               </button>
