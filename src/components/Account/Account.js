@@ -24,26 +24,8 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   const [diaryFormInputValues, setDiaryFormInputValues] = useState({});
   const [isPopupDeleteDiaryOpen, setIsPopupDeleteDiaryOpen] = useState(false);
 
-  // выбранная карточка дневника при открытии попапа подтверждения
-  const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
-
-  const handleClickPopupDeleteDiary = (card) => {
-    setIsPopupDeleteDiaryOpen(true);
-    setSelectedDiaryCard(card);
-  };
-
-  const closePopupDeleteDiary = () => {
-    setIsPopupDeleteDiaryOpen(false);
-  };
-
-  const handleCardDelete = (card) => {
-    // TODO сделать DELETE-запрос к серверу, получить новый массив карточек и отфильтровать стейт
-    // TODO .then()
-    setDiaries(() => diaries.filter((d) => (d.id === card.id ? null : d)));
-    // TODO .catch()
-    // TODO .finally()
-    closePopupDeleteDiary();
-  };
+  //! обновляемые данные с формы, карточка дневника пока не добавляется
+  console.log(diaryFormInputValues);
 
   useEffect(() => {
     getProfileDiaryData()
@@ -106,6 +88,26 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
 
   const handleOpenEventCard = (data) => {
     onEventFullDescriptionClick(data);
+  };
+
+  // выбранная карточка дневника при открытии попапа подтверждения
+  const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
+
+  const handleClickPopupDeleteDiary = (card) => {
+    setIsPopupDeleteDiaryOpen(true);
+    setSelectedDiaryCard(card);
+  };
+
+  const closePopupDeleteDiary = () => {
+    setIsPopupDeleteDiaryOpen(false);
+  };
+
+  const handleCardDelete = (card) => {
+    // TODO сделать DELETE-запрос к серверу, получить новый массив карточек и отфильтровать стейт
+    setDiaries(() => diaries.filter((d) => (d.id === card.id ? null : d)));
+    // TODO .catch()
+    // TODO .finally()
+    closePopupDeleteDiary();
   };
 
   if (!events || !diaries) {

@@ -15,9 +15,7 @@ function AccountForm({
   data, sectionClass, isEditMode, isOpen, onCancel, inputValues, setInputValues
 }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
-  // const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
-  // console.log({ inputValues });
 
   const {
     register, handleSubmit, formState: { errors }, reset, setValue
@@ -91,6 +89,7 @@ function AccountForm({
           <label htmlFor="input-upload" className="account-form__label-file">
             <input
               id="input-upload"
+              name="imageUrl"
               className="account-form__input-file"
               {...getInputProps()}
             />
