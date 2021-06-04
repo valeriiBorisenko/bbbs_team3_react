@@ -29,12 +29,14 @@ import {
   clearAuth,
   getUserData
 } from '../../utils/api';
+import Loader from '../ui/Loader/Loader';
 
 function App() {
   const history = useHistory();
 
   // текущий юзер
   const [currentUser, setCurrentUser] = useState(null);
+  const [isCheckingToken, setIsCheckingToken] = useState(true);
   console.log(currentUser);
 
   // стейт переменные попапов
@@ -164,8 +166,9 @@ function App() {
       // проверим токен
       getUserData()
         .then((data) => setCurrentUser(data.userData))
+        .then(() => setIsCheckingToken(false))
         .catch((error) => console.log(error)); // при получении userData возникла проблема
-    }
+    } else setIsCheckingToken(false);
   }
 
   //! работает с запросом Api (booked)
@@ -255,14 +258,18 @@ function App() {
                 isLoding={isLoding}
               />
             </Route>
-            <ProtectedRoute
-              exact
-              path="/account"
-              component={Account}
-              onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-              eventsData={dataCalendar}
-              isAuth={currentUser}
-            />
+
+            {!isCheckingToken ? (
+              <ProtectedRoute
+                exact
+                path="/account"
+                component={Account}
+                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                eventsData={dataCalendar}
+                isAuth={currentUser}
+              />
+            ) : <Loader />}
+
             <Route path="*">
               <PageNotFound />
             </Route>
