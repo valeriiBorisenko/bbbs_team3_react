@@ -261,7 +261,6 @@ function App() {
               component={Account}
               onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
               eventsData={dataCalendar}
-              isAuthorized={currentUser} //! Алена
             />
             <Route path="*">
               <PageNotFound />
