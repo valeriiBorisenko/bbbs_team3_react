@@ -18,6 +18,8 @@ function Calendar({
   isLoding
 }) {
   useSmoothScrollOnWindow({ top: 0 });
+
+  //! вынести в константы
   const months = [
     'январь', // 0
     'февраль', // 1
@@ -33,6 +35,10 @@ function Calendar({
     'декабрь' // 11
   ];
 
+  // работа с апи-датой, будет на следующем этапе использовать личный стейт
+  // const [eventsArray, setEventsArray] = useState([]);
+
+  // работа с фильтрами
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [filteredCardData, setFilteredCardData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
