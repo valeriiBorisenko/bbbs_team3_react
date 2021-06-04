@@ -12,7 +12,6 @@ import NavBar from '../ui/NavBar/NavBar';
 import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
 
 function Header({
-  isAuthorized,
   onUserButtonClick,
   onLogout,
   onCityChange
@@ -74,7 +73,6 @@ function Header({
       onKeyPress={handleCloseMobileMenu}
     >
       <NavBar
-        isAuthorized={isAuthorized}
         onUserButtonClick={onUserButtonClick}
         onBurgerButtonClick={toggleNavMenu}
         onCityChangeClick={onCityChange}
@@ -111,14 +109,12 @@ function Header({
 }
 
 Header.propTypes = {
-  isAuthorized: PropTypes.bool,
   onUserButtonClick: PropTypes.func,
   onCityChange: PropTypes.func,
   onLogout: PropTypes.func
 };
 
 Header.defaultProps = {
-  isAuthorized: false,
   onUserButtonClick: undefined,
   onCityChange: undefined,
   onLogout: undefined

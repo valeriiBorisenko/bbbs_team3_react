@@ -1,6 +1,8 @@
 import './NavBar.scss';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import NavItem from '../NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
@@ -8,13 +10,14 @@ import UserButton from '../UserButton/UserButton';
 import UserMenuButton from '../UserMenuButton/UserMenuButton';
 
 function NavBar({
-  isAuthorized,
   isNavMenuOpen,
   onUserButtonClick,
   onBurgerButtonClick,
   onCityChangeClick,
   onLogout
 }) {
+  const currentUser = useContext(CurrentUserContext);
+
   return (
     <nav className="menu">
       {/* логотип */}
@@ -124,7 +127,7 @@ function NavBar({
         </ul>
       </div>
 
-      {isAuthorized && (
+      {currentUser && (
       <div className={`menu__user-info ${!isNavMenuOpen ? 'menu__user-info_hidden' : ''}`}>
         <UserMenuButton
           title="Изменить город"
@@ -213,7 +216,7 @@ function NavBar({
         </li>
         <li className="menu__button-item">
           <UserButton
-            isAuthorized={isAuthorized}
+            isAuthorized={currentUser}
             handleClick={onUserButtonClick}
           />
         </li>
@@ -223,7 +226,6 @@ function NavBar({
 }
 
 NavBar.propTypes = {
-  isAuthorized: PropTypes.bool,
   onUserButtonClick: PropTypes.func,
   onBurgerButtonClick: PropTypes.func,
   onCityChangeClick: PropTypes.func,
@@ -232,7 +234,6 @@ NavBar.propTypes = {
 };
 
 NavBar.defaultProps = {
-  isAuthorized: false,
   onUserButtonClick: undefined,
   onBurgerButtonClick: undefined,
   onCityChangeClick: undefined,
