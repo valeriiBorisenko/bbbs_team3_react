@@ -5,14 +5,24 @@ import Popup from '../Popup/Popup';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 import Button from '../ui/Button/Button';
 
-function PopupDeleteDiary({ isOpen, onClose, data: { title, date } }) {
+function PopupDeleteDiary({
+  isOpen, onClose, onCardDelete, cardData
+}) {
+  const { title, date } = cardData;
   const day = formatDate(date);
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    onCardDelete(cardData);
+  };
+
   return (
     <Popup
       type="confirm-delete-diary"
       typeContainer="confirm-diary"
       isOpen={isOpen}
       onClose={onClose}
+      onSubmit={handleSubmit}
       withoutCloseButton
       sectionClass="popup-diary"
     >
@@ -41,13 +51,15 @@ function PopupDeleteDiary({ isOpen, onClose, data: { title, date } }) {
 PopupDeleteDiary.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  data: PropTypes.objectOf(PropTypes.any)
+  onCardDelete: PropTypes.func,
+  cardData: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupDeleteDiary.defaultProps = {
   isOpen: false,
   onClose: undefined,
-  data: {}
+  onCardDelete: undefined,
+  cardData: {}
 };
 
 export default PopupDeleteDiary;

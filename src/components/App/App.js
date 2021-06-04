@@ -10,7 +10,6 @@ import PopupLogin from '../PopupLogin/PopupLogin';
 import PopupAboutEvent from '../PopupAboutEvent/PopupAboutEvent';
 import PopupCities from '../PopupCities/PopupCities';
 import PopupError from '../PopupError/PopupError';
-import PopupDeleteDiary from '../PopupDeleteDiary/PopupDeleteDiary';
 // страницы
 import MainPage from '../MainPage/MainPage';
 import Calendar from '../Calendar/Calendar';
@@ -35,16 +34,11 @@ function App() {
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
-  const [isPopupDeleteDiaryOpen, setIsPopupDeleteDiaryOpen] = useState(false);
   const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа
   // selectedCalendarCard содержит только те поля что пришли с сервера
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
-
-  // выбранная карточка дневника при открытии попапа подтверждения
-  const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
-  console.log(selectedDiaryCard);
 
   // данные страниц с сервера
   const [dataCalendar, setDataCalendar] = useState([]); //! переименовать в eventsArray
@@ -81,7 +75,6 @@ function App() {
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupCitiesOpen(false);
     setIsPopupErrorOpen(false);
-    setIsPopupDeleteDiaryOpen(false);
   }
 
   function handleClickPopupConfirmationOpened() {
@@ -192,11 +185,6 @@ function App() {
     setIsPopupErrorOpen(true);
   }
 
-  function handleClickPopupDeleteDiary(cardData) {
-    setIsPopupDeleteDiaryOpen(true);
-    setSelectedDiaryCard(cardData);
-  }
-
   // эффект закрытия модалок по Escape
   useEffect(() => {
     window.addEventListener('keyup', (evt) => {
@@ -241,7 +229,6 @@ function App() {
             path="/"
             component={Account}
             onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-            onDiaryDelete={handleClickPopupDeleteDiary}
             eventsData={dataCalendar}
             isAuthorized={isAuthorized}
           />
@@ -281,10 +268,6 @@ function App() {
       />
       <PopupError
         isOpen={isPopupErrorOpen}
-        onClose={closeAllPopups}
-      />
-      <PopupDeleteDiary
-        isOpen={isPopupDeleteDiaryOpen}
         onClose={closeAllPopups}
       />
     </div>
