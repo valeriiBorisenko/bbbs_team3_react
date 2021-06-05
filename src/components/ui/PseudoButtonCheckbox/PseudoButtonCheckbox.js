@@ -47,7 +47,7 @@ PseudoButtonCheckbox.propTypes = {
   name: PropTypes.string,
   value: PropTypes.string,
   title: PropTypes.string,
-  filters: PropTypes.objectOf(PropTypes.number),
+  filters: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func.isRequired
 };
