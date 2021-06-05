@@ -238,19 +238,19 @@ function App() {
           onCityChange={handleClickPopupCities}
         />
         <main className="main">
-          <Switch>
-            <Route exact path="/">
-              <MainPage
-                onEventSignUpClick={bookingHandler}
-                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                dataMain={dataMain}
-              />
-            </Route>
-            <Route exact path="/about-us">
-              <AboutUs />
-            </Route>
-            <Route path="/afisha">
-              {!isCheckingToken ? (
+          {!isCheckingToken ? (
+            <Switch>
+              <Route exact path="/">
+                <MainPage
+                  onEventSignUpClick={bookingHandler}
+                  onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                  dataMain={dataMain}
+                />
+              </Route>
+              <Route exact path="/about-us">
+                <AboutUs />
+              </Route>
+              <Route path="/afisha">
                 <Calendar
                   onEventSignUpClick={bookingHandler}
                   onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
@@ -258,10 +258,8 @@ function App() {
                   dataCalendar={dataCalendar}
                   isLoding={isLoding}
                 />
-              ) : <Loader />}
-            </Route>
+              </Route>
 
-            {!isCheckingToken ? (
               <ProtectedRoute
                 exact
                 path="/account"
@@ -270,12 +268,12 @@ function App() {
                 eventsData={dataCalendar}
                 isAuth={currentUser}
               />
-            ) : <Loader />}
 
-            <Route path="*">
-              <PageNotFound />
-            </Route>
-          </Switch>
+              <Route path="*">
+                <PageNotFound />
+              </Route>
+            </Switch>
+          ) : <Loader />}
         </main>
         <Footer />
         <PopupConfirmation
