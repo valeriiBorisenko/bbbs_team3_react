@@ -170,7 +170,7 @@ function App() {
 
   //! работает с запросом Api (booked)
   function updateEvent(cardData) {
-    Api.updateEvent(cardData)
+    return Api.updateEvent(cardData)
       .then((updatedCardData) => {
         setDataCalendar(
           dataCalendar
