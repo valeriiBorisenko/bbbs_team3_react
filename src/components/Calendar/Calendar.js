@@ -76,10 +76,14 @@ function Calendar({
     setFilterSettings(filters);
   };
 
-  const handleCheckboxClick = (evt, dataset) => {
+  const handleCheckboxClick = (evt, value) => {
     const { target } = evt;
+    const values = value.split('-');
     if (filterSettings) {
-      if (target.checked && Number(dataset) === filterSettings.monthNumber) {
+      if (target.checked
+          && Number(values[0]) === filterSettings.monthNumber
+          && Number(values[1]) === filterSettings.year
+      ) {
         target.checked = false;
         setIsChecked(target.checked);
         setFilterSettings(null);
@@ -118,9 +122,8 @@ function Calendar({
         <PseudoButtonCheckbox
           type="radio"
           name="months"
-          value={tagTitle}
+          value={`${monthNumber}-${year}`}
           title={tagTitle}
-          datasetForFilter={String(monthNumber)}
           filters={filters}
           onChange={handleCheckboxChange}
           onClick={handleCheckboxClick}

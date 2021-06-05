@@ -6,7 +6,6 @@ function PseudoButtonCheckbox({
   name,
   value,
   title,
-  datasetForFilter,
   filters,
   onChange,
   onClick
@@ -16,10 +15,10 @@ function PseudoButtonCheckbox({
   };
 
   const handleClick = (evt) => {
-    onClick(evt, evt.target.dataset.filter);
+    onClick(evt, value);
   };
 
-  const id = `filter-button${datasetForFilter}`;
+  const id = `filter-button-${value}`;
   return (
     <label
       className="pseudo-button-label"
@@ -31,7 +30,6 @@ function PseudoButtonCheckbox({
         type={type}
         name={name}
         value={value}
-        data-filter={datasetForFilter}
         onChange={handleChange}
         onClick={handleClick}
       />
@@ -51,8 +49,7 @@ PseudoButtonCheckbox.propTypes = {
   title: PropTypes.string,
   filters: PropTypes.objectOf(PropTypes.number),
   onChange: PropTypes.func.isRequired,
-  onClick: PropTypes.func.isRequired,
-  datasetForFilter: PropTypes.string
+  onClick: PropTypes.func.isRequired
 };
 
 PseudoButtonCheckbox.defaultProps = {
@@ -60,8 +57,7 @@ PseudoButtonCheckbox.defaultProps = {
   name: '',
   value: '',
   title: '',
-  filters: {},
-  datasetForFilter: ''
+  filters: {}
 };
 
 export default PseudoButtonCheckbox;
