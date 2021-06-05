@@ -1,84 +1,84 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import './PopupCities.scss';
-import { getCities } from '../../utils/api';
+import Popup from '../Popup/Popup';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
-function PopupCities({ isOpen, onClose }) {
-  const [cities, setCities] = useState(null);
-
-  useEffect(() => {
-    getCities()
-      .then((res) => setCities(res.data.cities))
-      .catch((err) => console.log(err));
-  }, []);
+function PopupCities({
+  cities, isOpen, onClose, onSubmit
+}) {
+  const currentUser = useContext(CurrentUserContext);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    // TODO отправить запрос на сервер
-    console.log(evt.nativeEvent.submitter.value);
-    onClose();
-  };
-
-  const closeAllPopupsOnOverlay = (evt) => {
-    if (evt.target === evt.currentTarget) {
-      onClose();
+    const cityId = parseInt(evt.nativeEvent.submitter.value, 10);
+    if (currentUser) {
+      onSubmit({ ...currentUser, city: cityId });
     }
+    onClose();
   };
 
   return (
     cities && (
-      <article className={`popup ${isOpen ? 'popup_opened' : ''}`} onClick={closeAllPopupsOnOverlay}>
-        <div className="popup__container popup__container_type_cities">
-          <form className="cities" onSubmit={handleSubmit}>
-            <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />
-            <ul className="cities__list cities__list_type_primary">
-              {cities
-                .filter((item) => item.isPrimary === true)
-                .map((item) => (
-                  <li className="cities__list-item" key={item.id}>
-                    <button
-                      className="cities__city"
-                      type="submit"
-                      value={item.id}
-                    >
-                      {item.name}
-                    </button>
-                  </li>
-                ))}
-            </ul>
-            <ul className="cities__list">
-              {cities
-                .filter((item) => item.isPrimary !== true)
-                .map((item) => (
-                  <li className="cities__list-item" key={item.id}>
-                    <button
-                      className="cities__city"
-                      type="submit"
-                      value={item.id}
-                    >
-                      {item.name}
-                    </button>
-                  </li>
-                ))}
-            </ul>
-          </form>
-        </div>
-      </article>
+    <Popup
+      type="cities"
+      typeContainer="cities"
+      isOpen={isOpen}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      withoutCloseButton
+    >
+      <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />
+      <div className="cities__container">
+        <ul className="cities__list cities__list_type_primary">
+          {cities
+            .filter((item) => item.isPrimary === true)
+            .map((item) => (
+              <li className="cities__list-item" key={item.id}>
+                <button
+                  className="cities__city"
+                  type="submit"
+                  value={item.id}
+                >
+                  {item.name}
+                </button>
+              </li>
+            ))}
+        </ul>
+        <ul className="cities__list">
+          {cities
+            .filter((item) => item.isPrimary !== true)
+            .map((item) => (
+              <li className="cities__list-item" key={item.id}>
+                <button
+                  className="cities__city"
+                  type="submit"
+                  value={item.id}
+                >
+                  {item.name}
+                </button>
+              </li>
+            ))}
+        </ul>
+      </div>
+    </Popup>
     )
   );
 }
 
 PopupCities.propTypes = {
+  cities: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  onSubmit: PropTypes.func
 };
 
 PopupCities.defaultProps = {
+  cities: [],
   isOpen: false,
-  onClose: undefined
+  onClose: undefined,
+  onSubmit: undefined
 };
 
 export default PopupCities;

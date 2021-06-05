@@ -3,10 +3,11 @@
 // !делегирования функции закрытия мобильного меню по клику на ссылки
 // !https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/no-static-element-interactions.md#case-the-event-handler-is-only-being-used-to-capture-bubbled-events
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useClickOutside } from '../../utils/custom-hooks';
 import NavBar from '../ui/NavBar/NavBar';
 import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
@@ -14,9 +15,20 @@ import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
 function Header({
   onUserButtonClick,
   onLogout,
-  onCityChange
+  onCityChange,
+  cities
 }) {
   const { pathname } = useLocation();
+  const currentUser = useContext(CurrentUserContext);
+  const [userCityName, setUserCityName] = useState('');
+
+  // определение города пользователя, используется в кнопках
+  useEffect(() => {
+    if (cities && currentUser) {
+      const userCity = cities.filter((city) => city.id === currentUser.city);
+      setUserCityName(userCity[0].name);
+    }
+  }, [cities, currentUser]);
 
   // меню бургер
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -74,6 +86,7 @@ function Header({
       <NavBar
         onUserButtonClick={onUserButtonClick}
         onBurgerButtonClick={toggleMobileMenu}
+        userCityName={userCityName}
         onCityChangeClick={onCityChange}
         onLogout={onLogout}
         isMobileMenuOpen={isMobileMenuOpen}
@@ -82,7 +95,7 @@ function Header({
       {pathname === '/account' && (
       <div className="header__user-info">
         <UserMenuButton
-          title="Изменить город"
+          title={currentUser ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
           sectionClass="mobile-link"
           handleClick={onCityChange}
         />
@@ -97,7 +110,7 @@ function Header({
       {pathname === '/afisha' && (
       <div className="header__user-info">
         <UserMenuButton
-          title="Изменить город"
+          title={currentUser ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
           handleClick={onCityChange}
           sectionClass="mobile-link"
         />
@@ -110,13 +123,15 @@ function Header({
 Header.propTypes = {
   onUserButtonClick: PropTypes.func,
   onCityChange: PropTypes.func,
-  onLogout: PropTypes.func
+  onLogout: PropTypes.func,
+  cities: PropTypes.arrayOf(PropTypes.object)
 };
 
 Header.defaultProps = {
   onUserButtonClick: undefined,
   onCityChange: undefined,
-  onLogout: undefined
+  onLogout: undefined,
+  cities: []
 };
 
 export default Header;

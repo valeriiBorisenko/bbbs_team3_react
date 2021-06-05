@@ -14,7 +14,8 @@ function NavBar({
   onUserButtonClick,
   onBurgerButtonClick,
   onCityChangeClick,
-  onLogout
+  onLogout,
+  userCityName
 }) {
   const currentUser = useContext(CurrentUserContext);
 
@@ -130,7 +131,7 @@ function NavBar({
       {currentUser && (
       <div className={`menu__user-info ${!isMobileMenuOpen ? 'menu__user-info_hidden' : ''}`}>
         <UserMenuButton
-          title="Изменить город"
+          title={currentUser ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
           handleClick={onCityChangeClick}
           sectionClass="mobile-link"
         />
@@ -230,7 +231,8 @@ NavBar.propTypes = {
   onBurgerButtonClick: PropTypes.func,
   onCityChangeClick: PropTypes.func,
   onLogout: PropTypes.func,
-  isMobileMenuOpen: PropTypes.bool
+  isMobileMenuOpen: PropTypes.bool,
+  userCityName: PropTypes.string
 };
 
 NavBar.defaultProps = {
@@ -238,7 +240,8 @@ NavBar.defaultProps = {
   onBurgerButtonClick: undefined,
   onCityChangeClick: undefined,
   onLogout: undefined,
-  isMobileMenuOpen: false
+  isMobileMenuOpen: false,
+  userCityName: ''
 };
 
 export default NavBar;
