@@ -16,6 +16,7 @@
   opacity: 0;
   visibility: hidden;
   transition: visibility 0.3s, opacity 0.3s linear;
+  z-index: 100;
 
   &__container {
     display: flex;
@@ -60,7 +61,6 @@
   display: flex;
   opacity: 1;
   visibility: visible;
-  z-index: 15;
 }
 
 .popup__close {
