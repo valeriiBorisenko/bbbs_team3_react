@@ -1,20 +1,14 @@
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import './PopupCities.scss';
-import { getCities } from '../../utils/api';
 import Popup from '../Popup/Popup';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
-function PopupCities({ isOpen, onClose, onSubmit }) {
-  const [cities, setCities] = useState(null);
+function PopupCities({
+  cities, isOpen, onClose, onSubmit
+}) {
   const currentUser = useContext(CurrentUserContext);
-
-  useEffect(() => {
-    getCities()
-      .then((res) => setCities(res.data.cities))
-      .catch((err) => console.log(err));
-  }, []);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -74,12 +68,14 @@ function PopupCities({ isOpen, onClose, onSubmit }) {
 }
 
 PopupCities.propTypes = {
+  cities: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func
 };
 
 PopupCities.defaultProps = {
+  cities: [],
   isOpen: false,
   onClose: undefined,
   onSubmit: undefined
