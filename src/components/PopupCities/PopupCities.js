@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import './PopupCities.scss';
 import { getCities } from '../../utils/api';
 import Popup from '../Popup/Popup';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
-function PopupCities({ isOpen, onClose }) {
+function PopupCities({ isOpen, onClose, onSubmit }) {
   const [cities, setCities] = useState(null);
+  const currentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
     getCities()
@@ -16,8 +18,10 @@ function PopupCities({ isOpen, onClose }) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    // TODO отправить запрос на сервер
-    console.log(evt.nativeEvent.submitter.value);
+    const cityId = parseInt(evt.nativeEvent.submitter.value, 10);
+    if (currentUser) {
+      onSubmit({ ...currentUser, city: cityId });
+    }
     onClose();
   };
 
@@ -71,12 +75,14 @@ function PopupCities({ isOpen, onClose }) {
 
 PopupCities.propTypes = {
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  onSubmit: PropTypes.func
 };
 
 PopupCities.defaultProps = {
   isOpen: false,
-  onClose: undefined
+  onClose: undefined,
+  onSubmit: undefined
 };
 
 export default PopupCities;

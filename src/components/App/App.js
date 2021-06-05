@@ -37,7 +37,7 @@ function App() {
   // текущий юзер
   const [currentUser, setCurrentUser] = useState(null);
   const [isCheckingToken, setIsCheckingToken] = useState(true);
-  console.log(currentUser);
+  // console.log(currentUser);
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
@@ -301,6 +301,7 @@ function App() {
         <PopupCities
           isOpen={isPopupCitiesOpen}
           onClose={closeAllPopups}
+          onSubmit={setCurrentUser}
         />
         <PopupError
           isOpen={isPopupErrorOpen}
