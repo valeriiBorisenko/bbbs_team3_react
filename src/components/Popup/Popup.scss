@@ -93,35 +93,6 @@
   }
 }
 
-.popup__input {
-  box-sizing: border-box;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  height: 48px;
-  background-color: $background;
-  border-radius: 30px;
-  outline: none;
-  border: none;
-
-  &_required::placeholder {
-    color: red;
-  }
-}
-
-.popup__forgot-password {
-  margin: 0;
-  margin-bottom: 30px;
-  margin-top: 20px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: $darkGray;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 .popup__button {
   &_type_calendar {
     max-width: 191px;
