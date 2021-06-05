@@ -7,6 +7,7 @@ import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import Loader from '../ui/Loader/Loader';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { months } from '../../utils/constants';
 
 function Calendar({
   onEventSignUpClick,
@@ -18,33 +19,20 @@ function Calendar({
   isLoding
 }) {
   useSmoothScrollOnWindow({ top: 0 });
+
+  function eventSignUpHandler(cardData) {
+    onEventSignUpClick(cardData, cardData.booked);
+  }
+
   const currentUser = useContext(CurrentUserContext);
 
-  //! вынести в константы
-  const months = [
-    'Январь', // 0
-    'Февраль', // 1
-    'Март', // 2
-    'Апрель', // 3
-    'Май', // 4
-    'Июнь', // 5
-    'Июль', // 6
-    'Август', // 7
-    'Сентябрь', // 8
-    'Октябрь', // 9
-    'Ноябрь', // 10
-    'Декабрь' // 11
-  ];
-
-  // работа с апи-датой, будет на следующем этапе использоваться
-  // const [eventsArray, setEventsArray] = useState([]);
-
-  // работа с фильтрами
+  // работа с фильтр-кнопками, их стейты
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [filteredCardData, setFilteredCardData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
   const [filterSettings, setFilterSettings] = useState(null);
 
+  // создание кнопок с месяцами
   //! ШАГ 1 = сортируем все ивенты по хронологии
   const arrayOfSortedEvents = dataCalendar.sort((a, b) => {
     const date1 = new Date(a.startAt);
@@ -52,7 +40,7 @@ function Calendar({
     return date1 - date2;
   });
 
-  //! функция фильтрации ивентов под нажатый фильтр
+  // серия функций фильтрации ивентов под нажатый фильтр
   useEffect(() => {
     if (filterSettings) {
       const { year, monthNumber } = filterSettings;
@@ -63,20 +51,19 @@ function Calendar({
 
         return date >= min && date <= max;
       });
-
       setFilteredCardData(filteredArrayOfEvents);
     }
 
     setIsFiltersUsed(isChecked);
-  }, [isChecked, filterSettings]);
+  }, [isChecked, arrayOfSortedEvents, filterSettings]);
 
-  const handleCheckboxChange = (evt, filters) => {
+  function handleCheckboxChange(evt, filters) {
     const { target } = evt;
     setIsChecked(target.checked);
     setFilterSettings(filters);
-  };
+  }
 
-  const handleCheckboxClick = (evt, value) => {
+  function handleCheckboxClick(evt, value) {
     const { target } = evt;
     const values = value.split('-');
     if (filterSettings) {
@@ -89,10 +76,6 @@ function Calendar({
         setFilterSettings(null);
       }
     }
-  };
-
-  function eventSignUpHandler(cardData) {
-    onEventSignUpClick(cardData, cardData.booked);
   }
 
   //! ШАГ 2 = из массива ивентов делаем массив вида [месяц, год] на каждый ивент
@@ -106,52 +89,52 @@ function Calendar({
   });
 
   //! ШАГ 3 = выкидываем из массива arrayOfDatesWithEvents повторы
-  const arrayOfUniqueDates = Object.values(arrayOfDatesWithEvents.reduce((res, item) => ({
-    ...res,
-    [item.join('-')]: item
-  }), {}));
+  const arrayOfUniqueDates = Object.values(
+    arrayOfDatesWithEvents.reduce((res, item) => ({
+      ...res,
+      [item.join('-')]: item
+    }), {})
+  );
 
   //! ШАГ 4 = на основании хронологического массива без дубликатов генерируем кнопки
-  const tagsButtons = arrayOfUniqueDates.map((date) => {
-    const tagTitle = months[date[0]];
-    const monthNumber = months.indexOf(months[date[0]]);
-    const year = date[1];
-    const filters = {
-      year,
-      monthNumber
-    };
+  function tagsButtonsToRender() {
+    return arrayOfUniqueDates.map((date) => {
+      const tagTitle = months[date[0]];
+      const monthNumber = months.indexOf(months[date[0]]);
+      const year = date[1];
+      const filters = { year, monthNumber };
 
-    return (
-      <li className="tags__list-item" key={monthNumber}>
-        <PseudoButtonCheckbox
-          type="radio"
-          name="months"
-          value={`${monthNumber}-${year}`}
-          title={tagTitle}
-          filters={filters}
-          onChange={handleCheckboxChange}
-          onClick={handleCheckboxClick}
-        />
-      </li>
-    );
-  });
+      return (
+        <li className="tags__list-item" key={`${monthNumber}-${year}`}>
+          <PseudoButtonCheckbox
+            type="radio"
+            name="months"
+            value={`${monthNumber}-${year}`}
+            title={tagTitle}
+            filters={filters}
+            onChange={handleCheckboxChange}
+            onClick={handleCheckboxClick}
+          />
+        </li>
+      );
+    });
+  }
 
-  const whatToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
-  const tagsButtonRender = tagsButtons.length > 1
-    ? (
-      <div className="tags">
-        <ul className="tags__list">
-          {tagsButtons}
-        </ul>
-      </div>
-    ) : '';
+  const whatDataToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
 
   return !isLoding ? (
     <section className="lead page__section fade-in">
       <TitleH1 title="Календарь" />
-      {tagsButtonRender}
+      {arrayOfUniqueDates.length > 1 ? (
+        <div className="tags">
+          <ul className="tags__list">
+            {tagsButtonsToRender()}
+          </ul>
+        </div>
+      ) : null}
+
       <section className="calendar-container">
-        {whatToRender.map((data) => (
+        {whatDataToRender.map((data) => (
           <CardCalendar
             key={data.id}
             cardData={data}
@@ -162,6 +145,7 @@ function Calendar({
           />
         ))}
       </section>
+
       { currentUser ? '' : onOpenLoginPopup()}
     </section>
   ) : (
