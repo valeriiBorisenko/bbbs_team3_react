@@ -1,4 +1,4 @@
-import './CardPlaceMain.scss';
+import './CardPlace.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
@@ -7,7 +7,7 @@ import TitleH2 from '../TitleH2/TitleH2';
 import Card from '../Card/Card';
 import Caption from '../Caption/Caption';
 
-function CardPlaceMain({
+function CardPlace({
   data: {
     chosen, title, name, imageUrl, link, info, description
   },
@@ -52,7 +52,7 @@ function CardPlaceMain({
   );
 }
 
-CardPlaceMain.propTypes = {
+CardPlace.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   chosen: PropTypes.bool,
   title: PropTypes.string,
@@ -64,7 +64,7 @@ CardPlaceMain.propTypes = {
   sectionClass: PropTypes.string
 };
 
-CardPlaceMain.defaultProps = {
+CardPlace.defaultProps = {
   data: {},
   chosen: false,
   title: '',
@@ -76,4 +76,4 @@ CardPlaceMain.defaultProps = {
   sectionClass: ''
 };
 
-export default CardPlaceMain;
+export default CardPlace;

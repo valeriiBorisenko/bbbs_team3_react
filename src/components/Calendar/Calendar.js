@@ -1,9 +1,9 @@
-import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
+import './Calendar.scss';
+import { useEffect, useState, useContext } from 'react';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import TitleH1 from '../ui/TitleH1/TitleH1';
-import './Calendar.scss';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import Loader from '../ui/Loader/Loader';
@@ -127,7 +127,7 @@ function Calendar({
     <>
       <Helmet>
         <title>Календарь</title>
-        <meta name="description" content="Календарь событий и мероприятий для настаников" />
+        <meta name="description" content="Календарь событий и мероприятий для наставников" />
       </Helmet>
       <section className="lead page__section fade-in">
         <TitleH1 title="Календарь" />

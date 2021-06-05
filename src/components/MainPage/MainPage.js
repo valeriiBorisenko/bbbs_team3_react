@@ -8,7 +8,7 @@ import Loader from '../ui/Loader/Loader';
 import Card from '../ui/Card/Card';
 import CardStub from '../ui/CardStub/CardStub';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
-import CardPlaceMain from '../ui/CardPlaceMain/CardPlaceMain';
+import CardPlace from '../ui/CardPlace/CardPlace';
 import CardArticleBig from '../ui/CardArticleBig/CardArticleBig';
 import CardFilm from '../ui/CardFilm/CardFilm';
 import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
@@ -65,7 +65,7 @@ function MainPage({
       </section>
 
       <section className="place main-section page__section fade-in">
-        <CardPlaceMain
+        <CardPlace
           key={dataMain.place.id}
           data={dataMain.place}
         />
