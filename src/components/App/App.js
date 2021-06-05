@@ -225,7 +225,9 @@ function App() {
 
   // получение списка городов
   useEffect(() => {
-    getCities().then((res) => setCities(res.cities));
+    getCities()
+      .then((res) => setCities(res.cities))
+      .catch((error) => console.log(error));
   }, []);
 
   // эффект закрытия модалок по Escape
