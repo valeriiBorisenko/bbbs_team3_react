@@ -91,6 +91,10 @@ function Calendar({
     }
   };
 
+  function eventSignUpHandler(cardData) {
+    onEventSignUpClick(cardData, cardData.booked);
+  }
+
   //! ШАГ 2 = из массива ивентов делаем массив вида [месяц, год] на каждый ивент
   const arrayOfDatesWithEvents = arrayOfSortedEvents.map((someEvent) => {
     // взяли дату ивента, переделали в дату-объект
@@ -141,10 +145,6 @@ function Calendar({
         </ul>
       </div>
     ) : '';
-
-  function eventSignUpHandler(cardData) {
-    onEventSignUpClick(cardData, cardData.booked);
-  }
 
   return !isLoding ? (
     <section className="lead page__section fade-in">

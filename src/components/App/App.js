@@ -259,7 +259,6 @@ function App() {
                   isLoding={isLoding}
                 />
               </Route>
-
               <ProtectedRoute
                 exact
                 path="/account"
@@ -268,7 +267,6 @@ function App() {
                 eventsData={dataCalendar}
                 isAuth={currentUser}
               />
-
               <Route path="*">
                 <PageNotFound />
               </Route>
