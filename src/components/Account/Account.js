@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import './Account.scss';
 import PropTypes from 'prop-types';
 import { getProfileDiaryData } from '../../utils/api';
@@ -116,6 +117,10 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
 
   return (
     <>
+      <Helmet>
+        <title>Личный кабинет</title>
+        <meta name="description" content="Личный кабинет наставника" />
+      </Helmet>
       <section className="account fade-in">
         <div className="account__events-area page__section">
           <TitleH2

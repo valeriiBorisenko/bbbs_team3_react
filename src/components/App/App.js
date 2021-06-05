@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
 import { Route, Switch, useHistory } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Loader from '../ui/Loader/Loader';
@@ -240,87 +241,89 @@ function App() {
   }, []);
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <Header
-          onLogout={handleLogout}
-          onUserButtonClick={handleUserButtonClick}
-          onCityChange={handleClickPopupCities}
-          cities={cities}
-        />
-        <main className="main">
-          {!isCheckingToken ? (
-            <Switch>
-              <Route exact path="/">
-                <MainPage
-                  onEventSignUpClick={bookingHandler}
+    <HelmetProvider>
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className="page">
+          <Header
+            onLogout={handleLogout}
+            onUserButtonClick={handleUserButtonClick}
+            onCityChange={handleClickPopupCities}
+            cities={cities}
+          />
+          <main className="main">
+            {!isCheckingToken ? (
+              <Switch>
+                <Route exact path="/">
+                  <MainPage
+                    onEventSignUpClick={bookingHandler}
+                    onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                    dataMain={dataMain}
+                  />
+                </Route>
+                <Route exact path="/about-us">
+                  <AboutUs />
+                </Route>
+                <Route path="/afisha">
+                  <Calendar
+                    onEventSignUpClick={bookingHandler}
+                    onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                    onOpenLoginPopup={handleClickPopupLoginOpened}
+                    dataCalendar={dataCalendar}
+                    isLoding={isLoding}
+                  />
+                </Route>
+                <ProtectedRoute
+                  exact
+                  path="/account"
+                  component={Account}
                   onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                  dataMain={dataMain}
+                  eventsData={dataCalendar}
+                  isAuth={currentUser}
                 />
-              </Route>
-              <Route exact path="/about-us">
-                <AboutUs />
-              </Route>
-              <Route path="/afisha">
-                <Calendar
-                  onEventSignUpClick={bookingHandler}
-                  onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                  onOpenLoginPopup={handleClickPopupLoginOpened}
-                  dataCalendar={dataCalendar}
-                  isLoding={isLoding}
-                />
-              </Route>
-              <ProtectedRoute
-                exact
-                path="/account"
-                component={Account}
-                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                eventsData={dataCalendar}
-                isAuth={currentUser}
-              />
-              <Route path="*">
-                <PageNotFound />
-              </Route>
-            </Switch>
-          ) : <Loader />}
-        </main>
-        <Footer />
-        <PopupConfirmation
-          isOpen={isPopupConfirmationOpen}
-          onClose={closeAllPopups}
-          onConfirmButtonClick={handleEventUpdate}
-          onErrorClick={handleClickPopupErrorOpened}
-          cardData={selectedCalendarCard}
-        />
-        <PopupSuccessfully
-          isOpen={isPopupSuccessfullyOpen}
-          onClose={closeAllPopups}
-          cardData={selectedCalendarCard}
-        />
-        <PopupLogin
-          isOpen={isPopupLoginOpen}
-          onClose={closeAllPopups}
-          onLoginFormSubmit={handleLogin}
-        />
-        <PopupAboutEvent
-          isOpen={isPopupAboutDescriptionOpen}
-          onClose={closeAllPopups}
-          onEventSignUpClick={bookingHandler}
-          onErrorClick={handleClickPopupErrorOpened}
-          cardData={selectedCalendarCard}
-        />
-        <PopupCities
-          cities={cities}
-          isOpen={isPopupCitiesOpen}
-          onClose={closeAllPopups}
-          onSubmit={setCurrentUser}
-        />
-        <PopupError
-          isOpen={isPopupErrorOpen}
-          onClose={closeAllPopups}
-        />
-      </div>
-    </CurrentUserContext.Provider>
+                <Route path="*">
+                  <PageNotFound />
+                </Route>
+              </Switch>
+            ) : <Loader />}
+          </main>
+          <Footer />
+          <PopupConfirmation
+            isOpen={isPopupConfirmationOpen}
+            onClose={closeAllPopups}
+            onConfirmButtonClick={handleEventUpdate}
+            onErrorClick={handleClickPopupErrorOpened}
+            cardData={selectedCalendarCard}
+          />
+          <PopupSuccessfully
+            isOpen={isPopupSuccessfullyOpen}
+            onClose={closeAllPopups}
+            cardData={selectedCalendarCard}
+          />
+          <PopupLogin
+            isOpen={isPopupLoginOpen}
+            onClose={closeAllPopups}
+            onLoginFormSubmit={handleLogin}
+          />
+          <PopupAboutEvent
+            isOpen={isPopupAboutDescriptionOpen}
+            onClose={closeAllPopups}
+            onEventSignUpClick={bookingHandler}
+            onErrorClick={handleClickPopupErrorOpened}
+            cardData={selectedCalendarCard}
+          />
+          <PopupCities
+            cities={cities}
+            isOpen={isPopupCitiesOpen}
+            onClose={closeAllPopups}
+            onSubmit={setCurrentUser}
+          />
+          <PopupError
+            isOpen={isPopupErrorOpen}
+            onClose={closeAllPopups}
+          />
+        </div>
+      </CurrentUserContext.Provider>
+    </HelmetProvider>
   );
 }
 
