@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet-async';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 import './Calendar.scss';
@@ -123,31 +124,37 @@ function Calendar({
   const whatDataToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
 
   return !isLoding ? (
-    <section className="lead page__section fade-in">
-      <TitleH1 title="Календарь" />
-      {arrayOfUniqueDates.length > 1 ? (
-        <div className="tags">
-          <ul className="tags__list">
-            {tagsButtonsToRender()}
-          </ul>
-        </div>
-      ) : null}
+    <>
+      <Helmet>
+        <title>Календарь</title>
+        <meta name="description" content="Календарь событий и мероприятий для настаников" />
+      </Helmet>
+      <section className="lead page__section fade-in">
+        <TitleH1 title="Календарь" />
+        {arrayOfUniqueDates.length > 1 ? (
+          <div className="tags">
+            <ul className="tags__list">
+              {tagsButtonsToRender()}
+            </ul>
+          </div>
+        ) : null}
 
-      <section className="calendar-container">
-        {whatDataToRender.map((data) => (
-          <CardCalendar
-            key={data.id}
-            cardData={data}
-            onEventSignUpClick={eventSignUpHandler}
-            onEventFullDescriptionClick={onEventFullDescriptionClick}
-            clickButton={clickButton}
-            isBooked={isBooked}
-          />
-        ))}
+        <section className="calendar-container">
+          {whatDataToRender.map((data) => (
+            <CardCalendar
+              key={data.id}
+              cardData={data}
+              onEventSignUpClick={eventSignUpHandler}
+              onEventFullDescriptionClick={onEventFullDescriptionClick}
+              clickButton={clickButton}
+              isBooked={isBooked}
+            />
+          ))}
+        </section>
+
+        { currentUser ? '' : onOpenLoginPopup()}
       </section>
-
-      { currentUser ? '' : onOpenLoginPopup()}
-    </section>
+    </>
   ) : (
     <Loader />
   );
