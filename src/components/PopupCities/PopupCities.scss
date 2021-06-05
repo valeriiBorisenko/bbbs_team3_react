@@ -9,10 +9,21 @@
   max-width: 400px;
   max-height: calc(100vh - 30px);
   height: fit-content;
+
+  & > .popup__form {
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+  }
 }
 
-.cities {
-  box-sizing: border-box;
+.cities__title {
+  margin-bottom: 30px;
+  font-size: 23px;
+  text-align: center;
+}
+
+.cities__container {
   width: 100%;
   overflow-y: scroll;
   scrollbar-width: none;
@@ -22,12 +33,6 @@
     width: 0;
     height: 0;
   }
-}
-
-.cities__title {
-  margin-bottom: 30px;
-  font-size: 23px;
-  text-align: center;
 }
 
 .cities__list {

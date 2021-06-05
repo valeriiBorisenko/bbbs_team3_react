@@ -1,9 +1,8 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './PopupCities.scss';
 import { getCities } from '../../utils/api';
+import Popup from '../Popup/Popup';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
 function PopupCities({ isOpen, onClose }) {
@@ -22,51 +21,50 @@ function PopupCities({ isOpen, onClose }) {
     onClose();
   };
 
-  const closeAllPopupsOnOverlay = (evt) => {
-    if (evt.target === evt.currentTarget) {
-      onClose();
-    }
-  };
-
   return (
     cities && (
-      <article className={`popup ${isOpen ? 'popup_opened' : ''}`} onClick={closeAllPopupsOnOverlay}>
-        <div className="popup__container popup__container_type_cities">
-          <form className="cities" onSubmit={handleSubmit}>
-            <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />
-            <ul className="cities__list cities__list_type_primary">
-              {cities
-                .filter((item) => item.isPrimary === true)
-                .map((item) => (
-                  <li className="cities__list-item" key={item.id}>
-                    <button
-                      className="cities__city"
-                      type="submit"
-                      value={item.id}
-                    >
-                      {item.name}
-                    </button>
-                  </li>
-                ))}
-            </ul>
-            <ul className="cities__list">
-              {cities
-                .filter((item) => item.isPrimary !== true)
-                .map((item) => (
-                  <li className="cities__list-item" key={item.id}>
-                    <button
-                      className="cities__city"
-                      type="submit"
-                      value={item.id}
-                    >
-                      {item.name}
-                    </button>
-                  </li>
-                ))}
-            </ul>
-          </form>
-        </div>
-      </article>
+    <Popup
+      type="cities"
+      typeContainer="cities"
+      isOpen={isOpen}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      withoutCloseButton
+    >
+      <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />
+      <div className="cities__container">
+        <ul className="cities__list cities__list_type_primary">
+          {cities
+            .filter((item) => item.isPrimary === true)
+            .map((item) => (
+              <li className="cities__list-item" key={item.id}>
+                <button
+                  className="cities__city"
+                  type="submit"
+                  value={item.id}
+                >
+                  {item.name}
+                </button>
+              </li>
+            ))}
+        </ul>
+        <ul className="cities__list">
+          {cities
+            .filter((item) => item.isPrimary !== true)
+            .map((item) => (
+              <li className="cities__list-item" key={item.id}>
+                <button
+                  className="cities__city"
+                  type="submit"
+                  value={item.id}
+                >
+                  {item.name}
+                </button>
+              </li>
+            ))}
+        </ul>
+      </div>
+    </Popup>
     )
   );
 }
