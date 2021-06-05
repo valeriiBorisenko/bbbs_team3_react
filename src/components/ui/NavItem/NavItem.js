@@ -21,7 +21,7 @@ function NavItem({
 NavItem.propTypes = {
   sectionWrapperClass: PropTypes.string.isRequired,
   sectionLinkClass: PropTypes.string.isRequired,
-  href: PropTypes.string || PropTypes.objectOf(PropTypes.any),
+  href: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   linkText: PropTypes.string.isRequired,
   rel: PropTypes.string,
   target: PropTypes.string

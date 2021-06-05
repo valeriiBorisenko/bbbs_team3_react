@@ -21,9 +21,8 @@ function Header({
   // меню бургер
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const toggleNavMenu = () => {
-    if (isMobileMenuOpen) setIsMobileMenuOpen(false);
-    else setIsMobileMenuOpen(true);
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   // закрытие мобильного меню по клику вне хедера
@@ -31,8 +30,8 @@ function Header({
 
   // закрытие мобильного меню по клику на ссылки
   const handleCloseMobileMenu = (evt) => {
-    const el = evt.target;
-    if (isMobileMenuOpen && el.classList.contains('mobile-link')) {
+    const { target } = evt;
+    if (isMobileMenuOpen && target.classList.contains('mobile-link')) {
       setIsMobileMenuOpen(false);
     }
   };
@@ -74,18 +73,18 @@ function Header({
     >
       <NavBar
         onUserButtonClick={onUserButtonClick}
-        onBurgerButtonClick={toggleNavMenu}
+        onBurgerButtonClick={toggleMobileMenu}
         onCityChangeClick={onCityChange}
         onLogout={onLogout}
-        isNavMenuOpen={isMobileMenuOpen}
+        isMobileMenuOpen={isMobileMenuOpen}
       />
 
       {pathname === '/account' && (
       <div className="header__user-info">
         <UserMenuButton
           title="Изменить город"
-          handleClick={onCityChange}
           sectionClass="mobile-link"
+          handleClick={onCityChange}
         />
         <UserMenuButton
           title="Выйти"
