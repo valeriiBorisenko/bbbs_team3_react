@@ -10,7 +10,7 @@ import UserButton from '../UserButton/UserButton';
 import UserMenuButton from '../UserMenuButton/UserMenuButton';
 
 function NavBar({
-  isNavMenuOpen,
+  isMobileMenuOpen,
   onUserButtonClick,
   onBurgerButtonClick,
   onCityChangeClick,
@@ -27,7 +27,7 @@ function NavBar({
       {/* обычное меню */}
       <div
         className={`menu__lists-wrap ${
-          !isNavMenuOpen ? 'menu__lists-wrap_hidden' : ''
+          !isMobileMenuOpen ? 'menu__lists-wrap_hidden' : ''
         }`}
       >
         <ul className="menu__list">
@@ -82,7 +82,7 @@ function NavBar({
 
         <ul
           className={`menu__list menu__list_type_social ${
-            !isNavMenuOpen ? 'menu__list_hidden' : ''
+            !isMobileMenuOpen ? 'menu__list_hidden' : ''
           }`}
         >
           {/* facebook */}
@@ -128,7 +128,7 @@ function NavBar({
       </div>
 
       {currentUser && (
-      <div className={`menu__user-info ${!isNavMenuOpen ? 'menu__user-info_hidden' : ''}`}>
+      <div className={`menu__user-info ${!isMobileMenuOpen ? 'menu__user-info_hidden' : ''}`}>
         <UserMenuButton
           title="Изменить город"
           handleClick={onCityChangeClick}
@@ -144,7 +144,7 @@ function NavBar({
 
       <button
         onClick={onBurgerButtonClick}
-        className={`menu__burger ${isNavMenuOpen ? 'menu__burger_active' : ''}`}
+        className={`menu__burger ${isMobileMenuOpen ? 'menu__burger_active' : ''}`}
         type="button"
       >
         <span className="menu__burger-line" />
@@ -216,6 +216,7 @@ function NavBar({
         </li>
         <li className="menu__button-item">
           <UserButton
+            sectionClass="mobile-link"
             isAuthorized={currentUser}
             handleClick={onUserButtonClick}
           />
@@ -230,7 +231,7 @@ NavBar.propTypes = {
   onBurgerButtonClick: PropTypes.func,
   onCityChangeClick: PropTypes.func,
   onLogout: PropTypes.func,
-  isNavMenuOpen: PropTypes.bool
+  isMobileMenuOpen: PropTypes.bool
 };
 
 NavBar.defaultProps = {
@@ -238,7 +239,7 @@ NavBar.defaultProps = {
   onBurgerButtonClick: undefined,
   onCityChangeClick: undefined,
   onLogout: undefined,
-  isNavMenuOpen: false
+  isMobileMenuOpen: false
 };
 
 export default NavBar;

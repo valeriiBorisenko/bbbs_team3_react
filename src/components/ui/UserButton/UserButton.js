@@ -1,12 +1,16 @@
 import './UserButton.scss';
 import PropTypes from 'prop-types';
 
-function UserButton({ isAuthorized, handleClick }) {
+function UserButton({ sectionClass, isAuthorized, handleClick }) {
+  const classNames = [
+    'user-button',
+    isAuthorized ? 'user-button_authorized' : 'user-button_unauthorized',
+    sectionClass
+  ].join(' ').trim();
+
   return (
     <button
-      className={`user-button ${
-        isAuthorized ? 'user-button_authorized' : 'user-button_unauthorized'
-      }`}
+      className={classNames}
       type="button"
       aria-label="Личный кабинет"
       title="Личный кабинет"
@@ -16,11 +20,13 @@ function UserButton({ isAuthorized, handleClick }) {
 }
 
 UserButton.propTypes = {
-  isAuthorized: PropTypes.bool,
+  sectionClass: PropTypes.string,
+  isAuthorized: PropTypes.objectOf(PropTypes.any),
   handleClick: PropTypes.func
 };
 
 UserButton.defaultProps = {
+  sectionClass: '',
   isAuthorized: false,
   handleClick: undefined
 };
