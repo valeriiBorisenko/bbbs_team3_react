@@ -20,7 +20,11 @@
   margin-top: 15px;
 }
 
-.calendar-container {
+.calendar-page__loader {
+  margin: 120px auto 0;
+}
+
+.calendar-page__grid {
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(470px, 1fr));
@@ -31,19 +35,25 @@
 }
 
 @include atDesktop1440 {
-  .calendar-container {
+  .calendar-page__grid {
     grid-template-columns: repeat(2, minmax(370px, 1fr));
   }
 }
 
 @include atDesktop1023 {
-  .calendar-container {
+  .calendar-page__grid {
     grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   }
 }
 
+@include atTabletL {
+  .calendar-page__loader {
+    margin: 50px auto 0;
+  }
+}
+
 @include atTablet {
-  .calendar-container {
+  .calendar-page__grid {
     grid-template-columns: 1fr;
   }
 
@@ -56,6 +66,18 @@
       width: 40px;
       height: 100%;
       background: linear-gradient(90deg, transparent 0%, $background 100%);
+      z-index: 1;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -1px;
+      width: 40px;
+      height: 100%;
+      background: linear-gradient(90deg, $background 0%, transparent 100%);
+      z-index: 1;
     }
   }
   .tags__list {
@@ -70,7 +92,7 @@
 }
 
 @include atMobile {
-  .calendar-container {
+  .calendar-page__grid {
     padding-top: 30px;
   }
 }

@@ -1,19 +1,200 @@
-@keyframes rotation {
+@keyframes spin {
   0% {
-    transform: rotate(0);
+    opacity: 1;
+    transform: scale(1.4, 1.4);
+    animation-timing-function: ease-in;
+  } 
+
+  25% {
+    animation-timing-function: ease-out;
   }
-  100% {
-    transform: rotate(360deg);
+
+  51% {
+    opacity: .95;
+    animation-timing-function: ease-in;
+  }
+
+  75% {
+    animation-timing-function: ease-out;
+  }
+
+  86%, 100% {
+    opacity: .9;
+    transform: scale(0, 0);
   }
 }
 
-.loader {
-  width: 150px;
-  height: 150px;
-  background-image: url('../../../assets/loader.svg');
-  background-repeat: no-repeat;
-  background-size: 144px;
-  background-position: center;
+.spinner {
+  width: 148px;
+  height: 148px;
+  display: block;
   margin: 0 auto;
-  animation: rotation 1.2s infinite linear;
 }
+
+.spinner__container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.spinner__circle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #2e2468;
+  animation: spin 1s linear infinite;
+}
+
+.spinner__circle_1 {
+  right: 5px;
+  top: 65px;
+  animation-delay: -0.92s;
+}
+
+.spinner__circle_7 {
+  left: 5px;
+  top: 65px;
+  animation-delay: -0.42s;
+}
+//
+.spinner__circle_4 {
+  left: 65px;
+  bottom: 5px;
+  animation-delay: -0.67s;
+}
+
+.spinner__circle_10 {
+  left: 65px;
+  top: 5px;
+  animation-delay: -0.17s;
+}
+//
+.spinner__circle_2 {
+  right: 12px;
+  bottom: 35px;
+  animation-delay: -0.83s;
+}
+
+.spinner__circle_6 {
+  left: 12px;
+  bottom: 35px;
+  animation-delay: -0.5s;
+}
+//
+.spinner__circle_3 {
+  right: 33px;
+  bottom: 14px;
+  animation-delay: -0.75s;
+}
+
+.spinner__circle_5 {
+  left: 33px;
+  bottom: 14px;
+  animation-delay: -0.58s;
+}
+//
+.spinner__circle_8 {
+  left: 12px;
+  top: 35px;
+  animation-delay: -0.33s;
+}
+
+.spinner__circle_12 {
+  right: 12px;
+  top: 35px;
+  animation-delay: 0s;
+}
+//
+.spinner__circle_9 {
+  left: 33px;
+  top: 14px;
+  animation-delay: -0.25s;
+}
+
+.spinner__circle_11 {
+  right: 33px;
+  top: 14px;
+  animation-delay: -0.08s;
+}
+
+// .spinner__circle {
+//   position: absolute;
+//   width: 17px;
+//   height: 17px;
+//   border-radius: 50%;
+//   background-color: #2e2468;
+//   animation: spin 1s linear infinite;
+// }
+
+// .spinner__circle_1 {
+//   left: 110px;
+//   top: 57px;
+//   animation-delay: -0.9166666666666666s;
+// }
+
+// .spinner__circle_7 {
+//   left: 5px;
+//   top: 57px;
+//   animation-delay: -0.4166666666666667s;
+// }
+
+// .spinner__circle_4 {
+//   left: 57px;
+//   top: 110px;
+//   animation-delay: -0.6666666666666666s;
+// }
+
+// .spinner__circle_10 {
+//   left: 57px;
+//   top: 5px;
+//   animation-delay: -0.16666666666666666s;
+// }
+
+// .spinner__circle_2 {
+//   left: 103px;
+//   top: 83px;
+//   animation-delay: -0.8333333333333334s;
+// }
+
+// .spinner__circle_6 {
+//   left: 12px;
+//   top: 83px;
+//   animation-delay: -0.5s;
+// }
+
+// .spinner__circle_3 {
+//   left: 83px;
+//   top: 103px;
+//   animation-delay: -0.75s;
+// }
+
+// .spinner__circle_5 {
+//   left: 31px;
+//   top: 103px;
+//   animation-delay: -0.5833333333333334s;
+// }
+
+// .spinner__circle_8 {
+//   left: 12px;
+//   top: 31px;
+//   animation-delay: -0.3333333333333333s;
+// }
+
+// .spinner__circle_12 {
+//   left: 103px;
+//   top: 31px;
+//   animation-delay: 0s;
+// }
+
+// .spinner__circle_9 {
+//   left: 31px;
+//   top: 12px;
+//   animation-delay: -0.25s;
+// }
+
+// .spinner__circle_11 {
+//   left: 83px;
+//   top: 12px;
+//   animation-delay: -0.08333333333333333s;
+// }

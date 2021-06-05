@@ -42,7 +42,6 @@ function App() {
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
-  const [isLoding, setIsLoding] = useState(true);
 
   // выбранная карточка при открытии попапа (календарь)
   // в объекте всегда только те поля что пришли с сервера
@@ -57,7 +56,6 @@ function App() {
   useEffect(() => {
     Api.getMainPageData()
       .then((res) => setDataMain(res.mainPageData))
-      .then(() => setIsLoding(false))
       .catch((err) => console.log(err));
   }, []);
 
@@ -66,7 +64,6 @@ function App() {
     if (currentUser) {
       Api.getCalendarPageData()
         .then((res) => setDataCalendar(res.calendarPageData))
-        .then(() => setIsLoding(false))
         .catch((err) => {
           setIsPopupErrorOpen(true);
           console.log(err);
@@ -263,7 +260,6 @@ function App() {
                     onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
                     onOpenLoginPopup={handleClickPopupLoginOpened}
                     dataCalendar={dataCalendar}
-                    isLoding={isLoding}
                   />
                 </Route>
                 <ProtectedRoute

@@ -1,5 +1,4 @@
 import './CardCalendar.scss';
-// import { useState } from 'react';
 import PropTypes from 'prop-types';
 import ButtonDots from '../ButtonDots/ButtonDots';
 import Button from '../Button/Button';
@@ -9,7 +8,8 @@ function CardCalendar({
   cardData,
   isModal,
   onEventSignUpClick,
-  onEventFullDescriptionClick
+  onEventFullDescriptionClick,
+  sectionClass
 }) {
   const {
     booked,
@@ -36,8 +36,10 @@ function CardCalendar({
     onEventFullDescriptionClick(cardData, cardData.booked);
   }
 
+  const classNames = ['calendar', booked ? 'calendar_selected' : '', sectionClass].join(' ').trim();
+
   return (
-    <article className={`calendar ${booked ? 'calendar_selected' : ''}`}>
+    <article className={classNames}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -79,7 +81,6 @@ function CardCalendar({
             isDisabled={isDisabled}
             onClick={prepareDataForConfirmationPopup}
             isBooked={booked}
-            // setIsBooked={setIsBooked}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
@@ -97,32 +98,18 @@ function CardCalendar({
 
 CardCalendar.propTypes = {
   cardData: PropTypes.objectOf(PropTypes.any),
-  tags: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string,
-  startAt: PropTypes.string,
-  endAt: PropTypes.string,
-  address: PropTypes.string,
-  contact: PropTypes.string,
-  remainSeats: PropTypes.number,
-  description: PropTypes.string,
   isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func
+  onEventFullDescriptionClick: PropTypes.func,
+  sectionClass: PropTypes.string
 };
 
 CardCalendar.defaultProps = {
   cardData: {},
-  title: '',
-  startAt: '',
-  endAt: '',
-  address: '',
-  contact: '',
-  remainSeats: 0,
-  tags: [],
-  description: '',
   isModal: false,
   onEventSignUpClick: undefined,
-  onEventFullDescriptionClick: undefined
+  onEventFullDescriptionClick: undefined,
+  sectionClass: ''
 };
 
 export default CardCalendar;

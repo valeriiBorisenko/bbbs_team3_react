@@ -21,11 +21,10 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formDataToEdit, setFormDataToEdit] = useState(null);
-  const [diaryFormInputValues, setDiaryFormInputValues] = useState({});
   const [isPopupDeleteDiaryOpen, setIsPopupDeleteDiaryOpen] = useState(false);
 
   //! обновляемые данные с формы, карточка дневника пока не добавляется
-  console.log(diaryFormInputValues);
+  const [diaryFormInputValues, setDiaryFormInputValues] = useState({});
 
   useEffect(() => {
     Api.getProfileDiaryData()
@@ -103,10 +102,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   };
 
   const handleCardDelete = (card) => {
-    // TODO сделать DELETE-запрос к серверу, получить новый массив карточек и отфильтровать стейт
     setDiaries(() => diaries.filter((d) => (d.id === card.id ? null : d)));
-    // TODO .catch()
-    // TODO .finally()
     closePopupDeleteDiary();
   };
 
