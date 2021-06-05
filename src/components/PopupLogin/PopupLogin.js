@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
+import { useEffect } from 'react';
 import '../Popup/Popup.scss';
 import './PopupLogin.scss';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import Popup from '../Popup/Popup';
+import Input from '../ui/Input/Input';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
 function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
-  const [loginValue, setLoginValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
+  const {
+    register, handleSubmit, formState: { errors }, reset
+  } = useForm();
 
-  function submitHandler(event) {
-    event.preventDefault();
-    onLoginFormSubmit({
-      login: loginValue,
-      password: passwordValue
-    });
+  function onFormSubmit(values) {
+    onLoginFormSubmit(values);
   }
 
   //! аварийный перевод на главную, если не хочешь логиниться
@@ -29,13 +28,12 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
     onClose();
   }
 
-  function handleLoginChange(event) {
-    setLoginValue(event.target.value);
-  }
-
-  function handlePasswordChange(event) {
-    setPasswordValue(event.target.value);
-  }
+  useEffect(() => {
+    reset({
+      login: '',
+      password: ''
+    });
+  }, [isOpen]);
 
   return (
     <Popup
@@ -43,7 +41,7 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
       typeContainer="sign-in"
       isOpen={isOpen}
       onClose={closePopup}
-      onSubmit={submitHandler}
+      onSubmit={handleSubmit(onFormSubmit)}
     >
       <TitleH2 sectionClass="popup__title_type_sign-in" title="Вход" />
       <p className="paragraph popup__sign-in">
@@ -54,28 +52,33 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
         Пожалуйста, введите логин и пароль из письма. Если вам не приходило
         письмо, свяжитесь с вашим куратором.
       </p>
-      <input
+      <Input
+        sectionClass="popup__input"
         type="text"
-        className="popup__input"
-        required
+        name="login"
         placeholder="Логин"
-        value={loginValue}
-        onChange={handleLoginChange}
-      />
-      <input
-        type="password"
-        className="popup__input"
+        register={register}
         required
-        value={passwordValue}
-        onChange={handlePasswordChange}
+        error={errors?.login}
+        errorMessage="Логин*"
+      />
+      <Input
+        sectionClass="popup__input"
+        type="password"
+        name="password"
         placeholder="Пароль"
+        register={register}
+        required
+        error={errors?.password}
+        errorMessage="Пароль*"
       />
       <a href="/" className="popup__forgot-password">Забыли пароль?</a>
       <Button
+        sectionClass="popup__button_type_sign-in"
         color="blue"
         title="Войти"
+        isDisabled={!!(errors.login || errors.password)}
         isSubmittable
-        sectionClass="popup__button_type_sign-in"
       />
     </Popup>
   );
