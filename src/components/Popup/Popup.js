@@ -34,7 +34,7 @@ function Popup({
 }
 
 Popup.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
   type: PropTypes.string,
   typeContainer: PropTypes.string,
   isOpen: PropTypes.bool,
