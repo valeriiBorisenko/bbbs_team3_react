@@ -15,7 +15,6 @@ import PopupDeleteDiary from '../PopupDeleteDiary/PopupDeleteDiary';
 //! Сейчас данные о мероприятиях приходят из App,
 //! чтобы синхронизировать отмену записи со стейтом данных календаря.
 //! Когда будет готов бэк, она будет приходить в GET-запросе и синхронизироваться через сервер
-
 function Account({ eventsData, onEventFullDescriptionClick }) {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
