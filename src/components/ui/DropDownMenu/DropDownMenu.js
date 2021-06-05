@@ -8,6 +8,7 @@ function DropDownMenu({ sectionWrapperClass, textsForLinks }) {
     <ul className={sectionWrapperClass}>
       {textsForLinks.map((text) => (
         <NavItem
+          key={text}
           sectionWrapperClass="menu__dropdown-list-item"
           sectionLinkClass="link menu__dropdown-link"
           href="#"

@@ -161,7 +161,6 @@ function NavBar({
                 type="text"
                 name="search"
                 placeholder="Поиск"
-                value=""
                 className="search__input paragraph"
               />
               <ul className="search__option-list">
