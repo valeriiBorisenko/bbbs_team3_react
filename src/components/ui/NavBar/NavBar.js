@@ -50,7 +50,7 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="#"
+            href="/where-to-go"
             linkText="Куда пойти"
           />
           {/* Вопросы */}
