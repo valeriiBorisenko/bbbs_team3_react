@@ -28,7 +28,8 @@ import {
   setAuth,
   updateEventFetch,
   clearAuth,
-  getUserData
+  getUserData,
+  getCities
 } from '../../utils/api';
 
 function App() {
@@ -37,7 +38,9 @@ function App() {
   // текущий юзер
   const [currentUser, setCurrentUser] = useState(null);
   const [isCheckingToken, setIsCheckingToken] = useState(true);
-  console.log(currentUser);
+
+  // список городов
+  const [cities, setCities] = useState(null);
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
@@ -220,6 +223,11 @@ function App() {
     checkToken();
   }, []);
 
+  // получение списка городов
+  useEffect(() => {
+    getCities().then((res) => setCities(res.cities));
+  }, []);
+
   // эффект закрытия модалок по Escape
   useEffect(() => {
     window.addEventListener('keyup', (evt) => {
@@ -236,6 +244,7 @@ function App() {
           onLogout={handleLogout}
           onUserButtonClick={handleUserButtonClick}
           onCityChange={handleClickPopupCities}
+          cities={cities}
         />
         <main className="main">
           {!isCheckingToken ? (
@@ -299,8 +308,10 @@ function App() {
           cardData={selectedCalendarCard}
         />
         <PopupCities
+          cities={cities}
           isOpen={isPopupCitiesOpen}
           onClose={closeAllPopups}
+          onSubmit={setCurrentUser}
         />
         <PopupError
           isOpen={isPopupErrorOpen}

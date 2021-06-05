@@ -66,7 +66,7 @@ mock.onPost(`${baseURL}${apiUrl}/token/`).reply(
 // (response) => response.json() + проверять статусы response и тогда возвращать res.json()
 export const getMainPageData = () => axios.get(`${baseURL}${apiUrl}/main/`);
 export const getProfileDiaryData = () => axios.get(`${baseURL}${apiUrl}/profile/diary/`).then((response) => response.data);
-export const getCities = () => axios.get(`${baseURL}${apiUrl}/cities/`);
+export const getCities = () => axios.get(`${baseURL}${apiUrl}/cities/`).then((response) => response.data);
 export const getCalendarPageData = () => axios.get(`${baseURL}${apiUrl}/afisha/events/`).then((response) => response.data);
 
 // login
