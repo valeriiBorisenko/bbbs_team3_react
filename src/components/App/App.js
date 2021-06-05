@@ -3,6 +3,7 @@ import './App.scss';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import Loader from '../ui/Loader/Loader';
 // попапы
 import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
 import PopupSuccessfully from '../PopupSuccessfully/PopupSuccessfully';
@@ -35,6 +36,7 @@ function App() {
 
   // текущий юзер
   const [currentUser, setCurrentUser] = useState(null);
+  const [isCheckingToken, setIsCheckingToken] = useState(true);
   console.log(currentUser);
 
   // стейт переменные попапов
@@ -164,8 +166,9 @@ function App() {
       // проверим токен
       getUserData()
         .then((data) => setCurrentUser(data.userData))
+        .then(() => setIsCheckingToken(false))
         .catch((error) => console.log(error)); // при получении userData возникла проблема
-    }
+    } else setIsCheckingToken(false);
   }
 
   //! работает с запросом Api (booked)
@@ -235,38 +238,42 @@ function App() {
           onCityChange={handleClickPopupCities}
         />
         <main className="main">
-          <Switch>
-            <Route exact path="/">
-              <MainPage
-                onEventSignUpClick={bookingHandler}
+          {!isCheckingToken ? (
+            <Switch>
+              <Route exact path="/">
+                <MainPage
+                  onEventSignUpClick={bookingHandler}
+                  onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                  dataMain={dataMain}
+                />
+              </Route>
+              <Route exact path="/about-us">
+                <AboutUs />
+              </Route>
+              <Route path="/afisha">
+                <Calendar
+                  onEventSignUpClick={bookingHandler}
+                  onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+                  onOpenLoginPopup={handleClickPopupLoginOpened}
+                  dataCalendar={dataCalendar}
+                  isLoding={isLoding}
+                />
+              </Route>
+
+              <ProtectedRoute
+                exact
+                path="/account"
+                component={Account}
                 onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                dataMain={dataMain}
+                eventsData={dataCalendar}
+                isAuth={currentUser}
               />
-            </Route>
-            <Route exact path="/about-us">
-              <AboutUs />
-            </Route>
-            <Route path="/afisha">
-              <Calendar
-                onEventSignUpClick={bookingHandler}
-                onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                onOpenLoginPopup={handleClickPopupLoginOpened}
-                dataCalendar={dataCalendar}
-                isLoding={isLoding}
-              />
-            </Route>
-            <ProtectedRoute
-              exact
-              path="/account"
-              component={Account}
-              onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-              eventsData={dataCalendar}
-              isAuth={currentUser}
-            />
-            <Route path="*">
-              <PageNotFound />
-            </Route>
-          </Switch>
+
+              <Route path="*">
+                <PageNotFound />
+              </Route>
+            </Switch>
+          ) : <Loader />}
         </main>
         <Footer />
         <PopupConfirmation
