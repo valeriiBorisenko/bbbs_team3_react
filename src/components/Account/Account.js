@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Account.scss';
 import PropTypes from 'prop-types';
-import { getProfileDiaryData } from '../../utils/api';
+import Api from '../../utils/api';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import Loader from '../ui/Loader/Loader';
 import AccountEventCard from '../ui/AccountEventCard/AccountEventCard';
@@ -29,7 +29,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   console.log(diaryFormInputValues);
 
   useEffect(() => {
-    getProfileDiaryData()
+    Api.getProfileDiaryData()
       .then((diariesData) => {
         setDiaries(diariesData.profileDiaryData);
       })

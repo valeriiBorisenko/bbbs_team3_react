@@ -18,20 +18,12 @@ import Calendar from '../Calendar/Calendar';
 import AboutUs from '../AboutUs/AboutUs';
 import Account from '../Account/Account';
 import PageNotFound from '../PageNotFound/PageNotFound';
-// логины, авторизация
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+// логины, авторизация
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-// работа с API
-import {
-  getCalendarPageData,
-  authorize,
-  getMainPageData,
-  setAuth,
-  updateEventFetch,
-  clearAuth,
-  getUserData,
-  getCities
-} from '../../utils/api';
+// API
+import AuthApi from '../../utils/auth';
+import Api from '../../utils/api';
 
 function App() {
   const history = useHistory();
@@ -63,8 +55,8 @@ function App() {
   // загрузка данных страниц
   // загрузка данных главной страницы с сервера
   useEffect(() => {
-    getMainPageData()
-      .then((res) => setDataMain(res.data.mainPageData))
+    Api.getMainPageData()
+      .then((res) => setDataMain(res.mainPageData))
       .then(() => setIsLoding(false))
       .catch((err) => console.log(err));
   }, []);
@@ -72,7 +64,7 @@ function App() {
   // загрузка данных страницы календаря, если ты залогиненный
   useEffect(() => {
     if (currentUser) {
-      getCalendarPageData()
+      Api.getCalendarPageData()
         .then((res) => setDataCalendar(res.calendarPageData))
         .then(() => setIsLoding(false))
         .catch((err) => {
@@ -124,18 +116,18 @@ function App() {
 
   //! api
   function handleLogin({ login, password }) {
-    authorize(login, password)
+    AuthApi.authorize(login, password)
       .then((data) => {
         const { access, refresh } = data.token;
         // если токен получен верно
         if (refresh && access) {
           // устанавливаем заголовки
-          setAuth(access); //! работает, но бесполезно пока
+          AuthApi.setAuth(access); //! работает, но бесполезно пока
           // сохраняем токен
           localStorage.setItem('jwt', access);
           Promise.all([ // делаем запрос на календарь-дату и профиль юзера
-            getUserData(),
-            getCalendarPageData()
+            AuthApi.getUserData(),
+            Api.getCalendarPageData()
             // в дальнейшем сама страница календаря будет запрашивать АПИ напрямую
           ])
             .then(([userData, events]) => {
@@ -153,13 +145,12 @@ function App() {
   }
 
   function handleLogout() {
-    clearAuth();
+    AuthApi.clearAuth();
     setCurrentUser(null);
     //! заменить за очистку переменной контекста юзера
     localStorage.removeItem('jwt');
     history.push('/');
   }
-
   // проверка токена между сессиями
   // как только будет нормальный сервер будем проверять иначе
   function checkToken() {
@@ -168,21 +159,24 @@ function App() {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
       // проверим токен
-      getUserData()
+      AuthApi.getUserData()
         .then((data) => setCurrentUser(data.userData))
         .then(() => setIsCheckingToken(false))
         .catch((error) => console.log(error)); // при получении userData возникла проблема
-    } else setIsCheckingToken(false);
+    } else {
+      setIsCheckingToken(false);
+    }
   }
 
   //! работает с запросом Api (booked)
   function updateEvent(cardData) {
-    return updateEventFetch(cardData).then((updatedCardData) => {
-      setDataCalendar(
-        dataCalendar
-          .map((eventObj) => (eventObj.id === updatedCardData.id ? updatedCardData : eventObj))
-      );
-    });
+    Api.updateEvent(cardData)
+      .then((updatedCardData) => {
+        setDataCalendar(
+          dataCalendar
+            .map((eventObj) => (eventObj.id === updatedCardData.id ? updatedCardData : eventObj))
+        );
+      });
   }
 
   function handleEventUpdate(cardData) {
@@ -226,7 +220,7 @@ function App() {
 
   // получение списка городов
   useEffect(() => {
-    getCities()
+    Api.getCities()
       .then((res) => setCities(res.cities))
       .catch((error) => console.log(error));
   }, []);
