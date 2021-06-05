@@ -2,22 +2,19 @@ import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { months } from '../../utils/constants';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 import './Calendar.scss';
 import CardCalendar from '../ui/CardCalendar/CardCalendar';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import Loader from '../ui/Loader/Loader';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { months } from '../../utils/constants';
 
 function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
-  clickButton,
   dataCalendar,
-  isBooked,
-  onOpenLoginPopup,
-  isLoding
+  onOpenLoginPopup
 }) {
   useSmoothScrollOnWindow({ top: 0 });
 
@@ -123,58 +120,55 @@ function Calendar({
 
   const whatDataToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
 
-  return !isLoding ? (
+  return (
     <>
       <Helmet>
         <title>Календарь</title>
         <meta name="description" content="Календарь событий и мероприятий для настаников" />
       </Helmet>
-      <section className="lead page__section fade-in">
+      <section className="calendar-page page__section fade-in">
         <TitleH1 title="Календарь" />
-        {arrayOfUniqueDates.length > 1 ? (
-          <div className="tags">
-            <ul className="tags__list">
-              {tagsButtonsToRender()}
-            </ul>
+
+        {whatDataToRender.length > 0 ? (
+          <div className="calendar-page__container">
+            {arrayOfUniqueDates.length > 1 && (
+            <div className="tags fade-in">
+              <ul className="tags__list">
+                {tagsButtonsToRender()}
+              </ul>
+            </div>
+            )}
+
+            <div className="calendar-page__grid">
+              {whatDataToRender.map((data) => (
+                <CardCalendar
+                  key={data.id}
+                  cardData={data}
+                  onEventSignUpClick={eventSignUpHandler}
+                  onEventFullDescriptionClick={onEventFullDescriptionClick}
+                  sectionClass="fade-in"
+                />
+              ))}
+            </div>
           </div>
-        ) : null}
+        ) : <Loader sectionClass="calendar-page__loader" />}
 
-        <section className="calendar-container">
-          {whatDataToRender.map((data) => (
-            <CardCalendar
-              key={data.id}
-              cardData={data}
-              onEventSignUpClick={eventSignUpHandler}
-              onEventFullDescriptionClick={onEventFullDescriptionClick}
-              clickButton={clickButton}
-              isBooked={isBooked}
-            />
-          ))}
-        </section>
-
-        { currentUser ? '' : onOpenLoginPopup()}
+        { !currentUser && onOpenLoginPopup()}
       </section>
     </>
-  ) : (
-    <Loader />
   );
 }
 Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
-  clickButton: PropTypes.func,
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
-  isBooked: PropTypes.bool,
-  onOpenLoginPopup: PropTypes.func,
-  isLoding: PropTypes.bool.isRequired
+  onOpenLoginPopup: PropTypes.func
 };
 
 Calendar.defaultProps = {
   onEventSignUpClick: undefined,
   dataCalendar: [],
   onEventFullDescriptionClick: undefined,
-  clickButton: undefined,
-  isBooked: false,
   onOpenLoginPopup: undefined
 };
 

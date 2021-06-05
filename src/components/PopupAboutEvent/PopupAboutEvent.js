@@ -1,5 +1,3 @@
-import '../Popup/Popup.scss';
-import './PopupAboutEvent.scss';
 import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
 import Button from '../ui/Button/Button';
@@ -36,7 +34,6 @@ function PopupAboutEvent({
     <Popup
       type="about-event"
       typeContainer="calendar"
-      sectionClass={booked ? 'popup__container_booked' : ''}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={submitHandler}

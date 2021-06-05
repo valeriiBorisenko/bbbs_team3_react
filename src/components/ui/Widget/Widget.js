@@ -11,7 +11,7 @@ function Widget({ link, title }) {
         src={link}
         scrolling="no"
         allowFullScreen
-        allow="clipboard-write; encrypted-media; picture-in-picture; web-share"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
       />
     </Card>
   );

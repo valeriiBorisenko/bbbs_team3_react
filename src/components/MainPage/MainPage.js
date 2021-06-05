@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import './MainPage.scss';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
@@ -28,7 +29,11 @@ function MainPage({
     onEventSignUpClick(cardData, cardData.booked);
   }
 
-  return dataMain ? (
+  if (!dataMain) {
+    return <Loader />;
+  }
+
+  return (
     <>
       <Helmet>
         <title>Старшие Братья Старшие Сёстры</title>
@@ -102,7 +107,7 @@ function MainPage({
         <div className="card-container card-container_type_iframe">
           <Widget
             title="Facebook"
-            link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook&tabs=timeline&width=630&height=630&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+            link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
           />
           <div className="main-questions__container">
             {dataMain.questions.map((item) => (
@@ -127,8 +132,6 @@ function MainPage({
         </Link>
       </section>
     </>
-  ) : (
-    <Loader />
   );
 }
 
