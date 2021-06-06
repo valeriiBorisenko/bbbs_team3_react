@@ -1,15 +1,19 @@
+import './QuestionsPage.scss';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import './QuestionsPage.scss';
+// import CurrentUserContext from '../../contexts/CurrentUserContext';
 import TitleH1 from '../ui/TitleH1/TitleH1';
+// import TitleH2 from '../ui/TitleH2/TitleH2';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
 
 import Api from '../../utils/api';
 
 function QuestionsPage() {
+  // const currentUser = useContext(CurrentUserContext);
+
   const [isQuestionsData, setIsQuestionsData] = useState([]);
-  const [isQuestionsTagsData, setIsQuestionsTagsData] = useState([]);
-  const [categoriesTags, SetCategoriesTags] = useState([]);
+  // const [isQuestionsTagsData, setIsQuestionsTagsData] = useState([]);
+  // const [categoriesTags, SetCategoriesTags] = useState([]);
 
   useEffect(() => {
     Api.getQuestionsPageData()
@@ -17,12 +21,12 @@ function QuestionsPage() {
       .catch((err) => console.log(err));
   }, []);
 
-  useEffect(() => {
-    getQuestionsTagsData()
-      .then((res) => {  
+  /* useEffect(() => {
+      getQuestionsTagsData()
+      .then((res) => {
         setIsQuestionsTagsData(res)
 
-        const categoriesArr = res.map((tag) => tag.category);
+       const categoriesArr = res.map((tag) => tag.category);
         console.log('categoriesArr', categoriesArr);
         const set = new Set(categoriesArr);
         console.log('set', set);
@@ -31,7 +35,8 @@ function QuestionsPage() {
         SetCategoriesTags(['Все', ...uniqueCategories]);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [])
+  */
 
   return (
     <>
@@ -60,9 +65,32 @@ function QuestionsPage() {
             </li>
           ))}
         </ul>
+
       </section>
     </>
   );
 }
 
 export default QuestionsPage;
+
+/*
+  <section className="add-question page__section">
+    <TitleH2
+      sectionClass="add-question__title"
+      title="Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список" />
+    <form className="question-form">
+      <fieldset className="question-form__add-question">
+        <input className="question-form__input" type="text"
+        name="question"
+        value=""
+        placeholder="Введите вопрос"
+        required />
+        <button
+        className="button button_theme_light question-form__button"
+        type="submit"
+        name="submit"
+        disabled>Отправить</button>
+      </fieldset>
+    </form>
+  </section>
+*/
