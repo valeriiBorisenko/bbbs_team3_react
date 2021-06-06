@@ -10,11 +10,18 @@
   padding-right: 15px;
 }
 
-.page-not-found__picture {
-  display: block;
+// .page-not-found__picture {
+//   display: block;
+//   margin-bottom: 36px;
+//   height: auto;
+//   max-width: 100%;
+// }
+
+.page-not-found__animation {
+  max-width: 720px;
+  max-height: 220px;
+  width: 100%;
   margin-bottom: 36px;
-  height: auto;
-  max-width: 100%;
 }
 
 .page-not-found__title {
@@ -32,7 +39,7 @@
 }
 
 .page-not-found__subtitle {
-  max-width: 770px;
+  max-width: 720px;
   margin-bottom: 50px;
   text-align: center;
 }
@@ -41,8 +48,28 @@
   text-decoration: none;
 }
 
+@include atDesktop1024 {
+  .page-not-found__subtitle {
+    max-width: 590px;
+  }
+}
+
 @include atTabletL {
   .page-not-found__title {
     font-size: 60px;
+  }
+}
+
+@include atMobile {
+  .page-not-found__animation {
+    margin-bottom: 20px;
+  }
+
+  .page-not-found__title {
+    margin-bottom: 10px;
+  }
+
+  .page-not-found__subtitle {
+    margin-bottom: 40px;
   }
 }
