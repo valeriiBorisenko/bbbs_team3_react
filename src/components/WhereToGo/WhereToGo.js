@@ -9,7 +9,7 @@ import TitleH1 from '../ui/TitleH1/TitleH1';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import CardPlace from '../ui/CardPlace/CardPlace';
 import WhereToGoPreview from '../ui/WhereToGoPreview/WhereToGoPreview';
-// import Loader from '../ui/Loader/Loader';
+import Loader from '../ui/Loader/Loader';
 import Api from '../../utils/api';
 
 // какие пропсы нужны
@@ -196,6 +196,10 @@ function WhereToGo() {
 
   console.log('activeCategories', activeCategories);
 
+  if (places.length === 0) {
+    return <Loader />;
+  }
+
   return (
     <>
       <Helmet>
@@ -254,7 +258,7 @@ function WhereToGo() {
             data={place}
             key={place.id}
             color={repeatSchema(idx, places.length, COLORS)}
-            sectionClass="card-container_type_article"
+            sectionClass="card-container_type_article fade-in"
           />
         ))}
       </section>
