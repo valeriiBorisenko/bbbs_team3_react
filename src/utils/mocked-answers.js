@@ -13,6 +13,7 @@ const calendarPageData = require('./server-responses/calendar-page.json');
 const token = require('./server-responses/token.json');
 const userData = require('./server-responses/userData.json');
 const questionsData = require('./server-responses/questions-page.json');
+const question = require('./server-responses/question-post.json');
 
 // mock
 const mock = new MockAdapter(axios, { delayResponse: 1000 });
@@ -66,4 +67,8 @@ export default function setMockedAnswers() {
   mock
     .onGet(`${baseURL}${apiUrl}/questions/`)
     .reply(200, questionsData, 'Content-Type: application/json');
+
+  mock
+    .onPost(`${baseURL}${apiUrl}/question/`)
+    .reply(200, { question }, 'Content-Type: application/json');
 }

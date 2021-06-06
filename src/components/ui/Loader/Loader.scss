@@ -3,14 +3,14 @@
     opacity: 1;
     transform: scale(1.4, 1.4);
     animation-timing-function: ease-in;
-  } 
+  }
 
   25% {
     animation-timing-function: ease-out;
   }
 
   51% {
-    opacity: .95;
+    opacity: 0.95;
     animation-timing-function: ease-in;
   }
 
@@ -18,8 +18,9 @@
     animation-timing-function: ease-out;
   }
 
-  86%, 100% {
-    opacity: .9;
+  86%,
+  100% {
+    opacity: 0.9;
     transform: scale(0, 0);
   }
 }
@@ -29,8 +30,11 @@
   height: 148px;
   display: block;
   margin: 0 auto;
-}
 
+  &_waiting-for-data {
+    margin: 50px auto 0;
+  }
+}
 .spinner__container {
   width: 100%;
   height: 100%;

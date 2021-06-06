@@ -151,7 +151,7 @@ function Calendar({
               ))}
             </div>
           </div>
-        ) : <Loader sectionClass="calendar-page__loader" />}
+        ) : <Loader sectionClass />}
 
         { !currentUser && onOpenLoginPopup()}
       </section>

@@ -1,20 +1,28 @@
 import './QuestionsPage.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
-// import CurrentUserContext from '../../contexts/CurrentUserContext';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import TitleH1 from '../ui/TitleH1/TitleH1';
-// import TitleH2 from '../ui/TitleH2/TitleH2';
+import TitleH2 from '../ui/TitleH2/TitleH2';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 
 import Api from '../../utils/api';
+import Input from '../ui/Input/Input';
+import Button from '../ui/Button/Button';
+// import Loader from '../ui/Loader/Loader';
 
 function QuestionsPage() {
-  // const currentUser = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
 
   const [isQuestionsData, setIsQuestionsData] = useState([]);
-  const [categoriesTags, SetCategoriesTags] = useState([]);
+  const [categoriesTags, setCategoriesTags] = useState([]);
+  const [isInputValues, setIsInputValues] = useState(null);
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
+  // Данный вопросов с сервера
+  // комплектация тегов, относительно полученных тегов в вопросах
   useEffect(() => {
     Api.getQuestionsPageData()
       .then((res) => {
@@ -23,7 +31,7 @@ function QuestionsPage() {
         const tags = tagsArr.flat().map((data) => data.name);
         const set = new Set(tags);
         const uniqueCategories = Array.from(set);
-        SetCategoriesTags(['Все', ...uniqueCategories]);
+        setCategoriesTags(['Все', ...uniqueCategories]);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -44,6 +52,10 @@ function QuestionsPage() {
     ));
   }
 
+  const onFormSubmit = (values) => {
+    setIsInputValues({ ...isInputValues, ...values });
+  };
+
   return (
     <>
       <Helmet>
@@ -57,7 +69,7 @@ function QuestionsPage() {
             {tagsRender(categoriesTags, 'checkbox')}
           </ul>
         </div>
-        <ul className="questions page__section ">
+        <ul className="questions">
           {isQuestionsData.map((data) => (
             <li>
               <CardQuestion
@@ -69,32 +81,38 @@ function QuestionsPage() {
             </li>
           ))}
         </ul>
-
+        { currentUser && (
+          <section className="add-question">
+            <TitleH2
+              sectionClass="add-question__title"
+              title={isInputValues ? 'Спасибо! Мы приняли ваш вопрос' : 'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список'}
+            />
+            <form className={`question-form ${isInputValues ? 'question-form_invisible' : ''}`} onSubmit={handleSubmit(onFormSubmit)}>
+              <fieldset className="question-form__add-question">
+                <Input
+                  type="text"
+                  name="question"
+                  placeholder="Введите вопрос"
+                  register={register}
+                  required
+                  error={errors?.question}
+                  errorMessage="Введите вопрос*"
+                  sectionClass="input__question-form"
+                />
+                <Button
+                  title="Отправить"
+                  color="black"
+                  sectionClass="question-form__button"
+                  isSubmittable
+                  isDisabled={!!(errors.question)}
+                />
+              </fieldset>
+            </form>
+          </section>
+        )}
       </section>
     </>
   );
 }
 
 export default QuestionsPage;
-
-/*
-  <section className="add-question page__section">
-    <TitleH2
-      sectionClass="add-question__title"
-      title="Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список" />
-    <form className="question-form">
-      <fieldset className="question-form__add-question">
-        <input className="question-form__input" type="text"
-        name="question"
-        value=""
-        placeholder="Введите вопрос"
-        required />
-        <button
-        className="button button_theme_light question-form__button"
-        type="submit"
-        name="submit"
-        disabled>Отправить</button>
-      </fieldset>
-    </form>
-  </section>
-*/
