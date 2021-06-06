@@ -1,7 +1,9 @@
+import { useRef, useEffect } from 'react';
 import '../Popup/Popup.scss';
 import './PopupSuccessfully.scss';
 import PropTypes from 'prop-types';
-import svgPic from '../../assets/popup_done.svg';
+import Lottie from 'lottie-web';
+import animationSuccess from '../../assets/animation/ill_popup_success.json';
 import Popup from '../Popup/Popup';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 import Button from '../ui/Button/Button';
@@ -16,6 +18,18 @@ function PopupSuccessfully({
   const startDay = formatDate(startAt);
   const endDay = formatDate(endAt);
 
+  const animationContainer = useRef(null);
+
+  useEffect(() => {
+    Lottie.loadAnimation({
+      container: animationContainer.current,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      animationData: animationSuccess
+    });
+  }, []);
+
   return (
     <Popup
       type="successfully"
@@ -23,7 +37,7 @@ function PopupSuccessfully({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <img className="popup__image-successfully" src={svgPic} alt="красивые бесмысленные фигурки" />
+      <div ref={animationContainer} className="popup__animation-success" />
       <p className="section-title popup__title_type_calendar">Вы записаны на мероприятие</p>
       <TitleH2
         sectionClass="popup__title_type_calendar"
