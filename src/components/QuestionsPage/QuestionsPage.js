@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 // import TitleH2 from '../ui/TitleH2/TitleH2';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
+import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 
 import Api from '../../utils/api';
 
@@ -12,31 +13,36 @@ function QuestionsPage() {
   // const currentUser = useContext(CurrentUserContext);
 
   const [isQuestionsData, setIsQuestionsData] = useState([]);
-  // const [isQuestionsTagsData, setIsQuestionsTagsData] = useState([]);
-  // const [categoriesTags, SetCategoriesTags] = useState([]);
+  const [categoriesTags, SetCategoriesTags] = useState([]);
 
   useEffect(() => {
     Api.getQuestionsPageData()
-      .then((res) => setIsQuestionsData(res.questionsData))
-      .catch((err) => console.log(err));
-  }, []);
-
-  /* useEffect(() => {
-      getQuestionsTagsData()
       .then((res) => {
-        setIsQuestionsTagsData(res)
-
-       const categoriesArr = res.map((tag) => tag.category);
-        console.log('categoriesArr', categoriesArr);
-        const set = new Set(categoriesArr);
-        console.log('set', set);
+        setIsQuestionsData(res);
+        const tagsArr = res.map((data) => data.tags);
+        const tags = tagsArr.flat().map((data) => data.name);
+        const set = new Set(tags);
         const uniqueCategories = Array.from(set);
-        console.log('uniqueCategories', uniqueCategories);
         SetCategoriesTags(['Все', ...uniqueCategories]);
       })
       .catch((err) => console.log(err));
-  }, [])
-  */
+  }, []);
+
+  function tagsRender(array, typeOfFilter) {
+    return array.map((filterName) => (
+      <li className="tags__list-item" key={filterName}>
+        <PseudoButtonCheckbox
+          type={typeOfFilter}
+          name="categories"
+          value={filterName}
+          title={filterName}
+          filters={filterName}
+          // onChange={handleCheckboxChange}
+          // onClick={handleCheckboxClick}
+        />
+      </li>
+    ));
+  }
 
   return (
     <>
@@ -48,9 +54,7 @@ function QuestionsPage() {
         <TitleH1 title="Ответы на вопросы" />
         <div className="tags tags_content_long-list">
           <ul className="tags__list tags__list_type_long">
-            <li className="tags__list-item">
-              <button className="button tags__button" type="button">Сложности</button>
-            </li>
+            {tagsRender(categoriesTags, 'checkbox')}
           </ul>
         </div>
         <ul className="questions page__section ">
