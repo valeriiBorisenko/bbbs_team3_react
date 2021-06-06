@@ -12,7 +12,12 @@ function FormRecomendation({ isOpen }) {
   } = useForm();
 
   const onFormSubmit = (values) => {
-    console.log(values);
+    let inputFields = Object.assign(values);
+    inputFields = {
+      ...inputFields,
+      image: URL.createObjectURL(inputFields.image[0])
+    };
+    console.log({ inputFields });
   };
 
   useEffect(() => {
@@ -91,6 +96,17 @@ function FormRecomendation({ isOpen }) {
         />
       </div>
 
+      <select
+        className={`form-recom__select ${errors?.recreation ? 'form-recom__select_error' : ''}`}
+        name="recreation"
+        {...register('recreation', { required: 'Тип отдыха*' })}
+      >
+        <option className="form-recom__option" defaultValue="Тип отдыха" hidden>Тип отдыха*</option>
+        <option value="Активный" className="form-recom__option">Активный</option>
+        <option value="Развлекательный" className="form-recom__option">Развлекательный</option>
+        <option value="Познавательный" className="form-recom__option">Познавательный</option>
+      </select>
+
       <Input
         sectionClass="form-recom__input form-recom__input_textarea"
         type="text"
@@ -102,12 +118,26 @@ function FormRecomendation({ isOpen }) {
         errorMessage="Комментарий* Поделитесь впечатлениями о проведенном времени"
         isTextarea
       />
+      <div className="form-recom__submit-zone">
+        <label htmlFor="formRecomInputUpload">
+          <input
+            id="formRecomInputUpload"
+            type="file"
+            name="imageUrl"
+            className="form-recom__input-radio"
+            {...register('image', {
+              required: 'Добавить фото'
+            })}
+          />
+          <button className="button" type="button" disabled>Добавить</button>
+        </label>
 
-      <Button
-        title="Отправить"
-        color="blue"
-        isSubmittable
-      />
+        <Button
+          title="Отправить"
+          color="blue"
+          isSubmittable
+        />
+      </div>
     </form>
   );
 }

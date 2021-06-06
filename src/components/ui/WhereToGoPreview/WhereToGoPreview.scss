@@ -1,18 +1,21 @@
 @import './styles/utils.scss';
 
 .recommendation {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  padding: 50px 30px;
-  background-color: $white;
-  border-radius: 30px;
-  max-width: 770px;
-
   &_place_page {
     margin: 0 auto 80px;
+  }
+
+  &__container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 50px 30px;
+    border-radius: 30px;
+    max-width: 770px;
+    margin: 0 auto;
+    background-color: $white;
   }
 
   &__text {
@@ -37,5 +40,29 @@
         color: $darkBlue;
       }
     }
+  }
+}
+
+@include atDesktop1440 {
+  .recommendation_place_page {
+    margin: 0 135px 80px;
+  }
+}
+
+@include atDesktop1024 {
+  .recommendation_place_page {
+    margin: 0 127px 80px;
+  }
+}
+
+@include atTablet {
+  .recommendation_place_pag {
+    margin: 0 60px 80px;
+  }
+}
+
+@include atMobile {
+  .recommendation_place_page {
+    margin: 0 15px 30px;
   }
 }

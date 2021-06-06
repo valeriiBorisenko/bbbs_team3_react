@@ -70,7 +70,7 @@ function WhereToGo() {
         />
       </Helmet>
       {/* тайтл + фильтры */}
-      <section className="lead main-section page__section fade-in">
+      <section className="places main-section page__section fade-in">
         <TitleH1 title="Куда пойти" />
         <div className="tags">
           <ul className="tags__list">

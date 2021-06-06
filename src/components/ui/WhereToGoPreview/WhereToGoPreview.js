@@ -12,16 +12,19 @@ function WhereToGoPreview() {
 
   return (
     <section className="recommendation recommendation_place_page">
-      <p className="section-title recommendation__text">
-        Если вы были в интересном месте и хотите порекомендовать его другим&nbsp;наставникам
-        –&nbsp;
-        <a href="/" className="recommendation__text-link" onClick={handleRecommendPlace}>
-          заполните&nbsp;форму
-        </a>
-        , и мы добавим вашу&nbsp;рекомендацию.
-      </p>
-      {/* вызов формы */}
-      <FormRecomendation />
+      <div className="recommendation__container">
+        <p className="section-title recommendation__text">
+          Если вы были в интересном месте и хотите порекомендовать его другим&nbsp;наставникам
+          –&nbsp;
+          <a href="/" className="recommendation__text-link" onClick={handleRecommendPlace}>
+            заполните&nbsp;форму
+          </a>
+          , и мы добавим вашу&nbsp;рекомендацию.
+        </p>
+        {/* вызов формы */}
+        <FormRecomendation />
+      </div>
+
     </section>
   );
 }
