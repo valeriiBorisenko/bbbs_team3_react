@@ -1,4 +1,3 @@
-import './CardPlace.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
@@ -7,17 +6,15 @@ import TitleH2 from '../TitleH2/TitleH2';
 import Card from '../Card/Card';
 import Caption from '../Caption/Caption';
 
-function CardPlace({
+function CardPl({
   data: {
-    chosen, title, name, imageUrl, link, info, description
-  },
-  sectionClass,
-  isMain
+    chosen, title, name, link, info, description
+  }
+  // sectionClass
 }) {
   return (
-    // был div, Никита
-    <article className={`card-container ${sectionClass}`}>
-      <Card sectionClass="card-place card-place_main" color="yellow">
+    <article className="card-container card-container_type_article">
+      <Card sectionClass="card-place" color="yellow">
         {chosen && (
           <Rubric title="Выбор наставника" sectionClass="card-place__rubric" />
         )}
@@ -29,14 +26,14 @@ function CardPlace({
           <Caption sectionClass="card-place__name" title={name} />
         </div>
 
-        {(chosen && isMain) && (
+        {/* {chosen && (
           <Link
-            to="/where-to-go"
+            to="/place"
             className="card-place__link-wrap card-place__link-wrap_content_article-img"
           >
             <img src={imageUrl} alt={title} className="card-place__image" />
           </Link>
-        )}
+        )} */}
 
         <a
           href={link}
@@ -47,35 +44,32 @@ function CardPlace({
           перейти на сайт
         </a>
       </Card>
-      <CardAnnotation info={info} description={description} isMain={isMain} />
+      <CardAnnotation info={info} description={description} isMain={false} />
     </article>
   );
 }
-
-CardPlace.propTypes = {
+CardPl.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   chosen: PropTypes.bool,
   title: PropTypes.string,
   name: PropTypes.string,
-  imageUrl: PropTypes.string,
+  // imageUrl: PropTypes.string,
   link: PropTypes.string,
   info: PropTypes.string,
-  isMain: PropTypes.bool,
-  description: PropTypes.string,
-  sectionClass: PropTypes.string
+  description: PropTypes.string
+  // sectionClass: PropTypes.string
 };
 
-CardPlace.defaultProps = {
+CardPl.defaultProps = {
   data: {},
   chosen: false,
   title: '',
   name: '',
-  imageUrl: '',
+  // imageUrl: '',
   link: '',
-  isMain: false,
   info: '',
-  description: '',
-  sectionClass: ''
+  description: ''
+  // sectionClass: ''
 };
 
-export default CardPlace;
+export default CardPl;
