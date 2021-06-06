@@ -1,21 +1,23 @@
 import './WhereToGo.scss';
 // import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { repeatSchema } from '../../utils/utils';
 import { COLORS } from '../../utils/constants';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import CardPlace from '../ui/CardPlace/CardPlace';
 import WhereToGoPreview from '../ui/WhereToGoPreview/WhereToGoPreview';
 // import Loader from '../ui/Loader/Loader';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
 import Api from '../../utils/api';
 
 // какие пропсы нужны
 // открытие попапа города ??
 // выбранный город ??
 function WhereToGo() {
+  const currentUser = useContext(CurrentUserContext);
+
   const ageRange = ['8-10 лет', '11-13 лет', '14-18 лет', '18+ лет'];
 
   const [places, setPlaces] = useState([]);
@@ -26,9 +28,6 @@ function WhereToGo() {
   const [isAll, setIsAll] = useState(true); //! ВСЕ
   const [activeCategories, setActiveCategories] = useState(new Set()); //! категории
   const [activeAgeRange, setActiveAgeRange] = useState(''); //! возраст-фильтр
-
-  // const currentUser = useContext(CurrentUserContext);
-  // console.log(useContext);
 
   //! фильтры КАТЕГОРИЯ
   function handleCheckboxCategoryClick(evt, filter) {
@@ -207,7 +206,7 @@ function WhereToGo() {
         />
       </Helmet>
       {/* тайтл + фильтры */}
-      <section className="places main-section page__section fade-in">
+      <section className="lead main-section page__section fade-in">
         <TitleH1 title="Куда пойти" />
         <div className="tags">
           <ul className="tags__list">
