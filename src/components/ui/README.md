@@ -80,7 +80,7 @@
 ### Пропсы:
 
 - **label** - string, текст атрибута arial-lable
-- **name** - string, миксин стилей для разных кнопок
+- **sectionClass** - string, миксин стилей для разных кнопок
 - **color** - string, цвет кнопки (lightBlue, blue, lightGray).
 - **onClick** - function, функция-обработчик клика на кнопку.
 - **isClick** - boolean, если true, то крестик внутри кнопки совершает поворот вправо на 45 градусов.

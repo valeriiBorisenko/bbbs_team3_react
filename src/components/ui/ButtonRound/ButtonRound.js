@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 function ButtonRound({
   label,
-  name,
+  sectionClass,
   color,
   onClick,
   isClick
 }) {
   return (
     <button
-      className={`button-round button-round_color_${color} button-round__${name} ${isClick ? `button__${name}_active` : ''}`}
+      className={`button-round button-round_color_${color} ${sectionClass} ${isClick ? 'button-round_active' : ''}`}
       type="button"
       onClick={onClick}
       aria-label={label}
@@ -20,7 +20,7 @@ function ButtonRound({
 
 ButtonRound.propTypes = {
   label: PropTypes.string,
-  name: PropTypes.string,
+  sectionClass: PropTypes.string,
   color: PropTypes.string,
   onClick: PropTypes.func,
   isClick: PropTypes.bool
@@ -28,7 +28,7 @@ ButtonRound.propTypes = {
 
 ButtonRound.defaultProps = {
   label: '',
-  name: '',
+  sectionClass: '',
   color: '',
   onClick: undefined,
   isClick: false

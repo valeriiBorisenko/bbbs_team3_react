@@ -12,6 +12,8 @@ const cities = require('./server-responses/cities.json');
 const calendarPageData = require('./server-responses/calendar-page.json');
 const token = require('./server-responses/token.json');
 const userData = require('./server-responses/userData.json');
+const questionsData = require('./server-responses/questions-page.json');
+const questionsTagsData = require('./server-responses/questions-tags.json');
 
 // mock
 const mock = new MockAdapter(axios, { delayResponse: 1000 });
@@ -60,4 +62,13 @@ export default function setMockedAnswers() {
     return [200, calendarData];
   };
   mock.onPatch(`${baseURL}${apiUrl}/afisha/event-participants/`).reply(updateEventMock);
+
+  //! Страница Вопросы
+  mock
+    .onGet(`${baseURL}${apiUrl}/questions/`)
+    .reply(200, { questionsData }, 'Content-Type: application/json');
+
+  mock
+    .onGet(`${baseURL}${apiUrl}/questions/tags/`)
+    .reply(200, { questionsTagsData }, 'Content-Type: application/json');
 }
