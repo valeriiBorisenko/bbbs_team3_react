@@ -1,0 +1,48 @@
+@import './styles/utils.scss';
+
+.recommendation {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 50px 0;
+  background-color: #fff;
+  border-radius: 30px;
+  max-width: 770px;
+
+  &_place_page {
+    margin: 0 auto 80px;
+  }
+
+  &__texts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 710px;
+  }
+
+  &__text {
+    font-style: normal;
+    font-family: $protoGrotesk;
+    font-weight: 300;
+    font-size: 23px;
+    line-height: 30px;
+    color: $black;
+    margin: 0 0 16px 0;
+    text-align: center;
+
+    &_place_page {
+      margin: 0;
+    }
+
+    &-link {
+      color: $blue;
+      text-decoration: none;
+
+      &:hover {
+        color: $darkBlue;
+      }
+    }
+  }
+}

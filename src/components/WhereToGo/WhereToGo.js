@@ -5,9 +5,9 @@ import { useContext, useEffect, useState } from 'react';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import CardPlace from '../ui/CardPlace/CardPlace';
-// import CardPl from '../ui/CardPl/CardPl';
+import WhereToGoPreview from '../ui/WhereToGoPreview/WhereToGoPreview';
 // import Loader from '../ui/Loader/Loader';
-// import CurrentUserContext from '../../contexts/CurrentUserContext';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import Api from '../../utils/api';
 
 // какие пропсы нужны
@@ -23,8 +23,8 @@ function WhereToGo() {
   // const [activeCategory, setActiveCategory] = useState(['Все']);
   // const [activeAgeRange, setActiveAgeRange] = useState('');
 
-  // const currentUser = useContext(CurrentUserContext);
-  console.log(useContext);
+  const currentUser = useContext(CurrentUserContext);
+  console.log(currentUser);
 
   useEffect(() => {
     Api.getPlaces()
@@ -83,6 +83,7 @@ function WhereToGo() {
       </section>
 
       {/* форма, показывать, только если юзер авторизован, надо сделать */}
+      {currentUser && (<WhereToGoPreview />)}
 
       {/* большая карточка */}
       <section className="place main-section page__section fade-in">
