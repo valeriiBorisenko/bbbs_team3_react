@@ -41,7 +41,7 @@ function QuestionsPage() {
       <li className="tags__list-item" key={filterName}>
         <PseudoButtonCheckbox
           type={typeOfFilter}
-          name="categories"
+          name="tag"
           value={filterName}
           title={filterName}
           filters={filterName}

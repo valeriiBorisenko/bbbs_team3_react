@@ -18,12 +18,18 @@
 }
 
 .question__answer {
-  display: none;
+  visibility: hidden;
+  height: 0;
+  opacity: 0;
+  margin: 0;
+  transition: margin-top 0.3s ease;
 
   &_visible {
-    display: block;
     margin-top: 30px;
-    transition: 0.4s linear;
+    visibility: visible;
+    height: auto;
+    opacity: 1;
+    transition: margin-top 0.5s ease;
   }
 }
 
