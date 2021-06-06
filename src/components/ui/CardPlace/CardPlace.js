@@ -9,15 +9,17 @@ import Caption from '../Caption/Caption';
 
 function CardPlace({
   data: {
-    chosen, title, name, imageUrl, link, info, description
+    chosen, title, address, imageUrl, link, info, description
   },
+  color,
   sectionClass,
   isMain
 }) {
+  const cardColor = isMain ? 'yellow' : color;
+
   return (
-    // был div, Никита
     <article className={`card-container ${sectionClass}`}>
-      <Card sectionClass="card-place card-place_main" color="yellow">
+      <Card sectionClass={`card-place ${isMain ? 'card-place_main' : ''}`} color={cardColor}>
         {chosen && (
           <Rubric title="Выбор наставника" sectionClass="card-place__rubric" />
         )}
@@ -26,7 +28,7 @@ function CardPlace({
           <Link to="/place" className="card-place__link-wrap">
             <TitleH2 sectionClass="card-place__title" title={title} />
           </Link>
-          <Caption sectionClass="card-place__name" title={name} />
+          <Caption sectionClass="card-place__address" title={address} />
         </div>
 
         {(chosen && isMain) && (
@@ -56,25 +58,27 @@ CardPlace.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   chosen: PropTypes.bool,
   title: PropTypes.string,
-  name: PropTypes.string,
+  address: PropTypes.string,
   imageUrl: PropTypes.string,
   link: PropTypes.string,
   info: PropTypes.string,
-  isMain: PropTypes.bool,
   description: PropTypes.string,
-  sectionClass: PropTypes.string
+  color: PropTypes.string,
+  sectionClass: PropTypes.string,
+  isMain: PropTypes.bool
 };
 
 CardPlace.defaultProps = {
   data: {},
   chosen: false,
   title: '',
-  name: '',
+  address: '',
   imageUrl: '',
   link: '',
-  isMain: false,
   info: '',
   description: '',
+  color: 'white',
+  isMain: false,
   sectionClass: ''
 };
 

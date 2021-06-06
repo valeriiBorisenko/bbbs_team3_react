@@ -112,3 +112,10 @@ export const getCardType = (tags) => {
   }
   return undefined;
 };
+
+// повторить схему (цвета/фигуры) : индекс, длина массива, который рендерится, схема(массив)
+export const repeatSchema = (idx, size, schema) => {
+  const repeats = Math.ceil(size / schema.length);
+  const array = Array.from({ length: repeats }, () => schema).flat();
+  return array[idx];
+};
