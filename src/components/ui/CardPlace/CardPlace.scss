@@ -1,7 +1,7 @@
 @import './styles/utils.scss';
 
 .card-place {
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 37px 30px 15px;
   overflow: hidden;
@@ -45,7 +45,7 @@
   box-orient: vertical;
 }
 
-.card-place__name {
+.card-place__address {
   margin: 0 auto;
   overflow: hidden;
   text-overflow: ellipsis;
