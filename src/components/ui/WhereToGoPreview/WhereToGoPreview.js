@@ -30,6 +30,7 @@ function WhereToGoPreview({ sectionClass }) {
   const classNames = [
     'recommendation',
     'recommendation_place_page',
+    'fade-in',
     sectionClass].join(' ').trim();
 
   return (
