@@ -1,0 +1,102 @@
+@import './styles/utils.scss';
+
+.form-recom {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-recom__input-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.form-recom__input {
+  flex-grow: 1;
+  margin: 0 30px 20px 0;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  &_textarea {
+    overflow-y: visible;
+    resize: vertical;
+  }
+}
+
+.form-recom__label {
+  flex-grow: 1;
+  margin-right: 30px;
+  position: relative;
+  height: 48px;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  border-radius: 30px;
+  padding: 13px 20px 16px;
+  background-color: $background;
+  font-family: $protoGrotesk;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: 0.2px;
+}
+
+.form-recom__input-radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.form-recom__pseudo-radio {
+  display: flex;
+  align-items: center;
+  color: $lightGray;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 20px;
+    background-color: $white;
+    border-radius: 50%;
+  }
+}
+
+.form-recom__pseudo-radio_error {
+  color: $error;
+
+  &::before {
+    background-color: $error;
+    opacity: .2;
+  }
+}
+
+.form-recom__input-radio:checked + .form-recom__pseudo-radio {
+  color: $black;
+  &::before {
+    width: 10px;
+    height: 10px;
+    border: 5px solid $white;
+    background-color: $black;
+  }
+}
+
+.form-recom__input[type="number"]::-webkit-outer-spin-button,
+.form-recom__input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-recom__input[type="number"] {
+  -moz-appearance: textfield;
+}
+.form-recom__input[type="number"]:hover,
+.form-recom__input[type="number"]:focus {
+  -moz-appearance: number-input;
+}
+
