@@ -7,8 +7,9 @@ import { COLORS } from '../../utils/constants';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import CardPlace from '../ui/CardPlace/CardPlace';
+import WhereToGoPreview from '../ui/WhereToGoPreview/WhereToGoPreview';
 // import Loader from '../ui/Loader/Loader';
-// import CurrentUserContext from '../../contexts/CurrentUserContext';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import Api from '../../utils/api';
 
 // какие пропсы нужны
@@ -206,7 +207,7 @@ function WhereToGo() {
         />
       </Helmet>
       {/* тайтл + фильтры */}
-      <section className="lead main-section page__section fade-in">
+      <section className="places main-section page__section fade-in">
         <TitleH1 title="Куда пойти" />
         <div className="tags">
           <ul className="tags__list">
@@ -219,6 +220,7 @@ function WhereToGo() {
       </section>
 
       {/* форма, показывать, только если юзер авторизован, надо сделать */}
+      {currentUser && (<WhereToGoPreview />)}
 
       {/* большая карточка */}
       <section className="place main-section page__section fade-in">
