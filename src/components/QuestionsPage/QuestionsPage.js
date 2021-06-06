@@ -29,22 +29,22 @@ function QuestionsPage() {
         setIsQuestionsData(res);
         const tagsArr = res.map((data) => data.tags);
         const tags = tagsArr.flat().map((data) => data.name);
-        const set = new Set(tags);
-        const uniqueCategories = Array.from(set);
-        setCategoriesTags(['Все', ...uniqueCategories]);
+        const newTags = new Set(tags);
+        const uniqueTags = Array.from(newTags);
+        setCategoriesTags(['Все', ...uniqueTags]);
       })
       .catch((err) => console.log(err));
   }, []);
 
-  function tagsRender(array, typeOfFilter) {
-    return array.map((filterName) => (
-      <li className="tags__list-item" key={filterName}>
+  function tagsRender(tags, filterTags) {
+    return tags.map((filterTagsName) => (
+      <li className="tags__list-item" key={filterTagsName}>
         <PseudoButtonCheckbox
-          type={typeOfFilter}
+          type={filterTags}
           name="tag"
-          value={filterName}
-          title={filterName}
-          filters={filterName}
+          value={filterTagsName}
+          title={filterTagsName}
+          filters={filterTagsName}
           // onChange={handleCheckboxChange}
           // onClick={handleCheckboxClick}
         />
@@ -71,9 +71,8 @@ function QuestionsPage() {
         </div>
         <ul className="questions">
           {isQuestionsData.map((data) => (
-            <li>
+            <li key={data.id}>
               <CardQuestion
-                key={data.id}
                 data={data}
                 sectionClass="card__questions_type_questions-page"
                 isQuestionsPage
