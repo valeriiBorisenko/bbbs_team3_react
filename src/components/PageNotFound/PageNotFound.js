@@ -3,9 +3,8 @@ import './PageNotFound.scss';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Lottie from 'lottie-web';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import animation404 from '../../assets/animation/Illustration_404.json';
-// import shapes from '../../assets/page-not-found-shapes.svg';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 
 function PageNotFound() {
