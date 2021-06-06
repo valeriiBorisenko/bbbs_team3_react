@@ -206,7 +206,7 @@ function WhereToGo() {
         />
       </Helmet>
       {/* тайтл + фильтры */}
-      <section className="lead main-section page__section fade-in">
+      <section className="place page__section fade-in">
         <TitleH1 title="Куда пойти" />
         <div className="tags">
           <ul className="tags__list">
@@ -222,7 +222,7 @@ function WhereToGo() {
       {currentUser && (<WhereToGoPreview />)}
 
       {/* большая карточка */}
-      <section className="place main-section page__section fade-in">
+      <section className="place__main page__section fade-in">
         <CardPlace
           key={places.find((place) => place.chosen)?.id}
           data={places.find((place) => place.chosen)}
@@ -232,7 +232,7 @@ function WhereToGo() {
       </section>
 
       {/* секция карточек */}
-      <section className="cards-grid main-section page__section">
+      <section className="cards-grid page__section">
         {/* {places.map((place, idx) => (
           <CardPlace
             data={place}

@@ -1,12 +1,29 @@
 @import './styles/utils.scss';
 
 .form-recom {
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
+  transition: .6s ease;
+
+  &_opened {
+    visibility: visible;
+    height: auto;
+    padding-top: 40px;
+    animation: fade-in 1s ease .3s forwards;
+  }
 }
 
 .form-recom__input-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.form-recom__radio-inputs {
+  flex-grow: 1;
   display: flex;
   flex-wrap: nowrap;
 }
@@ -65,7 +82,7 @@
     margin-right: 20px;
     background-color: $white;
     border-radius: 50%;
-    transition: color .3s ease, background-color .3s ease;
+    transition: color .3s ease;
   }
 }
 
@@ -127,4 +144,60 @@
 .form-recom__input[type="number"]:hover,
 .form-recom__input[type="number"]:focus {
   -moz-appearance: number-input;
+}
+
+@include atTabletL {
+  .form-recom__input-container {
+    flex-direction: column;
+  }
+
+  .form-recom__input {
+    margin-right: 0;
+  }
+
+  .form-recom__label {
+    margin-bottom: 20px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}
+
+@include atMobile {
+  .form-recom {
+    &_opened {
+      padding-top: 30px;
+    }
+  }
+
+  .form-recom__label {
+    height: 44px;
+    margin-right: 10px;
+  }
+
+  .form-recom__pseudo-radio {
+    font-size: 12px;
+
+    &::before {
+      width: 15px;
+      height: 15px;
+      margin-right: 10px;
+    }
+  }
+
+  .form-recom__input-radio:checked + .form-recom__pseudo-radio {
+    color: $black;
+    &::before {
+      width: 7px;
+      height: 7px;
+      border: 4px solid $white;
+      background-color: $black;
+    }
+  }
+
+  .form-recom__select {
+    font-size: 12px;
+    height: 44px;
+  }
 }

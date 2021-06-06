@@ -1,32 +1,66 @@
-// import PropTypes from 'prop-types';
-// import { useState } from 'react';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import FormRecomendation from '../FormRecomendation/FormRecomendation';
 import './WhereToGoPreview.scss';
 
-function WhereToGoPreview() {
-  function handleRecommendPlace(event) {
-    event.preventDefault();
-    // onRecommendPlace();
-    // setTimeout(() => setShowInputs(!isPlacePopupOpened), 400);
-  }
+function WhereToGoPreview({ sectionClass }) {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const scrollToForm = () => {
+    const isSmallDesktop = window.innerWidth > 899 && window.innerWidth < 1100;
+    let position;
+
+    if (isSmallDesktop) {
+      position = 230;
+    } else {
+      position = 150;
+    }
+
+    window.scrollTo({
+      top: position,
+      behavior: 'smooth'
+    });
+  };
+
+  const toggleForm = () => {
+    setIsFormOpen(!isFormOpen);
+    if (!isFormOpen) scrollToForm();
+  };
+
+  const classNames = [
+    'recommendation',
+    'recommendation_place_page',
+    sectionClass].join(' ').trim();
 
   return (
-    <section className="recommendation recommendation_place_page">
+    <section className={classNames}>
       <div className="recommendation__container">
         <p className="section-title recommendation__text">
           Если вы были в интересном месте и хотите порекомендовать его другим&nbsp;наставникам
           –&nbsp;
-          <a href="/" className="recommendation__text-link" onClick={handleRecommendPlace}>
+          <button
+            className="recommendation__text-link"
+            type="button"
+            onClick={toggleForm}
+          >
             заполните&nbsp;форму
-          </a>
+          </button>
           , и мы добавим вашу&nbsp;рекомендацию.
         </p>
         {/* вызов формы */}
-        <FormRecomendation />
+        <FormRecomendation isOpen={isFormOpen} />
       </div>
 
     </section>
   );
 }
+
+WhereToGoPreview.propTypes = {
+  sectionClass: PropTypes.string
+};
+
+WhereToGoPreview.defaultProps = {
+  sectionClass: ''
+};
 
 export default WhereToGoPreview;
