@@ -2,6 +2,8 @@ import './WhereToGo.scss';
 // import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useContext, useEffect, useState } from 'react';
+import { repeatSchema } from '../../utils/utils';
+import { COLORS } from '../../utils/constants';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import CardPlace from '../ui/CardPlace/CardPlace';
@@ -100,8 +102,8 @@ function WhereToGo() {
         {/* с цветами можно разобраться так
           colors[Math.floor(Math.random() * i)] + массив цветов нужен */}
         {/* CardPl -> из-за маргин 0-авто в классе card-container все ломается */}
-        {places.map((place) => (
-          <CardPlace data={place} key={place.id} sectionClass="card-container_type_article" />
+        {places.map((place, idx) => (
+          <CardPlace data={place} key={place.id} color={repeatSchema(idx, places.length, COLORS)} sectionClass="card-container_type_article" />
           // <CardPl data={place} key={place.id} />
           // может приспособить CardPlace компонент, просто с классами поиграть
           // (с главной один, отсюда другой)
