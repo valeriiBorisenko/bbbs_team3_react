@@ -22,6 +22,7 @@ function CardCalendar({
     remainSeats,
     description
   } = cardData;
+
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
 
@@ -107,8 +108,8 @@ CardCalendar.propTypes = {
 CardCalendar.defaultProps = {
   cardData: {},
   isModal: false,
-  onEventSignUpClick: undefined,
-  onEventFullDescriptionClick: undefined,
+  onEventSignUpClick: () => {},
+  onEventFullDescriptionClick: () => {},
   sectionClass: ''
 };
 

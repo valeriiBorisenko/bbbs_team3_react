@@ -18,7 +18,7 @@ SearchButton.propTypes = {
 };
 
 SearchButton.defaultProps = {
-  handleClick: undefined
+  handleClick: () => {}
 };
 
 export default SearchButton;

@@ -13,9 +13,12 @@ function ProtectedRoute({ component: Component, ...props }) {
 
 ProtectedRoute.propTypes = {
   component: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  isAuth: PropTypes.object.isRequired,
+  isAuth: PropTypes.bool,
   path: PropTypes.string.isRequired
+};
+
+ProtectedRoute.defaultProps = {
+  isAuth: false
 };
 
 export default ProtectedRoute;

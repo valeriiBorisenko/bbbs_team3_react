@@ -272,7 +272,7 @@ function App() {
                   component={Account}
                   onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
                   eventsData={dataCalendar}
-                  isAuth={currentUser}
+                  isAuth={!!currentUser}
                 />
                 <Route path="*">
                   <PageNotFound />

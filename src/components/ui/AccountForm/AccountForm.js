@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 import './AccountForm.scss';
 import { useState, useEffect } from 'react';
@@ -15,6 +14,7 @@ function AccountForm({
   data, sectionClass, isEditMode, isOpen, onCancel, onSubmit
 }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
+
   const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
   const [userImage, setUserImage] = useState(null);
@@ -196,20 +196,16 @@ AccountForm.propTypes = {
   onCancel: PropTypes.func,
   isOpen: PropTypes.bool,
   isEditMode: PropTypes.bool,
-  onSubmit: PropTypes.func,
-  inputValues: PropTypes.objectOf(PropTypes.any),
-  setInputValues: PropTypes.func
+  onSubmit: PropTypes.func
 };
 
 AccountForm.defaultProps = {
   data: {},
   sectionClass: '',
-  onCancel: undefined,
+  onCancel: () => {},
   isOpen: false,
   isEditMode: false,
-  onSubmit: undefined,
-  inputValues: {},
-  setInputValues: undefined
+  onSubmit: () => {}
 };
 
 export default AccountForm;

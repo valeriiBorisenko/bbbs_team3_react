@@ -142,8 +142,8 @@ MainPage.propTypes = {
 };
 
 MainPage.defaultProps = {
-  onEventSignUpClick: undefined,
-  onEventFullDescriptionClick: undefined,
+  onEventSignUpClick: () => {},
+  onEventFullDescriptionClick: () => {},
   dataMain: {}
 };
 

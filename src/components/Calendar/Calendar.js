@@ -166,10 +166,10 @@ Calendar.propTypes = {
 };
 
 Calendar.defaultProps = {
-  onEventSignUpClick: undefined,
+  onEventSignUpClick: () => {},
   dataCalendar: [],
-  onEventFullDescriptionClick: undefined,
-  onOpenLoginPopup: undefined
+  onEventFullDescriptionClick: () => {},
+  onOpenLoginPopup: () => {}
 };
 
 export default Calendar;

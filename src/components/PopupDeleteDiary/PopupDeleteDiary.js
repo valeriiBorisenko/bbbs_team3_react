@@ -57,8 +57,8 @@ PopupDeleteDiary.propTypes = {
 
 PopupDeleteDiary.defaultProps = {
   isOpen: false,
-  onClose: undefined,
-  onCardDelete: undefined,
+  onClose: () => {},
+  onCardDelete: () => {},
   cardData: {}
 };
 

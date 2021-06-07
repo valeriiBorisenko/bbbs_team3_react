@@ -63,7 +63,7 @@ CardFilm.defaultProps = {
   info: '',
   link: '',
   tags: [],
-  handleClick: undefined
+  handleClick: () => {}
 };
 
 export default CardFilm;

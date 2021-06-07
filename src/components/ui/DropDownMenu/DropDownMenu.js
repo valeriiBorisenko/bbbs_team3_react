@@ -1,5 +1,4 @@
-import PropTypes, { string } from 'prop-types';
-// import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import NavItem from '../NavItem/NavItem';
 import './DropDownMenu.scss';
 
@@ -21,8 +20,7 @@ function DropDownMenu({ sectionWrapperClass, textsForLinks }) {
 
 DropDownMenu.propTypes = {
   sectionWrapperClass: PropTypes.string.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  textsForLinks: PropTypes.arrayOf(string).isRequired
+  textsForLinks: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 export default DropDownMenu;

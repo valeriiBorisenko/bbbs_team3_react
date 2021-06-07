@@ -28,7 +28,7 @@ UserButton.propTypes = {
 UserButton.defaultProps = {
   sectionClass: '',
   isAuthorized: false,
-  handleClick: undefined
+  handleClick: () => {}
 };
 
 export default UserButton;

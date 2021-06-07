@@ -8,9 +8,16 @@ function ButtonRound({
   onClick,
   isClick
 }) {
+  const classNames = [
+    'button-round',
+    `button-round_color_${color}`,
+    sectionClass,
+    isClick ? 'button-round_active' : ''
+  ].join(' ').trim();
+
   return (
     <button
-      className={`button-round button-round_color_${color} ${sectionClass} ${isClick ? 'button-round_active' : ''}`}
+      className={classNames}
       type="button"
       onClick={onClick}
       aria-label={label}
