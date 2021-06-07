@@ -29,14 +29,11 @@ import Api from '../../utils/api';
 
 function App() {
   const history = useHistory();
-
   // текущий юзер
   const [currentUser, setCurrentUser] = useState(null);
   const [isCheckingToken, setIsCheckingToken] = useState(true);
-
   // список городов
   const [cities, setCities] = useState(null);
-
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
@@ -44,12 +41,10 @@ function App() {
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
-
   // выбранная карточка при открытии попапа (календарь)
   // в объекте всегда только те поля что пришли с сервера
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
-
-  // данные страниц с сервера (пока вынуждены тут оставить их)
+  // данные страниц с сервера
   const [dataCalendar, setDataCalendar] = useState([]);
   const [dataMain, setDataMain] = useState(null);
 
@@ -118,26 +113,20 @@ function App() {
     AuthApi.authorize(login, password)
       .then((data) => {
         const { access, refresh } = data.token;
-        // если токен получен верно
         if (refresh && access) {
-          // устанавливаем заголовки
-          AuthApi.setAuth(access); //! работает, но бесполезно пока
-          // сохраняем токен
+          AuthApi.setAuth(access);
           localStorage.setItem('jwt', access);
-          Promise.all([ // делаем запрос на календарь-дату и профиль юзера
+          Promise.all([
             AuthApi.getUserData(),
             Api.getCalendarPageData()
             // в дальнейшем сама страница календаря будет запрашивать АПИ напрямую
           ])
             .then(([userData, events]) => {
-              // стейт данных календаря
               setDataCalendar(events.calendarPageData);
-              // стейт данных профиля
               setCurrentUser(userData.userData);
             })
             .then(() => closeAllPopups())
             .catch((error) => console.log(error)); // при получении данных произошла ошибка
-          // closeAllPopups(); //! засунуть в then
         }
       })
       .catch((error) => console.log(error)); // авторизация (работа с сервером) закончилась ошибкой
@@ -146,18 +135,14 @@ function App() {
   function handleLogout() {
     AuthApi.clearAuth();
     setCurrentUser(null);
-    //! заменить за очистку переменной контекста юзера
     localStorage.removeItem('jwt');
     history.push('/');
   }
+
   // проверка токена между сессиями
-  // как только будет нормальный сервер будем проверять иначе
   function checkToken() {
-    // если у пользователя есть токен в localStorage,
-    // эта функция проверит валидность токена
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
-      // проверим токен
       AuthApi.getUserData()
         .then((data) => setCurrentUser(data.userData))
         .then(() => setIsCheckingToken(false))
@@ -167,7 +152,7 @@ function App() {
     }
   }
 
-  //! работает с запросом Api (booked)
+  // работает с запросом Api (booked)
   function updateEvent(cardData) {
     return Api.updateEvent(cardData)
       .then((updatedCardData) => {
@@ -179,7 +164,6 @@ function App() {
   }
 
   function handleEventUpdate(cardData) {
-    // вызываем апи + при успехе показываем попап "успешно"
     updateEvent(cardData)
       .then(() => handleClickPopupSuccessfullyOpened())
       .catch(() => handleClickPopupErrorOpened());
@@ -187,23 +171,16 @@ function App() {
 
   function bookingHandler(cardData, isBooked) {
     if (isBooked) {
-      // сразу вызываем апи, если все ок - закрываем попап "подробно"
-      // идем на сервер и патчим ивент (меняем на booked=false)
-      // закрываем модалку (по желанию)
       updateEvent(cardData)
         .then(() => setIsPopupAboutDescriptionOpen(false))
         .catch(() => handleClickPopupErrorOpened());
     } else {
-      // запоминаем карточку
       setSelectedCalendarCard(cardData);
-      // закрываем попап с подробностями карточки
       setIsPopupAboutDescriptionOpen(false);
-      // открываем попап подтвердить
       handleClickPopupConfirmationOpened();
     }
   }
 
-  // в теории можно вынести в хедер вместе с хуком истории
   function handleUserButtonClick() {
     if (currentUser) {
       history.push('/account');
@@ -212,7 +189,6 @@ function App() {
     }
   }
 
-  //! проверка токена при монтировании
   useEffect(() => {
     checkToken();
   }, []);

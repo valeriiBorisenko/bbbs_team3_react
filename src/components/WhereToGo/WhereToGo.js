@@ -14,32 +14,23 @@ import Api from '../../utils/api';
 
 function WhereToGo({ openPopupCities }) {
   const currentUser = useContext(CurrentUserContext);
-
   const ageRange = ['8-10 лет', '11-13 лет', '14-18 лет', '18+ лет'];
-
   const [places, setPlaces] = useState([]);
-  // const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [categories, setCategories] = useState([]);
-  // const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-
   const [isAll, setIsAll] = useState(true); //! ВСЕ
   const [activeCategories, setActiveCategories] = useState(new Set()); //! категории
   const [activeAgeRange, setActiveAgeRange] = useState(''); //! возраст-фильтр
 
-  //! фильтры КАТЕГОРИЯ
   function handleCheckboxCategoryClick(evt, filter) {
     const { target } = evt;
     console.log('target', target);
 
-    // если мы нажали на ВСЕ
     if (filter === 'Все') {
       console.log('ВСЕ');
       setIsAll(true);
       setActiveCategories(new Set());
-      // setIsFiltersUsed(true);
       return;
     }
-
     // если такой фильтр уже есть
     if (activeCategories.has(filter)) {
       console.log('уже есть такой фильтр');
@@ -47,13 +38,11 @@ function WhereToGo({ openPopupCities }) {
         set.delete(filter);
         return set;
       });
-      // setIsFiltersUsed(true);
       return;
     }
 
     // новый фильтр
     console.log('это новый фильтр');
-    // setIsFiltersUsed(true);
     setIsAll(false);
     setActiveCategories((set) => {
       set.add(filter);
@@ -68,11 +57,11 @@ function WhereToGo({ openPopupCities }) {
   function handleCheckboxAgeClick(evt, value) {
     const { target } = evt;
     console.log('target', target);
-    setActiveAgeRange(value);
     if (value === activeAgeRange) {
       setActiveAgeRange(false);
+    } else {
+      setActiveAgeRange(value);
     }
-    // setIsFiltersUsed(true);
   }
 
   function handleCheckboxAgeChange() {
@@ -99,9 +88,7 @@ function WhereToGo({ openPopupCities }) {
     // ВСЕ + БЕЗ ВОЗРАСТА (по умолчанию)
     if (isAll && activeAgeRange === '') {
       console.log('ВСЕ + БЕЗ ВОЗРАСТА');
-      // setFilteredPlaces(places);
       return places;
-      // return;
     }
 
     // ВСЕ + ВОЗРАСТ
@@ -110,9 +97,7 @@ function WhereToGo({ openPopupCities }) {
       // отфильтровали по возрасту
       const a = places.filter((place) => filterAgeRanges(place.age));
       console.log('a', a);
-      // setFilteredPlaces(a);
       return a;
-      // return;
     }
 
     // КАТЕГОРИИ + БЕЗ ВОЗРАСТА
@@ -121,9 +106,7 @@ function WhereToGo({ openPopupCities }) {
       // отфильтровали по категории
       const a = places.filter((place) => activeCategories.has(place.category));
       console.log('a', a);
-      // setFilteredPlaces(a);
       return a;
-      // return;
     }
 
     // КАТЕГОРИЯ + ВОЗРАСТ
@@ -132,9 +115,7 @@ function WhereToGo({ openPopupCities }) {
       const a = places.filter((place) => filterAgeRanges(place.age));
       const b = a.filter((place) => activeCategories.has(place.category));
       console.log('b', b);
-      // setFilteredPlaces(b);
       return b;
-      // return;
     }
 
     console.log('ДТП');
@@ -146,7 +127,6 @@ function WhereToGo({ openPopupCities }) {
     Api.getPlaces()
       .then((result) => {
         setPlaces(result);
-        // setFinalData(result);
 
         const categoriesArr = result.map((place) => place.category);
         const set = new Set(categoriesArr);
@@ -157,12 +137,6 @@ function WhereToGo({ openPopupCities }) {
 
     // показать попап ГОРОДА если незалогинен
   }, []);
-
-  // useEffect(() => {
-  //   console.log('effect');
-  //   filterMePlacesFINAL();
-  //   setIsFiltersUsed(false);
-  // }, [isFiltersUsed]);
 
   function renderSomeFilters(array, typeOfFilter, handleCheckboxClick, handleCheckboxChange) {
     return array.map((filterName) => (
@@ -175,7 +149,6 @@ function WhereToGo({ openPopupCities }) {
           filters={filterName}
           onChange={handleCheckboxChange}
           onClick={handleCheckboxClick}
-          //! надо передавать колбэки т.к ты 2 списка делаешь в 1 функции
         />
       </li>
     ));
@@ -200,7 +173,6 @@ function WhereToGo({ openPopupCities }) {
           content="Куда вы можете пойти, что рекомендуют наши наставники"
         />
       </Helmet>
-      {/* тайтл + фильтры */}
       <section className="place page__section fade-in">
         <TitleH1 title="Куда пойти" />
         <div className="tags">
@@ -213,10 +185,8 @@ function WhereToGo({ openPopupCities }) {
         </div>
       </section>
 
-      {/* форма, показывать, только если юзер авторизован, надо сделать */}
       {currentUser && (<WhereToGoPreview />)}
 
-      {/* большая карточка */}
       <section className="place__main page__section fade-in">
         <CardPlace
           key={places.find((place) => place.chosen)?.id}
@@ -226,7 +196,6 @@ function WhereToGo({ openPopupCities }) {
         />
       </section>
 
-      {/* секция карточек */}
       <section className="cards-grid page__section">
         {filterMePlacesFINAL().map((place, idx) => (
           <CardPlace
@@ -238,7 +207,6 @@ function WhereToGo({ openPopupCities }) {
         ))}
       </section>
     </>
-    //! нужен лоадер ко всему этому пока данные грузятся, а то страница мигает
   );
 }
 
