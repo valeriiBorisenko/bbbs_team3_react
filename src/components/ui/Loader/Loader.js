@@ -2,7 +2,7 @@ import './Loader.scss';
 import PropTypes from 'prop-types';
 
 function Loader({ sectionClass }) {
-  const classNames = ['spinner', sectionClass].join(' ').trim();
+  const classNames = ['spinner', sectionClass ? 'spinner_waiting-for-data' : ''].join(' ').trim();
 
   return (
     <div className={classNames}>

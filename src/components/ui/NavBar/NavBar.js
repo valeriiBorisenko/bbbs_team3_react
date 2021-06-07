@@ -57,7 +57,7 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="#"
+            href="/questions"
             linkText="Вопросы"
           />
           {/* выпадающее меню  "Читать и смотреть" */}

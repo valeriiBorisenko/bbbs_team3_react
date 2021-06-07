@@ -19,6 +19,7 @@ import AboutUs from '../AboutUs/AboutUs';
 import Account from '../Account/Account';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import QuestionsPage from '../QuestionsPage/QuestionsPage';
 // логины, авторизация
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 // API
@@ -261,6 +262,9 @@ function App() {
                     onOpenLoginPopup={handleClickPopupLoginOpened}
                     dataCalendar={dataCalendar}
                   />
+                </Route>
+                <Route path="/questions">
+                  <QuestionsPage />
                 </Route>
                 <ProtectedRoute
                   exact

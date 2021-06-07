@@ -51,6 +51,18 @@ export default class Api {
       .then((response) => response.data);
   }
 
+  // работа со странице вопросов
+  static getQuestionsPageData() {
+    return axios
+      .get(`${baseURL}${apiUrl}/questions/`)
+      .then((response) => response.data);
+  }
+
+  static postQuestion(question) {
+    return axios
+      .post(`${baseURL}${apiUrl}/question/`, question)
+      .then((response) => response.data);
+  }
   //! все ответы будут потом переписаны на res.ok ? res.json() : reject()
   // _handleResult(response) {
   //   response.ok ? (response.json()) : Promise.reject(`Ошибка ${res.status} ${res.statusText}`)
