@@ -11,9 +11,6 @@ import CardPlace from '../ui/CardPlace/CardPlace';
 // import CurrentUserContext from '../../contexts/CurrentUserContext';
 import Api from '../../utils/api';
 
-// какие пропсы нужны
-// открытие попапа города ??
-// выбранный город ??
 function WhereToGo() {
   const ageRange = ['8-10 лет', '11-13 лет', '14-18 лет', '18+ лет'];
 
@@ -171,7 +168,8 @@ function WhereToGo() {
   // useEffect(() => {
   //   console.log('effect');
   //   filterMePlacesFINAL();
-  // });
+  //   setIsFiltersUsed(false);
+  // }, [isFiltersUsed]);
 
   function renderSomeFilters(array, typeOfFilter, handleCheckboxClick, handleCheckboxChange) {
     return array.map((filterName) => (
