@@ -1,0 +1,153 @@
+@import './styles/utils.scss';
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0.3s, opacity 0.3s linear;
+  z-index: 100;
+
+  &__container {
+    display: flex;
+    padding: 50px 100px;
+    border-radius: 30px;
+    background-color: $white;
+    font-family: $ptRootUI;
+    box-sizing: border-box;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+
+    &_type_sign-in {
+      width: 770px;
+    }
+
+    &_type_calendar {
+      min-height: 670px;
+      width: 770px;
+    }
+
+    &_type_confirm-diary {
+      width: 100%;
+      height: 100%;
+      max-width: 470px;
+      max-height: 238px;
+      padding: 30px;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_type_sign-in {
+    backdrop-filter: blur(7px);
+  }
+}
+
+.popup_opened {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+}
+
+.popup__close {
+  padding: 0;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-image: url('../../../assets/popup_close.svg');
+  width: 40px;
+  height: 40px;
+  background-size: 40px 40px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  color: $blue;
+  cursor: pointer;
+}
+
+.popup__title {
+  &_type_sign-in {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  &_type_calendar {
+    max-width: 570px;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+}
+
+.popup__button {
+  &_type_calendar {
+    max-width: 191px;
+    margin-right: 15px;
+  }
+}
+
+@include atDesktop1024 {
+  .popup__container {
+    padding: 50px;
+    width: 570px;
+    min-height: 470px;
+
+    &_type_confirm-diary {
+      width: 100%;
+      max-width: 320px;
+      max-height: 216px;
+      min-height: 216px;
+      padding: 15px;
+    }
+  }
+}
+
+@include atMobileL {
+  .popup__close {
+    top: 15px;
+    right: 15px;
+  }
+
+  .popup__container {
+    width: 450px;
+    padding: 60px 15px 30px;
+
+    &_type_sign-in {
+      padding-bottom: 50px;
+    }
+
+    &_type_confirm-diary {
+      padding: 15px;
+    }
+  }
+}
+
+@include atMobile {
+  .popup__container {
+    width: 290px;
+
+    &_type_cities {
+      max-width: 320px;
+    }
+  }
+
+  .popup__input {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+  }
+}
