@@ -1,30 +1,64 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+// !onClick в <header> используется исключительно для
+// !делегирования функции закрытия мобильного меню по клику на ссылки
+// !https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/no-static-element-interactions.md#case-the-event-handler-is-only-being-used-to-capture-bubbled-events
+
+import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useClickOutside } from '../../utils/custom-hooks';
 import NavBar from '../ui/NavBar/NavBar';
 import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
+import { AccountUrl, AfishaUrl, PlacesUrl } from '../../utils/routes';
 
-function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
+function Header({
+  onUserButtonClick,
+  onLogout,
+  onCityChange,
+  cities
+}) {
   const { pathname } = useLocation();
+  const currentUser = useContext(CurrentUserContext);
+
+  const [userCityName, setUserCityName] = useState('');
+
+  // определение города пользователя, используется в кнопках
+  useEffect(() => {
+    if (cities && currentUser) {
+      const userCity = cities.filter((city) => city.id === currentUser.city);
+      setUserCityName(userCity[0].name);
+    }
+  }, [cities, currentUser]);
 
   // меню бургер
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const toggleNavMenu = () => {
-    if (isMobileMenuOpen) setIsMobileMenuOpen(false);
-    else setIsMobileMenuOpen(true);
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // закрытие мобильного меню по клику вне хедера
+  const headerRef = useClickOutside(() => setIsMobileMenuOpen(false));
+
+  // закрытие мобильного меню по клику на ссылки
+  const handleCloseMobileMenu = (evt) => {
+    const { target } = evt;
+    if (isMobileMenuOpen && target.classList.contains('mobile-link')) {
+      setIsMobileMenuOpen(false);
+    }
   };
 
   // липкий хедер
   const [isHeaderActive, setIsHeaderActive] = useState(true);
-  let prevScrollpos = 0;
+  let prevScrollPos = 0;
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
       const currentScrollPos = window.pageYOffset;
-      // если prevScrollpos больше currentScrollPos значит мы скролим наверх уже
-      if (prevScrollpos > currentScrollPos) {
+      // если prevScrollPos больше currentScrollPos значит мы скролим наверх
+      if (prevScrollPos > currentScrollPos) {
         setIsHeaderActive(true);
       } else {
         setIsHeaderActive(false);
@@ -34,44 +68,72 @@ function Header({ isAuthorized, handleUserButtonClick, handleChangeCity }) {
       if (currentScrollPos === 0) {
         setIsHeaderActive(true);
       }
-      prevScrollpos = currentScrollPos;
+      prevScrollPos = currentScrollPos;
     });
   }, []);
 
+  const classNamesHeader = [
+    'header',
+    isMobileMenuOpen ? 'header_displayed' : '',
+    !isHeaderActive ? 'header__on-scroll-up' : ''
+  ].join(' ').trim();
+
   return (
     <header
-      className={`header ${isMobileMenuOpen ? 'header_displayed' : ''} ${
-        !isHeaderActive ? 'header__on-scroll-up' : ''
-      }`}
+      className={classNamesHeader}
+      ref={headerRef}
+      onClick={handleCloseMobileMenu}
+      onKeyPress={handleCloseMobileMenu}
     >
       <NavBar
-        isAuthorized={isAuthorized}
-        handleUserButtonClick={handleUserButtonClick}
-        handleBurgerClick={toggleNavMenu}
-        handleChangeCity={handleChangeCity}
-        isNavMenuOpen={isMobileMenuOpen}
+        onUserButtonClick={onUserButtonClick}
+        onBurgerButtonClick={toggleMobileMenu}
+        userCityName={userCityName}
+        onCityChangeClick={onCityChange}
+        onLogout={onLogout}
+        isMobileMenuOpen={isMobileMenuOpen}
       />
 
-      {pathname === '/account' && (
-        <div className="header__user-info">
-          <UserMenuButton title="Изменить город" handleClick={handleChangeCity} />
-          <UserMenuButton title="Выйти" />
-        </div>
+      {pathname === AccountUrl && (
+      <div className="header__user-info">
+        <UserMenuButton
+          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+          sectionClass="mobile-link"
+          handleClick={onCityChange}
+        />
+        <UserMenuButton
+          title="Выйти"
+          sectionClass="mobile-link"
+          handleClick={onLogout}
+        />
+      </div>
+      )}
+
+      {(pathname === AfishaUrl || pathname === PlacesUrl) && (
+      <div className="header__user-info">
+        <UserMenuButton
+          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+          handleClick={onCityChange}
+          sectionClass="mobile-link"
+        />
+      </div>
       )}
     </header>
   );
 }
 
 Header.propTypes = {
-  isAuthorized: PropTypes.bool,
-  handleUserButtonClick: PropTypes.func,
-  handleChangeCity: PropTypes.func
+  onUserButtonClick: PropTypes.func,
+  onCityChange: PropTypes.func,
+  onLogout: PropTypes.func,
+  cities: PropTypes.arrayOf(PropTypes.object)
 };
 
 Header.defaultProps = {
-  isAuthorized: false,
-  handleUserButtonClick: undefined,
-  handleChangeCity: undefined
+  onUserButtonClick: () => {},
+  onCityChange: () => {},
+  onLogout: () => {},
+  cities: []
 };
 
 export default Header;

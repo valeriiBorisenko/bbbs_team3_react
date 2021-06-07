@@ -1,24 +1,34 @@
 import './Card.scss';
 import PropTypes from 'prop-types';
 
-function Card({ color, sectionClass, children }) {
+function Card({
+  color, sectionClass, children, onClick
+}) {
   return (
-    <article className={`card card_color_${color} ${sectionClass}`}>
+    <div
+      className={`card card_color_${color} ${sectionClass}`}
+      onClick={onClick}
+      onKeyPress={onClick}
+      role="button"
+      tabIndex="0"
+    >
       {children}
-    </article>
+    </div>
   );
 }
 
 Card.propTypes = {
   color: PropTypes.string,
   sectionClass: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
+  onClick: PropTypes.func
 };
 
 Card.defaultProps = {
   color: 'white',
   sectionClass: '',
-  children: null
+  children: null,
+  onClick: () => {}
 };
 
 export default Card;

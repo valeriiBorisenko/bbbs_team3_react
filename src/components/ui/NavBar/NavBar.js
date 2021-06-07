@@ -1,63 +1,66 @@
 import './NavBar.scss';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import NavItem from '../NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
 import UserButton from '../UserButton/UserButton';
 import UserMenuButton from '../UserMenuButton/UserMenuButton';
+import {
+  AfishaUrl,
+  AboutUsUrl,
+  QuestionsUrl,
+  PlacesUrl
+} from '../../../utils/routes';
 
 function NavBar({
-  isAuthorized,
-  handleUserButtonClick,
-  handleBurgerClick,
-  handleChangeCity,
-  isNavMenuOpen
+  isMobileMenuOpen,
+  onUserButtonClick,
+  onBurgerButtonClick,
+  onCityChangeClick,
+  onLogout,
+  userCityName
 }) {
+  const currentUser = useContext(CurrentUserContext);
+
   return (
     <nav className="menu">
       {/* логотип */}
-      <Link to="/" target="_self" className="menu__logo">
+      <Link to="/" target="_self" className="menu__logo mobile-link">
         наставники.про
       </Link>
       {/* обычное меню */}
-      <div
-        className={`menu__lists-wrap ${
-          !isNavMenuOpen ? 'menu__lists-wrap_hidden' : ''
-        }`}
-      >
+      <div className={`menu__lists-wrap ${!isMobileMenuOpen ? 'menu__lists-wrap_hidden' : ''}`}>
         <ul className="menu__list">
           {/* О проекте, скрытый */}
           <NavItem
             sectionWrapperClass="menu__list-item menu__list-item_hidden"
-            sectionLinkClass="menu__link"
-            href="/about-us"
+            sectionLinkClass="menu__link mobile-link"
+            href={`${AboutUsUrl}`}
             linkText="О проекте"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* Календарь */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
-            href="/calendar"
+            sectionLinkClass="menu__link mobile-link"
+            href={`${AfishaUrl}`}
             linkText="Календарь"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* Куда пойти */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
-            href="#"
+            sectionLinkClass="menu__link mobile-link"
+            href={`${PlacesUrl}`}
             linkText="Куда пойти"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* Вопросы */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
-            href="#"
+            sectionLinkClass="menu__link mobile-link"
+            href={`${QuestionsUrl}`}
             linkText="Вопросы"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* выпадающее меню  "Читать и смотреть" */}
           <NavItemWithDropdown
@@ -67,30 +70,24 @@ function NavBar({
           {/* Права детей */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href="#"
             linkText="Права детей"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* Истории */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href="#"
             linkText="Истории"
-            closeMobileMenu={handleBurgerClick}
           />
         </ul>
 
-        <ul
-          className={`menu__list menu__list_type_social ${
-            !isNavMenuOpen ? 'menu__list_hidden' : ''
-          }`}
-        >
+        <ul className={`menu__list menu__list_type_social ${!isMobileMenuOpen ? 'menu__list_hidden' : ''}`}>
           {/* facebook */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href={{
               pathname:
                 'https://www.facebook.com/BigBrothers.BigSisters.Russia/'
@@ -98,54 +95,55 @@ function NavBar({
             linkText="facebook"
             target="_blank"
             rel="noopener noreferrer"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* vkontakte */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href={{ pathname: 'https://vk.com/big.brothers.big.sisters' }}
             linkText="vkontakte"
             target="_blank"
             rel="noopener noreferrer"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* instagram */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href={{ pathname: 'https://www.instagram.com/nastavniki_org/' }}
             linkText="instagram"
             target="_blank"
             rel="noopener noreferrer"
-            closeMobileMenu={handleBurgerClick}
           />
           {/* youtube */}
           <NavItem
             sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link"
+            sectionLinkClass="menu__link mobile-link"
             href={{ pathname: 'https://www.youtube.com/user/Nastavniki/' }}
             linkText="youtube"
             target="_blank"
             rel="noopener noreferrer"
-            closeMobileMenu={handleBurgerClick}
           />
         </ul>
       </div>
 
-      {isAuthorized && (
-      <div className={`menu__user-info ${
-        !isNavMenuOpen ? 'menu__user-info_hidden' : ''
-      }`}
-      >
-        <UserMenuButton title="Изменить город" handleClick={handleChangeCity} />
-        <UserMenuButton title="Выйти" />
+      {currentUser && (
+      <div className={`menu__user-info ${!isMobileMenuOpen ? 'menu__user-info_hidden' : ''}`}>
+        <UserMenuButton
+          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+          handleClick={onCityChangeClick}
+          sectionClass="mobile-link"
+        />
+        <UserMenuButton
+          title="Выйти"
+          sectionClass="mobile-link"
+          handleClick={onLogout}
+        />
       </div>
       )}
 
       <button
-        onClick={handleBurgerClick}
-        className={`menu__burger ${isNavMenuOpen ? 'menu__burger_active' : ''}`}
+        onClick={onBurgerButtonClick}
+        className={`menu__burger ${isMobileMenuOpen ? 'menu__burger_active' : ''}`}
         type="button"
       >
         <span className="menu__burger-line" />
@@ -162,7 +160,6 @@ function NavBar({
                 type="text"
                 name="search"
                 placeholder="Поиск"
-                value=""
                 className="search__input paragraph"
               />
               <ul className="search__option-list">
@@ -217,8 +214,9 @@ function NavBar({
         </li>
         <li className="menu__button-item">
           <UserButton
-            isAuthorized={isAuthorized}
-            handleClick={handleUserButtonClick}
+            sectionClass="mobile-link"
+            isAuthorized={currentUser}
+            handleClick={onUserButtonClick}
           />
         </li>
       </ul>
@@ -227,19 +225,21 @@ function NavBar({
 }
 
 NavBar.propTypes = {
-  isAuthorized: PropTypes.bool,
-  handleUserButtonClick: PropTypes.func,
-  handleBurgerClick: PropTypes.func,
-  handleChangeCity: PropTypes.func,
-  isNavMenuOpen: PropTypes.bool
+  onUserButtonClick: PropTypes.func,
+  onBurgerButtonClick: PropTypes.func,
+  onCityChangeClick: PropTypes.func,
+  onLogout: PropTypes.func,
+  isMobileMenuOpen: PropTypes.bool,
+  userCityName: PropTypes.string
 };
 
 NavBar.defaultProps = {
-  isAuthorized: false,
-  handleUserButtonClick: undefined,
-  handleBurgerClick: undefined,
-  handleChangeCity: undefined,
-  isNavMenuOpen: false
+  onUserButtonClick: () => {},
+  onBurgerButtonClick: () => {},
+  onCityChangeClick: () => {},
+  onLogout: () => {},
+  isMobileMenuOpen: false,
+  userCityName: ''
 };
 
 export default NavBar;

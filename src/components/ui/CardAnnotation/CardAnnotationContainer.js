@@ -1,16 +1,17 @@
 import './CardAnnotation.scss';
 import PropTypes from 'prop-types';
+import { Scrollbars } from 'react-custom-scrollbars';
 import Caption from '../Caption/Caption';
 
 function CardAnnotationContainer({ caption, children }) {
   return (
-    <div className="card-annotation__content">
+    <Scrollbars renderThumbVertical={() => <div className="card-annotation__thumb" />}>
       {caption && <Caption sectionClass="card-annotation__caption" title={caption} />}
 
       <div className="card-annotation__desc">
         {children}
       </div>
-    </div>
+    </Scrollbars>
   );
 }
 
@@ -20,7 +21,7 @@ CardAnnotationContainer.propTypes = {
 };
 
 CardAnnotationContainer.defaultProps = {
-  caption: false,
+  caption: null,
   children: null
 };
 

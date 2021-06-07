@@ -10,8 +10,8 @@ function Widget({ link, title }) {
         title={title}
         src={link}
         scrolling="no"
-        allowFullScreen="true"
-        allow="clipboard-write; encrypted-media; picture-in-picture; web-share"
+        allowFullScreen
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
       />
     </Card>
   );

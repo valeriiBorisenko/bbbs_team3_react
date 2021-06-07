@@ -9,11 +9,20 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .page__section {
   margin: 0 75px;
+}
+
+.main {
+  padding-top: 150px;
+  padding-bottom: 120px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 @include atDesktop1440 {
@@ -26,7 +35,20 @@
   .page__section {
     margin: 0 127px;
   }
+
+  .main {
+    padding-top: 110px;
+    padding-bottom: 100px;
+  }
 }
+
+@include atTabletL {
+  .main {
+    padding-top: 60px;
+    padding-bottom: 50px;
+  }
+}
+
 
 @include atTablet {
   .page__section {

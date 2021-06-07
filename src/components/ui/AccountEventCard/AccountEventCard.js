@@ -1,29 +1,35 @@
 import './AccountEventCard.scss';
 import PropTypes from 'prop-types';
+import { formatDate } from '../../../utils/utils';
 import Card from '../Card/Card';
 
-function AccountEventCard({ day, month, title }) {
+function AccountEventCard({
+  data, onOpen
+}) {
+  const startDay = formatDate(data.startAt);
+
+  const handleOpen = () => {
+    onOpen(data);
+  };
+
   return (
-    <Card sectionClass="account-event-card">
+    <Card sectionClass="account-event-card" onClick={handleOpen}>
       <div className="account-event-card__date">
-        <span className="account-event-card__day">{day}</span>
-        <span className="account-event-card__month">{month}</span>
+        <span className="account-event-card__day">{startDay.day}</span>
+        <span className="account-event-card__month">{startDay.monthName}</span>
       </div>
-      <p className="account-event-card__title">{title}</p>
+      <p className="account-event-card__title">{data.title}</p>
     </Card>
   );
 }
 
 AccountEventCard.propTypes = {
-  day: PropTypes.string,
-  month: PropTypes.string,
-  title: PropTypes.string
+  data: PropTypes.objectOf(PropTypes.any).isRequired,
+  onOpen: PropTypes.func
 };
 
 AccountEventCard.defaultProps = {
-  day: '',
-  month: '',
-  title: ''
+  onOpen: () => {}
 };
 
 export default AccountEventCard;

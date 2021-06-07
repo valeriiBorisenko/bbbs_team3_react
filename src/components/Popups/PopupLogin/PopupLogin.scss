@@ -1,0 +1,52 @@
+@import './styles/utils.scss';
+
+.popup__sign-in {
+  text-align: center;
+  margin-bottom: 30px;
+
+  &:nth-of-type(2) {
+    margin-bottom: 50px;
+  }
+}
+
+.popup__button_type_sign-in {
+  align-self: flex-start;
+}
+
+.popup__input {
+  margin-bottom: 20px;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.popup__forgot-password {
+  margin: 0;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: $darkGray;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@include atMobile {
+  .popup__sign-in {
+    margin-bottom: 20px;
+
+    &:nth-of-type(2) {
+      margin-bottom: 30px;
+    }
+  }
+
+  .popup__input {
+    margin-bottom: 10px;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}

@@ -1,53 +1,75 @@
-const axios = require('axios');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const MockAdapter = require('axios-mock-adapter');
+import axios from 'axios';
+import setMockedAnswers from './mocked-answers';
+import { apiUrl, baseURL } from './routes';
 
-const mainPageData = require('./server-responses/main-page.json');
+setMockedAnswers();
 
-const accountData = require('./server-responses/account.json');
-const cities = require('./server-responses/cities.json');
+axios.defaults.headers.get['Content-Type'] = 'application/json';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+export default class Api {
+  // главная страница
+  static getMainPageData() {
+    return axios
+      .get(`${baseURL}${apiUrl}/main/`)
+      .then((response) => response.data);
+  }
 
-const calendarPageData = require('./server-responses/calendar-page.json');
+  // города
+  static getCities() {
+    return axios
+      .get(`${baseURL}${apiUrl}/cities/`)
+      .then((response) => response.data);
+  }
 
-const baseURL = 'http://localhost:3000';
+  // страница календаря (ивенты)
+  static getCalendarPageData() {
+    return axios
+      .get(`${baseURL}${apiUrl}/afisha/events/`)
+      .then((response) => response.data);
+  }
 
-// mock
-const mock = new MockAdapter(axios, { delayResponse: 3000 });
-// arguments for reply are (status, data, headers)
-mock.onGet(`${baseURL}/main/`).reply(
-  200,
-  {
-    mainPageData
-  },
-  'Content-Type: application/json'
-);
+  // страница "куда пойти"
+  static getPlaces() {
+    return axios
+      .get(`${baseURL}${apiUrl}/where-to-go/`)
+      .then((response) => response.data);
+  }
 
-mock.onGet(`${baseURL}/account/`).reply(
-  200,
-  {
-    accountData
-  },
-  'Content-Type: application/json'
-);
+  // работа с ивентами (карточки)
+  static updateEvent(eventData) {
+    return axios
+      .patch(`${baseURL}${apiUrl}/afisha/event-participants/`, eventData)
+      .then((response) => response.data);
+  }
 
-mock.onGet(`${baseURL}/cities/`).reply(
-  200,
-  {
-    cities
-  },
-  'Content-Type: application/json'
-);
+  // работа с юзером
+  static updateUserInfo(userData) {
+    return axios
+      .patch(`${baseURL}${apiUrl}/profile/`, userData)
+      .then((response) => response.data);
+  }
 
-mock.onGet(`${baseURL}/afisha/events/`).reply(
-  200,
-  {
-    calendarPageData
-  },
-  'Content-Type: application/json'
-);
+  // работа со страницей ЛК
+  static getProfileDiaryData() {
+    return axios
+      .get(`${baseURL}${apiUrl}/profile/diary/`)
+      .then((response) => response.data);
+  }
 
-// functions
-export const getMainPageData = () => axios.get(`${baseURL}/main/`);
-export const getAccountData = () => axios.get(`${baseURL}/account/`);
-export const getCities = () => axios.get(`${baseURL}/cities/`);
-export const getCalendarPageData = () => axios.get(`${baseURL}/afisha/events/`);
+  // работа со странице вопросов
+  static getQuestionsPageData() {
+    return axios
+      .get(`${baseURL}${apiUrl}/questions/`)
+      .then((response) => response.data);
+  }
+
+  static postQuestion(question) {
+    return axios
+      .post(`${baseURL}${apiUrl}/question/`, question)
+      .then((response) => response.data);
+  }
+  //! все ответы будут потом переписаны на res.ok ? res.json() : reject()
+  // _handleResult(response) {
+  //   response.ok ? (response.json()) : Promise.reject(`Ошибка ${res.status} ${res.statusText}`)
+  // }
+}

@@ -96,14 +96,29 @@
     }
   }
 
+  &_color_gray {
+    color: $lightGray;
+
+    &:hover {
+      color: $black;
+      background-color: $lightGray;
+    }
+  }
+
+  &_color_gray-borderless {
+    border-color: transparent;
+    color: $lightGray;
+    padding: 0;
+    height: auto;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
   &_color_blackwhite {
     border-color: $black;
     color: $black;
-  }
-
-  &__calendar_type_confirm {
-    max-width: 191px;
-    margin-right: 15px;
   }
 }
 
@@ -113,5 +128,10 @@
     padding: 0 15px;
     font-size: 12px;
     line-height: 1.4;
+
+    &_color_gray-borderless {
+      padding: 0;
+      height: auto;
+    }
   }
 }

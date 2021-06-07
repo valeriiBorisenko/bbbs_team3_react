@@ -1,0 +1,140 @@
+@import './styles/utils.scss';
+
+.account__events-area {
+  box-sizing: border-box;
+  border-bottom: 1px solid $darkGray;
+}
+
+.account__title {
+  margin-bottom: 50px;
+  width: fit-content;
+  text-align: center;
+  color: $lightBlack;
+}
+
+.account__events {
+  margin-bottom: 50px;
+}
+
+.account-event-card {
+  max-width: 270px;
+  max-height: 158px;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  margin-right: 30px;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+.account__diaries {
+  padding-top: 50px;
+}
+
+.account__diaries-container {
+  max-width: 1170px;
+  margin: 0 auto;
+  transition: .5s ease;
+}
+
+.account__form-container {
+  margin-bottom: 80px;
+}
+
+.account__button-add-diary {
+  height: 48px;
+  padding: 0 0 0 63px;
+  font-family: $protoGrotesk;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.27;
+  letter-spacing: 0.2px;
+  color: $blue;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  background-image: url(../../../assets/icon-circle-with-plus.svg);
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    opacity: .5;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.account__diary-form {
+  visibility: visible;
+  height: auto;
+  opacity: 1;
+  pointer-events: all;
+  margin-top: 50px;
+  transition: .5s ease;
+
+  &_hidden {
+    visibility: hidden;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    margin: 0;
+    transition: .3s ease;
+  }
+}
+
+@include atDesktop1199 {
+  .account__diaries-container {
+    max-width: 700px;
+  }
+
+  .account__form-container {
+    margin-bottom: 30px;
+  }
+}
+
+@include atTablet {
+  .account__events {
+    margin-right: -60px;
+    margin-left: -60px;
+  }
+
+  .account-event-card {
+    max-width: 205px;
+    max-height: 108px;
+  }
+}
+
+@include atMobile {
+  .account__title {
+    margin-bottom: 20px;
+  }
+
+  .account__events {
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-bottom: 20px;
+  }
+
+  .account-event-card {
+    max-width: 205px;
+    max-height: 108px;
+  }
+
+  .account__button-add-diary {
+    height: 40px;
+    padding: 0 0 0 55px;
+    font-size: 12px;
+    line-height: 1.42;
+  }
+
+  .account__diary-form {
+    margin-top: 20px;
+  }
+}

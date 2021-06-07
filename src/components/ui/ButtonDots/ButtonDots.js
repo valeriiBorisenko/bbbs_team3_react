@@ -18,7 +18,7 @@ ButtonDots.propTypes = {
 };
 
 ButtonDots.defaultProps = {
-  handleClick: undefined
+  handleClick: () => {}
 };
 
 export default ButtonDots;

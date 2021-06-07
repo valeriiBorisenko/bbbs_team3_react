@@ -1,0 +1,27 @@
+@import './styles/utils.scss';
+
+.popup__animation-success {
+  max-width: 450px;
+  max-height: 190px;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto 30px;
+
+  & > svg {
+    max-height: 190px;
+  }
+}
+
+.popup__title_type_successfully {
+  margin-top: 30px;
+}
+
+@include atDesktop1024 {
+  .popup__animation-success {
+    max-height: 170px;
+
+    & > svg {
+      max-height: 170px;
+    }
+  }
+}

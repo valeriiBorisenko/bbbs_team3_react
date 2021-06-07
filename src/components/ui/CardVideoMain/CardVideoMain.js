@@ -11,6 +11,7 @@ function CardVideoMain({
   handleClick
 }) {
   const { hours, minutes, seconds } = formatDuration(duration);
+
   return (
     <div className="card-container card-container_type_main-video">
       <Card sectionClass="card-video-main" color="yellow">
@@ -67,7 +68,7 @@ CardVideoMain.defaultProps = {
   link: '',
   imageUrl: '',
   duration: 0,
-  handleClick: undefined
+  handleClick: () => {}
 };
 
 export default CardVideoMain;

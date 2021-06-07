@@ -14,22 +14,13 @@
   }
 }
 
-.card-annotation__content {
-  overflow-y: scroll;
-  scrollbar-width: thin;
-  scrollbar-color: $backgroundAnnotation transparent;
-  &::-webkit-scrollbar {
-    width: 3px;
-  }
-  &::-webkit-scrollbar-thumb {
-    height: 30px;
-    background-color: $backgroundAnnotation;
-    border-radius: 5px;
-  }
+.card-annotation__thumb {
+  background-color: $backgroundAnnotation;
+  border-radius: 5px;
 }
 
 .card-annotation__desc {
-  padding-right: 5px;
+  padding-right: 8px;
 }
 
 @include atDesktop1199 {

@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
 import './Footer.scss';
 import footerLogoPath from '../../assets/footer-logo.svg';
-// import Button from '../ui/Button/Button';
 import NavItem from '../ui/NavItem/NavItem';
+import {
+  AfishaUrl,
+  AboutUsUrl,
+  QuestionsUrl,
+  PlacesUrl
+} from '../../utils/routes';
 
 function Footer() {
   return (
@@ -59,28 +64,28 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="about-us"
+            href={`${AboutUsUrl}`}
             linkText="о проекте"
           />
           {/* каленарь */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/calendar"
+            href={`${AfishaUrl}`}
             linkText="календарь"
           />
           {/* куда пойти */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/"
+            href={`${PlacesUrl}`}
             linkText="куда пойти"
           />
           {/* вопросы */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/"
+            href={`${QuestionsUrl}`}
             linkText="вопросы"
           />
           {/* читать и смотреть */}
@@ -112,9 +117,7 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href={{
-              path: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/'
-            }}
+            href={{ path: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/' }}
             linkText="facebook"
             rel="noreferrer"
           />
@@ -141,13 +144,6 @@ function Footer() {
             href={{ path: 'https://www.youtube.com/user/Nastavniki/' }}
             linkText="youtube"
             rel="noreferrer"
-          />
-          {/* youtube */}
-          <NavItem
-            sectionWrapperClass="footer__column-links"
-            sectionLinkClass="footer__column-link"
-            href="/account"
-            linkText="ЛК (для теста)"
           />
         </ul>
       </div>
