@@ -47,8 +47,6 @@ function QuestionsPage() {
           value={filterTagsName}
           title={filterTagsName}
           filters={filterTagsName}
-          // onChange={handleCheckboxChange}
-          // onClick={handleCheckboxClick}
         />
       </li>
     ));
