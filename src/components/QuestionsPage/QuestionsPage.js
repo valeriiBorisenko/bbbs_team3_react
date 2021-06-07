@@ -62,7 +62,7 @@ function QuestionsPage() {
         <title>Ответы на вопросы</title>
         <meta name="description" content="Страница с ответами на основные вопросы" />
       </Helmet>
-      <section className="lead fade-in">
+      <section className="questions-page page__section fade-in">
         <TitleH1 title="Ответы на вопросы" />
         <div className="tags tags_content_long-list">
           <ul className="tags__list tags__list_type_long">
@@ -71,7 +71,7 @@ function QuestionsPage() {
         </div>
         <ul className="questions">
           {isQuestionsData.map((data) => (
-            <li key={data.id}>
+            <li className="questions__list-item" key={data.id}>
               <CardQuestion
                 data={data}
                 sectionClass="card__questions_type_questions-page"
