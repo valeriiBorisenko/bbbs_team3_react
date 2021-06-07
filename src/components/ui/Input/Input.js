@@ -58,7 +58,7 @@ Input.defaultProps = {
   placeholder: '',
   sectionClass: '',
   isTextarea: false,
-  onChange: undefined,
+  onChange: () => {},
   required: false,
   error: undefined,
   errorMessage: ''

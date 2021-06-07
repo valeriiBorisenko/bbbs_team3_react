@@ -29,7 +29,7 @@ AccountEventCard.propTypes = {
 };
 
 AccountEventCard.defaultProps = {
-  onOpen: undefined
+  onOpen: () => {}
 };
 
 export default AccountEventCard;

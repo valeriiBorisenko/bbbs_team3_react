@@ -26,11 +26,7 @@ function NavBar({
         наставники.про
       </Link>
       {/* обычное меню */}
-      <div
-        className={`menu__lists-wrap ${
-          !isMobileMenuOpen ? 'menu__lists-wrap_hidden' : ''
-        }`}
-      >
+      <div className={`menu__lists-wrap ${!isMobileMenuOpen ? 'menu__lists-wrap_hidden' : ''}`}>
         <ul className="menu__list">
           {/* О проекте, скрытый */}
           <NavItem
@@ -81,11 +77,7 @@ function NavBar({
           />
         </ul>
 
-        <ul
-          className={`menu__list menu__list_type_social ${
-            !isMobileMenuOpen ? 'menu__list_hidden' : ''
-          }`}
-        >
+        <ul className={`menu__list menu__list_type_social ${!isMobileMenuOpen ? 'menu__list_hidden' : ''}`}>
           {/* facebook */}
           <NavItem
             sectionWrapperClass="menu__list-item"
@@ -236,10 +228,10 @@ NavBar.propTypes = {
 };
 
 NavBar.defaultProps = {
-  onUserButtonClick: undefined,
-  onBurgerButtonClick: undefined,
-  onCityChangeClick: undefined,
-  onLogout: undefined,
+  onUserButtonClick: () => {},
+  onBurgerButtonClick: () => {},
+  onCityChangeClick: () => {},
+  onLogout: () => {},
   isMobileMenuOpen: false,
   userCityName: ''
 };

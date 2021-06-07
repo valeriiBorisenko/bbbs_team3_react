@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 function UserMenuButton({ title, handleClick, sectionClass }) {
   const classNames = ['user-menu-button', sectionClass].join(' ').trim();
+
   return (
     <button
       className={classNames}
@@ -22,7 +23,7 @@ UserMenuButton.propTypes = {
 
 UserMenuButton.defaultProps = {
   title: '',
-  handleClick: undefined,
+  handleClick: () => {},
   sectionClass: ''
 };
 

@@ -28,7 +28,7 @@ Card.defaultProps = {
   color: 'white',
   sectionClass: '',
   children: null,
-  onClick: undefined
+  onClick: () => {}
 };
 
 export default Card;

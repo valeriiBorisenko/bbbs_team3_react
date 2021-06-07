@@ -11,11 +11,16 @@ function Button({
   isBooked,
   sectionClass
 }) {
+  const classNames = [
+    'button',
+    `button_color_${color}`,
+    sectionClass,
+    isBooked ? `button_color_${color}_selected` : ''
+  ].join(' ').trim();
+
   return (
     <button
-      className={`button button_color_${color} ${sectionClass} ${
-        isBooked ? `button_color_${color}_selected` : ''
-      }`}
+      className={classNames}
       type={isSubmittable ? 'submit' : 'button'}
       disabled={isDisabled}
       onClick={onClick}
@@ -41,7 +46,7 @@ Button.defaultProps = {
   color: 'blue',
   isSubmittable: false,
   titleSelected: undefined,
-  onClick: undefined,
+  onClick: () => {},
   isDisabled: false,
   isBooked: false,
   sectionClass: ''

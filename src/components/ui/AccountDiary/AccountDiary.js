@@ -15,6 +15,7 @@ function AccountDiary({
   const {
     imageUrl, title, description, rate, date
   } = data;
+
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('Нормально');
 
@@ -101,8 +102,8 @@ AccountDiary.defaultProps = {
   title: '',
   rate: 'neutral',
   date: '',
-  onEdit: undefined,
-  onDelete: undefined
+  onEdit: () => {},
+  onDelete: () => {}
 };
 
 export default AccountDiary;
