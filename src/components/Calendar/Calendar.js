@@ -151,7 +151,7 @@ function Calendar({
               ))}
             </div>
           </div>
-        ) : <Loader sectionClass />}
+        ) : <Loader isNested />}
 
         { !currentUser && onOpenLoginPopup()}
       </section>

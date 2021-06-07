@@ -42,12 +42,6 @@
   }
 }
 
-@include atTabletL {
-  .calendar-page__loader {
-    margin: 50px auto 0;
-  }
-}
-
 @include atTablet {
   .calendar-page__grid {
     grid-template-columns: 1fr;
