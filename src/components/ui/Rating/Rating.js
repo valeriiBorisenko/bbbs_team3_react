@@ -34,7 +34,7 @@ function Rating({
 Rating.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   ratingType: PropTypes.string,
   sectionClass: PropTypes.string,
   checked: PropTypes.bool,
@@ -43,10 +43,11 @@ Rating.propTypes = {
 
 Rating.defaultProps = {
   name: '',
+  value: 'neutral',
   ratingType: 'neutral',
   sectionClass: '',
   checked: false,
-  onClick: undefined
+  onClick: () => {}
 };
 
 export default Rating;

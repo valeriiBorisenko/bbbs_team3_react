@@ -16,11 +16,10 @@ function AccountDiary({
     imageUrl, title, description, rate, date
   } = data;
   const eventDay = formatDate(date);
-  const [caption, setCaption] = useState('');
+  const [caption, setCaption] = useState('Нормально');
 
   useEffect(() => {
     if (rate === 'good') setCaption('Было классно');
-    if (rate === 'neutral') setCaption('Нормально');
     if (rate === 'bad') setCaption('Что-то пошло не так');
   }, []);
 
@@ -55,7 +54,7 @@ function AccountDiary({
             <Rating type="radio" ratingType={rate} value={rate} checked sectionClass="account-diary__rate" />
             <Caption
               title={caption}
-              sectionClass={`account-diary__ratings-text account-diary__ratings-text_type_${rate}`}
+              sectionClass={`account-diary__ratings-text account-diary__ratings-text_type_${rate || 'neutral'}`}
             />
           </div>
           <div className="account-diary__action-elements">
