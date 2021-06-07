@@ -48,8 +48,8 @@ PseudoButtonCheckbox.propTypes = {
   value: PropTypes.string,
   title: PropTypes.string,
   filters: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
-  onChange: PropTypes.func.isRequired,
-  onClick: PropTypes.func.isRequired
+  onChange: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 PseudoButtonCheckbox.defaultProps = {
@@ -57,7 +57,9 @@ PseudoButtonCheckbox.defaultProps = {
   name: '',
   value: '',
   title: '',
-  filters: {}
+  filters: {},
+  onChange: () => {},
+  onClick: () => {}
 };
 
 export default PseudoButtonCheckbox;
