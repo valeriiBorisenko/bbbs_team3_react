@@ -6,22 +6,22 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Loader from '../ui/Loader/Loader';
 // попапы
-import PopupConfirmation from '../PopupConfirmation/PopupConfirmation';
-import PopupSuccessfully from '../PopupSuccessfully/PopupSuccessfully';
-import PopupLogin from '../PopupLogin/PopupLogin';
-import PopupAboutEvent from '../PopupAboutEvent/PopupAboutEvent';
-import PopupCities from '../PopupCities/PopupCities';
-import PopupError from '../PopupError/PopupError';
+import PopupConfirmation from '../Popups/PopupConfirmation/PopupConfirmation';
+import PopupSuccessfully from '../Popups/PopupSuccessfully/PopupSuccessfully';
+import PopupLogin from '../Popups/PopupLogin/PopupLogin';
+import PopupAboutEvent from '../Popups/PopupAboutEvent/PopupAboutEvent';
+import PopupCities from '../Popups/PopupCities/PopupCities';
+import PopupError from '../Popups/PopupError/PopupError';
 // страницы
-import MainPage from '../MainPage/MainPage';
-import Calendar from '../Calendar/Calendar';
-import AboutUs from '../AboutUs/AboutUs';
-import Account from '../Account/Account';
-import PageNotFound from '../PageNotFound/PageNotFound';
-import QuestionsPage from '../QuestionsPage/QuestionsPage';
-import WhereToGo from '../WhereToGo/WhereToGo';
+import MainPage from '../Routes/MainPage/MainPage';
+import Calendar from '../Routes/Calendar/Calendar';
+import AboutUs from '../Routes/AboutUs/AboutUs';
+import Account from '../Routes/Account/Account';
+import PageNotFound from '../Routes/PageNotFound/PageNotFound';
+import QuestionsPage from '../Routes/QuestionsPage/QuestionsPage';
+import WhereToGo from '../Routes/WhereToGo/WhereToGo';
 // логины, авторизация
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import ProtectedRoute from '../Routes/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 // API
 import AuthApi from '../../utils/auth';
