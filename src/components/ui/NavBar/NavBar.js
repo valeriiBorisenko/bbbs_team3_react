@@ -8,6 +8,12 @@ import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import SearchButton from '../SearchButton/SearchButton';
 import UserButton from '../UserButton/UserButton';
 import UserMenuButton from '../UserMenuButton/UserMenuButton';
+import {
+  AfishaUrl,
+  AboutUsUrl,
+  QuestionsUrl,
+  PlacesUrl
+} from '../../../utils/routes';
 
 function NavBar({
   isMobileMenuOpen,
@@ -32,28 +38,28 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item menu__list-item_hidden"
             sectionLinkClass="menu__link mobile-link"
-            href="/about-us"
+            href={`${AboutUsUrl}`}
             linkText="О проекте"
           />
           {/* Календарь */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="/afisha"
+            href={`${AfishaUrl}`}
             linkText="Календарь"
           />
           {/* Куда пойти */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="/where-to-go"
+            href={`${PlacesUrl}`}
             linkText="Куда пойти"
           />
           {/* Вопросы */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="/questions"
+            href={`${QuestionsUrl}`}
             linkText="Вопросы"
           />
           {/* выпадающее меню  "Читать и смотреть" */}

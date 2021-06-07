@@ -11,6 +11,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useClickOutside } from '../../utils/custom-hooks';
 import NavBar from '../ui/NavBar/NavBar';
 import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
+import { AccountUrl, AfishaUrl, PlacesUrl } from '../../utils/routes';
 
 function Header({
   onUserButtonClick,
@@ -93,7 +94,7 @@ function Header({
         isMobileMenuOpen={isMobileMenuOpen}
       />
 
-      {pathname === '/account' && (
+      {pathname === AccountUrl && (
       <div className="header__user-info">
         <UserMenuButton
           title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
@@ -108,7 +109,7 @@ function Header({
       </div>
       )}
 
-      {(pathname === '/afisha' || pathname === '/where-to-go') && (
+      {(pathname === AfishaUrl || pathname === PlacesUrl) && (
       <div className="header__user-info">
         <UserMenuButton
           title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}

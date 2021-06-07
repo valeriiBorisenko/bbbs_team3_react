@@ -12,6 +12,7 @@ import Api from '../../utils/api';
 import Input from '../ui/Input/Input';
 import Button from '../ui/Button/Button';
 import Loader from '../ui/Loader/Loader';
+import { questionForm } from '../../utils/utils';
 
 function QuestionsPage() {
   useSmoothScrollOnWindow({ top: 0 });
@@ -21,6 +22,7 @@ function QuestionsPage() {
   const [questionsData, setQuestionsData] = useState([]);
   const [categoriesTags, setCategoriesTags] = useState([]);
   const [inputValues, setInputValues] = useState(null);
+  const [isQuestionForm, setIsQuestionForm] = useState(questionForm.before);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   // Данный вопросов с сервера
@@ -54,6 +56,10 @@ function QuestionsPage() {
 
   const onFormSubmit = (values) => {
     setInputValues({ ...inputValues, ...values });
+    setIsQuestionForm(questionForm.after);
+    setTimeout(() => {
+      setIsQuestionForm(questionForm.before);
+    }, 10000);
   };
 
   return (
@@ -88,9 +94,9 @@ function QuestionsPage() {
               <section className="add-question fade-in">
                 <TitleH2
                   sectionClass="add-question__title"
-                  title={inputValues ? 'Спасибо! Мы приняли ваш вопрос' : 'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список'}
+                  title={isQuestionForm.title}
                 />
-                <form className={`question-form ${inputValues ? 'question-form_invisible' : ''}`} onSubmit={handleSubmit(onFormSubmit)}>
+                <form className={`question-form ${isQuestionForm.sectionClass}`} onSubmit={handleSubmit(onFormSubmit)}>
                   <fieldset className="question-form__add-question">
                     <Input
                       type="text"

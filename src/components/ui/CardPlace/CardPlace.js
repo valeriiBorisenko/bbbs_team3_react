@@ -6,6 +6,7 @@ import Rubric from '../Rubric/Rubric';
 import TitleH2 from '../TitleH2/TitleH2';
 import Card from '../Card/Card';
 import Caption from '../Caption/Caption';
+import { PlacesUrl } from '../../../utils/routes';
 
 function CardPlace({
   data: {
@@ -27,7 +28,7 @@ function CardPlace({
         }
 
         <div className="card-place__title-wrap">
-          <Link to="/place" className="card-place__link-wrap">
+          <Link to={`${PlacesUrl}`} className="card-place__link-wrap">
             <TitleH2 sectionClass="card-place__title" title={title} />
           </Link>
           <Caption sectionClass="card-place__address" title={address} />
@@ -35,7 +36,7 @@ function CardPlace({
 
         {(chosen && isMain) && (
           <Link
-            to="/where-to-go"
+            to={`${PlacesUrl}`}
             className="card-place__link-wrap card-place__link-wrap_content_article-img"
           >
             <img src={imageUrl} alt={title} className="card-place__image" />

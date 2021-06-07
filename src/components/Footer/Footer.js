@@ -2,6 +2,12 @@ import { Link } from 'react-router-dom';
 import './Footer.scss';
 import footerLogoPath from '../../assets/footer-logo.svg';
 import NavItem from '../ui/NavItem/NavItem';
+import {
+  AfishaUrl,
+  AboutUsUrl,
+  QuestionsUrl,
+  PlacesUrl
+} from '../../utils/routes';
 
 function Footer() {
   return (
@@ -58,28 +64,28 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="about-us"
+            href={`${AboutUsUrl}`}
             linkText="о проекте"
           />
           {/* каленарь */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/afisha"
+            href={`${AfishaUrl}`}
             linkText="календарь"
           />
           {/* куда пойти */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/where-to-go"
+            href={`${PlacesUrl}`}
             linkText="куда пойти"
           />
           {/* вопросы */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/questions"
+            href={`${QuestionsUrl}`}
             linkText="вопросы"
           />
           {/* читать и смотреть */}

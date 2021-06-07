@@ -16,6 +16,7 @@ import CardVideoMain from '../ui/CardVideoMain/CardVideoMain';
 import Widget from '../ui/Widget/Widget';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { QuestionsUrl } from '../../utils/routes';
 
 function MainPage({
   onEventSignUpClick,
@@ -112,7 +113,7 @@ function MainPage({
           <div className="main-questions__container">
             {dataMain.questions.map((item) => (
               <Link
-                to="/questions"
+                to={`${QuestionsUrl}`}
                 className="main-section__link main-section__link_el_question"
                 key={item.id}
               >

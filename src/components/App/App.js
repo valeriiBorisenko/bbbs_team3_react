@@ -26,6 +26,14 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 // API
 import AuthApi from '../../utils/auth';
 import Api from '../../utils/api';
+import {
+  MainPageUrl,
+  AfishaUrl,
+  AboutUsUrl,
+  QuestionsUrl,
+  AccountUrl,
+  PlacesUrl
+} from '../../utils/routes';
 
 function App() {
   const history = useHistory();
@@ -136,7 +144,7 @@ function App() {
     AuthApi.clearAuth();
     setCurrentUser(null);
     localStorage.removeItem('jwt');
-    history.push('/');
+    history.push(MainPageUrl);
   }
 
   // проверка токена между сессиями
@@ -183,7 +191,7 @@ function App() {
 
   function handleUserButtonClick() {
     if (currentUser) {
-      history.push('/account');
+      history.push(AccountUrl);
     } else {
       handleClickPopupLoginOpened();
     }
@@ -222,17 +230,17 @@ function App() {
           <main className="main">
             {!isCheckingToken ? (
               <Switch>
-                <Route exact path="/">
+                <Route exact path={`${MainPageUrl}`}>
                   <MainPage
                     onEventSignUpClick={bookingHandler}
                     onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
                     dataMain={dataMain}
                   />
                 </Route>
-                <Route exact path="/about-us">
+                <Route exact path={`${AboutUsUrl}`}>
                   <AboutUs />
                 </Route>
-                <Route path="/afisha">
+                <Route path={`${AfishaUrl}`}>
                   <Calendar
                     onEventSignUpClick={bookingHandler}
                     onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
@@ -240,18 +248,18 @@ function App() {
                     dataCalendar={dataCalendar}
                   />
                 </Route>
-                <Route path="/questions">
+                <Route path={`${QuestionsUrl}`}>
                   <QuestionsPage />
                 </Route>
                 <ProtectedRoute
                   exact
-                  path="/account"
+                  path={`${AccountUrl}`}
                   component={Account}
                   onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
                   eventsData={dataCalendar}
                   isAuth={!!currentUser}
                 />
-                <Route exact path="/where-to-go">
+                <Route exact path={`${PlacesUrl}`}>
                   <WhereToGo
                     openPopupCities={handleClickPopupCities}
                   />
