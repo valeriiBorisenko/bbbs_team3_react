@@ -131,7 +131,7 @@ function NavBar({
       {currentUser && (
       <div className={`menu__user-info ${!isMobileMenuOpen ? 'menu__user-info_hidden' : ''}`}>
         <UserMenuButton
-          title={currentUser ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
           handleClick={onCityChangeClick}
           sectionClass="mobile-link"
         />

@@ -1,17 +1,20 @@
 import './WhereToGo.scss';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { repeatSchema } from '../../utils/utils';
 import { COLORS } from '../../utils/constants';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import CardPlace from '../ui/CardPlace/CardPlace';
-// import Loader from '../ui/Loader/Loader';
-// import CurrentUserContext from '../../contexts/CurrentUserContext';
+import WhereToGoPreview from '../ui/WhereToGoPreview/WhereToGoPreview';
+import Loader from '../ui/Loader/Loader';
 import Api from '../../utils/api';
 
-function WhereToGo() {
+function WhereToGo({ openPopupCities }) {
+  const currentUser = useContext(CurrentUserContext);
+
   const ageRange = ['8-10 лет', '11-13 лет', '14-18 лет', '18+ лет'];
 
   const [places, setPlaces] = useState([]);
@@ -22,9 +25,6 @@ function WhereToGo() {
   const [isAll, setIsAll] = useState(true); //! ВСЕ
   const [activeCategories, setActiveCategories] = useState(new Set()); //! категории
   const [activeAgeRange, setActiveAgeRange] = useState(''); //! возраст-фильтр
-
-  // const currentUser = useContext(CurrentUserContext);
-  // console.log(useContext);
 
   //! фильтры КАТЕГОРИЯ
   function handleCheckboxCategoryClick(evt, filter) {
@@ -96,10 +96,6 @@ function WhereToGo() {
 
   //! Финальный массив ивентов
   function filterMePlacesFINAL() {
-    //! isAll = true/false
-    //! activeAgeRange = ''/'10-14'
-    //! activeCategories = [] / [юююю]
-
     // ВСЕ + БЕЗ ВОЗРАСТА (по умолчанию)
     if (isAll && activeAgeRange === '') {
       console.log('ВСЕ + БЕЗ ВОЗРАСТА');
@@ -141,8 +137,7 @@ function WhereToGo() {
       // return;
     }
 
-    // !авария
-    console.log('AVARIA');
+    console.log('ДТП');
     return [];
   }
 
@@ -160,9 +155,7 @@ function WhereToGo() {
       })
       .catch((error) => console.log(error));
 
-    // if (!currentUser && !unauthСity) {
-    //   openPopupCities();
-    // }
+    // показать попап ГОРОДА если незалогинен
   }, []);
 
   // useEffect(() => {
@@ -188,11 +181,15 @@ function WhereToGo() {
     ));
   }
 
-  // console.log(isFiltersUsed);
-  // const whatDataToRender = isFiltersUsed ? filterMePlacesFINAL() : places;
-  // console.log('whatDataToRender', whatDataToRender);
+  useEffect(() => {
+    if (!currentUser) {
+      openPopupCities();
+    }
+  }, []);
 
-  console.log('activeCategories', activeCategories);
+  if (places.length === 0) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -204,7 +201,7 @@ function WhereToGo() {
         />
       </Helmet>
       {/* тайтл + фильтры */}
-      <section className="lead main-section page__section fade-in">
+      <section className="place page__section fade-in">
         <TitleH1 title="Куда пойти" />
         <div className="tags">
           <ul className="tags__list">
@@ -217,9 +214,10 @@ function WhereToGo() {
       </section>
 
       {/* форма, показывать, только если юзер авторизован, надо сделать */}
+      {currentUser && (<WhereToGoPreview />)}
 
       {/* большая карточка */}
-      <section className="place main-section page__section fade-in">
+      <section className="place__main page__section fade-in">
         <CardPlace
           key={places.find((place) => place.chosen)?.id}
           data={places.find((place) => place.chosen)}
@@ -229,29 +227,13 @@ function WhereToGo() {
       </section>
 
       {/* секция карточек */}
-      <section className="cards-grid main-section page__section">
-        {/* {places.map((place, idx) => (
-          <CardPlace
-            data={place}
-            key={place.id}
-            color={repeatSchema(idx, places.length, COLORS)}
-            sectionClass="card-container_type_article"
-          />
-        ))} */}
-        {/* {filterMePlacesFINAL().map((place, idx) => (
-          <CardPlace
-            data={place}
-            key={place.id}
-            color={repeatSchema(idx, places.length, COLORS)}
-            sectionClass="card-container_type_article"
-          />
-        ))} */}
+      <section className="cards-grid page__section">
         {filterMePlacesFINAL().map((place, idx) => (
           <CardPlace
             data={place}
             key={place.id}
             color={repeatSchema(idx, places.length, COLORS)}
-            sectionClass="card-container_type_article"
+            sectionClass="card-container_type_article fade-in"
           />
         ))}
       </section>
@@ -259,5 +241,13 @@ function WhereToGo() {
     //! нужен лоадер ко всему этому пока данные грузятся, а то страница мигает
   );
 }
+
+WhereToGo.propTypes = {
+  openPopupCities: PropTypes.func
+};
+
+WhereToGo.defaultProps = {
+  openPopupCities: () => {}
+};
 
 export default WhereToGo;

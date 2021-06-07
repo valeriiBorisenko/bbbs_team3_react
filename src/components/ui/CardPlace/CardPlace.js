@@ -9,7 +9,7 @@ import Caption from '../Caption/Caption';
 
 function CardPlace({
   data: {
-    chosen, title, address, imageUrl, link, info, description
+    chosen, title, address, imageUrl, link, description, sex, age, category
   },
   color,
   sectionClass,
@@ -20,9 +20,7 @@ function CardPlace({
   return (
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass={`card-place ${isMain ? 'card-place_main' : ''}`} color={cardColor}>
-        {chosen && (
-          <Rubric title="Выбор наставника" sectionClass="card-place__rubric" />
-        )}
+        <Rubric title={category} sectionClass="card-place__rubric" />
 
         <div className="card-place__title-wrap">
           <Link to="/place" className="card-place__link-wrap">
@@ -49,7 +47,7 @@ function CardPlace({
           перейти на сайт
         </a>
       </Card>
-      <CardAnnotation info={info} description={description} isMain={isMain} />
+      <CardAnnotation info={`${sex || ''} ${age} лет, ${category}`} description={description} isMain={isMain} />
     </article>
   );
 }
@@ -61,7 +59,6 @@ CardPlace.propTypes = {
   address: PropTypes.string,
   imageUrl: PropTypes.string,
   link: PropTypes.string,
-  info: PropTypes.string,
   description: PropTypes.string,
   color: PropTypes.string,
   sectionClass: PropTypes.string,
@@ -75,7 +72,6 @@ CardPlace.defaultProps = {
   address: '',
   imageUrl: '',
   link: '',
-  info: '',
   description: '',
   color: 'white',
   isMain: false,
