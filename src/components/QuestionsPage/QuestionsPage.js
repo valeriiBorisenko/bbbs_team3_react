@@ -2,6 +2,7 @@ import './QuestionsPage.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import TitleH1 from '../ui/TitleH1/TitleH1';
 import TitleH2 from '../ui/TitleH2/TitleH2';
@@ -13,6 +14,8 @@ import Button from '../ui/Button/Button';
 import Loader from '../ui/Loader/Loader';
 
 function QuestionsPage() {
+  useSmoothScrollOnWindow({ top: 0 });
+
   const currentUser = useContext(CurrentUserContext);
 
   const [questionsData, setQuestionsData] = useState([]);
