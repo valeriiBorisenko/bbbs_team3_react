@@ -1,4 +1,4 @@
-import './CardPlaceMain.scss';
+import './CardPlace.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
@@ -7,31 +7,31 @@ import TitleH2 from '../TitleH2/TitleH2';
 import Card from '../Card/Card';
 import Caption from '../Caption/Caption';
 
-function CardPlaceMain({
+function CardPlace({
   data: {
-    chosen, title, name, imageUrl, link, info, description
+    chosen, title, address, imageUrl, link, description, sex, age, category
   },
-  sectionClass
+  color,
+  sectionClass,
+  isMain
 }) {
+  const cardColor = isMain ? 'yellow' : color;
+
   return (
-    <div
-      className={`card-container card-container_type_main-article ${sectionClass}`}
-    >
-      <Card sectionClass="card-place card-place_main" color="yellow">
-        {chosen && (
-          <Rubric title="Выбор наставника" sectionClass="card-place__rubric" />
-        )}
+    <article className={`card-container ${sectionClass}`}>
+      <Card sectionClass={`card-place ${isMain ? 'card-place_main' : ''}`} color={cardColor}>
+        <Rubric title={category} sectionClass="card-place__rubric" />
 
         <div className="card-place__title-wrap">
           <Link to="/place" className="card-place__link-wrap">
             <TitleH2 sectionClass="card-place__title" title={title} />
           </Link>
-          <Caption sectionClass="card-place__name" title={name} />
+          <Caption sectionClass="card-place__address" title={address} />
         </div>
 
-        {chosen && (
+        {(chosen && isMain) && (
           <Link
-            to="/place"
+            to="/where-to-go"
             className="card-place__link-wrap card-place__link-wrap_content_article-img"
           >
             <img src={imageUrl} alt={title} className="card-place__image" />
@@ -47,33 +47,35 @@ function CardPlaceMain({
           перейти на сайт
         </a>
       </Card>
-      <CardAnnotation info={info} description={description} isMain />
-    </div>
+      <CardAnnotation info={`${sex || ''} ${age} лет, ${category}`} description={description} isMain={isMain} />
+    </article>
   );
 }
 
-CardPlaceMain.propTypes = {
+CardPlace.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   chosen: PropTypes.bool,
   title: PropTypes.string,
-  name: PropTypes.string,
+  address: PropTypes.string,
   imageUrl: PropTypes.string,
   link: PropTypes.string,
-  info: PropTypes.string,
   description: PropTypes.string,
-  sectionClass: PropTypes.string
+  color: PropTypes.string,
+  sectionClass: PropTypes.string,
+  isMain: PropTypes.bool
 };
 
-CardPlaceMain.defaultProps = {
+CardPlace.defaultProps = {
   data: {},
   chosen: false,
   title: '',
-  name: '',
+  address: '',
   imageUrl: '',
   link: '',
-  info: '',
   description: '',
+  color: 'white',
+  isMain: false,
   sectionClass: ''
 };
 
-export default CardPlaceMain;
+export default CardPlace;

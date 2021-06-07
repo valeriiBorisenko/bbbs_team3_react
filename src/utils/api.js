@@ -30,6 +30,13 @@ export default class Api {
       .then((response) => response.data);
   }
 
+  // страница "куда пойти"
+  static getPlaces() {
+    return axios
+      .get(`${baseURL}${apiUrl}/where-to-go/`)
+      .then((response) => response.data);
+  }
+
   // работа с ивентами (карточки)
   static updateEvent(eventData) {
     return axios

@@ -22,3 +22,11 @@ export const months = [
   'Ноябрь',
   'Декабрь'
 ];
+
+export const COLORS = [
+  'yellow', 'green', 'yellow', 'pink', 'blue', 'pink', 'green', 'yellow', 'green', 'blue', 'pink', 'blue'
+];
+
+export const FIGURES = [
+  'square', 'circle', 'arch', 'circle', 'arch', 'square', 'arch', 'square', 'circle'
+];

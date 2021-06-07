@@ -46,7 +46,7 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="#"
+            href="/where-to-go"
             linkText="Куда пойти"
           />
           {/* Вопросы */}
@@ -123,7 +123,7 @@ function NavBar({
       {currentUser && (
       <div className={`menu__user-info ${!isMobileMenuOpen ? 'menu__user-info_hidden' : ''}`}>
         <UserMenuButton
-          title={currentUser ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
           handleClick={onCityChangeClick}
           sectionClass="mobile-link"
         />

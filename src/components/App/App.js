@@ -18,15 +18,17 @@ import Calendar from '../Calendar/Calendar';
 import AboutUs from '../AboutUs/AboutUs';
 import Account from '../Account/Account';
 import PageNotFound from '../PageNotFound/PageNotFound';
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import QuestionsPage from '../QuestionsPage/QuestionsPage';
+import WhereToGo from '../WhereToGo/WhereToGo';
 // логины, авторизация
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 // API
 import AuthApi from '../../utils/auth';
 import Api from '../../utils/api';
 
 function App() {
+  console.log(MainPage);
   const history = useHistory();
 
   // текущий юзер
@@ -274,6 +276,14 @@ function App() {
                   eventsData={dataCalendar}
                   isAuth={!!currentUser}
                 />
+                <Route exact path="/where-to-go">
+                  <WhereToGo
+                    onRecommendPlace
+                    openPopupCities
+                    unauthСity
+                    isPlacePopupOpened
+                  />
+                </Route>
                 <Route path="*">
                   <PageNotFound />
                 </Route>

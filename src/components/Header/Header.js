@@ -20,6 +20,7 @@ function Header({
 }) {
   const { pathname } = useLocation();
   const currentUser = useContext(CurrentUserContext);
+
   const [userCityName, setUserCityName] = useState('');
 
   // определение города пользователя, используется в кнопках
@@ -95,7 +96,7 @@ function Header({
       {pathname === '/account' && (
       <div className="header__user-info">
         <UserMenuButton
-          title={currentUser ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
           sectionClass="mobile-link"
           handleClick={onCityChange}
         />
@@ -107,10 +108,10 @@ function Header({
       </div>
       )}
 
-      {pathname === '/afisha' && (
+      {(pathname === '/afisha' || pathname === '/where-to-go') && (
       <div className="header__user-info">
         <UserMenuButton
-          title={currentUser ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
           handleClick={onCityChange}
           sectionClass="mobile-link"
         />

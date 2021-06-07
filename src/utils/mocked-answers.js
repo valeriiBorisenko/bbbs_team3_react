@@ -14,6 +14,7 @@ const token = require('./server-responses/token.json');
 const userData = require('./server-responses/userData.json');
 const questionsData = require('./server-responses/questions-page.json');
 const question = require('./server-responses/question-post.json');
+const places = require('./server-responses/places.json');
 
 // mock
 const mock = new MockAdapter(axios, { delayResponse: 1000 });
@@ -24,6 +25,14 @@ export default function setMockedAnswers() {
     .onGet(`${baseURL}${apiUrl}/main/`)
     .reply(200, { mainPageData }, 'Content-Type: application/json');
 
+  //! страница календаря
+  mock
+    .onGet(`${baseURL}${apiUrl}/afisha/events/`)
+    .reply(200, { calendarPageData }, 'Content-Type: application/json');
+
+  //! страница мест
+  mock.onGet(`${baseURL}${apiUrl}/where-to-go/`).reply(200, places);
+
   //! Личный кабинет
   mock
     .onGet(`${baseURL}${apiUrl}/profile/diary/`)
@@ -33,11 +42,6 @@ export default function setMockedAnswers() {
   mock
     .onGet(`${baseURL}${apiUrl}/cities/`)
     .reply(200, { cities }, 'Content-Type: application/json');
-
-  //! массив ивентов для каленаря
-  mock
-    .onGet(`${baseURL}${apiUrl}/afisha/events/`)
-    .reply(200, { calendarPageData }, 'Content-Type: application/json');
 
   //! логин и юзер-инфо
   mock
