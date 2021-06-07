@@ -28,7 +28,6 @@ import AuthApi from '../../utils/auth';
 import Api from '../../utils/api';
 
 function App() {
-  console.log(MainPage);
   const history = useHistory();
 
   // текущий юзер
