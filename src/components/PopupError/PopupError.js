@@ -32,7 +32,7 @@ PopupError.propTypes = {
 
 PopupError.defaultProps = {
   isOpen: false,
-  onClose: undefined
+  onClose: () => {}
 };
 
 export default PopupError;

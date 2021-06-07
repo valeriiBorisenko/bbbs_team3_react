@@ -212,7 +212,7 @@ Account.propTypes = {
 
 Account.defaultProps = {
   eventsData: [],
-  onEventFullDescriptionClick: undefined
+  onEventFullDescriptionClick: () => {}
 };
 
 export default Account;

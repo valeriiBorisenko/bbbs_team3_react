@@ -21,6 +21,7 @@ function PopupAboutEvent({
     remainSeats,
     description
   } = cardData;
+
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
   const isDisabled = (remainSeats < 1);
@@ -102,8 +103,8 @@ PopupAboutEvent.propTypes = {
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
-  onClose: undefined,
-  onEventSignUpClick: undefined,
+  onClose: () => {},
+  onEventSignUpClick: () => {},
   cardData: {}
 };
 

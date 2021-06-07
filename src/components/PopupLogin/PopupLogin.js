@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import '../Popup/Popup.scss';
 import './PopupLogin.scss';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';

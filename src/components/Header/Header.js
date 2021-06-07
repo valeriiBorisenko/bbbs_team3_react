@@ -128,9 +128,9 @@ Header.propTypes = {
 };
 
 Header.defaultProps = {
-  onUserButtonClick: undefined,
-  onCityChange: undefined,
-  onLogout: undefined,
+  onUserButtonClick: () => {},
+  onCityChange: () => {},
+  onLogout: () => {},
   cities: []
 };
 

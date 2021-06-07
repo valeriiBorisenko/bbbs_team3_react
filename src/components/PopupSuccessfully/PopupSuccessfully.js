@@ -1,5 +1,4 @@
 import { useRef, useEffect } from 'react';
-import '../Popup/Popup.scss';
 import './PopupSuccessfully.scss';
 import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
@@ -68,7 +67,7 @@ PopupSuccessfully.propTypes = {
 
 PopupSuccessfully.defaultProps = {
   isOpen: false,
-  onClose: undefined,
+  onClose: () => {},
   cardData: {}
 };
 

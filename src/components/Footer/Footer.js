@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import './Footer.scss';
 import footerLogoPath from '../../assets/footer-logo.svg';
-// import Button from '../ui/Button/Button';
 import NavItem from '../ui/NavItem/NavItem';
 
 function Footer() {
@@ -112,9 +111,7 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href={{
-              path: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/'
-            }}
+            href={{ path: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/' }}
             linkText="facebook"
             rel="noreferrer"
           />

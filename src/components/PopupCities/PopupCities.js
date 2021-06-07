@@ -77,8 +77,8 @@ PopupCities.propTypes = {
 PopupCities.defaultProps = {
   cities: [],
   isOpen: false,
-  onClose: undefined,
-  onSubmit: undefined
+  onClose: () => {},
+  onSubmit: () => {}
 };
 
 export default PopupCities;

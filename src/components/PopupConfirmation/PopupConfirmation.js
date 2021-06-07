@@ -1,4 +1,3 @@
-import '../Popup/Popup.scss';
 import './PopupConfirmation.scss';
 import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
@@ -20,6 +19,7 @@ function PopupConfirmation({
     event.preventDefault();
     onConfirmButtonClick(cardData);
   };
+
   return (
     <Popup
       type="confirmation"
@@ -63,8 +63,8 @@ PopupConfirmation.propTypes = {
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
-  onClose: undefined,
-  onConfirmButtonClick: undefined,
+  onClose: () => {},
+  onConfirmButtonClick: () => {},
   cardData: {}
 };
 
