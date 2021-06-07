@@ -1,8 +1,8 @@
 import './Loader.scss';
 import PropTypes from 'prop-types';
 
-function Loader({ sectionClass }) {
-  const classNames = ['spinner', sectionClass ? 'spinner_waiting-for-data' : ''].join(' ').trim();
+function Loader({ isNested }) {
+  const classNames = ['spinner', isNested ? 'spinner_waiting-for-data' : ''].join(' ').trim();
 
   return (
     <div className={classNames}>
@@ -25,11 +25,11 @@ function Loader({ sectionClass }) {
 }
 
 Loader.propTypes = {
-  sectionClass: PropTypes.string
+  isNested: PropTypes.bool
 };
 
 Loader.defaultProps = {
-  sectionClass: ''
+  isNested: false
 };
 
 export default Loader;

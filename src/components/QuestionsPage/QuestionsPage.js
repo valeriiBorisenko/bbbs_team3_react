@@ -7,18 +7,17 @@ import TitleH1 from '../ui/TitleH1/TitleH1';
 import TitleH2 from '../ui/TitleH2/TitleH2';
 import CardQuestion from '../ui/CardQuestion/CardQuestion';
 import PseudoButtonCheckbox from '../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
-
 import Api from '../../utils/api';
 import Input from '../ui/Input/Input';
 import Button from '../ui/Button/Button';
-// import Loader from '../ui/Loader/Loader';
+import Loader from '../ui/Loader/Loader';
 
 function QuestionsPage() {
   const currentUser = useContext(CurrentUserContext);
 
-  const [isQuestionsData, setIsQuestionsData] = useState([]);
+  const [questionsData, setQuestionsData] = useState([]);
   const [categoriesTags, setCategoriesTags] = useState([]);
-  const [isInputValues, setIsInputValues] = useState(null);
+  const [inputValues, setInputValues] = useState(null);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   // Данный вопросов с сервера
@@ -26,7 +25,7 @@ function QuestionsPage() {
   useEffect(() => {
     Api.getQuestionsPageData()
       .then((res) => {
-        setIsQuestionsData(res);
+        setQuestionsData(res);
         const tagsArr = res.map((data) => data.tags);
         const tags = tagsArr.flat().map((data) => data.name);
         const newTags = new Set(tags);
@@ -53,7 +52,7 @@ function QuestionsPage() {
   }
 
   const onFormSubmit = (values) => {
-    setIsInputValues({ ...isInputValues, ...values });
+    setInputValues({ ...inputValues, ...values });
   };
 
   return (
@@ -64,51 +63,57 @@ function QuestionsPage() {
       </Helmet>
       <section className="questions-page page__section fade-in">
         <TitleH1 title="Ответы на вопросы" />
-        <div className="tags tags_content_long-list">
-          <ul className="tags__list tags__list_type_long">
-            {tagsRender(categoriesTags, 'checkbox')}
-          </ul>
-        </div>
-        <ul className="questions">
-          {isQuestionsData.map((data) => (
-            <li className="questions__list-item" key={data.id}>
-              <CardQuestion
-                data={data}
-                sectionClass="card__questions_type_questions-page"
-                isQuestionsPage
-              />
-            </li>
-          ))}
-        </ul>
-        { currentUser && (
-          <section className="add-question">
-            <TitleH2
-              sectionClass="add-question__title"
-              title={isInputValues ? 'Спасибо! Мы приняли ваш вопрос' : 'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список'}
-            />
-            <form className={`question-form ${isInputValues ? 'question-form_invisible' : ''}`} onSubmit={handleSubmit(onFormSubmit)}>
-              <fieldset className="question-form__add-question">
-                <Input
-                  type="text"
-                  name="question"
-                  placeholder="Введите вопрос"
-                  register={register}
-                  required
-                  error={errors?.question}
-                  errorMessage="Введите вопрос*"
-                  sectionClass="input__question-form"
+        {questionsData.length > 0
+          ? (
+            <>
+              <div className="tags tags_content_long-list">
+                <ul className="tags__list tags__list_type_long">
+                  {tagsRender(categoriesTags, 'checkbox')}
+                </ul>
+              </div>
+              <ul className="questions">
+                {questionsData.map((data) => (
+                  <li className="questions__list-item fade-in" key={data.id}>
+                    <CardQuestion
+                      data={data}
+                      sectionClass="card__questions_type_questions-page"
+                      isQuestionsPage
+                    />
+                  </li>
+                ))}
+              </ul>
+
+              {currentUser && (
+              <section className="add-question fade-in">
+                <TitleH2
+                  sectionClass="add-question__title"
+                  title={inputValues ? 'Спасибо! Мы приняли ваш вопрос' : 'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список'}
                 />
-                <Button
-                  title="Отправить"
-                  color="black"
-                  sectionClass="question-form__button"
-                  isSubmittable
-                  isDisabled={!!(errors.question)}
-                />
-              </fieldset>
-            </form>
-          </section>
-        )}
+                <form className={`question-form ${inputValues ? 'question-form_invisible' : ''}`} onSubmit={handleSubmit(onFormSubmit)}>
+                  <fieldset className="question-form__add-question">
+                    <Input
+                      type="text"
+                      name="question"
+                      placeholder="Введите вопрос"
+                      register={register}
+                      required
+                      error={errors?.question}
+                      errorMessage="Введите вопрос*"
+                      sectionClass="input__question-form"
+                    />
+                    <Button
+                      title="Отправить"
+                      color="black"
+                      sectionClass="question-form__button"
+                      isSubmittable
+                      isDisabled={!!(errors.question)}
+                    />
+                  </fieldset>
+                </form>
+              </section>
+              )}
+            </>
+          ) : <Loader isNested />}
       </section>
     </>
   );

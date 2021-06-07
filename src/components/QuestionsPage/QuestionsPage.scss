@@ -2,7 +2,7 @@
 
 .questions {
   max-width: 970px;
-  margin: 0 auto 80px;
+  margin: 0 auto;
   padding: 0;
   padding-top: 80px;
   list-style: none;
@@ -50,7 +50,7 @@
 .add-question {
   box-sizing: border-box;
   max-width: 970px;
-  margin: 0 auto;
+  margin: 80px auto 0;
 }
 
 .add-question__title {
@@ -83,7 +83,6 @@
 @include atDesktop1024 {
   .questions {
     padding-top: 50px;
-    margin-bottom: 50px;
   }
 
   .card__questions_type_questions-page {
@@ -110,6 +109,10 @@
   .input__question-form {
     padding-top: 10px;
     padding-bottom: 9px;
+  }
+
+  .add-question {
+    margin: 50px auto 0;
   }
 }
 
