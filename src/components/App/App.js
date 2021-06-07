@@ -278,7 +278,7 @@ function App() {
                 <Route exact path="/where-to-go">
                   <WhereToGo
                     onRecommendPlace
-                    openPopupCities
+                    openPopupCities={handleClickPopupCities}
                     unauthСity
                     isPlacePopupOpened
                   />

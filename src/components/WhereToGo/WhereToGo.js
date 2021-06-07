@@ -1,5 +1,5 @@
 import './WhereToGo.scss';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
 import { repeatSchema } from '../../utils/utils';
@@ -15,7 +15,7 @@ import Api from '../../utils/api';
 // какие пропсы нужны
 // открытие попапа города ??
 // выбранный город ??
-function WhereToGo() {
+function WhereToGo({ openPopupCities }) {
   const currentUser = useContext(CurrentUserContext);
 
   const ageRange = ['8-10 лет', '11-13 лет', '14-18 лет', '18+ лет'];
@@ -196,6 +196,12 @@ function WhereToGo() {
 
   console.log('activeCategories', activeCategories);
 
+  useEffect(() => {
+    if (!currentUser) {
+      openPopupCities();
+    }
+  }, []);
+
   if (places.length === 0) {
     return <Loader />;
   }
@@ -266,5 +272,13 @@ function WhereToGo() {
     //! нужен лоадер ко всему этому пока данные грузятся, а то страница мигает
   );
 }
+
+WhereToGo.propTypes = {
+  openPopupCities: PropTypes.func
+};
+
+WhereToGo.defaultProps = {
+  openPopupCities: () => {}
+};
 
 export default WhereToGo;
