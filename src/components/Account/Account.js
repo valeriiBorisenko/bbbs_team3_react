@@ -23,9 +23,6 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   const [formDataToEdit, setFormDataToEdit] = useState(null);
   const [isPopupDeleteDiaryOpen, setIsPopupDeleteDiaryOpen] = useState(false);
 
-  //! обновляемые данные с формы, карточка дневника пока не добавляется
-  const [diaryFormInputValues, setDiaryFormInputValues] = useState({});
-
   useEffect(() => {
     Api.getProfileDiaryData()
       .then((diariesData) => {
@@ -89,6 +86,22 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
     onEventFullDescriptionClick(data);
   };
 
+  const handleAddDiary = (data) => {
+    if (!isEditMode) {
+      const diary = { ...data, id: diaries.length + 1 };
+      if (diary.imageUrl.length === 0) {
+        // дефолтная картинка, если фото не загружено
+        diary.imageUrl = 'https://i.pinimg.com/originals/f0/e2/53/f0e253b6dbbb809145441ca8fa08b7b7.jpg';
+      }
+      setDiaries([diary, ...diaries]);
+    }
+    if (isEditMode) {
+      setDiaries(() => diaries.map((diary) => ((diary.id === data.id) ? data : diary)));
+    }
+
+    handleCancelForm();
+  };
+
   // выбранная карточка дневника при открытии попапа подтверждения
   const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
 
@@ -102,7 +115,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   };
 
   const handleCardDelete = (card) => {
-    setDiaries(() => diaries.filter((d) => (d.id === card.id ? null : d)));
+    setDiaries(() => diaries.filter((diary) => (diary.id === card.id ? null : diary)));
     closePopupDeleteDiary();
   };
 
@@ -167,8 +180,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
                 isOpen={isFormOpen}
                 data={formDataToEdit}
                 onCancel={handleCancelForm}
-                inputValues={diaryFormInputValues}
-                setInputValues={setDiaryFormInputValues}
+                onSubmit={handleAddDiary}
               />
             </div>
 

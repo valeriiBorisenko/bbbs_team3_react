@@ -1,8 +1,8 @@
+/* eslint-disable react/no-unused-prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 import './AccountForm.scss';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import { parseDate } from '../../../utils/utils';
 import Card from '../Card/Card';
@@ -12,23 +12,44 @@ import Rating from '../Rating/Rating';
 import Button from '../Button/Button';
 
 function AccountForm({
-  data, sectionClass, isEditMode, isOpen, onCancel, inputValues, setInputValues
+  data, sectionClass, isEditMode, isOpen, onCancel, onSubmit
 }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
+  const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
+  const [userImage, setUserImage] = useState(null);
 
   const {
     register, handleSubmit, formState: { errors }, reset, setValue
   } = useForm();
 
   const onFormSubmit = (values) => {
-    setInputValues({ ...inputValues, ...values });
+    let inputFields = Object.assign(values);
+    inputFields = {
+      ...inputFields,
+      rate: inputValues.rate,
+      id: inputValues.id
+    };
+    if (userImage) {
+      inputFields = {
+        ...inputFields,
+        imageUrl: userImage.imageUrl
+      };
+    }
+    onSubmit(inputFields);
   };
 
-  // рейтинг встречи
   const handleChangeRating = (evt) => {
     const { target } = evt;
     setInputValues({ ...inputValues, rate: target.value });
+  };
+
+  const handleChangeImage = (evt) => {
+    const { target } = evt;
+    if (target.files[0]) {
+      const imageUrl = URL.createObjectURL(target.files[0]);
+      setUserImage({ ...userImage, imageUrl });
+    }
   };
 
   useEffect(() => {
@@ -37,26 +58,6 @@ function AccountForm({
     if (inputValues?.rate === 'bad') setCaption('Что-то пошло не так');
     if (!inputValues?.rate) setCaption('Оцените проведенное время');
   }, [inputValues.rate]);
-
-  // добавление картинки
-  const [userImage, setUserImage] = useState(null);
-
-  const onDrop = useCallback((acceptedFiles) => {
-    if (acceptedFiles[0]) {
-      setUserImage(
-        { imageUrl: URL.createObjectURL(acceptedFiles[0]) }
-      );
-    }
-  }, []);
-
-  const { getInputProps } = useDropzone({
-    accept: 'image/*',
-    onDrop
-  });
-
-  useEffect(() => {
-    setInputValues({ ...inputValues, ...userImage });
-  }, [userImage]);
 
   useEffect(() => {
     if (isOpen) {
@@ -68,6 +69,7 @@ function AccountForm({
         setValue('title', data.title);
         setValue('date', parseDate(data.date));
         setValue('description', data.description);
+        setValue('rate', data.rate);
       }
     } else {
       setInputValues({});
@@ -89,9 +91,11 @@ function AccountForm({
           <label htmlFor="input-upload" className="account-form__label-file">
             <input
               id="input-upload"
+              type="file"
               name="imageUrl"
               className="account-form__input-file"
-              {...getInputProps()}
+              {...register('imageUrl')}
+              onChange={handleChangeImage}
             />
             <span className="account-form__pseudo-button" />
           </label>
@@ -137,28 +141,28 @@ function AccountForm({
                 type="radio"
                 name="rating"
                 ratingType="good"
+                onClick={handleChangeRating}
                 value="good"
                 sectionClass="account-form__rating"
-                onClick={handleChangeRating}
-                checked={inputValues.rate === 'good'}
+                checked={inputValues?.rate === 'good'}
               />
               <Rating
                 type="radio"
                 name="rating"
                 ratingType="neutral"
+                onClick={handleChangeRating}
                 value="neutral"
                 sectionClass="account-form__rating"
-                onClick={handleChangeRating}
-                checked={inputValues.rate === 'neutral'}
+                checked={inputValues?.rate === 'neutral'}
               />
               <Rating
                 type="radio"
                 name="rating"
                 ratingType="bad"
+                onClick={handleChangeRating}
                 value="bad"
                 sectionClass="account-form__rating"
-                onClick={handleChangeRating}
-                checked={inputValues.rate === 'bad'}
+                checked={inputValues?.rate === 'bad'}
               />
               <Caption
                 title={caption}
