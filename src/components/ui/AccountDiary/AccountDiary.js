@@ -20,8 +20,9 @@ function AccountDiary({
 
   useEffect(() => {
     if (rate === 'good') setCaption('Было классно');
+    if (rate === 'neutral') setCaption('Нормально');
     if (rate === 'bad') setCaption('Что-то пошло не так');
-  }, []);
+  }, [data.rate]);
 
   const handleEditButtonClick = () => {
     onEdit(data);
