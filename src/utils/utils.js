@@ -119,3 +119,14 @@ export const repeatSchema = (idx, size, schema) => {
   const array = Array.from({ length: repeats }, () => schema).flat();
   return array[idx];
 };
+
+export const questionForm = {
+  before: {
+    title: 'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список',
+    sectionClass: ''
+  },
+  after: {
+    title: 'Спасибо! Мы приняли ваш вопрос',
+    sectionClass: 'question-form_invisible'
+  }
+};

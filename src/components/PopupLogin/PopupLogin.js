@@ -7,6 +7,7 @@ import Popup from '../Popup/Popup';
 import Input from '../ui/Input/Input';
 import Button from '../ui/Button/Button';
 import TitleH2 from '../ui/TitleH2/TitleH2';
+import { AfishaUrl } from '../../utils/routes';
 
 function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
   const {
@@ -21,7 +22,7 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
   const history = useHistory();
   const location = useLocation();
   function closePopup() {
-    if (location.pathname === '/afisha') {
+    if (location.pathname === AfishaUrl) {
       history.push('/');
     }
     onClose();

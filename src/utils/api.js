@@ -1,8 +1,6 @@
 import axios from 'axios';
 import setMockedAnswers from './mocked-answers';
-
-const baseURL = 'http://localhost:3000';
-const apiUrl = '/api/v1';
+import { apiUrl, baseURL } from './routes';
 
 setMockedAnswers();
 
