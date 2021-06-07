@@ -28,7 +28,7 @@ function WhereToGoPreview({ sectionClass }) {
   };
 
   const handleFormSubmit = (data) => {
-    console.log(data);
+    console.log({ data });
     toggleForm();
   };
 

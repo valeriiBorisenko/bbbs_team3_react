@@ -20,7 +20,11 @@ function CardPlace({
   return (
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass={`card-place ${isMain ? 'card-place_main' : ''}`} color={cardColor}>
-        <Rubric title={category} sectionClass="card-place__rubric" />
+        {
+          isMain
+            ? <Rubric title="Выбор наставника" sectionClass="card-place__rubric" />
+            : <Rubric title={category} sectionClass="card-place__rubric" />
+        }
 
         <div className="card-place__title-wrap">
           <Link to="/place" className="card-place__link-wrap">

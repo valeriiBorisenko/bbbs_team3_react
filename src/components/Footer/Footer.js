@@ -72,7 +72,7 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/"
+            href="/where-to-go"
             linkText="куда пойти"
           />
           {/* вопросы */}
