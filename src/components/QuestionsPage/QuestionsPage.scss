@@ -2,19 +2,21 @@
 
 .questions {
   max-width: 970px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   padding: 0;
   padding-top: 80px;
   list-style: none;
 }
 
-.card__questions_type_questions-page {
+.questions__list-item {
   margin-bottom: 30px;
-  margin-right: 100px;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 }
 
-.card__questions_type_questions-page:last-of-type {
-  margin-bottom: 50px;
+.card__questions_type_questions-page {
+  margin-right: 100px;
 }
 
 .question__answer {
@@ -46,12 +48,14 @@
 }
 
 .add-question {
+  box-sizing: border-box;
   max-width: 970px;
   margin: 0 auto;
 }
 
 .add-question__title {
   max-width: 650px;
+  margin: 0;
 }
 
 .question-form__add-question {
@@ -78,8 +82,8 @@
 
 @include atDesktop1024 {
   .questions {
-    padding: 15px;
     padding-top: 50px;
+    margin-bottom: 50px;
   }
 
   .card__questions_type_questions-page {
@@ -97,10 +101,6 @@
     top: auto;
     right: auto;
     align-self: flex-end;
-  }
-
-  .add-question {
-    padding: 50px 15px;
   }
 
   .question-form__add-question {
