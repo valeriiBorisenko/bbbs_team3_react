@@ -27,6 +27,11 @@ function WhereToGoPreview({ sectionClass }) {
     if (!isFormOpen) scrollToForm();
   };
 
+  const handleFormSubmit = (data) => {
+    console.log(data);
+    toggleForm();
+  };
+
   const classNames = [
     'recommendation',
     'recommendation_place_page',
@@ -49,7 +54,7 @@ function WhereToGoPreview({ sectionClass }) {
           , и мы добавим вашу&nbsp;рекомендацию.
         </p>
         {/* вызов формы */}
-        <FormRecomendation isOpen={isFormOpen} />
+        <FormRecomendation isOpen={isFormOpen} onSubmit={handleFormSubmit} />
       </div>
 
     </section>

@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 
-function FormRecomendation({ isOpen }) {
+function FormRecomendation({ isOpen, onSubmit }) {
   const textAreaPlaceholder = window.innerWidth < 576
     ? 'Комментарий*'
     : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
@@ -23,7 +23,7 @@ function FormRecomendation({ isOpen }) {
       ...inputFields,
       image: URL.createObjectURL(inputFields.image[0])
     };
-    console.log({ inputFields });
+    onSubmit(inputFields);
   };
 
   useEffect(() => {
@@ -140,11 +140,14 @@ function FormRecomendation({ isOpen }) {
             type="file"
             name="imageUrl"
             className="form-recom__input-radio"
-            {...register('image', {
-              required: 'Добавить фото'
-            })}
+            {...register('image', { required: 'Добавить фото' })}
           />
-          <button className="button" type="button" disabled>Добавить</button>
+          <button
+            className={`form-recom__button-add-photo ${errors?.imageUrl ? 'form-recom__button-add-photo_error' : ''}`}
+            type="button"
+          >
+            Добавить фото
+          </button>
         </label>
 
         <Button
@@ -158,11 +161,13 @@ function FormRecomendation({ isOpen }) {
 }
 
 FormRecomendation.propTypes = {
-  isOpen: PropTypes.bool
+  isOpen: PropTypes.bool,
+  onSubmit: PropTypes.func
 };
 
 FormRecomendation.defaultProps = {
-  isOpen: false
+  isOpen: false,
+  onSubmit: () => {}
 };
 
 export default FormRecomendation;
