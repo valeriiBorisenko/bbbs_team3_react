@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import './QuestionsPage.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,35 +21,114 @@ function QuestionsPage() {
   const currentUser = useContext(CurrentUserContext);
 
   const [questionsData, setQuestionsData] = useState([]);
-  const [categoriesTags, setCategoriesTags] = useState([]);
-  const [inputValues, setInputValues] = useState(null);
+
+  // мутабельный массив для применения фильтров
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+
+  const [categories, setCategories] = useState([]);
+  const [activeCategories, setActiveCategories] = useState(new Set());
+
+  // форма
   const [isQuestionForm, setIsQuestionForm] = useState(questionForm.before);
+  const [inputValues, setInputValues] = useState(null);
   const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const changeCategory = (inputName, isChecked) => {
+    setCategories((stateFilters) => stateFilters.map((filter) => {
+      if (filter.filter === inputName) {
+        filter.isActive = isChecked;
+      }
+      return filter;
+    }));
+
+    if (inputName === 'Все') {
+      setActiveCategories(new Set());
+      setIsFiltersUsed(true);
+      return;
+    }
+
+    // если такой фильтр уже есть
+    if (activeCategories.has(inputName)) {
+      setActiveCategories((set) => {
+        set.delete(inputName);
+        return set;
+      });
+      setIsFiltersUsed(true);
+      return;
+    }
+
+    // новый фильтр
+    setIsFiltersUsed(true);
+    setActiveCategories((set) => {
+      set.add(inputName);
+      return set;
+    });
+  };
+
+  function handleFiltration() {
+    if (activeCategories.size === 0) {
+      setFilteredQuestions(questionsData);
+      // смена цвета и состояния чекбокса 'Все'
+      setCategories((stateFilters) => stateFilters.map((filter) => {
+        if (filter.filter === 'Все') {
+          filter.isActive = true;
+        } else {
+          filter.isActive = false;
+        }
+        return filter;
+      }));
+      return;
+    }
+
+    // КАТЕГОРИИ
+    if (activeCategories.size > 0) {
+      const filterByCategory = questionsData
+        .filter((question) => question.tags.some((el) => activeCategories.has(el.name)));
+      setFilteredQuestions(filterByCategory);
+    }
+    setCategories((stateFilters) => stateFilters.map((filter) => {
+      if (filter.filter === 'Все') {
+        filter.isActive = false;
+      }
+      return filter;
+    }));
+  }
+
+  useEffect(() => {
+    handleFiltration();
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed]);
 
   // Данный вопросов с сервера
   // комплектация тегов, относительно полученных тегов в вопросах
   useEffect(() => {
     Api.getQuestionsPageData()
-      .then((res) => {
-        setQuestionsData(res);
-        const tagsArr = res.map((data) => data.tags);
+      .then((result) => {
+        setQuestionsData(result);
+        setFilteredQuestions(result);
+        const tagsArr = result.map((data) => data.tags);
         const tags = tagsArr.flat().map((data) => data.name);
         const newTags = new Set(tags);
-        const uniqueTags = Array.from(newTags);
-        setCategoriesTags(['Все', ...uniqueTags]);
+        const uniqueTags = Array.from(newTags).map((item) => ({ filter: item, isActive: false }));
+        setCategories([
+          { filter: 'Все', isActive: true },
+          ...uniqueTags
+        ]);
       })
       .catch((err) => console.log(err));
   }, []);
 
-  function tagsRender(tags, filterTags) {
-    return tags.map((filterTagsName) => (
-      <li className="tags__list-item" key={filterTagsName}>
+  function renderSomeFilters(filterList, type, handleCheckboxClick) {
+    return filterList.map((item) => (
+      <li className="tags__list-item" key={item.filter}>
         <PseudoButtonTag
-          type={filterTags}
-          name="tag"
-          value={filterTagsName}
-          title={filterTagsName}
-          filters={filterTagsName}
+          type={type}
+          name="categories"
+          value={item.filter}
+          title={item.filter}
+          isActive={item.isActive}
+          onClick={handleCheckboxClick}
         />
       </li>
     ));
@@ -75,11 +155,11 @@ function QuestionsPage() {
             <>
               <div className="tags tags_content_long-list">
                 <ul className="tags__list tags__list_type_long">
-                  {tagsRender(categoriesTags, 'checkbox')}
+                  {renderSomeFilters(categories, 'checkbox', changeCategory)}
                 </ul>
               </div>
               <ul className="questions">
-                {questionsData.map((data) => (
+                {filteredQuestions.map((data) => (
                   <li className="questions__list-item fade-in" key={data.id}>
                     <CardQuestion
                       data={data}
