@@ -1,4 +1,3 @@
-import './PseudoButtonCheckbox.scss';
 import PropTypes from 'prop-types';
 
 function PseudoButtonCheckbox({
@@ -6,18 +5,9 @@ function PseudoButtonCheckbox({
   name,
   value,
   title,
-  filters,
-  onChange,
+  isActive,
   onClick
 }) {
-  const handleChange = (evt) => {
-    onChange(evt, filters);
-  };
-
-  const handleClick = (evt) => {
-    onClick(evt, value);
-  };
-
   const id = `filter-button-${value}`;
   return (
     <label
@@ -30,8 +20,8 @@ function PseudoButtonCheckbox({
         type={type}
         name={name}
         value={value}
-        onChange={handleChange}
-        onClick={handleClick}
+        checked={isActive}
+        onClick={(evt) => onClick(value, evt.target.checked)}
       />
       <span
         className="button pseudo-button"
@@ -47,9 +37,8 @@ PseudoButtonCheckbox.propTypes = {
   name: PropTypes.string,
   value: PropTypes.string,
   title: PropTypes.string,
-  filters: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
-  onChange: PropTypes.func,
-  onClick: PropTypes.func
+  isActive: PropTypes.bool,
+  onClick: PropTypes.func.isRequired
 };
 
 PseudoButtonCheckbox.defaultProps = {
@@ -57,9 +46,7 @@ PseudoButtonCheckbox.defaultProps = {
   name: '',
   value: '',
   title: '',
-  filters: {},
-  onChange: () => {},
-  onClick: () => {}
+  isActive: false
 };
 
 export default PseudoButtonCheckbox;

@@ -7,7 +7,7 @@ import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import TitleH1 from '../../ui/TitleH1/TitleH1';
 import TitleH2 from '../../ui/TitleH2/TitleH2';
 import CardQuestion from '../../ui/CardQuestion/CardQuestion';
-import PseudoButtonCheckbox from '../../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
+import PseudoButtonTag from '../../ui/PseudoButtonTag/PseudoButtonTag';
 import Api from '../../../utils/api';
 import Input from '../../ui/Input/Input';
 import Button from '../../ui/Button/Button';
@@ -43,7 +43,7 @@ function QuestionsPage() {
   function tagsRender(tags, filterTags) {
     return tags.map((filterTagsName) => (
       <li className="tags__list-item" key={filterTagsName}>
-        <PseudoButtonCheckbox
+        <PseudoButtonTag
           type={filterTags}
           name="tag"
           value={filterTagsName}
