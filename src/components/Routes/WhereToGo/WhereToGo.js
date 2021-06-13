@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import './WhereToGo.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
@@ -7,11 +6,17 @@ import { repeatSchema } from '../../../utils/utils';
 import { COLORS } from '../../../utils/constants';
 import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import TitleH1 from '../../ui/TitleH1/TitleH1';
-import PseudoButtonTag from '../../ui/PseudoButtonTag/PseudoButtonTag';
 import CardPlace from '../../ui/CardPlace/CardPlace';
 import WhereToGoPreview from '../../ui/WhereToGoPreview/WhereToGoPreview';
 import Loader from '../../ui/Loader/Loader';
 import Api from '../../../utils/api';
+import {
+  renderFilterTags,
+  changeCheckboxTagState,
+  changeRadioTagState,
+  selectOneTag,
+  deselectOneTag
+} from '../../../utils/filter-tags';
 
 const ageFilters = [
   { filter: '8-10 лет', isActive: false },
@@ -30,18 +35,13 @@ function WhereToGo({ openPopupCities }) {
   const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
 
-  const [ages, setAges] = useState(ageFilters); // фильтры возраста
-  const [categories, setCategories] = useState([]); // фильтры категорий
+  const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
+  const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
   const [activeCategories, setActiveCategories] = useState(new Set());
 
-  function changeCategory(inputName, isChecked) {
-    // смена цвета и состояния чекбокса
-    setCategories((stateFilters) => stateFilters.map((filter) => {
-      if (filter.filter === inputName) {
-        filter.isActive = isChecked;
-      }
-      return filter;
-    }));
+  //! фильтры КАТЕГОРИЯ
+  const changeCategory = (inputName, isChecked) => {
+    changeCheckboxTagState(setCategories, { inputName, isChecked });
 
     if (inputName === 'Все') {
       setActiveCategories(new Set());
@@ -65,23 +65,16 @@ function WhereToGo({ openPopupCities }) {
       set.add(inputName);
       return set;
     });
-  }
+  };
 
   //! фильтры ВОЗРАСТ
-  function changeAge(inputName, isChecked) {
-    setAges((stateFilters) => stateFilters.map((filter) => {
-      if (filter.filter === inputName) {
-        filter.isActive = isChecked;
-      } else {
-        filter.isActive = false;
-      }
-      return filter;
-    }));
+  const changeAge = (inputName, isChecked) => {
+    changeRadioTagState(setAges, { inputName, isChecked });
     setIsFiltersUsed(true);
-  }
+  };
 
   // вспомогательная функция-фильтровщик возраста
-  function filterAgeRanges(age, activeAge) {
+  const filterAgeRanges = (age, activeAge) => {
     switch (activeAge.filter) {
       case ageFilters[0].filter:
         return age >= 8 && age <= 10;
@@ -94,10 +87,9 @@ function WhereToGo({ openPopupCities }) {
       default:
         return age;
     }
-  }
+  };
 
-  //! Финальный массив ивентов
-  function handleFiltration() {
+  const handleFiltration = () => {
     const activeAgeFilter = ages.find((filter) => filter.isActive);
 
     // ВСЕ
@@ -111,15 +103,7 @@ function WhereToGo({ openPopupCities }) {
         setFilteredPlaces(filterByAge);
       }
 
-      // смена цвета и состояния чекбокса 'Все'
-      setCategories((stateFilters) => stateFilters.map((filter) => {
-        if (filter.filter === 'Все') {
-          filter.isActive = true;
-        } else {
-          filter.isActive = false;
-        }
-        return filter;
-      }));
+      selectOneTag(setCategories, 'Все');
       return;
     }
 
@@ -137,14 +121,15 @@ function WhereToGo({ openPopupCities }) {
 
         setFilteredPlaces(filterByCategory);
       }
-      setCategories((stateFilters) => stateFilters.map((filter) => {
-        if (filter.filter === 'Все') {
-          filter.isActive = false;
-        }
-        return filter;
-      }));
+
+      deselectOneTag(setCategories, 'Все');
     }
-  }
+  };
+
+  useEffect(() => {
+    handleFiltration();
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed]);
 
   // АПИ
   useEffect(() => {
@@ -163,26 +148,6 @@ function WhereToGo({ openPopupCities }) {
       })
       .catch((error) => console.log(error));
   }, []);
-
-  useEffect(() => {
-    handleFiltration();
-    setIsFiltersUsed(false);
-  }, [isFiltersUsed]);
-
-  function renderSomeFilters(filterList, type, handleCheckboxClick) {
-    return filterList.map((item) => (
-      <li className="tags__list-item" key={item.filter}>
-        <PseudoButtonTag
-          type={type}
-          name="categories"
-          value={item.filter}
-          title={item.filter}
-          isActive={item.isActive}
-          onClick={handleCheckboxClick}
-        />
-      </li>
-    ));
-  }
 
   useEffect(() => {
     if (!currentUser) {
@@ -207,10 +172,10 @@ function WhereToGo({ openPopupCities }) {
         <TitleH1 title="Куда пойти" />
         <div className="tags">
           <ul className="tags__list">
-            {renderSomeFilters(categories, 'checkbox', changeCategory)}
+            {renderFilterTags(categories, 'checkbox', changeCategory)}
           </ul>
           <ul className="tags__list">
-            {renderSomeFilters(ages, 'checkbox', changeAge)}
+            {renderFilterTags(ages, 'checkbox', changeAge)}
           </ul>
         </div>
       </section>

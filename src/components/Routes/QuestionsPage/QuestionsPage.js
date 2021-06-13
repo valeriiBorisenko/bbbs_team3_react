@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import './QuestionsPage.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -8,39 +7,49 @@ import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import TitleH1 from '../../ui/TitleH1/TitleH1';
 import TitleH2 from '../../ui/TitleH2/TitleH2';
 import CardQuestion from '../../ui/CardQuestion/CardQuestion';
-import PseudoButtonTag from '../../ui/PseudoButtonTag/PseudoButtonTag';
 import Api from '../../../utils/api';
 import Input from '../../ui/Input/Input';
 import Button from '../../ui/Button/Button';
 import Loader from '../../ui/Loader/Loader';
 import { questionForm } from '../../../utils/utils';
+import {
+  renderFilterTags,
+  changeCheckboxTagState,
+  selectOneTag,
+  deselectOneTag
+} from '../../../utils/filter-tags';
 
 function QuestionsPage() {
   useSmoothScrollOnWindow({ top: 0 });
 
   const currentUser = useContext(CurrentUserContext);
 
+  // начальная дата с API
   const [questionsData, setQuestionsData] = useState([]);
 
   // мутабельный массив для применения фильтров
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
 
-  const [categories, setCategories] = useState([]);
-  const [activeCategories, setActiveCategories] = useState(new Set());
+  const [categories, setCategories] = useState([]); // состояние кнопок фильтров
+  const [activeCategories, setActiveCategories] = useState(new Set()); // сами фильтры
 
   // форма
   const [isQuestionForm, setIsQuestionForm] = useState(questionForm.before);
   const [inputValues, setInputValues] = useState(null);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
+  const onFormSubmit = (values) => {
+    setInputValues({ ...inputValues, ...values });
+    setIsQuestionForm(questionForm.after);
+    setTimeout(() => {
+      setIsQuestionForm(questionForm.before);
+    }, 10000);
+  };
+
+  // фильтрация
   const changeCategory = (inputName, isChecked) => {
-    setCategories((stateFilters) => stateFilters.map((filter) => {
-      if (filter.filter === inputName) {
-        filter.isActive = isChecked;
-      }
-      return filter;
-    }));
+    changeCheckboxTagState(setCategories, { inputName, isChecked });
 
     if (inputName === 'Все') {
       setActiveCategories(new Set());
@@ -66,18 +75,10 @@ function QuestionsPage() {
     });
   };
 
-  function handleFiltration() {
+  const handleFiltration = () => {
     if (activeCategories.size === 0) {
       setFilteredQuestions(questionsData);
-      // смена цвета и состояния чекбокса 'Все'
-      setCategories((stateFilters) => stateFilters.map((filter) => {
-        if (filter.filter === 'Все') {
-          filter.isActive = true;
-        } else {
-          filter.isActive = false;
-        }
-        return filter;
-      }));
+      selectOneTag(setCategories, 'Все');
       return;
     }
 
@@ -87,21 +88,15 @@ function QuestionsPage() {
         .filter((question) => question.tags.some((el) => activeCategories.has(el.name)));
       setFilteredQuestions(filterByCategory);
     }
-    setCategories((stateFilters) => stateFilters.map((filter) => {
-      if (filter.filter === 'Все') {
-        filter.isActive = false;
-      }
-      return filter;
-    }));
-  }
+    deselectOneTag(setCategories, 'Все');
+  };
 
   useEffect(() => {
     handleFiltration();
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  // Данный вопросов с сервера
-  // комплектация тегов, относительно полученных тегов в вопросах
+  // API
   useEffect(() => {
     Api.getQuestionsPageData()
       .then((result) => {
@@ -119,29 +114,6 @@ function QuestionsPage() {
       .catch((err) => console.log(err));
   }, []);
 
-  function renderSomeFilters(filterList, type, handleCheckboxClick) {
-    return filterList.map((item) => (
-      <li className="tags__list-item" key={item.filter}>
-        <PseudoButtonTag
-          type={type}
-          name="categories"
-          value={item.filter}
-          title={item.filter}
-          isActive={item.isActive}
-          onClick={handleCheckboxClick}
-        />
-      </li>
-    ));
-  }
-
-  const onFormSubmit = (values) => {
-    setInputValues({ ...inputValues, ...values });
-    setIsQuestionForm(questionForm.after);
-    setTimeout(() => {
-      setIsQuestionForm(questionForm.before);
-    }, 10000);
-  };
-
   return (
     <>
       <Helmet>
@@ -155,7 +127,7 @@ function QuestionsPage() {
             <>
               <div className="tags tags_content_long-list">
                 <ul className="tags__list tags__list_type_long">
-                  {renderSomeFilters(categories, 'checkbox', changeCategory)}
+                  {renderFilterTags(categories, 'checkbox', changeCategory)}
                 </ul>
               </div>
               <ul className="questions">
