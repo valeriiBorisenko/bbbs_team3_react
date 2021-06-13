@@ -226,7 +226,7 @@ function WhereToGo({ openPopupCities }) {
         />
       </section>
 
-      <section className="cards-grid page__section">
+      <section className="place__cards-grid page__section">
         {filteredPlaces.map((place, idx) => (
           <CardPlace
             data={place}
