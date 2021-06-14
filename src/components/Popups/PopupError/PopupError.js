@@ -1,8 +1,6 @@
-import '../Popup/Popup.scss';
 import './PopupError.scss';
 import PropTypes from 'prop-types';
-import Button from '../../ui/Button/Button';
-import TitleH2 from '../../ui/TitleH2/TitleH2';
+import { Button, TitleH2 } from './index';
 
 function PopupError({ isOpen, onClose }) {
   return (

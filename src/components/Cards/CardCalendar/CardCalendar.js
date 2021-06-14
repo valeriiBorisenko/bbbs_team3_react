@@ -1,12 +1,14 @@
+import './CardCalendar.scss';
 import PropTypes from 'prop-types';
-import { Popup, Button, TitleH2 } from './index';
+import { ButtonDots, Button } from './index';
 import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
 
-function PopupAboutEvent({
-  isOpen,
-  onClose,
+function CardCalendar({
+  cardData,
+  isModal,
   onEventSignUpClick,
-  cardData
+  onEventFullDescriptionClick,
+  sectionClass
 }) {
   const {
     booked,
@@ -22,21 +24,22 @@ function PopupAboutEvent({
 
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
+
+  // будет ли заблокирована кнопка
   const isDisabled = (remainSeats < 1);
 
-  function submitHandler(event) {
-    event.preventDefault();
-    onEventSignUpClick(cardData, cardData.booked);
+  function prepareDataForConfirmationPopup() {
+    onEventSignUpClick(cardData);
   }
 
+  function prepareDataForAboutEventPopup() {
+    onEventFullDescriptionClick(cardData, cardData.booked);
+  }
+
+  const classNames = ['calendar', booked ? 'calendar_selected' : '', sectionClass].join(' ').trim();
+
   return (
-    <Popup
-      type="about-event"
-      typeContainer="calendar"
-      isOpen={isOpen}
-      onClose={onClose}
-      onSubmit={submitHandler}
-    >
+    <article className={classNames}>
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -47,10 +50,7 @@ function PopupAboutEvent({
           </p>
         </div>
         <div className="calendar__about">
-          <TitleH2
-            title={title}
-            sectionClass="calendar__title calendar__title_type_popup"
-          />
+          <h2 className="section-title calendar__title">{title}</h2>
           <p className="calendar__date">{startDateParts.day}</p>
         </div>
       </div>
@@ -68,42 +68,48 @@ function PopupAboutEvent({
             <p className="calendar__contact">{contact}</p>
           </li>
         </ul>
-        <div className="calendar__description">
-          <p className="paragraph calendar__desc-paragraph">{description}</p>
-        </div>
+        {isModal && (
+          <div className="calendar__description">
+            <p className="calendar__desc-paragraph">{description}</p>
+          </div>
+        )}
         <div className="calendar__submit">
           <Button
-            color="blue"
             title="Записаться"
             titleSelected="Отменить запись"
-            sectionClass="button_action_confirm"
-            isSubmittable
-            isBooked={booked}
+            color="blue"
             isDisabled={isDisabled}
+            onClick={prepareDataForConfirmationPopup}
+            isBooked={booked}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта')
             || (!booked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
           </p>
+          <ButtonDots
+            handleClick={prepareDataForAboutEventPopup}
+          />
         </div>
       </div>
-    </Popup>
+    </article>
   );
 }
 
-PopupAboutEvent.propTypes = {
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
+CardCalendar.propTypes = {
+  cardData: PropTypes.objectOf(PropTypes.any),
+  isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
-  cardData: PropTypes.objectOf(PropTypes.any)
+  onEventFullDescriptionClick: PropTypes.func,
+  sectionClass: PropTypes.string
 };
 
-PopupAboutEvent.defaultProps = {
-  isOpen: false,
-  onClose: () => {},
+CardCalendar.defaultProps = {
+  cardData: {},
+  isModal: false,
   onEventSignUpClick: () => {},
-  cardData: {}
+  onEventFullDescriptionClick: () => {},
+  sectionClass: ''
 };
 
-export default PopupAboutEvent;
+export default CardCalendar;

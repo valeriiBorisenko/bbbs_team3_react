@@ -7,11 +7,10 @@ import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
+import { NavBar, UserMenuButton } from './index';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useClickOutside } from '../../utils/custom-hooks';
-import NavBar from '../ui/NavBar/NavBar';
-import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
-import { AccountUrl, AfishaUrl, PlacesUrl } from '../../utils/routes';
+import { AccountUrl, AfishaUrl, PlacesUrl } from '../../config/routes';
 
 function Header({
   onUserButtonClick,

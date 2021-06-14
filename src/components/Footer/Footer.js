@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom';
 import './Footer.scss';
 import footerLogoPath from '../../assets/footer-logo.svg';
-import NavItem from '../ui/NavItem/NavItem';
+import NavItem from '../utils/NavItem/NavItem';
 import {
-  AfishaUrl,
-  AboutUsUrl,
-  QuestionsUrl,
-  PlacesUrl
-} from '../../utils/routes';
+  AfishaUrl, AboutUsUrl, QuestionsUrl, PlacesUrl
+} from '../../config/routes';
 
 function Footer() {
   return (
