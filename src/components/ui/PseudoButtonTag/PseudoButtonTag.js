@@ -1,23 +1,14 @@
-import './PseudoButtonCheckbox.scss';
+import './PseudoButtonTag.scss';
 import PropTypes from 'prop-types';
 
-function PseudoButtonCheckbox({
+function PseudoButtonTag({
   type,
   name,
   value,
   title,
-  filters,
-  onChange,
+  isActive,
   onClick
 }) {
-  const handleChange = (evt) => {
-    onChange(evt, filters);
-  };
-
-  const handleClick = (evt) => {
-    onClick(evt, value);
-  };
-
   const id = `filter-button-${value}`;
   return (
     <label
@@ -30,8 +21,9 @@ function PseudoButtonCheckbox({
         type={type}
         name={name}
         value={value}
-        onChange={handleChange}
-        onClick={handleClick}
+        checked={isActive}
+        onChange={() => {}}
+        onClick={(evt) => onClick(value, evt.target.checked)}
       />
       <span
         className="button pseudo-button"
@@ -42,24 +34,22 @@ function PseudoButtonCheckbox({
   );
 }
 
-PseudoButtonCheckbox.propTypes = {
+PseudoButtonTag.propTypes = {
   type: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
   title: PropTypes.string,
-  filters: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
-  onChange: PropTypes.func,
+  isActive: PropTypes.bool,
   onClick: PropTypes.func
 };
 
-PseudoButtonCheckbox.defaultProps = {
+PseudoButtonTag.defaultProps = {
   type: 'radio',
   name: '',
   value: '',
   title: '',
-  filters: {},
-  onChange: () => {},
+  isActive: false,
   onClick: () => {}
 };
 
-export default PseudoButtonCheckbox;
+export default PseudoButtonTag;

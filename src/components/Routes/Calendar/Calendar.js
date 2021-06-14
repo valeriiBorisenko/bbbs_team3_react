@@ -7,7 +7,7 @@ import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import { months } from '../../../utils/constants';
 import TitleH1 from '../../ui/TitleH1/TitleH1';
 import CardCalendar from '../../ui/CardCalendar/CardCalendar';
-import PseudoButtonCheckbox from '../../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
+import PseudoButtonTag from '../../ui/PseudoButtonTag/PseudoButtonTag';
 import Loader from '../../ui/Loader/Loader';
 
 function Calendar({
@@ -104,7 +104,7 @@ function Calendar({
 
       return (
         <li className="tags__list-item" key={`${monthNumber}-${year}`}>
-          <PseudoButtonCheckbox
+          <PseudoButtonTag
             type="radio"
             name="months"
             value={`${monthNumber}-${year}`}

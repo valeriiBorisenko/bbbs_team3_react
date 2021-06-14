@@ -5,10 +5,35 @@
   padding-bottom: 80px;
 }
 
+.place__cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(290px, 1fr));
+  gap: 80px 30px;
+}
+
+@include atDesktop1279 {
+  .place__cards-grid {
+    grid-template-columns: repeat(2, minmax(290px, 1fr));
+  }
+}
+
 @include atDesktop1024 {
   .place__main {
     padding-top: 50px;
     padding-bottom: 0;
+  }
+
+  .place__cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    padding-top: 50px;
+    row-gap: 30px;
+  }
+}
+
+@include atTablet {
+  .place__cards-grid {
+    grid-template-columns: 1fr;
+    padding-top: 30px;
   }
 }
 

@@ -7,52 +7,37 @@ import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import TitleH1 from '../../ui/TitleH1/TitleH1';
 import TitleH2 from '../../ui/TitleH2/TitleH2';
 import CardQuestion from '../../ui/CardQuestion/CardQuestion';
-import PseudoButtonCheckbox from '../../ui/PseudoButtonCheckbox/PseudoButtonCheckbox';
 import Api from '../../../utils/api';
 import Input from '../../ui/Input/Input';
 import Button from '../../ui/Button/Button';
 import Loader from '../../ui/Loader/Loader';
 import { questionForm } from '../../../utils/utils';
+import {
+  renderFilterTags,
+  changeCheckboxTagState,
+  selectOneTag,
+  deselectOneTag
+} from '../../../utils/filter-tags';
 
 function QuestionsPage() {
   useSmoothScrollOnWindow({ top: 0 });
 
   const currentUser = useContext(CurrentUserContext);
 
+  // начальная дата с API
   const [questionsData, setQuestionsData] = useState([]);
-  const [categoriesTags, setCategoriesTags] = useState([]);
-  const [inputValues, setInputValues] = useState(null);
+
+  // мутабельный массив для применения фильтров
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+
+  const [categories, setCategories] = useState([]); // состояние кнопок фильтров
+  const [activeCategories, setActiveCategories] = useState(new Set()); // сами фильтры
+
+  // форма
   const [isQuestionForm, setIsQuestionForm] = useState(questionForm.before);
+  const [inputValues, setInputValues] = useState(null);
   const { register, handleSubmit, formState: { errors } } = useForm();
-
-  // Данный вопросов с сервера
-  // комплектация тегов, относительно полученных тегов в вопросах
-  useEffect(() => {
-    Api.getQuestionsPageData()
-      .then((res) => {
-        setQuestionsData(res);
-        const tagsArr = res.map((data) => data.tags);
-        const tags = tagsArr.flat().map((data) => data.name);
-        const newTags = new Set(tags);
-        const uniqueTags = Array.from(newTags);
-        setCategoriesTags(['Все', ...uniqueTags]);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  function tagsRender(tags, filterTags) {
-    return tags.map((filterTagsName) => (
-      <li className="tags__list-item" key={filterTagsName}>
-        <PseudoButtonCheckbox
-          type={filterTags}
-          name="tag"
-          value={filterTagsName}
-          title={filterTagsName}
-          filters={filterTagsName}
-        />
-      </li>
-    ));
-  }
 
   const onFormSubmit = (values) => {
     setInputValues({ ...inputValues, ...values });
@@ -61,6 +46,73 @@ function QuestionsPage() {
       setIsQuestionForm(questionForm.before);
     }, 10000);
   };
+
+  // фильтрация
+  const changeCategory = (inputName, isChecked) => {
+    changeCheckboxTagState(setCategories, { inputName, isChecked });
+
+    if (inputName === 'Все') {
+      setActiveCategories(new Set());
+      setIsFiltersUsed(true);
+      return;
+    }
+
+    // если такой фильтр уже есть
+    if (activeCategories.has(inputName)) {
+      setActiveCategories((set) => {
+        set.delete(inputName);
+        return set;
+      });
+      setIsFiltersUsed(true);
+      return;
+    }
+
+    // новый фильтр
+    setIsFiltersUsed(true);
+    setActiveCategories((set) => {
+      set.add(inputName);
+      return set;
+    });
+  };
+
+  const handleFiltration = () => {
+    if (activeCategories.size === 0) {
+      setFilteredQuestions(questionsData);
+      selectOneTag(setCategories, 'Все');
+      return;
+    }
+
+    // КАТЕГОРИИ
+    if (activeCategories.size > 0) {
+      const filterByCategory = questionsData
+        .filter((question) => question.tags.some((el) => activeCategories.has(el.name)));
+      setFilteredQuestions(filterByCategory);
+    }
+    deselectOneTag(setCategories, 'Все');
+  };
+
+  useEffect(() => {
+    handleFiltration();
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed]);
+
+  // API
+  useEffect(() => {
+    Api.getQuestionsPageData()
+      .then((result) => {
+        setQuestionsData(result);
+        setFilteredQuestions(result);
+        const tagsArr = result.map((data) => data.tags);
+        const tags = tagsArr.flat().map((data) => data.name);
+        const newTags = new Set(tags);
+        const uniqueTags = Array.from(newTags).map((item) => ({ filter: item, isActive: false }));
+        setCategories([
+          { filter: 'Все', isActive: true },
+          ...uniqueTags
+        ]);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <>
@@ -75,11 +127,11 @@ function QuestionsPage() {
             <>
               <div className="tags tags_content_long-list">
                 <ul className="tags__list tags__list_type_long">
-                  {tagsRender(categoriesTags, 'checkbox')}
+                  {renderFilterTags(categories, 'checkbox', changeCategory)}
                 </ul>
               </div>
               <ul className="questions">
-                {questionsData.map((data) => (
+                {filteredQuestions.map((data) => (
                   <li className="questions__list-item fade-in" key={data.id}>
                     <CardQuestion
                       data={data}
