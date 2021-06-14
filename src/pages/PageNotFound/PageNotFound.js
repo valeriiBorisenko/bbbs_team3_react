@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Lottie from 'lottie-web';
-import { BasePage, animation404, TitleH2 } from './index';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
+import {
+  useSmoothScrollOnWindow, BasePage, animation404, TitleH2
+} from './index';
 
 function PageNotFound({ handlers }) {
   useSmoothScrollOnWindow({ top: 0 });

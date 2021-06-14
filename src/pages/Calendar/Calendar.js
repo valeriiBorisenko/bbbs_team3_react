@@ -2,16 +2,16 @@ import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
+  CurrentUserContext,
+  useSmoothScrollOnWindow,
+  months,
   BasePage,
   TitleH1,
   CardCalendar,
   PseudoButtonTag,
   Loader
 } from './index';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
-import { months } from '../../config/constants';
 
 function Calendar({
   onEventSignUpClick,

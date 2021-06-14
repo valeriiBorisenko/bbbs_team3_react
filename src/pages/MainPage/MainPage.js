@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import PropTypes from 'prop-types';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
+  CurrentUserContext,
+  useSmoothScrollOnWindow,
+  QuestionsUrl,
   BasePage,
   Loader,
   Card,
@@ -17,8 +19,6 @@ import {
   Widget,
   CardQuestion
 } from './index';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
-import { QuestionsUrl } from '../../config/routes';
 
 function MainPage({
   onEventSignUpClick,

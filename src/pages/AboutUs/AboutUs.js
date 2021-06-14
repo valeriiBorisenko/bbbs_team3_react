@@ -1,9 +1,8 @@
 import './AboutUs.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import {
-  BasePage, TitleH3, Blockquote, LogoBlue, CardFigure, CardAbout, Card
+  useSmoothScrollOnWindow, BasePage, TitleH3, Blockquote, LogoBlue, CardFigure, CardAbout, Card
 } from './index';
 
 function AboutUs({ handlers }) {

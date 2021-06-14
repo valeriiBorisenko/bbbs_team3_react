@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import './Account.scss';
 import PropTypes from 'prop-types';
 import {
+  useSmoothScrollOnWindow,
   BasePage,
   Loader,
   AccountEventCard,
@@ -13,7 +14,6 @@ import {
   PopupDeleteDiary
 } from './index';
 import Api from '../../utils/api';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 
 //! Сейчас данные о мероприятиях приходят из App,
 //! чтобы синхронизировать отмену записи со стейтом данных календаря.

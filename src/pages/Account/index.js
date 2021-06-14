@@ -1,3 +1,4 @@
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import BasePage from '../../layout/BasePage';
 import Loader from '../../components/utils/Loader/Loader';
 import AccountEventCard from '../../components/Cards/AccountEventCard/AccountEventCard';
@@ -8,6 +9,7 @@ import AccountDiary from '../../components/AccountDiary/AccountDiary';
 import PopupDeleteDiary from '../../components/Popups/PopupDeleteDiary/PopupDeleteDiary';
 
 export {
+  useSmoothScrollOnWindow,
   BasePage,
   Loader,
   AccountEventCard,
