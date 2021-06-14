@@ -18,7 +18,7 @@ import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 //! Сейчас данные о мероприятиях приходят из App,
 //! чтобы синхронизировать отмену записи со стейтом данных календаря.
 //! Когда будет готов бэк, она будет приходить в GET-запросе и синхронизироваться через сервер
-function Account({ eventsData, onEventFullDescriptionClick }) {
+function Account({ eventsData, onEventFullDescriptionClick, handlers }) {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -127,7 +127,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   }
 
   return (
-    <BasePage>
+    <BasePage handlers={handlers}>
       <Helmet>
         <title>Личный кабинет</title>
         <meta name="description" content="Личный кабинет наставника" />
@@ -210,12 +210,14 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
 
 Account.propTypes = {
   eventsData: PropTypes.arrayOf(PropTypes.object),
-  onEventFullDescriptionClick: PropTypes.func
+  onEventFullDescriptionClick: PropTypes.func,
+  handlers: PropTypes.objectOf(PropTypes.any)
 };
 
 Account.defaultProps = {
   eventsData: [],
-  onEventFullDescriptionClick: () => {}
+  onEventFullDescriptionClick: () => {},
+  handlers: {}
 };
 
 export default Account;

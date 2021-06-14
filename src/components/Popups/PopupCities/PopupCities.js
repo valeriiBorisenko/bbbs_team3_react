@@ -1,8 +1,7 @@
 import './PopupCities.scss';
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
-import CurrentUserContext from '../../../contexts/CurrentUserContext';
-import { Popup, TitleH2 } from './index';
+import { CurrentUserContext, Popup, TitleH2 } from './index';
 
 function PopupCities({
   cities, isOpen, onClose, onSubmit

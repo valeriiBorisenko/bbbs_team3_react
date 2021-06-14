@@ -2,9 +2,8 @@ import './CardPlace.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  CardAnnotation, Rubric, TitleH2, Card, Caption
+  PlacesUrl, CardAnnotation, Rubric, TitleH2, Card, Caption
 } from './index';
-import { PlacesUrl } from '../../../config/routes';
 
 function CardPlace({
   data: {

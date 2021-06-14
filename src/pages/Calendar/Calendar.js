@@ -17,7 +17,8 @@ function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
   dataCalendar,
-  onOpenLoginPopup
+  onOpenLoginPopup,
+  handlers
 }) {
   useSmoothScrollOnWindow({ top: 0 });
 
@@ -124,7 +125,7 @@ function Calendar({
   const whatDataToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
 
   return (
-    <BasePage>
+    <BasePage handlers={handlers}>
       <Helmet>
         <title>Календарь</title>
         <meta name="description" content="Календарь событий и мероприятий для наставников" />
@@ -165,14 +166,16 @@ Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
-  onOpenLoginPopup: PropTypes.func
+  onOpenLoginPopup: PropTypes.func,
+  handlers: PropTypes.objectOf(PropTypes.any)
 };
 
 Calendar.defaultProps = {
   onEventSignUpClick: () => {},
   dataCalendar: [],
   onEventFullDescriptionClick: () => {},
-  onOpenLoginPopup: () => {}
+  onOpenLoginPopup: () => {},
+  handlers: {}
 };
 
 export default Calendar;

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import PseudoButtonTag from '../components/ui/PseudoButtonTag/PseudoButtonTag';
+import PseudoButtonTag from '../components/utils/PseudoButtonTag/PseudoButtonTag';
 
 export const renderFilterTags = (filterList, type, handleClick) => filterList.map((item) => (
   <li className="tags__list-item" key={item.filter}>

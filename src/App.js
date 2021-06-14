@@ -1,39 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-import Loader from '../ui/Loader/Loader';
+import Header from './components/Header/Header';
+import Router from './navigation/Router';
+import Loader from './components/utils/Loader/Loader';
+import { MainPageUrl, AccountUrl } from './config/routes';
 // попапы
-import PopupConfirmation from '../Popups/PopupConfirmation/PopupConfirmation';
-import PopupSuccessfully from '../Popups/PopupSuccessfully/PopupSuccessfully';
-import PopupLogin from '../Popups/PopupLogin/PopupLogin';
-import PopupAboutEvent from '../Popups/PopupAboutEvent/PopupAboutEvent';
-import PopupCities from '../Popups/PopupCities/PopupCities';
-import PopupError from '../Popups/PopupError/PopupError';
-// страницы
-import MainPage from '../Routes/MainPage/MainPage';
-import Calendar from '../Routes/Calendar/Calendar';
-import AboutUs from '../Routes/AboutUs/AboutUs';
-import Account from '../Routes/Account/Account';
-import PageNotFound from '../Routes/PageNotFound/PageNotFound';
-import QuestionsPage from '../Routes/QuestionsPage/QuestionsPage';
-import WhereToGo from '../Routes/WhereToGo/WhereToGo';
-// логины, авторизация
-import ProtectedRoute from '../Routes/ProtectedRoute/ProtectedRoute';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-// API
-import AuthApi from '../../utils/auth';
-import Api from '../../utils/api';
 import {
-  MainPageUrl,
-  AfishaUrl,
-  AboutUsUrl,
-  QuestionsUrl,
-  AccountUrl,
-  PlacesUrl
-} from '../../utils/routes';
+  PopupConfirmation, PopupSuccessfully, PopupLogin, PopupAboutEvent, PopupCities, PopupError
+} from './components/Popups/index';
+// логины, авторизация
+import CurrentUserContext from './contexts/CurrentUserContext';
+// API
+import AuthApi from './utils/auth';
+import Api from './utils/api';
 
 function App() {
   const history = useHistory();
@@ -41,7 +22,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isCheckingToken, setIsCheckingToken] = useState(true);
   // список городов
-  const [cities, setCities] = useState(null);
+  const [cities, setCities] = useState(null); //! вынести в хук
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
@@ -62,7 +43,7 @@ function App() {
     Api.getMainPageData()
       .then((res) => setDataMain(res.mainPageData))
       .catch((err) => console.log(err));
-  }, []);
+  }, []); //! перенести в мейн, когда будет бэк
 
   // загрузка данных страницы календаря, если ты залогиненный
   useEffect(() => {
@@ -126,7 +107,7 @@ function App() {
           localStorage.setItem('jwt', access);
           Promise.all([
             AuthApi.getUserData(),
-            Api.getCalendarPageData()
+            Api.getCalendarPageData() //! перенести в календарь, когда будет бэк
             // в дальнейшем сама страница календаря будет запрашивать АПИ напрямую
           ])
             .then(([userData, events]) => {
@@ -206,7 +187,7 @@ function App() {
     Api.getCities()
       .then((res) => setCities(res.cities))
       .catch((error) => console.log(error));
-  }, []);
+  }, []); //! перенести в хук
 
   // эффект закрытия модалок по Escape
   useEffect(() => {
@@ -216,6 +197,15 @@ function App() {
       }
     });
   }, []);
+
+  const handlers = {
+    bookingHandler,
+    handleClickPopupAboutEventOpened,
+    handleClickPopupLoginOpened,
+    handleClickPopupCities,
+    dataMain, //! перенести в мейн, когда будет бэк
+    dataCalendar //! перенести в календарь, когда будет бэк
+  };
 
   return (
     <HelmetProvider>
@@ -227,50 +217,7 @@ function App() {
             onCityChange={handleClickPopupCities}
             cities={cities}
           />
-          <main className="main">
-            {!isCheckingToken ? (
-              <Switch>
-                <Route exact path={`${MainPageUrl}`}>
-                  <MainPage
-                    onEventSignUpClick={bookingHandler}
-                    onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                    dataMain={dataMain}
-                  />
-                </Route>
-                <Route exact path={`${AboutUsUrl}`}>
-                  <AboutUs />
-                </Route>
-                <Route path={`${AfishaUrl}`}>
-                  <Calendar
-                    onEventSignUpClick={bookingHandler}
-                    onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                    onOpenLoginPopup={handleClickPopupLoginOpened}
-                    dataCalendar={dataCalendar}
-                  />
-                </Route>
-                <Route path={`${QuestionsUrl}`}>
-                  <QuestionsPage />
-                </Route>
-                <ProtectedRoute
-                  exact
-                  path={`${AccountUrl}`}
-                  component={Account}
-                  onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-                  eventsData={dataCalendar}
-                  isAuth={!!currentUser}
-                />
-                <Route exact path={`${PlacesUrl}`}>
-                  <WhereToGo
-                    openPopupCities={handleClickPopupCities}
-                  />
-                </Route>
-                <Route path="*">
-                  <PageNotFound />
-                </Route>
-              </Switch>
-            ) : <Loader />}
-          </main>
-          <Footer />
+          {!isCheckingToken ? <Router handlers={handlers} /> : <Loader isCentered />}
           <PopupConfirmation
             isOpen={isPopupConfirmationOpen}
             onClose={closeAllPopups}

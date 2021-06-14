@@ -1,12 +1,11 @@
 import './AccountDiary.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button } from './index';
-import { formatDate } from '../../utils/utils';
+import {
+  formatDate, Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button
+} from './index';
 
-function AccountDiary({
-  data, onEdit, onDelete
-}) {
+function AccountDiary({ data, onEdit, onDelete }) {
   const {
     imageUrl, title, description, rate, date
   } = data;

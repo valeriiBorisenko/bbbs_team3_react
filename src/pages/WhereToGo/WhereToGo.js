@@ -2,20 +2,22 @@ import './WhereToGo.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
-import { repeatSchema } from '../../utils/utils';
-import { COLORS } from '../../config/constants';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
+  CurrentUserContext,
+  repeatSchema,
+  COLORS,
+  NO_CATEGORIES,
   BasePage,
   TitleH1,
   CardPlace,
   WhereToGoPreview,
-  Loader
+  renderFilterTags,
+  changeCheckboxTagState,
+  changeRadioTagState,
+  selectOneTag,
+  deselectOneTag
 } from './index';
 import Api from '../../utils/api';
-import {
-  renderFilterTags, changeCheckboxTagState, changeRadioTagState, selectOneTag, deselectOneTag
-} from '../../utils/filter-tags';
 
 const ageFilters = [
   { filter: '8-10 лет', isActive: false },
@@ -42,7 +44,7 @@ function WhereToGo({ openPopupCities }) {
   const changeCategory = (inputName, isChecked) => {
     changeCheckboxTagState(setCategories, { inputName, isChecked });
 
-    if (inputName === 'Все') {
+    if (inputName === NO_CATEGORIES) {
       setActiveCategories(new Set());
       setIsFiltersUsed(true);
       return;
@@ -102,7 +104,7 @@ function WhereToGo({ openPopupCities }) {
         setFilteredPlaces(filterByAge);
       }
 
-      selectOneTag(setCategories, 'Все');
+      selectOneTag(setCategories, NO_CATEGORIES);
       return;
     }
 
@@ -121,7 +123,7 @@ function WhereToGo({ openPopupCities }) {
         setFilteredPlaces(filterByCategory);
       }
 
-      deselectOneTag(setCategories, 'Все');
+      deselectOneTag(setCategories, NO_CATEGORIES);
     }
   };
 
@@ -141,7 +143,7 @@ function WhereToGo({ openPopupCities }) {
         const set = new Set(categoriesArr);
         const uniqueCategories = Array.from(set).map((item) => ({ filter: item, isActive: false }));
         setCategories([
-          { filter: 'Все', isActive: true },
+          { filter: NO_CATEGORIES, isActive: true },
           ...uniqueCategories
         ]);
       })
@@ -153,10 +155,6 @@ function WhereToGo({ openPopupCities }) {
       openPopupCities();
     }
   }, []);
-
-  if (places.length === 0) {
-    return <Loader />;
-  }
 
   return (
     <BasePage>

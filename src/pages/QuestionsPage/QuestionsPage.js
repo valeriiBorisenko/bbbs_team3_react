@@ -1,10 +1,17 @@
 import './QuestionsPage.scss';
 import { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
+  CurrentUserContext,
+  NO_CATEGORIES,
+  useSmoothScrollOnWindow,
+  questionForm,
+  renderFilterTags,
+  changeCheckboxTagState,
+  selectOneTag,
+  deselectOneTag,
   BasePage,
   TitleH1,
   TitleH2,
@@ -14,12 +21,8 @@ import {
   Loader
 } from './index';
 import Api from '../../utils/api';
-import { questionForm } from '../../utils/utils';
-import {
-  renderFilterTags, changeCheckboxTagState, selectOneTag, deselectOneTag
-} from '../../utils/filter-tags';
 
-function QuestionsPage() {
+function QuestionsPage({ handlers }) {
   useSmoothScrollOnWindow({ top: 0 });
 
   const currentUser = useContext(CurrentUserContext);
@@ -51,7 +54,7 @@ function QuestionsPage() {
   const changeCategory = (inputName, isChecked) => {
     changeCheckboxTagState(setCategories, { inputName, isChecked });
 
-    if (inputName === 'Все') {
+    if (inputName === NO_CATEGORIES) {
       setActiveCategories(new Set());
       setIsFiltersUsed(true);
       return;
@@ -78,7 +81,7 @@ function QuestionsPage() {
   const handleFiltration = () => {
     if (activeCategories.size === 0) {
       setFilteredQuestions(questionsData);
-      selectOneTag(setCategories, 'Все');
+      selectOneTag(setCategories, NO_CATEGORIES);
       return;
     }
 
@@ -88,7 +91,7 @@ function QuestionsPage() {
         .filter((question) => question.tags.some((el) => activeCategories.has(el.name)));
       setFilteredQuestions(filterByCategory);
     }
-    deselectOneTag(setCategories, 'Все');
+    deselectOneTag(setCategories, NO_CATEGORIES);
   };
 
   useEffect(() => {
@@ -107,7 +110,7 @@ function QuestionsPage() {
         const newTags = new Set(tags);
         const uniqueTags = Array.from(newTags).map((item) => ({ filter: item, isActive: false }));
         setCategories([
-          { filter: 'Все', isActive: true },
+          { filter: NO_CATEGORIES, isActive: true },
           ...uniqueTags
         ]);
       })
@@ -115,7 +118,7 @@ function QuestionsPage() {
   }, []);
 
   return (
-    <BasePage>
+    <BasePage handlers={handlers}>
       <Helmet>
         <title>Ответы на вопросы</title>
         <meta name="description" content="Страница с ответами на основные вопросы" />
@@ -177,5 +180,13 @@ function QuestionsPage() {
     </BasePage>
   );
 }
+
+QuestionsPage.propTypes = {
+  handlers: PropTypes.objectOf(PropTypes.any)
+};
+
+QuestionsPage.defaultProps = {
+  handlers: {}
+};
 
 export default QuestionsPage;

@@ -2,9 +2,10 @@
 import './AccountForm.scss';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Input, Caption, Rating, Button } from './index';
 import { useForm } from 'react-hook-form';
-import { parseDate } from '../../utils/utils';
+import {
+  parseDate, Card, Input, Caption, Rating, Button
+} from './index';
 
 function AccountForm({
   data, sectionClass, isEditMode, isOpen, onCancel, onSubmit

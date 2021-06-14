@@ -1,4 +1,3 @@
-import React from 'react';
 import './CardArticleBig.scss';
 import PropTypes from 'prop-types';
 import TitleH3 from '../../utils/TitleH3/TitleH3';

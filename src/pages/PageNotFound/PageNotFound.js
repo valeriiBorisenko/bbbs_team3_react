@@ -1,12 +1,13 @@
 import { useEffect, useRef } from 'react';
 import './PageNotFound.scss';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Lottie from 'lottie-web';
 import { BasePage, animation404, TitleH2 } from './index';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 
-function PageNotFound() {
+function PageNotFound({ handlers }) {
   useSmoothScrollOnWindow({ top: 0 });
 
   const animationContainer = useRef();
@@ -22,7 +23,7 @@ function PageNotFound() {
   }, []);
 
   return (
-    <BasePage>
+    <BasePage handlers={handlers}>
       <Helmet>
         <title>Страницы не существует</title>
         <meta name="description" content="Запрашиваемая страница не найдена" />
@@ -44,5 +45,13 @@ function PageNotFound() {
     </BasePage>
   );
 }
+
+PageNotFound.propTypes = {
+  handlers: PropTypes.objectOf(PropTypes.any)
+};
+
+PageNotFound.defaultProps = {
+  handlers: {}
+};
 
 export default PageNotFound;

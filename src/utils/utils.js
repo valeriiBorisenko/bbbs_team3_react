@@ -1,4 +1,4 @@
-import { months, weekdays } from './constants';
+import { months, weekdays } from '../config/constants';
 
 // форматирует секунды в часы, минуты и секунды, принимает на вход number
 export const formatDuration = (duration) => {

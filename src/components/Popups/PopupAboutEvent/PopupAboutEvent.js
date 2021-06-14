@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import { Popup, Button, TitleH2 } from './index';
-import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
+import {
+  formatDate, formatWordCase, getCardType, Popup, Button, TitleH2
+} from './index';
 
 function PopupAboutEvent({
   isOpen,

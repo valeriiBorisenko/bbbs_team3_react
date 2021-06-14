@@ -2,13 +2,18 @@ import './NavBar.scss';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
-  NavItem, NavItemWithDropdown, SearchButton, UserIconButton, UserMenuButton
+  CurrentUserContext,
+  AfishaUrl,
+  AboutUsUrl,
+  QuestionsUrl,
+  PlacesUrl,
+  NavItem,
+  NavItemWithDropdown,
+  SearchButton,
+  UserIconButton,
+  UserMenuButton
 } from './index';
-import {
-  AfishaUrl, AboutUsUrl, QuestionsUrl, PlacesUrl
-} from '../../config/routes';
 
 function NavBar({
   isMobileMenuOpen,
@@ -33,28 +38,28 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item menu__list-item_hidden"
             sectionLinkClass="menu__link mobile-link"
-            href={`${AboutUsUrl}`}
+            href={AboutUsUrl}
             linkText="О проекте"
           />
           {/* Календарь */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href={`${AfishaUrl}`}
+            href={AfishaUrl}
             linkText="Календарь"
           />
           {/* Куда пойти */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href={`${PlacesUrl}`}
+            href={PlacesUrl}
             linkText="Куда пойти"
           />
           {/* Вопросы */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href={`${QuestionsUrl}`}
+            href={QuestionsUrl}
             linkText="Вопросы"
           />
           {/* выпадающее меню  "Читать и смотреть" */}

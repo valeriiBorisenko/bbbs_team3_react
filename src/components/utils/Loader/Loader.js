@@ -1,8 +1,12 @@
 import './Loader.scss';
 import PropTypes from 'prop-types';
 
-function Loader({ isNested }) {
-  const classNames = ['spinner', isNested ? 'spinner_waiting-for-data' : ''].join(' ').trim();
+function Loader({ isNested, isCentered }) {
+  const classNames = [
+    'spinner',
+    isNested ? 'spinner_waiting-for-data' : '',
+    isCentered ? 'spinner_centered' : ''
+  ].join(' ').trim();
 
   return (
     <div className={classNames}>
@@ -25,11 +29,13 @@ function Loader({ isNested }) {
 }
 
 Loader.propTypes = {
-  isNested: PropTypes.bool
+  isNested: PropTypes.bool,
+  isCentered: PropTypes.bool
 };
 
 Loader.defaultProps = {
-  isNested: false
+  isNested: false,
+  isCentered: false
 };
 
 export default Loader;

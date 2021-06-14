@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
-  Popup, Input, Button, TitleH2
+  AfishaUrl, Popup, Input, Button, TitleH2
 } from './index';
-import { AfishaUrl } from '../../../config/routes';
 
 function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
   const {

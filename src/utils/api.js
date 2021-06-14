@@ -1,6 +1,6 @@
 import axios from 'axios';
 import setMockedAnswers from './mocked-answers';
-import { apiUrl, baseURL } from './routes';
+import { apiUrl, baseURL } from '../config/config';
 
 setMockedAnswers();
 

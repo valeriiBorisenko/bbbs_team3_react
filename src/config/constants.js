@@ -30,3 +30,5 @@ export const COLORS = [
 export const FIGURES = [
   'square', 'circle', 'arch', 'circle', 'arch', 'square', 'arch', 'square', 'circle'
 ];
+
+export const NO_CATEGORIES = 'Все';

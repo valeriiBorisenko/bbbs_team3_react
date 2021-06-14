@@ -1,7 +1,8 @@
 import './CardCalendar.scss';
 import PropTypes from 'prop-types';
-import { ButtonDots, Button } from './index';
-import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
+import {
+  formatDate, formatWordCase, getCardType, ButtonDots, Button
+} from './index';
 
 function CardCalendar({
   cardData,
