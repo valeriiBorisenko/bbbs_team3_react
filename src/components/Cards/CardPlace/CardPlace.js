@@ -2,7 +2,7 @@ import './CardPlace.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  PlacesUrl, CardAnnotation, Rubric, TitleH2, Card, Caption
+  PLACES_URL, CardAnnotation, Rubric, TitleH2, Card, Caption
 } from './index';
 
 function CardPlace({
@@ -25,7 +25,7 @@ function CardPlace({
         }
 
         <div className="card-place__title-wrap">
-          <Link to={`${PlacesUrl}`} className="card-place__link-wrap">
+          <Link to={PLACES_URL} className="card-place__link-wrap">
             <TitleH2 sectionClass="card-place__title" title={title} />
           </Link>
           <Caption sectionClass="card-place__address" title={address} />
@@ -33,7 +33,7 @@ function CardPlace({
 
         {(chosen && isMain) && (
           <Link
-            to={`${PlacesUrl}`}
+            to={PLACES_URL}
             className="card-place__link-wrap card-place__link-wrap_content_article-img"
           >
             <img src={imageUrl} alt={title} className="card-place__image" />

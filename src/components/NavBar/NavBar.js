@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import {
   CurrentUserContext,
-  AfishaUrl,
-  AboutUsUrl,
-  QuestionsUrl,
-  PlacesUrl,
+  AFISHA_URL,
+  ABOUT_US_URL,
+  QUESTIONS_URL,
+  PLACES_URL,
   NavItem,
   NavItemWithDropdown,
   SearchButton,
@@ -38,28 +38,28 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item menu__list-item_hidden"
             sectionLinkClass="menu__link mobile-link"
-            href={AboutUsUrl}
+            href={ABOUT_US_URL}
             linkText="О проекте"
           />
           {/* Календарь */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href={AfishaUrl}
+            href={AFISHA_URL}
             linkText="Календарь"
           />
           {/* Куда пойти */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href={PlacesUrl}
+            href={PLACES_URL}
             linkText="Куда пойти"
           />
           {/* Вопросы */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href={QuestionsUrl}
+            href={QUESTIONS_URL}
             linkText="Вопросы"
           />
           {/* выпадающее меню  "Читать и смотреть" */}

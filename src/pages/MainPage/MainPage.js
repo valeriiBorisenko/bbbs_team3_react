@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {
   CurrentUserContext,
   useSmoothScrollOnWindow,
-  QuestionsUrl,
+  QUESTIONS_URL,
   BasePage,
   Loader,
   Card,
@@ -34,7 +34,7 @@ function MainPage({
   }
 
   if (!dataMain) {
-    return <Loader />;
+    return <Loader isCentered />;
   }
 
   return (
@@ -116,7 +116,7 @@ function MainPage({
           <div className="main-questions__container">
             {dataMain.questions.map((item) => (
               <Link
-                to={`${QuestionsUrl}`}
+                to={QUESTIONS_URL}
                 className="main-section__link main-section__link_el_question"
                 key={item.id}
               >

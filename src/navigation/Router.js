@@ -13,7 +13,7 @@ import {
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import {
-  MainPageUrl, AboutUsUrl, AfishaUrl, QuestionsUrl, AccountUrl, PlacesUrl
+  MAIN_PAGE_URL, ABOUT_US_URL, AFISHA_URL, QUESTIONS_URL, ACCOUNT_URL, PLACES_URL
 } from '../config/routes';
 
 function Router({
@@ -30,17 +30,17 @@ function Router({
 
   return (
     <Switch>
-      <Route exact path={MainPageUrl}>
+      <Route exact path={MAIN_PAGE_URL}>
         <MainPage
           onEventSignUpClick={bookingHandler}
           onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
           dataMain={dataMain}
         />
       </Route>
-      <Route exact path={AboutUsUrl}>
+      <Route exact path={ABOUT_US_URL}>
         <AboutUs />
       </Route>
-      <Route path={AfishaUrl}>
+      <Route path={AFISHA_URL}>
         <Calendar
           onEventSignUpClick={bookingHandler}
           onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
@@ -48,18 +48,18 @@ function Router({
           dataCalendar={dataCalendar}
         />
       </Route>
-      <Route path={QuestionsUrl}>
+      <Route path={QUESTIONS_URL}>
         <QuestionsPage />
       </Route>
       <ProtectedRoute
         exact
-        path={AccountUrl}
+        path={ACCOUNT_URL}
         component={Account}
         onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
         eventsData={dataCalendar}
         isAuth={!!currentUser}
       />
-      <Route exact path={PlacesUrl}>
+      <Route exact path={PLACES_URL}>
         <WhereToGo
           openPopupCities={handleClickPopupCities}
         />

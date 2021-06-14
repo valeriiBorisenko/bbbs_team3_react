@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './Footer.scss';
 import {
-  footerLogoPath, NavItem, AfishaUrl, AboutUsUrl, QuestionsUrl, PlacesUrl
+  footerLogoPath, NavItem, AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL
 } from './index';
 
 function Footer() {
@@ -59,28 +59,28 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href={AboutUsUrl}
+            href={ABOUT_US_URL}
             linkText="о проекте"
           />
           {/* каленарь */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href={AfishaUrl}
+            href={AFISHA_URL}
             linkText="календарь"
           />
           {/* куда пойти */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href={PlacesUrl}
+            href={PLACES_URL}
             linkText="куда пойти"
           />
           {/* вопросы */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href={QuestionsUrl}
+            href={QUESTIONS_URL}
             linkText="вопросы"
           />
           {/* читать и смотреть */}

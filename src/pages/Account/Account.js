@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import {
   useSmoothScrollOnWindow,
   BasePage,
-  Loader,
   AccountEventCard,
   ScrollableByXContainer,
   TitleH2,
@@ -121,10 +120,6 @@ function Account({ eventsData, onEventFullDescriptionClick, handlers }) {
     setDiaries(() => diaries.filter((diary) => (diary.id === card.id ? null : diary)));
     closePopupDeleteDiary();
   };
-
-  if (!events || !diaries) {
-    return <Loader />;
-  }
 
   return (
     <BasePage handlers={handlers}>

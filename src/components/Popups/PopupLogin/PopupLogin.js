@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
-  AfishaUrl, Popup, Input, Button, TitleH2
+  AFISHA_URL, Popup, Input, Button, TitleH2
 } from './index';
 
 function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
@@ -20,7 +20,7 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
   const history = useHistory();
   const location = useLocation();
   function closePopup() {
-    if (location.pathname === AfishaUrl) {
+    if (location.pathname === AFISHA_URL) {
       history.push('/');
     }
     onClose();

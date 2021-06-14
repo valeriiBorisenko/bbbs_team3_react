@@ -1,6 +1,6 @@
-export const MainPageUrl = '/';
-export const AfishaUrl = '/afisha';
-export const AboutUsUrl = '/about-us';
-export const QuestionsUrl = '/questions';
-export const AccountUrl = '/account';
-export const PlacesUrl = '/places';
+export const MAIN_PAGE_URL = '/';
+export const AFISHA_URL = '/afisha';
+export const ABOUT_US_URL = '/about-us';
+export const QUESTIONS_URL = '/questions';
+export const ACCOUNT_URL = '/account';
+export const PLACES_URL = '/places';

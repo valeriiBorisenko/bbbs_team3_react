@@ -3,7 +3,7 @@ import { repeatSchema } from '../../utils/utils';
 import { COLORS, NO_CATEGORIES } from '../../config/constants';
 import BasePage from '../../layout/BasePage';
 import TitleH1 from '../../components/utils/TitleH1/TitleH1';
-import CardPlace from '../../components/Cards/CardPlace/CardPlace';
+import CardPlace from '../../components/cards/CardPlace/CardPlace';
 import WhereToGoPreview from '../../components/WhereToGoPreview/WhereToGoPreview';
 import {
   renderFilterTags, changeCheckboxTagState, changeRadioTagState, selectOneTag, deselectOneTag

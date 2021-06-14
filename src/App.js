@@ -5,11 +5,11 @@ import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header/Header';
 import Router from './navigation/Router';
 import Loader from './components/utils/Loader/Loader';
-import { MainPageUrl, AccountUrl } from './config/routes';
+import { MAIN_PAGE_URL, ACCOUNT_URL } from './config/routes';
 // попапы
 import {
   PopupConfirmation, PopupSuccessfully, PopupLogin, PopupAboutEvent, PopupCities, PopupError
-} from './components/Popups/index';
+} from './components/popups/index';
 // логины, авторизация
 import CurrentUserContext from './contexts/CurrentUserContext';
 // API
@@ -125,7 +125,7 @@ function App() {
     AuthApi.clearAuth();
     setCurrentUser(null);
     localStorage.removeItem('jwt');
-    history.push(MainPageUrl);
+    history.push(MAIN_PAGE_URL);
   }
 
   // проверка токена между сессиями
@@ -172,7 +172,7 @@ function App() {
 
   function handleUserButtonClick() {
     if (currentUser) {
-      history.push(AccountUrl);
+      history.push(ACCOUNT_URL);
     } else {
       handleClickPopupLoginOpened();
     }

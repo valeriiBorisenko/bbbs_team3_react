@@ -1,6 +1,6 @@
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
-  AfishaUrl, AboutUsUrl, QuestionsUrl, PlacesUrl
+  AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL
 } from '../../config/routes';
 import NavItem from '../utils/NavItem/NavItem';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
@@ -10,10 +10,10 @@ import UserMenuButton from '../utils/UserMenuButton/UserMenuButton';
 
 export {
   CurrentUserContext,
-  AfishaUrl,
-  AboutUsUrl,
-  QuestionsUrl,
-  PlacesUrl,
+  AFISHA_URL,
+  ABOUT_US_URL,
+  QUESTIONS_URL,
+  PLACES_URL,
   NavItem,
   NavItemWithDropdown,
   SearchButton,
