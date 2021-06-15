@@ -21,28 +21,29 @@ function PopupDeleteDiary({
       typeContainer="confirm-diary"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}
       withoutCloseButton
       sectionClass="popup-diary"
     >
-      <TitleH2
-        title={`Удалить встречу в ${title} ${parseInt(day.day, 10)} ${day.monthName} ${day.year}?`}
-        sectionClass="popup-diary__title"
-      />
-      <div className="popup-diary__buttons">
-        <Button
-          color="gray"
-          sectionClass="popup-diary__button"
-          title="Удалить"
-          isSubmittable
+      <form className="popup__form" onSubmit={handleSubmit}>
+        <TitleH2
+          title={`Удалить встречу в ${title} ${parseInt(day.day, 10)} ${day.monthName} ${day.year}?`}
+          sectionClass="popup-diary__title"
         />
-        <Button
-          color="black"
-          sectionClass="popup-diary__button"
-          title="Отмена"
-          onClick={onClose}
-        />
-      </div>
+        <div className="popup-diary__buttons">
+          <Button
+            color="gray"
+            sectionClass="popup-diary__button"
+            title="Удалить"
+            isSubmittable
+          />
+          <Button
+            color="black"
+            sectionClass="popup-diary__button"
+            title="Отмена"
+            onClick={onClose}
+          />
+        </div>
+      </form>
     </Popup>
   );
 }
