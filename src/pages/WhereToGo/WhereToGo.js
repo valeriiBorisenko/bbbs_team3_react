@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
 import {
   CurrentUserContext,
+  useSmoothScrollOnWindow,
   repeatSchema,
   COLORS,
   NO_CATEGORIES,
@@ -27,6 +28,8 @@ const ageFilters = [
 ];
 
 function WhereToGo({ openPopupCities }) {
+  useSmoothScrollOnWindow({ top: 0 });
+
   const currentUser = useContext(CurrentUserContext);
 
   // начальные места из API

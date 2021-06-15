@@ -9,7 +9,7 @@ import { MAIN_PAGE_URL, ACCOUNT_URL } from './config/routes';
 // попапы
 import {
   PopupConfirmation, PopupSuccessfully, PopupLogin, PopupAboutEvent, PopupCities, PopupError
-} from './components/popups/index';
+} from './components/Popups/index';
 // логины, авторизация
 import CurrentUserContext from './contexts/CurrentUserContext';
 // API
