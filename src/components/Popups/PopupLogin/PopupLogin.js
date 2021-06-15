@@ -3,8 +3,9 @@ import './PopupLogin.scss';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { AFISHA_URL } from '../../../config/routes';
 import {
-  AFISHA_URL, Popup, Input, Button, TitleH2
+  Popup, Input, Button, TitleH2
 } from './index';
 
 function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {

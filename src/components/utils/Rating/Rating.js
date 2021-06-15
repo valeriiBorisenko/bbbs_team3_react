@@ -6,10 +6,6 @@ function Rating({
 }) {
   const classNames = ['rating', sectionClass].join(' ').trim();
 
-  const handleClick = (evt) => {
-    onClick(evt);
-  };
-
   const pseudoButtonClassNames = [
     'rating__pseudo-button',
     `rating__pseudo-button_type_${ratingType}_default`
@@ -24,7 +20,7 @@ function Rating({
         name={name}
         value={value}
         defaultChecked={checked}
-        onClick={handleClick}
+        onClick={() => onClick(value)}
       />
       <span className={pseudoButtonClassNames} />
     </label>

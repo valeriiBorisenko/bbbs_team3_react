@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Account.scss';
 import PropTypes from 'prop-types';
 import {
-  useSmoothScrollOnWindow,
   BasePage,
   AccountEventCard,
   ScrollableByXContainer,
@@ -17,7 +16,7 @@ import Api from '../../utils/api';
 //! Сейчас данные о мероприятиях приходят из App,
 //! чтобы синхронизировать отмену записи со стейтом данных календаря.
 //! Когда будет готов бэк, она будет приходить в GET-запросе и синхронизироваться через сервер
-function Account({ eventsData, onEventFullDescriptionClick, handlers }) {
+function Account({ eventsData, onEventFullDescriptionClick }) {
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -43,25 +42,15 @@ function Account({ eventsData, onEventFullDescriptionClick, handlers }) {
     setEvents(sortedEvents);
   }, [eventsData]);
 
-  useSmoothScrollOnWindow({ top: 0 });
-
-  const scrollToForm = () => {
-    const isMobile = window.innerWidth < 576;
-    const isTablet = window.innerWidth > 576 && window.innerWidth < 769;
-    let position;
-
-    if (isMobile) {
-      position = 240;
-    } else if (isTablet) {
-      position = 320;
-    } else {
-      position = 390;
-    }
-
+  useEffect(() => {
     window.scrollTo({
-      top: position,
-      behavior: 'smooth'
+      top: 0
     });
+  }, []);
+
+  const diariesRef = useRef(null);
+  const scrollToForm = () => {
+    diariesRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleOpenForm = (data) => {
@@ -95,6 +84,9 @@ function Account({ eventsData, onEventFullDescriptionClick, handlers }) {
         // дефолтная картинка, если фото не загружено
         diary.imageUrl = 'https://i.pinimg.com/originals/f0/e2/53/f0e253b6dbbb809145441ca8fa08b7b7.jpg';
       }
+      if (!diary.rate) {
+        diary.rate = 'neutral';
+      }
       setDiaries([diary, ...diaries]);
     }
     if (isEditMode) {
@@ -122,7 +114,7 @@ function Account({ eventsData, onEventFullDescriptionClick, handlers }) {
   };
 
   return (
-    <BasePage handlers={handlers}>
+    <BasePage>
       <Helmet>
         <title>Личный кабинет</title>
         <meta name="description" content="Личный кабинет наставника" />
@@ -149,7 +141,7 @@ function Account({ eventsData, onEventFullDescriptionClick, handlers }) {
           </ScrollableByXContainer>
         </div>
 
-        <div className="account__diaries page__section">
+        <div className="account__diaries page__section" ref={diariesRef}>
           <div className="account__diaries-container">
             <div className="account__form-container">
 
@@ -205,14 +197,12 @@ function Account({ eventsData, onEventFullDescriptionClick, handlers }) {
 
 Account.propTypes = {
   eventsData: PropTypes.arrayOf(PropTypes.object),
-  onEventFullDescriptionClick: PropTypes.func,
-  handlers: PropTypes.objectOf(PropTypes.any)
+  onEventFullDescriptionClick: PropTypes.func
 };
 
 Account.defaultProps = {
   eventsData: [],
-  onEventFullDescriptionClick: () => {},
-  handlers: {}
+  onEventFullDescriptionClick: () => {}
 };
 
 export default Account;

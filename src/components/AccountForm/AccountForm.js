@@ -3,8 +3,10 @@ import './AccountForm.scss';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { parseDate } from '../../utils/utils';
+import captions from '../../utils/rating-captions';
 import {
-  parseDate, Card, Input, Caption, Rating, Button
+  Card, Input, Caption, Rating, Button
 } from './index';
 
 function AccountForm({
@@ -36,24 +38,20 @@ function AccountForm({
     onSubmit(inputFields);
   };
 
-  const handleChangeRating = (evt) => {
-    const { target } = evt;
-    setInputValues({ ...inputValues, rate: target.value });
+  const handleChangeRating = (value) => {
+    setInputValues({ ...inputValues, rate: value });
   };
 
-  const handleChangeImage = (evt) => {
-    const { target } = evt;
-    if (target.files[0]) {
-      const imageUrl = URL.createObjectURL(target.files[0]);
+  const handleChangeImage = (file) => {
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
       setUserImage({ ...userImage, imageUrl });
     }
   };
 
   useEffect(() => {
-    if (inputValues?.rate === 'good') setCaption('Было классно');
-    if (inputValues?.rate === 'neutral') setCaption('Нормально');
-    if (inputValues?.rate === 'bad') setCaption('Что-то пошло не так');
-    if (!inputValues?.rate) setCaption('Оцените проведенное время');
+    if (inputValues?.rate) setCaption(captions[inputValues.rate]);
+    else setCaption('Оцените проведенное время');
   }, [inputValues.rate]);
 
   useEffect(() => {
@@ -92,7 +90,7 @@ function AccountForm({
               name="imageUrl"
               className="account-form__input-file"
               {...register('imageUrl')}
-              onChange={handleChangeImage}
+              onChange={(evt) => handleChangeImage(evt.target.files[0])}
             />
             <span className="account-form__pseudo-button" />
           </label>

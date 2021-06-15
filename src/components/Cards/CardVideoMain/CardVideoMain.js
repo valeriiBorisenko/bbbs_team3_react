@@ -1,6 +1,7 @@
 import './CardVideoMain.scss';
 import PropTypes from 'prop-types';
-import { formatDuration, Card, TitleH2 } from './index';
+import { formatDuration } from '../../../utils/utils';
+import { Card, TitleH2 } from './index';
 
 function CardVideoMain({
   data: {

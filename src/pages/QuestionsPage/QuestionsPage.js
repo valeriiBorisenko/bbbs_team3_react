@@ -1,6 +1,5 @@
 import './QuestionsPage.scss';
 import { useContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
 import {
@@ -22,7 +21,7 @@ import {
 } from './index';
 import Api from '../../utils/api';
 
-function QuestionsPage({ handlers }) {
+function QuestionsPage() {
   useSmoothScrollOnWindow({ top: 0 });
 
   const currentUser = useContext(CurrentUserContext);
@@ -118,7 +117,7 @@ function QuestionsPage({ handlers }) {
   }, []);
 
   return (
-    <BasePage handlers={handlers}>
+    <BasePage>
       <Helmet>
         <title>Ответы на вопросы</title>
         <meta name="description" content="Страница с ответами на основные вопросы" />
@@ -180,13 +179,5 @@ function QuestionsPage({ handlers }) {
     </BasePage>
   );
 }
-
-QuestionsPage.propTypes = {
-  handlers: PropTypes.objectOf(PropTypes.any)
-};
-
-QuestionsPage.defaultProps = {
-  handlers: {}
-};
 
 export default QuestionsPage;

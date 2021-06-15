@@ -1,4 +1,3 @@
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import BasePage from '../../layout/BasePage';
 import AccountEventCard from '../../components/Cards/AccountEventCard/AccountEventCard';
 import ScrollableByXContainer from '../../components/utils/ScrollableByXContainer/ScrollableByXContainer';
@@ -8,7 +7,6 @@ import AccountDiary from '../../components/AccountDiary/AccountDiary';
 import PopupDeleteDiary from '../../components/Popups/PopupDeleteDiary/PopupDeleteDiary';
 
 export {
-  useSmoothScrollOnWindow,
   BasePage,
   AccountEventCard,
   ScrollableByXContainer,
