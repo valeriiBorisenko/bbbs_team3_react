@@ -7,7 +7,7 @@ import {
   useSmoothScrollOnWindow,
   repeatSchema,
   COLORS,
-  NO_CATEGORIES,
+  ALL_CATEGORIES,
   BasePage,
   TitleH1,
   CardPlace,
@@ -47,7 +47,7 @@ function WhereToGo({ openPopupCities }) {
   const changeCategory = (inputName, isChecked) => {
     changeCheckboxTagState(setCategories, { inputName, isChecked });
 
-    if (inputName === NO_CATEGORIES) {
+    if (inputName === ALL_CATEGORIES) {
       setActiveCategories(new Set());
       setIsFiltersUsed(true);
       return;
@@ -107,7 +107,7 @@ function WhereToGo({ openPopupCities }) {
         setFilteredPlaces(filterByAge);
       }
 
-      selectOneTag(setCategories, NO_CATEGORIES);
+      selectOneTag(setCategories, ALL_CATEGORIES);
       return;
     }
 
@@ -126,7 +126,7 @@ function WhereToGo({ openPopupCities }) {
         setFilteredPlaces(filterByCategory);
       }
 
-      deselectOneTag(setCategories, NO_CATEGORIES);
+      deselectOneTag(setCategories, ALL_CATEGORIES);
     }
   };
 
@@ -146,7 +146,7 @@ function WhereToGo({ openPopupCities }) {
         const set = new Set(categoriesArr);
         const uniqueCategories = Array.from(set).map((item) => ({ filter: item, isActive: false }));
         setCategories([
-          { filter: NO_CATEGORIES, isActive: true },
+          { filter: ALL_CATEGORIES, isActive: true },
           ...uniqueCategories
         ]);
       })

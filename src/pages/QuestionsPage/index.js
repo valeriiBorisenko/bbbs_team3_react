@@ -1,4 +1,4 @@
-import { NO_CATEGORIES } from '../WhereToGo';
+import { ALL_CATEGORIES } from '../WhereToGo';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { questionForm } from '../../utils/utils';
@@ -15,7 +15,7 @@ import Loader from '../../components/utils/Loader/Loader';
 
 export {
   CurrentUserContext,
-  NO_CATEGORIES,
+  ALL_CATEGORIES,
   useSmoothScrollOnWindow,
   questionForm,
   renderFilterTags,

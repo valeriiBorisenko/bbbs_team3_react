@@ -31,4 +31,4 @@ export const FIGURES = [
   'square', 'circle', 'arch', 'circle', 'arch', 'square', 'arch', 'square', 'circle'
 ];
 
-export const NO_CATEGORIES = 'Все';
+export const ALL_CATEGORIES = 'Все';

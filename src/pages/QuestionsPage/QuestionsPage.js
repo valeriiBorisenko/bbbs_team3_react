@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
 import {
   CurrentUserContext,
-  NO_CATEGORIES,
+  ALL_CATEGORIES,
   useSmoothScrollOnWindow,
   questionForm,
   renderFilterTags,
@@ -54,7 +54,7 @@ function QuestionsPage({ handlers }) {
   const changeCategory = (inputName, isChecked) => {
     changeCheckboxTagState(setCategories, { inputName, isChecked });
 
-    if (inputName === NO_CATEGORIES) {
+    if (inputName === ALL_CATEGORIES) {
       setActiveCategories(new Set());
       setIsFiltersUsed(true);
       return;
@@ -81,7 +81,7 @@ function QuestionsPage({ handlers }) {
   const handleFiltration = () => {
     if (activeCategories.size === 0) {
       setFilteredQuestions(questionsData);
-      selectOneTag(setCategories, NO_CATEGORIES);
+      selectOneTag(setCategories, ALL_CATEGORIES);
       return;
     }
 
@@ -91,7 +91,7 @@ function QuestionsPage({ handlers }) {
         .filter((question) => question.tags.some((el) => activeCategories.has(el.name)));
       setFilteredQuestions(filterByCategory);
     }
-    deselectOneTag(setCategories, NO_CATEGORIES);
+    deselectOneTag(setCategories, ALL_CATEGORIES);
   };
 
   useEffect(() => {
@@ -110,7 +110,7 @@ function QuestionsPage({ handlers }) {
         const newTags = new Set(tags);
         const uniqueTags = Array.from(newTags).map((item) => ({ filter: item, isActive: false }));
         setCategories([
-          { filter: NO_CATEGORIES, isActive: true },
+          { filter: ALL_CATEGORIES, isActive: true },
           ...uniqueTags
         ]);
       })

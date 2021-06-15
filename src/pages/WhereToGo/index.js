@@ -1,7 +1,7 @@
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import { repeatSchema } from '../../utils/utils';
-import { COLORS, NO_CATEGORIES } from '../../config/constants';
+import { COLORS, ALL_CATEGORIES } from '../../config/constants';
 import BasePage from '../../layout/BasePage';
 import TitleH1 from '../../components/utils/TitleH1/TitleH1';
 import CardPlace from '../../components/Cards/CardPlace/CardPlace';
@@ -15,7 +15,7 @@ export {
   useSmoothScrollOnWindow,
   repeatSchema,
   COLORS,
-  NO_CATEGORIES,
+  ALL_CATEGORIES,
   BasePage,
   TitleH1,
   CardPlace,
