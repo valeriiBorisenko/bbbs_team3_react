@@ -48,9 +48,9 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
     });
   }, []);
 
-  const diariesRef = useRef(null);
+  const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
-    diariesRef.current.scrollIntoView({ behavior: 'smooth' });
+    scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleOpenForm = (data) => {
@@ -141,7 +141,8 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
           </ScrollableByXContainer>
         </div>
 
-        <div className="account__diaries page__section" ref={diariesRef}>
+        <div className="account__diaries page__section">
+          <span className="account__scroll-anchor" ref={scrollAnchorRef} />
           <div className="account__diaries-container">
             <div className="account__form-container">
 

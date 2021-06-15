@@ -30,7 +30,16 @@
 }
 
 .account__diaries {
+  position: relative;
   padding-top: 50px;
+}
+
+.account__scroll-anchor {
+  position: absolute;
+  top: -55px;
+  left: 0;
+  width: 1px;
+  height: 1px;
 }
 
 .account__diaries-container {
@@ -86,6 +95,12 @@
     pointer-events: none;
     margin: 0;
     transition: .3s ease;
+  }
+}
+
+@include atDesktop1380 {
+  .account__scroll-anchor {
+    top: 0;
   }
 }
 
