@@ -7,7 +7,11 @@ import TitleH1 from '../../components/utils/TitleH1/TitleH1';
 import CardPlace from '../../components/Cards/CardPlace/CardPlace';
 import WhereToGoPreview from '../../components/WhereToGoPreview/WhereToGoPreview';
 import {
-  renderFilterTags, changeCheckboxTagState, changeRadioTagState, selectOneTag, deselectOneTag
+  renderFilterTags,
+  changeCheckboxTagState,
+  changeRadioTagState,
+  selectOneTag,
+  deselectOneTag
 } from '../../utils/filter-tags';
 
 export {

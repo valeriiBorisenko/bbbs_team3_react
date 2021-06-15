@@ -37,8 +37,10 @@ function WhereToGo({ openPopupCities }) {
 
   // мутабельный массив для применения фильтров
   const [filteredPlaces, setFilteredPlaces] = useState([]);
+  // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
 
+  // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
   const [activeCategories, setActiveCategories] = useState(new Set());
