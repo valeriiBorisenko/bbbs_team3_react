@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import './Footer.scss';
 import {
-  footerLogoPath, NavItem, AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL
-} from './index';
+  AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL
+} from '../../config/routes';
+import { footerLogoPath, NavItem } from './index';
 
 function Footer() {
   return (

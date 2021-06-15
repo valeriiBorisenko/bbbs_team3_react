@@ -7,9 +7,10 @@ import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
-import {
-  CurrentUserContext, useClickOutside, ACCOUNT_URL, AFISHA_URL, PLACES_URL, NavBar, UserMenuButton
-} from './index';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useClickOutside } from '../../utils/custom-hooks';
+import { ACCOUNT_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
+import { NavBar, UserMenuButton } from './index';
 
 function Header({
   onUserButtonClick,

@@ -1,15 +1,19 @@
 import './AboutUs.scss';
-import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
-  useSmoothScrollOnWindow, BasePage, TitleH3, Blockquote, LogoBlue, CardFigure, CardAbout, Card
+  BasePage, TitleH3, Blockquote, LogoBlue, CardFigure, CardAbout, Card
 } from './index';
 
-function AboutUs({ handlers }) {
-  useSmoothScrollOnWindow({ top: 0 });
+function AboutUs() {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0
+    });
+  }, []);
 
   return (
-    <BasePage handlers={handlers}>
+    <BasePage>
       <Helmet>
         <title>О проекте</title>
         <meta name="description" content="Информация об организации Старшие Братья Старшие Сёстры" />
@@ -93,13 +97,5 @@ function AboutUs({ handlers }) {
     </BasePage>
   );
 }
-
-AboutUs.propTypes = {
-  handlers: PropTypes.objectOf(PropTypes.any)
-};
-
-AboutUs.defaultProps = {
-  handlers: {}
-};
 
 export default AboutUs;

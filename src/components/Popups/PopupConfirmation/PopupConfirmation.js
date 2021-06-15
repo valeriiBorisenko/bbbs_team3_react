@@ -1,8 +1,7 @@
 import './PopupConfirmation.scss';
 import PropTypes from 'prop-types';
-import {
-  formatDate, Popup, Button, TitleH2
-} from './index';
+import { formatDate } from '../../../utils/utils';
+import { Popup, Button, TitleH2 } from './index';
 
 function PopupConfirmation({
   isOpen,

@@ -23,8 +23,7 @@ import {
 function MainPage({
   onEventSignUpClick,
   onEventFullDescriptionClick,
-  dataMain,
-  handlers
+  dataMain
 }) {
   useSmoothScrollOnWindow({ top: 0 });
   const currentUser = useContext(CurrentUserContext);
@@ -38,7 +37,7 @@ function MainPage({
   }
 
   return (
-    <BasePage handlers={handlers}>
+    <BasePage>
       <Helmet>
         <title>наставники.про</title>
         <meta
@@ -142,15 +141,13 @@ function MainPage({
 MainPage.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
-  dataMain: PropTypes.objectOf(PropTypes.any),
-  handlers: PropTypes.objectOf(PropTypes.any)
+  dataMain: PropTypes.objectOf(PropTypes.any)
 };
 
 MainPage.defaultProps = {
   onEventSignUpClick: () => {},
   onEventFullDescriptionClick: () => {},
-  dataMain: {},
-  handlers: {}
+  dataMain: {}
 };
 
 export default MainPage;

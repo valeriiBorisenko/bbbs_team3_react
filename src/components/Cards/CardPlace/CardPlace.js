@@ -1,8 +1,9 @@
 import './CardPlace.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { PLACES_URL } from '../../../config/routes';
 import {
-  PLACES_URL, CardAnnotation, Rubric, TitleH2, Card, Caption
+  CardAnnotation, Rubric, TitleH2, Card, Caption
 } from './index';
 
 function CardPlace({

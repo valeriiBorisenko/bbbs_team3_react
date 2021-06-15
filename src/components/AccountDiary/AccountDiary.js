@@ -1,8 +1,11 @@
+/* eslint-disable dot-notation */
 import './AccountDiary.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { formatDate } from '../../utils/utils';
+import captions from '../../utils/rating-captions';
 import {
-  formatDate, Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button
+  Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button
 } from './index';
 
 function AccountDiary({ data, onEdit, onDelete }) {
@@ -11,13 +14,11 @@ function AccountDiary({ data, onEdit, onDelete }) {
   } = data;
 
   const eventDay = formatDate(date);
-  const [caption, setCaption] = useState('Нормально');
+  const [caption, setCaption] = useState('');
 
   useEffect(() => {
-    if (rate === 'good') setCaption('Было классно');
-    if (rate === 'neutral') setCaption('Нормально');
-    if (rate === 'bad') setCaption('Что-то пошло не так');
-  }, [data.rate]);
+    setCaption(captions[rate]);
+  }, [rate]);
 
   const handleEditButtonClick = () => {
     onEdit(data);

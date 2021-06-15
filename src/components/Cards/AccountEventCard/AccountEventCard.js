@@ -1,6 +1,7 @@
 import './AccountEventCard.scss';
 import PropTypes from 'prop-types';
-import { formatDate, Card } from './index';
+import { formatDate } from '../../../utils/utils';
+import Card from '../../utils/Card/Card';
 
 function AccountEventCard({
   data, onOpen

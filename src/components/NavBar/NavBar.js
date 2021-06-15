@@ -2,12 +2,11 @@ import './NavBar.scss';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
-  CurrentUserContext,
-  AFISHA_URL,
-  ABOUT_US_URL,
-  QUESTIONS_URL,
-  PLACES_URL,
+  AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL
+} from '../../config/routes';
+import {
   NavItem,
   NavItemWithDropdown,
   SearchButton,
