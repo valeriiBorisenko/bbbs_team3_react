@@ -7,11 +7,9 @@ import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useClickOutside } from '../../utils/custom-hooks';
-import NavBar from '../ui/NavBar/NavBar';
-import UserMenuButton from '../ui/UserMenuButton/UserMenuButton';
-import { AccountUrl, AfishaUrl, PlacesUrl } from '../../utils/routes';
+import {
+  CurrentUserContext, useClickOutside, ACCOUNT_URL, AFISHA_URL, PLACES_URL, NavBar, UserMenuButton
+} from './index';
 
 function Header({
   onUserButtonClick,
@@ -94,7 +92,7 @@ function Header({
         isMobileMenuOpen={isMobileMenuOpen}
       />
 
-      {pathname === AccountUrl && (
+      {pathname === ACCOUNT_URL && (
       <div className="header__user-info">
         <UserMenuButton
           title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
@@ -109,7 +107,7 @@ function Header({
       </div>
       )}
 
-      {(pathname === AfishaUrl || pathname === PlacesUrl) && (
+      {(pathname === AFISHA_URL || pathname === PLACES_URL) && (
       <div className="header__user-info">
         <UserMenuButton
           title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}

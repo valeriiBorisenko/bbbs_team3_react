@@ -2,11 +2,9 @@ import { useRef, useEffect } from 'react';
 import './PopupSuccessfully.scss';
 import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
-import animationSuccess from '../../../assets/animation/ill_popup_success.json';
-import Popup from '../Popup/Popup';
-import TitleH2 from '../../ui/TitleH2/TitleH2';
-import Button from '../../ui/Button/Button';
-import { formatDate } from '../../../utils/utils';
+import {
+  formatDate, animationSuccess, Popup, TitleH2, Button
+} from './index';
 
 function PopupSuccessfully({
   isOpen,

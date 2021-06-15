@@ -28,12 +28,16 @@ export const useClickOutside = (callback) => {
 // плавный скролл при монтировании компонента
 export const useSmoothScrollOnWindow = (coordinate) => {
   useEffect(() => {
-    setTimeout(() => {
-      window.scrollTo({
-        ...coordinate,
-        behavior: 'smooth'
-      });
-    }, 500);
+    window.scrollTo({
+      ...coordinate
+    });
+
+    // setTimeout(() => {
+    //   window.scrollTo({
+    //     ...coordinate,
+    //     behavior: 'smooth'
+    //   });
+    // }, 500);
   }, []);
 };
 

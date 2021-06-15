@@ -1,37 +1,16 @@
-import { months, weekdays } from './constants';
+import { months, weekdays } from '../config/constants';
 
 // форматирует секунды в часы, минуты и секунды, принимает на вход number
 export const formatDuration = (duration) => {
-  let hours = Math.floor(duration / 3600);
-  let minutes = Math.floor(duration / 60);
-  let seconds = Math.floor(duration % 60);
-
-  if (minutes >= 60) {
-    hours += 1;
-    minutes -= 60;
-  }
-
-  if (seconds >= 60) {
-    minutes += 1;
-    seconds -= 60;
-  }
-
-  if (minutes < 10) {
-    minutes = `0${minutes}`;
-  }
-
-  if (seconds < 10) {
-    seconds = `0${seconds}`;
-  }
-
-  hours = String(hours);
-  minutes = String(minutes);
-  seconds = String(seconds);
+  const hours = parseInt(duration / (60 * 60), 10);
+  const minutes = parseInt((duration / 60) % 60, 10);
+  const seconds = duration % 60;
+  const format = (value) => (value < 10 ? `0${value}` : `${value}`);
 
   return {
-    hours,
-    minutes,
-    seconds
+    hours: format(hours),
+    minutes: format(minutes),
+    seconds: format(seconds)
   };
 };
 
