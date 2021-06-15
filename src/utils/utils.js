@@ -109,3 +109,9 @@ export const questionForm = {
     sectionClass: 'question-form_invisible'
   }
 };
+
+export function changeCaseOfFirstLetter(str) {
+  if (!str) return str;
+
+  return str[0].toUpperCase() + str.slice(1);
+}
