@@ -2,8 +2,6 @@
 
 .page {
   position: relative;
-  max-width: 1920px;
-  min-width: 320px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
@@ -12,17 +10,21 @@
   min-height: 100vh;
 }
 
-.page__section {
-  margin: 0 75px;
-}
-
 .main {
+  box-sizing: border-box;
+  max-width: 1920px;
+  min-width: 320px;
+  width: 100%;
+  margin: 0 auto;
   padding-top: 150px;
   padding-bottom: 120px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+}
+
+.page__section {
+  margin: 0 75px;
 }
 
 @include atDesktop1440 {

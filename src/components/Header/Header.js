@@ -84,39 +84,41 @@ function Header({
       onClick={handleCloseMobileMenu}
       onKeyPress={handleCloseMobileMenu}
     >
-      <NavBar
-        onUserButtonClick={onUserButtonClick}
-        onBurgerButtonClick={toggleMobileMenu}
-        userCityName={userCityName}
-        onCityChangeClick={onCityChange}
-        onLogout={onLogout}
-        isMobileMenuOpen={isMobileMenuOpen}
-      />
+      <div className="header__container">
+        <NavBar
+          onUserButtonClick={onUserButtonClick}
+          onBurgerButtonClick={toggleMobileMenu}
+          userCityName={userCityName}
+          onCityChangeClick={onCityChange}
+          onLogout={onLogout}
+          isMobileMenuOpen={isMobileMenuOpen}
+        />
 
-      {pathname === ACCOUNT_URL && (
-      <div className="header__user-info">
-        <UserMenuButton
-          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
-          sectionClass="mobile-link"
-          handleClick={onCityChange}
-        />
-        <UserMenuButton
-          title="Выйти"
-          sectionClass="mobile-link"
-          handleClick={onLogout}
-        />
-      </div>
-      )}
+        {pathname === ACCOUNT_URL && (
+        <div className="header__user-info">
+          <UserMenuButton
+            title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+            sectionClass="mobile-link"
+            handleClick={onCityChange}
+          />
+          <UserMenuButton
+            title="Выйти"
+            sectionClass="mobile-link"
+            handleClick={onLogout}
+          />
+        </div>
+        )}
 
-      {(pathname === AFISHA_URL || pathname === PLACES_URL) && (
-      <div className="header__user-info">
-        <UserMenuButton
-          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
-          handleClick={onCityChange}
-          sectionClass="mobile-link"
-        />
+        {(pathname === AFISHA_URL || pathname === PLACES_URL) && (
+        <div className="header__user-info">
+          <UserMenuButton
+            title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+            handleClick={onCityChange}
+            sectionClass="mobile-link"
+          />
+        </div>
+        )}
       </div>
-      )}
     </header>
   );
 }
