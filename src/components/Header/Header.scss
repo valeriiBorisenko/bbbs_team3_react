@@ -19,6 +19,12 @@
   }
 }
 
+.header__container {
+  max-width: 1920px;
+  min-width: 320px;
+  margin: 0 auto;
+}
+
 .header__user-info {
   display: flex;
   justify-content: flex-end;
