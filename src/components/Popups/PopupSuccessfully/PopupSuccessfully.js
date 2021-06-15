@@ -33,6 +33,7 @@ function PopupSuccessfully({
       typeContainer="calendar"
       isOpen={isOpen}
       onClose={onClose}
+      sectionClass="popup__container_success"
     >
       <div ref={animationContainer} className="popup__animation-success" />
       <p className="section-title popup__title_type_calendar">Вы записаны на мероприятие</p>

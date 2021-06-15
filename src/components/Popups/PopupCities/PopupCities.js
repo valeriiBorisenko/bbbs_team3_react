@@ -24,42 +24,43 @@ function PopupCities({
       typeContainer="cities"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}
       withoutCloseButton
     >
-      <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />
-      <div className="cities__container">
-        <ul className="cities__list cities__list_type_primary">
-          {cities
-            .filter((item) => item.isPrimary === true)
-            .map((item) => (
-              <li className="cities__list-item" key={item.id}>
-                <button
-                  className="cities__city"
-                  type="submit"
-                  value={item.id}
-                >
-                  {item.name}
-                </button>
-              </li>
-            ))}
-        </ul>
-        <ul className="cities__list">
-          {cities
-            .filter((item) => item.isPrimary !== true)
-            .map((item) => (
-              <li className="cities__list-item" key={item.id}>
-                <button
-                  className="cities__city"
-                  type="submit"
-                  value={item.id}
-                >
-                  {item.name}
-                </button>
-              </li>
-            ))}
-        </ul>
-      </div>
+      <form className="popup__form" onSubmit={handleSubmit}>
+        <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />
+        <div className="cities__container">
+          <ul className="cities__list cities__list_type_primary">
+            {cities
+              .filter((item) => item.isPrimary === true)
+              .map((item) => (
+                <li className="cities__list-item" key={item.id}>
+                  <button
+                    className="cities__city"
+                    type="submit"
+                    value={item.id}
+                  >
+                    {item.name}
+                  </button>
+                </li>
+              ))}
+          </ul>
+          <ul className="cities__list">
+            {cities
+              .filter((item) => item.isPrimary !== true)
+              .map((item) => (
+                <li className="cities__list-item" key={item.id}>
+                  <button
+                    className="cities__city"
+                    type="submit"
+                    value={item.id}
+                  >
+                    {item.name}
+                  </button>
+                </li>
+              ))}
+          </ul>
+        </div>
+      </form>
     </Popup>
     )
   );

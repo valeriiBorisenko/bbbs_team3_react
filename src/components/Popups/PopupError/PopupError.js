@@ -1,25 +1,29 @@
 import './PopupError.scss';
 import PropTypes from 'prop-types';
-import { Button, TitleH2 } from './index';
+import { Popup, Button, TitleH2 } from './index';
 
 function PopupError({ isOpen, onClose }) {
   return (
-    <div className={`popup popup_type_error ${isOpen ? 'popup_opened' : ''} `}>
-      <div className="popup__container popup__container_type_calendar popup__container_error">
-        <TitleH2
-          sectionClass="popup__title_type_calendar popup__title_type_error"
-          title="Что-то пошло не так, попробуйте записаться снова"
+    <Popup
+      type="error"
+      typeContainer="calendar"
+      sectionClass="popup__container_error"
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <TitleH2
+        sectionClass="popup__title_type_calendar popup__title_type_error"
+        title="Что-то пошло не так, попробуйте записаться снова"
+      />
+      <div className="popup__buttons_type_calendar">
+        <Button
+          color="black"
+          title="Вернуться к мероприятию"
+          sectionClass="popup__button_type_error"
+          onClick={onClose}
         />
-        <div className="popup__buttons_type_calendar">
-          <Button
-            color="black"
-            title="Вернуться к мероприятию"
-            sectionClass="popup__button_type_error"
-            onClick={onClose}
-          />
-        </div>
       </div>
-    </div>
+    </Popup>
   );
 }
 
