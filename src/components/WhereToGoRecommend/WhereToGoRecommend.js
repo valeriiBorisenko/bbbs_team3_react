@@ -55,7 +55,7 @@ function WhereToGoRecommend({ sectionClass }) {
           <button
             className="recommendation__text-link"
             type="button"
-            onClick={toggleForm}
+            onClick={() => setIsFormOpen(true)}
           >
             заполните&nbsp;форму
           </button>

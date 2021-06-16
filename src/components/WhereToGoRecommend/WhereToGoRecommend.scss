@@ -12,7 +12,7 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    padding: 30px 30px;
+    padding: 30px 30px 50px;
     border-radius: 30px;
     max-width: 770px;
     margin: 0 auto;
@@ -84,7 +84,12 @@
     }
 
     &__container {
-      padding-top: 25px;
+      padding-top: 15px;
+      padding-bottom: 30px;
+    }
+
+    &__close-button {
+      margin-top: 10px;
     }
 
     &__text {
@@ -99,6 +104,10 @@
   .recommendation {
     &_place_page {
       margin: 0 15px;
+    }
+
+    &__close-button {
+      margin-right: 15px;
     }
 
     &__container {
