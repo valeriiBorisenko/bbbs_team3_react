@@ -42,8 +42,8 @@ function Calendar({
   const [filteredCardData, setFilteredCardData] = useState([]);
 
   // хэндлер клика по фильтру МЕСЯЦ
-  const handleFilterClick = (inputName, isChecked) => {
-    changeRadioTagState(setFilters, { inputName, isChecked });
+  const handleFilterClick = (inputValue, isChecked) => {
+    changeRadioTagState(setFilters, { inputValue, isChecked });
     setIsFiltersUsed(true);
   };
 
