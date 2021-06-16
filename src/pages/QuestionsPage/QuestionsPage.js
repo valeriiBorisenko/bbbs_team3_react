@@ -51,7 +51,7 @@ function QuestionsPage() {
     }, 10000);
   };
 
-  // фильтрация
+  // хэндлер клика по фильтру
   const changeCategory = (inputName, isChecked) => {
     changeCheckboxTagState(setCategories, { inputName, isChecked });
 
@@ -79,6 +79,7 @@ function QuestionsPage() {
     });
   };
 
+  // фильтрация
   const handleFiltration = () => {
     if (activeCategories.size === 0) {
       setFilteredQuestions(questionsData);
@@ -95,6 +96,7 @@ function QuestionsPage() {
     deselectOneTag(setCategories, ALL_CATEGORIES);
   };
 
+  // запуск фильтрации
   useEffect(() => {
     handleFiltration();
     setIsFiltersUsed(false);
@@ -109,9 +111,10 @@ function QuestionsPage() {
         const tagsArr = result.map((data) => data.tags);
         const tags = tagsArr.flat().map((data) => data.name);
         const newTags = new Set(tags);
-        const uniqueTags = Array.from(newTags).map((item) => ({ filter: item, isActive: false }));
+        const uniqueTags = Array.from(newTags)
+          .map((item) => ({ filter: item, name: item, isActive: false }));
         setCategories([
-          { filter: ALL_CATEGORIES, isActive: true },
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
           ...uniqueTags
         ]);
       })
