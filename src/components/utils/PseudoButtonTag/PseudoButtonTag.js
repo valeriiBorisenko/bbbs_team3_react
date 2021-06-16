@@ -5,15 +5,17 @@ function PseudoButtonTag({
   type,
   name,
   value,
-  filter,
+  // filter,
   title,
   isActive,
   onClick
 }) {
   const id = `filter-button-${value}`;
+
   function handleClick(event) {
-    onClick(filter, value, event.target.checked);
+    onClick(value, event.target.checked);
   }
+
   return (
     <label
       className="pseudo-button-label"
@@ -41,8 +43,8 @@ function PseudoButtonTag({
 PseudoButtonTag.propTypes = {
   type: PropTypes.string,
   name: PropTypes.string,
-  value: PropTypes.string,
-  filter: PropTypes.oneOfType(PropTypes.string, PropTypes.object),
+  value: PropTypes.oneOfType(PropTypes.string, PropTypes.object),
+  // filter: PropTypes.oneOfType(PropTypes.string, PropTypes.object),
   title: PropTypes.string,
   isActive: PropTypes.bool,
   onClick: PropTypes.func
@@ -52,7 +54,7 @@ PseudoButtonTag.defaultProps = {
   type: 'radio',
   name: '',
   value: '',
-  filter: '',
+  // filter: '',
   title: '',
   isActive: false,
   onClick: () => {}
