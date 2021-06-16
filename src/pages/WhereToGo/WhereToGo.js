@@ -21,10 +21,10 @@ import {
 import Api from '../../utils/api';
 
 const ageFilters = [
-  { filter: '8-10 лет', isActive: false },
-  { filter: '11-13 лет', isActive: false },
-  { filter: '14-18 лет', isActive: false },
-  { filter: '18+ лет', isActive: false }
+  { filter: '8-10 лет', name: '8-10 лет', isActive: false },
+  { filter: '11-13 лет', name: '11-13 лет', isActive: false },
+  { filter: '14-18 лет', name: '14-18 лет', isActive: false },
+  { filter: '18+ лет', name: '18+ лет', isActive: false }
 ];
 
 function WhereToGo({ openPopupCities }) {
@@ -45,7 +45,7 @@ function WhereToGo({ openPopupCities }) {
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
   const [activeCategories, setActiveCategories] = useState(new Set());
 
-  //! фильтры КАТЕГОРИЯ
+  // хэндлер клика по фильтру КАТЕГОРИЯ
   const changeCategory = (inputName, isChecked) => {
     changeCheckboxTagState(setCategories, { inputName, isChecked });
 
@@ -73,7 +73,7 @@ function WhereToGo({ openPopupCities }) {
     });
   };
 
-  //! фильтры ВОЗРАСТ
+  // хэндлер клика по фильтру ВОЗРАСТ
   const changeAge = (inputName, isChecked) => {
     changeRadioTagState(setAges, { inputName, isChecked });
     setIsFiltersUsed(true);
@@ -95,6 +95,7 @@ function WhereToGo({ openPopupCities }) {
     }
   };
 
+  // функция-фильтратор
   const handleFiltration = () => {
     const activeAgeFilter = ages.find((filter) => filter.isActive);
 
@@ -132,6 +133,7 @@ function WhereToGo({ openPopupCities }) {
     }
   };
 
+  // запуск фильтрации
   useEffect(() => {
     handleFiltration();
     setIsFiltersUsed(false);
@@ -146,15 +148,17 @@ function WhereToGo({ openPopupCities }) {
 
         const categoriesArr = result.map((place) => place.category);
         const set = new Set(categoriesArr);
-        const uniqueCategories = Array.from(set).map((item) => ({ filter: item, isActive: false }));
+        const uniqueCategories = Array.from(set)
+          .map((item) => ({ filter: item, name: item, isActive: false }));
         setCategories([
-          { filter: ALL_CATEGORIES, isActive: true },
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
           ...uniqueCategories
         ]);
       })
       .catch((error) => console.log(error));
   }, []);
 
+  // открытие попапа "города" для незарегистрированного
   useEffect(() => {
     if (!currentUser) {
       openPopupCities();
