@@ -29,6 +29,7 @@ function WhereToGoRecommend({ sectionClass }) {
   };
 
   const handleFormSubmit = (data) => {
+    console.log({ data });
     toggleForm();
   };
 

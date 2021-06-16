@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form';
 import { Input, Button, ButtonRound } from './index';
 
 function FormRecommendation({ isOpen, onSubmit }) {
-  // const [userImage, setUserImage] = useState(null);
   const textAreaPlaceholder = window.innerWidth < 576
     ? 'Комментарий*'
     : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
@@ -18,28 +17,15 @@ function FormRecommendation({ isOpen, onSubmit }) {
   const {
     register, handleSubmit, formState: { errors }, reset
   } = useForm();
-  console.log(errors);
 
   const onFormSubmit = (values) => {
-    const inputFields = Object.assign(values);
-    // inputFields = {
-    //   ...inputFields,
-    //   image: URL.createObjectURL(inputFields.image[0])
-    // };
-    // if (userImage) {
-    //   inputFields = {
-    //     ...inputFields,
-    //     imageUrl: userImage.imageUrl
-    //   };
-    // }
-    console.log(inputFields);
+    let inputFields = Object.assign(values);
+    inputFields = {
+      ...inputFields,
+      imageUrl: URL.createObjectURL(inputFields.imageUrl[0])
+    };
     onSubmit(inputFields);
   };
-
-  // const handleImageUpload = (file) => {
-  //   const imageUrl = URL.createObjectURL(file);
-  //   setUserImage({ ...userImage, imageUrl });
-  // };
 
   useEffect(() => {
     reset({
@@ -155,14 +141,13 @@ function FormRecommendation({ isOpen, onSubmit }) {
             type="file"
             name="imageUrl"
             className="form-recom__input-radio"
-            {...register('imageUrl')}
-            // onChange={(evt) => handleImageUpload(evt.target.files[0])}
+            {...register('imageUrl', { required: 'Добавить фото' })}
           />
           <ButtonRound
             sectionClass={`form-recom__add-photo ${errors?.imageUrl ? 'form-recom__add-photo_error' : ''}`}
             color={`${errors?.imageUrl ? 'error' : 'lightGray'}`}
             isSmall
-            isDisabled
+            isSpan
           />
         </label>
 

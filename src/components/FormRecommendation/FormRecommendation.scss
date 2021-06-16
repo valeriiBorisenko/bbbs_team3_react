@@ -147,8 +147,9 @@
 }
 
 .form-recom__add-photo {
-  pointer-events: none;
-  
+  display: flex;
+  align-items: center;
+
   &::after {
     content: 'Добавить фото';
     white-space: nowrap;
@@ -159,6 +160,7 @@
     line-height: 1.27;
     letter-spacing: 0.2px;
     margin-left: 68px;
+    pointer-events: none;
   }
 
   &_error::after {

@@ -7,6 +7,7 @@ function ButtonRound({
   color,
   isSmall,
   isDisabled,
+  isSpan,
   onClick,
   isClick
 }) {
@@ -17,6 +18,14 @@ function ButtonRound({
     sectionClass,
     isClick ? 'button-round_active' : ''
   ].join(' ').trim();
+
+  if (isSpan) {
+    return (
+      <span
+        className={classNames}
+      />
+    );
+  }
 
   return (
     <button
@@ -35,6 +44,7 @@ ButtonRound.propTypes = {
   color: PropTypes.string,
   isSmall: PropTypes.bool,
   isDisabled: PropTypes.bool,
+  isSpan: PropTypes.bool,
   onClick: PropTypes.func,
   isClick: PropTypes.bool
 };
@@ -45,6 +55,7 @@ ButtonRound.defaultProps = {
   color: '',
   isSmall: false,
   isDisabled: false,
+  isSpan: false,
   onClick: undefined,
   isClick: false
 };
