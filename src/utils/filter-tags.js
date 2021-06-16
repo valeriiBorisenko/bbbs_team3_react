@@ -6,8 +6,7 @@ export const renderFilterTags = (filterList, type, handleClick) => filterList.ma
     <PseudoButtonTag
       type={type}
       name="categories"
-      value={item.name}
-      filter={item.filter}
+      value={item.filter}
       title={item.name}
       isActive={item.isActive}
       onClick={handleClick}
@@ -25,12 +24,8 @@ export const changeCheckboxTagState = (setState, { inputName, isChecked }) => {
 };
 
 export const changeRadioTagState = (setState, { inputName, isChecked }) => {
-  console.group('changeRadioTagState');
-  console.log('inputName', inputName);
-  console.log('isChecked', isChecked);
-  console.groupEnd();
   setState((stateFilters) => stateFilters.map((filter) => {
-    if (filter.name === inputName) {
+    if (filter.filter === inputName) {
       filter.isActive = isChecked;
     } else {
       filter.isActive = false;
