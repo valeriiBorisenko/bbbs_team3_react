@@ -1,30 +1,6 @@
 @import './styles/utils.scss';
 
-.page-not-found {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-// .page-not-found__picture {
-//   display: block;
-//   margin-bottom: 36px;
-//   height: auto;
-//   max-width: 100%;
-// }
-
-.page-not-found__animation {
-  max-width: 720px;
-  max-height: 220px;
-  width: 100%;
-  margin-bottom: 36px;
-}
-
-.page-not-found__title {
+.page-not-found-title {
   margin: 0;
   margin-bottom: 30px;
 
@@ -38,38 +14,14 @@
   color: #000000;
 }
 
-.page-not-found__subtitle {
-  max-width: 720px;
-  margin-bottom: 50px;
-  text-align: center;
-}
-
-.page-not-found__link {
-  text-decoration: none;
-}
-
-@include atDesktop1024 {
-  .page-not-found__subtitle {
-    max-width: 590px;
-  }
-}
-
 @include atTabletL {
-  .page-not-found__title {
+  .page-not-found-title {
     font-size: 60px;
   }
 }
 
 @include atMobile {
-  .page-not-found__animation {
-    margin-bottom: 20px;
-  }
-
-  .page-not-found__title {
+  .page-not-found-title {
     margin-bottom: 10px;
-  }
-
-  .page-not-found__subtitle {
-    margin-bottom: 40px;
   }
 }
