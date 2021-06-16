@@ -1,9 +1,10 @@
-import './WhereToGoPreview.scss';
+/* eslint-disable no-unused-vars */
+import './WhereToGoRecommend.scss';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import FormRecomendation from '../FormRecomendation/FormRecomendation';
+import FormRecommendation from '../FormRecommendation/FormRecommendation';
 
-function WhereToGoPreview({ sectionClass }) {
+function WhereToGoRecommend({ sectionClass }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const scrollToForm = () => {
@@ -28,7 +29,6 @@ function WhereToGoPreview({ sectionClass }) {
   };
 
   const handleFormSubmit = (data) => {
-    console.log({ data });
     toggleForm();
   };
 
@@ -41,6 +41,14 @@ function WhereToGoPreview({ sectionClass }) {
   return (
     <section className={classNames}>
       <div className="recommendation__container">
+        {isFormOpen && (
+          <button
+            className="recommendation__close-button"
+            type="button"
+            aria-label="закрыть попап"
+            onClick={toggleForm}
+          />
+        )}
         <p className="section-title recommendation__text">
           Если вы были в интересном месте и хотите порекомендовать его другим&nbsp;наставникам
           –&nbsp;
@@ -54,19 +62,19 @@ function WhereToGoPreview({ sectionClass }) {
           , и мы добавим вашу&nbsp;рекомендацию.
         </p>
         {/* вызов формы */}
-        <FormRecomendation isOpen={isFormOpen} onSubmit={handleFormSubmit} />
+        <FormRecommendation isOpen={isFormOpen} onSubmit={handleFormSubmit} />
       </div>
 
     </section>
   );
 }
 
-WhereToGoPreview.propTypes = {
+WhereToGoRecommend.propTypes = {
   sectionClass: PropTypes.string
 };
 
-WhereToGoPreview.defaultProps = {
+WhereToGoRecommend.defaultProps = {
   sectionClass: ''
 };
 
-export default WhereToGoPreview;
+export default WhereToGoRecommend;

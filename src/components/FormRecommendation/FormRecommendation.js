@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import './FormRecomendation.scss';
+import './FormRecommendation.scss';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Input, Button } from './index';
 
-function FormRecomendation({ isOpen, onSubmit }) {
+function FormRecommendation({ isOpen, onSubmit }) {
   const textAreaPlaceholder = window.innerWidth < 576
     ? 'Комментарий*'
     : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
@@ -159,14 +159,14 @@ function FormRecomendation({ isOpen, onSubmit }) {
   );
 }
 
-FormRecomendation.propTypes = {
+FormRecommendation.propTypes = {
   isOpen: PropTypes.bool,
   onSubmit: PropTypes.func
 };
 
-FormRecomendation.defaultProps = {
+FormRecommendation.defaultProps = {
   isOpen: false,
   onSubmit: () => {}
 };
 
-export default FormRecomendation;
+export default FormRecommendation;
