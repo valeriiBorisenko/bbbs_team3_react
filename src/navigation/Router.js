@@ -13,7 +13,12 @@ import {
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import {
-  MAIN_PAGE_URL, ABOUT_US_URL, AFISHA_URL, QUESTIONS_URL, ACCOUNT_URL, PLACES_URL
+  MAIN_PAGE_URL,
+  ABOUT_US_URL,
+  AFISHA_URL,
+  QUESTIONS_URL,
+  ACCOUNT_URL,
+  PLACES_URL
 } from '../config/routes';
 
 function Router({

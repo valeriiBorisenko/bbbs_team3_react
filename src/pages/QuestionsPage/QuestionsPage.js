@@ -31,8 +31,10 @@ function QuestionsPage() {
 
   // мутабельный массив для применения фильтров
   const [filteredQuestions, setFilteredQuestions] = useState([]);
+  // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
 
+  // категории фильтрации
   const [categories, setCategories] = useState([]); // состояние кнопок фильтров
   const [activeCategories, setActiveCategories] = useState(new Set()); // сами фильтры
 
@@ -49,20 +51,20 @@ function QuestionsPage() {
     }, 10000);
   };
 
-  // фильтрация
-  const changeCategory = (inputName, isChecked) => {
-    changeCheckboxTagState(setCategories, { inputName, isChecked });
+  // хэндлер клика по фильтру
+  const changeCategory = (inputValue, isChecked) => {
+    changeCheckboxTagState(setCategories, { inputValue, isChecked });
 
-    if (inputName === ALL_CATEGORIES) {
+    if (inputValue === ALL_CATEGORIES) {
       setActiveCategories(new Set());
       setIsFiltersUsed(true);
       return;
     }
 
     // если такой фильтр уже есть
-    if (activeCategories.has(inputName)) {
+    if (activeCategories.has(inputValue)) {
       setActiveCategories((set) => {
-        set.delete(inputName);
+        set.delete(inputValue);
         return set;
       });
       setIsFiltersUsed(true);
@@ -72,11 +74,12 @@ function QuestionsPage() {
     // новый фильтр
     setIsFiltersUsed(true);
     setActiveCategories((set) => {
-      set.add(inputName);
+      set.add(inputValue);
       return set;
     });
   };
 
+  // фильтрация
   const handleFiltration = () => {
     if (activeCategories.size === 0) {
       setFilteredQuestions(questionsData);
@@ -93,6 +96,7 @@ function QuestionsPage() {
     deselectOneTag(setCategories, ALL_CATEGORIES);
   };
 
+  // запуск фильтрации
   useEffect(() => {
     handleFiltration();
     setIsFiltersUsed(false);
@@ -107,9 +111,10 @@ function QuestionsPage() {
         const tagsArr = result.map((data) => data.tags);
         const tags = tagsArr.flat().map((data) => data.name);
         const newTags = new Set(tags);
-        const uniqueTags = Array.from(newTags).map((item) => ({ filter: item, isActive: false }));
+        const uniqueTags = Array.from(newTags)
+          .map((item) => ({ filter: item, name: item, isActive: false }));
         setCategories([
-          { filter: ALL_CATEGORIES, isActive: true },
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
           ...uniqueTags
         ]);
       })

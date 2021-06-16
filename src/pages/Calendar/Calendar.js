@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
@@ -9,123 +10,113 @@ import {
   BasePage,
   TitleH1,
   CardCalendar,
-  PseudoButtonTag,
-  Loader
+  Loader,
+  renderFilterTags,
+  changeRadioTagState
 } from './index';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
 
 function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
   dataCalendar,
-  onOpenLoginPopup,
-  handlers
+  onOpenLoginPopup
 }) {
   useSmoothScrollOnWindow({ top: 0 });
-
-  function eventSignUpHandler(cardData) {
-    onEventSignUpClick(cardData, cardData.booked);
-  }
-
   const currentUser = useContext(CurrentUserContext);
 
-  // работа с фильтр-кнопками, их стейты
+  const eventSignUpHandler = (cardData) => {
+    onEventSignUpClick(cardData, cardData.booked);
+  };
+
+  // весь список доступных фильтров
+  const [filters, setFilters] = useState([]);
+
+  // флаг использования фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+
+  // мутабельный массив для применения фильтров (отсортированный)
+  const [sortedArray, setSortedArray] = useState([]);
+
+  // массив отфильтрованных ивентов с даты, не мутировать!
   const [filteredCardData, setFilteredCardData] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
-  const [filterSettings, setFilterSettings] = useState(null);
 
-  // создание кнопок с месяцами
-  //! ШАГ 1 = сортируем все ивенты по хронологии
-  const arrayOfSortedEvents = dataCalendar.sort((a, b) => {
-    const date1 = new Date(a.startAt);
-    const date2 = new Date(b.startAt);
-    return date1 - date2;
-  });
+  // хэндлер клика по фильтру МЕСЯЦ
+  const handleFilterClick = (inputValue, isChecked) => {
+    changeRadioTagState(setFilters, { inputValue, isChecked });
+    setIsFiltersUsed(true);
+  };
 
-  // серия функций фильтрации ивентов под нажатый фильтр
+  //! первый useEffect, установка отсортированного массива
   useEffect(() => {
-    if (filterSettings) {
-      const { year, monthNumber } = filterSettings;
-      const min = new Date(year, monthNumber);
-      const max = new Date(year, monthNumber + 1);
-      const filteredArrayOfEvents = arrayOfSortedEvents.filter((eventItem) => {
-        const date = new Date(eventItem.startAt);
+    const arrayOfSortedEvent = [...dataCalendar].sort((a, b) => {
+      const date1 = new Date(a.startAt);
+      const date2 = new Date(b.startAt);
+      return date1 - date2;
+    });
+    setFilteredCardData(arrayOfSortedEvent);
+    setSortedArray(arrayOfSortedEvent);
+  }, [dataCalendar]);
 
-        return date >= min && date <= max;
-      });
-      setFilteredCardData(filteredArrayOfEvents);
-    }
+  //! второй useEffect, сбор списка фильтров
+  useEffect(() => {
+    //* ШАГ 2 из массива отсоритрованных ивентов делаем массив объектов {месяц, год} на каждый ивент
+    const arrayOfDatesWithEvents = sortedArray.map((someEvent) => {
+      // взяли дату ивента, переделали в дату-объект
+      const dateObj = new Date(someEvent.startAt);
+      const month = dateObj.getMonth();
+      const year = dateObj.getFullYear();
+      // в массив вернулся НОМЕР месяца и ГОД
+      return { month, year };
+    });
 
-    setIsFiltersUsed(isChecked);
-  }, [isChecked, arrayOfSortedEvents, filterSettings]);
+    //* ШАГ 3 выкидываем из массива arrayOfDatesWithEvent повторы
+    const arrayOfUniqueDates = arrayOfDatesWithEvents.filter((item, index, self) => {
+      const something = self
+        .findIndex((current) => (item.month === current.month && item.year === current.year));
+      return something === index;
+    });
 
-  function handleCheckboxChange(evt, filters) {
-    const { target } = evt;
-    setIsChecked(target.checked);
-    setFilterSettings(filters);
-  }
+    //* ШАГ 4 хронологические, уникальные фильтры, готовые к рендерингу в тагс-кнопки
+    const finallArrayOfTagsData = arrayOfUniqueDates.map((filter) => {
+      const name = changeCaseOfFirstLetter(months[filter.month]);
+      return {
+        filter: JSON.stringify(filter),
+        name,
+        isActive: false
+      };
+    });
 
-  function handleCheckboxClick(evt, value) {
-    const { target } = evt;
-    const values = value.split('-');
-    if (filterSettings) {
-      if (target.checked
-          && Number(values[0]) === filterSettings.monthNumber
-          && Number(values[1]) === filterSettings.year
-      ) {
-        target.checked = false;
-        setIsChecked(target.checked);
-        setFilterSettings(null);
+    setFilters(finallArrayOfTagsData);
+  }, [filteredCardData]);
+
+  // функция-фильтратор
+  const handleFiltration = () => {
+    if (isFiltersUsed) {
+      const activeFilter = filters.find((filter) => filter.isActive);
+      if (!activeFilter) {
+        setSortedArray(filteredCardData);
+      } else {
+        const { month, year } = JSON.parse(activeFilter.filter);
+        const min = new Date(year, month);
+        const max = new Date(year, month + 1);
+        const filteredArrayOfEvents = filteredCardData.filter((eventItem) => {
+          const date = new Date(eventItem.startAt);
+          return date >= min && date <= max;
+        });
+        setSortedArray(filteredArrayOfEvents);
       }
     }
-  }
+  };
 
-  //! ШАГ 2 = из массива ивентов делаем массив вида [месяц, год] на каждый ивент
-  const arrayOfDatesWithEvents = arrayOfSortedEvents.map((someEvent) => {
-    // взяли дату ивента, переделали в дату-объект
-    const dateObj = new Date(someEvent.startAt);
-    const month = dateObj.getMonth();
-    const year = dateObj.getFullYear();
-    // в массив вернулся НОМЕР месяца и ГОД
-    return [month, year];
-  });
-
-  //! ШАГ 3 = выкидываем из массива arrayOfDatesWithEvents повторы
-  const arrayOfUniqueDates = Object.values(
-    arrayOfDatesWithEvents.reduce((res, item) => ({
-      ...res,
-      [item.join('-')]: item
-    }), {})
-  );
-
-  //! ШАГ 4 = на основании хронологического массива без дубликатов генерируем кнопки
-  function tagsButtonsToRender() {
-    return arrayOfUniqueDates.map((date) => {
-      const tagTitle = months[date[0]];
-      const monthNumber = months.indexOf(months[date[0]]);
-      const year = date[1];
-      const filters = { year, monthNumber };
-
-      return (
-        <li className="tags__list-item" key={`${monthNumber}-${year}`}>
-          <PseudoButtonTag
-            type="radio"
-            name="months"
-            value={`${monthNumber}-${year}`}
-            title={tagTitle}
-            filters={filters}
-            onChange={handleCheckboxChange}
-            onClick={handleCheckboxClick}
-          />
-        </li>
-      );
-    });
-  }
-
-  const whatDataToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
+  //! третий useEffect (запуск фильтрации)
+  useEffect(() => {
+    handleFiltration();
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed]);
 
   return (
-    <BasePage handlers={handlers}>
+    <BasePage>
       <Helmet>
         <title>Календарь</title>
         <meta name="description" content="Календарь событий и мероприятий для наставников" />
@@ -133,18 +124,18 @@ function Calendar({
       <section className="calendar-page page__section fade-in">
         <TitleH1 title="Календарь" />
 
-        {whatDataToRender.length > 0 ? (
+        {dataCalendar.length > 0 ? (
           <div className="calendar-page__container">
-            {arrayOfUniqueDates.length > 1 && (
+            {filters.length > 1 && (
             <div className="tags fade-in">
               <ul className="tags__list">
-                {tagsButtonsToRender()}
+                {renderFilterTags(filters, 'checkbox', handleFilterClick)}
               </ul>
             </div>
             )}
 
             <div className="calendar-page__grid">
-              {whatDataToRender.map((data) => (
+              {sortedArray.map((data) => (
                 <CardCalendar
                   key={data.id}
                   cardData={data}
@@ -166,16 +157,14 @@ Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
-  onOpenLoginPopup: PropTypes.func,
-  handlers: PropTypes.objectOf(PropTypes.any)
+  onOpenLoginPopup: PropTypes.func
 };
 
 Calendar.defaultProps = {
   onEventSignUpClick: () => {},
   dataCalendar: [],
   onEventFullDescriptionClick: () => {},
-  onOpenLoginPopup: () => {},
-  handlers: {}
+  onOpenLoginPopup: () => {}
 };
 
 export default Calendar;

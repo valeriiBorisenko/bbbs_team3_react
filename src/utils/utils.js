@@ -109,3 +109,10 @@ export const questionForm = {
     sectionClass: 'question-form_invisible'
   }
 };
+
+// меняет в слове первую букву на заглавную
+export function changeCaseOfFirstLetter(str) {
+  if (!str) return str;
+
+  return str[0].toUpperCase() + str.slice(1);
+}
