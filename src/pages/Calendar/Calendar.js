@@ -46,18 +46,21 @@ function Calendar({
   const [filteredCardData, setFilteredCardData] = useState([]);
 
   const handleFilterClick = (filter, inputName, isChecked) => {
+    console.group('handleFilterClick');
     console.log('filter', filter);
     console.log('inputName', inputName);
     console.log('isChecked', isChecked);
+    console.groupEnd();
     setIsFiltersUsed(true);
     setActiveFilter(filter);
-    changeRadioTagState(setFilters, { inputName, isChecked }); //! вот тут проблема какая-то
+    changeRadioTagState(setFilters, { inputName, isChecked });
   };
 
   //! первый useEffect, установка отсортированного массива
   useEffect(() => {
-    console.log('запуск первого useEffect');
+    console.group('запуск первого useEffect');
     console.log('dataCalendar', dataCalendar);
+    console.groupEnd();
     const arrayOfSortedEvent = [...dataCalendar].sort((a, b) => {
       const date1 = new Date(a.startAt);
       const date2 = new Date(b.startAt);
@@ -70,7 +73,7 @@ function Calendar({
 
   //! второй useEffect, сбор списка фильтров
   useEffect(() => {
-    console.log('запуск второго useEffect');
+    console.group('запуск второго useEffect');
     //* ШАГ 2 из массива отсоритрованных ивентов делаем массив объектов {месяц, год} на каждый ивент
     const arrayOfDatesWithEvents = sortedArray.map((someEvent) => {
       // взяли дату ивента, переделали в дату-объект
@@ -98,9 +101,32 @@ function Calendar({
       };
     });
     console.log('finalTagsData', finallArrayOfTagsData);
+    console.groupEnd();
 
     setFilters(finallArrayOfTagsData);
   }, [sortedArray]);
+
+  //! третий useEffect, фильтрация при нажатии
+  useEffect(() => {
+    console.group('третий useEffect');
+    if (activeFilter) {
+      const { year, month } = activeFilter;
+
+      const min = new Date(year, month);
+      const max = new Date(year, month + 1);
+      const filteredArrayOfEvents = sortedArray.filter((eventItem) => {
+        const date = new Date(eventItem.startAt);
+        return date >= min && date <= max;
+      });
+      console.log('filteredArrayOfEvents', filteredArrayOfEvents);
+
+      setFilteredCardData(filteredArrayOfEvents);
+      // setIsFiltersUsed(false);
+      setActiveFilter(null);
+    }
+    console.groupEnd();
+    // activeFilter
+  }, [activeFilter]);
 
   const whatDataToRender = isFiltersUsed ? filteredCardData : sortedArray;
 
