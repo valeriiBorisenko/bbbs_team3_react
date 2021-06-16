@@ -14,42 +14,44 @@ export const renderFilterTags = (filterList, type, handleClick) => filterList.ma
   </li>
 ));
 
-export const changeCheckboxTagState = (setState, { inputName, isChecked }) => {
-  setState((stateFilters) => stateFilters.map((filter) => {
-    if (filter.filter === inputName) {
-      filter.isActive = isChecked;
+export const changeCheckboxTagState = (setState, { inputValue, isChecked }) => {
+  console.log(inputValue);
+  setState((stateFilters) => stateFilters.map((filterItem) => {
+    if (filterItem.filter === inputValue) {
+      filterItem.isActive = isChecked;
     }
-    return filter;
+    return filterItem;
   }));
 };
 
-export const changeRadioTagState = (setState, { inputName, isChecked }) => {
-  setState((stateFilters) => stateFilters.map((filter) => {
-    if (filter.filter === inputName) {
-      filter.isActive = isChecked;
+export const changeRadioTagState = (setState, { inputValue, isChecked }) => {
+  console.log(inputValue);
+  setState((stateFilters) => stateFilters.map((filterItem) => {
+    if (filterItem.filter === inputValue) {
+      filterItem.isActive = isChecked;
     } else {
-      filter.isActive = false;
+      filterItem.isActive = false;
     }
-    return filter;
+    return filterItem;
   }));
 };
 
 export const selectOneTag = (setState, tagName) => {
-  setState((stateFilters) => stateFilters.map((filter) => {
-    if (filter.filter === tagName) {
-      filter.isActive = true;
+  setState((stateFilters) => stateFilters.map((filterItem) => {
+    if (filterItem.filter === tagName) {
+      filterItem.isActive = true;
     } else {
-      filter.isActive = false;
+      filterItem.isActive = false;
     }
-    return filter;
+    return filterItem;
   }));
 };
 
 export const deselectOneTag = (setState, tagName) => {
-  setState((stateFilters) => stateFilters.map((filter) => {
-    if (filter.filter === tagName) {
-      filter.isActive = false;
+  setState((stateFilters) => stateFilters.map((filterItem) => {
+    if (filterItem.filter === tagName) {
+      filterItem.isActive = false;
     }
-    return filter;
+    return filterItem;
   }));
 };
