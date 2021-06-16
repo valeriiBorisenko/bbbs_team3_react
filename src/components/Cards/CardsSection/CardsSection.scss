@@ -1,0 +1,73 @@
+@import '../../../styles/base/variables';
+@import '../../../styles/base/mixins';
+
+.cards-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-rows: 1fr [first-line] 1px 1fr [second-line] 1px 1fr [third-line] 1px 1fr;
+  gap: 80px 30px;
+}
+
+.cards-section__line {
+  grid-column: 1 / -1;
+  background: $black;
+
+  &:nth-of-type(1) {
+    grid-row-start: first-line;
+  }
+
+  &:nth-of-type(2) {
+    grid-row-start: second-line;
+  }
+
+  &:nth-of-type(3) {
+    grid-row-start: third-line;
+  }
+}
+
+@include atDesktop1440 {
+  .cards-section {
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  }
+}
+
+@include atDesktop1199 {
+  .cards-section {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr [third-line] 1px 1fr;
+  }
+
+  .cards-section__line {
+    &:nth-of-type(-n + 2) {
+      display: none;
+    }
+  }
+}
+
+@include atDesktop1024 {
+  .cards-section {
+    padding-top: 50px;
+    grid-template-rows: 1fr [third-line] 1px 1fr;
+    gap: 30px;
+  }
+}
+
+@include atTablet {
+  .cards-section {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr [first-line] 1px 1fr [second-line] 1px 1fr [third-line] 1px 1fr;
+    gap: 30px;
+  }
+
+  .cards-section__line {
+    &:nth-of-type(-n + 2) {
+      display: block;
+    }
+  }
+}
+
+@include atMobile {
+  .cards-section {
+    padding-top: 30px;
+  }
+}

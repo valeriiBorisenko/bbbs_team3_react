@@ -1,0 +1,19 @@
+@import '../../styles/base/mixins';
+
+.catalog__subtitle {
+    margin: 40px auto 0;
+    max-width: 1170px;
+    text-align: center;
+  }
+  
+  @include atDesktop1440 {
+    .catalog__subtitle {
+      max-width: 970px;
+    }
+  }
+  
+  @include atDesktop1024 {
+    .catalog__subtitle {
+      margin-top: 20px;
+    }
+  }
