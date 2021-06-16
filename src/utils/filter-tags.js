@@ -15,7 +15,6 @@ export const renderFilterTags = (filterList, type, handleClick) => filterList.ma
 ));
 
 export const changeCheckboxTagState = (setState, { inputValue, isChecked }) => {
-  console.log(inputValue);
   setState((stateFilters) => stateFilters.map((filterItem) => {
     if (filterItem.filter === inputValue) {
       filterItem.isActive = isChecked;
@@ -25,7 +24,6 @@ export const changeCheckboxTagState = (setState, { inputValue, isChecked }) => {
 };
 
 export const changeRadioTagState = (setState, { inputValue, isChecked }) => {
-  console.log(inputValue);
   setState((stateFilters) => stateFilters.map((filterItem) => {
     if (filterItem.filter === inputValue) {
       filterItem.isActive = isChecked;
