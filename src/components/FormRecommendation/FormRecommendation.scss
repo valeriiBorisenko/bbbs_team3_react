@@ -146,27 +146,23 @@
   -moz-appearance: number-input;
 }
 
-.form-recom__button-add-photo {
-  height: 48px;
-  padding: 0 0 0 63px;
-  font-family: $protoGrotesk;
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 1.27;
-  letter-spacing: 0.2px;
-  color: $lightGray;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  background-image: url(../../assets/icon-circle-with-plus_gray.svg);
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: contain;
+.form-recom__add-photo {
   pointer-events: none;
+  
+  &::after {
+    content: 'Добавить фото';
+    white-space: nowrap;
+    color: $lightGray;
+    font-family: $protoGrotesk;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.27;
+    letter-spacing: 0.2px;
+    margin-left: 68px;
+  }
 
-  &_error {
+  &_error::after {
     color: $error;
-    background-image: url(../../assets/icon-circle-with-plus_red.svg);
   }
 }
 
@@ -184,6 +180,16 @@
 
     &:last-of-type {
       margin-right: 0;
+    }
+  }
+}
+
+@include atDesktop1024 {
+  .form-recom__add-photo {
+    &::after {
+      font-size: 12px;
+      line-height: 1.42;
+      margin-left: 55px;
     }
   }
 }

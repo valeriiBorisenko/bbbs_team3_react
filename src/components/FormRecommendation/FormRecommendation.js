@@ -1,11 +1,14 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
 import './FormRecommendation.scss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { Input, Button } from './index';
+import { Input, Button, ButtonRound } from './index';
 
 function FormRecommendation({ isOpen, onSubmit }) {
+  // const [userImage, setUserImage] = useState(null);
   const textAreaPlaceholder = window.innerWidth < 576
     ? 'Комментарий*'
     : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
@@ -15,15 +18,28 @@ function FormRecommendation({ isOpen, onSubmit }) {
   const {
     register, handleSubmit, formState: { errors }, reset
   } = useForm();
+  console.log(errors);
 
   const onFormSubmit = (values) => {
-    let inputFields = Object.assign(values);
-    inputFields = {
-      ...inputFields,
-      image: URL.createObjectURL(inputFields.image[0])
-    };
+    const inputFields = Object.assign(values);
+    // inputFields = {
+    //   ...inputFields,
+    //   image: URL.createObjectURL(inputFields.image[0])
+    // };
+    // if (userImage) {
+    //   inputFields = {
+    //     ...inputFields,
+    //     imageUrl: userImage.imageUrl
+    //   };
+    // }
+    console.log(inputFields);
     onSubmit(inputFields);
   };
+
+  // const handleImageUpload = (file) => {
+  //   const imageUrl = URL.createObjectURL(file);
+  //   setUserImage({ ...userImage, imageUrl });
+  // };
 
   useEffect(() => {
     reset({
@@ -115,7 +131,7 @@ function FormRecommendation({ isOpen, onSubmit }) {
         name="type"
         {...register('type', { required: 'Тип отдыха*' })}
       >
-        <option className="form-recom__option" defaultValue="Тип отдыха" hidden>Тип отдыха*</option>
+        <option value="" className="form-recom__option" hidden>Тип отдыха*</option>
         <option value="Активный" className="form-recom__option">Активный</option>
         <option value="Развлекательный" className="form-recom__option">Развлекательный</option>
         <option value="Познавательный" className="form-recom__option">Познавательный</option>
@@ -139,14 +155,15 @@ function FormRecommendation({ isOpen, onSubmit }) {
             type="file"
             name="imageUrl"
             className="form-recom__input-radio"
-            {...register('image', { required: 'Добавить фото' })}
+            {...register('imageUrl')}
+            // onChange={(evt) => handleImageUpload(evt.target.files[0])}
           />
-          <button
-            className={`form-recom__button-add-photo ${errors?.imageUrl ? 'form-recom__button-add-photo_error' : ''}`}
-            type="button"
-          >
-            Добавить фото
-          </button>
+          <ButtonRound
+            sectionClass={`form-recom__add-photo ${errors?.imageUrl ? 'form-recom__add-photo_error' : ''}`}
+            color={`${errors?.imageUrl ? 'error' : 'lightGray'}`}
+            isSmall
+            isDisabled
+          />
         </label>
 
         <Button
