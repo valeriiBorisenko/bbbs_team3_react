@@ -5,7 +5,6 @@ function PseudoButtonTag({
   type,
   name,
   value,
-  // filter,
   title,
   isActive,
   onClick
@@ -43,8 +42,7 @@ function PseudoButtonTag({
 PseudoButtonTag.propTypes = {
   type: PropTypes.string,
   name: PropTypes.string,
-  value: PropTypes.oneOfType(PropTypes.string, PropTypes.object),
-  // filter: PropTypes.oneOfType(PropTypes.string, PropTypes.object),
+  value: PropTypes.string,
   title: PropTypes.string,
   isActive: PropTypes.bool,
   onClick: PropTypes.func
@@ -54,7 +52,6 @@ PseudoButtonTag.defaultProps = {
   type: 'radio',
   name: '',
   value: '',
-  // filter: '',
   title: '',
   isActive: false,
   onClick: () => {}
