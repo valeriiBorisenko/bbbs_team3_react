@@ -2,12 +2,13 @@
 import PseudoButtonTag from '../components/utils/PseudoButtonTag/PseudoButtonTag';
 
 export const renderFilterTags = (filterList, type, handleClick) => filterList.map((item) => (
-  <li className="tags__list-item" key={item.filter}>
+  <li className="tags__list-item" key={item.name}>
     <PseudoButtonTag
       type={type}
       name="categories"
       value={item.filter}
-      title={item.filter}
+      // filter={item.filter}
+      title={item.name}
       isActive={item.isActive}
       onClick={handleClick}
     />
@@ -24,6 +25,9 @@ export const changeCheckboxTagState = (setState, { inputName, isChecked }) => {
 };
 
 export const changeRadioTagState = (setState, { inputName, isChecked }) => {
+  console.log('changeRadioTagState');
+  console.log('inputName', inputName);
+  console.log('isChecked', isChecked);
   setState((stateFilters) => stateFilters.map((filter) => {
     if (filter.filter === inputName) {
       filter.isActive = isChecked;
