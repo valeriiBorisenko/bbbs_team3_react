@@ -110,6 +110,7 @@ export const questionForm = {
   }
 };
 
+// меняет в слове первую букву на заглавную
 export function changeCaseOfFirstLetter(str) {
   if (!str) return str;
 
