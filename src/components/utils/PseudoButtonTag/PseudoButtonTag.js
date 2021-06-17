@@ -10,6 +10,11 @@ function PseudoButtonTag({
   onClick
 }) {
   const id = `filter-button-${value}`;
+
+  function handleClick(event) {
+    onClick(value, event.target.checked);
+  }
+
   return (
     <label
       className="pseudo-button-label"
@@ -23,7 +28,7 @@ function PseudoButtonTag({
         value={value}
         checked={isActive}
         onChange={() => {}}
-        onClick={(evt) => onClick(value, evt.target.checked)}
+        onClick={handleClick}
       />
       <span
         className="button pseudo-button"

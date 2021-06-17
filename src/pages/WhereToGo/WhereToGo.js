@@ -18,10 +18,10 @@ import {
 import Api from '../../utils/api';
 
 const ageFilters = [
-  { filter: '8-10 лет', isActive: false },
-  { filter: '11-13 лет', isActive: false },
-  { filter: '14-18 лет', isActive: false },
-  { filter: '18+ лет', isActive: false }
+  { filter: '8-10 лет', name: '8-10 лет', isActive: false },
+  { filter: '11-13 лет', name: '11-13 лет', isActive: false },
+  { filter: '14-18 лет', name: '14-18 лет', isActive: false },
+  { filter: '18+ лет', name: '18+ лет', isActive: false }
 ];
 
 function WhereToGo({ openPopupCities }) {
@@ -34,26 +34,28 @@ function WhereToGo({ openPopupCities }) {
 
   // мутабельный массив для применения фильтров
   const [filteredPlaces, setFilteredPlaces] = useState([]);
+  // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
 
+  // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
   const [activeCategories, setActiveCategories] = useState(new Set());
 
-  //! фильтры КАТЕГОРИЯ
-  const changeCategory = (inputName, isChecked) => {
-    changeCheckboxTagState(setCategories, { inputName, isChecked });
+  // хэндлер клика по фильтру КАТЕГОРИЯ
+  const changeCategory = (inputValue, isChecked) => {
+    changeCheckboxTagState(setCategories, { inputValue, isChecked });
 
-    if (inputName === ALL_CATEGORIES) {
+    if (inputValue === ALL_CATEGORIES) {
       setActiveCategories(new Set());
       setIsFiltersUsed(true);
       return;
     }
 
     // если такой фильтр уже есть
-    if (activeCategories.has(inputName)) {
+    if (activeCategories.has(inputValue)) {
       setActiveCategories((set) => {
-        set.delete(inputName);
+        set.delete(inputValue);
         return set;
       });
       setIsFiltersUsed(true);
@@ -63,14 +65,14 @@ function WhereToGo({ openPopupCities }) {
     // новый фильтр
     setIsFiltersUsed(true);
     setActiveCategories((set) => {
-      set.add(inputName);
+      set.add(inputValue);
       return set;
     });
   };
 
-  //! фильтры ВОЗРАСТ
-  const changeAge = (inputName, isChecked) => {
-    changeRadioTagState(setAges, { inputName, isChecked });
+  // хэндлер клика по фильтру ВОЗРАСТ
+  const changeAge = (inputValue, isChecked) => {
+    changeRadioTagState(setAges, { inputValue, isChecked });
     setIsFiltersUsed(true);
   };
 
@@ -90,6 +92,7 @@ function WhereToGo({ openPopupCities }) {
     }
   };
 
+  // функция-фильтратор
   const handleFiltration = () => {
     const activeAgeFilter = ages.find((filter) => filter.isActive);
 
@@ -127,6 +130,7 @@ function WhereToGo({ openPopupCities }) {
     }
   };
 
+  // запуск фильтрации
   useEffect(() => {
     handleFiltration();
     setIsFiltersUsed(false);
@@ -141,15 +145,17 @@ function WhereToGo({ openPopupCities }) {
 
         const categoriesArr = result.map((place) => place.category);
         const set = new Set(categoriesArr);
-        const uniqueCategories = Array.from(set).map((item) => ({ filter: item, isActive: false }));
+        const uniqueCategories = Array.from(set)
+          .map((item) => ({ filter: item, name: item, isActive: false }));
         setCategories([
-          { filter: ALL_CATEGORIES, isActive: true },
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
           ...uniqueCategories
         ]);
       })
       .catch((error) => console.log(error));
   }, []);
 
+  // открытие попапа "города" для незарегистрированного
   useEffect(() => {
     if (!currentUser) {
       openPopupCities();
