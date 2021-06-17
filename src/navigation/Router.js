@@ -7,8 +7,8 @@ import {
   Calendar,
   MainPage,
   PageNotFound,
-  QuestionsPage,
-  WhereToGo
+  Questions,
+  Places
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -54,7 +54,7 @@ function Router({
         />
       </Route>
       <Route path={QUESTIONS_URL}>
-        <QuestionsPage />
+        <Questions />
       </Route>
       <ProtectedRoute
         exact
@@ -65,7 +65,7 @@ function Router({
         isAuth={!!currentUser}
       />
       <Route exact path={PLACES_URL}>
-        <WhereToGo
+        <Places
           openPopupCities={handleClickPopupCities}
         />
       </Route>

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Account.scss';
 import PropTypes from 'prop-types';
-import { useSmoothHorizontalScroll } from '../../hooks/index';
+import { useSmoothHorizontalScroll, useScrollToTop } from '../../hooks/index';
 import {
   BasePage,
   AccountEventCard,
@@ -17,6 +17,8 @@ import Api from '../../utils/api';
 //! чтобы синхронизировать отмену записи со стейтом данных календаря.
 //! Когда будет готов бэк, она будет приходить в GET-запросе и синхронизироваться через сервер
 function Account({ eventsData, onEventFullDescriptionClick }) {
+  useScrollToTop();
+
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -41,11 +43,6 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
       });
     setEvents(sortedEvents);
   }, [eventsData]);
-
-  // поднятие страницы к хедеру при загрузке
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
 
   const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
