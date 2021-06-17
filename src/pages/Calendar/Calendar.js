@@ -10,6 +10,9 @@ import {
   BasePage,
   TitleH1,
   CardCalendar,
+  AnimatedPageContainer,
+  renderFilterTags,
+  changeRadioTagState,
   Loader
 } from './index';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
@@ -47,13 +50,15 @@ function Calendar({
 
   //! первый useEffect, установка отсортированного массива
   useEffect(() => {
-    const arrayOfSortedEvent = [...dataCalendar].sort((a, b) => {
-      const date1 = new Date(a.startAt);
-      const date2 = new Date(b.startAt);
-      return date1 - date2;
-    });
-    setFilteredCardData(arrayOfSortedEvent);
-    setSortedArray(arrayOfSortedEvent);
+    if (dataCalendar) {
+      const arrayOfSortedEvent = [...dataCalendar].sort((a, b) => {
+        const date1 = new Date(a.startAt);
+        const date2 = new Date(b.startAt);
+        return date1 - date2;
+      });
+      setFilteredCardData(arrayOfSortedEvent);
+      setSortedArray(arrayOfSortedEvent);
+    }
   }, [dataCalendar]);
 
   //! второй useEffect, сбор списка фильтров
@@ -113,6 +118,9 @@ function Calendar({
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
+  console.log(dataCalendar);
+  console.log(dataCalendar && dataCalendar?.length > 0);
+  // console.log(dataCalendar.length);
   return (
     <BasePage>
       <Helmet>
@@ -120,33 +128,43 @@ function Calendar({
         <meta name="description" content="Календарь событий и мероприятий для наставников" />
       </Helmet>
       <section className="calendar-page page__section fade-in">
-        <TitleH1 title="Календарь" />
+        {/* переработать */}
+        { (dataCalendar && dataCalendar?.length > 0) ? (
+          <>
+            <TitleH1 title="Календарь" />
 
-        {dataCalendar.length > 0 ? (
-          <div className="calendar-page__container">
-            {filters.length > 1 && (
-            <div className="tags fade-in">
-              <ul className="tags__list">
-                {renderFilterTags(filters, 'checkbox', handleFilterClick)}
-              </ul>
-            </div>
-            )}
+            {dataCalendar.length > 0 ? (
+              <div className="calendar-page__container">
+                {filters.length > 1 && (
+                <div className="tags fade-in">
+                  <ul className="tags__list">
+                    {renderFilterTags(filters, 'checkbox', handleFilterClick)}
+                  </ul>
+                </div>
+                )}
 
-            <div className="calendar-page__grid">
-              {sortedArray.map((data) => (
-                <CardCalendar
-                  key={data.id}
-                  cardData={data}
-                  onEventSignUpClick={eventSignUpHandler}
-                  onEventFullDescriptionClick={onEventFullDescriptionClick}
-                  sectionClass="fade-in"
-                />
-              ))}
-            </div>
-          </div>
-        ) : <Loader isNested />}
+                <div className="calendar-page__grid">
+                  {sortedArray.map((data) => (
+                    <CardCalendar
+                      key={data.id}
+                      cardData={data}
+                      onEventSignUpClick={eventSignUpHandler}
+                      onEventFullDescriptionClick={onEventFullDescriptionClick}
+                      sectionClass="fade-in"
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : <Loader isNested />}
 
-        { !currentUser && onOpenLoginPopup()}
+            { !currentUser && onOpenLoginPopup()}
+          </>
+        ) : (
+          <AnimatedPageContainer
+            titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
+            buttonText="Вернуться на главную"
+          />
+        ) }
       </section>
     </BasePage>
   );
