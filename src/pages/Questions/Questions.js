@@ -35,7 +35,6 @@ function Questions() {
 
   // категории фильтрации
   const [categories, setCategories] = useState([]); // состояние кнопок фильтров
-  const [activeCategories, setActiveCategories] = useState(new Set()); // сами фильтры
 
   // форма
   const [isQuestionForm, setIsQuestionForm] = useState(questionForm.before);
@@ -53,43 +52,25 @@ function Questions() {
   // хэндлер клика по фильтру
   const changeCategory = (inputValue, isChecked) => {
     changeCheckboxTagState(setCategories, { inputValue, isChecked });
-
-    if (inputValue === ALL_CATEGORIES) {
-      setActiveCategories(new Set());
-      setIsFiltersUsed(true);
-      return;
-    }
-
-    // если такой фильтр уже есть
-    if (activeCategories.has(inputValue)) {
-      setActiveCategories((set) => {
-        set.delete(inputValue);
-        return set;
-      });
-      setIsFiltersUsed(true);
-      return;
-    }
-
-    // новый фильтр
     setIsFiltersUsed(true);
-    setActiveCategories((set) => {
-      set.add(inputValue);
-      return set;
-    });
   };
 
   // фильтрация
   const handleFiltration = () => {
-    if (activeCategories.size === 0) {
+    const activeCategories = categories
+      .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+      .map((filter) => filter.filter);
+
+    if (activeCategories.length === 0) {
       setFilteredQuestions(questionsData);
       selectOneTag(setCategories, ALL_CATEGORIES);
       return;
     }
 
     // КАТЕГОРИИ
-    if (activeCategories.size > 0) {
+    if (activeCategories.length > 0) {
       const filterByCategory = questionsData
-        .filter((question) => question.tags.some((el) => activeCategories.has(el.name)));
+        .filter((question) => question.tags.some((el) => activeCategories.includes(el.name)));
       setFilteredQuestions(filterByCategory);
     }
     deselectOneTag(setCategories, ALL_CATEGORIES);
@@ -117,7 +98,7 @@ function Questions() {
           ...uniqueTags
         ]);
       })
-      .catch((err) => console.log(err));
+      .catch(console.log);
   }, []);
 
   return (
