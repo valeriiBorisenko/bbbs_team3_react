@@ -11,8 +11,6 @@ import {
   TitleH1,
   CardCalendar,
   AnimatedPageContainer,
-  renderFilterTags,
-  changeRadioTagState,
   Loader
 } from './index';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
