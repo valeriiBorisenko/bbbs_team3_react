@@ -1,10 +1,7 @@
 import './PageNotFound.scss';
 import { Helmet } from 'react-helmet-async';
-import {
-  useSmoothScrollOnWindow,
-  BasePage,
-  AnimatedPageContainer
-} from './index';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
+import { BasePage, AnimatedPageContainer } from './index';
 
 function PageNotFound() {
   useSmoothScrollOnWindow({ top: 0 });
