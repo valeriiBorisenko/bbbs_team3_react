@@ -31,7 +31,7 @@ export default class Api {
   // страница "куда пойти"
   static getPlaces() {
     return axios
-      .get(`${baseURL}${apiUrl}/where-to-go/`)
+      .get(`${baseURL}${apiUrl}/where-to-go/`) //! заменить /places
       .then((response) => response.data);
   }
 
