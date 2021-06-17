@@ -1,12 +1,12 @@
 import './MainPage.scss';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
-import PropTypes from 'prop-types';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
+import { QUESTIONS_URL } from '../../config/routes';
 import {
-  CurrentUserContext,
-  useSmoothScrollOnWindow,
-  QUESTIONS_URL,
   BasePage,
   Loader,
   Card,

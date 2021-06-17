@@ -1,19 +1,19 @@
-/* eslint-disable no-unused-vars */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
+import { months } from '../../config/constants';
+import { renderFilterTags, changeRadioTagState } from '../../utils/filter-tags';
 import {
-  CurrentUserContext,
-  useSmoothScrollOnWindow,
-  months,
   BasePage,
   TitleH1,
   CardCalendar,
-  Loader,
   AnimatedPageContainer,
   renderFilterTags,
-  changeRadioTagState
+  changeRadioTagState,
+  Loader
 } from './index';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 

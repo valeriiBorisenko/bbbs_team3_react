@@ -1,11 +1,13 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
-import './FormRecomendation.scss';
-import { useEffect } from 'react';
+import './FormRecommendation.scss';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { Input, Button } from './index';
+import { Input, Button, ButtonRound } from './index';
 
-function FormRecomendation({ isOpen, onSubmit }) {
+function FormRecommendation({ isOpen, onSubmit }) {
   const textAreaPlaceholder = window.innerWidth < 576
     ? 'Комментарий*'
     : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
@@ -20,7 +22,7 @@ function FormRecomendation({ isOpen, onSubmit }) {
     let inputFields = Object.assign(values);
     inputFields = {
       ...inputFields,
-      image: URL.createObjectURL(inputFields.image[0])
+      imageUrl: URL.createObjectURL(inputFields.imageUrl[0])
     };
     onSubmit(inputFields);
   };
@@ -115,7 +117,7 @@ function FormRecomendation({ isOpen, onSubmit }) {
         name="type"
         {...register('type', { required: 'Тип отдыха*' })}
       >
-        <option className="form-recom__option" defaultValue="Тип отдыха" hidden>Тип отдыха*</option>
+        <option value="" className="form-recom__option" hidden>Тип отдыха*</option>
         <option value="Активный" className="form-recom__option">Активный</option>
         <option value="Развлекательный" className="form-recom__option">Развлекательный</option>
         <option value="Познавательный" className="form-recom__option">Познавательный</option>
@@ -139,14 +141,14 @@ function FormRecomendation({ isOpen, onSubmit }) {
             type="file"
             name="imageUrl"
             className="form-recom__input-radio"
-            {...register('image', { required: 'Добавить фото' })}
+            {...register('imageUrl', { required: 'Добавить фото' })}
           />
-          <button
-            className={`form-recom__button-add-photo ${errors?.imageUrl ? 'form-recom__button-add-photo_error' : ''}`}
-            type="button"
-          >
-            Добавить фото
-          </button>
+          <ButtonRound
+            sectionClass={`form-recom__add-photo ${errors?.imageUrl ? 'form-recom__add-photo_error' : ''}`}
+            color={`${errors?.imageUrl ? 'error' : 'lightGray'}`}
+            isSmall
+            isSpan
+          />
         </label>
 
         <Button
@@ -159,14 +161,14 @@ function FormRecomendation({ isOpen, onSubmit }) {
   );
 }
 
-FormRecomendation.propTypes = {
+FormRecommendation.propTypes = {
   isOpen: PropTypes.bool,
   onSubmit: PropTypes.func
 };
 
-FormRecomendation.defaultProps = {
+FormRecommendation.defaultProps = {
   isOpen: false,
   onSubmit: () => {}
 };
 
-export default FormRecomendation;
+export default FormRecommendation;
