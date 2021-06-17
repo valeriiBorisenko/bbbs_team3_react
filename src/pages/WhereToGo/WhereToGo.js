@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import { repeatSchema } from '../../utils/utils';
 import { COLORS, ALL_CATEGORIES } from '../../config/constants';
 import {
@@ -25,9 +24,12 @@ const ageFilters = [
 ];
 
 function WhereToGo({ openPopupCities }) {
-  useSmoothScrollOnWindow({ top: 0 });
-
   const currentUser = useContext(CurrentUserContext);
+
+  // поднятие страницы к хедеру при загрузке
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
 
   // начальные места из API
   const [places, setPlaces] = useState([]);

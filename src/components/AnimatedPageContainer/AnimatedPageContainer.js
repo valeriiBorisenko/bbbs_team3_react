@@ -2,13 +2,9 @@ import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Lottie from 'lottie-web';
-import {
-  useSmoothScrollOnWindow, animation404, TitleH2
-} from './index';
+import { animation404, TitleH2 } from './index';
 
 function AnimatedPageContainer({ is404, titleText, buttonText }) {
-  useSmoothScrollOnWindow({ top: 0 });
-
   const animationContainer = useRef();
 
   useEffect(() => {

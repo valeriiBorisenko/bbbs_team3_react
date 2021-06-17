@@ -25,22 +25,6 @@ export const useClickOutside = (callback) => {
   return ref;
 };
 
-// плавный скролл при монтировании компонента
-export const useSmoothScrollOnWindow = (coordinate) => {
-  useEffect(() => {
-    window.scrollTo({
-      ...coordinate
-    });
-
-    // setTimeout(() => {
-    //   window.scrollTo({
-    //     ...coordinate,
-    //     behavior: 'smooth'
-    //   });
-    // }, 500);
-  }, []);
-};
-
 // горизонтальная плавная прокрутка
 // step: number
 export const useSmoothHorizontalScroll = ({ step }) => {

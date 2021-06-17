@@ -2,7 +2,6 @@ import './QuestionsPage.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { ALL_CATEGORIES } from '../../config/constants';
 import { questionForm } from '../../utils/utils';
@@ -21,9 +20,12 @@ import {
 import Api from '../../utils/api';
 
 function QuestionsPage() {
-  useSmoothScrollOnWindow({ top: 0 });
-
   const currentUser = useContext(CurrentUserContext);
+
+  // поднятие страницы к хедеру при загрузке
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
 
   // начальная дата с API
   const [questionsData, setQuestionsData] = useState([]);

@@ -3,7 +3,6 @@ import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import { months } from '../../config/constants';
 import { renderFilterTags, changeRadioTagState } from '../../utils/filter-tags';
 import {
@@ -21,8 +20,12 @@ function Calendar({
   dataCalendar,
   onOpenLoginPopup
 }) {
-  useSmoothScrollOnWindow({ top: 0 });
   const currentUser = useContext(CurrentUserContext);
+
+  // поднятие страницы к хедеру при загрузке
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
 
   const eventSignUpHandler = (cardData) => {
     onEventSignUpClick(cardData, cardData.booked);

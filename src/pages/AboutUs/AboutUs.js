@@ -6,10 +6,9 @@ import {
 } from './index';
 
 function AboutUs() {
+  // поднятие страницы к хедеру при загрузке
   useEffect(() => {
-    window.scrollTo({
-      top: 0
-    });
+    window.scrollTo({ top: 0 });
   }, []);
 
   return (

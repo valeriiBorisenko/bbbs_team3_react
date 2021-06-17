@@ -1,10 +1,9 @@
 import './MainPage.scss';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
 import { QUESTIONS_URL } from '../../config/routes';
 import {
   BasePage,
@@ -25,8 +24,12 @@ function MainPage({
   onEventFullDescriptionClick,
   dataMain
 }) {
-  useSmoothScrollOnWindow({ top: 0 });
   const currentUser = useContext(CurrentUserContext);
+
+  // поднятие страницы к хедеру при загрузке
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
 
   function eventSignUpHandler(cardData) {
     onEventSignUpClick(cardData, cardData.booked);

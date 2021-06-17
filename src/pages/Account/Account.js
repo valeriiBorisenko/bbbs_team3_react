@@ -42,10 +42,9 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
     setEvents(sortedEvents);
   }, [eventsData]);
 
+  // поднятие страницы к хедеру при загрузке
   useEffect(() => {
-    window.scrollTo({
-      top: 0
-    });
+    window.scrollTo({ top: 0 });
   }, []);
 
   const scrollAnchorRef = useRef(null);
