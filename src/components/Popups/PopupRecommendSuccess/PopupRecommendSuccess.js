@@ -1,4 +1,4 @@
-import '../PopupSuccessfully/PopupSuccessfully.scss';
+import './PopupRecommendSuccess.scss';
 import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
@@ -25,10 +25,10 @@ function PopupRecommendSuccess({ isOpen, onClose }) {
       typeContainer="calendar"
       isOpen={isOpen}
       onClose={onClose}
-      sectionClass="popup__container_success"
+      sectionClass="popup__container_recommend-success"
     >
-      <div ref={animationContainer} className="popup__animation-success" />
-      <p className="section-title popup__title_type_calendar popup__title_type_successfully">
+      <div ref={animationContainer} className="popup__animation-recommend" />
+      <p className="section-title popup__title_type_calendar popup__title_type_recommend-success">
         Спасибо, мы проверим информацию, и скоро все пользователи смогут увидеть вашу рекомендацию
       </p>
       <div className="popup__buttons_type_calendar">

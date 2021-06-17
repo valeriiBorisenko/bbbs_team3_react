@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import './WhereToGoRecommend.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormRecommendation, PopupRecommendSuccess } from './index';
 
@@ -14,12 +14,18 @@ function WhereToGoRecommend({ sectionClass }) {
 
   const closeSuccessPopup = () => {
     setIsSuccessPopupOpen(false);
-    toggleForm();
+  };
+
+  const closeSuccessPopupOnEsc = (evt) => {
+    if (evt.key === 'Escape') {
+      closeSuccessPopup();
+    }
   };
 
   const handleFormSubmit = (data) => {
     console.log({ data });
     setIsSuccessPopupOpen(true);
+    toggleForm();
   };
 
   const classNames = [
@@ -27,6 +33,11 @@ function WhereToGoRecommend({ sectionClass }) {
     'recommendation_place_page',
     'fade-in',
     sectionClass].join(' ').trim();
+
+  useEffect(() => {
+    window.addEventListener('keyup', closeSuccessPopupOnEsc);
+    return () => window.removeEventListener('keyup', closeSuccessPopupOnEsc);
+  }, []);
 
   return (
     <>
