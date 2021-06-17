@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Account.scss';
 import PropTypes from 'prop-types';
+import { useSmoothHorizontalScroll } from '../../hooks/index';
 import {
   BasePage,
   AccountEventCard,
-  ScrollableByXContainer,
   TitleH2,
   AccountForm,
   AccountDiary,
@@ -112,6 +112,9 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
     closePopupDeleteDiary();
   };
 
+  // скролл контейнера с карточками мероприятий
+  const containerEvents = useSmoothHorizontalScroll({ step: 3 });
+
   return (
     <BasePage>
       <Helmet>
@@ -128,7 +131,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
               : 'У вас нет записи на мероприятия'
           }
           />
-          <ScrollableByXContainer sectionClass="account__events">
+          <div className="account__events" ref={containerEvents}>
             {events && events.length > 0
             && events.map((item) => (
               <AccountEventCard
@@ -137,7 +140,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
                 onOpen={handleOpenEventCard}
               />
             ))}
-          </ScrollableByXContainer>
+          </div>
         </div>
 
         <div className="account__diaries page__section">
