@@ -9,9 +9,25 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 export default class Api {
   // главная страница
   static getMainPageData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/main/`)
-      .then((response) => response.data);
+    console.log(`${baseURL}${apiUrl}/main/`);
+    return fetch(`${baseURL}${apiUrl}/main/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        Origin: 'http://localhost:3000',
+        Accept: 'application/json'
+
+      }
+    })
+      .then((result) => console.log(result));
+    // return axios
+    //   .get('http://127.0.0.1/api/v1/main/', {
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     }
+    //   })
+    //   .then((response) => console.log(response))
+    //   .catch((err) => console.log(err));
   }
 
   // города

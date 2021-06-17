@@ -36,13 +36,14 @@ function App() {
   // данные страниц с сервера
   const [dataCalendar, setDataCalendar] = useState([]);
   const [dataMain, setDataMain] = useState(null);
+  console.log(setDataMain);
 
   // загрузка данных страниц
   // загрузка данных главной страницы с сервера
   useEffect(() => {
-    Api.getMainPageData()
-      .then((res) => setDataMain(res.mainPageData))
-      .catch((err) => console.log(err));
+    Api.getMainPageData();
+    // .then((res) => setDataMain(res.mainPageData))
+    // .catch((err) => console.log(err));
   }, []); //! перенести в мейн, когда будет бэк
 
   // загрузка данных страницы календаря, если ты залогиненный

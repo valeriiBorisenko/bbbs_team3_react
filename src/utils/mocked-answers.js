@@ -6,7 +6,7 @@ const baseURL = 'http://localhost:3000';
 const apiUrl = '/api/v1';
 
 // файлы с серверными ответами
-const mainPageData = require('./server-responses/main-page.json');
+// const mainPageData = require('./server-responses/main-page.json');
 const profileDiaryData = require('./server-responses/profile-diary.json');
 const cities = require('./server-responses/cities.json');
 const calendarPageData = require('./server-responses/calendar-page.json');
@@ -21,9 +21,9 @@ const mock = new MockAdapter(axios, { delayResponse: 1000 });
 
 export default function setMockedAnswers() {
   //! главная страница
-  mock
-    .onGet(`${baseURL}${apiUrl}/main/`)
-    .reply(200, { mainPageData }, 'Content-Type: application/json');
+  // mock
+  //   .onGet(`${baseURL}${apiUrl}/main/`)
+  //   .reply(200, { mainPageData }, 'Content-Type: application/json');
 
   //! страница календаря
   mock
