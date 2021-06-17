@@ -2,15 +2,14 @@ import './QuestionsPage.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { ALL_CATEGORIES } from '../../config/constants';
+import { questionForm } from '../../utils/utils';
 import {
-  CurrentUserContext,
-  ALL_CATEGORIES,
-  useSmoothScrollOnWindow,
-  questionForm,
-  renderFilterTags,
-  changeCheckboxTagState,
-  selectOneTag,
-  deselectOneTag,
+  renderFilterTags, changeCheckboxTagState, selectOneTag, deselectOneTag
+} from '../../utils/filter-tags';
+import {
   BasePage,
   TitleH1,
   TitleH2,

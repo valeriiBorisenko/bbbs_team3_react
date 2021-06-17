@@ -2,21 +2,18 @@ import './WhereToGo.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
+import { repeatSchema } from '../../utils/utils';
+import { COLORS, ALL_CATEGORIES } from '../../config/constants';
 import {
-  CurrentUserContext,
-  useSmoothScrollOnWindow,
-  repeatSchema,
-  COLORS,
-  ALL_CATEGORIES,
+  renderFilterTags, changeCheckboxTagState, changeRadioTagState, selectOneTag, deselectOneTag
+} from '../../utils/filter-tags';
+import {
   BasePage,
   TitleH1,
   CardPlace,
-  WhereToGoPreview,
-  renderFilterTags,
-  changeCheckboxTagState,
-  changeRadioTagState,
-  selectOneTag,
-  deselectOneTag
+  WhereToGoRecommend
 } from './index';
 import Api from '../../utils/api';
 
@@ -186,7 +183,7 @@ function WhereToGo({ openPopupCities }) {
         </div>
       </section>
 
-      {currentUser && (<WhereToGoPreview />)}
+      {currentUser && (<WhereToGoRecommend />)}
 
       <section className="place__main page__section fade-in">
         <CardPlace
