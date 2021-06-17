@@ -40,34 +40,11 @@ function Places({ openPopupCities }) {
   // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
-  const [activeCategories, setActiveCategories] = useState(new Set());
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
   const changeCategory = (inputValue, isChecked) => {
     changeCheckboxTagState(setCategories, { inputValue, isChecked });
-
-    if (inputValue === ALL_CATEGORIES) {
-      setActiveCategories(new Set());
-      setIsFiltersUsed(true);
-      return;
-    }
-
-    // если такой фильтр уже есть
-    if (activeCategories.has(inputValue)) {
-      setActiveCategories((set) => {
-        set.delete(inputValue);
-        return set;
-      });
-      setIsFiltersUsed(true);
-      return;
-    }
-
-    // новый фильтр
     setIsFiltersUsed(true);
-    setActiveCategories((set) => {
-      set.add(inputValue);
-      return set;
-    });
   };
 
   // хэндлер клика по фильтру ВОЗРАСТ
@@ -95,9 +72,12 @@ function Places({ openPopupCities }) {
   // функция-фильтратор
   const handleFiltration = () => {
     const activeAgeFilter = ages.find((filter) => filter.isActive);
+    const activeCategories = categories
+      .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+      .map((filter) => filter.filter);
 
     // ВСЕ
-    if (activeCategories.size === 0) {
+    if (activeCategories.length === 0) {
       if (!activeAgeFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         setFilteredPlaces(places);
@@ -112,16 +92,17 @@ function Places({ openPopupCities }) {
     }
 
     // КАТЕГОРИИ
-    if (activeCategories.size > 0) {
+    if (activeCategories.length > 0) {
       if (!activeAgeFilter) {
         // + БЕЗ ВОЗРАСТА
-        const filterByCategory = places.filter((place) => activeCategories.has(place.category));
+        const filterByCategory = places
+          .filter((place) => activeCategories.includes(place.category));
         setFilteredPlaces(filterByCategory);
       } else {
         // + ВОЗРАСТ
         const filterByAge = places.filter((place) => filterAgeRanges(place.age, activeAgeFilter));
         const filterByCategory = filterByAge
-          .filter((place) => activeCategories.has(place.category));
+          .filter((place) => activeCategories.includes(place.category));
 
         setFilteredPlaces(filterByCategory);
       }
@@ -152,7 +133,7 @@ function Places({ openPopupCities }) {
           ...uniqueCategories
         ]);
       })
-      .catch((error) => console.log(error));
+      .catch(console.log);
   }, []);
 
   // открытие попапа "города" для незарегистрированного
