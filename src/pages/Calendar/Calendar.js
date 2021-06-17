@@ -3,7 +3,9 @@ import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useScrollToTop } from '../../hooks/index';
 import { months } from '../../config/constants';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { renderFilterTags, changeRadioTagState } from '../../utils/filter-tags';
 import {
   BasePage,
@@ -12,7 +14,6 @@ import {
   AnimatedPageContainer,
   Loader
 } from './index';
-import { changeCaseOfFirstLetter } from '../../utils/utils';
 
 function Calendar({
   onEventSignUpClick,
@@ -20,13 +21,9 @@ function Calendar({
   dataCalendar,
   onOpenLoginPopup
 }) {
+  useScrollToTop();
+
   const currentUser = useContext(CurrentUserContext);
-
-  // поднятие страницы к хедеру при загрузке
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
-
   const eventSignUpHandler = (cardData) => {
     onEventSignUpClick(cardData, cardData.booked);
   };

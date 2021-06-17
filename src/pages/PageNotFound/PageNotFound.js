@@ -1,13 +1,10 @@
 import './PageNotFound.scss';
-import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useScrollToTop } from '../../hooks/index';
 import { BasePage, AnimatedPageContainer } from './index';
 
 function PageNotFound() {
-  // поднятие страницы к хедеру при загрузке
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
+  useScrollToTop();
 
   return (
     <BasePage>

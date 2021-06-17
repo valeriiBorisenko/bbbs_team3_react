@@ -1,8 +1,9 @@
-import './WhereToGo.scss';
+import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useScrollToTop } from '../../hooks/index';
 import { repeatSchema } from '../../utils/utils';
 import { COLORS, ALL_CATEGORIES } from '../../config/constants';
 import {
@@ -12,7 +13,7 @@ import {
   BasePage,
   TitleH1,
   CardPlace,
-  WhereToGoRecommend
+  PlacesRecommend
 } from './index';
 import Api from '../../utils/api';
 
@@ -23,13 +24,10 @@ const ageFilters = [
   { filter: '18+ лет', name: '18+ лет', isActive: false }
 ];
 
-function WhereToGo({ openPopupCities }) {
-  const currentUser = useContext(CurrentUserContext);
+function Places({ openPopupCities }) {
+  useScrollToTop();
 
-  // поднятие страницы к хедеру при загрузке
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
+  const currentUser = useContext(CurrentUserContext);
 
   // начальные места из API
   const [places, setPlaces] = useState([]);
@@ -185,7 +183,7 @@ function WhereToGo({ openPopupCities }) {
         </div>
       </section>
 
-      {currentUser && (<WhereToGoRecommend />)}
+      {currentUser && (<PlacesRecommend />)}
 
       <section className="place__main page__section fade-in">
         <CardPlace
@@ -210,12 +208,12 @@ function WhereToGo({ openPopupCities }) {
   );
 }
 
-WhereToGo.propTypes = {
+Places.propTypes = {
   openPopupCities: PropTypes.func
 };
 
-WhereToGo.defaultProps = {
+Places.defaultProps = {
   openPopupCities: () => {}
 };
 
-export default WhereToGo;
+export default Places;
