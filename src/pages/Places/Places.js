@@ -13,7 +13,7 @@ import {
   BasePage,
   TitleH1,
   CardPlace,
-  WhereToGoRecommend
+  PlacesRecommend
 } from './index';
 import Api from '../../utils/api';
 
@@ -183,7 +183,7 @@ function Places({ openPopupCities }) {
         </div>
       </section>
 
-      {currentUser && (<WhereToGoRecommend />)}
+      {currentUser && (<PlacesRecommend />)}
 
       <section className="place__main page__section fade-in">
         <CardPlace
