@@ -2,35 +2,24 @@
 import './WhereToGoRecommend.scss';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import FormRecommendation from '../FormRecommendation/FormRecommendation';
+import { FormRecommendation, PopupRecommendSuccess } from './index';
 
 function WhereToGoRecommend({ sectionClass }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
-
-  const scrollToForm = () => {
-    const isSmallDesktop = window.innerWidth > 899 && window.innerWidth < 1100;
-    let position;
-
-    if (isSmallDesktop) {
-      position = 230;
-    } else {
-      position = 150;
-    }
-
-    window.scrollTo({
-      top: position,
-      behavior: 'smooth'
-    });
-  };
+  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
 
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen);
-    if (!isFormOpen) scrollToForm();
+  };
+
+  const closeSuccessPopup = () => {
+    setIsSuccessPopupOpen(false);
+    toggleForm();
   };
 
   const handleFormSubmit = (data) => {
     console.log({ data });
-    toggleForm();
+    setIsSuccessPopupOpen(true);
   };
 
   const classNames = [
@@ -40,33 +29,39 @@ function WhereToGoRecommend({ sectionClass }) {
     sectionClass].join(' ').trim();
 
   return (
-    <section className={classNames}>
-      <div className="recommendation__container">
-        {isFormOpen && (
+    <>
+      <section className={classNames}>
+        <div className="recommendation__container">
+          {isFormOpen && (
           <button
             className="recommendation__close-button"
             type="button"
             aria-label="закрыть попап"
             onClick={toggleForm}
           />
-        )}
-        <p className="section-title recommendation__text">
-          Если вы были в интересном месте и хотите порекомендовать его другим&nbsp;наставникам
-          –&nbsp;
-          <button
-            className="recommendation__text-link"
-            type="button"
-            onClick={() => setIsFormOpen(true)}
-          >
-            заполните&nbsp;форму
-          </button>
-          , и мы добавим вашу&nbsp;рекомендацию.
-        </p>
-        {/* вызов формы */}
-        <FormRecommendation isOpen={isFormOpen} onSubmit={handleFormSubmit} />
-      </div>
+          )}
+          <p className="section-title recommendation__text">
+            Если вы были в интересном месте и хотите порекомендовать его другим&nbsp;наставникам
+            –&nbsp;
+            <button
+              className="recommendation__text-link"
+              type="button"
+              onClick={() => setIsFormOpen(true)}
+            >
+              заполните&nbsp;форму
+            </button>
+            , и мы добавим вашу&nbsp;рекомендацию.
+          </p>
+          {/* вызов формы */}
+          <FormRecommendation isOpen={isFormOpen} onSubmit={handleFormSubmit} />
+        </div>
 
-    </section>
+      </section>
+      <PopupRecommendSuccess
+        isOpen={isSuccessPopupOpen}
+        onClose={closeSuccessPopup}
+      />
+    </>
   );
 }
 
