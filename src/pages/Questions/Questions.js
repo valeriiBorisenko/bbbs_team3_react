@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -7,7 +8,7 @@ import { useScrollToTop } from '../../hooks/index';
 import { ALL_CATEGORIES } from '../../config/constants';
 import { questionForm } from '../../utils/utils';
 import {
-  renderFilterTags, changeCheckboxTagState, selectOneTag, deselectOneTag
+  renderFilterTags, handleCheckboxBehavior, selectOneTag, deselectOneTag
 } from '../../utils/filter-tags';
 import {
   BasePage,
@@ -32,9 +33,8 @@ function Questions() {
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-
-  // категории фильтрации
-  const [categories, setCategories] = useState([]); // состояние кнопок фильтров
+  // категории фильтрации, состояние кнопок фильтров
+  const [categories, setCategories] = useState([]);
 
   // форма
   const [isQuestionForm, setIsQuestionForm] = useState(questionForm.before);
@@ -51,7 +51,12 @@ function Questions() {
 
   // хэндлер клика по фильтру
   const changeCategory = (inputValue, isChecked) => {
-    changeCheckboxTagState(setCategories, { inputValue, isChecked });
+    if (inputValue === ALL_CATEGORIES) {
+      selectOneTag(setCategories, ALL_CATEGORIES);
+    } else {
+      handleCheckboxBehavior(setCategories, { inputValue, isChecked });
+    }
+
     setIsFiltersUsed(true);
   };
 
@@ -64,16 +69,13 @@ function Questions() {
     if (activeCategories.length === 0) {
       setFilteredQuestions(questionsData);
       selectOneTag(setCategories, ALL_CATEGORIES);
-      return;
-    }
-
-    // КАТЕГОРИИ
-    if (activeCategories.length > 0) {
+    } else {
       const filterByCategory = questionsData
         .filter((question) => question.tags.some((el) => activeCategories.includes(el.name)));
+
       setFilteredQuestions(filterByCategory);
+      deselectOneTag(setCategories, ALL_CATEGORIES);
     }
-    deselectOneTag(setCategories, ALL_CATEGORIES);
   };
 
   // запуск фильтрации
@@ -114,7 +116,7 @@ function Questions() {
             <>
               <div className="tags tags_content_long-list">
                 <ul className="tags__list tags__list_type_long">
-                  {renderFilterTags(categories, 'checkbox', changeCategory)}
+                  {renderFilterTags(categories, 'tag', changeCategory)}
                 </ul>
               </div>
               <ul className="questions">

@@ -7,7 +7,7 @@ import { useScrollToTop } from '../../hooks/index';
 import { repeatSchema } from '../../utils/utils';
 import { COLORS, ALL_CATEGORIES } from '../../config/constants';
 import {
-  renderFilterTags, changeCheckboxTagState, changeRadioTagState, selectOneTag, deselectOneTag
+  renderFilterTags, handleCheckboxBehavior, handleRadioBehavior, selectOneTag, deselectOneTag
 } from '../../utils/filter-tags';
 import {
   BasePage,
@@ -36,20 +36,24 @@ function Places({ openPopupCities }) {
   const [filteredPlaces, setFilteredPlaces] = useState([]);
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-
   // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
 
-  // хэндлер клика по фильтру КАТЕГОРИЯ
+  // хэндлер клика по фильтру
   const changeCategory = (inputValue, isChecked) => {
-    changeCheckboxTagState(setCategories, { inputValue, isChecked });
+    if (inputValue === ALL_CATEGORIES) {
+      selectOneTag(setCategories, ALL_CATEGORIES);
+    } else {
+      handleCheckboxBehavior(setCategories, { inputValue, isChecked });
+    }
+
     setIsFiltersUsed(true);
   };
 
   // хэндлер клика по фильтру ВОЗРАСТ
   const changeAge = (inputValue, isChecked) => {
-    changeRadioTagState(setAges, { inputValue, isChecked });
+    handleRadioBehavior(setAges, { inputValue, isChecked });
     setIsFiltersUsed(true);
   };
 
@@ -156,10 +160,10 @@ function Places({ openPopupCities }) {
         <TitleH1 title="Куда пойти" />
         <div className="tags">
           <ul className="tags__list">
-            {renderFilterTags(categories, 'checkbox', changeCategory)}
+            {renderFilterTags(categories, 'category', changeCategory)}
           </ul>
           <ul className="tags__list">
-            {renderFilterTags(ages, 'checkbox', changeAge)}
+            {renderFilterTags(ages, 'age', changeAge)}
           </ul>
         </div>
       </section>
