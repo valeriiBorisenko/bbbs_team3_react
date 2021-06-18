@@ -1,10 +1,11 @@
 import './MainPage.scss';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { QUESTIONS_URL } from '../../config/routes';
+import Api from '../../utils/api';
 import {
   BasePage,
   Loader,
@@ -21,10 +22,17 @@ import {
 
 function MainPage({
   onEventSignUpClick,
-  onEventFullDescriptionClick,
-  dataMain
+  onEventFullDescriptionClick
 }) {
   const currentUser = useContext(CurrentUserContext);
+  const [dataMain, setDataMain] = useState(null);
+
+  useEffect(() => {
+    Api.getMainPageData()
+      .then((mainPageData) => setDataMain(mainPageData))
+      .catch((error) => console.log(error)); // попап ошибка!
+  }, []);
+  console.log(dataMain);
 
   // поднятие страницы к хедеру при загрузке
   useEffect(() => {
@@ -132,8 +140,8 @@ function MainPage({
       <section className="articles main-section page__section fade-in">
         <Link to="/articles" className="main-section__link">
           <CardArticleBig
-            key={dataMain.articles[1].id}
-            data={dataMain.articles[1]}
+            key={dataMain.articles[0].id}
+            data={dataMain.articles[0]}
           />
         </Link>
       </section>
@@ -143,14 +151,14 @@ function MainPage({
 
 MainPage.propTypes = {
   onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
-  dataMain: PropTypes.objectOf(PropTypes.any)
+  onEventFullDescriptionClick: PropTypes.func
+  // dataMain: PropTypes.objectOf(PropTypes.any)
 };
 
 MainPage.defaultProps = {
   onEventSignUpClick: () => {},
-  onEventFullDescriptionClick: () => {},
-  dataMain: {}
+  onEventFullDescriptionClick: () => {}
+  // dataMain: {}
 };
 
 export default MainPage;

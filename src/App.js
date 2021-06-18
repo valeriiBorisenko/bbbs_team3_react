@@ -35,16 +35,6 @@ function App() {
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
   // данные страниц с сервера
   const [dataCalendar, setDataCalendar] = useState([]);
-  const [dataMain, setDataMain] = useState(null);
-  console.log(setDataMain);
-
-  // загрузка данных страниц
-  // загрузка данных главной страницы с сервера
-  useEffect(() => {
-    Api.getMainPageData();
-    // .then((res) => setDataMain(res.mainPageData))
-    // .catch((err) => console.log(err));
-  }, []); //! перенести в мейн, когда будет бэк
 
   // загрузка данных страницы календаря, если ты залогиненный
   useEffect(() => {
@@ -134,7 +124,8 @@ function App() {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
       AuthApi.getUserData()
-        .then((data) => setCurrentUser(data.userData))
+        .then((data) => console.log('APP', data))
+        .then((data) => setCurrentUser(data))
         .then(() => setIsCheckingToken(false))
         .catch((error) => console.log(error)); // при получении userData возникла проблема
     } else {
@@ -204,7 +195,7 @@ function App() {
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
     handleClickPopupCities,
-    dataMain, //! перенести в мейн, когда будет бэк
+    // dataMain, //! перенести в мейн, когда будет бэк
     dataCalendar //! перенести в календарь, когда будет бэк
   };
 
