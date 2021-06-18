@@ -28,6 +28,8 @@ export default class AuthApi {
   static getUserData() { //! подключено к бекенду
     console.log('getUserData');
     return axios
-     
+      .get(`${baseURL}${apiUrl}/profile/`)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 }
