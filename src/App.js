@@ -115,20 +115,20 @@ function App() {
   }
 
   // проверка токена между сессиями
-  // function checkToken() {
-  //   console.log('tokenCheck');
-  //   const token = localStorage.getItem('jwt');
-  //   console.log(token);
-  //   if (token) {
-  //     AuthApi.setAuth(token);
-  //     AuthApi.getUserData()
-  //       .then((userData) => setCurrentUser(userData))
-  //       .then(() => setIsCheckingToken(false))
-  //       .catch((error) => console.log(error)); // при получении userData возникла проблема
-  //   } else {
-  //     setIsCheckingToken(false);
-  //   }
-  // }
+  function checkToken() {
+    console.log('tokenCheck');
+    const token = localStorage.getItem('jwt');
+    console.log(token);
+    if (token) {
+      AuthApi.setAuth(token);
+      AuthApi.getUserData()
+        .then((userData) => setCurrentUser(userData))
+        .then(() => setIsCheckingToken(false))
+        .catch((error) => console.log(error)); // при получении userData возникла проблема
+    } else {
+      setIsCheckingToken(false);
+    }
+  }
 
   // работает с запросом Api (booked)
   function updateEvent(cardData) {
