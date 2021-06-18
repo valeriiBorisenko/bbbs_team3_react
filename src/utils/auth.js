@@ -14,27 +14,20 @@ export default class AuthApi {
   static clearAuth() {
     axios.defaults.headers.get.Authorization = '';
     axios.defaults.headers.post.Authorization = '';
+    axios.defaults.headers.delete.Authorization = '';
+    axios.defaults.headers.patch.Authorization = '';
   }
 
-  static authorize(loginData) {
+  static authorize(loginData) { //! подключено к бекенду
+    console.log(loginData);
+    return axios.post(`${baseURL}${apiUrl}/token/`, loginData)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  static getUserData() { //! подключено к бекенду
+    console.log('getUserData');
     return axios
-      .post(`${baseURL}${apiUrl}/token/`, loginData)
-      .then((response) => response.data);
+     
   }
-
-  static getUserData() {
-    return fetch('http://127.0.0.1/api/v1/profile/')
-      .then((profileData) => console.log(profileData))
-      .catch((error) => console.log('error', error));
-
-    // return axios
-    //   .get('http://127.0.0.1/api/v1/profile/')
-    //   .then((profileData) => console.log(profileData))
-    //   .catch((error) => console.log('error', error));
-  }
-
-  //! все ответы будут потом переписаны на res.ok ? res.json() : reject()
-  // _handleResult(response) {
-  //   response.ok ? (response.json()) : Promise.reject(`Ошибка ${res.status} ${res.statusText}`)
-  // }
 }
