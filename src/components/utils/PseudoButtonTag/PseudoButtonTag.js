@@ -2,7 +2,6 @@ import './PseudoButtonTag.scss';
 import PropTypes from 'prop-types';
 
 function PseudoButtonTag({
-  type,
   name,
   value,
   title,
@@ -23,7 +22,7 @@ function PseudoButtonTag({
       <input
         id={id}
         className="pseudo-button-checkbox"
-        type={type}
+        type="checkbox"
         name={name}
         value={value}
         checked={isActive}
@@ -40,7 +39,6 @@ function PseudoButtonTag({
 }
 
 PseudoButtonTag.propTypes = {
-  type: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
   title: PropTypes.string,
@@ -49,7 +47,6 @@ PseudoButtonTag.propTypes = {
 };
 
 PseudoButtonTag.defaultProps = {
-  type: 'radio',
   name: '',
   value: '',
   title: '',

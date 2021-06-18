@@ -6,7 +6,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop } from '../../hooks/index';
 import { months } from '../../config/constants';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { renderFilterTags, changeRadioTagState } from '../../utils/filter-tags';
+import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import {
   BasePage,
   TitleH1,
@@ -42,7 +42,7 @@ function Calendar({
 
   // хэндлер клика по фильтру МЕСЯЦ
   const handleFilterClick = (inputValue, isChecked) => {
-    changeRadioTagState(setFilters, { inputValue, isChecked });
+    handleRadioBehavior(setFilters, { inputValue, isChecked });
     setIsFiltersUsed(true);
   };
 
@@ -136,7 +136,7 @@ function Calendar({
                 {filters.length > 1 && (
                 <div className="tags fade-in">
                   <ul className="tags__list">
-                    {renderFilterTags(filters, 'checkbox', handleFilterClick)}
+                    {renderFilterTags(filters, 'month', handleFilterClick)}
                   </ul>
                 </div>
                 )}
