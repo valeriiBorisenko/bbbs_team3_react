@@ -89,22 +89,17 @@ function App() {
   }
 
   //! api
-  function handleLogin({ login, password }) {
-    AuthApi.authorize(login, password)
-      .then((data) => {
-        const { access, refresh } = data.token;
+  function handleLogin(loginData) {
+    console.log('handleLogin');
+    AuthApi.authorize(loginData)
+      .then((token) => {
+        console.log(token);
+        const { access, refresh } = token;
         if (refresh && access) {
           AuthApi.setAuth(access);
           localStorage.setItem('jwt', access);
-          Promise.all([
-            AuthApi.getUserData(),
-            Api.getCalendarPageData() //! перенести в календарь, когда будет бэк
-            // в дальнейшем сама страница календаря будет запрашивать АПИ напрямую
-          ])
-            .then(([userData, events]) => {
-              setDataCalendar(events.calendarPageData);
-              setCurrentUser(userData.userData);
-            })
+          AuthApi.getUserData()
+            .then((userData) => setCurrentUser(userData))
             .then(() => closeAllPopups())
             .catch((error) => console.log(error)); // при получении данных произошла ошибка
         }
@@ -120,18 +115,20 @@ function App() {
   }
 
   // проверка токена между сессиями
-  function checkToken() {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      AuthApi.getUserData()
-        .then((data) => console.log('APP', data))
-        .then((data) => setCurrentUser(data))
-        .then(() => setIsCheckingToken(false))
-        .catch((error) => console.log(error)); // при получении userData возникла проблема
-    } else {
-      setIsCheckingToken(false);
-    }
-  }
+  // function checkToken() {
+  //   console.log('tokenCheck');
+  //   const token = localStorage.getItem('jwt');
+  //   console.log(token);
+  //   if (token) {
+  //     AuthApi.setAuth(token);
+  //     AuthApi.getUserData()
+  //       .then((userData) => setCurrentUser(userData))
+  //       .then(() => setIsCheckingToken(false))
+  //       .catch((error) => console.log(error)); // при получении userData возникла проблема
+  //   } else {
+  //     setIsCheckingToken(false);
+  //   }
+  // }
 
   // работает с запросом Api (booked)
   function updateEvent(cardData) {
@@ -177,7 +174,7 @@ function App() {
   // получение списка городов
   useEffect(() => {
     Api.getCities()
-      .then((res) => setCities(res.cities))
+      .then((citiesList) => setCities(citiesList))
       .catch((error) => console.log(error));
   }, []); //! перенести в хук
 
