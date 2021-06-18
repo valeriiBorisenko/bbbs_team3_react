@@ -15,6 +15,7 @@ const userData = require('./server-responses/userData.json');
 const questionsData = require('./server-responses/questions-page.json');
 const question = require('./server-responses/question-post.json');
 const places = require('./server-responses/places.json');
+const catalog = require('./server-responses/catalog-page.json');
 
 // mock
 const mock = new MockAdapter(axios, { delayResponse: 1000 });
@@ -62,10 +63,14 @@ export default function setMockedAnswers() {
   const updateEventMock = (calendarCard) => {
     const calendarData = JSON.parse(calendarCard.data);
     calendarData.booked = !calendarData.booked;
-    calendarData.seats = calendarData.booked ? calendarData.seats - 1 : calendarData.seats + 1;
+    calendarData.seats = calendarData.booked
+      ? calendarData.seats - 1
+      : calendarData.seats + 1;
     return [200, calendarData];
   };
-  mock.onPatch(`${baseURL}${apiUrl}/afisha/event-participants/`).reply(updateEventMock);
+  mock
+    .onPatch(`${baseURL}${apiUrl}/afisha/event-participants/`)
+    .reply(updateEventMock);
 
   //! Страница Вопросы
   mock
@@ -76,3 +81,8 @@ export default function setMockedAnswers() {
     .onPost(`${baseURL}${apiUrl}/question/`)
     .reply(200, { question }, 'Content-Type: application/json');
 }
+
+//! Страница Справочник
+mock
+  .onGet(`${baseURL}${apiUrl}/catalog/`)
+  .reply(200, catalog, 'Content-Type: application/json');

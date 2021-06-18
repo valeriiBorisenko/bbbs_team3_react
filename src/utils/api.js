@@ -56,6 +56,13 @@ export default class Api {
       .then((response) => response.data);
   }
 
+  // работа со страницей справочника
+  static getCatalogPageData() {
+    return axios
+      .get(`${baseURL}${apiUrl}/catalog/`)
+      .then((response) => response.data);
+  }
+
   // работа со странице вопросов
   static getQuestionsPageData() {
     return axios

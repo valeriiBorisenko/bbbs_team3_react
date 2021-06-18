@@ -22,8 +22,8 @@ function Catalog() {
           рассказанную на вводном тренинге. Если вы захотите освежить свои знания, и&nbsp;напомнить
           себе о&nbsp;чем-то."
         />
+        <CardsSection />
       </section>
-      <CardsSection />
     </BasePage>
   );
 }

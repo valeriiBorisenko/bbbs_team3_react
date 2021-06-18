@@ -8,12 +8,19 @@ import {
   MainPage,
   PageNotFound,
   QuestionsPage,
-  WhereToGo
+  WhereToGo,
+  Catalog
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import {
-  MAIN_PAGE_URL, ABOUT_US_URL, AFISHA_URL, QUESTIONS_URL, ACCOUNT_URL, PLACES_URL
+  MAIN_PAGE_URL,
+  ABOUT_US_URL,
+  AFISHA_URL,
+  QUESTIONS_URL,
+  ACCOUNT_URL,
+  PLACES_URL,
+  CATALOG_URL
 } from '../config/routes';
 
 function Router({
@@ -60,9 +67,10 @@ function Router({
         isAuth={!!currentUser}
       />
       <Route exact path={PLACES_URL}>
-        <WhereToGo
-          openPopupCities={handleClickPopupCities}
-        />
+        <WhereToGo openPopupCities={handleClickPopupCities} />
+      </Route>
+      <Route exact path={CATALOG_URL}>
+        <Catalog openPopupCities={handleClickPopupCities} />
       </Route>
       <Route path="*">
         <PageNotFound />

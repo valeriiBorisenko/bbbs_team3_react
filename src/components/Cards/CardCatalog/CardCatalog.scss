@@ -1,5 +1,9 @@
 @import '../../../styles/base/mixins';
 
+.card-catalog {
+  max-width: 370px;
+}
+
 .card-catalog__title {
   text-align: center;
   margin-top: 20px;
@@ -15,11 +19,18 @@
   align-items: unset;
   padding: 0;
   overflow: hidden;
+  width: 370px;
+  height: 370px;
 }
 
 @include atDesktop1024 {
+  .card-catalog {
+    max-width: 290px;
+  }
+
   .card-catalog_type_shaped {
     margin: 0 auto;
-    max-width: 290px;
+    width: 290px;
+    height: 290px;
   }
 }
