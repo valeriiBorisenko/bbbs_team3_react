@@ -8,7 +8,8 @@ import {
   MainPage,
   PageNotFound,
   Questions,
-  Places
+  Places,
+  Rights
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -18,7 +19,8 @@ import {
   AFISHA_URL,
   QUESTIONS_URL,
   ACCOUNT_URL,
-  PLACES_URL
+  PLACES_URL,
+  RIGHTS_URL
 } from '../config/routes';
 
 function Router({
@@ -65,9 +67,10 @@ function Router({
         isAuth={!!currentUser}
       />
       <Route exact path={PLACES_URL}>
-        <Places
-          openPopupCities={handleClickPopupCities}
-        />
+        <Places openPopupCities={handleClickPopupCities} />
+      </Route>
+      <Route exact path={RIGHTS_URL}>
+        <Rights openPopupCities={handleClickPopupCities} />
       </Route>
       <Route path="*">
         <PageNotFound />
