@@ -8,6 +8,9 @@ export default class AuthApi {
   static setAuth(accessToken) {
     axios.defaults.headers.get.Authorization = `Bearer ${accessToken}`;
     axios.defaults.headers.post.Authorization = `Bearer ${accessToken}`;
+    axios.defaults.headers.patch.Authorization = `Bearer ${accessToken}`;
+    axios.defaults.headers.delete.Authorization = `Bearer ${accessToken}`;
+    console.log(axios.defaults.headers);
   }
 
   // очистка при логауте
