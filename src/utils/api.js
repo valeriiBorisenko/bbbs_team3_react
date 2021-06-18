@@ -1,33 +1,17 @@
 import axios from 'axios';
-import setMockedAnswers from './mocked-answers';
+// import setMockedAnswers from './mocked-answers';
 import { apiUrl, baseURL } from '../config/config';
 
-setMockedAnswers();
+// setMockedAnswers();
 
 axios.defaults.headers.get['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 export default class Api {
-  // главная страница
+  // главная страница //! подключено к бекенду
   static getMainPageData() {
-    console.log(`${baseURL}${apiUrl}/main/`);
-    return fetch(`${baseURL}${apiUrl}/main/`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
-        Origin: 'http://localhost:3000',
-        Accept: 'application/json'
-
-      }
-    })
-      .then((result) => console.log(result));
-    // return axios
-    //   .get('http://127.0.0.1/api/v1/main/', {
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     }
-    //   })
-    //   .then((response) => console.log(response))
-    //   .catch((err) => console.log(err));
+    return axios.get(`${baseURL}${apiUrl}/main/`)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   // города
@@ -84,8 +68,4 @@ export default class Api {
       .post(`${baseURL}${apiUrl}/question/`, question)
       .then((response) => response.data);
   }
-  //! все ответы будут потом переписаны на res.ok ? res.json() : reject()
-  // _handleResult(response) {
-  //   response.ok ? (response.json()) : Promise.reject(`Ошибка ${res.status} ${res.statusText}`)
-  // }
 }
