@@ -7,19 +7,13 @@ import { useScrollToTop } from '../../hooks/index';
 import { months } from '../../config/constants';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
-import {
-  BasePage,
-  TitleH1,
-  CardCalendar,
-  AnimatedPageContainer,
-  Loader
-} from './index';
+import { BasePage, TitleH1, CardCalendar, AnimatedPageContainer, Loader } from './index';
 
 function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
   dataCalendar,
-  onOpenLoginPopup
+  onOpenLoginPopup,
 }) {
   useScrollToTop();
 
@@ -73,8 +67,9 @@ function Calendar({
 
     //* ШАГ 3 выкидываем из массива arrayOfDatesWithEvent повторы
     const arrayOfUniqueDates = arrayOfDatesWithEvents.filter((item, index, self) => {
-      const something = self
-        .findIndex((current) => (item.month === current.month && item.year === current.year));
+      const something = self.findIndex(
+        (current) => item.month === current.month && item.year === current.year,
+      );
       return something === index;
     });
 
@@ -84,7 +79,7 @@ function Calendar({
       return {
         filter: JSON.stringify(filter),
         name,
-        isActive: false
+        isActive: false,
       };
     });
 
@@ -127,18 +122,18 @@ function Calendar({
       </Helmet>
       <section className="calendar-page page__section fade-in">
         {/* переработать */}
-        { (dataCalendar && dataCalendar?.length > 0) ? (
+        {dataCalendar && dataCalendar?.length > 0 ? (
           <>
             <TitleH1 title="Календарь" />
 
             {dataCalendar.length > 0 ? (
               <div className="calendar-page__container">
                 {filters.length > 1 && (
-                <div className="tags fade-in">
-                  <ul className="tags__list">
-                    {renderFilterTags(filters, 'month', handleFilterClick)}
-                  </ul>
-                </div>
+                  <div className="tags fade-in">
+                    <ul className="tags__list">
+                      {renderFilterTags(filters, 'month', handleFilterClick)}
+                    </ul>
+                  </div>
                 )}
 
                 <div className="calendar-page__grid">
@@ -153,16 +148,18 @@ function Calendar({
                   ))}
                 </div>
               </div>
-            ) : <Loader isNested />}
+            ) : (
+              <Loader isNested />
+            )}
 
-            { !currentUser && onOpenLoginPopup()}
+            {!currentUser && onOpenLoginPopup()}
           </>
         ) : (
           <AnimatedPageContainer
             titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
             buttonText="Вернуться на главную"
           />
-        ) }
+        )}
       </section>
     </BasePage>
   );
@@ -171,14 +168,14 @@ Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
   dataCalendar: PropTypes.arrayOf(PropTypes.object),
-  onOpenLoginPopup: PropTypes.func
+  onOpenLoginPopup: PropTypes.func,
 };
 
 Calendar.defaultProps = {
   onEventSignUpClick: () => {},
   dataCalendar: [],
   onEventFullDescriptionClick: () => {},
-  onOpenLoginPopup: () => {}
+  onOpenLoginPopup: () => {},
 };
 
 export default Calendar;

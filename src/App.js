@@ -8,7 +8,12 @@ import Loader from './components/utils/Loader/Loader';
 import { MAIN_PAGE_URL, ACCOUNT_URL } from './config/routes';
 // попапы
 import {
-  PopupConfirmation, PopupSuccessfully, PopupLogin, PopupAboutEvent, PopupCities, PopupError
+  PopupConfirmation,
+  PopupSuccessfully,
+  PopupLogin,
+  PopupAboutEvent,
+  PopupCities,
+  PopupError,
 } from './components/Popups/index';
 // логины, авторизация
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -107,7 +112,7 @@ function App() {
           localStorage.setItem('jwt', access);
           Promise.all([
             AuthApi.getUserData(),
-            Api.getCalendarPageData() //! перенести в календарь, когда будет бэк
+            Api.getCalendarPageData(), //! перенести в календарь, когда будет бэк
             // в дальнейшем сама страница календаря будет запрашивать АПИ напрямую
           ])
             .then(([userData, events]) => {
@@ -143,13 +148,13 @@ function App() {
 
   // работает с запросом Api (booked)
   function updateEvent(cardData) {
-    return Api.updateEvent(cardData)
-      .then((updatedCardData) => {
-        setDataCalendar(
-          dataCalendar
-            .map((eventObj) => (eventObj.id === updatedCardData.id ? updatedCardData : eventObj))
-        );
-      });
+    return Api.updateEvent(cardData).then((updatedCardData) => {
+      setDataCalendar(
+        dataCalendar.map((eventObj) =>
+          eventObj.id === updatedCardData.id ? updatedCardData : eventObj,
+        ),
+      );
+    });
   }
 
   function handleEventUpdate(cardData) {
@@ -204,7 +209,7 @@ function App() {
     handleClickPopupLoginOpened,
     handleClickPopupCities,
     dataMain, //! перенести в мейн, когда будет бэк
-    dataCalendar //! перенести в календарь, когда будет бэк
+    dataCalendar, //! перенести в календарь, когда будет бэк
   };
 
   return (
@@ -248,10 +253,7 @@ function App() {
             onClose={closeAllPopups}
             onSubmit={setCurrentUser}
           />
-          <PopupError
-            isOpen={isPopupErrorOpen}
-            onClose={closeAllPopups}
-          />
+          <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
         </div>
       </CurrentUserContext.Provider>
     </HelmetProvider>

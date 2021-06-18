@@ -1,15 +1,9 @@
 import './CardQuestion.scss';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Rubric, TitleH2, Card, ButtonRound
-} from './index';
+import { Rubric, TitleH2, Card, ButtonRound } from './index';
 
-function CardQuestion({
-  data: { title, tags, answer },
-  sectionClass,
-  isQuestionsPage
-}) {
+function CardQuestion({ data: { title, tags, answer }, sectionClass, isQuestionsPage }) {
   const [isClick, setIsClick] = useState(false);
 
   function handleClickButton() {
@@ -31,16 +25,17 @@ function CardQuestion({
             <Rubric key={tag.id} title={tag.name} sectionClass="card-question__rubric" />
           ))}
         </div>
-        {isQuestionsPage
-          ? (
-            <ButtonRound
-              label="Показать ответ"
-              sectionClass="button-round__questions-page"
-              color="lightblue"
-              onClick={handleClickButton}
-              isClick={isClick}
-            />
-          ) : ''}
+        {isQuestionsPage ? (
+          <ButtonRound
+            label="Показать ответ"
+            sectionClass="button-round__questions-page"
+            color="lightblue"
+            onClick={handleClickButton}
+            isClick={isClick}
+          />
+        ) : (
+          ''
+        )}
       </div>
       {isQuestionsPage ? answerRender : ''}
     </Card>
@@ -53,7 +48,7 @@ CardQuestion.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.object),
   sectionClass: PropTypes.string,
   isQuestionsPage: PropTypes.bool,
-  answer: PropTypes.string
+  answer: PropTypes.string,
 };
 
 CardQuestion.defaultProps = {
@@ -62,7 +57,7 @@ CardQuestion.defaultProps = {
   tags: [],
   sectionClass: '',
   isQuestionsPage: false,
-  answer: ''
+  answer: '',
 };
 
 export default CardQuestion;

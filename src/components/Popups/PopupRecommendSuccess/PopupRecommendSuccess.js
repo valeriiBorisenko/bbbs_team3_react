@@ -2,9 +2,7 @@ import './PopupRecommendSuccess.scss';
 import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
-import {
-  animationRecommendSuccess, Popup, Button
-} from './index';
+import { animationRecommendSuccess, Popup, Button } from './index';
 
 function PopupRecommendSuccess({ isOpen, onClose }) {
   const animationContainer = useRef(null);
@@ -15,7 +13,7 @@ function PopupRecommendSuccess({ isOpen, onClose }) {
       renderer: 'svg',
       loop: true,
       autoplay: true,
-      animationData: animationRecommendSuccess
+      animationData: animationRecommendSuccess,
     });
   }, []);
 
@@ -45,12 +43,12 @@ function PopupRecommendSuccess({ isOpen, onClose }) {
 
 PopupRecommendSuccess.propTypes = {
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
 PopupRecommendSuccess.defaultProps = {
   isOpen: false,
-  onClose: () => {}
+  onClose: () => {},
 };
 
 export default PopupRecommendSuccess;

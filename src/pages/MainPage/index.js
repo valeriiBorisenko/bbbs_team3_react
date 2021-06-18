@@ -21,5 +21,5 @@ export {
   CardFilm,
   CardVideoMain,
   Widget,
-  CardQuestion
+  CardQuestion,
 };

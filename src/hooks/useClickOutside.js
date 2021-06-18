@@ -4,13 +4,16 @@ import { useCallback, useEffect, useRef } from 'react';
 const useClickOutside = (callback) => {
   const ref = useRef(null);
 
-  const clickListener = useCallback((evt) => {
-    if (ref && ref.current) {
-      if (!ref.current.contains(evt.target)) {
-        callback();
+  const clickListener = useCallback(
+    (evt) => {
+      if (ref && ref.current) {
+        if (!ref.current.contains(evt.target)) {
+          callback();
+        }
       }
-    }
-  }, [ref.current]);
+    },
+    [ref.current],
+  );
 
   useEffect(() => {
     document.addEventListener('mousedown', clickListener);

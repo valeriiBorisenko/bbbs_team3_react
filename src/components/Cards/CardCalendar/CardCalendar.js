@@ -8,25 +8,16 @@ function CardCalendar({
   isModal,
   onEventSignUpClick,
   onEventFullDescriptionClick,
-  sectionClass
+  sectionClass,
 }) {
-  const {
-    booked,
-    tags,
-    title,
-    startAt,
-    endAt,
-    address,
-    contact,
-    remainSeats,
-    description
-  } = cardData;
+  const { booked, tags, title, startAt, endAt, address, contact, remainSeats, description } =
+    cardData;
 
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
 
   // будет ли заблокирована кнопка
-  const isDisabled = (remainSeats < 1);
+  const isDisabled = remainSeats < 1;
 
   function prepareDataForConfirmationPopup() {
     onEventSignUpClick(cardData);
@@ -42,9 +33,7 @@ function CardCalendar({
     <article className={classNames}>
       <div className="calendar__caption">
         <div className="calendar__info">
-          <p className="calendar__type">
-            {getCardType(tags)}
-          </p>
+          <p className="calendar__type">{getCardType(tags)}</p>
           <p className="calendar__weekday">
             {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
           </p>
@@ -84,12 +73,10 @@ function CardCalendar({
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
-            {(isDisabled && 'Запись закрыта')
-            || (!booked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
+            {(isDisabled && 'Запись закрыта') ||
+              (!booked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
           </p>
-          <ButtonDots
-            handleClick={prepareDataForAboutEventPopup}
-          />
+          <ButtonDots handleClick={prepareDataForAboutEventPopup} />
         </div>
       </div>
     </article>
@@ -101,7 +88,7 @@ CardCalendar.propTypes = {
   isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
 };
 
 CardCalendar.defaultProps = {
@@ -109,7 +96,7 @@ CardCalendar.defaultProps = {
   isModal: false,
   onEventSignUpClick: () => {},
   onEventFullDescriptionClick: () => {},
-  sectionClass: ''
+  sectionClass: '',
 };
 
 export default CardCalendar;

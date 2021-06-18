@@ -2,27 +2,13 @@ import PropTypes from 'prop-types';
 import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
 import { Popup, Button, TitleH2 } from './index';
 
-function PopupAboutEvent({
-  isOpen,
-  onClose,
-  onEventSignUpClick,
-  cardData
-}) {
-  const {
-    booked,
-    tags,
-    title,
-    startAt,
-    endAt,
-    address,
-    contact,
-    remainSeats,
-    description
-  } = cardData;
+function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick, cardData }) {
+  const { booked, tags, title, startAt, endAt, address, contact, remainSeats, description } =
+    cardData;
 
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
-  const isDisabled = (remainSeats < 1);
+  const isDisabled = remainSeats < 1;
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -30,27 +16,17 @@ function PopupAboutEvent({
   }
 
   return (
-    <Popup
-      type="about-event"
-      typeContainer="calendar"
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Popup type="about-event" typeContainer="calendar" isOpen={isOpen} onClose={onClose}>
       <form className="popup__form" onSubmit={handleSubmit}>
         <div className="calendar__caption">
           <div className="calendar__info">
-            <p className="calendar__type">
-              {getCardType(tags)}
-            </p>
+            <p className="calendar__type">{getCardType(tags)}</p>
             <p className="calendar__weekday">
               {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
             </p>
           </div>
           <div className="calendar__about">
-            <TitleH2
-              title={title}
-              sectionClass="calendar__title calendar__title_type_popup"
-            />
+            <TitleH2 title={title} sectionClass="calendar__title calendar__title_type_popup" />
             <p className="calendar__date">{startDateParts.day}</p>
           </div>
         </div>
@@ -83,8 +59,8 @@ function PopupAboutEvent({
             />
             <p className="calendar__place-left">
               {/* если запись закрыта, то карточка не должна быть выделенной */}
-              {(isDisabled && 'Запись закрыта')
-            || (!booked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
+              {(isDisabled && 'Запись закрыта') ||
+                (!booked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
             </p>
           </div>
         </div>
@@ -97,14 +73,14 @@ PopupAboutEvent.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onEventSignUpClick: PropTypes.func,
-  cardData: PropTypes.objectOf(PropTypes.any)
+  cardData: PropTypes.objectOf(PropTypes.any),
 };
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
   onClose: () => {},
   onEventSignUpClick: () => {},
-  cardData: {}
+  cardData: {},
 };
 
 export default PopupAboutEvent;

@@ -2,20 +2,12 @@ import './CardFilm.scss';
 import PropTypes from 'prop-types';
 import { Rubric, TitleH2, Card } from './index';
 
-function CardFilm({
-  data: {
-    imageUrl, title, info, link, tags
-  }, handleClick
-}) {
+function CardFilm({ data: { imageUrl, title, info, link, tags }, handleClick }) {
   return (
     <Card sectionClass="card-film">
       <div className="card-film__video">
         <button className="card-film__button" type="button" onClick={handleClick}>
-          <img
-            src={`${imageUrl}`}
-            alt="Превью видео"
-            className="card-film__preview"
-          />
+          <img src={`${imageUrl}`} alt="Превью видео" className="card-film__preview" />
           <ul className="card-film__rubric-list">
             {tags.map((tag) => (
               <li key={tag.id}>
@@ -31,12 +23,7 @@ function CardFilm({
           <TitleH2 sectionClass="card-film__title" title={title} />
           <p className="caption card-film__info">{info}</p>
         </div>
-        <button
-          type="button"
-          className="link card-film__button"
-          href={link}
-          onClick={handleClick}
-        >
+        <button type="button" className="link card-film__button" href={link} onClick={handleClick}>
           смотреть трейлер
         </button>
       </div>
@@ -51,7 +38,7 @@ CardFilm.propTypes = {
   info: PropTypes.string,
   link: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.object),
-  handleClick: PropTypes.func
+  handleClick: PropTypes.func,
 };
 
 CardFilm.defaultProps = {
@@ -61,7 +48,7 @@ CardFilm.defaultProps = {
   info: '',
   link: '',
   tags: [],
-  handleClick: () => {}
+  handleClick: () => {},
 };
 
 export default CardFilm;

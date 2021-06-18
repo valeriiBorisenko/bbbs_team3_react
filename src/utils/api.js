@@ -9,23 +9,17 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 export default class Api {
   // главная страница
   static getMainPageData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/main/`)
-      .then((response) => response.data);
+    return axios.get(`${baseURL}${apiUrl}/main/`).then((response) => response.data);
   }
 
   // города
   static getCities() {
-    return axios
-      .get(`${baseURL}${apiUrl}/cities/`)
-      .then((response) => response.data);
+    return axios.get(`${baseURL}${apiUrl}/cities/`).then((response) => response.data);
   }
 
   // страница календаря (ивенты)
   static getCalendarPageData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/afisha/events/`)
-      .then((response) => response.data);
+    return axios.get(`${baseURL}${apiUrl}/afisha/events/`).then((response) => response.data);
   }
 
   // страница "куда пойти"
@@ -44,29 +38,21 @@ export default class Api {
 
   // работа с юзером
   static updateUserInfo(userData) {
-    return axios
-      .patch(`${baseURL}${apiUrl}/profile/`, userData)
-      .then((response) => response.data);
+    return axios.patch(`${baseURL}${apiUrl}/profile/`, userData).then((response) => response.data);
   }
 
   // работа со страницей ЛК
   static getProfileDiaryData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/profile/diary/`)
-      .then((response) => response.data);
+    return axios.get(`${baseURL}${apiUrl}/profile/diary/`).then((response) => response.data);
   }
 
   // работа со странице вопросов
   static getQuestionsPageData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/questions/`)
-      .then((response) => response.data);
+    return axios.get(`${baseURL}${apiUrl}/questions/`).then((response) => response.data);
   }
 
   static postQuestion(question) {
-    return axios
-      .post(`${baseURL}${apiUrl}/question/`, question)
-      .then((response) => response.data);
+    return axios.post(`${baseURL}${apiUrl}/question/`, question).then((response) => response.data);
   }
   //! все ответы будут потом переписаны на res.ok ? res.json() : reject()
   // _handleResult(response) {

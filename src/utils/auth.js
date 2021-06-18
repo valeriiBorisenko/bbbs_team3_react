@@ -17,15 +17,11 @@ export default class AuthApi {
   }
 
   static authorize(loginData) {
-    return axios
-      .post(`${baseURL}${apiUrl}/token/`, loginData)
-      .then((response) => response.data);
+    return axios.post(`${baseURL}${apiUrl}/token/`, loginData).then((response) => response.data);
   }
 
   static getUserData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/profile/`)
-      .then((response) => response.data);
+    return axios.get(`${baseURL}${apiUrl}/profile/`).then((response) => response.data);
   }
 
   //! все ответы будут потом переписаны на res.ok ? res.json() : reject()

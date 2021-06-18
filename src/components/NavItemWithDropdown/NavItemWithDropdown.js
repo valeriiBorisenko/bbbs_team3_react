@@ -6,18 +6,13 @@ import DropDownMenu from '../utils/DropDownMenu/DropDownMenu';
 function NavItemWithDropdown({ sectionWrapperClass, linkText }) {
   return (
     <li className={sectionWrapperClass}>
-      <NavLink
-        className="menu__link"
-        to="#"
-      >
+      <NavLink className="menu__link" to="#">
         {linkText}
       </NavLink>
 
       <DropDownMenu
         sectionWrapperClass="menu__dropdown-list"
-        textsForLinks={
-          ['Справочник', 'Видео', 'Статьи', 'Фильмы', 'Книги']
-        }
+        textsForLinks={['Справочник', 'Видео', 'Статьи', 'Фильмы', 'Книги']}
       />
     </li>
   );
@@ -25,7 +20,7 @@ function NavItemWithDropdown({ sectionWrapperClass, linkText }) {
 
 NavItemWithDropdown.propTypes = {
   sectionWrapperClass: PropTypes.string.isRequired,
-  linkText: PropTypes.string.isRequired
+  linkText: PropTypes.string.isRequired,
 };
 
 export default NavItemWithDropdown;

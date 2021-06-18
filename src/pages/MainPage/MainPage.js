@@ -17,14 +17,10 @@ import {
   CardFilm,
   CardVideoMain,
   Widget,
-  CardQuestion
+  CardQuestion,
 } from './index';
 
-function MainPage({
-  onEventSignUpClick,
-  onEventFullDescriptionClick,
-  dataMain
-}) {
+function MainPage({ onEventSignUpClick, onEventFullDescriptionClick, dataMain }) {
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
@@ -82,20 +78,13 @@ function MainPage({
 
       <section className="articles main-section page__section fade-in">
         <Link to="/articles" className="main-section__link">
-          <CardArticleBig
-            key={dataMain.articles[0].id}
-            data={dataMain.articles[0]}
-          />
+          <CardArticleBig key={dataMain.articles[0].id} data={dataMain.articles[0]} />
         </Link>
       </section>
 
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
         {dataMain.movies.map((item) => (
-          <Link
-            to="/films"
-            className="main-section__link card-pagination_page_main"
-            key={item.id}
-          >
+          <Link to="/films" className="main-section__link card-pagination_page_main" key={item.id}>
             <CardFilm data={item} />
           </Link>
         ))}
@@ -129,10 +118,7 @@ function MainPage({
 
       <section className="articles main-section page__section fade-in">
         <Link to="/articles" className="main-section__link">
-          <CardArticleBig
-            key={dataMain.articles[1].id}
-            data={dataMain.articles[1]}
-          />
+          <CardArticleBig key={dataMain.articles[1].id} data={dataMain.articles[1]} />
         </Link>
       </section>
     </BasePage>
@@ -142,13 +128,13 @@ function MainPage({
 MainPage.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
-  dataMain: PropTypes.objectOf(PropTypes.any)
+  dataMain: PropTypes.objectOf(PropTypes.any),
 };
 
 MainPage.defaultProps = {
   onEventSignUpClick: () => {},
   onEventFullDescriptionClick: () => {},
-  dataMain: {}
+  dataMain: {},
 };
 
 export default MainPage;

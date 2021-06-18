@@ -1,15 +1,15 @@
 import './Rating.scss';
 import PropTypes from 'prop-types';
 
-function Rating({
-  type, name, value, ratingType, sectionClass, checked, onClick
-}) {
+function Rating({ type, name, value, ratingType, sectionClass, checked, onClick }) {
   const classNames = ['rating', sectionClass].join(' ').trim();
 
   const pseudoButtonClassNames = [
     'rating__pseudo-button',
-    `rating__pseudo-button_type_${ratingType}_default`
-  ].join(' ').trim();
+    `rating__pseudo-button_type_${ratingType}_default`,
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <label className={classNames} htmlFor={`rating-${name}-${value}`}>
@@ -34,7 +34,7 @@ Rating.propTypes = {
   ratingType: PropTypes.string,
   sectionClass: PropTypes.string,
   checked: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 Rating.defaultProps = {
@@ -43,7 +43,7 @@ Rating.defaultProps = {
   ratingType: 'neutral',
   sectionClass: '',
   checked: false,
-  onClick: () => {}
+  onClick: () => {},
 };
 
 export default Rating;

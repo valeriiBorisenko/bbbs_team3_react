@@ -3,9 +3,4 @@ import Popup from '../Popup/Popup';
 import TitleH2 from '../../utils/TitleH2/TitleH2';
 import Button from '../../utils/Button/Button';
 
-export {
-  animationSuccess,
-  Popup,
-  TitleH2,
-  Button
-};
+export { animationSuccess, Popup, TitleH2, Button };
