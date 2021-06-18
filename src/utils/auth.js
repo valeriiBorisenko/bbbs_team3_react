@@ -1,8 +1,8 @@
 import axios from 'axios';
-import setMockedAnswers from './mocked-answers';
+// import setMockedAnswers from './mocked-answers';
 import { apiUrl, baseURL } from '../config/config';
 
-setMockedAnswers();
+// setMockedAnswers();
 
 export default class AuthApi {
   static setAuth(accessToken) {
@@ -23,9 +23,14 @@ export default class AuthApi {
   }
 
   static getUserData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/profile/`)
-      .then((response) => response.data);
+    return fetch('http://127.0.0.1/api/v1/profile/')
+      .then((profileData) => console.log(profileData))
+      .catch((error) => console.log('error', error));
+
+    // return axios
+    //   .get('http://127.0.0.1/api/v1/profile/')
+    //   .then((profileData) => console.log(profileData))
+    //   .catch((error) => console.log('error', error));
   }
 
   //! все ответы будут потом переписаны на res.ok ? res.json() : reject()

@@ -11,7 +11,7 @@ const profileDiaryData = require('./server-responses/profile-diary.json');
 const cities = require('./server-responses/cities.json');
 const calendarPageData = require('./server-responses/calendar-page.json');
 const token = require('./server-responses/token.json');
-const userData = require('./server-responses/userData.json');
+// const userData = require('./server-responses/userData.json');
 const questionsData = require('./server-responses/questions-page.json');
 const question = require('./server-responses/question-post.json');
 const places = require('./server-responses/places.json');
@@ -48,9 +48,9 @@ export default function setMockedAnswers() {
     .onPost(`${baseURL}${apiUrl}/token/`)
     .reply(200, { token }, 'Content-Type: application/json');
 
-  mock
-    .onGet(`${baseURL}${apiUrl}/profile/`)
-    .reply(200, { userData }, 'Content-Type: application/json');
+  // mock
+  //   .onGet(`${baseURL}${apiUrl}/profile/`)
+  //   .reply(200, { userData }, 'Content-Type: application/json');
 
   const updateUserInfo = (incoming) => {
     const newUserData = JSON.parse(incoming.data);
