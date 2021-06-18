@@ -4,7 +4,11 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
-  AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL
+  AFISHA_URL,
+  ABOUT_US_URL,
+  QUESTIONS_URL,
+  PLACES_URL,
+  RIGHTS_URL
 } from '../../config/routes';
 import {
   NavItem,
@@ -31,7 +35,11 @@ function NavBar({
         наставники.про
       </Link>
       {/* обычное меню */}
-      <div className={`menu__lists-wrap ${!isMobileMenuOpen ? 'menu__lists-wrap_hidden' : ''}`}>
+      <div
+        className={`menu__lists-wrap ${
+          !isMobileMenuOpen ? 'menu__lists-wrap_hidden' : ''
+        }`}
+      >
         <ul className="menu__list">
           {/* О проекте, скрытый */}
           <NavItem
@@ -70,7 +78,7 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="#"
+            href={RIGHTS_URL}
             linkText="Права детей"
           />
           {/* Истории */}
@@ -82,7 +90,11 @@ function NavBar({
           />
         </ul>
 
-        <ul className={`menu__list menu__list_type_social ${!isMobileMenuOpen ? 'menu__list_hidden' : ''}`}>
+        <ul
+          className={`menu__list menu__list_type_social ${
+            !isMobileMenuOpen ? 'menu__list_hidden' : ''
+          }`}
+        >
           {/* facebook */}
           <NavItem
             sectionWrapperClass="menu__list-item"
@@ -126,23 +138,33 @@ function NavBar({
       </div>
 
       {currentUser && (
-      <div className={`menu__user-info ${!isMobileMenuOpen ? 'menu__user-info_hidden' : ''}`}>
-        <UserMenuButton
-          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
-          handleClick={onCityChangeClick}
-          sectionClass="mobile-link"
-        />
-        <UserMenuButton
-          title="Выйти"
-          sectionClass="mobile-link"
-          handleClick={onLogout}
-        />
-      </div>
+        <div
+          className={`menu__user-info ${
+            !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
+          }`}
+        >
+          <UserMenuButton
+            title={
+              userCityName
+                ? `${userCityName}. Изменить город`
+                : 'Изменить ваш город'
+            }
+            handleClick={onCityChangeClick}
+            sectionClass="mobile-link"
+          />
+          <UserMenuButton
+            title="Выйти"
+            sectionClass="mobile-link"
+            handleClick={onLogout}
+          />
+        </div>
       )}
 
       <button
         onClick={onBurgerButtonClick}
-        className={`menu__burger ${isMobileMenuOpen ? 'menu__burger_active' : ''}`}
+        className={`menu__burger ${
+          isMobileMenuOpen ? 'menu__burger_active' : ''
+        }`}
         type="button"
       >
         <span className="menu__burger-line" />
