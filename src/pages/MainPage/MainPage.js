@@ -25,14 +25,15 @@ function MainPage({
   onEventFullDescriptionClick
 }) {
   const currentUser = useContext(CurrentUserContext);
-  const [dataMain, setDataMain] = useState(null);
+  const [mainPageData, setDataMain] = useState(null);
 
+  // запрос даты главной страницы
   useEffect(() => {
+    console.log('tyt');
     Api.getMainPageData()
-      .then((mainPageData) => setDataMain(mainPageData))
+      .then((data) => setDataMain(data))
       .catch((error) => console.log(error)); // попап ошибка!
   }, []);
-  console.log(dataMain);
 
   // поднятие страницы к хедеру при загрузке
   useEffect(() => {
@@ -43,10 +44,10 @@ function MainPage({
     onEventSignUpClick(cardData, cardData.booked);
   }
 
-  if (!dataMain) {
+  if (!mainPageData) {
     return <Loader isCentered />;
   }
-
+  console.log(mainPageData);
   return (
     <BasePage>
       <Helmet>
@@ -58,24 +59,24 @@ function MainPage({
       </Helmet>
       <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
-          {currentUser ? (
+          {currentUser && mainPageData.event ? (
             <CardCalendar
-              key={dataMain.event.id}
-              cardData={dataMain.event}
+              key={mainPageData.event.id}
+              cardData={mainPageData.event}
               onEventSignUpClick={eventSignUpHandler}
               onEventFullDescriptionClick={onEventFullDescriptionClick}
             />
           ) : (
             <CardStub />
           )}
-          <Card sectionClass="lead__media" key={dataMain.history.id}>
+          <Card sectionClass="lead__media" key={mainPageData.history.id}>
             <img
-              src={dataMain.history.imageUrl}
-              alt={dataMain.history.title}
+              src={mainPageData.history.imageUrl}
+              alt={mainPageData.history.title}
               className="card__media-img"
             />
             <Link to="/stories" className="lead__link">
-              {dataMain.history.title}
+              {mainPageData.history.title}
             </Link>
           </Card>
         </div>
@@ -83,8 +84,8 @@ function MainPage({
 
       <section className="place main-section page__section fade-in">
         <CardPlace
-          key={dataMain.place.id}
-          data={dataMain.place}
+          key={mainPageData.place.id}
+          data={mainPageData.place}
           sectionClass="card-container_type_main-article"
           isMain
         />
@@ -93,14 +94,14 @@ function MainPage({
       <section className="articles main-section page__section fade-in">
         <Link to="/articles" className="main-section__link">
           <CardArticleBig
-            key={dataMain.articles[0].id}
-            data={dataMain.articles[0]}
+            key={mainPageData.articles[0].id}
+            data={mainPageData.articles[0]}
           />
         </Link>
       </section>
 
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
-        {dataMain.movies.map((item) => (
+        {mainPageData.movies.map((item) => (
           <Link
             to="/films"
             className="main-section__link card-pagination_page_main"
@@ -113,7 +114,7 @@ function MainPage({
 
       <section className="video main-section page__section fade-in">
         <Link to="/video" className="main-section__link">
-          <CardVideoMain key={dataMain.video.id} data={dataMain.video} />
+          <CardVideoMain key={mainPageData.video.id} data={mainPageData.video} />
         </Link>
       </section>
 
@@ -124,7 +125,7 @@ function MainPage({
             link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
           />
           <div className="main-questions__container">
-            {dataMain.questions.map((item) => (
+            {mainPageData.questions.map((item) => (
               <Link
                 to={QUESTIONS_URL}
                 className="main-section__link main-section__link_el_question"
@@ -140,8 +141,8 @@ function MainPage({
       <section className="articles main-section page__section fade-in">
         <Link to="/articles" className="main-section__link">
           <CardArticleBig
-            key={dataMain.articles[0].id}
-            data={dataMain.articles[0]}
+            key={mainPageData.articles[0].id}
+            data={mainPageData.articles[0]}
           />
         </Link>
       </section>
