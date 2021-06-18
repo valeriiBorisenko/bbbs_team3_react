@@ -14,11 +14,12 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // города
+  // города //! подключено к бекенду
   static getCities() {
     return axios
       .get(`${baseURL}${apiUrl}/cities/`)
-      .then((response) => response.data);
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   // страница календаря (ивенты)
