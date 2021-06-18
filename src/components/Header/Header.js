@@ -25,7 +25,9 @@ function Header({
 
   // определение города пользователя, используется в кнопках
   useEffect(() => {
-    if (cities && currentUser) {
+    if (cities && currentUser && currentUser.city) {
+      console.log(cities);
+      console.log(currentUser);
       const userCity = cities.filter((city) => city.id === currentUser.city);
       setUserCityName(userCity[0].name);
     }
