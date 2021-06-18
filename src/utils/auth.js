@@ -5,7 +5,8 @@ import { apiUrl, baseURL } from '../config/config';
 // setMockedAnswers();
 
 export default class AuthApi {
-  static setAuth(accessToken) {
+  static setAuth(accessToken) { //! подключено к бекенду
+    console.log(axios.defaults.headers);
     axios.defaults.headers.get.Authorization = `Bearer ${accessToken}`;
     axios.defaults.headers.post.Authorization = `Bearer ${accessToken}`;
     axios.defaults.headers.patch.Authorization = `Bearer ${accessToken}`;
@@ -14,11 +15,14 @@ export default class AuthApi {
   }
 
   // очистка при логауте
-  static clearAuth() {
+  static clearAuth() { //! подключено к бекенду
+    console.log('TYT');
+    console.log(axios.defaults.headers);
     axios.defaults.headers.get.Authorization = '';
     axios.defaults.headers.post.Authorization = '';
     axios.defaults.headers.delete.Authorization = '';
     axios.defaults.headers.patch.Authorization = '';
+    console.log(axios.defaults.headers);
   }
 
   static authorize(loginData) { //! подключено к бекенду
