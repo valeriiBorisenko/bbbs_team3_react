@@ -141,8 +141,9 @@ function MainPage({
       <section className="articles main-section page__section fade-in">
         <Link to="/articles" className="main-section__link">
           <CardArticleBig
-            key={mainPageData.articles[0].id}
-            data={mainPageData.articles[0]}
+            key={mainPageData.articles[1].id}
+            //! опасное место, лучше отталкиваться от сколько всего articles пришло
+            data={mainPageData.articles[1]}
           />
         </Link>
       </section>
