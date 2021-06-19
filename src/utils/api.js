@@ -22,11 +22,12 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // страница календаря (ивенты)
+  // страница календаря (ивенты) //! подключено к бекенду
   static getCalendarPageData() {
     return axios
       .get(`${baseURL}${apiUrl}/afisha/events/`)
-      .then((response) => response.data);
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   // страница "куда пойти"
