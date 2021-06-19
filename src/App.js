@@ -33,22 +33,6 @@ function App() {
   // выбранная карточка при открытии попапа (календарь)
   // в объекте всегда только те поля что пришли с сервера
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
-  // данные страниц с сервера
-  const [dataCalendar, setDataCalendar] = useState([]);
-
-  // загрузка данных страницы календаря, если ты залогиненный
-  useEffect(() => {
-    if (currentUser) {
-      Api.getCalendarPageData()
-        .then((res) => setDataCalendar(res.calendarPageData))
-        .catch((err) => {
-          setIsPopupErrorOpen(true);
-          console.log(err);
-        });
-    } else {
-      setDataCalendar([]);
-    }
-  }, [currentUser]);
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
@@ -132,13 +116,15 @@ function App() {
 
   // работает с запросом Api (booked)
   function updateEvent(cardData) {
-    return Api.updateEvent(cardData)
-      .then((updatedCardData) => {
-        setDataCalendar(
-          dataCalendar
-            .map((eventObj) => (eventObj.id === updatedCardData.id ? updatedCardData : eventObj))
-        );
-      });
+    //! ПЕРЕДЕЛАТЬ!
+    return cardData;
+    // return Api.updateEvent(cardData)
+    //   .then((updatedCardData) => {
+    //     setDataCalendar(
+    //       dataCalendar
+    //         .map((eventObj) => (eventObj.id === updatedCardData.id ? updatedCardData : eventObj))
+    //     );
+    //   });
   }
 
   function handleEventUpdate(cardData) {
@@ -191,9 +177,9 @@ function App() {
     bookingHandler,
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
-    handleClickPopupCities,
+    handleClickPopupCities
     // dataMain, //! перенести в мейн, когда будет бэк
-    dataCalendar //! перенести в календарь, когда будет бэк
+    // dataCalendar //! перенести в календарь, когда будет бэк
   };
 
   return (
