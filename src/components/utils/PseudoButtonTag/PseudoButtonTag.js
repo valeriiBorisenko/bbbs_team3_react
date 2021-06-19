@@ -1,5 +1,6 @@
 import './PseudoButtonTag.scss';
 import PropTypes from 'prop-types';
+import { useRef } from 'react';
 
 function PseudoButtonTag({
   type,
@@ -11,16 +12,26 @@ function PseudoButtonTag({
 }) {
   const id = `filter-button-${value}`;
 
-  function handleClick(event) {
-    onClick(value, event.target.checked);
-  }
+  const ref = useRef();
 
+  function handleClick(event) {
+    console.log('event.target.checked', event.target.checked); // false
+    console.log(event.target.checked); // false
+    console.dir(event.target.checked); // TRUE!!!!!!!
+    console.dir(ref.current); // TRUE!!!!!!!
+    // onClick(value, !isActive); // с этим все работает!
+    onClick(value, event.target.checked);
+    // или это onClick(value, event.target.checked); , но
+    // тогда надо в changeRadioTagState менять filterItem.isActive = !isChecked;
+  }
+  console.log(`${title}`, isActive);
   return (
     <label
       className="pseudo-button-label"
       htmlFor={id}
     >
       <input
+        ref={ref}
         id={id}
         className="pseudo-button-checkbox"
         type={type}
@@ -31,6 +42,7 @@ function PseudoButtonTag({
         onClick={handleClick}
       />
       <span
+        // className={`button pseudo-button ${isActive ? 'active-filter' : ''}`}
         className="button pseudo-button"
       >
         {title}
