@@ -38,8 +38,8 @@ export default class Api {
       .then((response) => response.data);
   }
 
-  // регистрация на событие // в процессе
-  static registerOnEvent(eventId) {
+  // регистрация на мероприятие  //! подключено к бекенду
+  static makeEventRegistration(eventId) {
     console.log('registerOnEvent');
     return axios
       .post(`${baseURL}${apiUrl}/afisha/event-participants/`, eventId)
@@ -47,13 +47,15 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // static cancelRegistrationOnEvent(eventId) {
-  //   console.log('registerOnEvent');
-  //   return axios
-  //     .delete(`${baseURL}${apiUrl}/afisha/event-participants/${eventId}/`, eventId)
-  //     .then((response) => console.log(response))
-  //     .catch((err) => Promise.reject(new Error(`${err.message}`)));
-  // }
+  // удаление регистрации на мероприятие //! подключено к бекенду
+  static cancelEventRegistration(eventId) {
+    console.log('registerOnEvent');
+    console.log(eventId);
+    return axios
+      .delete(`${baseURL}${apiUrl}/afisha/event-participants/${eventId}/`)
+      .then((response) => console.log(response))
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
 
   // работа с отдельными полями юзера
   static updateUseProfile(dataToUpdate) {
