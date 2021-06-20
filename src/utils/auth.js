@@ -6,17 +6,14 @@ import { apiUrl, baseURL } from '../config/config';
 
 export default class AuthApi {
   static setAuth(accessToken) { //! подключено к бекенду
-    console.log(axios.defaults.headers);
     axios.defaults.headers.get.Authorization = `Bearer ${accessToken}`;
     axios.defaults.headers.post.Authorization = `Bearer ${accessToken}`;
     axios.defaults.headers.patch.Authorization = `Bearer ${accessToken}`;
     axios.defaults.headers.delete.Authorization = `Bearer ${accessToken}`;
-    console.log(axios.defaults.headers);
   }
 
   // очистка при логауте
   static clearAuth() { //! подключено к бекенду
-    console.log('TYT');
     console.log(axios.defaults.headers);
     axios.defaults.headers.get.Authorization = '';
     axios.defaults.headers.post.Authorization = '';
@@ -26,14 +23,13 @@ export default class AuthApi {
   }
 
   static authorize(loginData) { //! подключено к бекенду
-    console.log(loginData);
     return axios.post(`${baseURL}${apiUrl}/token/`, loginData)
       .then((response) => response.data)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  //! может вынести отсюда в API
   static getUserData() { //! подключено к бекенду
-    console.log('getUserData');
     return axios
       .get(`${baseURL}${apiUrl}/profile/`)
       .then((response) => response.data)

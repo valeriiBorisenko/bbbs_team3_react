@@ -74,10 +74,8 @@ function App() {
 
   //! api
   function handleLogin(loginData) {
-    console.log('handleLogin');
     AuthApi.authorize(loginData)
       .then((token) => {
-        console.log(token);
         const { access, refresh } = token;
         if (refresh && access) {
           AuthApi.setAuth(access);
@@ -100,9 +98,7 @@ function App() {
 
   // проверка токена между сессиями
   function checkToken() {
-    console.log('tokenCheck');
     const token = localStorage.getItem('jwt');
-    console.log(token);
     if (token) {
       AuthApi.setAuth(token);
       AuthApi.getUserData()

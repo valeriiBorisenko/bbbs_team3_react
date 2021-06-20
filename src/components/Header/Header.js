@@ -27,8 +27,6 @@ function Header({
   //! работает с костылем из-за Null в currentUser.city
   useEffect(() => {
     if (cities && currentUser && currentUser.city) {
-      console.log(cities);
-      console.log(currentUser);
       const userCity = cities.filter((city) => city.id === currentUser.city);
       setUserCityName(userCity[0].name);
     }

@@ -37,10 +37,7 @@ function Calendar({
     if (currentUser) {
       Api.getCalendarPageData()
         .then((events) => setDataCalendar(events))
-        .catch((error) => {
-          // setIsPopupErrorOpen(true);
-          console.log(error);
-        });
+        .catch((error) => console.log(error));
     }
     // else {
     //   setDataCalendar([]);
@@ -66,7 +63,7 @@ function Calendar({
 
   // хэндлер клика по фильтру МЕСЯЦ
   const handleFilterClick = (inputValue, isChecked) => {
-    console.log('tyt');
+    console.log('handleFilterClick');
     console.log(filters);
     console.log(isChecked);
     changeRadioTagState(setFilters, { inputValue, isChecked });
@@ -121,6 +118,7 @@ function Calendar({
 
   // функция-фильтратор
   const handleFiltration = () => {
+    console.log('handleFiltration');
     if (isFiltersUsed) {
       const activeFilter = filters.find((filter) => filter.isActive);
       console.log(filters);
@@ -167,6 +165,7 @@ function Calendar({
   // }
 
   const dataForCurrentCityExist = calendarPageData.length > 0;
+  console.log(calendarPageData);
   // отрисовка заглушки
   function returnAnimatedContainer() {
     return (
