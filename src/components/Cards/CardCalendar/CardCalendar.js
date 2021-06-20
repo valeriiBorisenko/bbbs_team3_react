@@ -20,7 +20,7 @@ function CardCalendar({
   const isDisabled = remainSeats < 1;
 
   function changeStateOfEvent() {
-    onEventSignUpClick(cardData, cardData.booked);
+    onEventSignUpClick(cardData, cardData.id, cardData.booked);
   }
 
   function prepareDataForAboutEventPopup() {

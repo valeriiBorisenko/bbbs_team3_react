@@ -12,7 +12,7 @@ function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick, cardData }) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    onEventSignUpClick(cardData, cardData.booked);
+    onEventSignUpClick(cardData, cardData.id, cardData.booked);
   }
 
   return (
