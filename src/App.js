@@ -91,7 +91,7 @@ function App() {
           AuthApi.getUserData()
             .then((userData) => setCurrentUser(userData))
             .then(() => closeAllPopups())
-            .catch((error) => console.log(error)); // при получении данных произошла ошибка
+            .catch((error) => console.log(error)); // при получении данных юзера произошла ошибка
         }
       })
       .catch((error) => console.log(error)); // авторизация (работа с сервером) закончилась ошибкой
@@ -119,43 +119,29 @@ function App() {
   }
 
   // работает с запросом Api (booked)
-  function updateEvent(cardData) {
-    //! ПЕРЕДЕЛАТЬ!
-    // return cardData;
-    console.log(cardData.id);
-    return Api.registerOnEvent({ event: cardData.id });
-
-    // return Api.updateEvent(cardData)
-    //   .then((updatedCardData) => {
-    //     setDataCalendar(
-    //       dataCalendar
-    //         .map((eventObj) => (eventObj.id === updatedCardData.id ? updatedCardData : eventObj))
-    //     );
-    //   });
+  function registerOnEvent(cardData, cardId) {
+    Api.registerOnEvent({ event: cardId })
+      .then(() => handleClickPopupSuccessfullyOpened())
+      .then(() => setSelectedCalendarCard(cardData))
+      // .then(() => {
+      //   cardData.booked = true;
+      // })
+      .catch((error) => console.log(error));
   }
 
-  // function registerOnEvent(cardData) {
-  //   Api.registerOnEvent({ event: cardData.id });
+  // function cancelEventRegistration() {
   // }
 
-  function handleEventUpdate(cardData) {
-    updateEvent(cardData)
-      .then(() => handleClickPopupSuccessfullyOpened())
-      .catch(() => handleClickPopupErrorOpened());
-  }
-
-  function handleEventBooking(cardData, isEventBooked) {
+  function handleEventBooking(cardData, cardId, isEventBooked) {
     console.log('bookingHandler');
     console.log(cardData);
+    console.log(cardId);
     console.log(isEventBooked);
     // console.log(cardData.id);
     // console.log(isEventBooked);
     if (isEventBooked) {
       console.log('мы не записаны');
       // мы записаны на ивент, надо отписаться
-      // updateEvent(cardData.id)
-      //   .then(() => setIsPopupAboutDescriptionOpen(false))
-      //   .catch(() => handleClickPopupErrorOpened());
     } else {
       console.log('мы не записаны');
       // мы НЕ записаны на ивент, надо открыть попап "подтвердите"
@@ -214,7 +200,7 @@ function App() {
           <PopupConfirmation
             isOpen={isPopupConfirmationOpen}
             onClose={closeAllPopups}
-            onConfirmButtonClick={handleEventUpdate}
+            onConfirmButtonClick={registerOnEvent}
             onErrorClick={handleClickPopupErrorOpened}
             cardData={selectedCalendarCard}
           />
