@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Account.scss';
 import PropTypes from 'prop-types';
+import { useSmoothHorizontalScroll, useScrollToTop } from '../../hooks/index';
 import {
   BasePage,
   AccountEventCard,
-  ScrollableByXContainer,
   TitleH2,
   AccountForm,
   AccountDiary,
@@ -17,6 +17,8 @@ import Api from '../../utils/api';
 //! чтобы синхронизировать отмену записи со стейтом данных календаря.
 //! Когда будет готов бэк, она будет приходить в GET-запросе и синхронизироваться через сервер
 function Account({ eventsData, onEventFullDescriptionClick }) {
+  useScrollToTop();
+
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -41,11 +43,6 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
       });
     setEvents(sortedEvents);
   }, [eventsData]);
-
-  // поднятие страницы к хедеру при загрузке
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
 
   const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
@@ -112,6 +109,9 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
     closePopupDeleteDiary();
   };
 
+  // скролл контейнера с карточками мероприятий
+  const containerEvents = useSmoothHorizontalScroll({ step: 3 });
+
   return (
     <BasePage>
       <Helmet>
@@ -128,7 +128,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
               : 'У вас нет записи на мероприятия'
           }
           />
-          <ScrollableByXContainer sectionClass="account__events">
+          <div className="account__events" ref={containerEvents}>
             {events && events.length > 0
             && events.map((item) => (
               <AccountEventCard
@@ -137,7 +137,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
                 onOpen={handleOpenEventCard}
               />
             ))}
-          </ScrollableByXContainer>
+          </div>
         </div>
 
         <div className="account__diaries page__section">

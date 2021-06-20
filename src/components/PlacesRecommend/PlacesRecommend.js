@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-import './WhereToGoRecommend.scss';
+import './PlacesRecommend.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormRecommendation, PopupRecommendSuccess } from './index';
 
-function WhereToGoRecommend({ sectionClass }) {
+function PlacesRecommend({ sectionClass }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
 
@@ -76,12 +76,12 @@ function WhereToGoRecommend({ sectionClass }) {
   );
 }
 
-WhereToGoRecommend.propTypes = {
+PlacesRecommend.propTypes = {
   sectionClass: PropTypes.string
 };
 
-WhereToGoRecommend.defaultProps = {
+PlacesRecommend.defaultProps = {
   sectionClass: ''
 };
 
-export default WhereToGoRecommend;
+export default PlacesRecommend;
