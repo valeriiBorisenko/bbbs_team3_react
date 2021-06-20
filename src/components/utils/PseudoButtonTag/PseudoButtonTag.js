@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useRef } from 'react';
 
 function PseudoButtonTag({
-  type,
   name,
   value,
   title,
@@ -34,7 +33,7 @@ function PseudoButtonTag({
         ref={ref}
         id={id}
         className="pseudo-button-checkbox"
-        type={type}
+        type="checkbox"
         name={name}
         value={value}
         checked={isActive}
@@ -52,7 +51,6 @@ function PseudoButtonTag({
 }
 
 PseudoButtonTag.propTypes = {
-  type: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
   title: PropTypes.string,
@@ -61,7 +59,6 @@ PseudoButtonTag.propTypes = {
 };
 
 PseudoButtonTag.defaultProps = {
-  type: 'radio',
   name: '',
   value: '',
   title: '',

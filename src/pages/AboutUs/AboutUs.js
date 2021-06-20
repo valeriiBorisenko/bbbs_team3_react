@@ -1,15 +1,12 @@
 import './AboutUs.scss';
-import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useScrollToTop } from '../../hooks/index';
 import {
   BasePage, TitleH3, Blockquote, LogoBlue, CardFigure, CardAbout, Card
 } from './index';
 
 function AboutUs() {
-  // поднятие страницы к хедеру при загрузке
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
+  useScrollToTop();
 
   return (
     <BasePage>

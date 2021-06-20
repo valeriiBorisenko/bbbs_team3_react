@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { months } from '../../config/constants';
-import { renderFilterTags, changeRadioTagState } from '../../utils/filter-tags';
+import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import Api from '../../utils/api';
 import {
   BasePage,
@@ -24,7 +24,7 @@ function Calendar({
   onOpenLoginPopup
 }) {
   const currentUser = useContext(CurrentUserContext);
-  console.log(currentUser);
+  // console.log(currentUser);
 
   // поднятие страницы к хедеру при загрузке
   useEffect(() => {
@@ -63,12 +63,12 @@ function Calendar({
 
   // хэндлер клика по фильтру МЕСЯЦ
   const handleFilterClick = (inputValue, isChecked) => {
-    console.log('handleFilterClick');
-    console.log(filters);
-    console.log(isChecked);
-    changeRadioTagState(setFilters, { inputValue, isChecked });
+    // console.log('handleFilterClick');
+    // console.log(filters);
+    // console.log(isChecked);
+    handleRadioBehavior(setFilters, { inputValue, isChecked });
     setIsFiltersUsed(true);
-    console.log(filters);
+    // console.log(filters);
   };
 
   //! первый useEffect, установка отсортированного массива
@@ -118,17 +118,17 @@ function Calendar({
 
   // функция-фильтратор
   const handleFiltration = () => {
-    console.log('handleFiltration');
+    // console.log('handleFiltration');
     if (isFiltersUsed) {
       const activeFilter = filters.find((filter) => filter.isActive);
-      console.log(filters);
-      console.log(activeFilter);
+      // console.log(filters);
+      // console.log(activeFilter);
       if (!activeFilter) {
-        console.log('if');
-        console.log(filteredCardData);
+        // console.log('if');
+        // console.log(filteredCardData);
         setSortedArray(filteredCardData);
       } else {
-        console.log('else');
+        // console.log('else');
         const { month, year } = JSON.parse(activeFilter.filter);
         const min = new Date(year, month);
         const max = new Date(year, month + 1);
@@ -143,7 +143,7 @@ function Calendar({
 
   //! третий useEffect (запуск фильтрации)
   useEffect(() => {
-    console.log('3ий useEffect');
+    // console.log('3ий useEffect');
     handleFiltration();
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
@@ -165,7 +165,7 @@ function Calendar({
   // }
 
   const dataForCurrentCityExist = calendarPageData.length > 0;
-  console.log(calendarPageData);
+  // console.log(calendarPageData);
   // отрисовка заглушки
   function returnAnimatedContainer() {
     return (
@@ -212,7 +212,7 @@ function Calendar({
       return onOpenLoginPopup();
     }
 
-    console.log(currentUser);
+    // console.log(currentUser);
     // залогинен и есть ивенты
     if (currentUser !== null && dataForCurrentCityExist) {
       return (
@@ -232,7 +232,7 @@ function Calendar({
 
     // залогинен и нет ивентов
     //! (есть ошибки, проскакивает использование)
-    console.log('fail', currentUser, dataForCurrentCityExist, calendarPageData);
+    // console.log('fail', currentUser, dataForCurrentCityExist, calendarPageData);
     return returnAnimatedContainer();
   }
 
@@ -248,7 +248,6 @@ function Calendar({
         {/* { (calendarPageData && calendarPageData?.length > 0) ? (
           <>
             <TitleH1 title="Календарь" />
-
             {calendarPageData.length > 0 ? (
               <div className="calendar-page__container">
                 {filters.length > 1 && (
@@ -258,7 +257,6 @@ function Calendar({
                   </ul>
                 </div>
                 )}
-
                 <div className="calendar-page__grid">
                   {sortedArray.map((data) => (
                     <CardCalendar
@@ -272,7 +270,6 @@ function Calendar({
                 </div>
               </div>
             ) : <Loader isNested />}
-
             { !currentUser && onOpenLoginPopup()}
           </>
         ) : (

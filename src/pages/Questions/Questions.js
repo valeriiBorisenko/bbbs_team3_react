@@ -1,12 +1,14 @@
-import './QuestionsPage.scss';
+/* eslint-disable no-unused-vars */
+import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useScrollToTop } from '../../hooks/index';
 import { ALL_CATEGORIES } from '../../config/constants';
 import { questionForm } from '../../utils/utils';
 import {
-  renderFilterTags, changeCheckboxTagState, selectOneTag, deselectOneTag
+  renderFilterTags, handleCheckboxBehavior, selectOneTag, deselectOneTag
 } from '../../utils/filter-tags';
 import {
   BasePage,
@@ -19,13 +21,10 @@ import {
 } from './index';
 import Api from '../../utils/api';
 
-function QuestionsPage() {
-  const currentUser = useContext(CurrentUserContext);
+function Questions() {
+  useScrollToTop();
 
-  // поднятие страницы к хедеру при загрузке
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
+  const currentUser = useContext(CurrentUserContext);
 
   // начальная дата с API
   const [questionsData, setQuestionsData] = useState([]);
@@ -34,10 +33,8 @@ function QuestionsPage() {
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-
-  // категории фильтрации
-  const [categories, setCategories] = useState([]); // состояние кнопок фильтров
-  const [activeCategories, setActiveCategories] = useState(new Set()); // сами фильтры
+  // категории фильтрации, состояние кнопок фильтров
+  const [categories, setCategories] = useState([]);
 
   // форма
   const [isQuestionForm, setIsQuestionForm] = useState(questionForm.before);
@@ -54,47 +51,31 @@ function QuestionsPage() {
 
   // хэндлер клика по фильтру
   const changeCategory = (inputValue, isChecked) => {
-    changeCheckboxTagState(setCategories, { inputValue, isChecked });
-
     if (inputValue === ALL_CATEGORIES) {
-      setActiveCategories(new Set());
-      setIsFiltersUsed(true);
-      return;
+      selectOneTag(setCategories, ALL_CATEGORIES);
+    } else {
+      handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
 
-    // если такой фильтр уже есть
-    if (activeCategories.has(inputValue)) {
-      setActiveCategories((set) => {
-        set.delete(inputValue);
-        return set;
-      });
-      setIsFiltersUsed(true);
-      return;
-    }
-
-    // новый фильтр
     setIsFiltersUsed(true);
-    setActiveCategories((set) => {
-      set.add(inputValue);
-      return set;
-    });
   };
 
   // фильтрация
   const handleFiltration = () => {
-    if (activeCategories.size === 0) {
+    const activeCategories = categories
+      .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+      .map((filter) => filter.filter);
+
+    if (activeCategories.length === 0) {
       setFilteredQuestions(questionsData);
       selectOneTag(setCategories, ALL_CATEGORIES);
-      return;
-    }
-
-    // КАТЕГОРИИ
-    if (activeCategories.size > 0) {
+    } else {
       const filterByCategory = questionsData
-        .filter((question) => question.tags.some((el) => activeCategories.has(el.name)));
+        .filter((question) => question.tags.some((el) => activeCategories.includes(el.name)));
+
       setFilteredQuestions(filterByCategory);
+      deselectOneTag(setCategories, ALL_CATEGORIES);
     }
-    deselectOneTag(setCategories, ALL_CATEGORIES);
   };
 
   // запуск фильтрации
@@ -119,7 +100,7 @@ function QuestionsPage() {
           ...uniqueTags
         ]);
       })
-      .catch((err) => console.log(err));
+      .catch(console.log);
   }, []);
 
   return (
@@ -135,7 +116,7 @@ function QuestionsPage() {
             <>
               <div className="tags tags_content_long-list">
                 <ul className="tags__list tags__list_type_long">
-                  {renderFilterTags(categories, 'checkbox', changeCategory)}
+                  {renderFilterTags(categories, 'tag', changeCategory)}
                 </ul>
               </div>
               <ul className="questions">
@@ -186,4 +167,4 @@ function QuestionsPage() {
   );
 }
 
-export default QuestionsPage;
+export default Questions;

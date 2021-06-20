@@ -1,11 +1,10 @@
 /* eslint-disable no-param-reassign */
 import PseudoButtonTag from '../components/utils/PseudoButtonTag/PseudoButtonTag';
 
-export const renderFilterTags = (filterList, type, handleClick) => filterList.map((item) => (
+export const renderFilterTags = (filterList, name, handleClick) => filterList.map((item) => (
   <li className="tags__list-item" key={item.name}>
     <PseudoButtonTag
-      type={type}
-      name="categories"
+      name={name}
       value={item.filter}
       title={item.name}
       isActive={item.isActive}
@@ -14,7 +13,7 @@ export const renderFilterTags = (filterList, type, handleClick) => filterList.ma
   </li>
 ));
 
-export const changeCheckboxTagState = (setState, { inputValue, isChecked }) => {
+export const handleCheckboxBehavior = (setState, { inputValue, isChecked }) => {
   setState((stateFilters) => stateFilters.map((filterItem) => {
     if (filterItem.filter === inputValue) {
       filterItem.isActive = isChecked;
@@ -23,7 +22,7 @@ export const changeCheckboxTagState = (setState, { inputValue, isChecked }) => {
   }));
 };
 
-export const changeRadioTagState = (setState, { inputValue, isChecked }) => {
+export const handleRadioBehavior = (setState, { inputValue, isChecked }) => {
   setState((stateFilters) => stateFilters.map((filterItem) => {
     if (filterItem.filter === inputValue) {
       filterItem.isActive = !isChecked;
