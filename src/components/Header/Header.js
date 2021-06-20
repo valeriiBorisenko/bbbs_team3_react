@@ -12,12 +12,7 @@ import { useClickOutside } from '../../hooks/index';
 import { PROFILE_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
 import { NavBar, UserMenuButton } from './index';
 
-function Header({
-  onUserButtonClick,
-  onLogout,
-  onCityChange,
-  cities
-}) {
+function Header({ onUserButtonClick, onLogout, onCityChange, cities }) {
   const { pathname } = useLocation();
   const currentUser = useContext(CurrentUserContext);
 
@@ -75,8 +70,10 @@ function Header({
   const classNamesHeader = [
     'header',
     isMobileMenuOpen ? 'header_displayed' : '',
-    !isHeaderActive ? 'header__on-scroll-up' : ''
-  ].join(' ').trim();
+    !isHeaderActive ? 'header__on-scroll-up' : '',
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <header
@@ -96,28 +93,24 @@ function Header({
         />
 
         {pathname === PROFILE_URL && (
-        <div className="header__user-info">
-          <UserMenuButton
-            title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
-            sectionClass="mobile-link"
-            handleClick={onCityChange}
-          />
-          <UserMenuButton
-            title="Выйти"
-            sectionClass="mobile-link"
-            handleClick={onLogout}
-          />
-        </div>
+          <div className="header__user-info">
+            <UserMenuButton
+              title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+              sectionClass="mobile-link"
+              handleClick={onCityChange}
+            />
+            <UserMenuButton title="Выйти" sectionClass="mobile-link" handleClick={onLogout} />
+          </div>
         )}
 
         {(pathname === AFISHA_URL || pathname === PLACES_URL) && (
-        <div className="header__user-info">
-          <UserMenuButton
-            title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
-            handleClick={onCityChange}
-            sectionClass="mobile-link"
-          />
-        </div>
+          <div className="header__user-info">
+            <UserMenuButton
+              title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+              handleClick={onCityChange}
+              sectionClass="mobile-link"
+            />
+          </div>
         )}
       </div>
     </header>
@@ -128,14 +121,14 @@ Header.propTypes = {
   onUserButtonClick: PropTypes.func,
   onCityChange: PropTypes.func,
   onLogout: PropTypes.func,
-  cities: PropTypes.arrayOf(PropTypes.object)
+  cities: PropTypes.arrayOf(PropTypes.object),
 };
 
 Header.defaultProps = {
   onUserButtonClick: () => {},
   onCityChange: () => {},
   onLogout: () => {},
-  cities: []
+  cities: [],
 };
 
 export default Header;

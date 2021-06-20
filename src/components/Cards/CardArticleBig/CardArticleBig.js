@@ -14,13 +14,13 @@ function CardArticleBig({ data: { color, title } }) {
 CardArticleBig.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   color: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
 };
 
 CardArticleBig.defaultProps = {
   data: {},
   color: '#fff',
-  title: ''
+  title: '',
 };
 
 export default CardArticleBig;

@@ -6,12 +6,4 @@ import PageNotFound from './PageNotFound/PageNotFound';
 import Questions from './Questions/Questions';
 import Places from './Places/Places';
 
-export {
-  AboutUs,
-  Profile,
-  Calendar,
-  MainPage,
-  PageNotFound,
-  Questions,
-  Places
-};
+export { AboutUs, Profile, Calendar, MainPage, PageNotFound, Questions, Places };

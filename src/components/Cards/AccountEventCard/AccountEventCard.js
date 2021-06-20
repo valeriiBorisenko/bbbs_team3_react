@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { formatDate } from '../../../utils/utils';
 import Card from '../../utils/Card/Card';
 
-function AccountEventCard({
-  data, onOpen
-}) {
+function AccountEventCard({ data, onOpen }) {
   const startDay = formatDate(data.startAt);
 
   const handleOpen = () => {
@@ -25,11 +23,11 @@ function AccountEventCard({
 
 AccountEventCard.propTypes = {
   data: PropTypes.objectOf(PropTypes.any).isRequired,
-  onOpen: PropTypes.func
+  onOpen: PropTypes.func,
 };
 
 AccountEventCard.defaultProps = {
-  onOpen: () => {}
+  onOpen: () => {},
 };
 
 export default AccountEventCard;

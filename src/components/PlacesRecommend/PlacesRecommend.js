@@ -28,11 +28,9 @@ function PlacesRecommend({ sectionClass }) {
     toggleForm();
   };
 
-  const classNames = [
-    'recommendation',
-    'recommendation_place_page',
-    'fade-in',
-    sectionClass].join(' ').trim();
+  const classNames = ['recommendation', 'recommendation_place_page', 'fade-in', sectionClass]
+    .join(' ')
+    .trim();
 
   useEffect(() => {
     window.addEventListener('keyup', closeSuccessPopupOnEsc);
@@ -44,12 +42,12 @@ function PlacesRecommend({ sectionClass }) {
       <section className={classNames}>
         <div className="recommendation__container">
           {isFormOpen && (
-          <button
-            className="recommendation__close-button"
-            type="button"
-            aria-label="закрыть попап"
-            onClick={toggleForm}
-          />
+            <button
+              className="recommendation__close-button"
+              type="button"
+              aria-label="закрыть попап"
+              onClick={toggleForm}
+            />
           )}
           <p className="section-title recommendation__text">
             Если вы были в интересном месте и хотите порекомендовать его другим&nbsp;наставникам
@@ -66,22 +64,18 @@ function PlacesRecommend({ sectionClass }) {
           {/* вызов формы */}
           <FormRecommendation isOpen={isFormOpen} onSubmit={handleFormSubmit} />
         </div>
-
       </section>
-      <PopupRecommendSuccess
-        isOpen={isSuccessPopupOpen}
-        onClose={closeSuccessPopup}
-      />
+      <PopupRecommendSuccess isOpen={isSuccessPopupOpen} onClose={closeSuccessPopup} />
     </>
   );
 }
 
 PlacesRecommend.propTypes = {
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
 };
 
 PlacesRecommend.defaultProps = {
-  sectionClass: ''
+  sectionClass: '',
 };
 
 export default PlacesRecommend;

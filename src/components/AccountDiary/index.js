@@ -5,11 +5,4 @@ import Rating from '../utils/Rating/Rating';
 import Caption from '../utils/Caption/Caption';
 import Button from '../utils/Button/Button';
 
-export {
-  Card,
-  TitleH2,
-  CardAnnotationContainer,
-  Rating,
-  Caption,
-  Button
-};
+export { Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button };

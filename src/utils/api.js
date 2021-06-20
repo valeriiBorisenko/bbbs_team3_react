@@ -9,7 +9,8 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 export default class Api {
   // главная страница //! подключено к бекенду
   static getMainPageData() {
-    return axios.get(`${baseURL}${apiUrl}/main/`)
+    return axios
+      .get(`${baseURL}${apiUrl}/main/`)
       .then((response) => response.data)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
@@ -46,7 +47,8 @@ export default class Api {
   }
 
   // работа с отдельными полями юзера
-  static updateUseProfile(dataToUpdate) { //! подключено к бекенду
+  static updateUseProfile(dataToUpdate) {
+    //! подключено к бекенду
     return axios
       .patch(`${baseURL}${apiUrl}/profile/`, dataToUpdate)
       .then((response) => response.data)
@@ -55,21 +57,15 @@ export default class Api {
 
   // работа со страницей ЛК
   static getProfileDiaryData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/profile/diary/`)
-      .then((response) => response.data);
+    return axios.get(`${baseURL}${apiUrl}/profile/diary/`).then((response) => response.data);
   }
 
   // работа со странице вопросов
   static getQuestionsPageData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/questions/`)
-      .then((response) => response.data);
+    return axios.get(`${baseURL}${apiUrl}/questions/`).then((response) => response.data);
   }
 
   static postQuestion(question) {
-    return axios
-      .post(`${baseURL}${apiUrl}/question/`, question)
-      .then((response) => response.data);
+    return axios.post(`${baseURL}${apiUrl}/question/`, question).then((response) => response.data);
   }
 }

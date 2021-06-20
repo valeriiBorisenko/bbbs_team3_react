@@ -33,7 +33,7 @@ const useAuth = ({ setCurrentUser, closeAllPopups }) => {
 
   return {
     handleLogout,
-    handleLogin
+    handleLogin,
   };
 };
 export default useAuth;

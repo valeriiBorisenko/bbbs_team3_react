@@ -3,15 +3,13 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import {
-  AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL
-} from '../../config/routes';
+import { AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL } from '../../config/routes';
 import {
   NavItem,
   NavItemWithDropdown,
   SearchButton,
   UserIconButton,
-  UserMenuButton
+  UserMenuButton,
 } from './index';
 
 function NavBar({
@@ -20,7 +18,7 @@ function NavBar({
   onBurgerButtonClick,
   onCityChangeClick,
   onLogout,
-  userCityName
+  userCityName,
 }) {
   const currentUser = useContext(CurrentUserContext);
 
@@ -82,14 +80,17 @@ function NavBar({
           />
         </ul>
 
-        <ul className={`menu__list menu__list_type_social ${!isMobileMenuOpen ? 'menu__list_hidden' : ''}`}>
+        <ul
+          className={`menu__list menu__list_type_social ${
+            !isMobileMenuOpen ? 'menu__list_hidden' : ''
+          }`}
+        >
           {/* facebook */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
             href={{
-              pathname:
-                'https://www.facebook.com/BigBrothers.BigSisters.Russia/'
+              pathname: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/',
             }}
             linkText="facebook"
             target="_blank"
@@ -126,18 +127,14 @@ function NavBar({
       </div>
 
       {currentUser && (
-      <div className={`menu__user-info ${!isMobileMenuOpen ? 'menu__user-info_hidden' : ''}`}>
-        <UserMenuButton
-          title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
-          handleClick={onCityChangeClick}
-          sectionClass="mobile-link"
-        />
-        <UserMenuButton
-          title="Выйти"
-          sectionClass="mobile-link"
-          handleClick={onLogout}
-        />
-      </div>
+        <div className={`menu__user-info ${!isMobileMenuOpen ? 'menu__user-info_hidden' : ''}`}>
+          <UserMenuButton
+            title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+            handleClick={onCityChangeClick}
+            sectionClass="mobile-link"
+          />
+          <UserMenuButton title="Выйти" sectionClass="mobile-link" handleClick={onLogout} />
+        </div>
       )}
 
       <button
@@ -189,8 +186,7 @@ function NavBar({
                     href="./questions.html"
                     className="search__title-link section-title section-title_clickable"
                   >
-                    Что делать если ваш младший агрессивно себя ведет, решил
-                    закрыть пару?
+                    Что делать если ваш младший агрессивно себя ведет, решил закрыть пару?
                   </a>
                   <a href="./questions.html" className="link search__link">
                     вопросы
@@ -229,7 +225,7 @@ NavBar.propTypes = {
   onCityChangeClick: PropTypes.func,
   onLogout: PropTypes.func,
   isMobileMenuOpen: PropTypes.bool,
-  userCityName: PropTypes.string
+  userCityName: PropTypes.string,
 };
 
 NavBar.defaultProps = {
@@ -238,7 +234,7 @@ NavBar.defaultProps = {
   onCityChangeClick: () => {},
   onLogout: () => {},
   isMobileMenuOpen: false,
-  userCityName: ''
+  userCityName: '',
 };
 
 export default NavBar;

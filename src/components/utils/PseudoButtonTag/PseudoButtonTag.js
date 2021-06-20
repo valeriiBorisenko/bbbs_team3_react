@@ -1,13 +1,7 @@
 import './PseudoButtonTag.scss';
 import PropTypes from 'prop-types';
 
-function PseudoButtonTag({
-  name,
-  value,
-  title,
-  isActive,
-  onClick
-}) {
+function PseudoButtonTag({ name, value, title, isActive, onClick }) {
   const id = `filter-button-${value}`;
 
   function handleClick(event) {
@@ -15,10 +9,7 @@ function PseudoButtonTag({
   }
 
   return (
-    <label
-      className="pseudo-button-label"
-      htmlFor={id}
-    >
+    <label className="pseudo-button-label" htmlFor={id}>
       <input
         id={id}
         className="pseudo-button-checkbox"
@@ -29,11 +20,7 @@ function PseudoButtonTag({
         onChange={() => {}}
         onClick={handleClick}
       />
-      <span
-        className="button pseudo-button"
-      >
-        {title}
-      </span>
+      <span className="button pseudo-button">{title}</span>
     </label>
   );
 }
@@ -43,7 +30,7 @@ PseudoButtonTag.propTypes = {
   value: PropTypes.string,
   title: PropTypes.string,
   isActive: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 PseudoButtonTag.defaultProps = {
@@ -51,7 +38,7 @@ PseudoButtonTag.defaultProps = {
   value: '',
   title: '',
   isActive: false,
-  onClick: () => {}
+  onClick: () => {},
 };
 
 export default PseudoButtonTag;

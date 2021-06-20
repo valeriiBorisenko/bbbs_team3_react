@@ -6,15 +6,18 @@ import { useCallback, useLayoutEffect, useRef } from 'react';
 const useSmoothHorizontalScroll = ({ step }) => {
   const ref = useRef();
 
-  const scrollByWheel = useCallback((evt) => {
-    if (ref && ref.current) {
-      evt.preventDefault();
-      ref.current.scrollTo({
-        left: ref.current.scrollLeft + evt.deltaY * step,
-        behavior: 'smooth'
-      });
-    }
-  }, [ref.current]);
+  const scrollByWheel = useCallback(
+    (evt) => {
+      if (ref && ref.current) {
+        evt.preventDefault();
+        ref.current.scrollTo({
+          left: ref.current.scrollLeft + evt.deltaY * step,
+          behavior: 'smooth',
+        });
+      }
+    },
+    [ref.current],
+  );
 
   useLayoutEffect(() => {
     if (ref && ref.current) {

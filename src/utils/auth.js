@@ -5,7 +5,8 @@ import { apiUrl, baseURL } from '../config/config';
 // setMockedAnswers();
 
 export default class AuthApi {
-  static setAuth(accessToken) { //! подключено к бекенду
+  static setAuth(accessToken) {
+    //! подключено к бекенду
     axios.defaults.headers.get.Authorization = `Bearer ${accessToken}`;
     axios.defaults.headers.post.Authorization = `Bearer ${accessToken}`;
     axios.defaults.headers.patch.Authorization = `Bearer ${accessToken}`;
@@ -13,7 +14,8 @@ export default class AuthApi {
   }
 
   // очистка при логауте
-  static clearAuth() { //! подключено к бекенду
+  static clearAuth() {
+    //! подключено к бекенду
     console.log(axios.defaults.headers);
     axios.defaults.headers.get.Authorization = '';
     axios.defaults.headers.post.Authorization = '';
@@ -22,14 +24,17 @@ export default class AuthApi {
     console.log(axios.defaults.headers);
   }
 
-  static authorize(loginData) { //! подключено к бекенду
-    return axios.post(`${baseURL}${apiUrl}/token/`, loginData)
+  static authorize(loginData) {
+    //! подключено к бекенду
+    return axios
+      .post(`${baseURL}${apiUrl}/token/`, loginData)
       .then((response) => response.data)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   //! может вынести отсюда в API
-  static getUserData() { //! подключено к бекенду
+  static getUserData() {
+    //! подключено к бекенду
     return axios
       .get(`${baseURL}${apiUrl}/profile/`)
       .then((response) => response.data)

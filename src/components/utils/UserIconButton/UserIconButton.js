@@ -5,8 +5,10 @@ function UserIconButton({ sectionClass, isAuthorized, handleClick }) {
   const classNames = [
     'user-button',
     isAuthorized ? 'user-button_authorized' : 'user-button_unauthorized',
-    sectionClass
-  ].join(' ').trim();
+    sectionClass,
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <button
@@ -22,13 +24,13 @@ function UserIconButton({ sectionClass, isAuthorized, handleClick }) {
 UserIconButton.propTypes = {
   sectionClass: PropTypes.string,
   isAuthorized: PropTypes.objectOf(PropTypes.any),
-  handleClick: PropTypes.func
+  handleClick: PropTypes.func,
 };
 
 UserIconButton.defaultProps = {
   sectionClass: '',
   isAuthorized: false,
-  handleClick: () => {}
+  handleClick: () => {},
 };
 
 export default UserIconButton;

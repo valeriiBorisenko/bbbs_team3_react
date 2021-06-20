@@ -8,17 +8,12 @@ import { useScrollToTop } from '../../hooks/index';
 import { ALL_CATEGORIES } from '../../config/constants';
 import { questionForm } from '../../utils/utils';
 import {
-  renderFilterTags, handleCheckboxBehavior, selectOneTag, deselectOneTag
+  renderFilterTags,
+  handleCheckboxBehavior,
+  selectOneTag,
+  deselectOneTag,
 } from '../../utils/filter-tags';
-import {
-  BasePage,
-  TitleH1,
-  TitleH2,
-  CardQuestion,
-  Input,
-  Button,
-  Loader
-} from './index';
+import { BasePage, TitleH1, TitleH2, CardQuestion, Input, Button, Loader } from './index';
 import Api from '../../utils/api';
 
 function Questions() {
@@ -39,7 +34,11 @@ function Questions() {
   // форма
   const [isQuestionForm, setIsQuestionForm] = useState(questionForm.before);
   const [inputValues, setInputValues] = useState(null);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const onFormSubmit = (values) => {
     setInputValues({ ...inputValues, ...values });
@@ -70,8 +69,9 @@ function Questions() {
       setFilteredQuestions(questionsData);
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
-      const filterByCategory = questionsData
-        .filter((question) => question.tags.some((el) => activeCategories.includes(el.name)));
+      const filterByCategory = questionsData.filter((question) =>
+        question.tags.some((el) => activeCategories.includes(el.name)),
+      );
 
       setFilteredQuestions(filterByCategory);
       deselectOneTag(setCategories, ALL_CATEGORIES);
@@ -93,11 +93,14 @@ function Questions() {
         const tagsArr = result.map((data) => data.tags);
         const tags = tagsArr.flat().map((data) => data.name);
         const newTags = new Set(tags);
-        const uniqueTags = Array.from(newTags)
-          .map((item) => ({ filter: item, name: item, isActive: false }));
+        const uniqueTags = Array.from(newTags).map((item) => ({
+          filter: item,
+          name: item,
+          isActive: false,
+        }));
         setCategories([
           { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-          ...uniqueTags
+          ...uniqueTags,
         ]);
       })
       .catch(console.log);
@@ -111,33 +114,32 @@ function Questions() {
       </Helmet>
       <section className="questions-page page__section fade-in">
         <TitleH1 title="Ответы на вопросы" />
-        {questionsData.length > 0
-          ? (
-            <>
-              <div className="tags tags_content_long-list">
-                <ul className="tags__list tags__list_type_long">
-                  {renderFilterTags(categories, 'tag', changeCategory)}
-                </ul>
-              </div>
-              <ul className="questions">
-                {filteredQuestions.map((data) => (
-                  <li className="questions__list-item fade-in" key={data.id}>
-                    <CardQuestion
-                      data={data}
-                      sectionClass="card__questions_type_questions-page"
-                      isQuestionsPage
-                    />
-                  </li>
-                ))}
+        {questionsData.length > 0 ? (
+          <>
+            <div className="tags tags_content_long-list">
+              <ul className="tags__list tags__list_type_long">
+                {renderFilterTags(categories, 'tag', changeCategory)}
               </ul>
+            </div>
+            <ul className="questions">
+              {filteredQuestions.map((data) => (
+                <li className="questions__list-item fade-in" key={data.id}>
+                  <CardQuestion
+                    data={data}
+                    sectionClass="card__questions_type_questions-page"
+                    isQuestionsPage
+                  />
+                </li>
+              ))}
+            </ul>
 
-              {currentUser && (
+            {currentUser && (
               <section className="add-question fade-in">
-                <TitleH2
-                  sectionClass="add-question__title"
-                  title={isQuestionForm.title}
-                />
-                <form className={`question-form ${isQuestionForm.sectionClass}`} onSubmit={handleSubmit(onFormSubmit)}>
+                <TitleH2 sectionClass="add-question__title" title={isQuestionForm.title} />
+                <form
+                  className={`question-form ${isQuestionForm.sectionClass}`}
+                  onSubmit={handleSubmit(onFormSubmit)}
+                >
                   <fieldset className="question-form__add-question">
                     <Input
                       type="text"
@@ -154,14 +156,16 @@ function Questions() {
                       color="black"
                       sectionClass="question-form__button"
                       isSubmittable
-                      isDisabled={!!(errors.question)}
+                      isDisabled={!!errors.question}
                     />
                   </fieldset>
                 </form>
               </section>
-              )}
-            </>
-          ) : <Loader isNested />}
+            )}
+          </>
+        ) : (
+          <Loader isNested />
+        )}
       </section>
     </BasePage>
   );

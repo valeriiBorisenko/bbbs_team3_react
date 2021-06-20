@@ -44,9 +44,7 @@ export default function setMockedAnswers() {
     .reply(200, { cities }, 'Content-Type: application/json');
 
   //! логин и юзер-инфо
-  mock
-    .onPost(`${baseURL}${apiUrl}/token/`)
-    .reply(200, { token }, 'Content-Type: application/json');
+  mock.onPost(`${baseURL}${apiUrl}/token/`).reply(200, { token }, 'Content-Type: application/json');
 
   // mock
   //   .onGet(`${baseURL}${apiUrl}/profile/`)

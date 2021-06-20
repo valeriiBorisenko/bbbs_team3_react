@@ -10,7 +10,7 @@ function Popup({
   isOpen,
   onClose,
   withoutCloseButton,
-  sectionClass
+  sectionClass,
 }) {
   const closeAllPopupsOnOverlay = (evt) => {
     if (evt.target === evt.currentTarget) {
@@ -23,15 +23,14 @@ function Popup({
       onClick={closeAllPopupsOnOverlay}
     >
       <div className={`popup__container popup__container_type_${typeContainer} ${sectionClass}`}>
-        {!withoutCloseButton
-            && (
-            <button
-              className="popup__close"
-              type="button"
-              aria-label="закрыть попап"
-              onClick={onClose}
-            />
-            )}
+        {!withoutCloseButton && (
+          <button
+            className="popup__close"
+            type="button"
+            aria-label="закрыть попап"
+            onClick={onClose}
+          />
+        )}
         {children}
       </div>
     </div>
@@ -45,7 +44,7 @@ Popup.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   withoutCloseButton: PropTypes.bool,
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
 };
 
 Popup.defaultProps = {
@@ -55,7 +54,7 @@ Popup.defaultProps = {
   isOpen: false,
   onClose: () => {},
   sectionClass: '',
-  withoutCloseButton: false
+  withoutCloseButton: false,
 };
 
 export default Popup;

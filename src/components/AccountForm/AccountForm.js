@@ -5,13 +5,9 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
-import {
-  Card, Input, Caption, Rating, Button
-} from './index';
+import { Card, Input, Caption, Rating, Button } from './index';
 
-function AccountForm({
-  data, sectionClass, isEditMode, isOpen, onCancel, onSubmit
-}) {
+function AccountForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmit }) {
   const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
 
   const [inputValues, setInputValues] = useState({});
@@ -19,7 +15,11 @@ function AccountForm({
   const [userImage, setUserImage] = useState(null);
 
   const {
-    register, handleSubmit, formState: { errors }, reset, setValue
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
   } = useForm();
 
   const onFormSubmit = (values) => {
@@ -27,12 +27,12 @@ function AccountForm({
     inputFields = {
       ...inputFields,
       rate: inputValues.rate,
-      id: inputValues.id
+      id: inputValues.id,
     };
     if (userImage) {
       inputFields = {
         ...inputFields,
-        imageUrl: userImage.imageUrl
+        imageUrl: userImage.imageUrl,
       };
     }
     onSubmit(inputFields);
@@ -58,9 +58,7 @@ function AccountForm({
     if (isOpen) {
       if (data) {
         setInputValues({ ...inputValues, ...data });
-        setUserImage(
-          { imageUrl: data.imageUrl }
-        );
+        setUserImage({ imageUrl: data.imageUrl });
         setValue('title', data.title);
         setValue('date', parseDate(data.date));
         setValue('description', data.description);
@@ -72,7 +70,7 @@ function AccountForm({
       reset({
         title: '',
         date: '',
-        description: ''
+        description: '',
       });
     }
   }, [isOpen, data]);
@@ -80,9 +78,19 @@ function AccountForm({
   return (
     <div className={classNames}>
       <Card sectionClass="account-form__photo-upload">
-        {userImage && <img src={userImage.imageUrl} alt={data?.title} className="account-form__uploaded-image" />}
+        {userImage && (
+          <img
+            src={userImage.imageUrl}
+            alt={data?.title}
+            className="account-form__uploaded-image"
+          />
+        )}
 
-        <div className={`account-form__input-upload ${userImage ? 'account-form__input-upload_hidden' : ''}`}>
+        <div
+          className={`account-form__input-upload ${
+            userImage ? 'account-form__input-upload_hidden' : ''
+          }`}
+        >
           <label htmlFor="input-upload" className="account-form__label-file">
             <input
               id="input-upload"
@@ -99,7 +107,11 @@ function AccountForm({
       </Card>
 
       <Card sectionClass="account-form__form-container">
-        <form name="addStoryForm" className="account-form__form" onSubmit={handleSubmit(onFormSubmit)}>
+        <form
+          name="addStoryForm"
+          className="account-form__form"
+          onSubmit={handleSubmit(onFormSubmit)}
+        >
           <Input
             type="text"
             name="title"
@@ -113,7 +125,9 @@ function AccountForm({
             type="date"
             name="date"
             placeholder="Дата&emsp;"
-            sectionClass={`account-form__input_el_date ${errors.date ? 'account-form__input_el_date-error' : ''}`}
+            sectionClass={`account-form__input_el_date ${
+              errors.date ? 'account-form__input_el_date-error' : ''
+            }`}
             register={register}
             required
             error={errors?.date}
@@ -191,7 +205,7 @@ AccountForm.propTypes = {
   onCancel: PropTypes.func,
   isOpen: PropTypes.bool,
   isEditMode: PropTypes.bool,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
 };
 
 AccountForm.defaultProps = {
@@ -200,7 +214,7 @@ AccountForm.defaultProps = {
   onCancel: () => {},
   isOpen: false,
   isEditMode: false,
-  onSubmit: () => {}
+  onSubmit: () => {},
 };
 
 export default AccountForm;

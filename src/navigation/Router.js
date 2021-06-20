@@ -8,7 +8,7 @@ import {
   MainPage,
   PageNotFound,
   Questions,
-  Places
+  Places,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -18,7 +18,7 @@ import {
   AFISHA_URL,
   QUESTIONS_URL,
   PROFILE_URL,
-  PLACES_URL
+  PLACES_URL,
 } from '../config/routes';
 
 function Router({
@@ -27,8 +27,8 @@ function Router({
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
     handleClickPopupCities,
-    dataCalendar
-  }
+    dataCalendar,
+  },
 }) {
   const currentUser = useContext(CurrentUserContext);
 
@@ -63,9 +63,7 @@ function Router({
         isAuth={!!currentUser}
       />
       <Route exact path={PLACES_URL}>
-        <Places
-          openPopupCities={handleClickPopupCities}
-        />
+        <Places openPopupCities={handleClickPopupCities} />
       </Route>
       <Route path="*">
         <PageNotFound />
@@ -75,11 +73,11 @@ function Router({
 }
 
 Router.propTypes = {
-  handlers: PropTypes.objectOf(PropTypes.any)
+  handlers: PropTypes.objectOf(PropTypes.any),
 };
 
 Router.defaultProps = {
-  handlers: {}
+  handlers: {},
 };
 
 export default Router;

@@ -8,7 +8,12 @@ import Loader from './components/utils/Loader/Loader';
 import { MAIN_PAGE_URL, PROFILE_URL } from './config/routes';
 // попапы
 import {
-  PopupConfirmation, PopupSuccessfully, PopupLogin, PopupAboutEvent, PopupCities, PopupError
+  PopupConfirmation,
+  PopupSuccessfully,
+  PopupLogin,
+  PopupAboutEvent,
+  PopupCities,
+  PopupError,
 } from './components/Popups/index';
 // логины, авторизация
 import CurrentUserContext from './contexts/CurrentUserContext';
@@ -181,7 +186,7 @@ function App() {
     bookingHandler,
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
-    handleClickPopupCities
+    handleClickPopupCities,
     // dataMain, //! перенести в мейн, когда будет бэк
     // dataCalendar //! перенести в календарь, когда будет бэк
   };
@@ -227,10 +232,7 @@ function App() {
             onClose={closeAllPopups}
             onSubmit={setCurrentUser}
           />
-          <PopupError
-            isOpen={isPopupErrorOpen}
-            onClose={closeAllPopups}
-          />
+          <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
         </div>
       </CurrentUserContext.Provider>
     </HelmetProvider>
