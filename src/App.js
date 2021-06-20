@@ -23,11 +23,14 @@ import Api from './utils/api';
 
 function App() {
   const history = useHistory();
+
   // текущий юзер
   const [currentUser, setCurrentUser] = useState(null);
   const [isCheckingToken, setIsCheckingToken] = useState(true);
+
   // список городов
   const [cities, setCities] = useState(null); //! вынести в хук
+
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
@@ -35,8 +38,8 @@ function App() {
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
+
   // выбранная карточка при открытии попапа (календарь)
-  // в объекте всегда только те поля что пришли с сервера
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
 
   // управление попапами (открыть/закрыть)
@@ -116,11 +119,11 @@ function App() {
   }
 
   // работает с запросом Api (booked)
-  function updateEvent(id) {
+  function updateEvent(cardData) {
     //! ПЕРЕДЕЛАТЬ!
     // return cardData;
-    console.log(id);
-    return Api.updateEvent(id);
+    console.log(cardData.id);
+    return Api.registerOnEvent({ event: cardData.id });
 
     // return Api.updateEvent(cardData)
     //   .then((updatedCardData) => {
@@ -131,26 +134,34 @@ function App() {
     //   });
   }
 
+  // function registerOnEvent(cardData) {
+  //   Api.registerOnEvent({ event: cardData.id });
+  // }
+
   function handleEventUpdate(cardData) {
     updateEvent(cardData)
       .then(() => handleClickPopupSuccessfullyOpened())
       .catch(() => handleClickPopupErrorOpened());
   }
 
-  function bookingHandler(cardData, isEventBooked) {
+  function handleEventBooking(cardData, isEventBooked) {
     console.log('bookingHandler');
+    console.log(cardData);
+    console.log(isEventBooked);
     // console.log(cardData.id);
     // console.log(isEventBooked);
     if (isEventBooked) {
+      console.log('мы не записаны');
       // мы записаны на ивент, надо отписаться
-      updateEvent(cardData.id)
-        .then(() => setIsPopupAboutDescriptionOpen(false))
-        .catch(() => handleClickPopupErrorOpened());
+      // updateEvent(cardData.id)
+      //   .then(() => setIsPopupAboutDescriptionOpen(false))
+      //   .catch(() => handleClickPopupErrorOpened());
     } else {
-      // мы НЕ записаны на ивент, надо записаться
-      setSelectedCalendarCard(cardData);
-      setIsPopupAboutDescriptionOpen(false);
-      handleClickPopupConfirmationOpened();
+      console.log('мы не записаны');
+      // мы НЕ записаны на ивент, надо открыть попап "подтвердите"
+      setSelectedCalendarCard(cardData); // отмечаем карточку
+      setIsPopupAboutDescriptionOpen(false); // закрываем попап подробно
+      handleClickPopupConfirmationOpened(); // открываем попап "подтвердите"
     }
   }
 
@@ -183,12 +194,10 @@ function App() {
   }, []);
 
   const handlers = {
-    bookingHandler,
+    handleEventBooking,
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
     handleClickPopupCities,
-    // dataMain, //! перенести в мейн, когда будет бэк
-    // dataCalendar //! перенести в календарь, когда будет бэк
   };
 
   return (
@@ -222,7 +231,7 @@ function App() {
           <PopupAboutEvent
             isOpen={isPopupAboutDescriptionOpen}
             onClose={closeAllPopups}
-            onEventSignUpClick={bookingHandler}
+            onEventSignUpClick={handleEventBooking}
             onErrorClick={handleClickPopupErrorOpened}
             cardData={selectedCalendarCard}
           />
