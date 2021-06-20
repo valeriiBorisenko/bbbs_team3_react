@@ -38,13 +38,22 @@ export default class Api {
       .then((response) => response.data);
   }
 
-  // работа с ивентами (карточки) // в процессе
-  static updateEvent(eventData) {
+  // регистрация на событие // в процессе
+  static registerOnEvent(eventId) {
+    console.log('registerOnEvent');
     return axios
-      .patch(`${baseURL}${apiUrl}/afisha/event-participants/`, eventData)
+      .post(`${baseURL}${apiUrl}/afisha/event-participants/`, eventId)
       .then((response) => console.log(response))
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
+
+  // static cancelRegistrationOnEvent(eventId) {
+  //   console.log('registerOnEvent');
+  //   return axios
+  //     .delete(`${baseURL}${apiUrl}/afisha/event-participants/${eventId}/`, eventId)
+  //     .then((response) => console.log(response))
+  //     .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  // }
 
   // работа с отдельными полями юзера
   static updateUseProfile(dataToUpdate) {
