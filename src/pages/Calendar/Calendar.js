@@ -150,7 +150,7 @@ function Calendar({
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  // как надо будет рисоватьвсе
+  // как надо будет рисовать все
   // if (залогинен) {
   //   if (есть ивенты по городу) {
   //     рисуй ивенты
@@ -167,6 +167,7 @@ function Calendar({
   // }
 
   const dataForCurrentCityExist = calendarPageData.length > 0;
+  // отрисовка заглушки
   function returnAnimatedContainer() {
     return (
       <AnimatedPageContainer
@@ -176,16 +177,22 @@ function Calendar({
     );
   }
 
+  // отрисовка массива фильтров
   function renderTagsContainder() {
-    return (
-      <div className="tags fade-in">
-        <ul className="tags__list">
-          {renderFilterTags(filters, 'month', handleFilterClick)}
-        </ul>
-      </div>
-    );
+    if (filters.length > 1) {
+      return (
+        <div className="tags fade-in">
+          <ul className="tags__list">
+            {renderFilterTags(filters, 'month', handleFilterClick)}
+          </ul>
+        </div>
+      );
+    }
+
+    return null;
   }
 
+  // отрисовка карточек ивентов
   function renderEventCards(eventsArray) {
     const cards = eventsArray.map((cardData) => (
       <CardCalendar
@@ -199,6 +206,7 @@ function Calendar({
     return cards;
   }
 
+  // главная функция рендера
   function renderPageContent() {
     // незалогинен
     if (currentUser == null) {
@@ -213,7 +221,7 @@ function Calendar({
           <TitleH1 title="Календарь" />
 
           <div className="calendar-page__container">
-            {filters.length > 1 && (renderTagsContainder())}
+            {renderTagsContainder()}
 
             <div className="calendar-page__grid">
               {renderEventCards(sortedArray)}
@@ -224,6 +232,7 @@ function Calendar({
     }
 
     // залогинен и нет ивентов
+    //! (есть ошибки, проскакивает использование)
     console.log('fail', currentUser, dataForCurrentCityExist, calendarPageData);
     return returnAnimatedContainer();
   }
