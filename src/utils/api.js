@@ -1,31 +1,33 @@
 import axios from 'axios';
-import setMockedAnswers from './mocked-answers';
+// import setMockedAnswers from './mocked-answers';
 import { apiUrl, baseURL } from '../config/config';
 
-setMockedAnswers();
+// setMockedAnswers();
 
 axios.defaults.headers.get['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 export default class Api {
-  // главная страница
+  // главная страница //! подключено к бекенду
   static getMainPageData() {
-    return axios
-      .get(`${baseURL}${apiUrl}/main/`)
-      .then((response) => response.data);
+    return axios.get(`${baseURL}${apiUrl}/main/`)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // города
+  // города //! подключено к бекенду
   static getCities() {
     return axios
       .get(`${baseURL}${apiUrl}/cities/`)
-      .then((response) => response.data);
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // страница календаря (ивенты)
+  // страница календаря (ивенты) //! подключено к бекенду
   static getCalendarPageData() {
     return axios
       .get(`${baseURL}${apiUrl}/afisha/events/`)
-      .then((response) => response.data);
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   // страница "куда пойти"
@@ -35,18 +37,20 @@ export default class Api {
       .then((response) => response.data);
   }
 
-  // работа с ивентами (карточки)
+  // работа с ивентами (карточки) // в процессе
   static updateEvent(eventData) {
     return axios
       .patch(`${baseURL}${apiUrl}/afisha/event-participants/`, eventData)
-      .then((response) => response.data);
+      .then((response) => console.log(response))
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // работа с юзером
-  static updateUserInfo(userData) {
+  // работа с отдельными полями юзера
+  static updateUseProfile(dataToUpdate) { //! подключено к бекенду
     return axios
-      .patch(`${baseURL}${apiUrl}/profile/`, userData)
-      .then((response) => response.data);
+      .patch(`${baseURL}${apiUrl}/profile/`, dataToUpdate)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   // работа со страницей ЛК
@@ -68,8 +72,4 @@ export default class Api {
       .post(`${baseURL}${apiUrl}/question/`, question)
       .then((response) => response.data);
   }
-  //! все ответы будут потом переписаны на res.ok ? res.json() : reject()
-  // _handleResult(response) {
-  //   response.ok ? (response.json()) : Promise.reject(`Ошибка ${res.status} ${res.statusText}`)
-  // }
 }

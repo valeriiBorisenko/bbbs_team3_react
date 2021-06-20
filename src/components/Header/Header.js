@@ -24,8 +24,9 @@ function Header({
   const [userCityName, setUserCityName] = useState('');
 
   // определение города пользователя, используется в кнопках
+  //! работает с костылем из-за Null в currentUser.city
   useEffect(() => {
-    if (cities && currentUser) {
+    if (cities && currentUser && currentUser.city) {
       const userCity = cities.filter((city) => city.id === currentUser.city);
       setUserCityName(userCity[0].name);
     }

@@ -27,7 +27,6 @@ function Router({
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
     handleClickPopupCities,
-    dataMain,
     dataCalendar
   }
 }) {
@@ -39,7 +38,6 @@ function Router({
         <MainPage
           onEventSignUpClick={bookingHandler}
           onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-          dataMain={dataMain}
         />
       </Route>
       <Route exact path={ABOUT_US_URL}>
