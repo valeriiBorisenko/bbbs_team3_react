@@ -111,9 +111,12 @@ function App() {
   }
 
   // работает с запросом Api (booked)
-  function updateEvent(cardData) {
+  function updateEvent(id) {
     //! ПЕРЕДЕЛАТЬ!
-    return cardData;
+    // return cardData;
+    console.log(id);
+    return Api.updateEvent(id);
+
     // return Api.updateEvent(cardData)
     //   .then((updatedCardData) => {
     //     setDataCalendar(
@@ -129,12 +132,17 @@ function App() {
       .catch(() => handleClickPopupErrorOpened());
   }
 
-  function bookingHandler(cardData, isBooked) {
-    if (isBooked) {
-      updateEvent(cardData)
+  function bookingHandler(cardData, isEventBooked) {
+    console.log('bookingHandler');
+    // console.log(cardData.id);
+    // console.log(isEventBooked);
+    if (isEventBooked) {
+      // мы записаны на ивент, надо отписаться
+      updateEvent(cardData.id)
         .then(() => setIsPopupAboutDescriptionOpen(false))
         .catch(() => handleClickPopupErrorOpened());
     } else {
+      // мы НЕ записаны на ивент, надо записаться
       setSelectedCalendarCard(cardData);
       setIsPopupAboutDescriptionOpen(false);
       handleClickPopupConfirmationOpened();

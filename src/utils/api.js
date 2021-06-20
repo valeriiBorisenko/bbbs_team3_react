@@ -37,11 +37,12 @@ export default class Api {
       .then((response) => response.data);
   }
 
-  // работа с ивентами (карточки)
+  // работа с ивентами (карточки) // в процессе
   static updateEvent(eventData) {
     return axios
       .patch(`${baseURL}${apiUrl}/afisha/event-participants/`, eventData)
-      .then((response) => response.data);
+      .then((response) => console.log(response))
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   // работа с отдельными полями юзера
