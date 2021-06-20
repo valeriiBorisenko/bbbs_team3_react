@@ -17,7 +17,7 @@ import {
   ABOUT_US_URL,
   AFISHA_URL,
   QUESTIONS_URL,
-  ACCOUNT_URL,
+  PROFILE_URL,
   PLACES_URL
 } from '../config/routes';
 
@@ -56,7 +56,7 @@ function Router({
       </Route>
       <ProtectedRoute
         exact
-        path={ACCOUNT_URL}
+        path={PROFILE_URL}
         component={Profile}
         onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
         eventsData={dataCalendar}

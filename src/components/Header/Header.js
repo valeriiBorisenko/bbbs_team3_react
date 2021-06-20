@@ -9,7 +9,7 @@ import './Header.scss';
 import PropTypes from 'prop-types';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useClickOutside } from '../../hooks/index';
-import { ACCOUNT_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
+import { PROFILE_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
 import { NavBar, UserMenuButton } from './index';
 
 function Header({
@@ -95,7 +95,7 @@ function Header({
           isMobileMenuOpen={isMobileMenuOpen}
         />
 
-        {pathname === ACCOUNT_URL && (
+        {pathname === PROFILE_URL && (
         <div className="header__user-info">
           <UserMenuButton
             title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
