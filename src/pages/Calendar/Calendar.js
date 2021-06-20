@@ -5,8 +5,10 @@ import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useScrollToTop } from '../../hooks/index';
 import { months } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
 import Api from '../../utils/api';
 import {
   BasePage,
@@ -15,7 +17,6 @@ import {
   AnimatedPageContainer,
   Loader
 } from './index';
-import { changeCaseOfFirstLetter } from '../../utils/utils';
 
 function Calendar({
   onEventSignUpClick,
@@ -23,13 +24,10 @@ function Calendar({
   // dataCalendar,
   onOpenLoginPopup
 }) {
+  useScrollToTop();
+
   const currentUser = useContext(CurrentUserContext);
   // console.log(currentUser);
-
-  // поднятие страницы к хедеру при загрузке
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
 
   // загрузка данных страницы календаря, если ты залогиненный
   const [calendarPageData, setDataCalendar] = useState([]);

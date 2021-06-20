@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useScrollToTop } from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
 import Api from '../../utils/api';
 import {
@@ -24,6 +25,8 @@ function MainPage({
   onEventSignUpClick,
   onEventFullDescriptionClick
 }) {
+  useScrollToTop();
+
   const currentUser = useContext(CurrentUserContext);
   const [mainPageData, setDataMain] = useState(null);
 
@@ -41,11 +44,6 @@ function MainPage({
   // запрос даты главной страницы
   useEffect(() => {
     getMainPageData();
-  }, []);
-
-  // поднятие страницы к хедеру при загрузке
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
   }, []);
 
   function eventSignUpHandler(cardData) {
