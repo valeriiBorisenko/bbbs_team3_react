@@ -5,7 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header/Header';
 import Router from './navigation/Router';
 import Loader from './components/utils/Loader/Loader';
-import { MAIN_PAGE_URL, ACCOUNT_URL } from './config/routes';
+import { MAIN_PAGE_URL, PROFILE_URL } from './config/routes';
 // попапы
 import {
   PopupConfirmation, PopupSuccessfully, PopupLogin, PopupAboutEvent, PopupCities, PopupError
@@ -151,7 +151,7 @@ function App() {
 
   function handleUserButtonClick() {
     if (currentUser) {
-      history.push(ACCOUNT_URL);
+      history.push(PROFILE_URL);
     } else {
       handleClickPopupLoginOpened();
     }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import './Account.scss';
+import './Profile.scss';
 import PropTypes from 'prop-types';
 import { useSmoothHorizontalScroll, useScrollToTop } from '../../hooks/index';
 import {
