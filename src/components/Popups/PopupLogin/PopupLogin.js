@@ -30,7 +30,7 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
 
   useEffect(() => {
     reset({
-      login: '',
+      username: '',
       password: '',
     });
   }, [isOpen]);
@@ -49,11 +49,11 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
         <Input
           sectionClass="popup__input"
           type="text"
-          name="login"
+          name="username"
           placeholder="Логин"
           register={register}
           required
-          error={errors?.login}
+          error={errors?.username}
           errorMessage="Логин*"
         />
         <Input
@@ -73,7 +73,7 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
           sectionClass="popup__button_type_sign-in"
           color="blue"
           title="Войти"
-          isDisabled={!!(errors.login || errors.password)}
+          isDisabled={!!(errors.username || errors.password)}
           isSubmittable
         />
       </form>

@@ -5,7 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header/Header';
 import Router from './navigation/Router';
 import Loader from './components/utils/Loader/Loader';
-import { MAIN_PAGE_URL, ACCOUNT_URL } from './config/routes';
+import { MAIN_PAGE_URL, PROFILE_URL } from './config/routes';
 // попапы
 import {
   PopupConfirmation,
@@ -38,31 +38,6 @@ function App() {
   // выбранная карточка при открытии попапа (календарь)
   // в объекте всегда только те поля что пришли с сервера
   const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
-  // данные страниц с сервера
-  const [dataCalendar, setDataCalendar] = useState([]);
-  const [dataMain, setDataMain] = useState(null);
-
-  // загрузка данных страниц
-  // загрузка данных главной страницы с сервера
-  useEffect(() => {
-    Api.getMainPageData()
-      .then((res) => setDataMain(res.mainPageData))
-      .catch((err) => console.log(err));
-  }, []); //! перенести в мейн, когда будет бэк
-
-  // загрузка данных страницы календаря, если ты залогиненный
-  useEffect(() => {
-    if (currentUser) {
-      Api.getCalendarPageData()
-        .then((res) => setDataCalendar(res.calendarPageData))
-        .catch((err) => {
-          setIsPopupErrorOpen(true);
-          console.log(err);
-        });
-    } else {
-      setDataCalendar([]);
-    }
-  }, [currentUser]);
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
@@ -103,22 +78,15 @@ function App() {
   }
 
   //! api
-  function handleLogin({ login, password }) {
-    AuthApi.authorize(login, password)
-      .then((data) => {
-        const { access, refresh } = data.token;
+  function handleLogin(loginData) {
+    AuthApi.authorize(loginData)
+      .then((token) => {
+        const { access, refresh } = token;
         if (refresh && access) {
           AuthApi.setAuth(access);
           localStorage.setItem('jwt', access);
-          Promise.all([
-            AuthApi.getUserData(),
-            Api.getCalendarPageData(), //! перенести в календарь, когда будет бэк
-            // в дальнейшем сама страница календаря будет запрашивать АПИ напрямую
-          ])
-            .then(([userData, events]) => {
-              setDataCalendar(events.calendarPageData);
-              setCurrentUser(userData.userData);
-            })
+          AuthApi.getUserData()
+            .then((userData) => setCurrentUser(userData))
             .then(() => closeAllPopups())
             .catch((error) => console.log(error)); // при получении данных произошла ошибка
         }
@@ -135,10 +103,11 @@ function App() {
 
   // проверка токена между сессиями
   function checkToken() {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      AuthApi.setAuth(token);
       AuthApi.getUserData()
-        .then((data) => setCurrentUser(data.userData))
+        .then((userData) => setCurrentUser(userData))
         .then(() => setIsCheckingToken(false))
         .catch((error) => console.log(error)); // при получении userData возникла проблема
     } else {
@@ -147,14 +116,19 @@ function App() {
   }
 
   // работает с запросом Api (booked)
-  function updateEvent(cardData) {
-    return Api.updateEvent(cardData).then((updatedCardData) => {
-      setDataCalendar(
-        dataCalendar.map((eventObj) =>
-          eventObj.id === updatedCardData.id ? updatedCardData : eventObj,
-        ),
-      );
-    });
+  function updateEvent(id) {
+    //! ПЕРЕДЕЛАТЬ!
+    // return cardData;
+    console.log(id);
+    return Api.updateEvent(id);
+
+    // return Api.updateEvent(cardData)
+    //   .then((updatedCardData) => {
+    //     setDataCalendar(
+    //       dataCalendar
+    //         .map((eventObj) => (eventObj.id === updatedCardData.id ? updatedCardData : eventObj))
+    //     );
+    //   });
   }
 
   function handleEventUpdate(cardData) {
@@ -163,12 +137,17 @@ function App() {
       .catch(() => handleClickPopupErrorOpened());
   }
 
-  function bookingHandler(cardData, isBooked) {
-    if (isBooked) {
-      updateEvent(cardData)
+  function bookingHandler(cardData, isEventBooked) {
+    console.log('bookingHandler');
+    // console.log(cardData.id);
+    // console.log(isEventBooked);
+    if (isEventBooked) {
+      // мы записаны на ивент, надо отписаться
+      updateEvent(cardData.id)
         .then(() => setIsPopupAboutDescriptionOpen(false))
         .catch(() => handleClickPopupErrorOpened());
     } else {
+      // мы НЕ записаны на ивент, надо записаться
       setSelectedCalendarCard(cardData);
       setIsPopupAboutDescriptionOpen(false);
       handleClickPopupConfirmationOpened();
@@ -177,7 +156,7 @@ function App() {
 
   function handleUserButtonClick() {
     if (currentUser) {
-      history.push(ACCOUNT_URL);
+      history.push(PROFILE_URL);
     } else {
       handleClickPopupLoginOpened();
     }
@@ -190,7 +169,7 @@ function App() {
   // получение списка городов
   useEffect(() => {
     Api.getCities()
-      .then((res) => setCities(res.cities))
+      .then((citiesList) => setCities(citiesList))
       .catch((error) => console.log(error));
   }, []); //! перенести в хук
 
@@ -208,8 +187,8 @@ function App() {
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
     handleClickPopupCities,
-    dataMain, //! перенести в мейн, когда будет бэк
-    dataCalendar, //! перенести в календарь, когда будет бэк
+    // dataMain, //! перенести в мейн, когда будет бэк
+    // dataCalendar //! перенести в календарь, когда будет бэк
   };
 
   return (

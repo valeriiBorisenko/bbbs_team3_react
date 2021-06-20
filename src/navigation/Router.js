@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   AboutUs,
-  Account,
+  Profile,
   Calendar,
   MainPage,
   PageNotFound,
@@ -17,7 +17,7 @@ import {
   ABOUT_US_URL,
   AFISHA_URL,
   QUESTIONS_URL,
-  ACCOUNT_URL,
+  PROFILE_URL,
   PLACES_URL,
 } from '../config/routes';
 
@@ -27,7 +27,6 @@ function Router({
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
     handleClickPopupCities,
-    dataMain,
     dataCalendar,
   },
 }) {
@@ -39,7 +38,6 @@ function Router({
         <MainPage
           onEventSignUpClick={bookingHandler}
           onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-          dataMain={dataMain}
         />
       </Route>
       <Route exact path={ABOUT_US_URL}>
@@ -58,8 +56,8 @@ function Router({
       </Route>
       <ProtectedRoute
         exact
-        path={ACCOUNT_URL}
-        component={Account}
+        path={PROFILE_URL}
+        component={Profile}
         onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
         eventsData={dataCalendar}
         isAuth={!!currentUser}
