@@ -85,4 +85,13 @@ export default function setMockedAnswers() {
 //! Страница Справочник
 mock
   .onGet(`${baseURL}${apiUrl}/catalog/`)
-  .reply(200, catalog, 'Content-Type: application/json');
+  .reply((config) => {
+    const { limit, offset } = config.params;
+
+    const catalogPart = catalog.catalog.slice(offset, offset + limit);
+
+    return [200, {
+      catalogTotalLength: catalog.catalog.length,
+      catalog: catalogPart
+    }, 'Content-Type: application/json'];
+  });

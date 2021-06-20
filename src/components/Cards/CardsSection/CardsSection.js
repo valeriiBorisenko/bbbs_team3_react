@@ -6,23 +6,54 @@ import Api from '../../../utils/api';
 import { FIGURES } from '../../../config/constants';
 
 function CardsSection() {
-  const pageSize = 16;
+  const [pageSize, setPageSize] = useState(16);
   const [catalogPageData, setCatalogPageData] = useState([]);
-  const [pageCount, setPageCount] = useState(null);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    Api.getCatalogPageData({ limit: pageSize }).then(
+    setIsLoading(true);
+    const offset = pageSize * pageNumber;
+    Api.getCatalogPageData({ limit: pageSize, offset }).then(
       ({ catalog, catalogTotalLength }) => {
         setCatalogPageData(catalog);
         setPageCount(Math.ceil(catalogTotalLength / pageSize));
+        setIsLoading(false);
       }
     );
+  }, [pageSize, pageNumber]);
+
+  useEffect(() => {
+    const smallQuery = window.matchMedia('(max-width: 1439px)');
+    const largeQuery = window.matchMedia('(max-width: 1919px)');
+
+    const listener = () => {
+      if (smallQuery.matches) {
+        setPageSize(4);
+      } else if (largeQuery.matches) {
+        setPageSize(9);
+      } else {
+        setPageSize(16);
+      }
+    };
+    listener();
+
+    smallQuery.addEventListener('change', listener);
+    largeQuery.addEventListener('change', listener);
+
+    return () => {
+      smallQuery.removeEventListener('change', listener);
+      largeQuery.removeEventListener('change', listener);
+    };
   }, []);
+
   return (
     <section className="cards-section">
       <div className="cards-section__line" />
       <div className="cards-section__line" />
       <div className="cards-section__line" />
-      {catalogPageData.map((item, i) => (
+      {!isLoading && catalogPageData.map((item, i) => (
         <CardCatalog
           key={item.id}
           title={item.title}
@@ -42,6 +73,8 @@ function CardsSection() {
         pageCount={pageCount}
         pageRangeDisplayed={3}
         marginPagesDisplayed={1}
+        forcePage={pageNumber}
+        onPageChange={({ selected }) => setPageNumber(selected)}
       />
     </section>
   );

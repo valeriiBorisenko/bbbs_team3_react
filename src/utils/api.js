@@ -57,9 +57,11 @@ export default class Api {
   }
 
   // работа со страницей справочника
-  static getCatalogPageData() {
+  static getCatalogPageData({ limit, offset }) {
     return axios
-      .get(`${baseURL}${apiUrl}/catalog/`)
+      .get(`${baseURL}${apiUrl}/catalog/`, {
+        params: { limit, offset }
+      })
       .then((response) => response.data);
   }
 
