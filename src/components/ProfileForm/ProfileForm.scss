@@ -1,0 +1,219 @@
+@import './styles/utils.scss';
+
+.profile-form {
+  max-width: 1170px;
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 475px;
+
+  &__photo-upload {
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__uploaded-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__input-upload {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: .3s ease;
+    background-color: rgba(255, 255, 255, .8);
+  
+    &_hidden {
+      opacity: 0;
+      transition: .3s ease;
+  
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__label-file {
+    display: inline-block;
+    position: relative;
+    margin: 0 auto;
+  
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__input-file {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  &__pseudo-button {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid $lightGray;
+    background-image: url(../../assets/plus-icon_gray.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  &__form-container {
+    box-sizing: border-box;
+    padding: 30px 30px 20px;
+  }
+
+  &__form {
+    width: 100%;
+    display: grid;
+    gap: 20px 30px;
+    grid-template-columns: minmax(200px, 1fr) minmax(180px, 240px);
+    grid-template-rows: auto;
+  }
+
+  &__caption {
+    color: $lightGray;
+    font-size: 15px;
+    line-height: 1.27;
+    margin-top: 15px;
+  }
+
+  &__input_el_date:not(:focus):not(.has-value):before {
+    color: $lightGray;
+    content: attr(placeholder);
+  }
+
+  &__input_el_date-error:not(:focus):not(.has-value):before {
+    color: $error;
+    content: attr(placeholder);
+  }
+
+  &__input_el_textarea {
+    grid-column: 1 / -1;
+    min-height: 286px;
+    resize: none;
+  }
+
+  &__submit-zone {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__ratings {
+    display: flex;
+    align-items: center;
+  }
+
+  &__ratings-text {
+    margin-left: 15px;
+    color: $lightGray;
+    
+    &_type_good {
+      color: $green;
+    }
+  
+    &_type_neutral {
+      color: $lightGray;
+    }
+  
+    &_type_bad {
+      color: $error;
+    }
+  }
+
+  &__rating {
+    margin-right: 15px;
+  
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+  }
+
+  &__button_el_delete {
+    margin-right: 20px;
+    margin-left: 10px;
+  }
+}
+
+@include atDesktop1199 {
+  .profile-form {
+    max-width: 700px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 290px 1fr;
+  }
+}
+
+@include atTabletL {
+  .profile-form {
+    &__form {
+      grid-template-columns: 1fr;
+    }
+
+    &__input_el_textarea {
+      min-height: 120px;
+    }
+
+    &__submit-zone {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__ratings {
+      margin-bottom: 30px;
+      justify-content: flex-start;
+    }
+
+    &__buttons {
+      justify-content: space-between;
+    }
+
+    &__button_el_add {
+      order: -1;
+    }
+
+    &__button_el_delete {
+      margin: 0;
+    }
+  }
+}
+
+@include atMobile {
+  .profile-form {
+    &__form-container {
+      padding: 30px 15px;
+    }
+
+    &__caption {
+      font-size: 12px;
+      line-height: 1.42;
+    }
+
+    &__rating {
+      margin-right: 10px;
+    }
+
+    &__pseudo-button {
+      width: 80px;
+      height: 80px;
+      background-size: 19px;
+    }
+  }
+}

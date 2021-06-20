@@ -1,12 +1,11 @@
-/* eslint-disable dot-notation */
-import './AccountDiary.scss';
+import './ProfileDiary.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button } from './index';
 
-function AccountDiary({ data, onEdit, onDelete }) {
+function ProfileDiary({ data, onEdit, onDelete }) {
   const { imageUrl, title, description, rate, date } = data;
 
   const eventDay = formatDate(date);
@@ -25,55 +24,55 @@ function AccountDiary({ data, onEdit, onDelete }) {
   };
 
   return (
-    <div className="card-container account-diary">
-      <Card sectionClass="account-diary__image-container">
-        <img className="account-diary__image" src={imageUrl} alt={title} />
+    <div className="card-container profile-diary">
+      <Card sectionClass="profile-diary__image-container">
+        <img className="profile-diary__image" src={imageUrl} alt={title} />
       </Card>
-      <Card sectionClass="account-diary__date-container">
-        <div className="account-diary__text-wrap">
-          <TitleH2 sectionClass="account-diary__card-title" title={title} />
-          <div className="account-diary__card-text">
+      <Card sectionClass="profile-diary__date-container">
+        <div className="profile-diary__text-wrap">
+          <TitleH2 sectionClass="profile-diary__card-title" title={title} />
+          <div className="profile-diary__card-text">
             <CardAnnotationContainer>
-              <p className="account-diary__paragraph">{description}</p>
+              <p className="profile-diary__paragraph">{description}</p>
             </CardAnnotationContainer>
           </div>
         </div>
-        <div className="account-diary__card-date">
-          <p className="account-diary__weekday">{`${eventDay.monthName}, ${eventDay.year}`}</p>
-          <p className="account-diary__day">{eventDay.day}</p>
+        <div className="profile-diary__card-date">
+          <p className="profile-diary__weekday">{`${eventDay.monthName}, ${eventDay.year}`}</p>
+          <p className="profile-diary__day">{eventDay.day}</p>
         </div>
-        <div className="account-diary__actions">
-          <div className="account-diary__rating">
+        <div className="profile-diary__actions">
+          <div className="profile-diary__rating">
             <Rating
               type="radio"
               ratingType={rate}
               value={rate}
               checked
-              sectionClass="account-diary__rate"
+              sectionClass="profile-diary__rate"
             />
             <Caption
               title={caption}
-              sectionClass={`account-diary__ratings-text account-diary__ratings-text_type_${
+              sectionClass={`profile-diary__ratings-text profile-diary__ratings-text_type_${
                 rate || 'neutral'
               }`}
             />
           </div>
-          <div className="account-diary__action-elements">
+          <div className="profile-diary__action-elements">
             <Button
               title="Поделиться с куратором"
               color="gray-borderless"
-              sectionClass="account-diary__button"
+              sectionClass="profile-diary__button"
             />
             <Button
               title="Редактировать"
               color="gray-borderless"
-              sectionClass="account-diary__button"
+              sectionClass="profile-diary__button"
               onClick={handleEditButtonClick}
             />
             <Button
               title="Удалить"
               color="gray-borderless"
-              sectionClass="account-diary__button"
+              sectionClass="profile-diary__button"
               onClick={handleDeleteButtonClick}
             />
           </div>
@@ -83,7 +82,7 @@ function AccountDiary({ data, onEdit, onDelete }) {
   );
 }
 
-AccountDiary.propTypes = {
+ProfileDiary.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   imageUrl: PropTypes.string,
   description: PropTypes.string,
@@ -94,7 +93,7 @@ AccountDiary.propTypes = {
   onDelete: PropTypes.func,
 };
 
-AccountDiary.defaultProps = {
+ProfileDiary.defaultProps = {
   data: {},
   imageUrl: '',
   description: '',
@@ -105,4 +104,4 @@ AccountDiary.defaultProps = {
   onDelete: () => {},
 };
 
-export default AccountDiary;
+export default ProfileDiary;

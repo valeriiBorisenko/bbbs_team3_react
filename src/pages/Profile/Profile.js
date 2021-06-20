@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Profile.scss';
@@ -7,16 +8,13 @@ import {
   BasePage,
   AccountEventCard,
   TitleH2,
-  AccountForm,
-  AccountDiary,
+  ProfileForm,
+  ProfileDiary,
   PopupDeleteDiary,
 } from './index';
 import Api from '../../utils/api';
 
-//! Сейчас данные о мероприятиях приходят из App,
-//! чтобы синхронизировать отмену записи со стейтом данных календаря.
-//! Когда будет готов бэк, она будет приходить в GET-запросе и синхронизироваться через сервер
-function Account({ eventsData, onEventFullDescriptionClick }) {
+function Profile({ onEventFullDescriptionClick }) {
   useScrollToTop();
 
   const [events, setEvents] = useState(null);
@@ -33,17 +31,6 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
       })
       .catch((err) => console.log(err));
   }, []);
-
-  useEffect(() => {
-    const sortedEvents = eventsData
-      .filter((e) => e.booked)
-      .sort((a, b) => {
-        const date1 = new Date(a.startAt);
-        const date2 = new Date(b.startAt);
-        return date1 - date2;
-      });
-    setEvents(sortedEvents);
-  }, [eventsData]);
 
   const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
@@ -120,17 +107,17 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
         <title>Личный кабинет</title>
         <meta name="description" content="Личный кабинет наставника" />
       </Helmet>
-      <section className="account fade-in">
-        <div className="account__events-area page__section">
+      <section className="profile fade-in">
+        <div className="profile__events-area page__section">
           <TitleH2
-            sectionClass="account__title"
+            sectionClass="profile__title"
             title={
               events && events.length > 0
                 ? 'Вы записаны на мероприятия:'
                 : 'У вас нет записи на мероприятия'
             }
           />
-          <div className="account__events" ref={containerEvents}>
+          <div className="profile__events" ref={containerEvents}>
             {events &&
               events.length > 0 &&
               events.map((item) => (
@@ -139,13 +126,13 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
           </div>
         </div>
 
-        <div className="account__diaries page__section">
-          <span className="account__scroll-anchor" ref={scrollAnchorRef} />
-          <div className="account__diaries-container">
-            <div className="account__form-container">
+        <div className="profile__diaries page__section">
+          <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
+          <div className="profile__diaries-container">
+            <div className="profile__form-container">
               {!isFormOpen && (
                 <button
-                  className="account__button-add-diary"
+                  className="profile__button-add-diary"
                   type="button"
                   onClick={handleOpenForm}
                 >
@@ -155,14 +142,14 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
 
               {!isEditMode && isFormOpen && (
                 <TitleH2
-                  sectionClass="account__title"
+                  sectionClass="profile__title"
                   title="Составьте историю вашей дружбы с младшим. Эта страница доступна только вам."
                 />
               )}
 
-              <AccountForm
+              <ProfileForm
                 sectionClass={`${
-                  isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'
+                  isFormOpen ? 'profile__diary-form' : 'profile__diary-form_hidden'
                 }`}
                 isEditMode={isEditMode}
                 isOpen={isFormOpen}
@@ -175,7 +162,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
             {diaries &&
               diaries.length > 0 &&
               diaries.map((diary) => (
-                <AccountDiary
+                <ProfileDiary
                   key={diary.id}
                   data={diary}
                   onEdit={handleEditDiaryCard}
@@ -195,14 +182,12 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   );
 }
 
-Account.propTypes = {
-  eventsData: PropTypes.arrayOf(PropTypes.object),
+Profile.propTypes = {
   onEventFullDescriptionClick: PropTypes.func,
 };
 
-Account.defaultProps = {
-  eventsData: [],
+Profile.defaultProps = {
   onEventFullDescriptionClick: () => {},
 };
 
-export default Account;
+export default Profile;
