@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   AboutUs,
-  Account,
+  Profile,
   Calendar,
   MainPage,
   PageNotFound,
@@ -57,7 +57,7 @@ function Router({
       <ProtectedRoute
         exact
         path={ACCOUNT_URL}
-        component={Account}
+        component={Profile}
         onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
         eventsData={dataCalendar}
         isAuth={!!currentUser}
