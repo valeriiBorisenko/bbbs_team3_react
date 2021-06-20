@@ -27,12 +27,20 @@ function MainPage({
   const currentUser = useContext(CurrentUserContext);
   const [mainPageData, setDataMain] = useState(null);
 
-  // запрос даты главной страницы
-  useEffect(() => {
-    console.log('tyt');
+  function getMainPageData() {
     Api.getMainPageData()
       .then((data) => setDataMain(data))
       .catch((error) => console.log(error)); // попап ошибка!
+  }
+
+  // запрос даты главной страницы, если сменили город
+  useEffect(() => {
+    getMainPageData();
+  }, [currentUser?.city]);
+
+  // запрос даты главной страницы
+  useEffect(() => {
+    getMainPageData();
   }, []);
 
   // поднятие страницы к хедеру при загрузке
