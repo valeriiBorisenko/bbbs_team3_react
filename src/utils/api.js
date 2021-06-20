@@ -44,11 +44,12 @@ export default class Api {
       .then((response) => response.data);
   }
 
-  // работа с юзером
-  static updateUserInfo(userData) {
+  // работа с отдельными полями юзера
+  static updateUseProfile(dataToUpdate) { //! подключено к бекенду
     return axios
-      .patch(`${baseURL}${apiUrl}/profile/`, userData)
-      .then((response) => response.data);
+      .patch(`${baseURL}${apiUrl}/profile/`, dataToUpdate)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   // работа со страницей ЛК

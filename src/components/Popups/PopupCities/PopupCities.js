@@ -3,20 +3,24 @@ import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import { Popup, TitleH2 } from './index';
+import Api from '../../../utils/api';
 
 function PopupCities({
   cities, isOpen, onClose, onSubmit
 }) {
   const currentUser = useContext(CurrentUserContext);
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    const cityId = parseInt(evt.nativeEvent.submitter.value, 10);
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const cityId = parseInt(event.nativeEvent.submitter.value, 10);
     if (currentUser) {
-      onSubmit({ ...currentUser, city: cityId });
+      Api.updateUseProfile({ city: cityId })
+        .then((updatedUser) => onSubmit({ ...currentUser, ...updatedUser }))
+        .catch((error) => console.log(error));
     }
     onClose();
-  };
+  }
 
   return (
     cities && (
