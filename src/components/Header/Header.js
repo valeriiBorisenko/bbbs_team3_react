@@ -8,24 +8,20 @@ import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useClickOutside } from '../../utils/custom-hooks';
-import { ACCOUNT_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
+import { useClickOutside } from '../../hooks/index';
+import { PROFILE_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
 import { NavBar, UserMenuButton } from './index';
 
-function Header({
-  onUserButtonClick,
-  onLogout,
-  onCityChange,
-  cities
-}) {
+function Header({ onUserButtonClick, onLogout, onCityChange, cities }) {
   const { pathname } = useLocation();
   const currentUser = useContext(CurrentUserContext);
 
   const [userCityName, setUserCityName] = useState('');
 
   // определение города пользователя, используется в кнопках
+  //! работает с костылем из-за Null в currentUser.city
   useEffect(() => {
-    if (cities && currentUser) {
+    if (cities && currentUser && currentUser.city) {
       const userCity = cities.filter((city) => city.id === currentUser.city);
       setUserCityName(userCity[0].name);
     }
@@ -74,8 +70,10 @@ function Header({
   const classNamesHeader = [
     'header',
     isMobileMenuOpen ? 'header_displayed' : '',
-    !isHeaderActive ? 'header__on-scroll-up' : ''
-  ].join(' ').trim();
+    !isHeaderActive ? 'header__on-scroll-up' : '',
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <header
@@ -94,29 +92,25 @@ function Header({
           isMobileMenuOpen={isMobileMenuOpen}
         />
 
-        {pathname === ACCOUNT_URL && (
-        <div className="header__user-info">
-          <UserMenuButton
-            title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
-            sectionClass="mobile-link"
-            handleClick={onCityChange}
-          />
-          <UserMenuButton
-            title="Выйти"
-            sectionClass="mobile-link"
-            handleClick={onLogout}
-          />
-        </div>
+        {pathname === PROFILE_URL && (
+          <div className="header__user-info">
+            <UserMenuButton
+              title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+              sectionClass="mobile-link"
+              handleClick={onCityChange}
+            />
+            <UserMenuButton title="Выйти" sectionClass="mobile-link" handleClick={onLogout} />
+          </div>
         )}
 
         {(pathname === AFISHA_URL || pathname === PLACES_URL) && (
-        <div className="header__user-info">
-          <UserMenuButton
-            title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
-            handleClick={onCityChange}
-            sectionClass="mobile-link"
-          />
-        </div>
+          <div className="header__user-info">
+            <UserMenuButton
+              title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+              handleClick={onCityChange}
+              sectionClass="mobile-link"
+            />
+          </div>
         )}
       </div>
     </header>
@@ -127,14 +121,14 @@ Header.propTypes = {
   onUserButtonClick: PropTypes.func,
   onCityChange: PropTypes.func,
   onLogout: PropTypes.func,
-  cities: PropTypes.arrayOf(PropTypes.object)
+  cities: PropTypes.arrayOf(PropTypes.object),
 };
 
 Header.defaultProps = {
   onUserButtonClick: () => {},
   onCityChange: () => {},
   onLogout: () => {},
-  cities: []
+  cities: [],
 };
 
 export default Header;

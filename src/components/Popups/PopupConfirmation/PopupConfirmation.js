@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { formatDate } from '../../../utils/utils';
 import { Popup, Button, TitleH2 } from './index';
 
-function PopupConfirmation({
-  isOpen,
-  onClose,
-  onConfirmButtonClick,
-  cardData
-}) {
+function PopupConfirmation({ isOpen, onClose, onConfirmButtonClick, cardData }) {
   const { title, startAt, endAt } = cardData;
   const startDay = formatDate(startAt);
   const endDay = formatDate(endAt);
@@ -19,18 +14,12 @@ function PopupConfirmation({
   };
 
   return (
-    <Popup
-      type="confirmation"
-      typeContainer="calendar"
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Popup type="confirmation" typeContainer="calendar" isOpen={isOpen} onClose={onClose}>
       <form className="popup__form" onSubmit={handleSubmit}>
-        <p className="section-title popup__title_type_calendar">Подтвердить запись на мероприятие</p>
-        <TitleH2
-          sectionClass="popup__title_type_calendar"
-          title={`«${title}»`}
-        />
+        <p className="section-title popup__title_type_calendar">
+          Подтвердить запись на мероприятие
+        </p>
+        <TitleH2 sectionClass="popup__title_type_calendar" title={`«${title}»`} />
         <TitleH2
           sectionClass="popup__title_type_calendar"
           title={`${startDay.day} ${startDay.monthName} с ${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
@@ -42,11 +31,7 @@ function PopupConfirmation({
             sectionClass="popup__button_type_calendar"
             isSubmittable
           />
-          <Button
-            color="black"
-            title="Отменить"
-            onClick={onClose}
-          />
+          <Button color="black" title="Отменить" onClick={onClose} />
         </div>
       </form>
     </Popup>
@@ -57,14 +42,14 @@ PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onConfirmButtonClick: PropTypes.func,
-  cardData: PropTypes.objectOf(PropTypes.any)
+  cardData: PropTypes.objectOf(PropTypes.any),
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: () => {},
   onConfirmButtonClick: () => {},
-  cardData: {}
+  cardData: {},
 };
 
 export default PopupConfirmation;

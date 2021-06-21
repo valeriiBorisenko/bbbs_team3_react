@@ -5,30 +5,49 @@ export const weekdays = [
   'среда',
   'четверг',
   'пятница',
-  'суббота'
+  'суббота',
 ];
 
 export const months = [
-  'Январь',
-  'Февраль',
-  'Март',
-  'Апрель',
-  'Май',
-  'Июнь',
-  'Июль',
-  'Август',
-  'Сентябрь',
-  'Октябрь',
-  'Ноябрь',
-  'Декабрь'
+  'январь',
+  'февраль',
+  'март',
+  'апрель',
+  'май',
+  'июнь',
+  'июль',
+  'август',
+  'сентябрь',
+  'октябрь',
+  'ноябрь',
+  'декабрь',
 ];
 
 export const COLORS = [
-  'yellow', 'green', 'yellow', 'pink', 'blue', 'pink', 'green', 'yellow', 'green', 'blue', 'pink', 'blue'
+  'yellow',
+  'green',
+  'yellow',
+  'pink',
+  'blue',
+  'pink',
+  'green',
+  'yellow',
+  'green',
+  'blue',
+  'pink',
+  'blue',
 ];
 
 export const FIGURES = [
-  'square', 'circle', 'arch', 'circle', 'arch', 'square', 'arch', 'square', 'circle'
+  'square',
+  'circle',
+  'arch',
+  'circle',
+  'arch',
+  'square',
+  'arch',
+  'square',
+  'circle',
 ];
 
 export const ALL_CATEGORIES = 'Все';

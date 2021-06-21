@@ -1,18 +1,12 @@
 import { Link } from 'react-router-dom';
 import './Footer.scss';
-import {
-  AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL
-} from '../../config/routes';
+import { AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL } from '../../config/routes';
 import { footerLogoPath, NavItem } from './index';
 
 function Footer() {
   return (
     <footer className="footer">
-      <Link
-        to="/"
-        className="footer__logo"
-        target="_self"
-      >
+      <Link to="/" className="footer__logo" target="_self">
         <img
           className="footer__logo-image"
           src={footerLogoPath}
@@ -29,8 +23,7 @@ function Footer() {
         <p className="footer__brand">&copy; Старшие Братья Старшие Сестры</p>
         <div className="footer__copyright">
           <p className="footer__authors">
-            Разработка – студенты
-            {' '}
+            Разработка – студенты{' '}
             <a
               href="https://praktikum.yandex.ru/"
               className="footer__production"
@@ -41,8 +34,7 @@ function Footer() {
             </a>
           </p>
           <p className="footer__design">
-            Концепция и дизайн –
-            {' '}
+            Концепция и дизайн –{' '}
             <a
               href="https://krkr.design/"
               className="footer__production"

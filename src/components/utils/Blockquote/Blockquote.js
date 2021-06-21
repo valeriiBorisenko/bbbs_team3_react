@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 function Blockquote({ sectionWrapperClass, sectionTitleClass, text }) {
   return (
     <blockquote className={sectionWrapperClass}>
-      <h3 className={`chapter-title ${sectionTitleClass}`}>
-        {text}
-      </h3>
+      <h3 className={`chapter-title ${sectionTitleClass}`}>{text}</h3>
     </blockquote>
   );
 }
@@ -13,13 +11,13 @@ function Blockquote({ sectionWrapperClass, sectionTitleClass, text }) {
 Blockquote.propTypes = {
   sectionWrapperClass: PropTypes.string,
   sectionTitleClass: PropTypes.string,
-  text: PropTypes.string
+  text: PropTypes.string,
 };
 
 Blockquote.defaultProps = {
   sectionWrapperClass: '',
   sectionTitleClass: '',
-  text: ''
+  text: '',
 };
 
 export default Blockquote;

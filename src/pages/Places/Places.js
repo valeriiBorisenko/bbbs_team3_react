@@ -1,34 +1,30 @@
-import './WhereToGo.scss';
+import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useScrollToTop } from '../../hooks/index';
+import { repeatSchema } from '../../utils/utils';
+import { COLORS, ALL_CATEGORIES } from '../../config/constants';
 import {
-  CurrentUserContext,
-  useSmoothScrollOnWindow,
-  repeatSchema,
-  COLORS,
-  ALL_CATEGORIES,
-  BasePage,
-  TitleH1,
-  CardPlace,
-  WhereToGoPreview,
   renderFilterTags,
-  changeCheckboxTagState,
-  changeRadioTagState,
+  handleCheckboxBehavior,
+  handleRadioBehavior,
   selectOneTag,
-  deselectOneTag
-} from './index';
+  deselectOneTag,
+} from '../../utils/filter-tags';
+import { BasePage, TitleH1, CardPlace, PlacesRecommend } from './index';
 import Api from '../../utils/api';
 
 const ageFilters = [
-  { filter: '8-10 лет', isActive: false },
-  { filter: '11-13 лет', isActive: false },
-  { filter: '14-18 лет', isActive: false },
-  { filter: '18+ лет', isActive: false }
+  { filter: '8-10 лет', name: '8-10 лет', isActive: false },
+  { filter: '11-13 лет', name: '11-13 лет', isActive: false },
+  { filter: '14-18 лет', name: '14-18 лет', isActive: false },
+  { filter: '18+ лет', name: '18+ лет', isActive: false },
 ];
 
-function WhereToGo({ openPopupCities }) {
-  useSmoothScrollOnWindow({ top: 0 });
+function Places({ openPopupCities }) {
+  useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
 
@@ -37,43 +33,26 @@ function WhereToGo({ openPopupCities }) {
 
   // мутабельный массив для применения фильтров
   const [filteredPlaces, setFilteredPlaces] = useState([]);
+  // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-
+  // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
-  const [activeCategories, setActiveCategories] = useState(new Set());
 
-  //! фильтры КАТЕГОРИЯ
-  const changeCategory = (inputName, isChecked) => {
-    changeCheckboxTagState(setCategories, { inputName, isChecked });
-
-    if (inputName === ALL_CATEGORIES) {
-      setActiveCategories(new Set());
-      setIsFiltersUsed(true);
-      return;
+  // хэндлер клика по фильтру
+  const changeCategory = (inputValue, isChecked) => {
+    if (inputValue === ALL_CATEGORIES) {
+      selectOneTag(setCategories, ALL_CATEGORIES);
+    } else {
+      handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
 
-    // если такой фильтр уже есть
-    if (activeCategories.has(inputName)) {
-      setActiveCategories((set) => {
-        set.delete(inputName);
-        return set;
-      });
-      setIsFiltersUsed(true);
-      return;
-    }
-
-    // новый фильтр
     setIsFiltersUsed(true);
-    setActiveCategories((set) => {
-      set.add(inputName);
-      return set;
-    });
   };
 
-  //! фильтры ВОЗРАСТ
-  const changeAge = (inputName, isChecked) => {
-    changeRadioTagState(setAges, { inputName, isChecked });
+  // хэндлер клика по фильтру ВОЗРАСТ
+  const changeAge = (inputValue, isChecked) => {
+    handleRadioBehavior(setAges, { inputValue, isChecked });
     setIsFiltersUsed(true);
   };
 
@@ -93,11 +72,15 @@ function WhereToGo({ openPopupCities }) {
     }
   };
 
+  // функция-фильтратор
   const handleFiltration = () => {
     const activeAgeFilter = ages.find((filter) => filter.isActive);
+    const activeCategories = categories
+      .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+      .map((filter) => filter.filter);
 
     // ВСЕ
-    if (activeCategories.size === 0) {
+    if (activeCategories.length === 0) {
       if (!activeAgeFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         setFilteredPlaces(places);
@@ -112,16 +95,19 @@ function WhereToGo({ openPopupCities }) {
     }
 
     // КАТЕГОРИИ
-    if (activeCategories.size > 0) {
+    if (activeCategories.length > 0) {
       if (!activeAgeFilter) {
         // + БЕЗ ВОЗРАСТА
-        const filterByCategory = places.filter((place) => activeCategories.has(place.category));
+        const filterByCategory = places.filter((place) =>
+          activeCategories.includes(place.category),
+        );
         setFilteredPlaces(filterByCategory);
       } else {
         // + ВОЗРАСТ
         const filterByAge = places.filter((place) => filterAgeRanges(place.age, activeAgeFilter));
-        const filterByCategory = filterByAge
-          .filter((place) => activeCategories.has(place.category));
+        const filterByCategory = filterByAge.filter((place) =>
+          activeCategories.includes(place.category),
+        );
 
         setFilteredPlaces(filterByCategory);
       }
@@ -130,6 +116,7 @@ function WhereToGo({ openPopupCities }) {
     }
   };
 
+  // запуск фильтрации
   useEffect(() => {
     handleFiltration();
     setIsFiltersUsed(false);
@@ -144,15 +131,20 @@ function WhereToGo({ openPopupCities }) {
 
         const categoriesArr = result.map((place) => place.category);
         const set = new Set(categoriesArr);
-        const uniqueCategories = Array.from(set).map((item) => ({ filter: item, isActive: false }));
+        const uniqueCategories = Array.from(set).map((item) => ({
+          filter: item,
+          name: item,
+          isActive: false,
+        }));
         setCategories([
-          { filter: ALL_CATEGORIES, isActive: true },
-          ...uniqueCategories
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+          ...uniqueCategories,
         ]);
       })
-      .catch((error) => console.log(error));
+      .catch(console.log);
   }, []);
 
+  // открытие попапа "города" для незарегистрированного
   useEffect(() => {
     if (!currentUser) {
       openPopupCities();
@@ -163,24 +155,17 @@ function WhereToGo({ openPopupCities }) {
     <BasePage>
       <Helmet>
         <title>Куда пойти</title>
-        <meta
-          name="description"
-          content="Куда вы можете пойти, что рекомендуют наши наставники"
-        />
+        <meta name="description" content="Куда вы можете пойти, что рекомендуют наши наставники" />
       </Helmet>
       <section className="place page__section fade-in">
         <TitleH1 title="Куда пойти" />
         <div className="tags">
-          <ul className="tags__list">
-            {renderFilterTags(categories, 'checkbox', changeCategory)}
-          </ul>
-          <ul className="tags__list">
-            {renderFilterTags(ages, 'checkbox', changeAge)}
-          </ul>
+          <ul className="tags__list">{renderFilterTags(categories, 'category', changeCategory)}</ul>
+          <ul className="tags__list">{renderFilterTags(ages, 'age', changeAge)}</ul>
         </div>
       </section>
 
-      {currentUser && (<WhereToGoPreview />)}
+      {currentUser && <PlacesRecommend />}
 
       <section className="place__main page__section fade-in">
         <CardPlace
@@ -205,12 +190,12 @@ function WhereToGo({ openPopupCities }) {
   );
 }
 
-WhereToGo.propTypes = {
-  openPopupCities: PropTypes.func
+Places.propTypes = {
+  openPopupCities: PropTypes.func,
 };
 
-WhereToGo.defaultProps = {
-  openPopupCities: () => {}
+Places.defaultProps = {
+  openPopupCities: () => {},
 };
 
-export default WhereToGo;
+export default Places;

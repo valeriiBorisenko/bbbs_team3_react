@@ -5,8 +5,10 @@ function Loader({ isNested, isCentered }) {
   const classNames = [
     'spinner',
     isNested ? 'spinner_waiting-for-data' : '',
-    isCentered ? 'spinner_centered' : ''
-  ].join(' ').trim();
+    isCentered ? 'spinner_centered' : '',
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <div className={classNames}>
@@ -30,12 +32,12 @@ function Loader({ isNested, isCentered }) {
 
 Loader.propTypes = {
   isNested: PropTypes.bool,
-  isCentered: PropTypes.bool
+  isCentered: PropTypes.bool,
 };
 
 Loader.defaultProps = {
   isNested: false,
-  isCentered: false
+  isCentered: false,
 };
 
 export default Loader;

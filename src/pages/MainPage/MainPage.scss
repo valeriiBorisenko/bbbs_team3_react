@@ -16,7 +16,7 @@
 @include atDesktop1400 {
   .main-questions__container .main-section__link {
     &:nth-last-of-type(-n+1) {
-      display: none;
+      // display: none;
     }
   }
 }
