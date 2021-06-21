@@ -21,7 +21,6 @@ import {
   PLACES_URL,
   CATALOG_URL,
   PROFILE_URL,
-  PLACES_URL,
 } from '../config/routes';
 
 function Router({
