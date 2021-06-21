@@ -4,13 +4,13 @@ import './CardsSection.scss';
 import { FIGURES } from '../../../config/constants';
 import Paginate from '../../utils/Paginate/Paginate';
 
-function CardsSection({ pageCount, catalogPageData, pageNumber, setPageNumber }) {
+function CardsSection({ pageCount, pageData, pageNumber, setPageNumber }) {
   return (
     <section className="cards-section">
       <div className="cards-section__line" />
       <div className="cards-section__line" />
       <div className="cards-section__line" />
-      {catalogPageData.map((item, i) => (
+      {pageData.map((item, i) => (
         <CardCatalog
           key={item.id}
           title={item.title}
@@ -19,7 +19,7 @@ function CardsSection({ pageCount, catalogPageData, pageNumber, setPageNumber })
         />
       ))}
       <Paginate
-        secetionClass="cards-section__pagination"
+        sectionClass="cards-section__pagination"
         pageCount={pageCount}
         value={pageNumber}
         onChange={setPageNumber}
@@ -30,14 +30,14 @@ function CardsSection({ pageCount, catalogPageData, pageNumber, setPageNumber })
 
 CardsSection.propTypes = {
   pageCount: PropTypes.number,
-  catalogPageData: PropTypes.arrayOf(PropTypes.object),
+  pageData: PropTypes.arrayOf(PropTypes.object),
   pageNumber: PropTypes.number,
   setPageNumber: PropTypes.func,
 };
 
 CardsSection.defaultProps = {
   pageCount: 0,
-  catalogPageData: [],
+  pageData: [],
   pageNumber: 0,
   setPageNumber: () => {},
 };

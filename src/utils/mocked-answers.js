@@ -6,12 +6,12 @@ const baseURL = 'http://localhost:3000';
 const apiUrl = '/api/v1';
 
 // файлы с серверными ответами
-// const mainPageData = require('./server-responses/main-page.json');
+const mainPageData = require('./server-responses/main-page.json');
 const profileDiaryData = require('./server-responses/profile-diary.json');
 const cities = require('./server-responses/cities.json');
 const calendarPageData = require('./server-responses/calendar-page.json');
 const token = require('./server-responses/token.json');
-// const userData = require('./server-responses/userData.json');
+const userData = require('./server-responses/userData.json');
 const questionsData = require('./server-responses/questions-page.json');
 const question = require('./server-responses/question-post.json');
 const places = require('./server-responses/places.json');
@@ -22,9 +22,9 @@ const mock = new MockAdapter(axios, { delayResponse: 1000 });
 
 export default function setMockedAnswers() {
   //! главная страница
-  // mock
-  //   .onGet(`${baseURL}${apiUrl}/main/`)
-  //   .reply(200, { mainPageData }, 'Content-Type: application/json');
+  mock
+    .onGet(`${baseURL}${apiUrl}/main/`)
+    .reply(200, { mainPageData }, 'Content-Type: application/json');
 
   //! страница календаря
   mock
@@ -47,9 +47,9 @@ export default function setMockedAnswers() {
   //! логин и юзер-инфо
   mock.onPost(`${baseURL}${apiUrl}/token/`).reply(200, { token }, 'Content-Type: application/json');
 
-  // mock
-  //   .onGet(`${baseURL}${apiUrl}/profile/`)
-  //   .reply(200, { userData }, 'Content-Type: application/json');
+  mock
+    .onGet(`${baseURL}${apiUrl}/profile/`)
+    .reply(200, { userData }, 'Content-Type: application/json');
 
   const updateUserInfo = (incoming) => {
     const newUserData = JSON.parse(incoming.data);
@@ -61,14 +61,10 @@ export default function setMockedAnswers() {
   const updateEventMock = (calendarCard) => {
     const calendarData = JSON.parse(calendarCard.data);
     calendarData.booked = !calendarData.booked;
-    calendarData.seats = calendarData.booked
-      ? calendarData.seats - 1
-      : calendarData.seats + 1;
+    calendarData.seats = calendarData.booked ? calendarData.seats - 1 : calendarData.seats + 1;
     return [200, calendarData];
   };
-  mock
-    .onPatch(`${baseURL}${apiUrl}/afisha/event-participants/`)
-    .reply(updateEventMock);
+  mock.onPatch(`${baseURL}${apiUrl}/afisha/event-participants/`).reply(updateEventMock);
 
   //! Страница Вопросы
   mock
@@ -81,15 +77,17 @@ export default function setMockedAnswers() {
 }
 
 //! Страница Справочник
-mock
-  .onGet(`${baseURL}${apiUrl}/catalog/`)
-  .reply((config) => {
-    const { limit, offset } = config.params;
+mock.onGet(`${baseURL}${apiUrl}/catalog/`).reply((config) => {
+  const { limit, offset } = config.params;
 
-    const catalogPart = catalog.catalog.slice(offset, offset + limit);
+  const catalogPart = catalog.catalog.slice(offset, offset + limit);
 
-    return [200, {
+  return [
+    200,
+    {
       catalogTotalLength: catalog.catalog.length,
-      catalog: catalogPart
-    }, 'Content-Type: application/json'];
-  });
+      catalog: catalogPart,
+    },
+    'Content-Type: application/json',
+  ];
+});

@@ -3,9 +3,9 @@ import ReactPaginate from 'react-paginate';
 import PropTypes from 'prop-types';
 import './Paginate.scss';
 
-const Paginate = ({ pageCount, secetionClass, value, onChange }) => (
+const Paginate = ({ pageCount, sectionClass, value, onChange }) => (
   <ReactPaginate
-    containerClassName={`pagination ${secetionClass}`}
+    containerClassName={`pagination ${sectionClass}`}
     pageClassName="pagination__element"
     pageLinkClassName="pagination__element-link"
     activeLinkClassName="pagination__element-link_type_active"
@@ -25,12 +25,12 @@ Paginate.propTypes = {
   value: PropTypes.number.isRequired,
   onChange: PropTypes.func,
   pageCount: PropTypes.number.isRequired,
-  secetionClass: PropTypes.string,
+  sectionClass: PropTypes.string,
 };
 
 Paginate.defaultProps = {
   onChange: () => {},
-  secetionClass: '',
+  sectionClass: '',
 };
 
 export default Paginate;

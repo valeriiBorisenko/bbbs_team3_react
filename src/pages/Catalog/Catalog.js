@@ -15,9 +15,9 @@ function Catalog() {
   useEffect(() => {
     setIsLoading(true);
     const offset = pageSize * pageNumber;
-    Api.getCatalogPageData({ limit: pageSize, offset }).then(({ catalog, catalogTotalLength }) => {
-      setCatalogPageData(catalog);
-      setPageCount(Math.ceil(catalogTotalLength / pageSize));
+    Api.getCatalogPageData({ limit: pageSize, offset }).then(({ results, count }) => {
+      setCatalogPageData(results);
+      setPageCount(Math.ceil(count / pageSize));
       setIsLoading(false);
     });
   }, [pageSize, pageNumber]);
@@ -63,7 +63,7 @@ function Catalog() {
         {!isLoading && (
           <CardsSection
             pageCount={pageCount}
-            catalogPageData={catalogPageData}
+            pageData={catalogPageData}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
           />
