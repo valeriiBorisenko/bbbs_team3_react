@@ -8,10 +8,10 @@ function CardCatalog({
 }) {
   return (
     <div className="card-catalog">
-      <CardFigure className="card-catalog_type_shaped" shape={shape}>
+      <CardFigure sectionClass="card-catalog_type_shaped" shape={shape}>
         <img className="card-catalog__image" src={image} alt={title} />
       </CardFigure>
-      <TitleH2 className="section-ttile card-catalog__title" title={title} />
+      <TitleH2 sectionClass="card-catalog__title" title={title} />
     </div>
 
   );
