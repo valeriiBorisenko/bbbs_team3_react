@@ -15,13 +15,11 @@ function CardsSection() {
   useEffect(() => {
     setIsLoading(true);
     const offset = pageSize * pageNumber;
-    Api.getCatalogPageData({ limit: pageSize, offset }).then(
-      ({ catalog, catalogTotalLength }) => {
-        setCatalogPageData(catalog);
-        setPageCount(Math.ceil(catalogTotalLength / pageSize));
-        setIsLoading(false);
-      }
-    );
+    Api.getCatalogPageData({ limit: pageSize, offset }).then(({ catalog, catalogTotalLength }) => {
+      setCatalogPageData(catalog);
+      setPageCount(Math.ceil(catalogTotalLength / pageSize));
+      setIsLoading(false);
+    });
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
@@ -53,14 +51,15 @@ function CardsSection() {
       <div className="cards-section__line" />
       <div className="cards-section__line" />
       <div className="cards-section__line" />
-      {!isLoading && catalogPageData.map((item, i) => (
-        <CardCatalog
-          key={item.id}
-          title={item.title}
-          image={item.imageUrl}
-          shape={FIGURES[i % FIGURES.length]}
-        />
-      ))}
+      {!isLoading &&
+        catalogPageData.map((item, i) => (
+          <CardCatalog
+            key={item.id}
+            title={item.title}
+            image={item.imageUrl}
+            shape={FIGURES[i % FIGURES.length]}
+          />
+        ))}
       <ReactPaginate
         containerClassName="cards-section__pagination-container"
         pageClassName="cards-section__pagination-element"
