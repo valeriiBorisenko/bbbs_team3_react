@@ -1,5 +1,7 @@
 import { Helmet } from 'react-helmet-async';
-import { BasePage, TitleH1, TitleH2, CardsSection } from './index';
+import {
+  BasePage, TitleH1, TitleH2, CardsSection
+} from './index';
 import './Catalog.scss';
 
 function Catalog() {
