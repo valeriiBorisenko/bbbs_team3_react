@@ -5,7 +5,17 @@ import { PLACES_URL } from '../../../config/routes';
 import { CardAnnotation, Rubric, TitleH2, Card, Caption } from './index';
 
 function CardPlace({
-  data: { chosen, title, address, imageUrl, link, description, sex, age, category },
+  data: {
+    chosen,
+    title,
+    address,
+    imageUrl,
+    link,
+    description,
+    sex,
+    age,
+    category,
+  },
   color,
   sectionClass,
   isMain,
@@ -14,7 +24,10 @@ function CardPlace({
 
   return (
     <article className={`card-container ${sectionClass}`}>
-      <Card sectionClass={`card-place ${isMain ? 'card-place_main' : ''}`} color={cardColor}>
+      <Card
+        sectionClass={`card-place ${isMain ? 'card-place_main' : ''}`}
+        color={cardColor}
+      >
         {isMain ? (
           <Rubric title="Выбор наставника" sectionClass="card-place__rubric" />
         ) : (
@@ -37,7 +50,12 @@ function CardPlace({
           </Link>
         )}
 
-        <a href={link} className="link card-place__link" target="_blank" rel="noopener noreferrer">
+        <a
+          href={link}
+          className="link card-place__link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           перейти на сайт
         </a>
       </Card>

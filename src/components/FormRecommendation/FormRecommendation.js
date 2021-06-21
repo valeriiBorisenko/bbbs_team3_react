@@ -13,7 +13,9 @@ function FormRecommendation({ isOpen, onSubmit }) {
       ? 'Комментарий*'
       : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
 
-  const formClassNames = ['form-recom', isOpen ? 'form-recom_opened' : ''].join(' ').trim();
+  const formClassNames = ['form-recom', isOpen ? 'form-recom_opened' : '']
+    .join(' ')
+    .trim();
 
   const {
     register,
@@ -43,7 +45,11 @@ function FormRecommendation({ isOpen, onSubmit }) {
   }, [isOpen]);
 
   return (
-    <form className={formClassNames} name="formRecomendation" onSubmit={handleSubmit(onFormSubmit)}>
+    <form
+      className={formClassNames}
+      name="formRecomendation"
+      onSubmit={handleSubmit(onFormSubmit)}
+    >
       <div className="form-recom__input-container">
         <Input
           sectionClass="form-recom__input"
@@ -125,7 +131,9 @@ function FormRecommendation({ isOpen, onSubmit }) {
       </div>
 
       <select
-        className={`form-recom__select ${errors?.type ? 'form-recom__select_error' : ''}`}
+        className={`form-recom__select ${
+          errors?.type ? 'form-recom__select_error' : ''
+        }`}
         name="type"
         {...register('type', { required: 'Тип отдыха*' })}
       >

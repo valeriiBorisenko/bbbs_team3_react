@@ -32,7 +32,8 @@ function App() {
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
-  const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] = useState(false);
+  const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] =
+    useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
   // выбранная карточка при открытии попапа (календарь)
@@ -201,7 +202,11 @@ function App() {
             onCityChange={handleClickPopupCities}
             cities={cities}
           />
-          {!isCheckingToken ? <Router handlers={handlers} /> : <Loader isCentered />}
+          {!isCheckingToken ? (
+            <Router handlers={handlers} />
+          ) : (
+            <Loader isCentered />
+          )}
           <PopupConfirmation
             isOpen={isPopupConfirmationOpen}
             onClose={closeAllPopups}

@@ -5,4 +5,11 @@ import AccountForm from '../../components/AccountForm/AccountForm';
 import AccountDiary from '../../components/AccountDiary/AccountDiary';
 import PopupDeleteDiary from '../../components/Popups/PopupDeleteDiary/PopupDeleteDiary';
 
-export { BasePage, AccountEventCard, TitleH2, AccountForm, AccountDiary, PopupDeleteDiary };
+export {
+  BasePage,
+  AccountEventCard,
+  TitleH2,
+  AccountForm,
+  AccountDiary,
+  PopupDeleteDiary,
+};

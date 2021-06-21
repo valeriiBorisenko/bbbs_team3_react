@@ -95,18 +95,30 @@ function Header({ onUserButtonClick, onLogout, onCityChange, cities }) {
         {pathname === PROFILE_URL && (
           <div className="header__user-info">
             <UserMenuButton
-              title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+              title={
+                userCityName
+                  ? `${userCityName}. Изменить город`
+                  : 'Изменить ваш город'
+              }
               sectionClass="mobile-link"
               handleClick={onCityChange}
             />
-            <UserMenuButton title="Выйти" sectionClass="mobile-link" handleClick={onLogout} />
+            <UserMenuButton
+              title="Выйти"
+              sectionClass="mobile-link"
+              handleClick={onLogout}
+            />
           </div>
         )}
 
         {(pathname === AFISHA_URL || pathname === PLACES_URL) && (
           <div className="header__user-info">
             <UserMenuButton
-              title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+              title={
+                userCityName
+                  ? `${userCityName}. Изменить город`
+                  : 'Изменить ваш город'
+              }
               handleClick={onCityChange}
               sectionClass="mobile-link"
             />

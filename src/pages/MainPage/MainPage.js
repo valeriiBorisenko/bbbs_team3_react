@@ -96,13 +96,20 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
 
       <section className="articles main-section page__section fade-in">
         <Link to="/articles" className="main-section__link">
-          <CardArticleBig key={mainPageData.articles[0].id} data={mainPageData.articles[0]} />
+          <CardArticleBig
+            key={mainPageData.articles[0].id}
+            data={mainPageData.articles[0]}
+          />
         </Link>
       </section>
 
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
         {mainPageData.movies.map((item) => (
-          <Link to="/films" className="main-section__link card-pagination_page_main" key={item.id}>
+          <Link
+            to="/films"
+            className="main-section__link card-pagination_page_main"
+            key={item.id}
+          >
             <CardFilm data={item} />
           </Link>
         ))}
@@ -110,7 +117,10 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
 
       <section className="video main-section page__section fade-in">
         <Link to="/video" className="main-section__link">
-          <CardVideoMain key={mainPageData.video.id} data={mainPageData.video} />
+          <CardVideoMain
+            key={mainPageData.video.id}
+            data={mainPageData.video}
+          />
         </Link>
       </section>
 

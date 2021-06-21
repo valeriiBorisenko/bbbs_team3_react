@@ -3,7 +3,11 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Rubric, TitleH2, Card, ButtonRound } from './index';
 
-function CardQuestion({ data: { title, tags, answer }, sectionClass, isQuestionsPage }) {
+function CardQuestion({
+  data: { title, tags, answer },
+  sectionClass,
+  isQuestionsPage,
+}) {
   const [isClick, setIsClick] = useState(false);
 
   function handleClickButton() {
@@ -11,7 +15,11 @@ function CardQuestion({ data: { title, tags, answer }, sectionClass, isQuestions
   }
 
   const answerRender = (
-    <div className={`question__answer ${isClick ? 'question__answer_visible' : ''}`}>
+    <div
+      className={`question__answer ${
+        isClick ? 'question__answer_visible' : ''
+      }`}
+    >
       <p className="paragraph question__paragraph">{answer}</p>
     </div>
   );
@@ -22,7 +30,11 @@ function CardQuestion({ data: { title, tags, answer }, sectionClass, isQuestions
       <div className="question__wrap">
         <div className="question__tags">
           {tags.map((tag) => (
-            <Rubric key={tag.id} title={tag.name} sectionClass="card-question__rubric" />
+            <Rubric
+              key={tag.id}
+              title={tag.name}
+              sectionClass="card-question__rubric"
+            />
           ))}
         </div>
         {isQuestionsPage ? (

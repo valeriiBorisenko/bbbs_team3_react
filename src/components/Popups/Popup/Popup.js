@@ -22,7 +22,9 @@ function Popup({
       className={`popup popup_type_${type} ${isOpen ? 'popup_opened' : ''} `}
       onClick={closeAllPopupsOnOverlay}
     >
-      <div className={`popup__container popup__container_type_${typeContainer} ${sectionClass}`}>
+      <div
+        className={`popup__container popup__container_type_${typeContainer} ${sectionClass}`}
+      >
         {!withoutCloseButton && (
           <button
             className="popup__close"

@@ -57,15 +57,21 @@ export default class Api {
 
   // работа со страницей ЛК
   static getProfileDiaryData() {
-    return axios.get(`${baseURL}${apiUrl}/profile/diary/`).then((response) => response.data);
+    return axios
+      .get(`${baseURL}${apiUrl}/profile/diary/`)
+      .then((response) => response.data);
   }
 
   // работа со странице вопросов
   static getQuestionsPageData() {
-    return axios.get(`${baseURL}${apiUrl}/questions/`).then((response) => response.data);
+    return axios
+      .get(`${baseURL}${apiUrl}/questions/`)
+      .then((response) => response.data);
   }
 
   static postQuestion(question) {
-    return axios.post(`${baseURL}${apiUrl}/question/`, question).then((response) => response.data);
+    return axios
+      .post(`${baseURL}${apiUrl}/question/`, question)
+      .then((response) => response.data);
   }
 }

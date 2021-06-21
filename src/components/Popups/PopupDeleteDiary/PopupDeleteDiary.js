@@ -23,13 +23,18 @@ function PopupDeleteDiary({ isOpen, onClose, onCardDelete, cardData }) {
     >
       <form className="popup__form" onSubmit={handleSubmit}>
         <TitleH2
-          title={`Удалить встречу в ${title} ${parseInt(day.day, 10)} ${day.monthName} ${
-            day.year
-          }?`}
+          title={`Удалить встречу в ${title} ${parseInt(day.day, 10)} ${
+            day.monthName
+          } ${day.year}?`}
           sectionClass="popup-diary__title"
         />
         <div className="popup-diary__buttons">
-          <Button color="gray" sectionClass="popup-diary__button" title="Удалить" isSubmittable />
+          <Button
+            color="gray"
+            sectionClass="popup-diary__button"
+            title="Удалить"
+            isSubmittable
+          />
           <Button
             color="black"
             sectionClass="popup-diary__button"

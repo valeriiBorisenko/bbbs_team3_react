@@ -86,7 +86,9 @@ function Places({ openPopupCities }) {
         setFilteredPlaces(places);
       } else {
         // + ВОЗРАСТ
-        const filterByAge = places.filter((place) => filterAgeRanges(place.age, activeAgeFilter));
+        const filterByAge = places.filter((place) =>
+          filterAgeRanges(place.age, activeAgeFilter)
+        );
         setFilteredPlaces(filterByAge);
       }
 
@@ -99,14 +101,16 @@ function Places({ openPopupCities }) {
       if (!activeAgeFilter) {
         // + БЕЗ ВОЗРАСТА
         const filterByCategory = places.filter((place) =>
-          activeCategories.includes(place.category),
+          activeCategories.includes(place.category)
         );
         setFilteredPlaces(filterByCategory);
       } else {
         // + ВОЗРАСТ
-        const filterByAge = places.filter((place) => filterAgeRanges(place.age, activeAgeFilter));
+        const filterByAge = places.filter((place) =>
+          filterAgeRanges(place.age, activeAgeFilter)
+        );
         const filterByCategory = filterByAge.filter((place) =>
-          activeCategories.includes(place.category),
+          activeCategories.includes(place.category)
         );
 
         setFilteredPlaces(filterByCategory);
@@ -155,13 +159,20 @@ function Places({ openPopupCities }) {
     <BasePage>
       <Helmet>
         <title>Куда пойти</title>
-        <meta name="description" content="Куда вы можете пойти, что рекомендуют наши наставники" />
+        <meta
+          name="description"
+          content="Куда вы можете пойти, что рекомендуют наши наставники"
+        />
       </Helmet>
       <section className="place page__section fade-in">
         <TitleH1 title="Куда пойти" />
         <div className="tags">
-          <ul className="tags__list">{renderFilterTags(categories, 'category', changeCategory)}</ul>
-          <ul className="tags__list">{renderFilterTags(ages, 'age', changeAge)}</ul>
+          <ul className="tags__list">
+            {renderFilterTags(categories, 'category', changeCategory)}
+          </ul>
+          <ul className="tags__list">
+            {renderFilterTags(ages, 'age', changeAge)}
+          </ul>
         </div>
       </section>
 

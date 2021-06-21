@@ -5,7 +5,9 @@ import CardAnnotationContainer from './CardAnnotationContainer';
 
 function CardAnnotation({ info, description, isMain }) {
   return (
-    <Card sectionClass={`card-annotation ${isMain ? 'card-annotation_main' : ''}`}>
+    <Card
+      sectionClass={`card-annotation ${isMain ? 'card-annotation_main' : ''}`}
+    >
       <CardAnnotationContainer caption={info}>
         <p className="paragraph card-annotation__paragraph">{description}</p>
       </CardAnnotationContainer>

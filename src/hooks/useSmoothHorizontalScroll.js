@@ -16,7 +16,7 @@ const useSmoothHorizontalScroll = ({ step }) => {
         });
       }
     },
-    [ref.current],
+    [ref.current]
   );
 
   useLayoutEffect(() => {
