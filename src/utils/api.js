@@ -64,7 +64,7 @@ export default class Api {
   static getCatalogPageData({ limit, offset }) {
     return axios
       .get(`${baseURL}${apiUrl}/catalog/`, {
-        params: { limit, offset }
+        params: { limit, offset },
       })
       .then((response) => response.data);
   }

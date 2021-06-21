@@ -23,65 +23,9 @@
     }
   }
 
-  &__pagination-container {
-    display: flex;
-    justify-content: space-evenly;
-    max-width: 475px;
-    width: 100%;
-    padding: 0;
+  &__pagination {
     margin: 90px auto 70px;
     grid-column: 1 / -1;
-  }
-
-  &__pagination-element {
-    list-style: none;
-    cursor: pointer;
-
-    &-link {
-      font-style: normal;
-      font-family: $protoGrotesk;
-      font-weight: 300;
-      font-size: 23px;
-      line-height: 1.3;
-      color: $black;
-      text-align: center;
-      position: relative;
-
-      &_type_active {
-        &::after {
-          content: '';
-          position: absolute;
-          padding: 0;
-          margin: 0;
-          width: 50px;
-          height: 50px;
-          border: 1px solid #000000;
-          box-sizing: border-box;
-          border-radius: 50%;
-          background-color: transparent;
-          z-index: 2;
-          top: 50%;
-          left: 50%;
-          margin-right: -50%;
-          transform: translate(-50%, -50%);
-        }
-      }
-    }
-  }
-  &__pagination-arrow-element {
-    background-image: url('../../../assets/arrow.svg');
-    width: 30px;
-    height: 30px;
-    color: transparent;
-    background-size: contain;
-
-    &_type_previous {
-      transform: rotate(180deg);
-    }
-
-    &_type_disabled {
-      display: none;
-    }
   }
 }
 
@@ -109,30 +53,6 @@
     padding-top: 50px;
     grid-template-rows: 1fr [third-line] 1px 1fr;
     gap: 30px;
-
-    &__pagination-container {
-      margin: 60px auto 50px;
-      max-width: 305px;
-    }
-
-    &__pagination-arrow-element {
-      width: 20px;
-      height: 20px;
-    }
-
-    &__pagination-element {
-      &-link {
-        font-size: 14px;
-        line-height: 17px;
-
-        &_type_active {
-          &::after {
-            width: 38px;
-            height: 38px;
-          }
-        }
-      }
-    }
   }
 }
 
