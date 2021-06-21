@@ -1,59 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
+import PropTypes from 'prop-types';
 import CardCatalog from '../CardCatalog/CardCatalog';
 import './CardsSection.scss';
-import Api from '../../../utils/api';
 import { FIGURES } from '../../../config/constants';
+import Paginate from '../../utils/Paginate/Paginate';
 
-function CardsSection() {
-  const [pageSize, setPageSize] = useState(16);
-  const [catalogPageData, setCatalogPageData] = useState([]);
-  const [pageCount, setPageCount] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const offset = pageSize * pageNumber;
-    Api.getCatalogPageData({ limit: pageSize, offset }).then(
-      ({ catalog, catalogTotalLength }) => {
-        setCatalogPageData(catalog);
-        setPageCount(Math.ceil(catalogTotalLength / pageSize));
-        setIsLoading(false);
-      }
-    );
-  }, [pageSize, pageNumber]);
-
-  useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1439px)');
-    const largeQuery = window.matchMedia('(max-width: 1919px)');
-
-    const listener = () => {
-      if (smallQuery.matches) {
-        setPageSize(4);
-      } else if (largeQuery.matches) {
-        setPageSize(9);
-      } else {
-        setPageSize(16);
-      }
-    };
-    listener();
-
-    smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
-
-    return () => {
-      smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
-    };
-  }, []);
-
+function CardsSection({ pageCount, catalogPageData, pageNumber, setPageNumber }) {
   return (
     <section className="cards-section">
       <div className="cards-section__line" />
       <div className="cards-section__line" />
       <div className="cards-section__line" />
-      {!isLoading && catalogPageData.map((item, i) => (
+      {catalogPageData.map((item, i) => (
         <CardCatalog
           key={item.id}
           title={item.title}
@@ -61,23 +18,28 @@ function CardsSection() {
           shape={FIGURES[i % FIGURES.length]}
         />
       ))}
-      <ReactPaginate
-        containerClassName="cards-section__pagination-container"
-        pageClassName="cards-section__pagination-element"
-        pageLinkClassName="cards-section__pagination-element-link"
-        activeLinkClassName="cards-section__pagination-element-link_type_active"
-        previousClassName="cards-section__pagination-element cards-section__pagination-arrow-element cards-section__pagination-arrow-element_type_previous"
-        breakClassName="cards-section__pagination-element"
-        nextClassName="cards-section__pagination-element cards-section__pagination-arrow-element"
-        disabledClassName="cards-section__pagination-arrow-element_type_disabled"
+      <Paginate
+        secetionClass="cards-section__pagination"
         pageCount={pageCount}
-        pageRangeDisplayed={3}
-        marginPagesDisplayed={1}
-        forcePage={pageNumber}
-        onPageChange={({ selected }) => setPageNumber(selected)}
+        value={pageNumber}
+        onChange={setPageNumber}
       />
     </section>
   );
 }
+
+CardsSection.propTypes = {
+  pageCount: PropTypes.number,
+  catalogPageData: PropTypes.arrayOf(PropTypes.object),
+  pageNumber: PropTypes.number,
+  setPageNumber: PropTypes.func,
+};
+
+CardsSection.defaultProps = {
+  pageCount: 0,
+  catalogPageData: [],
+  pageNumber: 0,
+  setPageNumber: () => {},
+};
 
 export default CardsSection;

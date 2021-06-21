@@ -6,12 +6,12 @@ function TitleH2({ title, sectionClass }) {
 
 TitleH2.propTypes = {
   title: PropTypes.string,
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
 };
 
 TitleH2.defaultProps = {
   title: '',
-  sectionClass: ''
+  sectionClass: '',
 };
 
 export default TitleH2;

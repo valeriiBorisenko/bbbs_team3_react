@@ -29,12 +29,12 @@ function PopupError({ isOpen, onClose }) {
 
 PopupError.propTypes = {
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
 PopupError.defaultProps = {
   isOpen: false,
-  onClose: () => {}
+  onClose: () => {},
 };
 
 export default PopupError;

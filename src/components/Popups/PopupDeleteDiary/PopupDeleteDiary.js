@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { formatDate } from '../../../utils/utils';
 import { Popup, TitleH2, Button } from './index';
 
-function PopupDeleteDiary({
-  isOpen, onClose, onCardDelete, cardData
-}) {
+function PopupDeleteDiary({ isOpen, onClose, onCardDelete, cardData }) {
   const { title, date } = cardData;
   const day = formatDate(date);
 
@@ -25,16 +23,13 @@ function PopupDeleteDiary({
     >
       <form className="popup__form" onSubmit={handleSubmit}>
         <TitleH2
-          title={`Удалить встречу в ${title} ${parseInt(day.day, 10)} ${day.monthName} ${day.year}?`}
+          title={`Удалить встречу в ${title} ${parseInt(day.day, 10)} ${day.monthName} ${
+            day.year
+          }?`}
           sectionClass="popup-diary__title"
         />
         <div className="popup-diary__buttons">
-          <Button
-            color="gray"
-            sectionClass="popup-diary__button"
-            title="Удалить"
-            isSubmittable
-          />
+          <Button color="gray" sectionClass="popup-diary__button" title="Удалить" isSubmittable />
           <Button
             color="black"
             sectionClass="popup-diary__button"
@@ -51,14 +46,14 @@ PopupDeleteDiary.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onCardDelete: PropTypes.func,
-  cardData: PropTypes.objectOf(PropTypes.any)
+  cardData: PropTypes.objectOf(PropTypes.any),
 };
 
 PopupDeleteDiary.defaultProps = {
   isOpen: false,
   onClose: () => {},
   onCardDelete: () => {},
-  cardData: {}
+  cardData: {},
 };
 
 export default PopupDeleteDiary;

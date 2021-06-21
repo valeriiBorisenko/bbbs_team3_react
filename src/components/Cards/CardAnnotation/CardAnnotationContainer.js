@@ -7,21 +7,19 @@ function CardAnnotationContainer({ caption, children }) {
     <Scrollbars renderThumbVertical={() => <div className="card-annotation__thumb" />}>
       {caption && <Caption sectionClass="card-annotation__caption" title={caption} />}
 
-      <div className="card-annotation__desc">
-        {children}
-      </div>
+      <div className="card-annotation__desc">{children}</div>
     </Scrollbars>
   );
 }
 
 CardAnnotationContainer.propTypes = {
   caption: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 CardAnnotationContainer.defaultProps = {
   caption: null,
-  children: null
+  children: null,
 };
 
 export default CardAnnotationContainer;

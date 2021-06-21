@@ -1,28 +1,23 @@
-import './QuestionsPage.scss';
+/* eslint-disable no-unused-vars */
+import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useScrollToTop } from '../../hooks/index';
+import { ALL_CATEGORIES } from '../../config/constants';
+import { questionForm } from '../../utils/utils';
 import {
-  CurrentUserContext,
-  ALL_CATEGORIES,
-  useSmoothScrollOnWindow,
-  questionForm,
   renderFilterTags,
-  changeCheckboxTagState,
+  handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
-  BasePage,
-  TitleH1,
-  TitleH2,
-  CardQuestion,
-  Input,
-  Button,
-  Loader
-} from './index';
+} from '../../utils/filter-tags';
+import { BasePage, TitleH1, TitleH2, CardQuestion, Input, Button, Loader } from './index';
 import Api from '../../utils/api';
 
-function QuestionsPage() {
-  useSmoothScrollOnWindow({ top: 0 });
+function Questions() {
+  useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
 
@@ -31,15 +26,19 @@ function QuestionsPage() {
 
   // мутабельный массив для применения фильтров
   const [filteredQuestions, setFilteredQuestions] = useState([]);
+  // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-
-  const [categories, setCategories] = useState([]); // состояние кнопок фильтров
-  const [activeCategories, setActiveCategories] = useState(new Set()); // сами фильтры
+  // категории фильтрации, состояние кнопок фильтров
+  const [categories, setCategories] = useState([]);
 
   // форма
   const [isQuestionForm, setIsQuestionForm] = useState(questionForm.before);
   const [inputValues, setInputValues] = useState(null);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const onFormSubmit = (values) => {
     setInputValues({ ...inputValues, ...values });
@@ -49,50 +48,37 @@ function QuestionsPage() {
     }, 10000);
   };
 
-  // фильтрация
-  const changeCategory = (inputName, isChecked) => {
-    changeCheckboxTagState(setCategories, { inputName, isChecked });
-
-    if (inputName === ALL_CATEGORIES) {
-      setActiveCategories(new Set());
-      setIsFiltersUsed(true);
-      return;
+  // хэндлер клика по фильтру
+  const changeCategory = (inputValue, isChecked) => {
+    if (inputValue === ALL_CATEGORIES) {
+      selectOneTag(setCategories, ALL_CATEGORIES);
+    } else {
+      handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
 
-    // если такой фильтр уже есть
-    if (activeCategories.has(inputName)) {
-      setActiveCategories((set) => {
-        set.delete(inputName);
-        return set;
-      });
-      setIsFiltersUsed(true);
-      return;
-    }
-
-    // новый фильтр
     setIsFiltersUsed(true);
-    setActiveCategories((set) => {
-      set.add(inputName);
-      return set;
-    });
   };
 
+  // фильтрация
   const handleFiltration = () => {
-    if (activeCategories.size === 0) {
+    const activeCategories = categories
+      .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+      .map((filter) => filter.filter);
+
+    if (activeCategories.length === 0) {
       setFilteredQuestions(questionsData);
       selectOneTag(setCategories, ALL_CATEGORIES);
-      return;
-    }
+    } else {
+      const filterByCategory = questionsData.filter((question) =>
+        question.tags.some((el) => activeCategories.includes(el.name)),
+      );
 
-    // КАТЕГОРИИ
-    if (activeCategories.size > 0) {
-      const filterByCategory = questionsData
-        .filter((question) => question.tags.some((el) => activeCategories.has(el.name)));
       setFilteredQuestions(filterByCategory);
+      deselectOneTag(setCategories, ALL_CATEGORIES);
     }
-    deselectOneTag(setCategories, ALL_CATEGORIES);
   };
 
+  // запуск фильтрации
   useEffect(() => {
     handleFiltration();
     setIsFiltersUsed(false);
@@ -107,13 +93,17 @@ function QuestionsPage() {
         const tagsArr = result.map((data) => data.tags);
         const tags = tagsArr.flat().map((data) => data.name);
         const newTags = new Set(tags);
-        const uniqueTags = Array.from(newTags).map((item) => ({ filter: item, isActive: false }));
+        const uniqueTags = Array.from(newTags).map((item) => ({
+          filter: item,
+          name: item,
+          isActive: false,
+        }));
         setCategories([
-          { filter: ALL_CATEGORIES, isActive: true },
-          ...uniqueTags
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+          ...uniqueTags,
         ]);
       })
-      .catch((err) => console.log(err));
+      .catch(console.log);
   }, []);
 
   return (
@@ -124,33 +114,32 @@ function QuestionsPage() {
       </Helmet>
       <section className="questions-page page__section fade-in">
         <TitleH1 title="Ответы на вопросы" />
-        {questionsData.length > 0
-          ? (
-            <>
-              <div className="tags tags_content_long-list">
-                <ul className="tags__list tags__list_type_long">
-                  {renderFilterTags(categories, 'checkbox', changeCategory)}
-                </ul>
-              </div>
-              <ul className="questions">
-                {filteredQuestions.map((data) => (
-                  <li className="questions__list-item fade-in" key={data.id}>
-                    <CardQuestion
-                      data={data}
-                      sectionClass="card__questions_type_questions-page"
-                      isQuestionsPage
-                    />
-                  </li>
-                ))}
+        {questionsData.length > 0 ? (
+          <>
+            <div className="tags tags_content_long-list">
+              <ul className="tags__list tags__list_type_long">
+                {renderFilterTags(categories, 'tag', changeCategory)}
               </ul>
+            </div>
+            <ul className="questions">
+              {filteredQuestions.map((data) => (
+                <li className="questions__list-item fade-in" key={data.id}>
+                  <CardQuestion
+                    data={data}
+                    sectionClass="card__questions_type_questions-page"
+                    isQuestionsPage
+                  />
+                </li>
+              ))}
+            </ul>
 
-              {currentUser && (
+            {currentUser && (
               <section className="add-question fade-in">
-                <TitleH2
-                  sectionClass="add-question__title"
-                  title={isQuestionForm.title}
-                />
-                <form className={`question-form ${isQuestionForm.sectionClass}`} onSubmit={handleSubmit(onFormSubmit)}>
+                <TitleH2 sectionClass="add-question__title" title={isQuestionForm.title} />
+                <form
+                  className={`question-form ${isQuestionForm.sectionClass}`}
+                  onSubmit={handleSubmit(onFormSubmit)}
+                >
                   <fieldset className="question-form__add-question">
                     <Input
                       type="text"
@@ -167,17 +156,19 @@ function QuestionsPage() {
                       color="black"
                       sectionClass="question-form__button"
                       isSubmittable
-                      isDisabled={!!(errors.question)}
+                      isDisabled={!!errors.question}
                     />
                   </fieldset>
                 </form>
               </section>
-              )}
-            </>
-          ) : <Loader isNested />}
+            )}
+          </>
+        ) : (
+          <Loader isNested />
+        )}
       </section>
     </BasePage>
   );
 }
 
-export default QuestionsPage;
+export default Questions;

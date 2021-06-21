@@ -1,9 +1,7 @@
 import './CardFigure.scss';
 import PropTypes from 'prop-types';
 
-function CardFigure({
-  title, shape, color, children, sectionClass
-}) {
+function CardFigure({ title, shape, color, children, sectionClass }) {
   return (
     <div
       className={`card-figure card-figure_color_${color} card-figure_form_${shape} ${sectionClass}`}
@@ -19,7 +17,7 @@ CardFigure.propTypes = {
   shape: PropTypes.string,
   color: PropTypes.string,
   children: PropTypes.node,
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
 };
 
 CardFigure.defaultProps = {
@@ -27,7 +25,7 @@ CardFigure.defaultProps = {
   shape: 'square',
   color: 'yellow',
   children: null,
-  sectionClass: ''
+  sectionClass: '',
 };
 
 export default CardFigure;

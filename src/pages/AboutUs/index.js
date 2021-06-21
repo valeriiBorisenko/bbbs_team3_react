@@ -6,12 +6,4 @@ import CardFigure from '../../components/Cards/CardFigure/CardFigure';
 import CardAbout from '../../components/Cards/CardAbout/CardAbout';
 import Card from '../../components/utils/Card/Card';
 
-export {
-  BasePage,
-  TitleH3,
-  Blockquote,
-  LogoBlue,
-  CardFigure,
-  CardAbout,
-  Card
-};
+export { BasePage, TitleH3, Blockquote, LogoBlue, CardFigure, CardAbout, Card };

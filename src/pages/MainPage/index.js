@@ -1,6 +1,3 @@
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useSmoothScrollOnWindow } from '../../utils/custom-hooks';
-import { QUESTIONS_URL } from '../../config/routes';
 import BasePage from '../../layout/BasePage';
 import Loader from '../../components/utils/Loader/Loader';
 import Card from '../../components/utils/Card/Card';
@@ -14,9 +11,6 @@ import Widget from '../../components/utils/Widget/Widget';
 import CardQuestion from '../../components/Cards/CardQuestion/CardQuestion';
 
 export {
-  CurrentUserContext,
-  useSmoothScrollOnWindow,
-  QUESTIONS_URL,
   BasePage,
   Loader,
   Card,
@@ -27,5 +21,5 @@ export {
   CardFilm,
   CardVideoMain,
   Widget,
-  CardQuestion
+  CardQuestion,
 };

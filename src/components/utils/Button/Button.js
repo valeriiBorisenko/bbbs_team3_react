@@ -9,14 +9,16 @@ function Button({
   isDisabled,
   onClick,
   isBooked,
-  sectionClass
+  sectionClass,
 }) {
   const classNames = [
     'button',
     `button_color_${color}`,
     sectionClass,
-    isBooked ? `button_color_${color}_selected` : ''
-  ].join(' ').trim();
+    isBooked ? `button_color_${color}_selected` : '',
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <button
@@ -38,7 +40,7 @@ Button.propTypes = {
   isDisabled: PropTypes.bool,
   onClick: PropTypes.func,
   isBooked: PropTypes.bool,
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -49,7 +51,7 @@ Button.defaultProps = {
   onClick: () => {},
   isDisabled: false,
   isBooked: false,
-  sectionClass: ''
+  sectionClass: '',
 };
 
 export default Button;

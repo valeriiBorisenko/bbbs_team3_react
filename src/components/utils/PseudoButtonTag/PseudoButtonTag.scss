@@ -31,3 +31,14 @@
     border-color: $darkBlue;
   }
 }
+
+.active-filter {
+  background-color: $black;
+  color: $background;
+
+  &:hover {
+    background-color: $darkBlue;
+    color: $background;
+    border-color: $darkBlue;
+  }
+}

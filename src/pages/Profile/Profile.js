@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import './Account.scss';
+import './Profile.scss';
 import PropTypes from 'prop-types';
+import { useSmoothHorizontalScroll, useScrollToTop } from '../../hooks/index';
 import {
   BasePage,
   AccountEventCard,
-  ScrollableByXContainer,
   TitleH2,
   AccountForm,
   AccountDiary,
-  PopupDeleteDiary
+  PopupDeleteDiary,
 } from './index';
 import Api from '../../utils/api';
 
@@ -17,6 +17,8 @@ import Api from '../../utils/api';
 //! чтобы синхронизировать отмену записи со стейтом данных календаря.
 //! Когда будет готов бэк, она будет приходить в GET-запросе и синхронизироваться через сервер
 function Account({ eventsData, onEventFullDescriptionClick }) {
+  useScrollToTop();
+
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -33,7 +35,8 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   }, []);
 
   useEffect(() => {
-    const sortedEvents = eventsData.filter((e) => e.booked)
+    const sortedEvents = eventsData
+      .filter((e) => e.booked)
       .sort((a, b) => {
         const date1 = new Date(a.startAt);
         const date2 = new Date(b.startAt);
@@ -41,12 +44,6 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
       });
     setEvents(sortedEvents);
   }, [eventsData]);
-
-  useEffect(() => {
-    window.scrollTo({
-      top: 0
-    });
-  }, []);
 
   const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
@@ -82,7 +79,8 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
       const diary = { ...data, id: diaries.length + 1 };
       if (diary.imageUrl.length === 0) {
         // дефолтная картинка, если фото не загружено
-        diary.imageUrl = 'https://i.pinimg.com/originals/f0/e2/53/f0e253b6dbbb809145441ca8fa08b7b7.jpg';
+        diary.imageUrl =
+          'https://i.pinimg.com/originals/f0/e2/53/f0e253b6dbbb809145441ca8fa08b7b7.jpg';
       }
       if (!diary.rate) {
         diary.rate = 'neutral';
@@ -90,7 +88,7 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
       setDiaries([diary, ...diaries]);
     }
     if (isEditMode) {
-      setDiaries(() => diaries.map((diary) => ((diary.id === data.id) ? data : diary)));
+      setDiaries(() => diaries.map((diary) => (diary.id === data.id ? data : diary)));
     }
 
     handleCancelForm();
@@ -113,6 +111,9 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
     closePopupDeleteDiary();
   };
 
+  // скролл контейнера с карточками мероприятий
+  const containerEvents = useSmoothHorizontalScroll({ step: 3 });
+
   return (
     <BasePage>
       <Helmet>
@@ -124,30 +125,25 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
           <TitleH2
             sectionClass="account__title"
             title={
-            events && events.length > 0
-              ? 'Вы записаны на мероприятия:'
-              : 'У вас нет записи на мероприятия'
-          }
+              events && events.length > 0
+                ? 'Вы записаны на мероприятия:'
+                : 'У вас нет записи на мероприятия'
+            }
           />
-          <ScrollableByXContainer sectionClass="account__events">
-            {events && events.length > 0
-            && events.map((item) => (
-              <AccountEventCard
-                key={item.id}
-                data={item}
-                onOpen={handleOpenEventCard}
-              />
-            ))}
-          </ScrollableByXContainer>
+          <div className="account__events" ref={containerEvents}>
+            {events &&
+              events.length > 0 &&
+              events.map((item) => (
+                <AccountEventCard key={item.id} data={item} onOpen={handleOpenEventCard} />
+              ))}
+          </div>
         </div>
 
         <div className="account__diaries page__section">
           <span className="account__scroll-anchor" ref={scrollAnchorRef} />
           <div className="account__diaries-container">
             <div className="account__form-container">
-
-              {!isFormOpen
-                && (
+              {!isFormOpen && (
                 <button
                   className="account__button-add-diary"
                   type="button"
@@ -155,18 +151,19 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
                 >
                   Добавить встречу
                 </button>
-                )}
+              )}
 
-              {!isEditMode && isFormOpen
-                && (
+              {!isEditMode && isFormOpen && (
                 <TitleH2
                   sectionClass="account__title"
                   title="Составьте историю вашей дружбы с младшим. Эта страница доступна только вам."
                 />
-                )}
+              )}
 
               <AccountForm
-                sectionClass={`${isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'}`}
+                sectionClass={`${
+                  isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'
+                }`}
                 isEditMode={isEditMode}
                 isOpen={isFormOpen}
                 data={formDataToEdit}
@@ -175,14 +172,16 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
               />
             </div>
 
-            {diaries && diaries.length > 0 && diaries.map((diary) => (
-              <AccountDiary
-                key={diary.id}
-                data={diary}
-                onEdit={handleEditDiaryCard}
-                onDelete={handleClickPopupDeleteDiary}
-              />
-            ))}
+            {diaries &&
+              diaries.length > 0 &&
+              diaries.map((diary) => (
+                <AccountDiary
+                  key={diary.id}
+                  data={diary}
+                  onEdit={handleEditDiaryCard}
+                  onDelete={handleClickPopupDeleteDiary}
+                />
+              ))}
           </div>
         </div>
       </section>
@@ -198,12 +197,12 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
 
 Account.propTypes = {
   eventsData: PropTypes.arrayOf(PropTypes.object),
-  onEventFullDescriptionClick: PropTypes.func
+  onEventFullDescriptionClick: PropTypes.func,
 };
 
 Account.defaultProps = {
   eventsData: [],
-  onEventFullDescriptionClick: () => {}
+  onEventFullDescriptionClick: () => {},
 };
 
 export default Account;

@@ -5,11 +5,7 @@ function UserMenuButton({ title, handleClick, sectionClass }) {
   const classNames = ['user-menu-button', sectionClass].join(' ').trim();
 
   return (
-    <button
-      className={classNames}
-      type="button"
-      onClick={handleClick}
-    >
+    <button className={classNames} type="button" onClick={handleClick}>
       {title}
     </button>
   );
@@ -18,13 +14,13 @@ function UserMenuButton({ title, handleClick, sectionClass }) {
 UserMenuButton.propTypes = {
   title: PropTypes.string,
   handleClick: PropTypes.func,
-  sectionClass: PropTypes.string
+  sectionClass: PropTypes.string,
 };
 
 UserMenuButton.defaultProps = {
   title: '',
   handleClick: () => {},
-  sectionClass: ''
+  sectionClass: '',
 };
 
 export default UserMenuButton;

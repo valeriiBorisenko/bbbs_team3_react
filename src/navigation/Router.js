@@ -3,13 +3,13 @@ import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   AboutUs,
-  Account,
+  Profile,
   Calendar,
   MainPage,
   PageNotFound,
-  QuestionsPage,
-  WhereToGo,
-  Catalog
+  Catalog,
+  Questions,
+  Places,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -18,9 +18,9 @@ import {
   ABOUT_US_URL,
   AFISHA_URL,
   QUESTIONS_URL,
-  ACCOUNT_URL,
   PLACES_URL,
-  CATALOG_URL
+  CATALOG_URL,
+  PROFILE_URL,
 } from '../config/routes';
 
 function Router({
@@ -29,9 +29,8 @@ function Router({
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
     handleClickPopupCities,
-    dataMain,
-    dataCalendar
-  }
+    dataCalendar,
+  },
 }) {
   const currentUser = useContext(CurrentUserContext);
 
@@ -41,7 +40,6 @@ function Router({
         <MainPage
           onEventSignUpClick={bookingHandler}
           onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-          dataMain={dataMain}
         />
       </Route>
       <Route exact path={ABOUT_US_URL}>
@@ -56,18 +54,18 @@ function Router({
         />
       </Route>
       <Route path={QUESTIONS_URL}>
-        <QuestionsPage />
+        <Questions />
       </Route>
       <ProtectedRoute
         exact
-        path={ACCOUNT_URL}
-        component={Account}
+        path={PROFILE_URL}
+        component={Profile}
         onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
         eventsData={dataCalendar}
         isAuth={!!currentUser}
       />
       <Route exact path={PLACES_URL}>
-        <WhereToGo openPopupCities={handleClickPopupCities} />
+        <Places openPopupCities={handleClickPopupCities} />
       </Route>
       <Route exact path={CATALOG_URL}>
         <Catalog openPopupCities={handleClickPopupCities} />
@@ -80,11 +78,11 @@ function Router({
 }
 
 Router.propTypes = {
-  handlers: PropTypes.objectOf(PropTypes.any)
+  handlers: PropTypes.objectOf(PropTypes.any),
 };
 
 Router.defaultProps = {
-  handlers: {}
+  handlers: {},
 };
 
 export default Router;

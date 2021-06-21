@@ -1,163 +1,272 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-nested-ternary */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
-import {
-  CurrentUserContext,
-  useSmoothScrollOnWindow,
-  months,
-  BasePage,
-  TitleH1,
-  CardCalendar,
-  PseudoButtonTag,
-  Loader
-} from './index';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { useScrollToTop } from '../../hooks/index';
+import { months } from '../../config/constants';
+import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
+import Api from '../../utils/api';
+import { BasePage, TitleH1, CardCalendar, AnimatedPageContainer, Loader } from './index';
 
 function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
-  dataCalendar,
+  // dataCalendar,
   onOpenLoginPopup,
-  handlers
 }) {
-  useSmoothScrollOnWindow({ top: 0 });
-
-  function eventSignUpHandler(cardData) {
-    onEventSignUpClick(cardData, cardData.booked);
-  }
+  useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
+  // console.log(currentUser);
 
-  // работа с фильтр-кнопками, их стейты
-  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-  const [filteredCardData, setFilteredCardData] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
-  const [filterSettings, setFilterSettings] = useState(null);
-
-  // создание кнопок с месяцами
-  //! ШАГ 1 = сортируем все ивенты по хронологии
-  const arrayOfSortedEvents = dataCalendar.sort((a, b) => {
-    const date1 = new Date(a.startAt);
-    const date2 = new Date(b.startAt);
-    return date1 - date2;
-  });
-
-  // серия функций фильтрации ивентов под нажатый фильтр
+  // загрузка данных страницы календаря, если ты залогиненный
+  const [calendarPageData, setDataCalendar] = useState([]);
   useEffect(() => {
-    if (filterSettings) {
-      const { year, monthNumber } = filterSettings;
-      const min = new Date(year, monthNumber);
-      const max = new Date(year, monthNumber + 1);
-      const filteredArrayOfEvents = arrayOfSortedEvents.filter((eventItem) => {
-        const date = new Date(eventItem.startAt);
-
-        return date >= min && date <= max;
-      });
-      setFilteredCardData(filteredArrayOfEvents);
+    if (currentUser) {
+      Api.getCalendarPageData()
+        .then((events) => setDataCalendar(events))
+        .catch((error) => console.log(error));
     }
+    // else {
+    //   setDataCalendar([]);
+    // }
+  }, [currentUser]);
+  //! надо делать какой то стопор в виде isLoading
 
-    setIsFiltersUsed(isChecked);
-  }, [isChecked, arrayOfSortedEvents, filterSettings]);
+  const eventSignUpHandler = (cardData) => {
+    onEventSignUpClick(cardData, cardData.booked);
+  };
 
-  function handleCheckboxChange(evt, filters) {
-    const { target } = evt;
-    setIsChecked(target.checked);
-    setFilterSettings(filters);
-  }
+  // весь список доступных фильтров
+  const [filters, setFilters] = useState([]);
 
-  function handleCheckboxClick(evt, value) {
-    const { target } = evt;
-    const values = value.split('-');
-    if (filterSettings) {
-      if (target.checked
-          && Number(values[0]) === filterSettings.monthNumber
-          && Number(values[1]) === filterSettings.year
-      ) {
-        target.checked = false;
-        setIsChecked(target.checked);
-        setFilterSettings(null);
+  // флаг использования фильтров
+  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+
+  // мутабельный массив для применения фильтров (отсортированный)
+  const [sortedArray, setSortedArray] = useState([]);
+
+  // массив отфильтрованных ивентов с даты, не мутировать!
+  const [filteredCardData, setFilteredCardData] = useState([]);
+
+  // хэндлер клика по фильтру МЕСЯЦ
+  const handleFilterClick = (inputValue, isChecked) => {
+    // console.log('handleFilterClick');
+    // console.log(filters);
+    // console.log(isChecked);
+    handleRadioBehavior(setFilters, { inputValue, isChecked });
+    setIsFiltersUsed(true);
+    // console.log(filters);
+  };
+
+  //! первый useEffect, установка отсортированного массива
+  useEffect(() => {
+    if (calendarPageData) {
+      const arrayOfSortedEvent = [...calendarPageData].sort((a, b) => {
+        const date1 = new Date(a.startAt);
+        const date2 = new Date(b.startAt);
+        return date1 - date2;
+      });
+      setFilteredCardData(arrayOfSortedEvent);
+      setSortedArray(arrayOfSortedEvent);
+    }
+  }, [calendarPageData]);
+
+  //! второй useEffect, сбор списка фильтров
+  useEffect(() => {
+    //* ШАГ 2 из массива отсоритрованных ивентов делаем массив объектов {месяц, год} на каждый ивент
+    const arrayOfDatesWithEvents = sortedArray.map((someEvent) => {
+      // взяли дату ивента, переделали в дату-объект
+      const dateObj = new Date(someEvent.startAt);
+      const month = dateObj.getMonth();
+      const year = dateObj.getFullYear();
+      // в массив вернулся НОМЕР месяца и ГОД
+      return { month, year };
+    });
+
+    //* ШАГ 3 выкидываем из массива arrayOfDatesWithEvent повторы
+    const arrayOfUniqueDates = arrayOfDatesWithEvents.filter((item, index, self) => {
+      const something = self.findIndex(
+        (current) => item.month === current.month && item.year === current.year,
+      );
+      return something === index;
+    });
+
+    //* ШАГ 4 хронологические, уникальные фильтры, готовые к рендерингу в тагс-кнопки
+    const finallArrayOfTagsData = arrayOfUniqueDates.map((filter) => {
+      const name = changeCaseOfFirstLetter(months[filter.month]);
+      return {
+        filter: JSON.stringify(filter),
+        name,
+        isActive: false,
+      };
+    });
+
+    setFilters(finallArrayOfTagsData);
+  }, [filteredCardData]);
+
+  // функция-фильтратор
+  const handleFiltration = () => {
+    // console.log('handleFiltration');
+    if (isFiltersUsed) {
+      const activeFilter = filters.find((filter) => filter.isActive);
+      // console.log(filters);
+      // console.log(activeFilter);
+      if (!activeFilter) {
+        // console.log('if');
+        // console.log(filteredCardData);
+        setSortedArray(filteredCardData);
+      } else {
+        // console.log('else');
+        const { month, year } = JSON.parse(activeFilter.filter);
+        const min = new Date(year, month);
+        const max = new Date(year, month + 1);
+        const filteredArrayOfEvents = filteredCardData.filter((eventItem) => {
+          const date = new Date(eventItem.startAt);
+          return date >= min && date <= max;
+        });
+        setSortedArray(filteredArrayOfEvents);
       }
     }
+  };
+
+  //! третий useEffect (запуск фильтрации)
+  useEffect(() => {
+    // console.log('3ий useEffect');
+    handleFiltration();
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed]);
+
+  // как надо будет рисовать все
+  // if (залогинен) {
+  //   if (есть ивенты по городу) {
+  //     рисуй ивенты
+  //     if (длина массива > 1) {
+  //       покажи фильтры
+  //     } else {
+
+  //     }
+  //   } else {
+  //     покажи заглушку // returnAnimatedContainer
+  //   }
+  // } else {
+  //   покажи попап логина
+  // }
+
+  const dataForCurrentCityExist = calendarPageData.length > 0;
+  // console.log(calendarPageData);
+  // отрисовка заглушки
+  function returnAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
+        buttonText="Вернуться на главную"
+      />
+    );
   }
 
-  //! ШАГ 2 = из массива ивентов делаем массив вида [месяц, год] на каждый ивент
-  const arrayOfDatesWithEvents = arrayOfSortedEvents.map((someEvent) => {
-    // взяли дату ивента, переделали в дату-объект
-    const dateObj = new Date(someEvent.startAt);
-    const month = dateObj.getMonth();
-    const year = dateObj.getFullYear();
-    // в массив вернулся НОМЕР месяца и ГОД
-    return [month, year];
-  });
-
-  //! ШАГ 3 = выкидываем из массива arrayOfDatesWithEvents повторы
-  const arrayOfUniqueDates = Object.values(
-    arrayOfDatesWithEvents.reduce((res, item) => ({
-      ...res,
-      [item.join('-')]: item
-    }), {})
-  );
-
-  //! ШАГ 4 = на основании хронологического массива без дубликатов генерируем кнопки
-  function tagsButtonsToRender() {
-    return arrayOfUniqueDates.map((date) => {
-      const tagTitle = months[date[0]];
-      const monthNumber = months.indexOf(months[date[0]]);
-      const year = date[1];
-      const filters = { year, monthNumber };
-
+  // отрисовка массива фильтров
+  function renderTagsContainder() {
+    if (filters.length > 1) {
       return (
-        <li className="tags__list-item" key={`${monthNumber}-${year}`}>
-          <PseudoButtonTag
-            type="radio"
-            name="months"
-            value={`${monthNumber}-${year}`}
-            title={tagTitle}
-            filters={filters}
-            onChange={handleCheckboxChange}
-            onClick={handleCheckboxClick}
-          />
-        </li>
+        <div className="tags fade-in">
+          <ul className="tags__list">{renderFilterTags(filters, 'month', handleFilterClick)}</ul>
+        </div>
       );
-    });
+    }
+
+    return null;
   }
 
-  const whatDataToRender = isFiltersUsed ? filteredCardData : arrayOfSortedEvents;
+  // отрисовка карточек ивентов
+  function renderEventCards(eventsArray) {
+    const cards = eventsArray.map((cardData) => (
+      <CardCalendar
+        key={cardData.id}
+        cardData={cardData}
+        onEventSignUpClick={eventSignUpHandler}
+        onEventFullDescriptionClick={onEventFullDescriptionClick}
+        sectionClass="fade-in"
+      />
+    ));
+    return cards;
+  }
 
+  // главная функция рендера
+  function renderPageContent() {
+    // незалогинен
+    if (currentUser == null) {
+      return onOpenLoginPopup();
+    }
+
+    // console.log(currentUser);
+    // залогинен и есть ивенты
+    if (currentUser !== null && dataForCurrentCityExist) {
+      return (
+        <>
+          <TitleH1 title="Календарь" />
+
+          <div className="calendar-page__container">
+            {renderTagsContainder()}
+
+            <div className="calendar-page__grid">{renderEventCards(sortedArray)}</div>
+          </div>
+        </>
+      );
+    }
+
+    // залогинен и нет ивентов
+    //! (есть ошибки, проскакивает использование)
+    // console.log('fail', currentUser, dataForCurrentCityExist, calendarPageData);
+    return returnAnimatedContainer();
+  }
+
+  // console.log(calendarPageData);
   return (
-    <BasePage handlers={handlers}>
+    <BasePage>
       <Helmet>
         <title>Календарь</title>
         <meta name="description" content="Календарь событий и мероприятий для наставников" />
       </Helmet>
       <section className="calendar-page page__section fade-in">
-        <TitleH1 title="Календарь" />
-
-        {whatDataToRender.length > 0 ? (
-          <div className="calendar-page__container">
-            {arrayOfUniqueDates.length > 1 && (
-            <div className="tags fade-in">
-              <ul className="tags__list">
-                {tagsButtonsToRender()}
-              </ul>
-            </div>
-            )}
-
-            <div className="calendar-page__grid">
-              {whatDataToRender.map((data) => (
-                <CardCalendar
-                  key={data.id}
-                  cardData={data}
-                  onEventSignUpClick={eventSignUpHandler}
-                  onEventFullDescriptionClick={onEventFullDescriptionClick}
-                  sectionClass="fade-in"
-                />
-              ))}
-            </div>
-          </div>
-        ) : <Loader isNested />}
-
-        { !currentUser && onOpenLoginPopup()}
+        {renderPageContent()}
+        {/* { (calendarPageData && calendarPageData?.length > 0) ? (
+          <>
+            <TitleH1 title="Календарь" />
+            {calendarPageData.length > 0 ? (
+              <div className="calendar-page__container">
+                {filters.length > 1 && (
+                <div className="tags fade-in">
+                  <ul className="tags__list">
+                    {renderFilterTags(filters, 'month', handleFilterClick)}
+                  </ul>
+                </div>
+                )}
+                <div className="calendar-page__grid">
+                  {sortedArray.map((data) => (
+                    <CardCalendar
+                      key={data.id}
+                      cardData={data}
+                      onEventSignUpClick={eventSignUpHandler}
+                      onEventFullDescriptionClick={onEventFullDescriptionClick}
+                      sectionClass="fade-in"
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : <Loader isNested />}
+            { !currentUser && onOpenLoginPopup()}
+          </>
+        ) : (
+          <AnimatedPageContainer
+            titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
+            buttonText="Вернуться на главную"
+          />
+        ) } */}
       </section>
     </BasePage>
   );
@@ -165,17 +274,13 @@ function Calendar({
 Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
-  dataCalendar: PropTypes.arrayOf(PropTypes.object),
   onOpenLoginPopup: PropTypes.func,
-  handlers: PropTypes.objectOf(PropTypes.any)
 };
 
 Calendar.defaultProps = {
   onEventSignUpClick: () => {},
-  dataCalendar: [],
   onEventFullDescriptionClick: () => {},
   onOpenLoginPopup: () => {},
-  handlers: {}
 };
 
 export default Calendar;

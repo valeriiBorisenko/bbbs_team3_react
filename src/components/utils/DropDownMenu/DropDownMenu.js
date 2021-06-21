@@ -20,7 +20,7 @@ function DropDownMenu({ sectionWrapperClass, textsForLinks }) {
 
 DropDownMenu.propTypes = {
   sectionWrapperClass: PropTypes.string.isRequired,
-  textsForLinks: PropTypes.arrayOf(PropTypes.string).isRequired
+  textsForLinks: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default DropDownMenu;

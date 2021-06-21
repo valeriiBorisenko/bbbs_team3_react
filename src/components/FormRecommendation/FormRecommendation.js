@@ -1,26 +1,32 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
-import './FormRecomendation.scss';
-import { useEffect } from 'react';
+import './FormRecommendation.scss';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { Input, Button } from './index';
+import { Input, Button, ButtonRound } from './index';
 
-function FormRecomendation({ isOpen, onSubmit }) {
-  const textAreaPlaceholder = window.innerWidth < 576
-    ? 'Комментарий*'
-    : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
+function FormRecommendation({ isOpen, onSubmit }) {
+  const textAreaPlaceholder =
+    window.innerWidth < 576
+      ? 'Комментарий*'
+      : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
 
   const formClassNames = ['form-recom', isOpen ? 'form-recom_opened' : ''].join(' ').trim();
 
   const {
-    register, handleSubmit, formState: { errors }, reset
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
   } = useForm();
 
   const onFormSubmit = (values) => {
     let inputFields = Object.assign(values);
     inputFields = {
       ...inputFields,
-      image: URL.createObjectURL(inputFields.image[0])
+      imageUrl: URL.createObjectURL(inputFields.imageUrl[0]),
     };
     onSubmit(inputFields);
   };
@@ -32,16 +38,12 @@ function FormRecomendation({ isOpen, onSubmit }) {
       address: '',
       age: '',
       description: '',
-      imageUrl: ''
+      imageUrl: '',
     });
   }, [isOpen]);
 
   return (
-    <form
-      className={formClassNames}
-      name="formRecomendation"
-      onSubmit={handleSubmit(onFormSubmit)}
-    >
+    <form className={formClassNames} name="formRecomendation" onSubmit={handleSubmit(onFormSubmit)}>
       <div className="form-recom__input-container">
         <Input
           sectionClass="form-recom__input"
@@ -84,7 +86,13 @@ function FormRecomendation({ isOpen, onSubmit }) {
               {...register('sex', { required: 'Мальчик' })}
               value="Мальчик"
             />
-            <span className={`form-recom__pseudo-radio ${errors?.sex ? 'form-recom__pseudo-radio_error' : ''}`}>Мальчик</span>
+            <span
+              className={`form-recom__pseudo-radio ${
+                errors?.sex ? 'form-recom__pseudo-radio_error' : ''
+              }`}
+            >
+              Мальчик
+            </span>
           </label>
           <label className="form-recom__label" htmlFor="formRecommendationGirl">
             <input
@@ -95,7 +103,13 @@ function FormRecomendation({ isOpen, onSubmit }) {
               {...register('sex', { required: 'Девочка' })}
               value="Девочка"
             />
-            <span className={`form-recom__pseudo-radio ${errors?.sex ? 'form-recom__pseudo-radio_error' : ''}`}>Девочка</span>
+            <span
+              className={`form-recom__pseudo-radio ${
+                errors?.sex ? 'form-recom__pseudo-radio_error' : ''
+              }`}
+            >
+              Девочка
+            </span>
           </label>
         </div>
         <Input
@@ -115,10 +129,18 @@ function FormRecomendation({ isOpen, onSubmit }) {
         name="type"
         {...register('type', { required: 'Тип отдыха*' })}
       >
-        <option className="form-recom__option" defaultValue="Тип отдыха" hidden>Тип отдыха*</option>
-        <option value="Активный" className="form-recom__option">Активный</option>
-        <option value="Развлекательный" className="form-recom__option">Развлекательный</option>
-        <option value="Познавательный" className="form-recom__option">Познавательный</option>
+        <option value="" className="form-recom__option" hidden>
+          Тип отдыха*
+        </option>
+        <option value="Активный" className="form-recom__option">
+          Активный
+        </option>
+        <option value="Развлекательный" className="form-recom__option">
+          Развлекательный
+        </option>
+        <option value="Познавательный" className="form-recom__option">
+          Познавательный
+        </option>
       </select>
 
       <Input
@@ -139,34 +161,32 @@ function FormRecomendation({ isOpen, onSubmit }) {
             type="file"
             name="imageUrl"
             className="form-recom__input-radio"
-            {...register('image', { required: 'Добавить фото' })}
+            {...register('imageUrl', { required: 'Добавить фото' })}
           />
-          <button
-            className={`form-recom__button-add-photo ${errors?.imageUrl ? 'form-recom__button-add-photo_error' : ''}`}
-            type="button"
-          >
-            Добавить фото
-          </button>
+          <ButtonRound
+            sectionClass={`form-recom__add-photo ${
+              errors?.imageUrl ? 'form-recom__add-photo_error' : ''
+            }`}
+            color={`${errors?.imageUrl ? 'error' : 'lightGray'}`}
+            isSmall
+            isSpan
+          />
         </label>
 
-        <Button
-          title="Отправить"
-          color="blue"
-          isSubmittable
-        />
+        <Button title="Отправить" color="blue" isSubmittable />
       </div>
     </form>
   );
 }
 
-FormRecomendation.propTypes = {
+FormRecommendation.propTypes = {
   isOpen: PropTypes.bool,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
 };
 
-FormRecomendation.defaultProps = {
+FormRecommendation.defaultProps = {
   isOpen: false,
-  onSubmit: () => {}
+  onSubmit: () => {},
 };
 
-export default FormRecomendation;
+export default FormRecommendation;
