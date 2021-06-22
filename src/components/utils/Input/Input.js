@@ -11,12 +11,14 @@ function Input({
   error,
   errorMessage,
   sectionClass,
-  isTextarea
+  isTextarea,
 }) {
   const message = error ? errorMessage : '';
 
   const classNamesInput = ['input', message ? 'input__error' : '', sectionClass].join(' ').trim();
-  const classNamesTextarea = ['input', message ? 'input__error' : '', 'textarea', sectionClass].join(' ').trim();
+  const classNamesTextarea = ['input', message ? 'input__error' : '', 'textarea', sectionClass]
+    .join(' ')
+    .trim();
 
   if (isTextarea) {
     return (
@@ -51,7 +53,7 @@ Input.propTypes = {
   register: PropTypes.func.isRequired,
   required: PropTypes.bool,
   error: PropTypes.objectOf(PropTypes.any),
-  errorMessage: PropTypes.string
+  errorMessage: PropTypes.string,
 };
 
 Input.defaultProps = {
@@ -61,7 +63,7 @@ Input.defaultProps = {
   onChange: () => {},
   required: false,
   error: undefined,
-  errorMessage: ''
+  errorMessage: '',
 };
 
 export default Input;

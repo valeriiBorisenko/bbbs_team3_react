@@ -5,9 +5,7 @@ import CardAnnotationContainer from './CardAnnotationContainer';
 
 function CardAnnotation({ info, description, isMain }) {
   return (
-    <Card
-      sectionClass={`card-annotation ${isMain ? 'card-annotation_main' : ''}`}
-    >
+    <Card sectionClass={`card-annotation ${isMain ? 'card-annotation_main' : ''}`}>
       <CardAnnotationContainer caption={info}>
         <p className="paragraph card-annotation__paragraph">{description}</p>
       </CardAnnotationContainer>
@@ -18,13 +16,13 @@ function CardAnnotation({ info, description, isMain }) {
 CardAnnotation.propTypes = {
   info: PropTypes.string,
   description: PropTypes.string,
-  isMain: PropTypes.bool
+  isMain: PropTypes.bool,
 };
 
 CardAnnotation.defaultProps = {
   info: undefined,
   description: undefined,
-  isMain: false
+  isMain: false,
 };
 
 export default CardAnnotation;

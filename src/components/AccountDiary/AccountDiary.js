@@ -4,14 +4,10 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
-import {
-  Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button
-} from './index';
+import { Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button } from './index';
 
 function AccountDiary({ data, onEdit, onDelete }) {
-  const {
-    imageUrl, title, description, rate, date
-  } = data;
+  const { imageUrl, title, description, rate, date } = data;
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
@@ -48,10 +44,18 @@ function AccountDiary({ data, onEdit, onDelete }) {
         </div>
         <div className="account-diary__actions">
           <div className="account-diary__rating">
-            <Rating type="radio" ratingType={rate} value={rate} checked sectionClass="account-diary__rate" />
+            <Rating
+              type="radio"
+              ratingType={rate}
+              value={rate}
+              checked
+              sectionClass="account-diary__rate"
+            />
             <Caption
               title={caption}
-              sectionClass={`account-diary__ratings-text account-diary__ratings-text_type_${rate || 'neutral'}`}
+              sectionClass={`account-diary__ratings-text account-diary__ratings-text_type_${
+                rate || 'neutral'
+              }`}
             />
           </div>
           <div className="account-diary__action-elements">
@@ -87,7 +91,7 @@ AccountDiary.propTypes = {
   rate: PropTypes.string,
   date: PropTypes.string,
   onEdit: PropTypes.func,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
 };
 
 AccountDiary.defaultProps = {
@@ -98,7 +102,7 @@ AccountDiary.defaultProps = {
   rate: 'neutral',
   date: '',
   onEdit: () => {},
-  onDelete: () => {}
+  onDelete: () => {},
 };
 
 export default AccountDiary;

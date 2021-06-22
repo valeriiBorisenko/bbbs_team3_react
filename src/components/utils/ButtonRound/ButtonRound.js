@@ -9,22 +9,20 @@ function ButtonRound({
   isDisabled,
   isSpan,
   onClick,
-  isClick
+  isClick,
 }) {
   const classNames = [
     'button-round',
     `button-round_color_${color}`,
     isSmall ? 'button-round_small' : '',
     sectionClass,
-    isClick ? 'button-round_active' : ''
-  ].join(' ').trim();
+    isClick ? 'button-round_active' : '',
+  ]
+    .join(' ')
+    .trim();
 
   if (isSpan) {
-    return (
-      <span
-        className={classNames}
-      />
-    );
+    return <span className={classNames} />;
   }
 
   return (
@@ -46,7 +44,7 @@ ButtonRound.propTypes = {
   isDisabled: PropTypes.bool,
   isSpan: PropTypes.bool,
   onClick: PropTypes.func,
-  isClick: PropTypes.bool
+  isClick: PropTypes.bool,
 };
 
 ButtonRound.defaultProps = {
@@ -57,7 +55,7 @@ ButtonRound.defaultProps = {
   isDisabled: false,
   isSpan: false,
   onClick: undefined,
-  isClick: false
+  isClick: false,
 };
 
 export default ButtonRound;

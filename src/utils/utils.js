@@ -10,7 +10,7 @@ export const formatDuration = (duration) => {
   return {
     hours: format(hours),
     minutes: format(minutes),
-    seconds: format(seconds)
+    seconds: format(seconds),
   };
 };
 
@@ -38,7 +38,7 @@ export const formatDate = (date) => {
     weekdayName,
     monthName,
     hour,
-    minutes
+    minutes,
   };
 };
 
@@ -102,12 +102,12 @@ export const repeatSchema = (idx, size, schema) => {
 export const questionForm = {
   before: {
     title: 'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список',
-    sectionClass: ''
+    sectionClass: '',
   },
   after: {
     title: 'Спасибо! Мы приняли ваш вопрос',
-    sectionClass: 'question-form_invisible'
-  }
+    sectionClass: 'question-form_invisible',
+  },
 };
 
 // меняет в слове первую букву на заглавную

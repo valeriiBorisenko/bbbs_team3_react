@@ -4,10 +4,4 @@ import CardCalendar from '../../components/Cards/CardCalendar/CardCalendar';
 import Loader from '../../components/utils/Loader/Loader';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 
-export {
-  BasePage,
-  TitleH1,
-  CardCalendar,
-  Loader,
-  AnimatedPageContainer
-};
+export { BasePage, TitleH1, CardCalendar, Loader, AnimatedPageContainer };

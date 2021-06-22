@@ -14,11 +14,11 @@ function SearchButton({ handleClick }) {
 }
 
 SearchButton.propTypes = {
-  handleClick: PropTypes.func
+  handleClick: PropTypes.func,
 };
 
 SearchButton.defaultProps = {
-  handleClick: () => {}
+  handleClick: () => {},
 };
 
 export default SearchButton;

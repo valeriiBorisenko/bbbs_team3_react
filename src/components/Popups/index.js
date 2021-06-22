@@ -13,5 +13,5 @@ export {
   PopupLogin,
   PopupAboutEvent,
   PopupCities,
-  PopupError
+  PopupError,
 };

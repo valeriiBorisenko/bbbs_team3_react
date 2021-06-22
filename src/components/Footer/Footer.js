@@ -5,7 +5,7 @@ import {
   ABOUT_US_URL,
   QUESTIONS_URL,
   PLACES_URL,
-  RIGHTS_URL
+  RIGHTS_URL,
 } from '../../config/routes';
 import { footerLogoPath, NavItem } from './index';
 
@@ -112,7 +112,7 @@ function Footer() {
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={{
-              path: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/'
+              path: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/',
             }}
             linkText="facebook"
             rel="noreferrer"

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-nested-ternary */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
@@ -5,25 +7,36 @@ import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop } from '../../hooks/index';
 import { months } from '../../config/constants';
+import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { renderFilterTags, changeRadioTagState } from '../../utils/filter-tags';
-import {
-  BasePage,
-  TitleH1,
-  CardCalendar,
-  AnimatedPageContainer,
-  Loader
-} from './index';
+import Api from '../../utils/api';
+import { BasePage, TitleH1, CardCalendar, AnimatedPageContainer, Loader } from './index';
 
 function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
-  dataCalendar,
-  onOpenLoginPopup
+  // dataCalendar,
+  onOpenLoginPopup,
 }) {
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
+  // console.log(currentUser);
+
+  // загрузка данных страницы календаря, если ты залогиненный
+  const [calendarPageData, setDataCalendar] = useState([]);
+  useEffect(() => {
+    if (currentUser) {
+      Api.getCalendarPageData()
+        .then((events) => setDataCalendar(events))
+        .catch((error) => console.log(error));
+    }
+    // else {
+    //   setDataCalendar([]);
+    // }
+  }, [currentUser]);
+  //! надо делать какой то стопор в виде isLoading
+
   const eventSignUpHandler = (cardData) => {
     onEventSignUpClick(cardData, cardData.booked);
   };
@@ -42,14 +55,18 @@ function Calendar({
 
   // хэндлер клика по фильтру МЕСЯЦ
   const handleFilterClick = (inputValue, isChecked) => {
-    changeRadioTagState(setFilters, { inputValue, isChecked });
+    // console.log('handleFilterClick');
+    // console.log(filters);
+    // console.log(isChecked);
+    handleRadioBehavior(setFilters, { inputValue, isChecked });
     setIsFiltersUsed(true);
+    // console.log(filters);
   };
 
   //! первый useEffect, установка отсортированного массива
   useEffect(() => {
-    if (dataCalendar) {
-      const arrayOfSortedEvent = [...dataCalendar].sort((a, b) => {
+    if (calendarPageData) {
+      const arrayOfSortedEvent = [...calendarPageData].sort((a, b) => {
         const date1 = new Date(a.startAt);
         const date2 = new Date(b.startAt);
         return date1 - date2;
@@ -57,7 +74,7 @@ function Calendar({
       setFilteredCardData(arrayOfSortedEvent);
       setSortedArray(arrayOfSortedEvent);
     }
-  }, [dataCalendar]);
+  }, [calendarPageData]);
 
   //! второй useEffect, сбор списка фильтров
   useEffect(() => {
@@ -73,8 +90,9 @@ function Calendar({
 
     //* ШАГ 3 выкидываем из массива arrayOfDatesWithEvent повторы
     const arrayOfUniqueDates = arrayOfDatesWithEvents.filter((item, index, self) => {
-      const something = self
-        .findIndex((current) => (item.month === current.month && item.year === current.year));
+      const something = self.findIndex(
+        (current) => item.month === current.month && item.year === current.year,
+      );
       return something === index;
     });
 
@@ -84,7 +102,7 @@ function Calendar({
       return {
         filter: JSON.stringify(filter),
         name,
-        isActive: false
+        isActive: false,
       };
     });
 
@@ -93,11 +111,17 @@ function Calendar({
 
   // функция-фильтратор
   const handleFiltration = () => {
+    // console.log('handleFiltration');
     if (isFiltersUsed) {
       const activeFilter = filters.find((filter) => filter.isActive);
+      // console.log(filters);
+      // console.log(activeFilter);
       if (!activeFilter) {
+        // console.log('if');
+        // console.log(filteredCardData);
         setSortedArray(filteredCardData);
       } else {
+        // console.log('else');
         const { month, year } = JSON.parse(activeFilter.filter);
         const min = new Date(year, month);
         const max = new Date(year, month + 1);
@@ -112,13 +136,96 @@ function Calendar({
 
   //! третий useEffect (запуск фильтрации)
   useEffect(() => {
+    // console.log('3ий useEffect');
     handleFiltration();
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  console.log(dataCalendar);
-  console.log(dataCalendar && dataCalendar?.length > 0);
-  // console.log(dataCalendar.length);
+  // как надо будет рисовать все
+  // if (залогинен) {
+  //   if (есть ивенты по городу) {
+  //     рисуй ивенты
+  //     if (длина массива > 1) {
+  //       покажи фильтры
+  //     } else {
+
+  //     }
+  //   } else {
+  //     покажи заглушку // returnAnimatedContainer
+  //   }
+  // } else {
+  //   покажи попап логина
+  // }
+
+  const dataForCurrentCityExist = calendarPageData.length > 0;
+  // console.log(calendarPageData);
+  // отрисовка заглушки
+  function returnAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
+        buttonText="Вернуться на главную"
+      />
+    );
+  }
+
+  // отрисовка массива фильтров
+  function renderTagsContainder() {
+    if (filters.length > 1) {
+      return (
+        <div className="tags fade-in">
+          <ul className="tags__list">{renderFilterTags(filters, 'month', handleFilterClick)}</ul>
+        </div>
+      );
+    }
+
+    return null;
+  }
+
+  // отрисовка карточек ивентов
+  function renderEventCards(eventsArray) {
+    const cards = eventsArray.map((cardData) => (
+      <CardCalendar
+        key={cardData.id}
+        cardData={cardData}
+        onEventSignUpClick={eventSignUpHandler}
+        onEventFullDescriptionClick={onEventFullDescriptionClick}
+        sectionClass="fade-in"
+      />
+    ));
+    return cards;
+  }
+
+  // главная функция рендера
+  function renderPageContent() {
+    // незалогинен
+    if (currentUser == null) {
+      return onOpenLoginPopup();
+    }
+
+    // console.log(currentUser);
+    // залогинен и есть ивенты
+    if (currentUser !== null && dataForCurrentCityExist) {
+      return (
+        <>
+          <TitleH1 title="Календарь" />
+
+          <div className="calendar-page__container">
+            {renderTagsContainder()}
+
+            <div className="calendar-page__grid">{renderEventCards(sortedArray)}</div>
+          </div>
+        </>
+      );
+    }
+
+    // залогинен и нет ивентов
+    //! (есть ошибки, проскакивает использование)
+    // console.log('fail', currentUser, dataForCurrentCityExist, calendarPageData);
+    return returnAnimatedContainer();
+  }
+
+  // console.log(calendarPageData);
   return (
     <BasePage>
       <Helmet>
@@ -126,21 +233,19 @@ function Calendar({
         <meta name="description" content="Календарь событий и мероприятий для наставников" />
       </Helmet>
       <section className="calendar-page page__section fade-in">
-        {/* переработать */}
-        { (dataCalendar && dataCalendar?.length > 0) ? (
+        {renderPageContent()}
+        {/* { (calendarPageData && calendarPageData?.length > 0) ? (
           <>
             <TitleH1 title="Календарь" />
-
-            {dataCalendar.length > 0 ? (
+            {calendarPageData.length > 0 ? (
               <div className="calendar-page__container">
                 {filters.length > 1 && (
                 <div className="tags fade-in">
                   <ul className="tags__list">
-                    {renderFilterTags(filters, 'checkbox', handleFilterClick)}
+                    {renderFilterTags(filters, 'month', handleFilterClick)}
                   </ul>
                 </div>
                 )}
-
                 <div className="calendar-page__grid">
                   {sortedArray.map((data) => (
                     <CardCalendar
@@ -154,7 +259,6 @@ function Calendar({
                 </div>
               </div>
             ) : <Loader isNested />}
-
             { !currentUser && onOpenLoginPopup()}
           </>
         ) : (
@@ -162,7 +266,7 @@ function Calendar({
             titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
             buttonText="Вернуться на главную"
           />
-        ) }
+        ) } */}
       </section>
     </BasePage>
   );
@@ -170,15 +274,13 @@ function Calendar({
 Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
-  dataCalendar: PropTypes.arrayOf(PropTypes.object),
-  onOpenLoginPopup: PropTypes.func
+  onOpenLoginPopup: PropTypes.func,
 };
 
 Calendar.defaultProps = {
   onEventSignUpClick: () => {},
-  dataCalendar: [],
   onEventFullDescriptionClick: () => {},
-  onOpenLoginPopup: () => {}
+  onOpenLoginPopup: () => {},
 };
 
 export default Calendar;
