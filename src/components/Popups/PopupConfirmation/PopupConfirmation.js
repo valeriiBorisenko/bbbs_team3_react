@@ -10,7 +10,7 @@ function PopupConfirmation({ isOpen, onClose, onConfirmButtonClick, cardData }) 
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onConfirmButtonClick(cardData);
+    onConfirmButtonClick(cardData, cardData.id);
   };
 
   return (

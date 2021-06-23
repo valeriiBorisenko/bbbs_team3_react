@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-nested-ternary */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
@@ -21,14 +20,13 @@ function Calendar({
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
-  // console.log(currentUser);
 
   // загрузка данных страницы календаря, если ты залогиненный
-  const [calendarPageData, setDataCalendar] = useState([]);
+  const [calendarPageData, setCalendarPageData] = useState([]);
   useEffect(() => {
     if (currentUser) {
       Api.getCalendarPageData()
-        .then((events) => setDataCalendar(events))
+        .then((events) => setCalendarPageData(events))
         .catch((error) => console.log(error));
     }
     // else {
@@ -36,10 +34,6 @@ function Calendar({
     // }
   }, [currentUser]);
   //! надо делать какой то стопор в виде isLoading
-
-  const eventSignUpHandler = (cardData) => {
-    onEventSignUpClick(cardData, cardData.booked);
-  };
 
   // весь список доступных фильтров
   const [filters, setFilters] = useState([]);
@@ -188,7 +182,7 @@ function Calendar({
       <CardCalendar
         key={cardData.id}
         cardData={cardData}
-        onEventSignUpClick={eventSignUpHandler}
+        onEventSignUpClick={onEventSignUpClick}
         onEventFullDescriptionClick={onEventFullDescriptionClick}
         sectionClass="fade-in"
       />

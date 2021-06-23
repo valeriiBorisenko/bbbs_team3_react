@@ -19,12 +19,12 @@ function CardCalendar({
   // будет ли заблокирована кнопка
   const isDisabled = remainSeats < 1;
 
-  function prepareDataForConfirmationPopup() {
-    onEventSignUpClick(cardData);
+  function changeStateOfEvent() {
+    onEventSignUpClick(cardData, cardData.id, cardData.booked);
   }
 
   function prepareDataForAboutEventPopup() {
-    onEventFullDescriptionClick(cardData, cardData.booked);
+    onEventFullDescriptionClick(cardData);
   }
 
   const classNames = ['calendar', booked ? 'calendar_selected' : '', sectionClass].join(' ').trim();
@@ -68,7 +68,7 @@ function CardCalendar({
             titleSelected="Отменить запись"
             color="blue"
             isDisabled={isDisabled}
-            onClick={prepareDataForConfirmationPopup}
+            onClick={changeStateOfEvent}
             isBooked={booked}
           />
           <p className="calendar__place-left">
