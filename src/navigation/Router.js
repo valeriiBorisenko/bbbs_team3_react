@@ -68,7 +68,7 @@ function Router({
         <Places openPopupCities={handleClickPopupCities} />
       </Route>
       <Route exact path={RIGHTS_URL}>
-        <Rights openPopupCities={handleClickPopupCities} />
+        <Rights />
       </Route>
       <Route path="*">
         <PageNotFound />
