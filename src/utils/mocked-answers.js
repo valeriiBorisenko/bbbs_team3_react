@@ -44,7 +44,9 @@ export default function setMockedAnswers() {
     .reply(200, { cities }, 'Content-Type: application/json');
 
   //! логин и юзер-инфо
-  mock.onPost(`${baseURL}${apiUrl}/token/`).reply(200, { token }, 'Content-Type: application/json');
+  mock
+    .onPost(`${baseURL}${apiUrl}/token/`)
+    .reply(200, { token }, 'Content-Type: application/json');
 
   // mock
   //   .onGet(`${baseURL}${apiUrl}/profile/`)
@@ -60,10 +62,14 @@ export default function setMockedAnswers() {
   const updateEventMock = (calendarCard) => {
     const calendarData = JSON.parse(calendarCard.data);
     calendarData.booked = !calendarData.booked;
-    calendarData.seats = calendarData.booked ? calendarData.seats - 1 : calendarData.seats + 1;
+    calendarData.seats = calendarData.booked
+      ? calendarData.seats - 1
+      : calendarData.seats + 1;
     return [200, calendarData];
   };
-  mock.onPatch(`${baseURL}${apiUrl}/afisha/event-participants/`).reply(updateEventMock);
+  mock
+    .onPatch(`${baseURL}${apiUrl}/afisha/event-participants/`)
+    .reply(updateEventMock);
 
   //! Страница Вопросы
   mock

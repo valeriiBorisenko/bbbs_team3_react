@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL } from '../../config/routes';
+import {
+  AFISHA_URL,
+  ABOUT_US_URL,
+  QUESTIONS_URL,
+  PLACES_URL,
+} from '../../config/routes';
 import {
   NavItem,
   NavItemWithDropdown,
@@ -29,7 +34,11 @@ function NavBar({
         наставники.про
       </Link>
       {/* обычное меню */}
-      <div className={`menu__lists-wrap ${!isMobileMenuOpen ? 'menu__lists-wrap_hidden' : ''}`}>
+      <div
+        className={`menu__lists-wrap ${
+          !isMobileMenuOpen ? 'menu__lists-wrap_hidden' : ''
+        }`}
+      >
         <ul className="menu__list">
           {/* О проекте, скрытый */}
           <NavItem
@@ -90,7 +99,8 @@ function NavBar({
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
             href={{
-              pathname: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/',
+              pathname:
+                'https://www.facebook.com/BigBrothers.BigSisters.Russia/',
             }}
             linkText="facebook"
             target="_blank"
@@ -127,19 +137,33 @@ function NavBar({
       </div>
 
       {currentUser && (
-        <div className={`menu__user-info ${!isMobileMenuOpen ? 'menu__user-info_hidden' : ''}`}>
+        <div
+          className={`menu__user-info ${
+            !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
+          }`}
+        >
           <UserMenuButton
-            title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+            title={
+              userCityName
+                ? `${userCityName}. Изменить город`
+                : 'Изменить ваш город'
+            }
             handleClick={onCityChangeClick}
             sectionClass="mobile-link"
           />
-          <UserMenuButton title="Выйти" sectionClass="mobile-link" handleClick={onLogout} />
+          <UserMenuButton
+            title="Выйти"
+            sectionClass="mobile-link"
+            handleClick={onLogout}
+          />
         </div>
       )}
 
       <button
         onClick={onBurgerButtonClick}
-        className={`menu__burger ${isMobileMenuOpen ? 'menu__burger_active' : ''}`}
+        className={`menu__burger ${
+          isMobileMenuOpen ? 'menu__burger_active' : ''
+        }`}
         type="button"
       >
         <span className="menu__burger-line" />
@@ -186,7 +210,8 @@ function NavBar({
                     href="./questions.html"
                     className="search__title-link section-title section-title_clickable"
                   >
-                    Что делать если ваш младший агрессивно себя ведет, решил закрыть пару?
+                    Что делать если ваш младший агрессивно себя ведет, решил
+                    закрыть пару?
                   </a>
                   <a href="./questions.html" className="link search__link">
                     вопросы

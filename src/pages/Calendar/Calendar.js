@@ -9,7 +9,13 @@ import { months } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import Api from '../../utils/api';
-import { BasePage, TitleH1, CardCalendar, AnimatedPageContainer, Loader } from './index';
+import {
+  BasePage,
+  TitleH1,
+  CardCalendar,
+  AnimatedPageContainer,
+  Loader,
+} from './index';
 
 function Calendar({
   onEventSignUpClick,
@@ -83,12 +89,15 @@ function Calendar({
     });
 
     //* ШАГ 3 выкидываем из массива arrayOfDatesWithEvent повторы
-    const arrayOfUniqueDates = arrayOfDatesWithEvents.filter((item, index, self) => {
-      const something = self.findIndex(
-        (current) => item.month === current.month && item.year === current.year,
-      );
-      return something === index;
-    });
+    const arrayOfUniqueDates = arrayOfDatesWithEvents.filter(
+      (item, index, self) => {
+        const something = self.findIndex(
+          (current) =>
+            item.month === current.month && item.year === current.year
+        );
+        return something === index;
+      }
+    );
 
     //* ШАГ 4 хронологические, уникальные фильтры, готовые к рендерингу в тагс-кнопки
     const finallArrayOfTagsData = arrayOfUniqueDates.map((filter) => {
@@ -168,7 +177,9 @@ function Calendar({
     if (filters.length > 1) {
       return (
         <div className="tags fade-in">
-          <ul className="tags__list">{renderFilterTags(filters, 'month', handleFilterClick)}</ul>
+          <ul className="tags__list">
+            {renderFilterTags(filters, 'month', handleFilterClick)}
+          </ul>
         </div>
       );
     }
@@ -207,7 +218,9 @@ function Calendar({
           <div className="calendar-page__container">
             {renderTagsContainder()}
 
-            <div className="calendar-page__grid">{renderEventCards(sortedArray)}</div>
+            <div className="calendar-page__grid">
+              {renderEventCards(sortedArray)}
+            </div>
           </div>
         </>
       );
@@ -224,7 +237,10 @@ function Calendar({
     <BasePage>
       <Helmet>
         <title>Календарь</title>
-        <meta name="description" content="Календарь событий и мероприятий для наставников" />
+        <meta
+          name="description"
+          content="Календарь событий и мероприятий для наставников"
+        />
       </Helmet>
       <section className="calendar-page page__section fade-in">
         {renderPageContent()}

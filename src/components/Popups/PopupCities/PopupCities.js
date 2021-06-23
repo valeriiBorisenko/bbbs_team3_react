@@ -37,7 +37,11 @@ function PopupCities({ cities, isOpen, onClose, onSubmit }) {
                 .filter((item) => item.isPrimary === true)
                 .map((item) => (
                   <li className="cities__list-item" key={item.id}>
-                    <button className="cities__city" type="submit" value={item.id}>
+                    <button
+                      className="cities__city"
+                      type="submit"
+                      value={item.id}
+                    >
                       {item.name}
                     </button>
                   </li>
@@ -48,7 +52,11 @@ function PopupCities({ cities, isOpen, onClose, onSubmit }) {
                 .filter((item) => item.isPrimary !== true)
                 .map((item) => (
                   <li className="cities__list-item" key={item.id}>
-                    <button className="cities__city" type="submit" value={item.id}>
+                    <button
+                      className="cities__city"
+                      type="submit"
+                      value={item.id}
+                    >
                       {item.name}
                     </button>
                   </li>

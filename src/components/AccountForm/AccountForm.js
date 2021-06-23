@@ -7,8 +7,17 @@ import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { Card, Input, Caption, Rating, Button } from './index';
 
-function AccountForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmit }) {
-  const classNames = ['card-container', 'account-form', sectionClass].join(' ').trim();
+function AccountForm({
+  data,
+  sectionClass,
+  isEditMode,
+  isOpen,
+  onCancel,
+  onSubmit,
+}) {
+  const classNames = ['card-container', 'account-form', sectionClass]
+    .join(' ')
+    .trim();
 
   const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
@@ -102,7 +111,10 @@ function AccountForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
             />
             <span className="account-form__pseudo-button" />
           </label>
-          <Caption title="Загрузить фото" sectionClass="account-form__caption" />
+          <Caption
+            title="Загрузить фото"
+            sectionClass="account-form__caption"
+          />
         </div>
       </Card>
 
@@ -188,7 +200,9 @@ function AccountForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
               <Button
                 title={`${isEditMode ? 'Сохранить' : 'Добавить'}`}
                 sectionClass="account-form__button_el_add"
-                isDisabled={!!(errors.title || errors.date || errors.description)}
+                isDisabled={
+                  !!(errors.title || errors.date || errors.description)
+                }
                 isSubmittable
               />
             </div>

@@ -20,15 +20,8 @@
     "react-hooks"
   ],
   "rules": {
-    "prettier/prettier": ["error", {"endOfLine": "auto"}],
+    "prettier/prettier": ["error"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "linebreak-style": "off",
-    "react/react-in-jsx-scope": "off",
-    "no-plusplus": "off",
-    "arrow-parens": "off", // Несовместимо с prettier
-    "object-curly-newline": "off" // Несовместимо с prettier
-    // "no-mixed-operators": "off", // Несовместимо с prettier
-    // "function-paren-newline": "off", // Несовместимо с prettier
-    // "space-before-function-paren": 0 // Несовместимо с prettier
+    "react/react-in-jsx-scope": "off"
   }
 }

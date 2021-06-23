@@ -28,7 +28,12 @@ function PlacesRecommend({ sectionClass }) {
     toggleForm();
   };
 
-  const classNames = ['recommendation', 'recommendation_place_page', 'fade-in', sectionClass]
+  const classNames = [
+    'recommendation',
+    'recommendation_place_page',
+    'fade-in',
+    sectionClass,
+  ]
     .join(' ')
     .trim();
 
@@ -50,8 +55,8 @@ function PlacesRecommend({ sectionClass }) {
             />
           )}
           <p className="section-title recommendation__text">
-            Если вы были в интересном месте и хотите порекомендовать его другим&nbsp;наставникам
-            –&nbsp;
+            Если вы были в интересном месте и хотите порекомендовать его
+            другим&nbsp;наставникам –&nbsp;
             <button
               className="recommendation__text-link"
               type="button"
@@ -65,7 +70,10 @@ function PlacesRecommend({ sectionClass }) {
           <FormRecommendation isOpen={isFormOpen} onSubmit={handleFormSubmit} />
         </div>
       </section>
-      <PopupRecommendSuccess isOpen={isSuccessPopupOpen} onClose={closeSuccessPopup} />
+      <PopupRecommendSuccess
+        isOpen={isSuccessPopupOpen}
+        onClose={closeSuccessPopup}
+      />
     </>
   );
 }

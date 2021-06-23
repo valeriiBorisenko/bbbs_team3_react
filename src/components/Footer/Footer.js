@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom';
 import './Footer.scss';
-import { AFISHA_URL, ABOUT_US_URL, QUESTIONS_URL, PLACES_URL } from '../../config/routes';
+import {
+  AFISHA_URL,
+  ABOUT_US_URL,
+  QUESTIONS_URL,
+  PLACES_URL,
+} from '../../config/routes';
 import { footerLogoPath, NavItem } from './index';
 
 function Footer() {
@@ -105,7 +110,9 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href={{ path: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/' }}
+            href={{
+              path: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/',
+            }}
             linkText="facebook"
             rel="noreferrer"
           />

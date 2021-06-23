@@ -36,15 +36,21 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
   }, [isOpen]);
 
   return (
-    <Popup type="sign-in" typeContainer="sign-in" isOpen={isOpen} onClose={closePopup}>
+    <Popup
+      type="sign-in"
+      typeContainer="sign-in"
+      isOpen={isOpen}
+      onClose={closePopup}
+    >
       <form className="popup__form" onSubmit={handleSubmit(onFormSubmit)}>
         <TitleH2 sectionClass="popup__title_type_sign-in" title="Вход" />
         <p className="paragraph popup__sign-in">
-          Вход в личный кабинет доступен наставникам программы «Старшие Братья Старшие Сёстры».
+          Вход в личный кабинет доступен наставникам программы «Старшие Братья
+          Старшие Сёстры».
         </p>
         <p className="paragraph popup__sign-in">
-          Пожалуйста, введите логин и пароль из письма. Если вам не приходило письмо, свяжитесь с
-          вашим куратором.
+          Пожалуйста, введите логин и пароль из письма. Если вам не приходило
+          письмо, свяжитесь с вашим куратором.
         </p>
         <Input
           sectionClass="popup__input"

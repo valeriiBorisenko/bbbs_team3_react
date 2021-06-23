@@ -4,8 +4,12 @@ import Caption from '../../utils/Caption/Caption';
 
 function CardAnnotationContainer({ caption, children }) {
   return (
-    <Scrollbars renderThumbVertical={() => <div className="card-annotation__thumb" />}>
-      {caption && <Caption sectionClass="card-annotation__caption" title={caption} />}
+    <Scrollbars
+      renderThumbVertical={() => <div className="card-annotation__thumb" />}
+    >
+      {caption && (
+        <Caption sectionClass="card-annotation__caption" title={caption} />
+      )}
 
       <div className="card-annotation__desc">{children}</div>
     </Scrollbars>

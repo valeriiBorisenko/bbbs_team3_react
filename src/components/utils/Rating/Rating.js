@@ -1,7 +1,15 @@
 import './Rating.scss';
 import PropTypes from 'prop-types';
 
-function Rating({ type, name, value, ratingType, sectionClass, checked, onClick }) {
+function Rating({
+  type,
+  name,
+  value,
+  ratingType,
+  sectionClass,
+  checked,
+  onClick,
+}) {
   const classNames = ['rating', sectionClass].join(' ').trim();
 
   const pseudoButtonClassNames = [
