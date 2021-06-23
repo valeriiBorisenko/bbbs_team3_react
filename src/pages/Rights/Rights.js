@@ -102,7 +102,7 @@ const Rights = () => {
     // КАТЕГОРИИ
     if (activeCategories.length > 0) {
       const filterByCategory = pageData.filter((article) =>
-        activeCategories.includes(article.category),
+        activeCategories.includes(article.category)
       );
 
       setFilteredArticles(filterByCategory);
@@ -170,7 +170,10 @@ const Rights = () => {
     <BasePage>
       <Helmet>
         <title>Права детей</title>
-        <meta name="description" content="Информационные рубрики о правах детей" />
+        <meta
+          name="description"
+          content="Информационные рубрики о правах детей"
+        />
       </Helmet>
       <section className="lead page__section fade-in">
         <TitleH1 title="Права детей" />
