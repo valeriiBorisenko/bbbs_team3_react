@@ -38,10 +38,21 @@ export default class Api {
       .then((response) => response.data);
   }
 
-  // работа с ивентами (карточки) // в процессе
-  static updateEvent(eventData) {
+  // регистрация на мероприятие  //! подключено к бекенду
+  static makeEventRegistration(eventId) {
+    console.log('registerOnEvent');
     return axios
-      .patch(`${baseURL}${apiUrl}/afisha/event-participants/`, eventData)
+      .post(`${baseURL}${apiUrl}/afisha/event-participants/`, eventId)
+      .then((response) => console.log(response))
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  // удаление регистрации на мероприятие //! подключено к бекенду
+  static cancelEventRegistration(eventId) {
+    console.log('registerOnEvent');
+    console.log(eventId);
+    return axios
+      .delete(`${baseURL}${apiUrl}/afisha/event-participants/${eventId}/`)
       .then((response) => console.log(response))
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }

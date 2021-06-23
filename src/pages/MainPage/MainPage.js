@@ -25,11 +25,11 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
-  const [mainPageData, setDataMain] = useState(null);
+  const [mainPageData, setMainPageData] = useState(null);
 
   function getMainPageData() {
     Api.getMainPageData()
-      .then((data) => setDataMain(data))
+      .then((data) => setMainPageData(data))
       .catch((error) => console.log(error)); // попап ошибка!
   }
 
@@ -42,10 +42,6 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
   useEffect(() => {
     getMainPageData();
   }, []);
-
-  function eventSignUpHandler(cardData) {
-    onEventSignUpClick(cardData, cardData.booked);
-  }
 
   if (!mainPageData) {
     return <Loader isCentered />;
@@ -66,7 +62,7 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
             <CardCalendar
               key={mainPageData.event.id}
               cardData={mainPageData.event}
-              onEventSignUpClick={eventSignUpHandler}
+              onEventSignUpClick={onEventSignUpClick}
               onEventFullDescriptionClick={onEventFullDescriptionClick}
             />
           ) : (
