@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import './AccountForm.scss';
+import './ProfileForm.scss';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
@@ -7,17 +7,8 @@ import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { Card, Input, Caption, Rating, Button } from './index';
 
-function AccountForm({
-  data,
-  sectionClass,
-  isEditMode,
-  isOpen,
-  onCancel,
-  onSubmit,
-}) {
-  const classNames = ['card-container', 'account-form', sectionClass]
-    .join(' ')
-    .trim();
+function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmit }) {
+  const classNames = ['card-container', 'profile-form', sectionClass].join(' ').trim();
 
   const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
@@ -86,42 +77,39 @@ function AccountForm({
 
   return (
     <div className={classNames}>
-      <Card sectionClass="account-form__photo-upload">
+      <Card sectionClass="profile-form__photo-upload">
         {userImage && (
           <img
             src={userImage.imageUrl}
             alt={data?.title}
-            className="account-form__uploaded-image"
+            className="profile-form__uploaded-image"
           />
         )}
 
         <div
-          className={`account-form__input-upload ${
-            userImage ? 'account-form__input-upload_hidden' : ''
+          className={`profile-form__input-upload ${
+            userImage ? 'profile-form__input-upload_hidden' : ''
           }`}
         >
-          <label htmlFor="input-upload" className="account-form__label-file">
+          <label htmlFor="input-upload" className="profile-form__label-file">
             <input
               id="input-upload"
               type="file"
               name="imageUrl"
-              className="account-form__input-file"
+              className="profile-form__input-file"
               {...register('imageUrl')}
               onChange={(evt) => handleChangeImage(evt.target.files[0])}
             />
-            <span className="account-form__pseudo-button" />
+            <span className="profile-form__pseudo-button" />
           </label>
-          <Caption
-            title="Загрузить фото"
-            sectionClass="account-form__caption"
-          />
+          <Caption title="Загрузить фото" sectionClass="profile-form__caption" />
         </div>
       </Card>
 
-      <Card sectionClass="account-form__form-container">
+      <Card sectionClass="profile-form__form-container">
         <form
           name="addStoryForm"
-          className="account-form__form"
+          className="profile-form__form"
           onSubmit={handleSubmit(onFormSubmit)}
         >
           <Input
@@ -137,8 +125,8 @@ function AccountForm({
             type="date"
             name="date"
             placeholder="Дата&emsp;"
-            sectionClass={`account-form__input_el_date ${
-              errors.date ? 'account-form__input_el_date-error' : ''
+            sectionClass={`profile-form__input_el_date ${
+              errors.date ? 'profile-form__input_el_date-error' : ''
             }`}
             register={register}
             required
@@ -149,22 +137,22 @@ function AccountForm({
             type="text"
             name="description"
             placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
-            sectionClass="account-form__input_el_textarea"
+            sectionClass="profile-form__input_el_textarea"
             register={register}
             required
             error={errors?.description}
             errorMessage="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось*"
             isTextarea
           />
-          <div className="account-form__submit-zone">
-            <div className="account-form__ratings">
+          <div className="profile-form__submit-zone">
+            <div className="profile-form__ratings">
               <Rating
                 type="radio"
                 name="rating"
                 ratingType="good"
                 onClick={handleChangeRating}
                 value="good"
-                sectionClass="account-form__rating"
+                sectionClass="profile-form__rating"
                 checked={inputValues?.rate === 'good'}
               />
               <Rating
@@ -173,7 +161,7 @@ function AccountForm({
                 ratingType="neutral"
                 onClick={handleChangeRating}
                 value="neutral"
-                sectionClass="account-form__rating"
+                sectionClass="profile-form__rating"
                 checked={inputValues?.rate === 'neutral'}
               />
               <Rating
@@ -182,27 +170,25 @@ function AccountForm({
                 ratingType="bad"
                 onClick={handleChangeRating}
                 value="bad"
-                sectionClass="account-form__rating"
+                sectionClass="profile-form__rating"
                 checked={inputValues?.rate === 'bad'}
               />
               <Caption
                 title={caption}
-                sectionClass={`account-form__ratings-text account-form__ratings-text_type_${inputValues.rate}`}
+                sectionClass={`profile-form__ratings-text profile-form__ratings-text_type_${inputValues.rate}`}
               />
             </div>
-            <div className="account-form__buttons">
+            <div className="profile-form__buttons">
               <Button
                 title={`${isEditMode ? 'Отмена' : 'Удалить'}`}
                 color="gray-borderless"
-                sectionClass="account-form__button_el_delete"
+                sectionClass="profile-form__button_el_delete"
                 onClick={onCancel}
               />
               <Button
                 title={`${isEditMode ? 'Сохранить' : 'Добавить'}`}
-                sectionClass="account-form__button_el_add"
-                isDisabled={
-                  !!(errors.title || errors.date || errors.description)
-                }
+                sectionClass="profile-form__button_el_add"
+                isDisabled={!!(errors.title || errors.date || errors.description)}
                 isSubmittable
               />
             </div>
@@ -213,7 +199,7 @@ function AccountForm({
   );
 }
 
-AccountForm.propTypes = {
+ProfileForm.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   sectionClass: PropTypes.string,
   onCancel: PropTypes.func,
@@ -222,7 +208,7 @@ AccountForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 
-AccountForm.defaultProps = {
+ProfileForm.defaultProps = {
   data: {},
   sectionClass: '',
   onCancel: () => {},
@@ -231,4 +217,4 @@ AccountForm.defaultProps = {
   onSubmit: () => {},
 };
 
-export default AccountForm;
+export default ProfileForm;
