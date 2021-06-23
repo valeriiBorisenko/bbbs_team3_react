@@ -69,21 +69,27 @@ function Profile({ onEventFullDescriptionClick }) {
 
   const handleAddDiary = (data) => {
     if (!isEditMode) {
-      const diary = { ...data, id: diaries.length + 1 };
+      const diary = data;
       if (diary.imageUrl.length === 0) {
         // дефолтная картинка, если фото не загружено
         diary.imageUrl =
           'https://i.pinimg.com/originals/f0/e2/53/f0e253b6dbbb809145441ca8fa08b7b7.jpg';
       }
-      if (!diary.rate) {
-        diary.rate = 'neutral';
+      if (!diary.mark) {
+        diary.mark = 'neutral';
       }
-      setDiaries([diary, ...diaries]);
+      Api.createDiary(data)
+        .then((res) => setDiaries([res, ...diaries]))
+        .catch(console.log);
     }
     if (isEditMode) {
-      setDiaries(() =>
-        diaries.map((diary) => (diary.id === data.id ? data : diary))
-      );
+      Api.editDiary(data)
+        .then((res) =>
+          setDiaries(() =>
+            diaries.map((diary) => (diary.id === res.id ? res : diary))
+          )
+        )
+        .catch(console.log);
     }
 
     handleCancelForm();
@@ -102,9 +108,14 @@ function Profile({ onEventFullDescriptionClick }) {
   };
 
   const handleCardDelete = (card) => {
-    setDiaries(() =>
-      diaries.filter((diary) => (diary.id === card.id ? null : diary))
-    );
+    Api.deleteDiary(card)
+      .then(() =>
+        setDiaries(() =>
+          diaries.filter((diary) => (diary.id === card.id ? null : diary))
+        )
+      )
+      .catch(console.log);
+
     closePopupDeleteDiary();
   };
 

@@ -67,18 +67,44 @@ export default class Api {
   }
 
   // работа со страницей ЛК
-  //! подключено к бекенду
   static getBookedEvents() {
+    //! подключено к бекенду
     return axios
       .get(`${baseURL}${apiUrl}/afisha/event-participants/`)
-      .then((response) => response.data.results);
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   static getProfileDiariesData() {
     //! подключено к бекенду
     return axios
       .get(`${baseURL}${apiUrl}/profile/diaries/`)
-      .then((response) => response.data.results);
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  static createDiary(data) {
+    //! подключено к бекенду
+    return axios
+      .post(`${baseURL}${apiUrl}/profile/diaries/`, data)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  static editDiary(data) {
+    //! подключено к бекенду
+    return axios
+      .patch(`${baseURL}${apiUrl}/profile/diaries/${data.id}/`, data)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  static deleteDiary(data) {
+    //! подключено к бекенду
+    return axios
+      .delete(`${baseURL}${apiUrl}/profile/diaries/${data.id}/`, data)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   // работа со странице вопросов
