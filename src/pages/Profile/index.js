@@ -5,4 +5,11 @@ import ProfileForm from '../../components/ProfileForm/ProfileForm';
 import ProfileDiary from '../../components/ProfileDiary/ProfileDiary';
 import PopupDeleteDiary from '../../components/Popups/PopupDeleteDiary/PopupDeleteDiary';
 
-export { BasePage, AccountEventCard, TitleH2, ProfileForm, ProfileDiary, PopupDeleteDiary };
+export {
+  BasePage,
+  AccountEventCard,
+  TitleH2,
+  ProfileForm,
+  ProfileDiary,
+  PopupDeleteDiary,
+};

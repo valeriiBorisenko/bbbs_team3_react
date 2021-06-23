@@ -25,11 +25,17 @@ function Profile({ onEventFullDescriptionClick }) {
   const [isPopupDeleteDiaryOpen, setIsPopupDeleteDiaryOpen] = useState(false);
 
   useEffect(() => {
-    Api.getProfileDiaryData()
-      .then((diariesData) => {
-        setDiaries(diariesData.profileDiaryData);
+    Promise.all([Api.getCalendarPageData(), Api.getBookedEvents()])
+      .then(([calendarData, bookedEvents]) => {
+        const a = bookedEvents.map((e) => e.event);
+        const b = calendarData.filter((e) => a.includes(e.id));
+        setEvents(b);
       })
-      .catch((err) => console.log(err));
+      .catch(console.log);
+  }, []);
+
+  useEffect(() => {
+    Api.getProfileDiariesData().then(setDiaries).catch(console.log);
   }, []);
 
   const scrollAnchorRef = useRef(null);
@@ -75,7 +81,9 @@ function Profile({ onEventFullDescriptionClick }) {
       setDiaries([diary, ...diaries]);
     }
     if (isEditMode) {
-      setDiaries(() => diaries.map((diary) => (diary.id === data.id ? data : diary)));
+      setDiaries(() =>
+        diaries.map((diary) => (diary.id === data.id ? data : diary))
+      );
     }
 
     handleCancelForm();
@@ -94,7 +102,9 @@ function Profile({ onEventFullDescriptionClick }) {
   };
 
   const handleCardDelete = (card) => {
-    setDiaries(() => diaries.filter((diary) => (diary.id === card.id ? null : diary)));
+    setDiaries(() =>
+      diaries.filter((diary) => (diary.id === card.id ? null : diary))
+    );
     closePopupDeleteDiary();
   };
 
@@ -121,7 +131,11 @@ function Profile({ onEventFullDescriptionClick }) {
             {events &&
               events.length > 0 &&
               events.map((item) => (
-                <AccountEventCard key={item.id} data={item} onOpen={handleOpenEventCard} />
+                <AccountEventCard
+                  key={item.id}
+                  data={item}
+                  onOpen={handleOpenEventCard}
+                />
               ))}
           </div>
         </div>
@@ -149,7 +163,9 @@ function Profile({ onEventFullDescriptionClick }) {
 
               <ProfileForm
                 sectionClass={`${
-                  isFormOpen ? 'profile__diary-form' : 'profile__diary-form_hidden'
+                  isFormOpen
+                    ? 'profile__diary-form'
+                    : 'profile__diary-form_hidden'
                 }`}
                 isEditMode={isEditMode}
                 isOpen={isFormOpen}

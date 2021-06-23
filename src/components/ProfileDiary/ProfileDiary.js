@@ -3,17 +3,24 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
-import { Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button } from './index';
+import {
+  Card,
+  TitleH2,
+  CardAnnotationContainer,
+  Rating,
+  Caption,
+  Button,
+} from './index';
 
 function ProfileDiary({ data, onEdit, onDelete }) {
-  const { imageUrl, title, description, rate, date } = data;
+  const { imageUrl, place, description, mark, date } = data;
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
 
   useEffect(() => {
-    setCaption(captions[rate]);
-  }, [rate]);
+    setCaption(captions[mark]);
+  }, [mark]);
 
   const handleEditButtonClick = () => {
     onEdit(data);
@@ -26,11 +33,11 @@ function ProfileDiary({ data, onEdit, onDelete }) {
   return (
     <div className="card-container profile-diary">
       <Card sectionClass="profile-diary__image-container">
-        <img className="profile-diary__image" src={imageUrl} alt={title} />
+        <img className="profile-diary__image" src={imageUrl} alt={place} />
       </Card>
       <Card sectionClass="profile-diary__date-container">
         <div className="profile-diary__text-wrap">
-          <TitleH2 sectionClass="profile-diary__card-title" title={title} />
+          <TitleH2 sectionClass="profile-diary__card-title" title={place} />
           <div className="profile-diary__card-text">
             <CardAnnotationContainer>
               <p className="profile-diary__paragraph">{description}</p>
@@ -45,15 +52,15 @@ function ProfileDiary({ data, onEdit, onDelete }) {
           <div className="profile-diary__rating">
             <Rating
               type="radio"
-              ratingType={rate}
-              value={rate}
+              ratingType={mark}
+              value={mark}
               checked
               sectionClass="profile-diary__rate"
             />
             <Caption
               title={caption}
               sectionClass={`profile-diary__ratings-text profile-diary__ratings-text_type_${
-                rate || 'neutral'
+                mark || 'neutral'
               }`}
             />
           </div>
@@ -86,8 +93,8 @@ ProfileDiary.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   imageUrl: PropTypes.string,
   description: PropTypes.string,
-  title: PropTypes.string,
-  rate: PropTypes.string,
+  place: PropTypes.string,
+  mark: PropTypes.string,
   date: PropTypes.string,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
@@ -97,8 +104,8 @@ ProfileDiary.defaultProps = {
   data: {},
   imageUrl: '',
   description: '',
-  title: '',
-  rate: 'neutral',
+  place: '',
+  mark: 'neutral',
   date: '',
   onEdit: () => {},
   onDelete: () => {},

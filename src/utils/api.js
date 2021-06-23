@@ -67,10 +67,18 @@ export default class Api {
   }
 
   // работа со страницей ЛК
-  static getProfileDiaryData() {
+  //! подключено к бекенду
+  static getBookedEvents() {
     return axios
-      .get(`${baseURL}${apiUrl}/profile/diary/`)
-      .then((response) => response.data);
+      .get(`${baseURL}${apiUrl}/afisha/event-participants/`)
+      .then((response) => response.data.results);
+  }
+
+  static getProfileDiariesData() {
+    //! подключено к бекенду
+    return axios
+      .get(`${baseURL}${apiUrl}/profile/diaries/`)
+      .then((response) => response.data.results);
   }
 
   // работа со странице вопросов

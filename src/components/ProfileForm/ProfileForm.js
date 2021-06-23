@@ -7,8 +7,17 @@ import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { Card, Input, Caption, Rating, Button } from './index';
 
-function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmit }) {
-  const classNames = ['card-container', 'profile-form', sectionClass].join(' ').trim();
+function ProfileForm({
+  data,
+  sectionClass,
+  isEditMode,
+  isOpen,
+  onCancel,
+  onSubmit,
+}) {
+  const classNames = ['card-container', 'profile-form', sectionClass]
+    .join(' ')
+    .trim();
 
   const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
@@ -26,7 +35,7 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
     let inputFields = Object.assign(values);
     inputFields = {
       ...inputFields,
-      rate: inputValues.rate,
+      mark: inputValues.mark,
       id: inputValues.id,
     };
     if (userImage) {
@@ -39,7 +48,7 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
   };
 
   const handleChangeRating = (value) => {
-    setInputValues({ ...inputValues, rate: value });
+    setInputValues({ ...inputValues, mark: value });
   };
 
   const handleChangeImage = (file) => {
@@ -50,25 +59,25 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
   };
 
   useEffect(() => {
-    if (inputValues?.rate) setCaption(captions[inputValues.rate]);
+    if (inputValues?.mark) setCaption(captions[inputValues.mark]);
     else setCaption('Оцените проведенное время');
-  }, [inputValues.rate]);
+  }, [inputValues.mark]);
 
   useEffect(() => {
     if (isOpen) {
       if (data) {
         setInputValues({ ...inputValues, ...data });
         setUserImage({ imageUrl: data.imageUrl });
-        setValue('title', data.title);
+        setValue('place', data.place);
         setValue('date', parseDate(data.date));
         setValue('description', data.description);
-        setValue('rate', data.rate);
+        setValue('mark', data.mark);
       }
     } else {
       setInputValues({});
       setUserImage(null);
       reset({
-        title: '',
+        place: '',
         date: '',
         description: '',
       });
@@ -81,7 +90,7 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
         {userImage && (
           <img
             src={userImage.imageUrl}
-            alt={data?.title}
+            alt={data?.place}
             className="profile-form__uploaded-image"
           />
         )}
@@ -102,7 +111,10 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
             />
             <span className="profile-form__pseudo-button" />
           </label>
-          <Caption title="Загрузить фото" sectionClass="profile-form__caption" />
+          <Caption
+            title="Загрузить фото"
+            sectionClass="profile-form__caption"
+          />
         </div>
       </Card>
 
@@ -114,11 +126,11 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
         >
           <Input
             type="text"
-            name="title"
+            name="place"
             placeholder="Место встречи"
             register={register}
             required
-            error={errors?.title}
+            error={errors?.place}
             errorMessage="Место встречи*"
           />
           <Input
@@ -153,7 +165,7 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
                 onClick={handleChangeRating}
                 value="good"
                 sectionClass="profile-form__rating"
-                checked={inputValues?.rate === 'good'}
+                checked={inputValues?.mark === 'good'}
               />
               <Rating
                 type="radio"
@@ -162,7 +174,7 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
                 onClick={handleChangeRating}
                 value="neutral"
                 sectionClass="profile-form__rating"
-                checked={inputValues?.rate === 'neutral'}
+                checked={inputValues?.mark === 'neutral'}
               />
               <Rating
                 type="radio"
@@ -171,11 +183,11 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
                 onClick={handleChangeRating}
                 value="bad"
                 sectionClass="profile-form__rating"
-                checked={inputValues?.rate === 'bad'}
+                checked={inputValues?.mark === 'bad'}
               />
               <Caption
                 title={caption}
-                sectionClass={`profile-form__ratings-text profile-form__ratings-text_type_${inputValues.rate}`}
+                sectionClass={`profile-form__ratings-text profile-form__ratings-text_type_${inputValues.mark}`}
               />
             </div>
             <div className="profile-form__buttons">
@@ -188,7 +200,9 @@ function ProfileForm({ data, sectionClass, isEditMode, isOpen, onCancel, onSubmi
               <Button
                 title={`${isEditMode ? 'Сохранить' : 'Добавить'}`}
                 sectionClass="profile-form__button_el_add"
-                isDisabled={!!(errors.title || errors.date || errors.description)}
+                isDisabled={
+                  !!(errors.place || errors.date || errors.description)
+                }
                 isSubmittable
               />
             </div>
