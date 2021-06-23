@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-nested-ternary */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
@@ -10,7 +9,13 @@ import { months } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import Api from '../../utils/api';
-import { BasePage, TitleH1, CardCalendar, AnimatedPageContainer, Loader } from './index';
+import {
+  BasePage,
+  TitleH1,
+  CardCalendar,
+  AnimatedPageContainer,
+  Loader,
+} from './index';
 
 function Calendar({
   onEventSignUpClick,
@@ -21,14 +26,13 @@ function Calendar({
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
-  // console.log(currentUser);
 
   // загрузка данных страницы календаря, если ты залогиненный
-  const [calendarPageData, setDataCalendar] = useState([]);
+  const [calendarPageData, setCalendarPageData] = useState([]);
   useEffect(() => {
     if (currentUser) {
       Api.getCalendarPageData()
-        .then((events) => setDataCalendar(events))
+        .then((events) => setCalendarPageData(events))
         .catch((error) => console.log(error));
     }
     // else {
@@ -36,10 +40,6 @@ function Calendar({
     // }
   }, [currentUser]);
   //! надо делать какой то стопор в виде isLoading
-
-  const eventSignUpHandler = (cardData) => {
-    onEventSignUpClick(cardData, cardData.booked);
-  };
 
   // весь список доступных фильтров
   const [filters, setFilters] = useState([]);
@@ -89,12 +89,15 @@ function Calendar({
     });
 
     //* ШАГ 3 выкидываем из массива arrayOfDatesWithEvent повторы
-    const arrayOfUniqueDates = arrayOfDatesWithEvents.filter((item, index, self) => {
-      const something = self.findIndex(
-        (current) => item.month === current.month && item.year === current.year,
-      );
-      return something === index;
-    });
+    const arrayOfUniqueDates = arrayOfDatesWithEvents.filter(
+      (item, index, self) => {
+        const something = self.findIndex(
+          (current) =>
+            item.month === current.month && item.year === current.year
+        );
+        return something === index;
+      }
+    );
 
     //* ШАГ 4 хронологические, уникальные фильтры, готовые к рендерингу в тагс-кнопки
     const finallArrayOfTagsData = arrayOfUniqueDates.map((filter) => {
@@ -174,7 +177,9 @@ function Calendar({
     if (filters.length > 1) {
       return (
         <div className="tags fade-in">
-          <ul className="tags__list">{renderFilterTags(filters, 'month', handleFilterClick)}</ul>
+          <ul className="tags__list">
+            {renderFilterTags(filters, 'month', handleFilterClick)}
+          </ul>
         </div>
       );
     }
@@ -188,7 +193,7 @@ function Calendar({
       <CardCalendar
         key={cardData.id}
         cardData={cardData}
-        onEventSignUpClick={eventSignUpHandler}
+        onEventSignUpClick={onEventSignUpClick}
         onEventFullDescriptionClick={onEventFullDescriptionClick}
         sectionClass="fade-in"
       />
@@ -213,7 +218,9 @@ function Calendar({
           <div className="calendar-page__container">
             {renderTagsContainder()}
 
-            <div className="calendar-page__grid">{renderEventCards(sortedArray)}</div>
+            <div className="calendar-page__grid">
+              {renderEventCards(sortedArray)}
+            </div>
           </div>
         </>
       );
@@ -230,7 +237,10 @@ function Calendar({
     <BasePage>
       <Helmet>
         <title>Календарь</title>
-        <meta name="description" content="Календарь событий и мероприятий для наставников" />
+        <meta
+          name="description"
+          content="Календарь событий и мероприятий для наставников"
+        />
       </Helmet>
       <section className="calendar-page page__section fade-in">
         {renderPageContent()}

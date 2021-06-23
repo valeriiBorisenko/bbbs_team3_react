@@ -7,4 +7,13 @@ import Questions from './Questions/Questions';
 import Places from './Places/Places';
 import Rights from './Rights/Rights';
 
-export { AboutUs, Profile, Calendar, MainPage, PageNotFound, Questions, Places, Rights };
+export {
+  AboutUs,
+  Profile,
+  Calendar,
+  MainPage,
+  PageNotFound,
+  Questions,
+  Places,
+  Rights,
+};

@@ -19,11 +19,10 @@ function Header({ onUserButtonClick, onLogout, onCityChange, cities }) {
   const [userCityName, setUserCityName] = useState('');
 
   // определение города пользователя, используется в кнопках
-  //! работает с костылем из-за Null в currentUser.city
   useEffect(() => {
-    if (cities && currentUser && currentUser.city) {
-      const userCity = cities.filter((city) => city.id === currentUser.city);
-      setUserCityName(userCity[0].name);
+    if (cities && currentUser) {
+      const currentCity = cities.find((city) => city.id === currentUser.city);
+      setUserCityName(currentCity.name);
     }
   }, [cities, currentUser]);
 
@@ -95,18 +94,30 @@ function Header({ onUserButtonClick, onLogout, onCityChange, cities }) {
         {pathname === PROFILE_URL && (
           <div className="header__user-info">
             <UserMenuButton
-              title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+              title={
+                userCityName
+                  ? `${userCityName}. Изменить город`
+                  : 'Изменить ваш город'
+              }
               sectionClass="mobile-link"
               handleClick={onCityChange}
             />
-            <UserMenuButton title="Выйти" sectionClass="mobile-link" handleClick={onLogout} />
+            <UserMenuButton
+              title="Выйти"
+              sectionClass="mobile-link"
+              handleClick={onLogout}
+            />
           </div>
         )}
 
         {(pathname === AFISHA_URL || pathname === PLACES_URL) && (
           <div className="header__user-info">
             <UserMenuButton
-              title={userCityName ? `${userCityName}. Изменить город` : 'Изменить ваш город'}
+              title={
+                userCityName
+                  ? `${userCityName}. Изменить город`
+                  : 'Изменить ваш город'
+              }
               handleClick={onCityChange}
               sectionClass="mobile-link"
             />

@@ -13,7 +13,15 @@ import {
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
-import { BasePage, TitleH1, TitleH2, CardQuestion, Input, Button, Loader } from './index';
+import {
+  BasePage,
+  TitleH1,
+  TitleH2,
+  CardQuestion,
+  Input,
+  Button,
+  Loader,
+} from './index';
 import Api from '../../utils/api';
 
 function Questions() {
@@ -70,7 +78,7 @@ function Questions() {
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       const filterByCategory = questionsData.filter((question) =>
-        question.tags.some((el) => activeCategories.includes(el.name)),
+        question.tags.some((el) => activeCategories.includes(el.name))
       );
 
       setFilteredQuestions(filterByCategory);
@@ -110,7 +118,10 @@ function Questions() {
     <BasePage>
       <Helmet>
         <title>Ответы на вопросы</title>
-        <meta name="description" content="Страница с ответами на основные вопросы" />
+        <meta
+          name="description"
+          content="Страница с ответами на основные вопросы"
+        />
       </Helmet>
       <section className="questions-page page__section fade-in">
         <TitleH1 title="Ответы на вопросы" />
@@ -135,7 +146,10 @@ function Questions() {
 
             {currentUser && (
               <section className="add-question fade-in">
-                <TitleH2 sectionClass="add-question__title" title={isQuestionForm.title} />
+                <TitleH2
+                  sectionClass="add-question__title"
+                  title={isQuestionForm.title}
+                />
                 <form
                   className={`question-form ${isQuestionForm.sectionClass}`}
                   onSubmit={handleSubmit(onFormSubmit)}

@@ -88,7 +88,9 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
       setDiaries([diary, ...diaries]);
     }
     if (isEditMode) {
-      setDiaries(() => diaries.map((diary) => (diary.id === data.id ? data : diary)));
+      setDiaries(() =>
+        diaries.map((diary) => (diary.id === data.id ? data : diary))
+      );
     }
 
     handleCancelForm();
@@ -107,7 +109,9 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
   };
 
   const handleCardDelete = (card) => {
-    setDiaries(() => diaries.filter((diary) => (diary.id === card.id ? null : diary)));
+    setDiaries(() =>
+      diaries.filter((diary) => (diary.id === card.id ? null : diary))
+    );
     closePopupDeleteDiary();
   };
 
@@ -134,7 +138,11 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
             {events &&
               events.length > 0 &&
               events.map((item) => (
-                <AccountEventCard key={item.id} data={item} onOpen={handleOpenEventCard} />
+                <AccountEventCard
+                  key={item.id}
+                  data={item}
+                  onOpen={handleOpenEventCard}
+                />
               ))}
           </div>
         </div>
@@ -162,7 +170,9 @@ function Account({ eventsData, onEventFullDescriptionClick }) {
 
               <AccountForm
                 sectionClass={`${
-                  isFormOpen ? 'account__diary-form' : 'account__diary-form_hidden'
+                  isFormOpen
+                    ? 'account__diary-form'
+                    : 'account__diary-form_hidden'
                 }`}
                 isEditMode={isEditMode}
                 isOpen={isFormOpen}

@@ -15,8 +15,15 @@ function Input({
 }) {
   const message = error ? errorMessage : '';
 
-  const classNamesInput = ['input', message ? 'input__error' : '', sectionClass].join(' ').trim();
-  const classNamesTextarea = ['input', message ? 'input__error' : '', 'textarea', sectionClass]
+  const classNamesInput = ['input', message ? 'input__error' : '', sectionClass]
+    .join(' ')
+    .trim();
+  const classNamesTextarea = [
+    'input',
+    message ? 'input__error' : '',
+    'textarea',
+    sectionClass,
+  ]
     .join(' ')
     .trim();
 

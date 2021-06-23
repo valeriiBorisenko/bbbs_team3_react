@@ -10,8 +10,17 @@ function CardCalendar({
   onEventFullDescriptionClick,
   sectionClass,
 }) {
-  const { booked, tags, title, startAt, endAt, address, contact, remainSeats, description } =
-    cardData;
+  const {
+    booked,
+    tags,
+    title,
+    startAt,
+    endAt,
+    address,
+    contact,
+    remainSeats,
+    description,
+  } = cardData;
 
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
@@ -19,15 +28,21 @@ function CardCalendar({
   // будет ли заблокирована кнопка
   const isDisabled = remainSeats < 1;
 
-  function prepareDataForConfirmationPopup() {
-    onEventSignUpClick(cardData);
+  function changeStateOfEvent() {
+    onEventSignUpClick(cardData, cardData.id, cardData.booked);
   }
 
   function prepareDataForAboutEventPopup() {
-    onEventFullDescriptionClick(cardData, cardData.booked);
+    onEventFullDescriptionClick(cardData);
   }
 
-  const classNames = ['calendar', booked ? 'calendar_selected' : '', sectionClass].join(' ').trim();
+  const classNames = [
+    'calendar',
+    booked ? 'calendar_selected' : '',
+    sectionClass,
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <article className={classNames}>
@@ -68,13 +83,14 @@ function CardCalendar({
             titleSelected="Отменить запись"
             color="blue"
             isDisabled={isDisabled}
-            onClick={prepareDataForConfirmationPopup}
+            onClick={changeStateOfEvent}
             isBooked={booked}
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
             {(isDisabled && 'Запись закрыта') ||
-              (!booked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
+              (!booked &&
+                `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
           </p>
           <ButtonDots handleClick={prepareDataForAboutEventPopup} />
         </div>

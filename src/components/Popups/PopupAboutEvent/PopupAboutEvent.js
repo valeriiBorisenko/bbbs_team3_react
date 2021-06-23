@@ -3,8 +3,17 @@ import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
 import { Popup, Button, TitleH2 } from './index';
 
 function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick, cardData }) {
-  const { booked, tags, title, startAt, endAt, address, contact, remainSeats, description } =
-    cardData;
+  const {
+    booked,
+    tags,
+    title,
+    startAt,
+    endAt,
+    address,
+    contact,
+    remainSeats,
+    description,
+  } = cardData;
 
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
@@ -12,11 +21,16 @@ function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick, cardData }) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    onEventSignUpClick(cardData, cardData.booked);
+    onEventSignUpClick(cardData, cardData.id, cardData.booked);
   }
 
   return (
-    <Popup type="about-event" typeContainer="calendar" isOpen={isOpen} onClose={onClose}>
+    <Popup
+      type="about-event"
+      typeContainer="calendar"
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <form className="popup__form" onSubmit={handleSubmit}>
         <div className="calendar__caption">
           <div className="calendar__info">
@@ -26,7 +40,10 @@ function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick, cardData }) {
             </p>
           </div>
           <div className="calendar__about">
-            <TitleH2 title={title} sectionClass="calendar__title calendar__title_type_popup" />
+            <TitleH2
+              title={title}
+              sectionClass="calendar__title calendar__title_type_popup"
+            />
             <p className="calendar__date">{startDateParts.day}</p>
           </div>
         </div>
@@ -60,7 +77,8 @@ function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick, cardData }) {
             <p className="calendar__place-left">
               {/* если запись закрыта, то карточка не должна быть выделенной */}
               {(isDisabled && 'Запись закрыта') ||
-                (!booked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
+                (!booked &&
+                  `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
             </p>
           </div>
         </div>

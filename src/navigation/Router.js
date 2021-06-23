@@ -25,11 +25,10 @@ import {
 
 function Router({
   handlers: {
-    bookingHandler,
+    handleEventBooking,
     handleClickPopupAboutEventOpened,
     handleClickPopupLoginOpened,
     handleClickPopupCities,
-    dataCalendar,
   },
 }) {
   const currentUser = useContext(CurrentUserContext);
@@ -38,7 +37,7 @@ function Router({
     <Switch>
       <Route exact path={MAIN_PAGE_URL}>
         <MainPage
-          onEventSignUpClick={bookingHandler}
+          onEventSignUpClick={handleEventBooking}
           onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
         />
       </Route>
@@ -47,10 +46,9 @@ function Router({
       </Route>
       <Route path={AFISHA_URL}>
         <Calendar
-          onEventSignUpClick={bookingHandler}
+          onEventSignUpClick={handleEventBooking}
           onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
           onOpenLoginPopup={handleClickPopupLoginOpened}
-          dataCalendar={dataCalendar}
         />
       </Route>
       <Route path={QUESTIONS_URL}>
@@ -61,7 +59,6 @@ function Router({
         path={PROFILE_URL}
         component={Profile}
         onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
-        eventsData={dataCalendar}
         isAuth={!!currentUser}
       />
       <Route exact path={PLACES_URL}>

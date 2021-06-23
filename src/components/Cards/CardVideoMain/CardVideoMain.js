@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { formatDuration } from '../../../utils/utils';
 import { Card, TitleH2 } from './index';
 
-function CardVideoMain({ data: { title, info, link, imageUrl, duration }, handleClick }) {
+function CardVideoMain({
+  data: { title, info, link, imageUrl, duration },
+  handleClick,
+}) {
   const { hours, minutes, seconds } = formatDuration(duration);
 
   return (
@@ -24,8 +27,16 @@ function CardVideoMain({ data: { title, info, link, imageUrl, duration }, handle
       </Card>
 
       <Card sectionClass="card-video-main__video">
-        <button className="card-video-main__button" type="button" onClick={handleClick}>
-          <img src={imageUrl} alt="Превью видео" className="card-video-main__image" />
+        <button
+          className="card-video-main__button"
+          type="button"
+          onClick={handleClick}
+        >
+          <img
+            src={imageUrl}
+            alt="Превью видео"
+            className="card-video-main__image"
+          />
           {hours > 0 ? (
             <span className="card-video-main__duration paragraph">{`${hours}:${minutes}:${seconds}`}</span>
           ) : (
