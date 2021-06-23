@@ -9,6 +9,7 @@ import {
   PageNotFound,
   Questions,
   Places,
+  Movies,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -19,6 +20,7 @@ import {
   QUESTIONS_URL,
   PROFILE_URL,
   PLACES_URL,
+  MOVIES_URL,
 } from '../config/routes';
 
 function Router({
@@ -61,6 +63,9 @@ function Router({
       />
       <Route exact path={PLACES_URL}>
         <Places openPopupCities={handleClickPopupCities} />
+      </Route>
+      <Route exact path={MOVIES_URL}>
+        <Movies />
       </Route>
       <Route path="*">
         <PageNotFound />

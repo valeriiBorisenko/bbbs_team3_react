@@ -10,10 +10,7 @@ function NavItemWithDropdown({ sectionWrapperClass, linkText }) {
         {linkText}
       </NavLink>
 
-      <DropDownMenu
-        sectionWrapperClass="menu__dropdown-list"
-        textsForLinks={['Справочник', 'Видео', 'Статьи', 'Фильмы', 'Книги']}
-      />
+      <DropDownMenu sectionWrapperClass="menu__dropdown-list" />
     </li>
   );
 }

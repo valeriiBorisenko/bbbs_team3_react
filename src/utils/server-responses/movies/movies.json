@@ -1,0 +1,77 @@
+{
+  "count": 4,
+  "next": null,
+  "previous": null,
+  "results": [
+      {
+          "id": 1,
+          "tags": [
+              {
+                  "id": 28,
+                  "name": "драма",
+                  "category": "Книги",
+                  "slug": "drama"
+              }
+          ],
+          "title": "Жутко громко и запредельно близко",
+          "info": "Василий Сигарев, Борисов-Мусотов (Россия), 2009 год",
+          "annotation": "Аннотация фильма",
+          "imageUrl": "https://picsum.photos/420/239",
+          "link": "https://youtu.be/8VzzlhOyOSI"
+      },
+      {
+          "id": 2,
+          "tags": [
+              {
+                  "id": 44,
+                  "name": "детский",
+                  "category": "Книги",
+                  "slug": "for-child"
+              },
+              {
+                  "id": 28,
+                  "name": "драма",
+                  "category": "Книги",
+                  "slug": "drama"
+              }
+          ],
+          "title": "Жизнь Кабачка",
+          "info": "Клод Баррас, мультфильм, Швейцария, Франция, 2016",
+          "annotation": "Аннотация фильма",
+          "imageUrl": "https://picsum.photos/420/239",
+          "link": "https://youtu.be/8VzzlhOyOSI"
+      },
+      {
+          "id": 3,
+          "tags": [
+              {
+                  "id": 28,
+                  "name": "драма",
+                  "category": "Книги",
+                  "slug": "drama"
+              }
+          ],
+          "title": "Волчок",
+          "info": "Василий Сигарев, Россия, 2009 год",
+          "annotation": "Аннотация фильма",
+          "imageUrl": "https://picsum.photos/420/239",
+          "link": "https://youtu.be/8VzzlhOyOSI"
+      },
+      {
+          "id": 4,
+          "tags": [
+              {
+                  "id": 28,
+                  "name": "драма",
+                  "category": "Книги",
+                  "slug": "drama"
+              }
+          ],
+          "title": "Жутко громко и запредельно близко",
+          "info": "Василий Сигарев, Борисов-Мусотов (Россия), 2009 год",
+          "annotation": "Аннотация фильма",
+          "imageUrl": "https://picsum.photos/420/239",
+          "link": "https://youtu.be/8VzzlhOyOSI"
+      }
+  ]
+}

@@ -5,6 +5,7 @@ import MainPage from './MainPage/MainPage';
 import PageNotFound from './PageNotFound/PageNotFound';
 import Questions from './Questions/Questions';
 import Places from './Places/Places';
+import Movies from './Movies/Movies';
 
 export {
   AboutUs,
@@ -14,4 +15,5 @@ export {
   PageNotFound,
   Questions,
   Places,
+  Movies,
 };
