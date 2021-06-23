@@ -2,10 +2,18 @@ import './Card.scss';
 import PropTypes from 'prop-types';
 
 function Card({ color, sectionClass, children, onClick }) {
-  const classNames = ['card', `card_color_${color}`, sectionClass].join(' ').trim();
+  const classNames = ['card', `card_color_${color}`, sectionClass]
+    .join(' ')
+    .trim();
 
   return (
-    <div className={classNames} onClick={onClick} onKeyPress={onClick} role="button" tabIndex="0">
+    <div
+      className={classNames}
+      onClick={onClick}
+      onKeyPress={onClick}
+      role="button"
+      tabIndex="0"
+    >
       {children}
     </div>
   );

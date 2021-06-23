@@ -101,7 +101,8 @@ export const repeatSchema = (idx, size, schema) => {
 
 export const questionForm = {
   before: {
-    title: 'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список',
+    title:
+      'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список',
     sectionClass: '',
   },
   after: {

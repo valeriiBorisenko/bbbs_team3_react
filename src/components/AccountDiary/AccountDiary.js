@@ -4,7 +4,14 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
-import { Card, TitleH2, CardAnnotationContainer, Rating, Caption, Button } from './index';
+import {
+  Card,
+  TitleH2,
+  CardAnnotationContainer,
+  Rating,
+  Caption,
+  Button,
+} from './index';
 
 function AccountDiary({ data, onEdit, onDelete }) {
   const { imageUrl, title, description, rate, date } = data;

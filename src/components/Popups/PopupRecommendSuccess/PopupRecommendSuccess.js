@@ -27,7 +27,8 @@ function PopupRecommendSuccess({ isOpen, onClose }) {
     >
       <div ref={animationContainer} className="popup__animation-recommend" />
       <p className="section-title popup__title_type_calendar popup__title_type_recommend-success">
-        Спасибо, мы проверим информацию, и скоро все пользователи смогут увидеть вашу рекомендацию
+        Спасибо, мы проверим информацию, и скоро все пользователи смогут увидеть
+        вашу рекомендацию
       </p>
       <div className="popup__buttons_type_calendar">
         <Button

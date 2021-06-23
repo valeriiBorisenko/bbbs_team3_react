@@ -12,7 +12,7 @@ const useClickOutside = (callback) => {
         }
       }
     },
-    [ref.current],
+    [ref.current]
   );
 
   useEffect(() => {

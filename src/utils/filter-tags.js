@@ -21,7 +21,7 @@ export const handleCheckboxBehavior = (setState, { inputValue, isChecked }) => {
         filterItem.isActive = isChecked;
       }
       return filterItem;
-    }),
+    })
   );
 };
 
@@ -34,7 +34,7 @@ export const handleRadioBehavior = (setState, { inputValue, isChecked }) => {
         filterItem.isActive = false;
       }
       return filterItem;
-    }),
+    })
   );
 };
 
@@ -47,7 +47,7 @@ export const selectOneTag = (setState, tagName) => {
         filterItem.isActive = false;
       }
       return filterItem;
-    }),
+    })
   );
 };
 
@@ -58,6 +58,6 @@ export const deselectOneTag = (setState, tagName) => {
         filterItem.isActive = false;
       }
       return filterItem;
-    }),
+    })
   );
 };

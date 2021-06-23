@@ -31,7 +31,9 @@ function PopupSuccessfully({ isOpen, onClose, cardData }) {
       sectionClass="popup__container_success"
     >
       <div ref={animationContainer} className="popup__animation-success" />
-      <p className="section-title popup__title_type_calendar">Вы записаны на мероприятие</p>
+      <p className="section-title popup__title_type_calendar">
+        Вы записаны на мероприятие
+      </p>
       <TitleH2 sectionClass="popup__title_type_calendar" title={`«${title}»`} />
       <TitleH2
         sectionClass="popup__title_type_calendar"
