@@ -24,7 +24,7 @@ function Catalog() {
 
   useEffect(() => {
     const smallQuery = window.matchMedia('(max-width: 1439px)');
-    const largeQuery = window.matchMedia('(max-width: 1919px)');
+    const largeQuery = window.matchMedia('(max-width: 1640px)');
 
     const listener = () => {
       if (smallQuery.matches) {
