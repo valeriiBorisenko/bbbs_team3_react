@@ -10,6 +10,7 @@ import {
   ProfileForm,
   ProfileDiary,
   PopupDeleteDiary,
+  ButtonRound,
 } from './index';
 import Api from '../../utils/api';
 
@@ -170,13 +171,12 @@ function Profile({ onEventFullDescriptionClick }) {
           <div className="profile__diaries-container">
             <div className="profile__form-container">
               {!isFormOpen && diaries && diaries.length > 0 && (
-                <button
-                  className="profile__button-add-diary fade-in"
-                  type="button"
+                <ButtonRound
+                  sectionClass="profile__button-add-diary fade-in"
+                  color="blue"
+                  isSmall
                   onClick={openForm}
-                >
-                  Добавить встречу
-                </button>
+                />
               )}
 
               {(isFormOpen || (diaries && diaries.length === 0)) && (
