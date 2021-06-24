@@ -51,3 +51,5 @@ export const FIGURES = [
 ];
 
 export const ALL_CATEGORIES = 'Все';
+
+export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif)$/i;

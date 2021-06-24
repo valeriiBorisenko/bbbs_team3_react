@@ -21,7 +21,7 @@ function Profile({ onEventFullDescriptionClick }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formDataToEdit, setFormDataToEdit] = useState(null);
-  const [isPopupDeleteDiaryOpen, setIsPopupDeleteDiaryOpen] = useState(false);
+  const [isDeleteDiaryPopupOpen, setIsDeleteDiaryPopupOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([Api.getCalendarPageData(), Api.getBookedEvents()])
@@ -39,98 +39,99 @@ function Profile({ onEventFullDescriptionClick }) {
     Api.getProfileDiariesData().then(setDiaries).catch(console.log);
   }, []);
 
+  // работа с карточками мероприятий календаря
+  const openEventCard = (data) => {
+    onEventFullDescriptionClick(data);
+  };
+
+  // скролл контейнера с карточками мероприятий
+  const containerEvents = useSmoothHorizontalScroll({ step: 3 });
+
+  // работа с формой
   const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
     scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleOpenForm = (data) => {
-    if (!data) {
-      setIsEditMode(false);
-    }
+  const openForm = (data) => {
+    if (!data) setIsEditMode(false);
     setIsFormOpen(true);
     scrollToForm();
   };
 
-  const handleCancelForm = () => {
+  const cancelForm = () => {
     setIsFormOpen(false);
     setIsEditMode(false);
     setFormDataToEdit(null);
   };
 
-  const handleEditDiaryCard = (data) => {
+  const handleEditMode = (data) => {
     setIsEditMode(true);
     setFormDataToEdit(data);
-    handleOpenForm(data);
-  };
-
-  const handleOpenEventCard = (data) => {
-    onEventFullDescriptionClick(data);
+    openForm(data);
   };
 
   const createFormData = (data) => {
     const formData = new FormData();
     if (data.id) formData.append('id', data.id);
+    if (data.image) formData.append('image', data.image);
     formData.append('date', data.date);
-    formData.append('image', data.image);
     formData.append('place', data.place);
     formData.append('description', data.description);
     formData.append('mark', data.mark);
     return formData;
   };
 
-  const handleCreateDiary = (data) => {
+  const createDiary = (data) => {
     Api.createDiary(createFormData(data))
       .then((res) => setDiaries([res, ...diaries]))
-      .catch(console.log);
+      .catch(console.log)
+      .finally(() => cancelForm());
   };
 
-  const handleEditDiary = (data) => {
+  const editDiary = (data) => {
     Api.editDiary(data.id, createFormData(data))
       .then((res) =>
         setDiaries(() =>
           diaries.map((diary) => (diary.id === res.id ? res : diary))
         )
       )
-      .catch(console.log);
+      .catch(console.log)
+      .finally(() => cancelForm());
   };
 
-  const handleSubmitDiary = (data) => {
+  const submitDiary = (data) => {
+    // console.log(data);
     const diary = data;
     if (!diary.mark) {
       diary.mark = 'neutral';
     }
-    if (isEditMode) handleEditDiary(diary);
-    else handleCreateDiary(diary);
-    handleCancelForm();
+    if (isEditMode) editDiary(diary);
+    else createDiary(diary);
   };
 
-  // выбранная карточка дневника при открытии попапа подтверждения
+  // удаление дневника
   const [selectedDiary, setSelectedDiary] = useState({});
 
-  const handleClickPopupDeleteDiary = (diary) => {
-    setIsPopupDeleteDiaryOpen(true);
+  const openDeleteDiaryPopup = (diary) => {
+    setIsDeleteDiaryPopupOpen(true);
     setSelectedDiary(diary);
   };
 
-  const closePopupDeleteDiary = () => {
-    setIsPopupDeleteDiaryOpen(false);
+  const closeDeleteDiaryPopup = () => {
+    setIsDeleteDiaryPopupOpen(false);
   };
 
-  const handleDeleteDiary = (diary) => {
+  const deleteDiary = (diary) => {
     Api.deleteDiary(diary.id, diary)
       .then(() =>
         setDiaries(() =>
           diaries.filter((prev) => (prev.id === diary.id ? null : prev))
         )
       )
-      .catch(console.log);
-
-    closePopupDeleteDiary();
+      .catch(console.log)
+      .finally(() => closeDeleteDiaryPopup());
   };
-
-  // скролл контейнера с карточками мероприятий
-  const containerEvents = useSmoothHorizontalScroll({ step: 3 });
 
   return (
     <BasePage>
@@ -155,7 +156,7 @@ function Profile({ onEventFullDescriptionClick }) {
                 <AccountEventCard
                   key={item.id}
                   data={item}
-                  onOpen={handleOpenEventCard}
+                  onOpen={openEventCard}
                 />
               ))}
           </div>
@@ -169,7 +170,7 @@ function Profile({ onEventFullDescriptionClick }) {
                 <button
                   className="profile__button-add-diary"
                   type="button"
-                  onClick={handleOpenForm}
+                  onClick={openForm}
                 >
                   Добавить встречу
                 </button>
@@ -191,8 +192,8 @@ function Profile({ onEventFullDescriptionClick }) {
                 isEditMode={isEditMode}
                 isOpen={isFormOpen}
                 data={formDataToEdit}
-                onCancel={handleCancelForm}
-                onSubmit={handleSubmitDiary}
+                onCancel={cancelForm}
+                onSubmit={submitDiary}
               />
             </div>
 
@@ -202,18 +203,18 @@ function Profile({ onEventFullDescriptionClick }) {
                 <ProfileDiary
                   key={diary.id}
                   data={diary}
-                  onEdit={handleEditDiaryCard}
-                  onDelete={handleClickPopupDeleteDiary}
+                  onEdit={handleEditMode}
+                  onDelete={openDeleteDiaryPopup}
                 />
               ))}
           </div>
         </div>
       </section>
       <PopupDeleteDiary
-        isOpen={isPopupDeleteDiaryOpen}
+        isOpen={isDeleteDiaryPopupOpen}
         cardData={selectedDiary}
-        onClose={closePopupDeleteDiary}
-        onCardDelete={handleDeleteDiary}
+        onClose={closeDeleteDiaryPopup}
+        onCardDelete={deleteDiary}
       />
     </BasePage>
   );

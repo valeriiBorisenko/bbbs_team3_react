@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { adminUrl } from '../../config/config';
+import { regExpImages } from '../../config/constants';
 import { Card, Input, Caption, Rating, Button } from './index';
 
 function ProfileForm({
@@ -53,9 +54,11 @@ function ProfileForm({
   };
 
   const handleChangeImage = (file) => {
-    if (file) {
+    if (file && regExpImages.test(file.name)) {
       const imageUrl = URL.createObjectURL(file);
       setUserImage({ ...userImage, image: file, imageUrl });
+    } else {
+      setValue('image', null);
     }
   };
 
@@ -86,7 +89,11 @@ function ProfileForm({
   }, [isOpen, data]);
 
   return (
-    <div className={classNames}>
+    <form
+      name="addStoryForm"
+      onSubmit={handleSubmit(onFormSubmit)}
+      className={classNames}
+    >
       <Card sectionClass="profile-form__photo-upload">
         {userImage && (
           <img
@@ -105,9 +112,10 @@ function ProfileForm({
             <input
               id="input-upload"
               type="file"
+              accept="image/png, image/jpeg"
               name="image"
               className="profile-form__input-file"
-              {...register('image')}
+              {...register('image', { required: 'Загрузить фото' })}
               onChange={(evt) => handleChangeImage(evt.target.files[0])}
             />
             <span className="profile-form__pseudo-button" />
@@ -119,12 +127,8 @@ function ProfileForm({
         </div>
       </Card>
 
-      <Card sectionClass="profile-form__form-container">
-        <form
-          name="addStoryForm"
-          className="profile-form__form"
-          onSubmit={handleSubmit(onFormSubmit)}
-        >
+      <Card sectionClass="profile-form__text-container">
+        <div className="profile-form__texts">
           <Input
             type="text"
             name="place"
@@ -208,9 +212,9 @@ function ProfileForm({
               />
             </div>
           </div>
-        </form>
+        </div>
       </Card>
-    </div>
+    </form>
   );
 }
 
