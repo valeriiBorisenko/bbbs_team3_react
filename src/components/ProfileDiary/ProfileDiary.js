@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
+import { adminUrl } from '../../config/config';
 import {
   Card,
   TitleH2,
@@ -13,7 +14,7 @@ import {
 } from './index';
 
 function ProfileDiary({ data, onEdit, onDelete }) {
-  const { imageUrl, place, description, mark, date } = data;
+  const { image, place, description, mark, date } = data;
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
@@ -33,7 +34,11 @@ function ProfileDiary({ data, onEdit, onDelete }) {
   return (
     <div className="card-container profile-diary">
       <Card sectionClass="profile-diary__image-container">
-        <img className="profile-diary__image" src={imageUrl} alt={place} />
+        <img
+          className="profile-diary__image"
+          src={`${adminUrl}/media/${image}`}
+          alt={place}
+        />
       </Card>
       <Card sectionClass="profile-diary__date-container">
         <div className="profile-diary__text-wrap">
@@ -91,7 +96,7 @@ function ProfileDiary({ data, onEdit, onDelete }) {
 
 ProfileDiary.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  imageUrl: PropTypes.string,
+  image: PropTypes.string,
   description: PropTypes.string,
   place: PropTypes.string,
   mark: PropTypes.string,
@@ -102,7 +107,7 @@ ProfileDiary.propTypes = {
 
 ProfileDiary.defaultProps = {
   data: {},
-  imageUrl: '',
+  image: '',
   description: '',
   place: '',
   mark: 'neutral',

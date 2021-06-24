@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Profile.scss';
@@ -26,10 +25,12 @@ function Profile({ onEventFullDescriptionClick }) {
 
   useEffect(() => {
     Promise.all([Api.getCalendarPageData(), Api.getBookedEvents()])
-      .then(([calendarData, bookedEvents]) => {
-        const a = bookedEvents.map((e) => e.event);
-        const b = calendarData.filter((e) => a.includes(e.id));
-        setEvents(b);
+      .then(([calendarData, participantsData]) => {
+        const eventIds = participantsData.map((event) => event.event);
+        const bookedEvents = calendarData.filter((event) =>
+          eventIds.includes(event.id)
+        );
+        setEvents(bookedEvents);
       })
       .catch(console.log);
   }, []);
@@ -67,51 +68,60 @@ function Profile({ onEventFullDescriptionClick }) {
     onEventFullDescriptionClick(data);
   };
 
-  const handleAddDiary = (data) => {
-    if (!isEditMode) {
-      const diary = data;
-      if (diary.imageUrl.length === 0) {
-        // дефолтная картинка, если фото не загружено
-        diary.imageUrl =
-          'https://i.pinimg.com/originals/f0/e2/53/f0e253b6dbbb809145441ca8fa08b7b7.jpg';
-      }
-      if (!diary.mark) {
-        diary.mark = 'neutral';
-      }
-      Api.createDiary(data)
-        .then((res) => setDiaries([res, ...diaries]))
-        .catch(console.log);
-    }
-    if (isEditMode) {
-      Api.editDiary(data)
-        .then((res) =>
-          setDiaries(() =>
-            diaries.map((diary) => (diary.id === res.id ? res : diary))
-          )
-        )
-        .catch(console.log);
-    }
+  const createFormData = (data) => {
+    const formData = new FormData();
+    if (data.id) formData.append('id', data.id);
+    formData.append('date', data.date);
+    formData.append('image', data.image);
+    formData.append('place', data.place);
+    formData.append('description', data.description);
+    formData.append('mark', data.mark);
+    return formData;
+  };
 
+  const handleCreateDiary = (data) => {
+    Api.createDiary(createFormData(data))
+      .then((res) => setDiaries([res, ...diaries]))
+      .catch(console.log);
+  };
+
+  const handleEditDiary = (data) => {
+    Api.editDiary(data.id, createFormData(data))
+      .then((res) =>
+        setDiaries(() =>
+          diaries.map((diary) => (diary.id === res.id ? res : diary))
+        )
+      )
+      .catch(console.log);
+  };
+
+  const handleSubmitDiary = (data) => {
+    const diary = data;
+    if (!diary.mark) {
+      diary.mark = 'neutral';
+    }
+    if (isEditMode) handleEditDiary(diary);
+    else handleCreateDiary(diary);
     handleCancelForm();
   };
 
   // выбранная карточка дневника при открытии попапа подтверждения
-  const [selectedDiaryCard, setSelectedDiaryCard] = useState({});
+  const [selectedDiary, setSelectedDiary] = useState({});
 
-  const handleClickPopupDeleteDiary = (card) => {
+  const handleClickPopupDeleteDiary = (diary) => {
     setIsPopupDeleteDiaryOpen(true);
-    setSelectedDiaryCard(card);
+    setSelectedDiary(diary);
   };
 
   const closePopupDeleteDiary = () => {
     setIsPopupDeleteDiaryOpen(false);
   };
 
-  const handleCardDelete = (card) => {
-    Api.deleteDiary(card)
+  const handleDeleteDiary = (diary) => {
+    Api.deleteDiary(diary.id, diary)
       .then(() =>
         setDiaries(() =>
-          diaries.filter((diary) => (diary.id === card.id ? null : diary))
+          diaries.filter((prev) => (prev.id === diary.id ? null : prev))
         )
       )
       .catch(console.log);
@@ -182,7 +192,7 @@ function Profile({ onEventFullDescriptionClick }) {
                 isOpen={isFormOpen}
                 data={formDataToEdit}
                 onCancel={handleCancelForm}
-                onSubmit={handleAddDiary}
+                onSubmit={handleSubmitDiary}
               />
             </div>
 
@@ -201,9 +211,9 @@ function Profile({ onEventFullDescriptionClick }) {
       </section>
       <PopupDeleteDiary
         isOpen={isPopupDeleteDiaryOpen}
-        cardData={selectedDiaryCard}
+        cardData={selectedDiary}
         onClose={closePopupDeleteDiary}
-        onCardDelete={handleCardDelete}
+        onCardDelete={handleDeleteDiary}
       />
     </BasePage>
   );

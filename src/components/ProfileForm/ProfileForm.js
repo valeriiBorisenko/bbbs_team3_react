@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
+import { adminUrl } from '../../config/config';
 import { Card, Input, Caption, Rating, Button } from './index';
 
 function ProfileForm({
@@ -41,7 +42,7 @@ function ProfileForm({
     if (userImage) {
       inputFields = {
         ...inputFields,
-        imageUrl: userImage.imageUrl,
+        image: userImage.image,
       };
     }
     onSubmit(inputFields);
@@ -54,7 +55,7 @@ function ProfileForm({
   const handleChangeImage = (file) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setUserImage({ ...userImage, imageUrl });
+      setUserImage({ ...userImage, image: file, imageUrl });
     }
   };
 
@@ -67,7 +68,7 @@ function ProfileForm({
     if (isOpen) {
       if (data) {
         setInputValues({ ...inputValues, ...data });
-        setUserImage({ imageUrl: data.imageUrl });
+        setUserImage({ image: data.image });
         setValue('place', data.place);
         setValue('date', parseDate(data.date));
         setValue('description', data.description);
@@ -89,7 +90,7 @@ function ProfileForm({
       <Card sectionClass="profile-form__photo-upload">
         {userImage && (
           <img
-            src={userImage.imageUrl}
+            src={userImage.imageUrl || `${adminUrl}/media/${userImage.image}`}
             alt={data?.place}
             className="profile-form__uploaded-image"
           />
@@ -104,9 +105,9 @@ function ProfileForm({
             <input
               id="input-upload"
               type="file"
-              name="imageUrl"
+              name="image"
               className="profile-form__input-file"
-              {...register('imageUrl')}
+              {...register('image')}
               onChange={(evt) => handleChangeImage(evt.target.files[0])}
             />
             <span className="profile-form__pseudo-button" />

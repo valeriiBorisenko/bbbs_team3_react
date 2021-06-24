@@ -86,23 +86,27 @@ export default class Api {
   static createDiary(data) {
     //! подключено к бекенду
     return axios
-      .post(`${baseURL}${apiUrl}/profile/diaries/`, data)
+      .post(`${baseURL}${apiUrl}/profile/diaries/`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then((response) => response.data)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  static editDiary(data) {
+  static editDiary(diaryId, data) {
     //! подключено к бекенду
     return axios
-      .patch(`${baseURL}${apiUrl}/profile/diaries/${data.id}/`, data)
+      .patch(`${baseURL}${apiUrl}/profile/diaries/${diaryId}/`, data)
       .then((response) => response.data)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  static deleteDiary(data) {
+  static deleteDiary(diaryId, data) {
     //! подключено к бекенду
     return axios
-      .delete(`${baseURL}${apiUrl}/profile/diaries/${data.id}/`, data)
+      .delete(`${baseURL}${apiUrl}/profile/diaries/${diaryId}/`, data)
       .then((response) => response.data)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
