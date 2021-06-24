@@ -21,12 +21,14 @@ function CardsSection({ pageCount, pageData, pageNumber, setPageNumber }) {
           />
         ))}
       </section>
-      <Paginate
-        sectionClass="cards-section__pagination"
-        pageCount={pageCount}
-        value={pageNumber}
-        onChange={setPageNumber}
-      />
+      {pageCount > 1 && (
+        <Paginate
+          sectionClass="cards-section__pagination"
+          pageCount={pageCount}
+          value={pageNumber}
+          onChange={setPageNumber}
+        />
+      )}
     </>
   );
 }
