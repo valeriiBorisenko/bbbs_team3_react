@@ -1,0 +1,21 @@
+@import '../../../styles/utils.scss';
+
+.rights__link {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-self: auto;
+  text-align: center;
+  flex: 1;
+  text-decoration: none;
+
+  &::before {
+    content: '';
+    padding-bottom: 100%;
+  }
+}
+
+.rights__rubric {
+  margin-top: 17px;
+  align-self: center;
+}
