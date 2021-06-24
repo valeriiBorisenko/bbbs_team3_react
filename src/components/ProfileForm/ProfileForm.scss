@@ -163,7 +163,7 @@
 
 @include atTabletL {
   .profile-form {
-    &__form {
+    &__texts {
       grid-template-columns: 1fr;
     }
 
@@ -197,7 +197,7 @@
 
 @include atMobile {
   .profile-form {
-    &__form-container {
+    &__text-container {
       padding: 30px 15px;
     }
 

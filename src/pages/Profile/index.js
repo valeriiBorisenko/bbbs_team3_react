@@ -1,5 +1,5 @@
 import BasePage from '../../layout/BasePage';
-import AccountEventCard from '../../components/Cards/AccountEventCard/AccountEventCard';
+import ProfileEventCard from '../../components/Cards/ProfileEventCard/ProfileEventCard';
 import TitleH2 from '../../components/utils/TitleH2/TitleH2';
 import ProfileForm from '../../components/ProfileForm/ProfileForm';
 import ProfileDiary from '../../components/ProfileDiary/ProfileDiary';
@@ -7,7 +7,7 @@ import PopupDeleteDiary from '../../components/Popups/PopupDeleteDiary/PopupDele
 
 export {
   BasePage,
-  AccountEventCard,
+  ProfileEventCard,
   TitleH2,
   ProfileForm,
   ProfileDiary,

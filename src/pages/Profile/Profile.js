@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useSmoothHorizontalScroll, useScrollToTop } from '../../hooks/index';
 import {
   BasePage,
-  AccountEventCard,
+  ProfileEventCard,
   TitleH2,
   ProfileForm,
   ProfileDiary,
@@ -153,7 +153,7 @@ function Profile({ onEventFullDescriptionClick }) {
             {events &&
               events.length > 0 &&
               events.map((item) => (
-                <AccountEventCard
+                <ProfileEventCard
                   key={item.id}
                   data={item}
                   onOpen={openEventCard}
