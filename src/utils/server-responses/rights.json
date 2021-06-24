@@ -1,0 +1,275 @@
+{ 
+  "count": 16,
+  "next": "http://example.com",
+  "previous": "http://example.com",
+  "results": [
+    {
+      "id": 1,
+      "tags": [
+        {
+          "id": 1,
+          "name": "Книги",
+          "category": "Книги",
+          "slug": "string"
+        },
+        {
+          "id": 2,
+          "name": "Пенсии",
+          "category": "Пенсии",
+          "slug": "string"
+        },
+        {
+          "id": 3,
+          "name": "Образование",
+          "category": "Образование",
+          "slug": "string"
+        }
+      ],
+      "title": "string",
+      "description": "string",
+      "text": "string",
+      "color": "yellow",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 2,
+      "tags": [
+        {
+          "id": 2,
+          "name": "string",
+          "category": "Пенсии",
+          "slug": "string"
+        }
+      ],
+      "title": "string",
+      "description": "string",
+      "text": "string",
+      "color": "green",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 3,
+      "tags": [
+        {
+          "id": 3,
+          "name": "string",
+          "category": "Образование",
+          "slug": "string"
+        }
+      ],
+      "title": "string",
+      "description": "string",
+      "text": "string",
+      "color": "yellow",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 4,
+      "tags": [
+        {
+          "id": 4,
+          "name": "Транспорт",
+          "category": "Транспорт",
+          "slug": "string"
+        }
+      ],
+      "title": "string",
+      "description": "string",
+      "text": "string",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 5,
+      "tags": [
+        {
+          "id": 5,
+          "name": "Трудоустройство",
+          "category": "Трудоустройство",
+          "slug": "string"
+        }
+      ],
+      "title": "string",
+      "description": "string",
+      "text": "string",
+      "color": "blue",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 6,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 7,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 8,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 9,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 10,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 11,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 12,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 13,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 14,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 15,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    },
+    {
+      "id": 16,
+      "tags": [
+        {
+          "id": 1,
+          "name": "string",
+          "category": "Книги",
+          "slug": "string"
+        }
+      ],
+      "title": "title",
+      "description": "description",
+      "text": "text",
+      "color": "pink",
+      "imageUrl": "http://example.com"
+    }
+  ]
+}
