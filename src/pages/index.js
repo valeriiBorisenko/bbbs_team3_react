@@ -6,6 +6,7 @@ import PageNotFound from './PageNotFound/PageNotFound';
 import Questions from './Questions/Questions';
 import Places from './Places/Places';
 import Movies from './Movies/Movies';
+import ReadAndWatching from './ReadAndWatching/ReadAndWatching';
 
 export {
   AboutUs,
@@ -16,4 +17,5 @@ export {
   Questions,
   Places,
   Movies,
+  ReadAndWatching,
 };

@@ -10,6 +10,7 @@ import {
   Questions,
   Places,
   Movies,
+  ReadAndWatching,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -21,6 +22,7 @@ import {
   PROFILE_URL,
   PLACES_URL,
   MOVIES_URL,
+  READANDWATCHING_URL,
 } from '../config/routes';
 
 function Router({
@@ -66,6 +68,9 @@ function Router({
       </Route>
       <Route exact path={MOVIES_URL}>
         <Movies />
+      </Route>
+      <Route exact path={READANDWATCHING_URL}>
+        <ReadAndWatching />
       </Route>
       <Route path="*">
         <PageNotFound />
