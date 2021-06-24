@@ -59,16 +59,20 @@ function Profile({ onEventFullDescriptionClick }) {
     scrollToForm();
   };
 
-  const cancelForm = () => {
+  const closeForm = () => {
     setIsFormOpen(false);
     setIsEditMode(false);
     setFormDataToEdit(null);
   };
 
   const handleEditMode = (data) => {
-    setIsEditMode(true);
-    setFormDataToEdit(data);
-    openForm(data);
+    setIsFormOpen(false);
+    //! необходима небольшая задержка перед ререндером
+    setTimeout(() => {
+      setIsEditMode(true);
+      setFormDataToEdit(data);
+      openForm(data);
+    }, 100);
   };
 
   const createFormData = (data) => {
@@ -86,7 +90,7 @@ function Profile({ onEventFullDescriptionClick }) {
     Api.createDiary(createFormData(data))
       .then((res) => setDiaries([res, ...diaries]))
       .catch(console.log)
-      .finally(() => cancelForm());
+      .finally(() => closeForm());
   };
 
   const editDiary = (data) => {
@@ -97,11 +101,10 @@ function Profile({ onEventFullDescriptionClick }) {
         )
       )
       .catch(console.log)
-      .finally(() => cancelForm());
+      .finally(() => closeForm());
   };
 
   const submitDiary = (data) => {
-    // console.log(data);
     const diary = data;
     if (!diary.mark) {
       diary.mark = 'neutral';
@@ -166,9 +169,9 @@ function Profile({ onEventFullDescriptionClick }) {
           <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
           <div className="profile__diaries-container">
             <div className="profile__form-container">
-              {!isFormOpen && (
+              {!isFormOpen && diaries && diaries.length > 0 && (
                 <button
-                  className="profile__button-add-diary"
+                  className="profile__button-add-diary fade-in"
                   type="button"
                   onClick={openForm}
                 >
@@ -176,25 +179,24 @@ function Profile({ onEventFullDescriptionClick }) {
                 </button>
               )}
 
-              {!isEditMode && isFormOpen && (
-                <TitleH2
-                  sectionClass="profile__title"
-                  title="Составьте историю вашей дружбы с младшим. Эта страница доступна только вам."
-                />
+              {(isFormOpen || (diaries && diaries.length === 0)) && (
+                <>
+                  {!isEditMode && (
+                    <TitleH2
+                      sectionClass="profile__title fade-in"
+                      title="Составьте историю вашей дружбы с младшим. Эта страница доступна только вам."
+                    />
+                  )}
+                  <ProfileForm
+                    sectionClass="profile__diary-form fade-in"
+                    isEditMode={isEditMode}
+                    isOpen={isFormOpen}
+                    data={formDataToEdit}
+                    onClose={closeForm}
+                    onSubmit={submitDiary}
+                  />
+                </>
               )}
-
-              <ProfileForm
-                sectionClass={`${
-                  isFormOpen
-                    ? 'profile__diary-form'
-                    : 'profile__diary-form_hidden'
-                }`}
-                isEditMode={isEditMode}
-                isOpen={isFormOpen}
-                data={formDataToEdit}
-                onCancel={cancelForm}
-                onSubmit={submitDiary}
-              />
             </div>
 
             {diaries &&

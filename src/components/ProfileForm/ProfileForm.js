@@ -14,7 +14,7 @@ function ProfileForm({
   sectionClass,
   isEditMode,
   isOpen,
-  onCancel,
+  onClose,
   onSubmit,
 }) {
   const classNames = ['card-container', 'profile-form', sectionClass]
@@ -24,6 +24,7 @@ function ProfileForm({
   const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
   const [userImage, setUserImage] = useState(null);
+  const [fileUploaded, setFileUploaded] = useState(false);
 
   const {
     register,
@@ -40,13 +41,14 @@ function ProfileForm({
       mark: inputValues.mark,
       id: inputValues.id,
     };
-    if (userImage) {
+    if (fileUploaded && userImage.image) {
       inputFields = {
         ...inputFields,
         image: userImage.image,
       };
     }
     onSubmit(inputFields);
+    setFileUploaded(false);
   };
 
   const handleChangeRating = (value) => {
@@ -57,9 +59,8 @@ function ProfileForm({
     if (file && regExpImages.test(file.name)) {
       const imageUrl = URL.createObjectURL(file);
       setUserImage({ ...userImage, image: file, imageUrl });
-    } else {
-      setValue('image', null);
-    }
+      setFileUploaded(true);
+    } else setValue('image', null);
   };
 
   useEffect(() => {
@@ -76,6 +77,7 @@ function ProfileForm({
         setValue('date', parseDate(data.date));
         setValue('description', data.description);
         setValue('mark', data.mark);
+        console.log(data);
       }
     } else {
       setInputValues({});
@@ -84,6 +86,7 @@ function ProfileForm({
         place: '',
         date: '',
         description: '',
+        mark: '',
       });
     }
   }, [isOpen, data]);
@@ -109,15 +112,26 @@ function ProfileForm({
           }`}
         >
           <label htmlFor="input-upload" className="profile-form__label-file">
-            <input
-              id="input-upload"
-              type="file"
-              accept="image/png, image/jpeg"
-              name="image"
-              className="profile-form__input-file"
-              {...register('image', { required: 'Загрузить фото' })}
-              onChange={(evt) => handleChangeImage(evt.target.files[0])}
-            />
+            {isEditMode ? (
+              <input
+                id="input-upload"
+                type="file"
+                accept="image/png, image/jpeg"
+                name="image"
+                className="profile-form__input-file"
+                onChange={(evt) => handleChangeImage(evt.target.files[0])}
+              />
+            ) : (
+              <input
+                id="input-upload"
+                type="file"
+                accept="image/png, image/jpeg"
+                name="image"
+                className="profile-form__input-file"
+                {...register('image', { required: 'Загрузить фото' })}
+                onChange={(evt) => handleChangeImage(evt.target.files[0])}
+              />
+            )}
             <span className="profile-form__pseudo-button" />
           </label>
           <Caption
@@ -170,7 +184,7 @@ function ProfileForm({
                 onClick={handleChangeRating}
                 value="good"
                 sectionClass="profile-form__rating"
-                checked={inputValues?.mark === 'good'}
+                checked={data?.mark === 'good'}
               />
               <Rating
                 type="radio"
@@ -179,7 +193,7 @@ function ProfileForm({
                 onClick={handleChangeRating}
                 value="neutral"
                 sectionClass="profile-form__rating"
-                checked={inputValues?.mark === 'neutral'}
+                checked={data?.mark === 'neutral'}
               />
               <Rating
                 type="radio"
@@ -188,7 +202,7 @@ function ProfileForm({
                 onClick={handleChangeRating}
                 value="bad"
                 sectionClass="profile-form__rating"
-                checked={inputValues?.mark === 'bad'}
+                checked={data?.mark === 'bad'}
               />
               <Caption
                 title={caption}
@@ -200,7 +214,7 @@ function ProfileForm({
                 title={`${isEditMode ? 'Отмена' : 'Удалить'}`}
                 color="gray-borderless"
                 sectionClass="profile-form__button_el_delete"
-                onClick={onCancel}
+                onClick={onClose}
               />
               <Button
                 title={`${isEditMode ? 'Сохранить' : 'Добавить'}`}
@@ -221,7 +235,7 @@ function ProfileForm({
 ProfileForm.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   sectionClass: PropTypes.string,
-  onCancel: PropTypes.func,
+  onClose: PropTypes.func,
   isOpen: PropTypes.bool,
   isEditMode: PropTypes.bool,
   onSubmit: PropTypes.func,
@@ -230,7 +244,7 @@ ProfileForm.propTypes = {
 ProfileForm.defaultProps = {
   data: {},
   sectionClass: '',
-  onCancel: () => {},
+  onClose: () => {},
   isOpen: false,
   isEditMode: false,
   onSubmit: () => {},
