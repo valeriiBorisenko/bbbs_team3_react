@@ -77,7 +77,6 @@ function ProfileForm({
         setValue('date', parseDate(data.date));
         setValue('description', data.description);
         setValue('mark', data.mark);
-        console.log(data);
       }
     } else {
       setInputValues({});
