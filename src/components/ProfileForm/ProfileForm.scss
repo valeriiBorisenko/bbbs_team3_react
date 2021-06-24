@@ -27,8 +27,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: .3s ease;
-    background-color: rgba(255, 255, 255, .8);
   
     &_hidden {
       opacity: 0;
@@ -44,10 +42,6 @@
     display: inline-block;
     position: relative;
     margin: 0 auto;
-  
-    &:hover {
-      cursor: pointer;
-    }
   }
 
   &__input-file {
@@ -60,13 +54,21 @@
 
   &__pseudo-button {
     display: inline-block;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 1px solid $lightGray;
-    background-image: url(../../assets/plus-icon_gray.svg);
-    background-repeat: no-repeat;
-    background-position: center;
+
+    &_error {
+      border: 1px solid $error;
+      background-image: url(../../assets/error-cross.svg);
+    }
+  }
+
+  &__input-upload_hidden .profile-form__pseudo-button {
+    border: 1px solid $background;
+    background-image: url(../../assets/black-cross.svg);
+    background-color: rgba($background, .5);
+
+    &:hover {
+      background-color: rgba($background, .9);
+    }
   }
 
   &__text-container {
@@ -87,6 +89,14 @@
     font-size: 15px;
     line-height: 1.27;
     margin-top: 15px;
+
+    &_error {
+      color: $error;
+    }
+  }
+
+  &__input-upload_hidden .profile-form__caption {
+    display: none;
   }
 
   &__input_el_date:not(:focus):not(.has-value):before {

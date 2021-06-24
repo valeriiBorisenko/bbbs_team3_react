@@ -7,7 +7,7 @@ import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { adminUrl } from '../../config/config';
 import { regExpImages } from '../../config/constants';
-import { Card, Input, Caption, Rating, Button } from './index';
+import { Card, Input, Caption, Rating, Button, ButtonRound } from './index';
 
 function ProfileForm({
   data,
@@ -131,11 +131,19 @@ function ProfileForm({
                 onChange={(evt) => handleChangeImage(evt.target.files[0])}
               />
             )}
-            <span className="profile-form__pseudo-button" />
+            <ButtonRound
+              sectionClass={`profile-form__pseudo-button ${
+                errors?.image ? 'profile-form__pseudo-button_error' : ''
+              }`}
+              color={`${errors?.image ? 'error' : 'lightGray'}`}
+              isSpan
+            />
           </label>
           <Caption
             title="Загрузить фото"
-            sectionClass="profile-form__caption"
+            sectionClass={`profile-form__caption ${
+              errors?.image ? 'profile-form__caption_error' : ''
+            }`}
           />
         </div>
       </Card>
