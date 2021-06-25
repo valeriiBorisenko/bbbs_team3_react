@@ -4,6 +4,7 @@ export const ABOUT_US_URL = '/about-us';
 export const QUESTIONS_URL = '/questions';
 export const PROFILE_URL = '/profile';
 export const PLACES_URL = '/places';
+export const RIGHTS_URL = '/rights';
 export const READANDWATCHING_URL = '/read-and-watchig';
 export const CATALOG_URL = '/catalog';
 export const VIDEO_URL = '/video';
