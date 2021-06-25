@@ -2,15 +2,15 @@ import PropTypes from 'prop-types';
 import NavItem from '../NavItem/NavItem';
 import './DropDownMenu.scss';
 
-function DropDownMenu({ sectionWrapperClass, textsForLinks }) {
+function DropDownMenu({ sectionWrapperClass, links }) {
   return (
     <ul className={sectionWrapperClass}>
-      {textsForLinks.map((text) => (
+      {links.map(({ text, link }) => (
         <NavItem
           key={text}
           sectionWrapperClass="menu__dropdown-list-item"
           sectionLinkClass="link menu__dropdown-link"
-          href="#"
+          href={link}
           linkText={text}
         />
       ))}
@@ -20,7 +20,7 @@ function DropDownMenu({ sectionWrapperClass, textsForLinks }) {
 
 DropDownMenu.propTypes = {
   sectionWrapperClass: PropTypes.string.isRequired,
-  textsForLinks: PropTypes.arrayOf(PropTypes.string).isRequired,
+  links: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default DropDownMenu;

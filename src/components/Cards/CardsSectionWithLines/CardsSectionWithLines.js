@@ -2,7 +2,12 @@ import PropTypes from 'prop-types';
 import './CardsSectionWithLines.scss';
 import Paginate from '../../utils/Paginate/Paginate';
 
-function CardsSectionWithLines({ pageCount, children, pageNumber, setPageNumber }) {
+function CardsSectionWithLines({
+  pageCount,
+  children,
+  pageNumber,
+  setPageNumber,
+}) {
   return (
     <>
       <section className="cards-section">

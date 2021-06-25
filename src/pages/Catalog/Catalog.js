@@ -17,11 +17,13 @@ function Catalog() {
   useEffect(() => {
     setIsLoading(true);
     const offset = pageSize * pageNumber;
-    Api.getCatalogPageData({ limit: pageSize, offset }).then(({ results, count }) => {
-      setCatalogPageData(results);
-      setPageCount(Math.ceil(count / pageSize));
-      setIsLoading(false);
-    });
+    Api.getCatalogPageData({ limit: pageSize, offset }).then(
+      ({ results, count }) => {
+        setCatalogPageData(results);
+        setPageCount(Math.ceil(count / pageSize));
+        setIsLoading(false);
+      }
+    );
   }, [pageSize, pageNumber]);
 
   useEffect(() => {

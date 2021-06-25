@@ -7,4 +7,13 @@ import Catalog from './Catalog/Catalog';
 import Questions from './Questions/Questions';
 import Places from './Places/Places';
 
-export { AboutUs, Profile, Calendar, MainPage, PageNotFound, Questions, Places, Catalog };
+export {
+  AboutUs,
+  Profile,
+  Calendar,
+  MainPage,
+  PageNotFound,
+  Questions,
+  Places,
+  Catalog,
+};
