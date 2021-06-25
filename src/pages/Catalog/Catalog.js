@@ -25,7 +25,7 @@ function Catalog() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1439px)');
+    const smallQuery = window.matchMedia('(max-width: 1399px)');
     const largeQuery = window.matchMedia('(max-width: 1640px)');
 
     const listener = () => {
