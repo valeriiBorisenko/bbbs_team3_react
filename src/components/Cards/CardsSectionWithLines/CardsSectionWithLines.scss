@@ -1,0 +1,81 @@
+@import './styles/utils.scss';
+
+.cards-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
+  gap: 0 30px;
+
+  &__line {
+    grid-column: 1 / -1;
+    background: $black;
+
+    &:nth-of-type(1) {
+      grid-row-start: first-line;
+    }
+
+    &:nth-of-type(2) {
+      grid-row-start: second-line;
+    }
+
+    &:nth-of-type(3) {
+      grid-row-start: third-line;
+    }
+  }
+
+  &__pagination {
+    margin: 90px auto 70px;
+  }
+
+  &__item {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+}
+
+@include atDesktop1400 {
+  .cards-section {
+    grid-template-columns: repeat(2, minmax(290px, 1fr));
+  }
+}
+
+@include atDesktop1199 {
+  .cards-section {
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    grid-template-rows: max-content [third-line] 1px max-content;
+
+    &__line {
+      &:nth-of-type(-n + 2) {
+        display: none;
+      }
+    }
+  }
+}
+
+@include atDesktop1024 {
+  .cards-section {
+    padding-top: 50px;
+    grid-template-rows: max-content [third-line] 1px max-content;
+    gap: 0 30px;
+  }
+}
+
+@include atTabletL {
+  .cards-section {
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
+    gap: 0 30px;
+
+    &__line {
+      &:nth-of-type(-n + 2) {
+        display: block;
+      }
+    }
+  }
+}
+
+@include atMobile {
+  .cards-section {
+    padding-top: 30px;
+  }
+}

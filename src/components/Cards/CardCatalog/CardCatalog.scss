@@ -1,0 +1,39 @@
+@import './styles/utils.scss';
+
+.card-catalog {
+  width: 370px;
+  margin-left: auto;
+  margin-right: auto;
+
+  &__title {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  &__image {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  &_type_shaped {
+    flex-direction: row;
+    align-items: unset;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    object-fit: cover;
+    height: 370px;
+  }
+}
+
+@include atDesktop1024 {
+  .card-catalog {
+    width: 290px;
+
+    &_type_shaped {
+      margin: 0 auto;
+      height: 290px;
+    }
+  }
+}

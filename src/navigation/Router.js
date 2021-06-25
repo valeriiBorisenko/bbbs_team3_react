@@ -7,6 +7,7 @@ import {
   Calendar,
   MainPage,
   PageNotFound,
+  Catalog,
   Questions,
   Places,
   Movies,
@@ -19,10 +20,11 @@ import {
   ABOUT_US_URL,
   AFISHA_URL,
   QUESTIONS_URL,
-  PROFILE_URL,
   PLACES_URL,
   MOVIES_URL,
   READANDWATCHING_URL,
+  CATALOG_URL,
+  PROFILE_URL,
 } from '../config/routes';
 
 function Router({
@@ -71,6 +73,8 @@ function Router({
       </Route>
       <Route exact path={READANDWATCHING_URL}>
         <ReadAndWatching />
+      <Route exact path={CATALOG_URL}>
+        <Catalog openPopupCities={handleClickPopupCities} />
       </Route>
       <Route path="*">
         <PageNotFound />
