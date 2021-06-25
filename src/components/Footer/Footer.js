@@ -5,6 +5,7 @@ import {
   ABOUT_US_URL,
   QUESTIONS_URL,
   PLACES_URL,
+  READANDWATCHING_URL,
 } from '../../config/routes';
 import { footerLogoPath, NavItem } from './index';
 
@@ -85,7 +86,7 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/"
+            href={READANDWATCHING_URL}
             linkText="читать и смотреть"
           />
           {/* права детей */}
