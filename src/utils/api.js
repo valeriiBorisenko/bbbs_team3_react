@@ -111,6 +111,15 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  // работа со страницей справочника
+  static getCatalogPageData({ limit, offset }) {
+    return axios
+      .get(`${baseURL}${apiUrl}/catalog/`, {
+        params: { limit, offset },
+      })
+      .then((response) => response.data);
+  }
+
   // работа со странице вопросов
   static getQuestionsPageData() {
     return axios

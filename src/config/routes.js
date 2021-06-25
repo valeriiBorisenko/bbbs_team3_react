@@ -4,3 +4,4 @@ export const ABOUT_US_URL = '/about-us';
 export const QUESTIONS_URL = '/questions';
 export const PROFILE_URL = '/profile';
 export const PLACES_URL = '/places';
+export const CATALOG_URL = '/catalog';
