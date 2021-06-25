@@ -1,25 +1,15 @@
 import PropTypes from 'prop-types';
-import CardCatalog from '../CardCatalog/CardCatalog';
-import './CardsSection.scss';
-import { FIGURES } from '../../../config/constants';
+import './CardsSectionWithLines.scss';
 import Paginate from '../../utils/Paginate/Paginate';
 
-function CardsSection({ pageCount, pageData, pageNumber, setPageNumber }) {
+function CardsSectionWithLines({ pageCount, children, pageNumber, setPageNumber }) {
   return (
     <>
       <section className="cards-section">
         <div className="cards-section__line" />
         <div className="cards-section__line" />
         <div className="cards-section__line" />
-        {pageData.map((item, i) => (
-          <CardCatalog
-            sectionClass="cards-section__item"
-            key={item.id}
-            title={item.title}
-            image={item.imageUrl}
-            shape={FIGURES[i % FIGURES.length]}
-          />
-        ))}
+        {children}
       </section>
       {pageCount > 1 && (
         <Paginate
@@ -33,18 +23,18 @@ function CardsSection({ pageCount, pageData, pageNumber, setPageNumber }) {
   );
 }
 
-CardsSection.propTypes = {
+CardsSectionWithLines.propTypes = {
   pageCount: PropTypes.number,
-  pageData: PropTypes.arrayOf(PropTypes.object),
+  children: PropTypes.node,
   pageNumber: PropTypes.number,
   setPageNumber: PropTypes.func,
 };
 
-CardsSection.defaultProps = {
+CardsSectionWithLines.defaultProps = {
   pageCount: 0,
-  pageData: [],
+  children: null,
   pageNumber: 0,
   setPageNumber: () => {},
 };
 
-export default CardsSection;
+export default CardsSectionWithLines;

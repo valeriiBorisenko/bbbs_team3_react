@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { BasePage, TitleH1, TitleH2, CardsSection } from './index';
+import { BasePage, TitleH1, TitleH2, CardsSectionWithLines } from './index';
 import Api from '../../utils/api';
+import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
+import { FIGURES } from '../../config/constants';
 import './Catalog.scss';
 
 function Catalog() {
@@ -61,12 +63,21 @@ function Catalog() {
           себе о&nbsp;чем-то."
         />
         {!isLoading && (
-          <CardsSection
+          <CardsSectionWithLines
             pageCount={pageCount}
-            pageData={catalogPageData}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
-          />
+          >
+            {catalogPageData.map((item, i) => (
+              <CardCatalog
+                sectionClass="cards-section__item"
+                key={item.id}
+                title={item.title}
+                image={item.imageUrl}
+                shape={FIGURES[i % FIGURES.length]}
+              />
+            ))}
+          </CardsSectionWithLines>
         )}
       </section>
     </BasePage>
