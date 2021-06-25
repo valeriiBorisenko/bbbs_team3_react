@@ -41,7 +41,7 @@
 
 @include atDesktop1199 {
   .cards-section {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
     grid-template-rows: max-content [third-line] 1px max-content;
 
     &__line {
@@ -60,7 +60,7 @@
   }
 }
 
-@include atTablet {
+@include atTabletL {
   .cards-section {
     grid-template-columns: 1fr;
     grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
