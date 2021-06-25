@@ -73,6 +73,7 @@ function Router({
       </Route>
       <Route exact path={READANDWATCHING_URL}>
         <ReadAndWatching />
+      </Route>
       <Route exact path={CATALOG_URL}>
         <Catalog openPopupCities={handleClickPopupCities} />
       </Route>
