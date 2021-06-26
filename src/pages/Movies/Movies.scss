@@ -1,0 +1,17 @@
+@import './styles/utils.scss';
+
+.movies__cards {
+  margin-top: 80px;
+}
+
+@include atDesktop1024 {
+  .movies__cards {
+    padding-top: 50px;
+  }
+}
+
+@include atMobileL {
+  .movies__cards {
+    padding-top: 30px;
+  }
+}
