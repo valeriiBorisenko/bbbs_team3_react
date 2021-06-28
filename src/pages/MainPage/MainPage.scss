@@ -14,8 +14,13 @@
 }
 
 @include atDesktop1400 {
-  .main-section__link {
-    &_el_question_pagination {
+  .main-questions_pagination {
+    &:nth-last-of-type(-n+1) {
+      display: none;
+    }
+  }
+  .movies_pagination {
+    &_4 {
       &:nth-last-of-type(-n+1) {
         display: none;
       }
@@ -23,15 +28,36 @@
   }
 }
 
-@include atTabletL {
-  .main-section__link {
-    &_el_question_pagination {
+@include atDesktop1279 {
+  .movies_pagination {
+    &_3 {
       &:nth-last-of-type(-n+1) {
-        display: flex;
+        display: none;
+      }
+    }
+    &_4 {
+      &:nth-last-of-type(-n+2) {
+        display: none;
       }
     }
   }
 }
+
+@include atTabletL {
+  .main-questions_pagination {
+    &:nth-last-of-type(-n+1) {
+      display: flex;
+    }
+  }
+
+  .movies_pagination {
+    &:not(:first-child) {
+      display: none;
+    }
+  }
+}
+
+
 
 .lead {
   &__text {

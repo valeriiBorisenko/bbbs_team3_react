@@ -110,7 +110,11 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
         {randomizeArray(mainPageData?.movies, MOVIES_COUNT).map((item) => (
           <Link
             to="/films"
-            className="main-section__link card-pagination_page_main"
+            className={`main-section__link ${
+              MOVIES_COUNT > 1
+                ? `movies_pagination movies_pagination_${MOVIES_COUNT}`
+                : ''
+            }`}
             key={item?.id}
           >
             <CardFilm data={item} />
@@ -138,10 +142,8 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
               (item) => (
                 <Link
                   to={QUESTIONS_URL}
-                  className={`main-section__link ${
-                    QUESTIONS_COUNT > 2
-                      ? 'main-section__link_el_question main-section__link_el_question_pagination'
-                      : 'main-section__link_el_question'
+                  className={`main-section__link main-section__link_el_question ${
+                    QUESTIONS_COUNT > 2 ? ' main-questions_pagination' : ''
                   }`}
                   key={item?.id}
                 >
