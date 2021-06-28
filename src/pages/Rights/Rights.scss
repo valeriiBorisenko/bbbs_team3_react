@@ -1,9 +1,7 @@
 @import '../../styles/utils.scss';
 
-/* !!Нужно решить проблему с полосками они жестко захаркожены!! */
-
 .rights {
-  gap: 80px 30px;
+  grid-gap: 80px 30px;
   padding: 80px  0 0 0;
 }
 
@@ -11,13 +9,13 @@
 @include atDesktop1024 {
   .rights {
     padding-top: 50px;
-    gap: 30px;
+    grid-gap: 30px;
   }
 }
 
 @include atTablet {
   .rights {
-    gap: 30px;
+    grid-gap: 30px;
   }
 }
 
