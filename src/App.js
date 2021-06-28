@@ -131,7 +131,9 @@ function App() {
   }
 
   function cancelEventRegistration(cardData, cardId) {
-    Api.cancelEventRegistration(cardId).catch((error) => console.log(error));
+    Api.cancelEventRegistration(cardId)
+      .then(() => console.log('Успешно!'))
+      .catch((error) => console.log(error));
     // нужна перекраска карточки без подзагрузок (в идеале)
     // или переносить это в карточку + юзать стейт
     // или использовать контекст
