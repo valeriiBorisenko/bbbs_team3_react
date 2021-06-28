@@ -7,7 +7,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop } from '../../hooks/index';
 import { months } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
-import { changeCaseOfFirstLetter } from '../../utils/utils';
+import { changeCaseOfFirstLetter, debounce } from '../../utils/utils';
 import Api from '../../utils/api';
 import {
   BasePage,
@@ -38,102 +38,67 @@ function Calendar({
   //! надо делать какой то стопор в виде isLoading
 
   // весь список доступных фильтров
+  // { isActive, name, filter }
   const [filters, setFilters] = useState([]);
+  useEffect(() => {
+    Api.getActiveMonthTags()
+      .then((activeMonths) => {
+        const customFilters = activeMonths.map((activeMonth) => {
+          const filterName = changeCaseOfFirstLetter(months[activeMonth]);
+          return {
+            isActive: false,
+            name: filterName,
+            filter: activeMonth,
+          };
+        });
+        setFilters(customFilters);
+      })
+      .catch((error) => console.log(error));
+  }, [currentUser.city]);
 
   // флаг использования фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
 
-  // мутабельный массив для применения фильтров (отсортированный)
-  const [sortedArray, setSortedArray] = useState([]);
+  // нужно ли рисовать фильтры (если месяц всего 1 - не рисуем)
+  const dataForCurrentCityExist = calendarPageData.length > 0;
 
-  // массив отфильтрованных ивентов с даты, не мутировать!
-  const [filteredCardData, setFilteredCardData] = useState([]);
+  function handleFiltration() {
+    console.log('handleFiltration');
 
-  // хэндлер клика по фильтру МЕСЯЦ
-  const handleFilterClick = (inputValue, isChecked) => {
+    if (isFiltersUsed) {
+      console.log('handleFiltration IF');
+      const activeFilter = filters.find((filter) => filter.isActive);
+      console.log(activeFilter);
+      // console.log(activeFilter.filter);
+      if (activeFilter) {
+        console.log('activeFilter IF');
+        Api.getActualEventsForFilter(activeFilter.filter)
+          .then((events) => setCalendarPageData(events))
+          .catch((error) => console.log(error));
+      } else {
+        console.log('activeFilter ELSE');
+        Api.getCalendarPageData()
+          .then((events) => setCalendarPageData(events))
+          .catch((error) => console.log(error));
+      }
+    }
+  }
+
+  function handleFilterClick(inputValue, isChecked) {
     handleRadioBehavior(setFilters, { inputValue, isChecked });
     setIsFiltersUsed(true);
-  };
-
-  //! первый useEffect, установка отсортированного массива
-  useEffect(() => {
-    if (calendarPageData) {
-      const arrayOfSortedEvent = [...calendarPageData].sort((a, b) => {
-        const date1 = new Date(a.startAt);
-        const date2 = new Date(b.startAt);
-        return date1 - date2;
-      });
-      setFilteredCardData(arrayOfSortedEvent);
-      setSortedArray(arrayOfSortedEvent);
-    }
-  }, [calendarPageData]);
-
-  //! второй useEffect, сбор списка фильтров
-  useEffect(() => {
-    //* ШАГ 2 из массива отсоритрованных ивентов делаем массив объектов {месяц, год} на каждый ивент
-    const arrayOfDatesWithEvents = sortedArray.map((someEvent) => {
-      // взяли дату ивента, переделали в дату-объект
-      const dateObj = new Date(someEvent.startAt);
-      const month = dateObj.getMonth();
-      const year = dateObj.getFullYear();
-      // в массив вернулся НОМЕР месяца и ГОД
-      return { month, year };
-    });
-
-    //* ШАГ 3 выкидываем из массива arrayOfDatesWithEvent повторы
-    const arrayOfUniqueDates = arrayOfDatesWithEvents.filter(
-      (item, index, self) => {
-        const something = self.findIndex(
-          (current) =>
-            item.month === current.month && item.year === current.year
-        );
-        return something === index;
-      }
-    );
-
-    //* ШАГ 4 хронологические, уникальные фильтры, готовые к рендерингу в тагс-кнопки
-    const finallArrayOfTagsData = arrayOfUniqueDates.map((filter) => {
-      const name = changeCaseOfFirstLetter(months[filter.month]);
-      return {
-        filter: JSON.stringify(filter),
-        name,
-        isActive: false,
-      };
-    });
-
-    setFilters(finallArrayOfTagsData);
-  }, [filteredCardData]);
-
-  // функция-фильтратор
-  const handleFiltration = () => {
-    // console.log('handleFiltration');
-    if (isFiltersUsed) {
-      const activeFilter = filters.find((filter) => filter.isActive);
-      // console.log(filters);
-      // console.log(activeFilter);
-      if (!activeFilter) {
-        // console.log('if');
-        // console.log(filteredCardData);
-        setSortedArray(filteredCardData);
-      } else {
-        // console.log('else');
-        const { month, year } = JSON.parse(activeFilter.filter);
-        const min = new Date(year, month);
-        const max = new Date(year, month + 1);
-        const filteredArrayOfEvents = filteredCardData.filter((eventItem) => {
-          const date = new Date(eventItem.startAt);
-          return date >= min && date <= max;
-        });
-        setSortedArray(filteredArrayOfEvents);
-      }
-    }
-  };
+  }
 
   //! третий useEffect (запуск фильтрации)
+  // useEffect(() => {
+  //   // console.log('3ий useEffect');
+  //   handleFiltration();
+  //   setIsFiltersUsed(false);
+  // }, [isFiltersUsed]);
+
   useEffect(() => {
-    // console.log('3ий useEffect');
-    handleFiltration();
-    setIsFiltersUsed(false);
+    // в дальнейшем надо изменить количество секунд
+    // return () => clearTimeout(timer);
   }, [isFiltersUsed]);
 
   //! как надо будет рисовать все
@@ -152,8 +117,6 @@ function Calendar({
   //   покажи попап логина
   // }
 
-  const dataForCurrentCityExist = calendarPageData.length > 0;
-  // console.log(calendarPageData);
   // отрисовка заглушки
   function returnAnimatedContainer() {
     return (
@@ -211,7 +174,8 @@ function Calendar({
             {renderTagsContainder()}
 
             <div className="calendar-page__grid">
-              {renderEventCards(sortedArray)}
+              {renderEventCards(calendarPageData)}
+              {/* {renderEventCards(sortedArray)} */}
             </div>
           </div>
         </>
@@ -224,7 +188,6 @@ function Calendar({
     return returnAnimatedContainer();
   }
 
-  // console.log(calendarPageData);
   return (
     <BasePage>
       <Helmet>
@@ -253,3 +216,83 @@ Calendar.defaultProps = {
 };
 
 export default Calendar;
+
+// //! первый useEffect, установка отсортированного массива
+// useEffect(() => {
+// if (calendarPageData) {
+//   const arrayOfSortedEvent = [...calendarPageData].sort((a, b) => {
+//     const date1 = new Date(a.startAt);
+//     const date2 = new Date(b.startAt);
+//     return date1 - date2;
+//   });
+//   setFilteredCardData(arrayOfSortedEvent);
+//   setSortedArray(arrayOfSortedEvent);
+// }
+// }, [calendarPageData]);
+
+// //! второй useEffect, сбор списка фильтров
+// useEffect(() => {
+// //* ШАГ 2 из массива отсоритрованных ивентов делаем массив объектов {месяц, год} на каждый ивент
+// const arrayOfDatesWithEvents = sortedArray.map((someEvent) => {
+//   // взяли дату ивента, переделали в дату-объект
+//   const dateObj = new Date(someEvent.startAt);
+//   const month = dateObj.getMonth();
+//   const year = dateObj.getFullYear();
+//   // в массив вернулся НОМЕР месяца и ГОД
+//   return { month, year };
+// });
+
+// //* ШАГ 3 выкидываем из массива arrayOfDatesWithEvent повторы
+// const arrayOfUniqueDates = arrayOfDatesWithEvents.filter(
+//   (item, index, self) => {
+//     const something = self.findIndex(
+//       (current) =>
+//         item.month === current.month && item.year === current.year
+//     );
+//     return something === index;
+//   }
+// );
+
+// //* ШАГ 4 хронологические, уникальные фильтры, готовые к рендерингу в тагс-кнопки
+// const finallArrayOfTagsData = arrayOfUniqueDates.map((filter) => {
+//   const name = changeCaseOfFirstLetter(months[filter.month]);
+//   return {
+//     filter: JSON.stringify(filter),
+//     name,
+//     isActive: false,
+//   };
+// });
+
+// setFilters(finallArrayOfTagsData);
+// }, [filteredCardData]);
+
+// // хэндлер клика по фильтру МЕСЯЦ
+// const handleFilterClick = (inputValue, isChecked) => {
+// handleRadioBehavior(setFilters, { inputValue, isChecked });
+// setIsFiltersUsed(true);
+// };
+
+// // функция-фильтратор
+// const handleFiltration = () => {
+// // console.log('handleFiltration');
+// if (isFiltersUsed) {
+//   const activeFilter = filters.find((filter) => filter.isActive);
+//   // console.log(filters);
+//   // console.log(activeFilter);
+//   if (!activeFilter) {
+//     // console.log('if');
+//     // console.log(filteredCardData);
+//     setSortedArray(filteredCardData);
+//   } else {
+//     // console.log('else');
+//     const { month, year } = JSON.parse(activeFilter.filter);
+//     const min = new Date(year, month);
+//     const max = new Date(year, month + 1);
+//     const filteredArrayOfEvents = filteredCardData.filter((eventItem) => {
+//       const date = new Date(eventItem.startAt);
+//       return date >= min && date <= max;
+//     });
+//     setSortedArray(filteredArrayOfEvents);
+//   }
+// }
+// };
