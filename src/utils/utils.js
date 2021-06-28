@@ -123,7 +123,6 @@ export const formatMonthsGenitiveCase = (month) => {
   return `${month.slice(0, -1)}я`;
 };
 
-
 export function debounce(callback, time) {
   let timer;
 
@@ -141,4 +140,3 @@ export const randomizeArray = (arr, size) => {
     () => array.splice(Math.floor(Math.random() * array.length), 1)[0]
   );
 };
-
