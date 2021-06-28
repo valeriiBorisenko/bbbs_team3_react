@@ -16,28 +16,26 @@ function CardQuestion({
 
   const answerRender = (
     <div
-      className={`question__answer ${
-        isClick ? 'question__answer_visible' : ''
+      className={`card-question__answer ${
+        isClick ? 'card-question__answer_visible' : ''
       }`}
     >
-      <p className="paragraph question__paragraph">{answer}</p>
+      <p className="paragraph card-question__paragraph">{answer}</p>
     </div>
   );
 
   return (
     <Card sectionClass={`card-question ${sectionClass}`}>
       <TitleH2 sectionClass="card-question__title" title={title} />
-      <div className="question__wrap">
-        <div className="question__tags">
-          {tags.map((tag) => (
-            <Rubric
-              key={tag.id}
-              title={tag.name}
-              sectionClass="card-question__rubric"
-            />
+      <div className="card-question__wrap">
+        <ul className="card-question__tags">
+          {tags?.map((tag) => (
+            <li className="card-question__tag" key={tag?.id}>
+              <Rubric title={tag?.name} sectionClass="card-question__rubric" />
+            </li>
           ))}
-        </div>
-        {isQuestionsPage ? (
+        </ul>
+        {isQuestionsPage && (
           <ButtonRound
             label="Показать ответ"
             sectionClass="button-round__questions-page"
@@ -45,11 +43,9 @@ function CardQuestion({
             onClick={handleClickButton}
             isClick={isClick}
           />
-        ) : (
-          ''
         )}
       </div>
-      {isQuestionsPage ? answerRender : ''}
+      {isQuestionsPage && answerRender}
     </Card>
   );
 }
