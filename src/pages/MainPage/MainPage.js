@@ -46,7 +46,7 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
   if (!mainPageData) {
     return <Loader isCentered />;
   }
-  console.log(mainPageData);
+
   return (
     <BasePage>
       <Helmet>
@@ -90,14 +90,17 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
         />
       </section>
 
-      <section className="articles main-section page__section fade-in">
-        <Link to="/articles" className="main-section__link">
-          <CardArticleBig
-            key={mainPageData.articles[0].id}
-            data={mainPageData.articles[0]}
-          />
-        </Link>
-      </section>
+      {mainPageData?.articles.length > 0 && (
+        <section className="articles main-section page__section fade-in">
+          <Link to="/articles" className="main-section__link">
+            <CardArticleBig
+              key={mainPageData?.articles[0].id}
+              title={mainPageData?.articles[0].title}
+              color="blue"
+            />
+          </Link>
+        </section>
+      )}
 
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
         {mainPageData.movies.map((item) => (
@@ -140,15 +143,17 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
         </div>
       </section>
 
-      <section className="articles main-section page__section fade-in">
-        <Link to="/articles" className="main-section__link">
-          <CardArticleBig
-            key={mainPageData.articles[1].id}
-            //! опасное место, лучше отталкиваться от сколько всего articles пришло
-            data={mainPageData.articles[1]}
-          />
-        </Link>
-      </section>
+      {mainPageData?.articles.length > 1 && (
+        <section className="articles main-section page__section fade-in">
+          <Link to="/articles" className="main-section__link">
+            <CardArticleBig
+              key={mainPageData.articles[1].id}
+              title={mainPageData?.articles[1].title}
+              color="green"
+            />
+          </Link>
+        </section>
+      )}
     </BasePage>
   );
 }
