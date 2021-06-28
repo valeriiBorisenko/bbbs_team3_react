@@ -7,7 +7,8 @@ import { apiUrl, baseURL } from '../config/config';
 axios.defaults.headers.get['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 export default class Api {
-  // главная страница //! подключено к бекенду
+  // главная страница
+  //! подключено к бекенду
   static getMainPageData() {
     return axios
       .get(`${baseURL}${apiUrl}/main/`)
@@ -15,7 +16,8 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // города //! подключено к бекенду
+  // города
+  //! подключено к бекенду
   static getCities() {
     return axios
       .get(`${baseURL}${apiUrl}/cities/`)
@@ -23,7 +25,8 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // страница календаря (ивенты) //! подключено к бекенду
+  // страница календаря (ивенты)
+  //! подключено к бекенду
   static getCalendarPageData() {
     return axios
       .get(`${baseURL}${apiUrl}/afisha/events/`)
@@ -38,7 +41,8 @@ export default class Api {
       .then((response) => response.data);
   }
 
-  // регистрация на мероприятие  //! подключено к бекенду
+  // регистрация на мероприятие
+  //! подключено к бекенду
   static makeEventRegistration(eventId) {
     console.log('registerOnEvent');
     return axios
@@ -47,7 +51,8 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // удаление регистрации на мероприятие //! подключено к бекенду
+  // удаление регистрации на мероприятие
+  //! подключено к бекенду
   static cancelEventRegistration(eventId) {
     console.log('registerOnEvent');
     console.log(eventId);
@@ -58,8 +63,8 @@ export default class Api {
   }
 
   // работа с отдельными полями юзера
+  //! подключено к бекенду
   static updateUseProfile(dataToUpdate) {
-    //! подключено к бекенду
     return axios
       .patch(`${baseURL}${apiUrl}/profile/`, dataToUpdate)
       .then((response) => response.data)
@@ -67,14 +72,15 @@ export default class Api {
   }
 
   // работа со страницей ЛК
+  //! подключено к бекенду
   static getBookedEvents() {
-    //! подключено к бекенду
     return axios
       .get(`${baseURL}${apiUrl}/afisha/event-participants/`)
       .then((response) => response.data.results)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  // получить дневник
   static getProfileDiariesData() {
     //! подключено к бекенду
     return axios
@@ -83,6 +89,7 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  // создать дневник
   static createDiary(data) {
     //! подключено к бекенду
     return axios
@@ -95,6 +102,7 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  // редактировать дневник
   static editDiary(diaryId, data) {
     //! подключено к бекенду
     return axios
@@ -103,6 +111,7 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  // удалить дневник
   static deleteDiary(diaryId, data) {
     //! подключено к бекенду
     return axios
@@ -112,6 +121,7 @@ export default class Api {
   }
 
   // работа со страницей справочника
+  //! подключено к бекенду
   static getCatalogPageData({ limit, offset }) {
     return axios
       .get(`${baseURL}${apiUrl}/catalog/`, {

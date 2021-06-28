@@ -20,7 +20,6 @@ import {
 function Calendar({
   onEventSignUpClick,
   onEventFullDescriptionClick,
-  // dataCalendar,
   onOpenLoginPopup,
 }) {
   useScrollToTop();
@@ -35,9 +34,6 @@ function Calendar({
         .then((events) => setCalendarPageData(events))
         .catch((error) => console.log(error));
     }
-    // else {
-    //   setDataCalendar([]);
-    // }
   }, [currentUser]);
   //! надо делать какой то стопор в виде isLoading
 
@@ -55,12 +51,8 @@ function Calendar({
 
   // хэндлер клика по фильтру МЕСЯЦ
   const handleFilterClick = (inputValue, isChecked) => {
-    // console.log('handleFilterClick');
-    // console.log(filters);
-    // console.log(isChecked);
     handleRadioBehavior(setFilters, { inputValue, isChecked });
     setIsFiltersUsed(true);
-    // console.log(filters);
   };
 
   //! первый useEffect, установка отсортированного массива
@@ -144,7 +136,7 @@ function Calendar({
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  // как надо будет рисовать все
+  //! как надо будет рисовать все
   // if (залогинен) {
   //   if (есть ивенты по городу) {
   //     рисуй ивенты
@@ -244,39 +236,6 @@ function Calendar({
       </Helmet>
       <section className="calendar-page page__section fade-in">
         {renderPageContent()}
-        {/* { (calendarPageData && calendarPageData?.length > 0) ? (
-          <>
-            <TitleH1 title="Календарь" />
-            {calendarPageData.length > 0 ? (
-              <div className="calendar-page__container">
-                {filters.length > 1 && (
-                <div className="tags fade-in">
-                  <ul className="tags__list">
-                    {renderFilterTags(filters, 'month', handleFilterClick)}
-                  </ul>
-                </div>
-                )}
-                <div className="calendar-page__grid">
-                  {sortedArray.map((data) => (
-                    <CardCalendar
-                      key={data.id}
-                      cardData={data}
-                      onEventSignUpClick={eventSignUpHandler}
-                      onEventFullDescriptionClick={onEventFullDescriptionClick}
-                      sectionClass="fade-in"
-                    />
-                  ))}
-                </div>
-              </div>
-            ) : <Loader isNested />}
-            { !currentUser && onOpenLoginPopup()}
-          </>
-        ) : (
-          <AnimatedPageContainer
-            titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
-            buttonText="Вернуться на главную"
-          />
-        ) } */}
       </section>
     </BasePage>
   );
