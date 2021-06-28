@@ -19,7 +19,7 @@ export const formatDate = (date) => {
   const parsedDate = new Date(date);
   let day = parsedDate.getDate();
   const weekdayName = weekdays[parsedDate.getDay()];
-  const monthName = months[parsedDate.getMonth()];
+  const monthName = months[parsedDate.getMonth() + 1]; // потому что months начинается с 1, а не 0
   const hour = String(parsedDate.getHours());
   const year = String(parsedDate.getFullYear());
   let minutes = parsedDate.getMinutes();
@@ -122,3 +122,14 @@ export const formatMonthsGenitiveCase = (month) => {
   if (month === 'март' || month === 'август') return `${month}а`;
   return `${month.slice(0, -1)}я`;
 };
+
+export function debounce(callback, time) {
+  let timer;
+
+  return function (args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      callback(args);
+    }, time);
+  };
+}
