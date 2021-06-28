@@ -112,8 +112,13 @@ export const questionForm = {
 };
 
 // меняет в слове первую букву на заглавную
-export function changeCaseOfFirstLetter(str) {
+export const changeCaseOfFirstLetter = (str) => {
   if (!str) return str;
 
   return str[0].toUpperCase() + str.slice(1);
-}
+};
+
+export const formatMonthsGenitiveCase = (month) => {
+  if (month === 'март' || month === 'август') return `${month}а`;
+  return `${month.slice(0, -1)}я`;
+};

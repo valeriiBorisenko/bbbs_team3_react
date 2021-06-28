@@ -1,164 +1,135 @@
 @import './styles/utils.scss';
 
-.account__events-area {
-  box-sizing: border-box;
-  border-bottom: 1px solid $darkGray;
-}
-
-.account__title {
-  margin-bottom: 50px;
-  width: fit-content;
-  text-align: center;
-  color: $lightBlack;
-}
-
-.account__events {
-  margin-bottom: 50px;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-  }
-}
-
-.account-event-card {
-  max-width: 270px;
-  max-height: 158px;
-  width: 100%;
-  height: 100%;
-  flex-shrink: 0;
-  margin-right: 30px;
-
-  &:last-of-type {
-    margin-right: 0;
-  }
-}
-
-.account__diaries {
-  position: relative;
-  padding-top: 50px;
-}
-
-.account__scroll-anchor {
-  position: absolute;
-  top: -55px;
-  left: 0;
-  width: 1px;
-  height: 1px;
-}
-
-.account__diaries-container {
-  max-width: 1170px;
-  margin: 0 auto;
-  transition: .5s ease;
-}
-
-.account__form-container {
-  margin-bottom: 80px;
-}
-
-.account__button-add-diary {
-  height: 48px;
-  padding: 0 0 0 63px;
-  font-family: $protoGrotesk;
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 1.27;
-  letter-spacing: 0.2px;
-  color: $blue;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  background-image: url(../../assets/icon-circle-with-plus.svg);
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: contain;
-
-  &:hover {
-    cursor: pointer;
+.profile {
+  &__events-area {
+    box-sizing: border-box;
+    border-bottom: 1px solid $darkGray;
   }
 
-  &:disabled {
-    opacity: .5;
-    pointer-events: none;
-    cursor: default;
+  &__title {
+    margin-bottom: 50px;
+    width: fit-content;
+    text-align: center;
+    color: $lightBlack;
   }
-}
 
-.account__diary-form {
-  visibility: visible;
-  height: auto;
-  opacity: 1;
-  pointer-events: all;
-  margin-top: 50px;
-  transition: .5s ease;
+  &__events {
+    margin-bottom: 50px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
 
-  &_hidden {
-    visibility: hidden;
-    height: 0;
-    opacity: 0;
-    pointer-events: none;
-    margin: 0;
-    transition: .3s ease;
+  &__diaries {
+    position: relative;
+    padding-top: 50px;
+  }
+
+  &__scroll-anchor {
+    position: absolute;
+    top: -55px;
+    left: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  &__diaries-container {
+    max-width: 1170px;
+    margin: 0 auto;
+    transition: .5s ease;
+  }
+
+  &__form-container {
+    margin-bottom: 80px;
+  }
+
+  &__button-add-diary {
+    display: flex;
+    align-items: center;
+  
+    &::after {
+      content: 'Добавить фото';
+      white-space: nowrap;
+      color: $blue;
+      font-family: $protoGrotesk;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.27;
+      letter-spacing: 0.2px;
+      margin-left: 68px;
+      pointer-events: none;
+    }
+  
+    &:hover {
+      cursor: pointer;
+      background-color: $lightBlue;
+    }
+  }
+
+  &__diary-form {
+    visibility: visible;
+    height: auto;
+    opacity: 1;
+    pointer-events: all;
+    margin-top: 50px;
+    transition: .5s ease;
   }
 }
 
 @include atDesktop1380 {
-  .account__scroll-anchor {
+  .profile__scroll-anchor {
     top: 0;
   }
 }
 
 @include atDesktop1199 {
-  .account__diaries-container {
-    max-width: 700px;
-  }
+  .profile {
+    &__diaries-container {
+      max-width: 700px;
+    }
 
-  .account__form-container {
-    margin-bottom: 30px;
+    &__form-container {
+      margin-bottom: 30px;
+    }
   }
 }
 
 @include atTablet {
-  .account__events {
-    margin-right: -60px;
-    margin-left: -60px;
-  }
-
-  .account-event-card {
-    max-width: 205px;
-    max-height: 108px;
+  .profile {
+    &__events {
+      margin-right: -60px;
+      margin-left: -60px;
+    }
   }
 }
 
 @include atMobile {
-  .account__title {
-    margin-bottom: 20px;
-  }
+  .profile {
+    &__title {
+      margin-bottom: 20px;
+    }
 
-  .account__events {
-    margin-right: -15px;
-    margin-left: -15px;
-    margin-bottom: 20px;
-  }
+    &__events {
+      margin-right: -15px;
+      margin-left: -15px;
+      margin-bottom: 20px;
+    }
 
-  .account-event-card {
-    max-width: 205px;
-    max-height: 108px;
-  }
+    &__button-add-diary {
+      height: 40px;
+      padding: 0 0 0 55px;
+      font-size: 12px;
+      line-height: 1.42;
+    }
 
-  .account__button-add-diary {
-    height: 40px;
-    padding: 0 0 0 55px;
-    font-size: 12px;
-    line-height: 1.42;
-  }
-
-  .account__diary-form {
-    margin-top: 20px;
+    &__diary-form {
+      margin-top: 20px;
+    }
   }
 }

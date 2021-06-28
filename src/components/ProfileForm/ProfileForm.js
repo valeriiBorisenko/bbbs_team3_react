@@ -1,27 +1,30 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import './AccountForm.scss';
+import './ProfileForm.scss';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
-import { Card, Input, Caption, Rating, Button } from './index';
+import { adminUrl } from '../../config/config';
+import { regExpImages } from '../../config/constants';
+import { Card, Input, Caption, Rating, Button, ButtonRound } from './index';
 
-function AccountForm({
+function ProfileForm({
   data,
   sectionClass,
   isEditMode,
   isOpen,
-  onCancel,
+  onClose,
   onSubmit,
 }) {
-  const classNames = ['card-container', 'account-form', sectionClass]
+  const classNames = ['card-container', 'profile-form', sectionClass]
     .join(' ')
     .trim();
 
   const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
   const [userImage, setUserImage] = useState(null);
+  const [fileUploaded, setFileUploaded] = useState(false);
 
   const {
     register,
@@ -35,110 +38,133 @@ function AccountForm({
     let inputFields = Object.assign(values);
     inputFields = {
       ...inputFields,
-      rate: inputValues.rate,
+      mark: inputValues.mark,
       id: inputValues.id,
     };
-    if (userImage) {
+    if (fileUploaded && userImage.image) {
       inputFields = {
         ...inputFields,
-        imageUrl: userImage.imageUrl,
+        image: userImage.image,
       };
     }
     onSubmit(inputFields);
+    setFileUploaded(false);
   };
 
   const handleChangeRating = (value) => {
-    setInputValues({ ...inputValues, rate: value });
+    setInputValues({ ...inputValues, mark: value });
   };
 
   const handleChangeImage = (file) => {
-    if (file) {
+    if (file && regExpImages.test(file.name)) {
       const imageUrl = URL.createObjectURL(file);
-      setUserImage({ ...userImage, imageUrl });
-    }
+      setUserImage({ ...userImage, image: file, imageUrl });
+      setFileUploaded(true);
+    } else setValue('image', null);
   };
 
   useEffect(() => {
-    if (inputValues?.rate) setCaption(captions[inputValues.rate]);
+    if (inputValues?.mark) setCaption(captions[inputValues.mark]);
     else setCaption('Оцените проведенное время');
-  }, [inputValues.rate]);
+  }, [inputValues.mark]);
 
   useEffect(() => {
     if (isOpen) {
       if (data) {
         setInputValues({ ...inputValues, ...data });
-        setUserImage({ imageUrl: data.imageUrl });
-        setValue('title', data.title);
+        setUserImage({ image: data.image });
+        setValue('place', data.place);
         setValue('date', parseDate(data.date));
         setValue('description', data.description);
-        setValue('rate', data.rate);
+        setValue('mark', data.mark);
       }
     } else {
       setInputValues({});
       setUserImage(null);
       reset({
-        title: '',
+        place: '',
         date: '',
         description: '',
+        mark: '',
       });
     }
   }, [isOpen, data]);
 
   return (
-    <div className={classNames}>
-      <Card sectionClass="account-form__photo-upload">
+    <form
+      name="addStoryForm"
+      onSubmit={handleSubmit(onFormSubmit)}
+      className={classNames}
+    >
+      <Card sectionClass="profile-form__photo-upload">
         {userImage && (
           <img
-            src={userImage.imageUrl}
-            alt={data?.title}
-            className="account-form__uploaded-image"
+            src={userImage.imageUrl || `${adminUrl}/media/${userImage.image}`}
+            alt={data?.place}
+            className="profile-form__uploaded-image"
           />
         )}
 
         <div
-          className={`account-form__input-upload ${
-            userImage ? 'account-form__input-upload_hidden' : ''
+          className={`profile-form__input-upload ${
+            userImage ? 'profile-form__input-upload_hidden' : ''
           }`}
         >
-          <label htmlFor="input-upload" className="account-form__label-file">
-            <input
-              id="input-upload"
-              type="file"
-              name="imageUrl"
-              className="account-form__input-file"
-              {...register('imageUrl')}
-              onChange={(evt) => handleChangeImage(evt.target.files[0])}
+          <label htmlFor="input-upload" className="profile-form__label-file">
+            {isEditMode ? (
+              <input
+                id="input-upload"
+                type="file"
+                accept="image/png, image/jpeg"
+                name="image"
+                className="profile-form__input-file"
+                onChange={(evt) => handleChangeImage(evt.target.files[0])}
+              />
+            ) : (
+              <input
+                id="input-upload"
+                type="file"
+                accept="image/png, image/jpeg"
+                name="image"
+                className="profile-form__input-file"
+                {...register('image', { required: 'Загрузить фото' })}
+                onChange={(evt) => handleChangeImage(evt.target.files[0])}
+              />
+            )}
+            <ButtonRound
+              sectionClass={`profile-form__pseudo-button ${
+                errors?.image ? 'profile-form__pseudo-button_error' : ''
+              }`}
+              color={`${errors?.image ? 'error' : 'lightGray'}`}
+              isSpan
             />
-            <span className="account-form__pseudo-button" />
           </label>
           <Caption
             title="Загрузить фото"
-            sectionClass="account-form__caption"
+            sectionClass={`profile-form__caption ${
+              errors?.image ? 'profile-form__caption_error' : ''
+            }`}
           />
         </div>
       </Card>
 
-      <Card sectionClass="account-form__form-container">
-        <form
-          name="addStoryForm"
-          className="account-form__form"
-          onSubmit={handleSubmit(onFormSubmit)}
-        >
+      <Card sectionClass="profile-form__text-container">
+        <div className="profile-form__texts">
           <Input
             type="text"
-            name="title"
+            name="place"
             placeholder="Место встречи"
             register={register}
             required
-            error={errors?.title}
+            error={errors?.place}
             errorMessage="Место встречи*"
           />
           <Input
             type="date"
             name="date"
             placeholder="Дата&emsp;"
-            sectionClass={`account-form__input_el_date ${
-              errors.date ? 'account-form__input_el_date-error' : ''
+            sectionClass={`profile-form__input_el_date ${
+              errors.date ? 'profile-form__input_el_date-error' : ''
             }`}
             register={register}
             required
@@ -149,23 +175,23 @@ function AccountForm({
             type="text"
             name="description"
             placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
-            sectionClass="account-form__input_el_textarea"
+            sectionClass="profile-form__input_el_textarea"
             register={register}
             required
             error={errors?.description}
             errorMessage="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось*"
             isTextarea
           />
-          <div className="account-form__submit-zone">
-            <div className="account-form__ratings">
+          <div className="profile-form__submit-zone">
+            <div className="profile-form__ratings">
               <Rating
                 type="radio"
                 name="rating"
                 ratingType="good"
                 onClick={handleChangeRating}
                 value="good"
-                sectionClass="account-form__rating"
-                checked={inputValues?.rate === 'good'}
+                sectionClass="profile-form__rating"
+                checked={data?.mark === 'good'}
               />
               <Rating
                 type="radio"
@@ -173,8 +199,8 @@ function AccountForm({
                 ratingType="neutral"
                 onClick={handleChangeRating}
                 value="neutral"
-                sectionClass="account-form__rating"
-                checked={inputValues?.rate === 'neutral'}
+                sectionClass="profile-form__rating"
+                checked={data?.mark === 'neutral'}
               />
               <Rating
                 type="radio"
@@ -182,53 +208,53 @@ function AccountForm({
                 ratingType="bad"
                 onClick={handleChangeRating}
                 value="bad"
-                sectionClass="account-form__rating"
-                checked={inputValues?.rate === 'bad'}
+                sectionClass="profile-form__rating"
+                checked={data?.mark === 'bad'}
               />
               <Caption
                 title={caption}
-                sectionClass={`account-form__ratings-text account-form__ratings-text_type_${inputValues.rate}`}
+                sectionClass={`profile-form__ratings-text profile-form__ratings-text_type_${inputValues.mark}`}
               />
             </div>
-            <div className="account-form__buttons">
+            <div className="profile-form__buttons">
               <Button
                 title={`${isEditMode ? 'Отмена' : 'Удалить'}`}
                 color="gray-borderless"
-                sectionClass="account-form__button_el_delete"
-                onClick={onCancel}
+                sectionClass="profile-form__button_el_delete"
+                onClick={onClose}
               />
               <Button
                 title={`${isEditMode ? 'Сохранить' : 'Добавить'}`}
-                sectionClass="account-form__button_el_add"
+                sectionClass="profile-form__button_el_add"
                 isDisabled={
-                  !!(errors.title || errors.date || errors.description)
+                  !!(errors.place || errors.date || errors.description)
                 }
                 isSubmittable
               />
             </div>
           </div>
-        </form>
+        </div>
       </Card>
-    </div>
+    </form>
   );
 }
 
-AccountForm.propTypes = {
+ProfileForm.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   sectionClass: PropTypes.string,
-  onCancel: PropTypes.func,
+  onClose: PropTypes.func,
   isOpen: PropTypes.bool,
   isEditMode: PropTypes.bool,
   onSubmit: PropTypes.func,
 };
 
-AccountForm.defaultProps = {
+ProfileForm.defaultProps = {
   data: {},
   sectionClass: '',
-  onCancel: () => {},
+  onClose: () => {},
   isOpen: false,
   isEditMode: false,
   onSubmit: () => {},
 };
 
-export default AccountForm;
+export default ProfileForm;

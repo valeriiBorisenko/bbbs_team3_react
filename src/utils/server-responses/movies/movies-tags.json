@@ -1,0 +1,14 @@
+[
+  {
+      "id": 44,
+      "name": "детский",
+      "category": "Книги",
+      "slug": "for-child"
+  },
+  {
+      "id": 28,
+      "name": "драма",
+      "category": "Книги",
+      "slug": "drama"
+  }
+]

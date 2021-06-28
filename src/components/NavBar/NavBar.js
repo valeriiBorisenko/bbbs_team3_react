@@ -9,6 +9,7 @@ import {
   QUESTIONS_URL,
   PLACES_URL,
   RIGHTS_URL,
+  READANDWATCHING_URL,
 } from '../../config/routes';
 import {
   NavItem,
@@ -73,6 +74,7 @@ function NavBar({
           <NavItemWithDropdown
             sectionWrapperClass="menu__list-item menu__dropdown-item"
             linkText="Читать и смотреть"
+            href={READANDWATCHING_URL}
           />
           {/* Права детей */}
           <NavItem
