@@ -14,17 +14,21 @@
 }
 
 @include atDesktop1400 {
-  .main-questions__container .main-section__link {
-    &:nth-last-of-type(-n+1) {
-      // display: none;
+  .main-section__link {
+    &_el_question_pagination {
+      &:nth-last-of-type(-n+1) {
+        display: none;
+      }
     }
   }
 }
 
 @include atTabletL {
-  .main-questions__container .main-section__link {
-    &:nth-last-of-type(-n+1) {
-      display: flex;
+  .main-section__link {
+    &_el_question_pagination {
+      &:nth-last-of-type(-n+1) {
+        display: flex;
+      }
     }
   }
 }
@@ -69,6 +73,10 @@
     background-image: linear-gradient(180deg, rgba($black, 0) 35.29%, rgba($black, 0.67) 82.35%);
     padding-bottom: 30px;
   }
+}
+
+.movies {
+  row-gap: 30px;
 }
 
 @include atDesktop1440 {

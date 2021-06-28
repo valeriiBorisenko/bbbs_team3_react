@@ -7,6 +7,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop } from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
 import { adminUrl } from '../../config/config';
+import { randomizeArray } from '../../utils/utils';
 import Api from '../../utils/api';
 import {
   BasePage,
@@ -21,6 +22,10 @@ import {
   Widget,
   CardQuestion,
 } from './index';
+
+// количество отображаемых карточек с фильмами и вопросами
+const MOVIES_COUNT = 4;
+const QUESTIONS_COUNT = 3;
 
 function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
   useScrollToTop();
@@ -102,11 +107,11 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
       )}
 
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
-        {mainPageData?.movies.map((item) => (
+        {randomizeArray(mainPageData?.movies, MOVIES_COUNT).map((item) => (
           <Link
             to="/films"
             className="main-section__link card-pagination_page_main"
-            key={item.id}
+            key={item?.id}
           >
             <CardFilm data={item} />
           </Link>
@@ -129,15 +134,21 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
             link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
           />
           <div className="main-questions__container">
-            {mainPageData?.questions.map((item) => (
-              <Link
-                to={QUESTIONS_URL}
-                className="main-section__link main-section__link_el_question"
-                key={item.id}
-              >
-                <CardQuestion data={item} />
-              </Link>
-            ))}
+            {randomizeArray(mainPageData?.questions, QUESTIONS_COUNT).map(
+              (item) => (
+                <Link
+                  to={QUESTIONS_URL}
+                  className={`main-section__link ${
+                    QUESTIONS_COUNT > 2
+                      ? 'main-section__link_el_question main-section__link_el_question_pagination'
+                      : 'main-section__link_el_question'
+                  }`}
+                  key={item?.id}
+                >
+                  <CardQuestion data={item} />
+                </Link>
+              )
+            )}
           </div>
         </div>
       </section>

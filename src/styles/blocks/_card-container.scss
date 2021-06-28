@@ -28,7 +28,7 @@
 
   &_type_iframe {
     grid-template-columns: 420px 1fr;
-    grid-template-rows: 627px;
+    grid-template-rows: minmax(627px, 1fr);
     gap: 30px;
   }
 
@@ -95,7 +95,7 @@
 
     &_type_iframe {
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 552px;
+      grid-template-rows: min-max(552px, 1fr);
     }
   }
 }
