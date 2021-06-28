@@ -44,7 +44,12 @@ export default class Api {
   }
 
   // ивенты по конкретному месяцу
-
+  static getActualEventsForFilter(monthNumber) {
+    return axios
+      .get(`${baseURL}${apiUrl}/afisha/events/?months=${monthNumber}`)
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
   // фильтрация по нажатому фильтру
 
   // страница "куда пойти"
