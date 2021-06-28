@@ -47,6 +47,7 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
     getMainPageData();
   }, []);
 
+  // глобальный лоадер (без футера)
   if (!mainPageData) {
     return <Loader isCentered />;
   }
