@@ -26,6 +26,7 @@ export default class Api {
   }
 
   // страница календаря (ивенты)
+  // все ивенты
   //! подключено к бекенду
   static getCalendarPageData() {
     return axios
@@ -33,6 +34,18 @@ export default class Api {
       .then((response) => response.data.results)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
+
+  // все активные месяцы
+  static getActiveMonthTags() {
+    return axios
+      .get(`${baseURL}${apiUrl}/afisha/events/months/`)
+      .then((response) => response.data.months)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  // ивенты по конкретному месяцу
+
+  // фильтрация по нажатому фильтру
 
   // страница "куда пойти"
   static getPlaces() {
