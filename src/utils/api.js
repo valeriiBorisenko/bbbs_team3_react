@@ -85,4 +85,27 @@ export default class Api {
       .post(`${baseURL}${apiUrl}/question/`, question)
       .then((response) => response.data);
   }
+
+  // работа со страницей Права DATA
+  static getRightsData({ limit, offset }) {
+    return axios
+      .get(`${baseURL}${apiUrl}/rights/`, {
+        params: { limit, offset },
+      })
+      .then((response) => response.data);
+  }
+
+  // работа со страницей Права TAGS
+  static getRightsTags() {
+    return axios
+      .get(`${baseURL}${apiUrl}/rights/tags/`)
+      .then((response) => response.data);
+  }
+
+  // работа со страницей Права статься по id
+  static getRightById({ RightId }) {
+    return axios
+      .get(`${baseURL}${apiUrl}/rights/${RightId}/`)
+      .then((response) => response.data);
+  }
 }
