@@ -91,8 +91,8 @@ const Rights = () => {
         setPageCount(Math.ceil(count / pageSize));
 
         const categoriesArr = Array.from(tags).map((tag) => ({
-          filter: tag.name,
-          name: tag.name,
+          filter: tag.name.toLowerCase(),
+          name: tag.name[0].toUpperCase() + tag.name.slice(1),
           isActive: false,
         }));
 
@@ -108,8 +108,8 @@ const Rights = () => {
 
   // Юз эффект для пагинации
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1439px)');
-    const largeQuery = window.matchMedia('(max-width: 1919px)');
+    const smallQuery = window.matchMedia('(max-width: 1399px)');
+    const largeQuery = window.matchMedia('(max-width: 1640px)');
 
     const listener = () => {
       if (smallQuery.matches) {
