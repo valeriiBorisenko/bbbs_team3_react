@@ -17,5 +17,10 @@
 
 .rights__rubric {
   margin-top: 17px;
+  margin-right: 5px;
   align-self: center;
+
+  &:last-of-type {
+    margin-right: 0px;
+  }
 }
