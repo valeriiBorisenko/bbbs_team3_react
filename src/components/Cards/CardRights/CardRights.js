@@ -7,7 +7,7 @@ import { CardFigure, Rubric } from './index';
 
 function CardRights({ title, tags, shape, color }) {
   return (
-    <div className="catalog-card card-pagination card-pagination_type_shapes">
+    <div className="rights__card">
       <a href="/" className="rights__link">
         <CardFigure
           sectionClass="card-catalog_type_shaped"
@@ -19,7 +19,7 @@ function CardRights({ title, tags, shape, color }) {
             <Rubric
               key={tag.id}
               sectionClass="rights__rubric"
-              title={tag.name}
+              title={tag.category}
             />
           ))}
         </CardFigure>

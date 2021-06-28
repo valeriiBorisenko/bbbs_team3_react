@@ -10,12 +10,15 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 import { useScrollToTop } from '../../hooks/index';
+import Api from '../../utils/api';
 
-// json data
-import rightsData from '../../utils/server-responses/rights.json';
-import rightsTags from '../../utils/server-responses/rights-tags.json';
-
-import { BasePage, Loader, TitleH1, Paginate, CardRights } from './index';
+import {
+  BasePage,
+  Loader,
+  TitleH1,
+  CardRights,
+  CardsSectionWithLines,
+} from './index';
 
 const Rights = () => {
   useScrollToTop();
@@ -41,7 +44,7 @@ const Rights = () => {
     setIsFiltersUsed(true);
   };
 
-  // функция-фильтратор
+  // функция-фильтратор пока реализация на фронте без использованя АПИ
   const handleFiltration = () => {
     const activeCategories = categories
       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
@@ -58,7 +61,7 @@ const Rights = () => {
     // КАТЕГОРИИ
     if (activeCategories.length > 0) {
       const filterByCategory = pageData.filter((article) =>
-        article.tags.some((tag) => activeCategories.includes(tag.category))
+        article.tags.some((tag) => activeCategories.includes(tag.name))
       );
 
       setFilteredArticles(filterByCategory);
@@ -73,29 +76,34 @@ const Rights = () => {
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  // Временно адаптирован под хардкод компонента и отсутствие АПИ
+  //  АПИ теги и статьи
   useEffect(() => {
     setIsLoading(true);
-    // const offset = pageSize * pageNumber;
-    // Здесь будет АПИ запросы тегов и карточек
-    setPageData(rightsData.results);
-    setFilteredArticles(rightsData.results);
-    setPageCount(Math.ceil(rightsData.count / pageSize));
+    const offset = pageSize * pageNumber;
 
-    const categoriesArr = rightsTags.map((tag) => tag.category);
-    const set = new Set(categoriesArr);
-    const uniqueCategories = Array.from(set).map((item) => ({
-      filter: item,
-      name: item,
-      isActive: false,
-    }));
+    Promise.all([
+      Api.getRightsData({ limit: pageSize, offset }),
+      Api.getRightsTags(),
+    ])
+      .then(([{ results, count }, tags]) => {
+        setPageData(results);
+        setFilteredArticles(results);
+        setPageCount(Math.ceil(count / pageSize));
 
-    setCategories([
-      { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-      ...uniqueCategories,
-    ]);
+        const categoriesArr = Array.from(tags).map((tag) => ({
+          filter: tag.name,
+          name: tag.name,
+          isActive: false,
+        }));
 
-    setIsLoading(false);
+        setCategories([
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+          ...categoriesArr,
+        ]);
+
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err));
   }, [pageSize, pageNumber]);
 
   // Юз эффект для пагинации
@@ -146,31 +154,23 @@ const Rights = () => {
         <Loader isNested />
       ) : (
         <>
-          <section className="rights page__section">
-            {/* !!Нужно решить проблему с полосками они жестко захаркожены!! */}
-            <div className="rights__line" />
-            <div className="rights__line" />
-            <div className="rights__line" />
+          {/* !!Нужно решить проблему с полосками они жестко захаркожены!! */}
+          <CardsSectionWithLines
+            pageCount={pageCount}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+            sectionClassCards="rights page__section"
+          >
             {filteredArticles.map((item, i) => (
               <CardRights
                 key={item.id}
                 title={item.title}
                 tags={item.tags}
-                // временные значение shape, color поскольку данные будут прихдить от БЭКА?
                 shape={FIGURES[i % FIGURES.length]}
                 color={COLORS[i % COLORS.length]}
               />
             ))}
-          </section>
-
-          <section className="rights-pagination page__section">
-            <Paginate
-              sectionClass="cards-section__pagination"
-              pageCount={pageCount}
-              value={pageNumber}
-              onChange={setPageNumber}
-            />
-          </section>
+          </CardsSectionWithLines>
         </>
       )}
     </BasePage>
