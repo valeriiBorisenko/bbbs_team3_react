@@ -2,10 +2,7 @@ import './CardFilm.scss';
 import PropTypes from 'prop-types';
 import { Rubric, TitleH2, Card } from './index';
 
-function CardFilm({
-  data: { imageUrl, title, info, link, tags },
-  handleClick,
-}) {
+function CardFilm({ data: { image, title, info, link, tags }, handleClick }) {
   return (
     <Card sectionClass="card-film">
       <div className="card-film__video">
@@ -15,7 +12,7 @@ function CardFilm({
           onClick={handleClick}
         >
           <img
-            src={`${imageUrl}`}
+            src={`http://127.0.0.1/media/${image}`}
             alt="Превью видео"
             className="card-film__preview"
           />
@@ -49,7 +46,7 @@ function CardFilm({
 
 CardFilm.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  imageUrl: PropTypes.string,
+  image: PropTypes.string,
   title: PropTypes.string,
   info: PropTypes.string,
   link: PropTypes.string,
@@ -59,7 +56,7 @@ CardFilm.propTypes = {
 
 CardFilm.defaultProps = {
   data: {},
-  imageUrl: '',
+  image: '',
   title: '',
   info: '',
   link: '',

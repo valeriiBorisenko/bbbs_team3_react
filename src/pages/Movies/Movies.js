@@ -1,19 +1,113 @@
 import './Movies.scss';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useScrollToTop } from '../../hooks';
-import {
-  BasePage,
-  TitleH1,
-  PseudoButtonTag,
-  CardFilm,
-  CardAnnotation,
-} from './index';
-import moviesTags from '../../utils/server-responses/movies/movies-tags.json';
-import movies from '../../utils/server-responses/movies/movies.json';
+import Api from '../../utils/api';
+import { BasePage, TitleH1, CardFilm, CardAnnotation } from './index';
+import Paginate from '../../components/utils/Paginate/Paginate';
+import { changeCaseOfFirstLetter, debounce } from '../../utils/utils';
+import { handleRadioBehavior, renderFilterTags } from '../../utils/filter-tags';
 
 function Movies() {
   useScrollToTop();
+
+  const [pageSize, setPageSize] = useState(16);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
+
+  const [moviesPageData, setMoviesPageData] = useState([]);
+  const [filters, setFilters] = useState(null);
+  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const offset = pageSize * pageNumber;
+    Api.getMoviesPageData({ limit: pageSize, offset }).then(
+      ({ results, count }) => {
+        setMoviesPageData(results);
+        setPageCount(Math.ceil(count / pageSize));
+        setIsLoading(false);
+      }
+    );
+  }, [pageSize, pageNumber]);
+
+  useEffect(() => {
+    const smallQuery = window.matchMedia('(max-width: 1399px)');
+    const largeQuery = window.matchMedia('(max-width: 1640px)');
+
+    const listener = () => {
+      if (smallQuery.matches) {
+        setPageSize(4);
+      } else if (largeQuery.matches) {
+        setPageSize(12);
+      } else {
+        setPageSize(16);
+      }
+    };
+    listener();
+    smallQuery.addEventListener('change', listener);
+    largeQuery.addEventListener('change', listener);
+
+    return () => {
+      smallQuery.removeEventListener('change', listener);
+      largeQuery.removeEventListener('change', listener);
+    };
+  }, []);
+
+  useEffect(() => {
+    Api.getActiveMoviesTags()
+      .then((activeMovies) => {
+        const customFilters = activeMovies.map((activeMovie) => {
+          const filterName = changeCaseOfFirstLetter(activeMovie.name);
+          return {
+            isActive: false,
+            name: filterName,
+            filter: activeMovie,
+          };
+        });
+        setFilters(customFilters);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  function handleFiltration() {
+    if (isFiltersUsed) {
+      const activeFilter = filters.find((filter) => filter.isActive);
+      console.log(activeFilter);
+      if (activeFilter) {
+        console.log('activeFilter IF');
+        Api.getActualMoviesForFilter(activeFilter.filter)
+          .then((movies) => setMoviesPageData(movies))
+          .catch((error) => console.log(error));
+      } else {
+        setMoviesPageData();
+      }
+    }
+  }
+
+  function handleFilterClick(inputValue, isChecked) {
+    handleRadioBehavior(setFilters, { inputValue, isChecked });
+    setIsFiltersUsed(true);
+  }
+
+  useEffect(() => {
+    // в дальнейшем надо изменить количество секунд
+    const debaunceFiltration = debounce(handleFiltration, 1000);
+    debaunceFiltration();
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed]);
+
+  function renderTagsContainder() {
+    return (
+      <div className="tags fade-in">
+        <ul className="tags__list">
+          {renderFilterTags(filters, 'movies', handleFilterClick)}
+        </ul>
+      </div>
+    );
+  }
+
   return (
     <BasePage>
       <Helmet>
@@ -25,30 +119,30 @@ function Movies() {
       </Helmet>
       <section className="movies page__section fade-in">
         <TitleH1 title="Фильмы" />
-        <div className="tags">
-          <ul className="tags__list">
-            {moviesTags.map((item) => (
-              <li className="tags__list-item" key={item.name}>
-                <PseudoButtonTag
-                  name={item.name}
-                  value={item.filter}
-                  title={item.name}
-                  isActive={item.isActive}
+        {filters?.length > 1 && renderTagsContainder()}
+        {!isLoading && (
+          <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
+            {moviesPageData.map((item) => (
+              <li className="card-container" key={item.id}>
+                <CardFilm
+                  data={item}
+                  pageCount={pageCount}
+                  pageNumber={pageNumber}
+                  setPageNumber={setPageNumber}
                 />
+                <CardAnnotation description={item.annotation} />
               </li>
             ))}
           </ul>
-        </div>
-        <div className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
-          {movies.results.map((item) => (
-            <article className="card-container">
-              <Link to="/films" className="main-section__link" key={item.id}>
-                <CardFilm data={item} />
-              </Link>
-              <CardAnnotation description={item.annotation} />
-            </article>
-          ))}
-        </div>
+        )}
+        {pageCount > 1 && (
+          <Paginate
+            sectionClass="cards-section__pagination"
+            pageCount={pageCount}
+            value={pageNumber}
+            onChange={setPageNumber}
+          />
+        )}
       </section>
     </BasePage>
   );

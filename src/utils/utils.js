@@ -122,3 +122,14 @@ export const formatMonthsGenitiveCase = (month) => {
   if (month === 'март' || month === 'август') return `${month}а`;
   return `${month.slice(0, -1)}я`;
 };
+
+export function debounce(callback, time) {
+  let timer;
+
+  return function (args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      callback(args);
+    }, time);
+  };
+}

@@ -120,6 +120,33 @@ export default class Api {
       .then((response) => response.data);
   }
 
+  // работа со страницей фильмы
+  static getMoviesPageData({ limit, offset }) {
+    //! подключено к бекенду
+    return axios
+      .get(`${baseURL}${apiUrl}/movies/`, {
+        params: { limit, offset },
+      })
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  // все активные теги
+  static getActiveMoviesTags() {
+    return axios
+      .get(`${baseURL}${apiUrl}/movies/tags/`)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  // фильмы по конкретному тегу
+  static getActualMoviesForFilter(moviesNumber) {
+    return axios
+      .get(`${baseURL}${apiUrl}/movies/?tags=${moviesNumber}`)
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
   // работа со странице вопросов
   static getQuestionsPageData() {
     return axios
