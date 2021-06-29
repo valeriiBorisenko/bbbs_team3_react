@@ -44,7 +44,7 @@ export default class Api {
   }
 
   // ивенты по конкретному месяцу
-  static getActualEventsForFilter(monthNumber) {
+  static getEventsByFilters(monthNumber) {
     return axios
       .get(`${baseURL}${apiUrl}/afisha/events/?months=${monthNumber}`)
       .then((response) => response.data.results)

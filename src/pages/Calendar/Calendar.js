@@ -88,8 +88,8 @@ function Calendar({
     if (isFiltersUsed) {
       const activeFilter = filters.find((filter) => filter.isActive);
       if (activeFilter) {
-        Api.getActualEventsForFilter(activeFilter.filter)
-          .then((calendarEvents) => setCalendarPageData(calendarEvents))
+        Api.getEventsByFilters(activeFilter.filter)
+          .then((filteredEvents) => setCalendarPageData(filteredEvents))
           .catch((error) => console.log(error))
           .finally(() => setIsLoading(false));
       } else {
