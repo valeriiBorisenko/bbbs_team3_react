@@ -135,8 +135,11 @@ export function debounce(callback, time) {
 }
 
 export const randomizeArray = (arr, size) => {
-  const array = arr.slice();
-  return [...Array(size)].map(
-    () => array.splice(Math.floor(Math.random() * array.length), 1)[0]
-  );
+  if (arr && size < arr.length) {
+    const array = arr.slice();
+    return [...Array(size)].map(
+      () => array.splice(Math.floor(Math.random() * array.length), 1)[0]
+    );
+  }
+  return arr;
 };
