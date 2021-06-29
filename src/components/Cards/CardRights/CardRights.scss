@@ -1,6 +1,9 @@
-@import '../../../styles/utils.scss';
+@import './styles/utils.scss';
 
 .rights__link {
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   flex-direction: row;
   justify-content: center;
