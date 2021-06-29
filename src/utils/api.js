@@ -52,14 +52,6 @@ export default class Api {
   }
   // фильтрация по нажатому фильтру
 
-  // страница "куда пойти"
-  static getPlaces() {
-    return axios
-      .get(`${baseURL}${apiUrl}/places/`)
-      .then((response) => response.data.results)
-      .catch((err) => Promise.reject(new Error(`${err.message}`)));
-  }
-
   // регистрация на мероприятие
   //! подключено к бекенду
   static makeEventRegistration(eventId) {
@@ -136,6 +128,28 @@ export default class Api {
     return axios
       .delete(`${baseURL}${apiUrl}/profile/diaries/${diaryId}/`, data)
       .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  // страница "куда пойти"
+  static getPlaces() {
+    return axios
+      .get(`${baseURL}${apiUrl}/places/`)
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  static getPlacesTags() {
+    return axios
+      .get(`${baseURL}${apiUrl}/places/tags/`)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  static getFilteredPlaces(tags) {
+    return axios
+      .get(`${baseURL}${apiUrl}/places/?tags=${tags}`)
+      .then((response) => response.data.results)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 

@@ -55,6 +55,10 @@
     -webkit-box-orient: vertical;
     line-clamp: 2;
     box-orient: vertical;
+
+    &_test {
+      font-weight: 900;
+    }
   }
 
   &__image {
@@ -63,6 +67,11 @@
     border-radius: 15px;
     object-fit: cover;
     object-position: center;
+
+    &_type_article {
+      margin-top: 70px;
+      margin-bottom: 15px;
+    }
   }
 }
 

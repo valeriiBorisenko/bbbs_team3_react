@@ -17,6 +17,7 @@ function CardPlace({
     gender,
     age,
     activityType,
+    tags,
   },
   color,
   sectionClass,
@@ -47,12 +48,14 @@ function CardPlace({
         <img
           src={`${staticImageUrl}/${image}`}
           alt={title}
-          className="card-place__image"
+          className="card-place__image card-place__image_type_article"
         />
       );
     }
     return null;
   };
+
+  const Test = () => tags.map((t) => t.name).join(',');
 
   return (
     <article className={`card-container ${sectionClass}`}>
@@ -70,6 +73,10 @@ function CardPlace({
             <TitleH2 sectionClass="card-place__title" title={title} />
           )}
           <Caption sectionClass="card-place__address" title={address} />
+          <Caption
+            sectionClass="card-place__address card-place__address_test"
+            title={Test()}
+          />
         </div>
 
         {renderImage()}
