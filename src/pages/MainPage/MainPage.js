@@ -112,8 +112,8 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
           <Link
             to="/films"
             className={`main-section__link ${
-              MOVIES_COUNT > 1
-                ? `movies_pagination movies_pagination_${MOVIES_COUNT}`
+              mainPageData?.movies.length > 1
+                ? `movies_pagination movies_pagination_${mainPageData?.movies.length}`
                 : ''
             }`}
             key={item?.id}
@@ -144,7 +144,9 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
                 <Link
                   to={QUESTIONS_URL}
                   className={`main-section__link main-section__link_el_question ${
-                    QUESTIONS_COUNT > 2 ? ' main-questions_pagination' : ''
+                    mainPageData?.questions.length > 2
+                      ? ' main-questions_pagination'
+                      : ''
                   }`}
                   key={item?.id}
                 >
