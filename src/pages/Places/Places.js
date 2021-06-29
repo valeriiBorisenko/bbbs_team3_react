@@ -83,11 +83,11 @@ function Places({ openPopupCities }) {
   // chosenLast - самая "свежая" карточка "Выбор наставника"
   // restOfPlaces - массив без этой карточки
   const definePlaces = (placesData) => {
-    const chosenPlaces = placesData.filter((place) => place.chosen);
+    const chosenPlaces = placesData.filter((place) => place?.chosen);
     const chosenLast = chosenPlaces[chosenPlaces.length - 1];
-    const restOfPlaces = placesData.filter(
-      (place) => place.id !== chosenLast.id
-    );
+    const restOfPlaces = chosenLast
+      ? placesData.filter((place) => place?.id !== chosenLast?.id)
+      : placesData;
     return { chosenPlaces, chosenLast, restOfPlaces };
   };
 
