@@ -91,6 +91,19 @@ function Places({ openPopupCities }) {
     return { chosenPlaces, chosenLast, restOfPlaces };
   };
 
+  // запрос на все места
+  const getAllPlaces = () => {
+    Promise.all([Api.getPlaces(), Api.getPlacesTags()])
+      .then(([placesData, tagsData]) => {
+        const { chosenPlaces, chosenLast, restOfPlaces } =
+          definePlaces(placesData);
+        setChosenPlace(chosenLast);
+        setPlaces(restOfPlaces);
+        setCategories(defineCategories(tagsData, chosenPlaces));
+      })
+      .catch(console.log);
+  };
+
   // функция-фильтратор
   const handleFiltration = () => {
     const ageFilter = ages.find((filter) => filter.isActive);
@@ -112,14 +125,8 @@ function Places({ openPopupCities }) {
     if (activeCategories.length === 0) {
       if (!ageFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
-        Api.getPlaces()
-          .then((res) => {
-            const { restOfPlaces, chosenLast } = definePlaces(res);
-            setChosenPlace(chosenLast);
-            setPlaces(restOfPlaces);
-            setIsChosenCardHidden(false);
-          })
-          .catch(console.log);
+        getAllPlaces();
+        setIsChosenCardHidden(false);
       } else {
         // + ВОЗРАСТ
         Api.getPlacesByCategories({
@@ -150,9 +157,8 @@ function Places({ openPopupCities }) {
           setIsChosenCardHidden(true);
         })
         .catch(console.log);
+      deselectOneTag(setCategories, ALL_CATEGORIES);
     }
-
-    deselectOneTag(setCategories, ALL_CATEGORIES);
   };
 
   // запуск фильтрации
@@ -170,15 +176,7 @@ function Places({ openPopupCities }) {
 
   // АПИ
   useEffect(() => {
-    Promise.all([Api.getPlaces(), Api.getPlacesTags()])
-      .then(([placesData, tagsData]) => {
-        const { chosenPlaces, chosenLast, restOfPlaces } =
-          definePlaces(placesData);
-        setChosenPlace(chosenLast);
-        setPlaces(restOfPlaces);
-        setCategories(defineCategories(tagsData, chosenPlaces));
-      })
-      .catch(console.log);
+    getAllPlaces();
   }, [currentUser?.city]);
 
   return (
