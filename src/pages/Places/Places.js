@@ -21,7 +21,7 @@ const ageFilters = [
   { filter: '8-10 лет', name: '8-10 лет', isActive: false, range: [8, 10] },
   { filter: '11-13 лет', name: '11-13 лет', isActive: false, range: [11, 13] },
   { filter: '14-18 лет', name: '14-18 лет', isActive: false, range: [14, 18] },
-  { filter: '18+ лет', name: '18+ лет', isActive: false, range: [18, 18] },
+  { filter: '18+ лет', name: '18+ лет', isActive: false, range: [18, 100] },
 ];
 
 const mentorTag = 'Выбор наставников';
