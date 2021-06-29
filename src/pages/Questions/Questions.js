@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop } from '../../hooks/index';
 import { ALL_CATEGORIES } from '../../config/constants';
-import { questionForm } from '../../utils/utils';
+import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
 import {
   renderFilterTags,
   handleCheckboxBehavior,
@@ -30,7 +30,7 @@ function Questions() {
   const currentUser = useContext(CurrentUserContext);
 
   // начальная дата с API
-  const [questionsData, setQuestionsData] = useState([]);
+  const [questionsPageData, setQuestionsPageData] = useState([]);
 
   // мутабельный массив для применения фильтров
   const [filteredQuestions, setFilteredQuestions] = useState([]);
@@ -74,10 +74,10 @@ function Questions() {
       .map((filter) => filter.filter);
 
     if (activeCategories.length === 0) {
-      setFilteredQuestions(questionsData);
+      setFilteredQuestions(questionsPageData);
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
-      const filterByCategory = questionsData.filter((question) =>
+      const filterByCategory = questionsPageData.filter((question) =>
         question.tags.some((el) => activeCategories.includes(el.name))
       );
 
@@ -94,25 +94,27 @@ function Questions() {
 
   // API
   useEffect(() => {
-    Api.getQuestionsPageData()
-      .then((result) => {
-        setQuestionsData(result);
-        setFilteredQuestions(result);
-        const tagsArr = result.map((data) => data.tags);
-        const tags = tagsArr.flat().map((data) => data.name);
-        const newTags = new Set(tags);
-        const uniqueTags = Array.from(newTags).map((item) => ({
-          filter: item,
-          name: item,
-          isActive: false,
-        }));
+    Promise.all([Api.getQuestionsPageData(), Api.getQuestionsPageTags()])
+      .then(([questionsData, tagsFilters]) => {
+        setQuestionsPageData(questionsData);
+
+        const customFilters = tagsFilters.map((tag) => {
+          const filterName = changeCaseOfFirstLetter(tag.name);
+          return {
+            isActive: false,
+            name: filterName,
+            filter: tag.slug,
+          };
+        });
         setCategories([
           { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-          ...uniqueTags,
+          ...customFilters,
         ]);
       })
-      .catch(console.log);
+      .catch((error) => console.log(error));
   }, []);
+
+  function renderPageContent() {}
 
   return (
     <BasePage>
@@ -125,7 +127,7 @@ function Questions() {
       </Helmet>
       <section className="questions-page page__section fade-in">
         <TitleH1 title="Ответы на вопросы" />
-        {questionsData.length > 0 ? (
+        {questionsPageData.length > 0 ? (
           <>
             <div className="tags tags_content_long-list">
               <ul className="tags__list tags__list_type_long">
@@ -133,10 +135,13 @@ function Questions() {
               </ul>
             </div>
             <ul className="questions">
-              {filteredQuestions.map((data) => (
-                <li className="questions__list-item fade-in" key={data.id}>
+              {questionsPageData.map((questionData) => (
+                <li
+                  className="questions__list-item fade-in"
+                  key={questionData.id}
+                >
                   <CardQuestion
-                    data={data}
+                    data={questionData}
                     sectionClass="card__questions_type_questions-page"
                     isQuestionsPage
                   />
