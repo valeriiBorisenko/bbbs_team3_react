@@ -10,6 +10,7 @@ import { COLORS, ALL_CATEGORIES } from '../../config/constants';
 import {
   renderFilterTags,
   handleCheckboxBehavior,
+  handleRadioBehavior,
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
@@ -24,19 +25,20 @@ const ageFilters = [
 ];
 
 const mentorTag = 'Выбор наставников';
-// ну там будет запрос такого вида: /places/?mentor=1&tags=park,museum
 
 function Places({ openPopupCities }) {
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
 
-  // начальные места из API
+  // места из API
   const [places, setPlaces] = useState([]);
   const [chosenPlace, setChosenPlace] = useState(null);
 
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+  // видна ли главная карточка
+  const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
   // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
@@ -54,26 +56,21 @@ function Places({ openPopupCities }) {
 
   // хэндлер клика по фильтру ВОЗРАСТ
   const changeAge = (inputValue, isChecked) => {
-    handleCheckboxBehavior(setAges, { inputValue, isChecked });
+    handleRadioBehavior(setAges, { inputValue, isChecked });
     setIsFiltersUsed(true);
   };
 
   // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Выбор наставника"
-  const defineCategories = (tags, chosenArr) => {
+  const defineCategories = (tags, chosenPlaces) => {
     const categoriesArray = tags.map((tag) => ({
-      filter: tag?.slug,
+      filter: tag?.slug.toLowerCase(),
       name: tag?.name[0].toUpperCase() + tag?.name.slice(1),
       isActive: false,
     }));
-    const chosenFilter = {
-      filter: mentorTag,
-      name: mentorTag,
-      isActive: false,
-    };
-    if (chosenArr.length > 0) {
+    if (chosenPlaces.length > 0) {
       return [
         { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-        chosenFilter,
+        { filter: mentorTag, name: mentorTag, isActive: false },
         ...categoriesArray,
       ];
     }
@@ -83,71 +80,79 @@ function Places({ openPopupCities }) {
     ];
   };
 
-  // функция, определяющая места, отмеченые флагом "Выбор наставника"
-  const defineChosenPlaces = (placesData) => {
-    const chosenArr = placesData.filter((place) => place.chosen);
-    const chosenLast = chosenArr[chosenArr.length - 1];
-    return { chosenArr, chosenLast };
+  // функция, определяющая самую "свежую" карточку по флагу "Выбор наставника"
+  // restOfPlaces - массив без этой карточки
+  const definePlaces = (placesData) => {
+    const chosenPlaces = placesData.filter((place) => place.chosen);
+    const chosenLast = chosenPlaces[chosenPlaces.length - 1];
+    const restOfPlaces = placesData.filter(
+      (place) => place.id !== chosenLast.id
+    );
+    return { chosenPlaces, chosenLast, restOfPlaces };
   };
 
   // функция-фильтратор
   const handleFiltration = () => {
-    const activeAgeFilter = ages.filter((filter) => filter.isActive);
-    console.log({ activeAgeFilter });
-    const activeCategories = categories
-      .filter(
-        (filter) =>
-          filter.isActive &&
-          filter.filter !== ALL_CATEGORIES &&
-          filter.filter !== mentorTag
-      )
-      .map((filter) => filter.filter)
+    const activeAgeFilter = ages.find((filter) => filter.isActive);
+
+    const activeCategories = categories.filter(
+      (category) => category.isActive && category.filter !== ALL_CATEGORIES
+    );
+
+    const activeTags = activeCategories
+      .filter((tag) => tag.filter !== mentorTag)
+      .map((tag) => tag.filter)
       .join(',');
-    console.log({ activeCategories });
+
+    const isMentorFlag = activeCategories.some(
+      (tag) => tag.filter === mentorTag
+    );
 
     // ВСЕ
     if (activeCategories.length === 0) {
-      if (activeAgeFilter.length === 0) {
+      if (!activeAgeFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         Api.getPlaces()
           .then((res) => {
-            const { chosenLast } = defineChosenPlaces(res);
-            setPlaces(res.filter((place) => place.id !== chosenLast.id));
+            const { restOfPlaces, chosenLast } = definePlaces(res);
             setChosenPlace(chosenLast);
+            setPlaces(restOfPlaces);
+            setIsChosenCardHidden(false);
           })
           .catch(console.log);
       } else {
         // + ВОЗРАСТ
-        // const filterByAge = places.filter((place) =>
-        //   filterAgeRanges(place.age, activeAgeFilter)
-        // );
-        // setFilteredPlaces(filterByAge);
+        Api.getPlacesByCategories({
+          min_age: activeAgeFilter.range[0],
+          max_age: activeAgeFilter.range[1],
+        })
+          .then((res) => {
+            setPlaces(res);
+            setIsChosenCardHidden(true);
+          })
+          .catch(console.log);
       }
 
       selectOneTag(setCategories, ALL_CATEGORIES);
       return;
     }
 
-    // КАТЕГОРИИ
+    // КАТЕГОРИИ + ВОЗРАСТ (или без него)
     if (activeCategories.length > 0) {
-      if (activeAgeFilter.length === 0) {
-        // + БЕЗ ВОЗРАСТА
-        Api.getFilteredPlaces(activeCategories)
-          .then(setPlaces)
-          .catch(console.log);
-      } else {
-        // + ВОЗРАСТ
-        // const filterByAge = places.filter((place) =>
-        //   filterAgeRanges(place.age, activeAgeFilter)
-        // );
-        // const filterByCategory = filterByAge.filter((place) =>
-        //   activeCategories.includes(place.category)
-        // );
-        // setFilteredPlaces(filterByCategory);
-      }
-
-      deselectOneTag(setCategories, ALL_CATEGORIES);
+      Api.getPlacesByCategories({
+        chosen: isMentorFlag,
+        tags: activeTags,
+        min_age: activeAgeFilter?.range[0],
+        max_age: activeAgeFilter?.range[1],
+      })
+        .then((res) => {
+          setPlaces(res);
+          setIsChosenCardHidden(true);
+        })
+        .catch(console.log);
     }
+
+    deselectOneTag(setCategories, ALL_CATEGORIES);
   };
 
   // запуск фильтрации
@@ -167,10 +172,11 @@ function Places({ openPopupCities }) {
   useEffect(() => {
     Promise.all([Api.getPlaces(), Api.getPlacesTags()])
       .then(([placesData, tagsData]) => {
-        const { chosenArr, chosenLast } = defineChosenPlaces(placesData);
-        setPlaces(placesData.filter((place) => place.id !== chosenLast.id));
+        const { chosenPlaces, chosenLast, restOfPlaces } =
+          definePlaces(placesData);
         setChosenPlace(chosenLast);
-        setCategories(defineCategories(tagsData, chosenArr));
+        setPlaces(restOfPlaces);
+        setCategories(defineCategories(tagsData, chosenPlaces));
       })
       .catch(console.log);
   }, [currentUser?.city]);
@@ -198,7 +204,7 @@ function Places({ openPopupCities }) {
 
       {currentUser && <PlacesRecommend />}
 
-      {chosenPlace && !isFiltersUsed && (
+      {chosenPlace && !isChosenCardHidden && (
         <section className="place__main page__section fade-in">
           <CardPlace
             key={chosenPlace?.id}

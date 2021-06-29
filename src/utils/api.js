@@ -146,9 +146,15 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  static getFilteredPlaces(tags) {
+  // python was here
+  // eslint-disable-next-line camelcase
+  static getPlacesByCategories({ chosen, tags, min_age, max_age }) {
     return axios
-      .get(`${baseURL}${apiUrl}/places/?tags=${tags}`)
+      .get(`${baseURL}${apiUrl}/places/`, {
+        params: chosen
+          ? { chosen, tags, min_age, max_age }
+          : { tags, min_age, max_age },
+      })
       .then((response) => response.data.results)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
