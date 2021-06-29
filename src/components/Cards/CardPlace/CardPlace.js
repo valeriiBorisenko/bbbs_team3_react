@@ -2,67 +2,93 @@ import './CardPlace.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { PLACES_URL } from '../../../config/routes';
+import { staticImageUrl } from '../../../config/config';
+import { activityTypePlaces } from '../../../config/constants';
 import { CardAnnotation, Rubric, TitleH2, Card, Caption } from './index';
 
 function CardPlace({
   data: {
-    chosen,
+    image,
     title,
-    address,
-    imageUrl,
-    link,
     description,
-    sex,
+    link,
+    chosen,
+    address,
+    gender,
     age,
-    category,
+    activityType,
   },
   color,
   sectionClass,
-  isMain,
+  isBig,
+  isMainPage,
 }) {
-  const cardColor = isMain ? 'yellow' : color;
+  const cardColor = isBig ? 'yellow' : color;
+  const cardSize = isBig ? 'card-place_main' : '';
+  const sex = gender === 'male' ? 'Мальчик' : 'Девочка';
+
+  const renderImage = () => {
+    if (isMainPage) {
+      return (
+        <Link
+          to={PLACES_URL}
+          className="card-place__link-wrap card-place__link-wrap_content_article-img"
+        >
+          <img
+            src={`${staticImageUrl}/${image}`}
+            alt={title}
+            className="card-place__image"
+          />
+        </Link>
+      );
+    }
+    if (!isMainPage && chosen && isBig) {
+      return (
+        <img
+          src={`${staticImageUrl}/${image}`}
+          alt={title}
+          className="card-place__image"
+        />
+      );
+    }
+    return null;
+  };
 
   return (
     <article className={`card-container ${sectionClass}`}>
-      <Card
-        sectionClass={`card-place ${isMain ? 'card-place_main' : ''}`}
-        color={cardColor}
-      >
-        {isMain ? (
+      <Card sectionClass={`card-place ${cardSize}`} color={cardColor}>
+        {chosen && (
           <Rubric title="Выбор наставника" sectionClass="card-place__rubric" />
-        ) : (
-          <Rubric title={category} sectionClass="card-place__rubric" />
         )}
 
         <div className="card-place__title-wrap">
-          <Link to={PLACES_URL} className="card-place__link-wrap">
+          {isMainPage ? (
+            <Link to={PLACES_URL} className="card-place__link-wrap">
+              <TitleH2 sectionClass="card-place__title" title={title} />
+            </Link>
+          ) : (
             <TitleH2 sectionClass="card-place__title" title={title} />
-          </Link>
+          )}
           <Caption sectionClass="card-place__address" title={address} />
         </div>
 
-        {chosen && isMain && (
-          <Link
-            to={PLACES_URL}
-            className="card-place__link-wrap card-place__link-wrap_content_article-img"
-          >
-            <img src={imageUrl} alt={title} className="card-place__image" />
-          </Link>
-        )}
+        {renderImage()}
 
-        <a
-          href={link}
-          className="link card-place__link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          перейти на сайт
-        </a>
+        {link && (
+          <a
+            href={link}
+            className="link card-place__link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            перейти на сайт
+          </a>
+        )}
       </Card>
       <CardAnnotation
-        info={`${sex || ''} ${age} лет, ${category}`}
+        info={`${sex}, ${age} лет, ${activityTypePlaces[activityType]} отдых`}
         description={description}
-        isMain={isMain}
+        isMain={isBig}
       />
     </article>
   );
@@ -73,12 +99,13 @@ CardPlace.propTypes = {
   chosen: PropTypes.bool,
   title: PropTypes.string,
   address: PropTypes.string,
-  imageUrl: PropTypes.string,
+  image: PropTypes.string,
   link: PropTypes.string,
   description: PropTypes.string,
   color: PropTypes.string,
   sectionClass: PropTypes.string,
-  isMain: PropTypes.bool,
+  isBig: PropTypes.bool,
+  isMainPage: PropTypes.bool,
 };
 
 CardPlace.defaultProps = {
@@ -86,12 +113,13 @@ CardPlace.defaultProps = {
   chosen: false,
   title: '',
   address: '',
-  imageUrl: '',
+  image: '',
   link: '',
   description: '',
   color: 'white',
-  isMain: false,
+  isBig: false,
   sectionClass: '',
+  isMainPage: false,
 };
 
 export default CardPlace;

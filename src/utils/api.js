@@ -55,8 +55,9 @@ export default class Api {
   // страница "куда пойти"
   static getPlaces() {
     return axios
-      .get(`${baseURL}${apiUrl}/where-to-go/`) //! заменить /places
-      .then((response) => response.data);
+      .get(`${baseURL}${apiUrl}/places/`)
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   // регистрация на мероприятие

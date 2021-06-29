@@ -1,10 +1,10 @@
+/* eslint-disable no-unused-vars */
 import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop } from '../../hooks/index';
-import { repeatSchema } from '../../utils/utils';
 import { COLORS, ALL_CATEGORIES } from '../../config/constants';
 import {
   renderFilterTags,
@@ -30,6 +30,7 @@ function Places({ openPopupCities }) {
 
   // начальные места из API
   const [places, setPlaces] = useState([]);
+  console.log(places);
 
   // мутабельный массив для применения фильтров
   const [filteredPlaces, setFilteredPlaces] = useState([]);
@@ -129,24 +130,24 @@ function Places({ openPopupCities }) {
   // АПИ
   useEffect(() => {
     Api.getPlaces()
-      .then((result) => {
-        setPlaces(result);
-        setFilteredPlaces(result);
+      .then((res) => {
+        setPlaces(res);
+        // setFilteredPlaces(result);
 
-        const categoriesArr = result.map((place) => place.category);
-        const set = new Set(categoriesArr);
-        const uniqueCategories = Array.from(set).map((item) => ({
-          filter: item,
-          name: item,
-          isActive: false,
-        }));
-        setCategories([
-          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-          ...uniqueCategories,
-        ]);
+        // const categoriesArr = result.map((place) => place.category);
+        // const set = new Set(categoriesArr);
+        // const uniqueCategories = Array.from(set).map((item) => ({
+        //   filter: item,
+        //   name: item,
+        //   isActive: false,
+        // }));
+        // setCategories([
+        //   { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+        //   ...uniqueCategories,
+        // ]);
       })
       .catch(console.log);
-  }, []);
+  }, [currentUser?.city]);
 
   // открытие попапа "города" для незарегистрированного
   useEffect(() => {
@@ -180,19 +181,19 @@ function Places({ openPopupCities }) {
 
       <section className="place__main page__section fade-in">
         <CardPlace
-          key={places.find((place) => place.chosen)?.id}
-          data={places.find((place) => place.chosen)}
+          key={places.find((place) => place?.chosen)?.id}
+          data={places.find((place) => place?.chosen)}
           sectionClass="card-container_type_main-article"
-          isMain
+          isBig
         />
       </section>
 
       <section className="place__cards-grid page__section">
-        {filteredPlaces.map((place, idx) => (
+        {places.map((place, i) => (
           <CardPlace
             data={place}
-            key={place.id}
-            color={repeatSchema(idx, places.length, COLORS)}
+            key={place?.id}
+            color={COLORS[i % COLORS.length]}
             sectionClass="card-container_type_article fade-in"
           />
         ))}

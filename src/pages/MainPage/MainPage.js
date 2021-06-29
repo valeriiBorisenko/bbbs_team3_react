@@ -96,7 +96,8 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
           key={mainPageData?.place?.id}
           data={mainPageData?.place}
           sectionClass="card-container_type_main-article"
-          isMain
+          isBig
+          isMainPage
         />
       </section>
 

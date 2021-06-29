@@ -51,6 +51,12 @@ export const FIGURES = [
   'circle',
 ];
 
+export const activityTypePlaces = {
+  1: 'Активный',
+  2: 'Развлекательный',
+  3: 'Познавательный',
+};
+
 export const ALL_CATEGORIES = 'Все';
 
 export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif|bmp)$/i;
