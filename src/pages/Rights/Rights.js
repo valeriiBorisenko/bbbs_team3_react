@@ -45,7 +45,7 @@ const Rights = () => {
 
   // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
-    setPageNumber(0);
+    setIsLoading(true);
     const offset = pageSize * pageNumber;
     const activeCategories = categories
       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
@@ -56,6 +56,7 @@ const Rights = () => {
         .then(({ results, count }) => {
           setArticles(results);
           setPageCount(Math.ceil(count / pageSize));
+          setIsLoading(false);
         })
         .catch((err) => console.log(err));
 
@@ -75,30 +76,11 @@ const Rights = () => {
         .then(({ results, count }) => {
           setArticles(results);
           setPageCount(Math.ceil(count / pageSize));
+          setIsLoading(false);
         })
         .catch((err) => console.log(err));
     }
   };
-
-  // запуск фильтрации
-  useEffect(() => {
-    handleFiltration();
-    setIsFiltersUsed(false);
-  }, [isFiltersUsed]);
-
-  //  АПИ статей + пагинация
-  useEffect(() => {
-    setIsLoading(true);
-    const offset = pageSize * pageNumber;
-
-    Api.getRightsData({ limit: pageSize, offset })
-      .then(({ results, count }) => {
-        setArticles(results);
-        setPageCount(Math.ceil(count / pageSize));
-        setIsLoading(false);
-      })
-      .catch((err) => console.log(err));
-  }, [pageSize, pageNumber]);
 
   // Отрисовка тэгов при загрузке страницы
   useEffect(() => {
@@ -121,6 +103,26 @@ const Rights = () => {
       ]);
     });
   }, []);
+
+  // запуск фильтрации
+  useEffect(() => {
+    handleFiltration();
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed]);
+
+  //  АПИ статей + пагинация
+  useEffect(() => {
+    setIsLoading(true);
+    const offset = pageSize * pageNumber;
+
+    Api.getRightsData({ limit: pageSize, offset })
+      .then(({ results, count }) => {
+        setArticles(results);
+        setPageCount(Math.ceil(count / pageSize));
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err));
+  }, [pageSize, pageNumber]);
 
   // Юз эффект для пагинации
   useEffect(() => {
