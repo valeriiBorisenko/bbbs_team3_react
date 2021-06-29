@@ -48,7 +48,7 @@ function Calendar({
   function getInitialPageData() {
     setIsCityChanging(true);
     Api.getCalendarPageData()
-      .then((events) => setCalendarPageData(events))
+      .then((calendarEvents) => setCalendarPageData(calendarEvents))
       .catch((error) => console.log(error))
       .finally(() => {
         setIsLoading(false);
@@ -69,13 +69,13 @@ function Calendar({
   useEffect(() => {
     if (currentUser) {
       Api.getActiveMonthTags()
-        .then((activeMonths) => {
-          const customFilters = activeMonths.map((activeMonth) => {
-            const filterName = changeCaseOfFirstLetter(months[activeMonth]);
+        .then((monthsTags) => {
+          const customFilters = monthsTags.map((tag) => {
+            const filterName = changeCaseOfFirstLetter(months[tag]);
             return {
               isActive: false,
               name: filterName,
-              filter: activeMonth,
+              filter: tag,
             };
           });
           setFilters(customFilters);
@@ -89,7 +89,7 @@ function Calendar({
       const activeFilter = filters.find((filter) => filter.isActive);
       if (activeFilter) {
         Api.getActualEventsForFilter(activeFilter.filter)
-          .then((events) => setCalendarPageData(events))
+          .then((calendarEvents) => setCalendarPageData(calendarEvents))
           .catch((error) => console.log(error))
           .finally(() => setIsLoading(false));
       } else {
