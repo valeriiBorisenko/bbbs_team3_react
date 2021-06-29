@@ -9,7 +9,8 @@ import {
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
-import { useScrollToTop } from '../../hooks/index';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
+import { useScrollToTop, useDebounce } from '../../hooks/index';
 import Api from '../../utils/api';
 
 import {
@@ -43,102 +44,85 @@ const Rights = () => {
     setIsFiltersUsed(true);
   };
 
+  // Функция запроса ДАТЫ и её обработка
+  const getRightsData = async (tagsStr = '') => {
+    const offset = pageSize * pageNumber;
+    const { results, count } = await Api.getRightsData({
+      limit: pageSize,
+      offset,
+      tags: tagsStr,
+    });
+    setArticles(results);
+    setPageCount(Math.ceil(count / pageSize));
+    setIsLoading(false);
+  };
+
+  // Функция запроса тэгов и их обработка
+  const getRingtsTags = async () => {
+    const tags = await Api.getRightsTags();
+    const categoriesArr = await tags.map((tag) => ({
+      filter: tag.slug.toLowerCase(),
+      name: changeCaseOfFirstLetter(tag.name),
+      isActive: false,
+    }));
+
+    setCategories([
+      {
+        filter: ALL_CATEGORIES,
+        name: ALL_CATEGORIES,
+        isActive: true,
+      },
+      ...categoriesArr,
+    ]);
+  };
+
   // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
-    setIsLoading(true);
-    const offset = pageSize * pageNumber;
     const activeCategories = categories
       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-      .map((filter) => filter.slug);
-    // ВСЕ
+      .map((filter) => filter.filter);
+
     if (activeCategories.length === 0) {
-      Api.getRightsData({ limit: pageSize, offset, tags: '' })
-        .then(({ results, count }) => {
-          setArticles(results);
-          setPageCount(Math.ceil(count / pageSize));
-          setIsLoading(false);
-        })
-        .catch((err) => console.log(err));
-
+      getRightsData();
       selectOneTag(setCategories, ALL_CATEGORIES);
-      return;
-    }
-
-    // КАТЕГОРИИ
-    if (activeCategories.length > 0) {
+    } else {
       const tagsStr = activeCategories.join(',');
+      getRightsData(tagsStr);
       deselectOneTag(setCategories, ALL_CATEGORIES);
-      Api.getRightsData({
-        limit: pageSize,
-        offset,
-        tags: tagsStr,
-      })
-        .then(({ results, count }) => {
-          setArticles(results);
-          setPageCount(Math.ceil(count / pageSize));
-          setIsLoading(false);
-        })
-        .catch((err) => console.log(err));
+    }
+  };
+
+  const listener = (smallQuery, largeQuery) => {
+    if (smallQuery.matches) {
+      setPageSize(4);
+    } else if (largeQuery.matches) {
+      setPageSize(9);
+    } else {
+      setPageSize(16);
     }
   };
 
   // Отрисовка тэгов при загрузке страницы
   useEffect(() => {
-    Api.getRightsTags().then((tags) => {
-      const categoriesArr = Array.from(tags).map((tag) => ({
-        filter: tag.name.toLowerCase(),
-        name: tag.name[0].toUpperCase() + tag.name.slice(1),
-        isActive: false,
-        slug: tag.slug,
-      }));
-
-      setCategories([
-        {
-          filter: ALL_CATEGORIES,
-          name: ALL_CATEGORIES,
-          isActive: true,
-          slug: '',
-        },
-        ...categoriesArr,
-      ]);
-    });
+    setIsLoading(true);
+    getRingtsTags();
   }, []);
 
+  // delay для фильтрации
+  const debounceFiltration = useDebounce(handleFiltration, 1500);
   // запуск фильтрации
   useEffect(() => {
-    handleFiltration();
-    setIsFiltersUsed(false);
-  }, [isFiltersUsed]);
-
-  //  АПИ статей + пагинация
-  useEffect(() => {
     setIsLoading(true);
-    const offset = pageSize * pageNumber;
-
-    Api.getRightsData({ limit: pageSize, offset })
-      .then(({ results, count }) => {
-        setArticles(results);
-        setPageCount(Math.ceil(count / pageSize));
-        setIsLoading(false);
-      })
-      .catch((err) => console.log(err));
-  }, [pageSize, pageNumber]);
+    debounceFiltration();
+    setIsFiltersUsed(false);
+  }, [pageSize, pageNumber, isFiltersUsed]);
 
   // Юз эффект для пагинации
   useEffect(() => {
     const smallQuery = window.matchMedia('(max-width: 1399px)');
     const largeQuery = window.matchMedia('(max-width: 1640px)');
 
-    const listener = () => {
-      if (smallQuery.matches) {
-        setPageSize(4);
-      } else if (largeQuery.matches) {
-        setPageSize(9);
-      } else {
-        setPageSize(16);
-      }
-    };
-    listener();
+    listener(smallQuery, largeQuery);
 
     smallQuery.addEventListener('change', listener);
     largeQuery.addEventListener('change', listener);
@@ -148,6 +132,11 @@ const Rights = () => {
       largeQuery.removeEventListener('change', listener);
     };
   }, []);
+
+  // глобальный лоадер
+  if (!articles || !categories) {
+    return <Loader isCentered />;
+  }
 
   return (
     <BasePage>

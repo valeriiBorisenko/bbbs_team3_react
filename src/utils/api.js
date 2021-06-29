@@ -148,11 +148,4 @@ export default class Api {
       .get(`${baseURL}${apiUrl}/rights/tags/`)
       .then((response) => response.data);
   }
-
-  // работа со страницей Права статься по id
-  static getRightById({ RightId }) {
-    return axios
-      .get(`${baseURL}${apiUrl}/rights/${RightId}/`)
-      .then((response) => response.data);
-  }
 }
