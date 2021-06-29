@@ -32,6 +32,11 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
 
   const currentUser = useContext(CurrentUserContext);
   const [mainPageData, setMainPageData] = useState(null);
+  const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
+  const randomQuestions = randomizeArray(
+    mainPageData?.questions,
+    QUESTIONS_COUNT
+  );
 
   const getMainPageData = () => {
     Api.getMainPageData().then(setMainPageData).catch(console.log); // попап ошибка!
@@ -108,12 +113,12 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
       )}
 
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
-        {randomizeArray(mainPageData?.movies, MOVIES_COUNT).map((item) => (
+        {randomMovies.map((item) => (
           <Link
             to="/films"
             className={`main-section__link ${
-              MOVIES_COUNT > 1
-                ? `movies_pagination movies_pagination_${MOVIES_COUNT}`
+              randomMovies.length > 1
+                ? `movies_pagination movies_pagination_${randomMovies.length}`
                 : ''
             }`}
             key={item?.id}
@@ -139,19 +144,17 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
             link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
           />
           <div className="main-questions__container">
-            {randomizeArray(mainPageData?.questions, QUESTIONS_COUNT).map(
-              (item) => (
-                <Link
-                  to={QUESTIONS_URL}
-                  className={`main-section__link main-section__link_el_question ${
-                    QUESTIONS_COUNT > 2 ? ' main-questions_pagination' : ''
-                  }`}
-                  key={item?.id}
-                >
-                  <CardQuestion data={item} />
-                </Link>
-              )
-            )}
+            {randomQuestions.map((item) => (
+              <Link
+                to={QUESTIONS_URL}
+                className={`main-section__link main-section__link_el_question ${
+                  randomQuestions.length > 2 ? ' main-questions_pagination' : ''
+                }`}
+                key={item?.id}
+              >
+                <CardQuestion data={item} />
+              </Link>
+            ))}
           </div>
         </div>
       </section>
