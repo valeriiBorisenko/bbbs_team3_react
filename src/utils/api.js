@@ -50,7 +50,6 @@ export default class Api {
       .then((response) => response.data.results)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
-  // фильтрация по нажатому фильтру
 
   // страница "куда пойти"
   static getPlaces() {
