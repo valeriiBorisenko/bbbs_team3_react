@@ -1,6 +1,3 @@
-// Lod55: Пока летят дубли с мулти тегэв бэка реакт ругается что key повторяется и ломает код
-// Фильтр при нажатии на "ВСЕ" не отключается отсальные кнопки если хотя бы одна из них isActive: true
-
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Rights.scss';
@@ -48,11 +45,11 @@ const Rights = () => {
 
   // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
+    setPageNumber(0);
     const offset = pageSize * pageNumber;
     const activeCategories = categories
       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
       .map((filter) => filter.slug);
-    // console.log(activeCategories);
     // ВСЕ
     if (activeCategories.length === 0) {
       Api.getRightsData({ limit: pageSize, offset, tags: '' })
@@ -62,7 +59,6 @@ const Rights = () => {
         })
         .catch((err) => console.log(err));
 
-      // Не сбрасывает все тэги в false?
       selectOneTag(setCategories, ALL_CATEGORIES);
       return;
     }
@@ -70,7 +66,6 @@ const Rights = () => {
     // КАТЕГОРИИ
     if (activeCategories.length > 0) {
       const tagsStr = activeCategories.join(',');
-      // console.log(tagsStr);
       deselectOneTag(setCategories, ALL_CATEGORIES);
       Api.getRightsData({
         limit: pageSize,
@@ -91,40 +86,41 @@ const Rights = () => {
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  //  АПИ теги и статьи
+  //  АПИ статей + пагинация
   useEffect(() => {
     setIsLoading(true);
     const offset = pageSize * pageNumber;
 
-    Promise.all([
-      Api.getRightsData({ limit: pageSize, offset }),
-      Api.getRightsTags(),
-    ])
-      .then(([{ results, count }, tags]) => {
+    Api.getRightsData({ limit: pageSize, offset })
+      .then(({ results, count }) => {
         setArticles(results);
         setPageCount(Math.ceil(count / pageSize));
-
-        const categoriesArr = Array.from(tags).map((tag) => ({
-          filter: tag.name.toLowerCase(),
-          name: tag.name[0].toUpperCase() + tag.name.slice(1),
-          isActive: false,
-          slug: tag.slug,
-        }));
-
-        setCategories([
-          {
-            filter: ALL_CATEGORIES,
-            name: ALL_CATEGORIES,
-            isActive: true,
-            slug: '',
-          },
-          ...categoriesArr,
-        ]);
-
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, [pageSize, pageNumber]);
+
+  // Отрисовка тэгов при загрузке страницы
+  useEffect(() => {
+    Api.getRightsTags().then((tags) => {
+      const categoriesArr = Array.from(tags).map((tag) => ({
+        filter: tag.name.toLowerCase(),
+        name: tag.name[0].toUpperCase() + tag.name.slice(1),
+        isActive: false,
+        slug: tag.slug,
+      }));
+
+      setCategories([
+        {
+          filter: ALL_CATEGORIES,
+          name: ALL_CATEGORIES,
+          isActive: true,
+          slug: '',
+        },
+        ...categoriesArr,
+      ]);
+    });
+  }, []);
 
   // Юз эффект для пагинации
   useEffect(() => {
