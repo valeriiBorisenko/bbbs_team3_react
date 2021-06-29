@@ -163,6 +163,13 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  static getQuestionsByFilters(query) {
+    return axios
+      .get(`${baseURL}${apiUrl}/questions/?tags=${query}`)
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
   static postQuestion(question) {
     return axios
       .post(`${baseURL}${apiUrl}/questions/`, question)
