@@ -35,7 +35,7 @@ function Places({ openPopupCities }) {
   const [places, setPlaces] = useState([]);
   const [chosenPlace, setChosenPlace] = useState(null);
 
-  // флаг применения фильтров
+  // флаг применения фильтров для useEffect
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // видна ли главная карточка
   const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
@@ -50,7 +50,6 @@ function Places({ openPopupCities }) {
     } else {
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
-
     setIsFiltersUsed(true);
   };
 
@@ -80,7 +79,8 @@ function Places({ openPopupCities }) {
     ];
   };
 
-  // функция, определяющая самую "свежую" карточку по флагу "Выбор наставника"
+  // функция, определяющая карточки по флагу "Выбор наставника"
+  // chosenLast - самая "свежая" карточка "Выбор наставника"
   // restOfPlaces - массив без этой карточки
   const definePlaces = (placesData) => {
     const chosenPlaces = placesData.filter((place) => place.chosen);
@@ -93,7 +93,7 @@ function Places({ openPopupCities }) {
 
   // функция-фильтратор
   const handleFiltration = () => {
-    const activeAgeFilter = ages.find((filter) => filter.isActive);
+    const ageFilter = ages.find((filter) => filter.isActive);
 
     const activeCategories = categories.filter(
       (category) => category.isActive && category.filter !== ALL_CATEGORIES
@@ -110,7 +110,7 @@ function Places({ openPopupCities }) {
 
     // ВСЕ
     if (activeCategories.length === 0) {
-      if (!activeAgeFilter) {
+      if (!ageFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         Api.getPlaces()
           .then((res) => {
@@ -123,8 +123,8 @@ function Places({ openPopupCities }) {
       } else {
         // + ВОЗРАСТ
         Api.getPlacesByCategories({
-          min_age: activeAgeFilter.range[0],
-          max_age: activeAgeFilter.range[1],
+          min_age: ageFilter.range[0],
+          max_age: ageFilter.range[1],
         })
           .then((res) => {
             setPlaces(res);
@@ -142,8 +142,8 @@ function Places({ openPopupCities }) {
       Api.getPlacesByCategories({
         chosen: isMentorFlag,
         tags: activeTags,
-        min_age: activeAgeFilter?.range[0],
-        max_age: activeAgeFilter?.range[1],
+        min_age: ageFilter?.range[0],
+        max_age: ageFilter?.range[1],
       })
         .then((res) => {
           setPlaces(res);
