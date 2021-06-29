@@ -148,10 +148,12 @@ export default class Api {
   }
 
   // работа со странице вопросов
+  //! подключено к бекенду
   static getQuestionsPageData() {
     return axios
       .get(`${baseURL}${apiUrl}/questions/`)
-      .then((response) => response.data);
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   static postQuestion(question) {
