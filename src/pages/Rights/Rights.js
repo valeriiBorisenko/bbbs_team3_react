@@ -159,7 +159,7 @@ const Rights = () => {
             pageCount={pageCount}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
-            sectionClassCards="rights page__section"
+            sectionClass="rights page__section"
           >
             {filteredArticles.map((item, i) => (
               <CardRights
