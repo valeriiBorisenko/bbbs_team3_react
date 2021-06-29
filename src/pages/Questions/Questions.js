@@ -116,6 +116,11 @@ function Questions() {
 
   function renderPageContent() {}
 
+  // глобальный лоадер
+  if (!questionsPageData || !categories) {
+    return <Loader isCentered />;
+  }
+
   return (
     <BasePage>
       <Helmet>
