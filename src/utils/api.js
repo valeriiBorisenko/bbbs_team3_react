@@ -134,10 +134,10 @@ export default class Api {
   }
 
   // работа со страницей Права DATA
-  static getRightsData({ limit, offset }) {
+  static getRightsData({ limit, offset, tags }) {
     return axios
       .get(`${baseURL}${apiUrl}/rights/`, {
-        params: { limit, offset },
+        params: { tags, limit, offset },
       })
       .then((response) => response.data);
   }

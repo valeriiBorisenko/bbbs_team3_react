@@ -1,3 +1,6 @@
+// Lod55: Пока летят дубли с мулти тегэв бэка реакт ругается что key повторяется и ломает код
+// Фильтр при нажатии на "ВСЕ" не отключается отсальные кнопки если хотя бы одна из них isActive: true
+
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Rights.scss';
@@ -28,10 +31,9 @@ const Rights = () => {
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
-  // Стейты с данными Статьи, Теги, Отфильтрованные Статьи
-  const [pageData, setPageData] = useState([]);
+  // Стейты с данными Статьи, Теги
+  const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [filteredArticles, setFilteredArticles] = useState([]);
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(false);
@@ -44,29 +46,42 @@ const Rights = () => {
     setIsFiltersUsed(true);
   };
 
-  // функция-фильтратор пока реализация на фронте без использованя АПИ
+  // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
+    const offset = pageSize * pageNumber;
     const activeCategories = categories
       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-      .map((filter) => filter.filter);
-
+      .map((filter) => filter.slug);
+    // console.log(activeCategories);
     // ВСЕ
     if (activeCategories.length === 0) {
-      setFilteredArticles(pageData);
+      Api.getRightsData({ limit: pageSize, offset, tags: '' })
+        .then(({ results, count }) => {
+          setArticles(results);
+          setPageCount(Math.ceil(count / pageSize));
+        })
+        .catch((err) => console.log(err));
 
+      // Не сбрасывает все тэги в false?
       selectOneTag(setCategories, ALL_CATEGORIES);
       return;
     }
 
     // КАТЕГОРИИ
     if (activeCategories.length > 0) {
-      const filterByCategory = pageData.filter((article) =>
-        article.tags.some((tag) => activeCategories.includes(tag.name))
-      );
-
-      setFilteredArticles(filterByCategory);
-
+      const tagsStr = activeCategories.join(',');
+      // console.log(tagsStr);
       deselectOneTag(setCategories, ALL_CATEGORIES);
+      Api.getRightsData({
+        limit: pageSize,
+        offset,
+        tags: tagsStr,
+      })
+        .then(({ results, count }) => {
+          setArticles(results);
+          setPageCount(Math.ceil(count / pageSize));
+        })
+        .catch((err) => console.log(err));
     }
   };
 
@@ -86,18 +101,23 @@ const Rights = () => {
       Api.getRightsTags(),
     ])
       .then(([{ results, count }, tags]) => {
-        setPageData(results);
-        setFilteredArticles(results);
+        setArticles(results);
         setPageCount(Math.ceil(count / pageSize));
 
         const categoriesArr = Array.from(tags).map((tag) => ({
           filter: tag.name.toLowerCase(),
           name: tag.name[0].toUpperCase() + tag.name.slice(1),
           isActive: false,
+          slug: tag.slug,
         }));
 
         setCategories([
-          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+          {
+            filter: ALL_CATEGORIES,
+            name: ALL_CATEGORIES,
+            isActive: true,
+            slug: '',
+          },
           ...categoriesArr,
         ]);
 
@@ -142,13 +162,11 @@ const Rights = () => {
       </Helmet>
       <section className="lead page__section fade-in">
         <TitleH1 title="Права детей" />
-        {!isLoading && (
-          <div className="tags">
-            <ul className="tags__list">
-              {renderFilterTags(categories, 'checkbox', changeCategory)}
-            </ul>
-          </div>
-        )}
+        <div className="tags">
+          <ul className="tags__list">
+            {renderFilterTags(categories, 'checkbox', changeCategory)}
+          </ul>
+        </div>
       </section>
       {isLoading ? (
         <Loader isNested />
@@ -161,7 +179,7 @@ const Rights = () => {
             setPageNumber={setPageNumber}
             sectionClass="rights page__section"
           >
-            {filteredArticles.map((item, i) => (
+            {articles.map((item, i) => (
               <CardRights
                 key={item.id}
                 title={item.title}
