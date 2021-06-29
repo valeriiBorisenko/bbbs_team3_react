@@ -156,6 +156,13 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  static getQuestionsPageTags() {
+    return axios
+      .get(`${baseURL}${apiUrl}/questions/tags/`)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
   static postQuestion(question) {
     return axios
       .post(`${baseURL}${apiUrl}/question/`, question)
