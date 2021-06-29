@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
-import PropTypes, { func } from 'prop-types';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop } from '../../hooks/index';
+import { useScrollToTop, useDebounce } from '../../hooks/index';
+import useEventSubscription from '../../hooks/useEventSubscription';
 import { months } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
-import { changeCaseOfFirstLetter, debounce } from '../../utils/utils';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
 import Api from '../../utils/api';
 import {
   BasePage,
@@ -74,6 +75,8 @@ function Calendar({
   }, [currentUser?.city]);
 
   function handleFiltration() {
+    console.log('handleFiltration');
+    console.log('isFiltersUsed', isFiltersUsed);
     if (isFiltersUsed) {
       const activeFilter = filters.find((filter) => filter.isActive);
       console.log(activeFilter);
@@ -85,6 +88,7 @@ function Calendar({
       } else {
         getCalendarPageData();
       }
+      setIsFiltersUsed(false);
     }
   }
 
@@ -93,11 +97,10 @@ function Calendar({
     setIsFiltersUsed(true);
   }
 
+  const debounceFiltration = useDebounce(handleFiltration, 1500);
   useEffect(() => {
     // в дальнейшем надо изменить количество секунд
-    const debaunceFiltration = debounce(handleFiltration, 1000);
-    debaunceFiltration();
-    setIsFiltersUsed(false);
+    debounceFiltration();
   }, [isFiltersUsed]);
 
   // отрисовка заглушки

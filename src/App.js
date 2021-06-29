@@ -122,19 +122,19 @@ function App() {
   // работает с запросом Api (booked)
   function registerOnEvent(cardData, cardId) {
     Api.makeEventRegistration({ event: cardId })
+      //! нужна перекраска карточки без подзагрузок (в идеале)
       .then(() => setSelectedCalendarCard(cardData))
       .then(() => handleClickPopupSuccessfullyOpened())
       .catch((error) => console.log(error));
-    // нужна перекраска карточки без подзагрузок (в идеале)
     // или переносить это в карточку + юзать стейт
     // или использовать контекст
   }
 
   function cancelEventRegistration(cardData, cardId) {
     Api.cancelEventRegistration(cardId)
+      //! нужна перекраска карточки без подзагрузок (в идеале)
       .then(() => console.log('Успешно!'))
       .catch((error) => console.log(error));
-    // нужна перекраска карточки без подзагрузок (в идеале)
     // или переносить это в карточку + юзать стейт
     // или использовать контекст
   }
