@@ -4,12 +4,11 @@ import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop } from '../../hooks/index';
+import { useScrollToTop, useDebounce } from '../../hooks/index';
 import { months } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import Api from '../../utils/api';
-import useDebounce from '../../hooks/useDebounce';
 import {
   BasePage,
   TitleH1,
