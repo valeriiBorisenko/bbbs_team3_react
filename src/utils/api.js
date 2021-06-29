@@ -147,7 +147,7 @@ export default class Api {
       .then((response) => response.data);
   }
 
-  // работа со странице вопросов
+  // работа со страницей вопросов
   //! подключено к бекенду
   static getQuestionsPageData() {
     return axios
@@ -165,7 +165,8 @@ export default class Api {
 
   static postQuestion(question) {
     return axios
-      .post(`${baseURL}${apiUrl}/question/`, question)
-      .then((response) => response.data);
+      .post(`${baseURL}${apiUrl}/questions/`, question)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 }
