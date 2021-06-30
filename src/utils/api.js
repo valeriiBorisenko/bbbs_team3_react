@@ -176,4 +176,20 @@ export default class Api {
       .then((response) => response.data)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
+
+  // работа со страницей Права DATA
+  static getRightsData({ limit, offset, tags }) {
+    return axios
+      .get(`${baseURL}${apiUrl}/rights/`, {
+        params: { tags, limit, offset },
+      })
+      .then((response) => response.data);
+  }
+
+  // работа со страницей Права TAGS
+  static getRightsTags() {
+    return axios
+      .get(`${baseURL}${apiUrl}/rights/tags/`)
+      .then((response) => response.data);
+  }
 }

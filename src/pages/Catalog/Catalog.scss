@@ -1,5 +1,9 @@
 @import './styles/utils.scss';
 
+.catalog__gap {
+  grid-gap: 0 30px;
+}
+
 .catalog__subtitle {
     margin: 40px auto 80px;
     max-width: 1170px;

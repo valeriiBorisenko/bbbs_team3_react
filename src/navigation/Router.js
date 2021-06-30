@@ -10,6 +10,7 @@ import {
   Catalog,
   Questions,
   Places,
+  Rights,
   Movies,
   ReadAndWatching,
 } from '../pages/index';
@@ -21,6 +22,7 @@ import {
   AFISHA_URL,
   QUESTIONS_URL,
   PLACES_URL,
+  RIGHTS_URL,
   MOVIES_URL,
   READANDWATCHING_URL,
   CATALOG_URL,
@@ -67,6 +69,9 @@ function Router({
       />
       <Route exact path={PLACES_URL}>
         <Places openPopupCities={handleClickPopupCities} />
+      </Route>
+      <Route exact path={RIGHTS_URL}>
+        <Rights />
       </Route>
       <Route exact path={MOVIES_URL}>
         <Movies />

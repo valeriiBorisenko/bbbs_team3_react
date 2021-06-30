@@ -8,6 +8,7 @@ import {
   ABOUT_US_URL,
   QUESTIONS_URL,
   PLACES_URL,
+  RIGHTS_URL,
   READANDWATCHING_URL,
 } from '../../config/routes';
 import {
@@ -79,7 +80,7 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="#"
+            href={RIGHTS_URL}
             linkText="Права детей"
           />
           {/* Истории */}
