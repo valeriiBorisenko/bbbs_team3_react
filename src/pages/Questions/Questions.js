@@ -28,7 +28,8 @@ function Questions() {
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
-
+  // крутилка-лоадер
+  const [isLoading, setIsLoading] = useState(false);
   // начальная дата с API
   const [questionsPageData, setQuestionsPageData] = useState([]);
 
@@ -82,7 +83,7 @@ function Questions() {
     } else {
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
-
+    setIsLoading(true);
     setIsFiltersUsed(true);
   };
 
@@ -102,14 +103,16 @@ function Questions() {
           console.log('TYT2');
           setQuestionsPageData(allQuestions);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
+        .finally(() => setIsLoading(false));
 
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       const query = activeCategories.join();
       Api.getQuestionsByFilters(query)
         .then((filteredQuestions) => setQuestionsPageData(filteredQuestions))
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
+        .finally(() => setIsLoading(false));
 
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
@@ -219,7 +222,8 @@ function Questions() {
           {categories?.length > 1 && renderTagsContainer()}
 
           {/* рендерим сами вопросы */}
-          {renderQuestionsContainer()}
+          {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
+          {/* {renderQuestionsContainer()} */}
 
           {/* если залогинен рендерим форму */}
           {currentUser && renderQuestionForm()}
@@ -231,6 +235,9 @@ function Questions() {
   };
 
   // глобальный лоадер
+  console.log(!questionsPageData);
+  console.log(!categories);
+  console.log(!questionsPageData || !categories);
   if (!questionsPageData || !categories) {
     return <Loader isCentered />;
   }
