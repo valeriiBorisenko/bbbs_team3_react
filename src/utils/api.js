@@ -1,8 +1,5 @@
 import axios from 'axios';
-// import setMockedAnswers from './mocked-answers';
 import { apiUrl, baseURL } from '../config/config';
-
-// setMockedAnswers();
 
 axios.defaults.headers.get['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -207,5 +204,21 @@ export default class Api {
       .post(`${baseURL}${apiUrl}/questions/`, question)
       .then((response) => response.data)
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  // работа со страницей Права DATA
+  static getRightsData({ limit, offset, tags }) {
+    return axios
+      .get(`${baseURL}${apiUrl}/rights/`, {
+        params: { tags, limit, offset },
+      })
+      .then((response) => response.data);
+  }
+
+  // работа со страницей Права TAGS
+  static getRightsTags() {
+    return axios
+      .get(`${baseURL}${apiUrl}/rights/tags/`)
+      .then((response) => response.data);
   }
 }

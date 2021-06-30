@@ -69,6 +69,7 @@ function Catalog() {
             pageCount={pageCount}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
+            sectionClass="catalog__gap"
           >
             {catalogPageData.map((item, i) => (
               <CardCatalog
