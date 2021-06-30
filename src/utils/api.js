@@ -127,45 +127,6 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // страница "куда пойти"
-  static getPlacesTags() {
-    return axios
-      .get(`${baseURL}${apiUrl}/places/tags/`)
-      .then((response) => response.data)
-      .catch((err) => Promise.reject(new Error(`${err.message}`)));
-  }
-
-  // python was here
-  // eslint-disable-next-line camelcase
-  static getPlaces({ chosen, tags, min_age, max_age }) {
-    return axios
-      .get(`${baseURL}${apiUrl}/places/`, {
-        params: chosen
-          ? { chosen, tags, min_age, max_age }
-          : { tags, min_age, max_age },
-      })
-      .then((response) => response.data.results)
-      .catch((err) => Promise.reject(new Error(`${err.message}`)));
-  }
-
-  static postPlace(data) {
-    return axios
-      .post(`${baseURL}${apiUrl}/places/`, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((response) => response.data.results)
-      .catch((err) => Promise.reject(new Error(`${err.message}`)));
-  }
-
-  static getActivityTypes() {
-    return axios
-      .get(`${baseURL}${apiUrl}/places/activity-types/`)
-      .then((response) => response.data.results)
-      .catch((err) => Promise.reject(new Error(`${err.message}`)));
-  }
-
   // работа со страницей справочника
   //! подключено к бекенду
   static getCatalogPageData({ limit, offset }) {
