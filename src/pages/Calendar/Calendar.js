@@ -113,13 +113,20 @@ function Calendar({
     debounceFiltration();
   }, [isFiltersUsed]);
 
+  // рендеринг
   // отрисовка заглушки
   function returnAnimatedContainer() {
     return (
-      <AnimatedPageContainer
-        titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
-        buttonText="Вернуться на главную"
-      />
+      <>
+        {isCityChanging ? (
+          <Loader isNested />
+        ) : (
+          <AnimatedPageContainer
+            titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
+            buttonText="Вернуться на главную"
+          />
+        )}
+      </>
     );
   }
 
@@ -135,8 +142,8 @@ function Calendar({
   }
 
   // отрисовка карточек ивентов
-  function renderEventCards(eventsArray) {
-    const cards = eventsArray.map((cardData) => (
+  function renderEventCardsContainer() {
+    const cards = calendarPageData.map((cardData) => (
       <CardCalendar
         key={cardData.id}
         cardData={cardData}
@@ -166,7 +173,7 @@ function Calendar({
                 <Loader isNested />
               ) : (
                 <div className="calendar-page__grid">
-                  {renderEventCards(calendarPageData)}
+                  {renderEventCardsContainer()}
                 </div>
               )}
             </div>

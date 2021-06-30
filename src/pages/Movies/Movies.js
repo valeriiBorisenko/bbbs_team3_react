@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { useScrollToTop } from '../../hooks';
@@ -8,8 +9,6 @@ import {
   CardFilm,
   CardAnnotation,
 } from './index';
-import moviesTags from '../../utils/server-responses/movies/movies-tags.json';
-import movies from '../../utils/server-responses/movies/movies.json';
 
 function Movies() {
   useScrollToTop();
