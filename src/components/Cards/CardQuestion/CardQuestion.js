@@ -45,7 +45,7 @@ function CardQuestion({
           />
         )}
       </div>
-      {isQuestionsPage && answerRender}
+      {isQuestionsPage && isClick && answerRender}
     </Card>
   );
 }
