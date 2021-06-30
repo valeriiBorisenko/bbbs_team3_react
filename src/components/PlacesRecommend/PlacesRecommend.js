@@ -1,5 +1,5 @@
 import './PlacesRecommend.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FormRecommendation, PopupRecommendSuccess } from './index';
 import { postPlace } from '../../api/places-page';
@@ -8,8 +8,18 @@ function PlacesRecommend({ sectionClass }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
 
-  const toggleForm = () => {
-    setIsFormOpen(!isFormOpen);
+  const scrollAnchorRef = useRef(null);
+  const scrollToForm = () => {
+    scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const closeForm = () => {
+    setIsFormOpen(false);
+  };
+
+  const openForm = () => {
+    setIsFormOpen(true);
+    scrollToForm();
   };
 
   const closeSuccessPopup = () => {
@@ -41,7 +51,7 @@ function PlacesRecommend({ sectionClass }) {
     postPlace(createFormData(data))
       .then(() => {
         setIsSuccessPopupOpen(true);
-        toggleForm();
+        closeForm();
       })
       .catch(console.log);
   };
@@ -62,14 +72,14 @@ function PlacesRecommend({ sectionClass }) {
 
   return (
     <>
-      <section className={classNames}>
+      <section className={classNames} ref={scrollAnchorRef}>
         <div className="recommendation__container">
           {isFormOpen && (
             <button
               className="recommendation__close-button"
               type="button"
               aria-label="закрыть попап"
-              onClick={toggleForm}
+              onClick={closeForm}
             />
           )}
           <p className="section-title recommendation__text">
@@ -78,7 +88,7 @@ function PlacesRecommend({ sectionClass }) {
             <button
               className="recommendation__text-link"
               type="button"
-              onClick={() => setIsFormOpen(true)}
+              onClick={openForm}
             >
               заполните&nbsp;форму
             </button>

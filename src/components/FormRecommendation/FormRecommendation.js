@@ -13,10 +13,6 @@ function FormRecommendation({ isOpen, onSubmit }) {
       ? 'Комментарий*'
       : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
 
-  const formClassNames = ['form-recom', isOpen ? 'form-recom_opened' : '']
-    .join(' ')
-    .trim();
-
   const activityTypes = useActivityTypes();
   const cities = useCities();
 
@@ -29,6 +25,7 @@ function FormRecommendation({ isOpen, onSubmit }) {
     reset,
   } = useForm();
 
+  const [isAnimated, setIsAnimated] = useState(false);
   const [userImage, setUserImage] = useState(null);
   const [fileUploaded, setFileUploaded] = useState(false);
 
@@ -57,8 +54,23 @@ function FormRecommendation({ isOpen, onSubmit }) {
   };
 
   useEffect(() => {
-    reset();
+    if (isOpen) {
+      reset();
+      setTimeout(() => {
+        setIsAnimated(true);
+      }, 600);
+    } else {
+      setIsAnimated(false);
+    }
   }, [isOpen]);
+
+  const formClassNames = [
+    'form-recom',
+    isOpen ? 'form-recom_opened' : '',
+    isAnimated ? 'form-recom_animated' : '',
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <form

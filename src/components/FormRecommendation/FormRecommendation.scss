@@ -4,16 +4,21 @@
   box-sizing: border-box;
   opacity: 0;
   height: 0;
+  min-height: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
-  transition: height .6s ease-out;
+  transition: min-height .6s ease-out;
   padding: 0 70px;
 
   &_opened {
-    height: fit-content;
+    min-height: 541px;
     padding-top: 40px;
     animation: fade-in .5s ease 1s forwards;
+  }
+
+  &_animated {
+    height: fit-content;
   }
 
   &__input-container {
@@ -37,6 +42,7 @@
     &_textarea {
       overflow-y: visible;
       resize: vertical;
+      min-height: 67px;
     }
   }
 
@@ -190,6 +196,10 @@
 
 @include atTabletL {
   .form-recom {
+    &_opened {
+      min-height: 718px;
+    }
+    
     &__input-container {
       flex-direction: column;
     }
@@ -229,6 +239,7 @@
 @include atMobile {
   .form-recom {
     &_opened {
+      min-height: 668px;
       padding-top: 30px;
     }
 
