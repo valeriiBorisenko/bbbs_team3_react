@@ -65,7 +65,6 @@ function Questions() {
   };
 
   const onFormSubmit = (values) => {
-    console.log(values);
     const { question } = values;
     Api.postQuestion({ title: question })
       .then(() => {
@@ -148,7 +147,88 @@ function Questions() {
       .catch((error) => console.log(error));
   }, []);
 
-  const renderPageContent = () => {};
+  // рендеринг
+  // форма вопросов
+  const renderQuestionForm = () => (
+    <>
+      <section className="add-question fade-in">
+        <TitleH2
+          sectionClass={`add-question__title ${questionFormState.titleClass}`}
+          title={questionFormState.title}
+        />
+        <form
+          className={`question-form ${questionFormState.formVisibilityClass}`}
+          onSubmit={handleSubmit(onFormSubmit)}
+        >
+          <fieldset className="question-form__add-question">
+            <Input
+              type="text"
+              name="question"
+              placeholder="Введите вопрос"
+              register={register}
+              required
+              error={errors?.question}
+              errorMessage="Введите вопрос*"
+              sectionClass="input__question-form"
+            />
+            <Button
+              title="Отправить"
+              color="black"
+              sectionClass="question-form__button"
+              isSubmittable
+              isDisabled={!!errors.question}
+            />
+          </fieldset>
+        </form>
+      </section>
+    </>
+  );
+
+  // контейнер с вопросами
+  const renderQuestionsContainer = () => (
+    <ul className="questions">
+      {questionsPageData.map((question) => (
+        <li className="questions__list-item fade-in" key={question.id}>
+          <CardQuestion
+            data={question}
+            sectionClass="card__questions_type_questions-page"
+            isQuestionsPage
+          />
+        </li>
+      ))}
+    </ul>
+  );
+
+  // контейнер фильтров
+  const renderTagsContainer = () => (
+    <div className="tags tags_content_long-list">
+      <ul className="tags__list tags__list_type_long">
+        {renderFilterTags(categories, 'tag', changeCategory)}
+      </ul>
+    </div>
+  );
+
+  // главная функция рендеринга
+  const renderPageContent = () => {
+    if (questionsPageData.length > 0) {
+      return (
+        <>
+          <TitleH1 title="Ответы на вопросы" />
+
+          {/* рендер фильтров */}
+          {categories?.length > 1 && renderTagsContainer()}
+
+          {/* рендерим сами вопросы */}
+          {renderQuestionsContainer()}
+
+          {/* если залогинен рендерим форму */}
+          {currentUser && renderQuestionForm()}
+        </>
+      );
+    }
+
+    return null;
+  };
 
   // глобальный лоадер
   if (!questionsPageData || !categories) {
@@ -165,65 +245,7 @@ function Questions() {
         />
       </Helmet>
       <section className="questions-page page__section fade-in">
-        <TitleH1 title="Ответы на вопросы" />
-        {questionsPageData.length > 0 ? (
-          <>
-            <div className="tags tags_content_long-list">
-              <ul className="tags__list tags__list_type_long">
-                {renderFilterTags(categories, 'tag', changeCategory)}
-              </ul>
-            </div>
-            <ul className="questions">
-              {questionsPageData.map((questionData) => (
-                <li
-                  className="questions__list-item fade-in"
-                  key={questionData.id}
-                >
-                  <CardQuestion
-                    data={questionData}
-                    sectionClass="card__questions_type_questions-page"
-                    isQuestionsPage
-                  />
-                </li>
-              ))}
-            </ul>
-
-            {currentUser && (
-              <section className="add-question fade-in">
-                <TitleH2
-                  sectionClass={`add-question__title ${questionFormState.titleClass}`}
-                  title={questionFormState.title}
-                />
-                <form
-                  className={`question-form ${questionFormState.formVisibilityClass}`}
-                  onSubmit={handleSubmit(onFormSubmit)}
-                >
-                  <fieldset className="question-form__add-question">
-                    <Input
-                      type="text"
-                      name="question"
-                      placeholder="Введите вопрос"
-                      register={register}
-                      required
-                      error={errors?.question}
-                      errorMessage="Введите вопрос*"
-                      sectionClass="input__question-form"
-                    />
-                    <Button
-                      title="Отправить"
-                      color="black"
-                      sectionClass="question-form__button"
-                      isSubmittable
-                      isDisabled={!!errors.question}
-                    />
-                  </fieldset>
-                </form>
-              </section>
-            )}
-          </>
-        ) : (
-          <Loader isNested />
-        )}
+        {renderPageContent()}
       </section>
     </BasePage>
   );
