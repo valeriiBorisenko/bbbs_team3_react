@@ -64,17 +64,17 @@
   }
 }
 
-@include atDesktop1440 {
-  .recommendation_place_page {
-    margin: 0 135px;
-  }
-}
+// @include atDesktop1440 {
+//   .recommendation_place_page {
+//     margin: 0 135px;
+//   }
+// }
 
-@include atDesktop1024 {
-  .recommendation_place_page {
-    margin: 0 127px;
-  }
-}
+// @include atDesktop1024 {
+//   .recommendation_place_page {
+//     margin: 0 127px;
+//   }
+// }
 
 @include atTablet {
   .recommendation{
@@ -102,9 +102,9 @@
 
 @include atMobile {
   .recommendation {
-    &_place_page {
-      margin: 0 15px;
-    }
+    // &_place_page {
+    //   margin: 0 15px;
+    // }
 
     &__close-button {
       margin-right: 15px;

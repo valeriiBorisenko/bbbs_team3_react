@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
@@ -13,8 +14,15 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { BasePage, TitleH1, CardPlace, PlacesRecommend } from './index';
+import {
+  BasePage,
+  TitleH1,
+  CardPlace,
+  PlacesRecommend,
+  AnimatedPageContainer,
+} from './index';
 import Api from '../../utils/api';
+import { Loader } from '../Calendar';
 
 const ageFilters = [
   { filter: '8-10 лет', name: '8-10 лет', isActive: false, range: [8, 10] },
@@ -31,8 +39,13 @@ function Places({ openPopupCities }) {
   const currentUser = useContext(CurrentUserContext);
 
   // места из API
-  const [places, setPlaces] = useState([]);
+  const [places, setPlaces] = useState(null);
   const [chosenPlace, setChosenPlace] = useState(null);
+
+  // переход между фильтрами, лоадер
+  const [isLoading, setIsLoading] = useState(false);
+  // переход между городами, лоадер
+  const [isCityChanging, setIsCityChanging] = useState(false);
 
   // триггер для useEffect
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
@@ -92,6 +105,7 @@ function Places({ openPopupCities }) {
 
   // запрос на все места
   const getAllPlaces = () => {
+    setIsCityChanging(true);
     Promise.all([Api.getPlaces({}), Api.getPlacesTags()])
       .then(([placesData, tagsData]) => {
         const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
@@ -100,7 +114,11 @@ function Places({ openPopupCities }) {
         setCategories(defineCategories(tagsData, chosenPlaceLast));
         setIsChosenCardHidden(false);
       })
-      .catch(console.log);
+      .catch(console.log)
+      .finally(() => {
+        setIsLoading(false);
+        setIsCityChanging(false);
+      });
   };
 
   // функция-фильтратор
@@ -124,9 +142,11 @@ function Places({ openPopupCities }) {
     if (activeCategories.length === 0) {
       if (!ageFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
+        setIsLoading(true);
         getAllPlaces();
       } else {
         // + ВОЗРАСТ
+        setIsLoading(true);
         Api.getPlaces({
           min_age: ageFilter.range[0],
           max_age: ageFilter.range[1],
@@ -135,7 +155,8 @@ function Places({ openPopupCities }) {
             setPlaces(res);
             setIsChosenCardHidden(true);
           })
-          .catch(console.log);
+          .catch(console.log)
+          .finally(() => setIsLoading(false));
       }
 
       selectOneTag(setCategories, ALL_CATEGORIES);
@@ -144,6 +165,7 @@ function Places({ openPopupCities }) {
 
     // КАТЕГОРИИ + ВОЗРАСТ (или без него)
     if (activeCategories.length > 0) {
+      setIsLoading(true);
       Api.getPlaces({
         chosen: isMentorFlag,
         tags: activeTags,
@@ -154,7 +176,8 @@ function Places({ openPopupCities }) {
           setPlaces(res);
           setIsChosenCardHidden(true);
         })
-        .catch(console.log);
+        .catch(console.log)
+        .finally(() => setIsLoading(false));
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
   };
@@ -178,6 +201,83 @@ function Places({ openPopupCities }) {
     getAllPlaces();
   }, [currentUser?.city]);
 
+  // функции рендера
+  const renderTags = () => (
+    <div className="tags">
+      <ul className="tags__list">
+        {renderFilterTags(categories, 'category', changeCategory)}
+      </ul>
+      <ul className="tags__list">{renderFilterTags(ages, 'age', changeAge)}</ul>
+    </div>
+  );
+
+  const renderPlaces = () => (
+    <>
+      {chosenPlace && !isChosenCardHidden && (
+        <section className="place__main fade-in">
+          <CardPlace
+            key={chosenPlace?.id}
+            data={chosenPlace}
+            sectionClass="card-container_type_main-article"
+            isBig
+          />
+        </section>
+      )}
+
+      <section className="place__cards-grid">
+        {places.map((place, i) => (
+          <CardPlace
+            data={place}
+            key={place?.id}
+            color={COLORS[i % COLORS.length]}
+            sectionClass="card-container_type_article fade-in"
+          />
+        ))}
+      </section>
+    </>
+  );
+
+  const renderAnimatedContainer = () => (
+    <>
+      {!isCityChanging ? (
+        <>
+          <AnimatedPageContainer
+            titleText="Рекомендуемых мест для вашего города ещё нет, но они обязательно появятся!"
+            buttonText="Вернуться на главную"
+          />
+          {currentUser && <PlacesRecommend />}
+        </>
+      ) : (
+        <Loader isNested />
+      )}
+    </>
+  );
+
+  const renderPageContent = () => {
+    if (places?.length === 0) {
+      return renderAnimatedContainer();
+    }
+    return (
+      <>
+        <TitleH1 title="Куда пойти" />
+        {!isCityChanging ? (
+          <>
+            {renderTags()}
+            {currentUser && <PlacesRecommend />}
+
+            {!isLoading ? <>{renderPlaces()}</> : <Loader isNested />}
+          </>
+        ) : (
+          <Loader isNested />
+        )}
+      </>
+    );
+  };
+
+  if (!places) {
+    return <Loader isCentered />;
+  }
+
   return (
     <BasePage>
       <Helmet>
@@ -188,39 +288,7 @@ function Places({ openPopupCities }) {
         />
       </Helmet>
       <section className="place page__section fade-in">
-        <TitleH1 title="Куда пойти" />
-        <div className="tags">
-          <ul className="tags__list">
-            {renderFilterTags(categories, 'category', changeCategory)}
-          </ul>
-          <ul className="tags__list">
-            {renderFilterTags(ages, 'age', changeAge)}
-          </ul>
-        </div>
-      </section>
-
-      {currentUser && <PlacesRecommend />}
-
-      {chosenPlace && !isChosenCardHidden && (
-        <section className="place__main page__section fade-in">
-          <CardPlace
-            key={chosenPlace?.id}
-            data={chosenPlace}
-            sectionClass="card-container_type_main-article"
-            isBig
-          />
-        </section>
-      )}
-
-      <section className="place__cards-grid page__section">
-        {places.map((place, i) => (
-          <CardPlace
-            data={place}
-            key={place?.id}
-            color={COLORS[i % COLORS.length]}
-            sectionClass="card-container_type_article fade-in"
-          />
-        ))}
+        {renderPageContent()}
       </section>
     </BasePage>
   );
