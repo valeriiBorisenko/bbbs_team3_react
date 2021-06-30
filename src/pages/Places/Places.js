@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';

@@ -28,6 +28,14 @@ function CardPlace({
   const cardSize = isBig ? 'card-place_main' : '';
   const sex = gender === 'male' ? 'Мальчик' : 'Девочка';
 
+  const types = activityTypes
+    ? activityTypes.reduce((obj, { id, name }) => {
+        // eslint-disable-next-line no-param-reassign
+        obj[id] = name;
+        return obj;
+      }, {})
+    : null;
+
   const renderImage = () => {
     if (isMainPage) {
       return (
@@ -96,7 +104,7 @@ function CardPlace({
 
       <CardAnnotation
         info={`${sex}, ${age} лет, ${
-          activityTypes ? activityTypes[activityType] : 'Развлекательный'
+          activityTypes ? types[activityType] : 'Развлекательный'
         } отдых`}
         description={description}
         isMain={isBig}
@@ -117,7 +125,7 @@ CardPlace.propTypes = {
   age: PropTypes.number,
   activityType: PropTypes.number,
   tags: PropTypes.objectOf(PropTypes.any),
-  activityTypes: PropTypes.objectOf(PropTypes.string),
+  activityTypes: PropTypes.arrayOf(PropTypes.object),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
   isBig: PropTypes.bool,
@@ -136,7 +144,7 @@ CardPlace.defaultProps = {
   age: 18,
   activityType: 1,
   tags: {},
-  activityTypes: {},
+  activityTypes: [],
   color: 'white',
   isBig: false,
   sectionClass: '',

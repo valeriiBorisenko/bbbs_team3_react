@@ -151,6 +151,17 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  static postPlace(data) {
+    return axios
+      .post(`${baseURL}${apiUrl}/places/`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
   static getActivityTypes() {
     return axios
       .get(`${baseURL}${apiUrl}/places/activity-types/`)

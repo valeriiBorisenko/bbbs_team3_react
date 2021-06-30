@@ -1,8 +1,8 @@
-/* eslint-disable no-unused-vars */
 import './PlacesRecommend.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormRecommendation, PopupRecommendSuccess } from './index';
+import Api from '../../utils/api';
 
 function PlacesRecommend({ sectionClass }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -22,10 +22,28 @@ function PlacesRecommend({ sectionClass }) {
     }
   };
 
+  const createFormData = (data) => {
+    const formData = new FormData();
+    if (data.link) formData.append('link', data.link);
+    formData.append('image', data.image);
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('address', data.address);
+    formData.append('gender', data.gender);
+    formData.append('age', data.age);
+    formData.append('city', data.city);
+    formData.append('activityType', data.activityType);
+    return formData;
+  };
+
   const handleFormSubmit = (data) => {
-    console.log({ data });
-    setIsSuccessPopupOpen(true);
-    toggleForm();
+    console.log(data);
+    Api.postPlace(createFormData(data))
+      .then(() => {
+        setIsSuccessPopupOpen(true);
+        toggleForm();
+      })
+      .catch(console.log);
   };
 
   const classNames = [

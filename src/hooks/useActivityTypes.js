@@ -5,17 +5,7 @@ const useActivityTypes = () => {
   const [activityTypes, setActivityTypes] = useState(null);
 
   useEffect(() => {
-    Api.getActivityTypes()
-      .then((res) =>
-        setActivityTypes(() =>
-          res.reduce((obj, { id, name }) => {
-            // eslint-disable-next-line no-param-reassign
-            obj[id] = name;
-            return obj;
-          }, {})
-        )
-      )
-      .catch(console.log);
+    Api.getActivityTypes().then(setActivityTypes).catch(console.log);
   }, []);
 
   return activityTypes;

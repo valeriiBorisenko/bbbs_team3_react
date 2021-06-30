@@ -78,10 +78,10 @@
 
 @include atTablet {
   .recommendation{
-    &_place_page {
-      padding-top: 30px;
-      margin: 0 60px;
-    }
+    // &_place_page {
+    //   padding-top: 30px;
+    //   margin: 0 60px;
+    // }
 
     &__container {
       padding-top: 15px;
