@@ -8,7 +8,8 @@ import { regExpImages } from '../../config/constants';
 import { Input, Button, ButtonRound } from './index';
 
 function FormRecommendation({ isOpen, onSubmit }) {
-  const regExpUrl = /^https?:\/\/(w{3}\.)?\w+\S+(\.[a-z]{2,})?#?$/;
+  //! вынести в константы
+  const regExpUrl = /^https?:\/\/(w{3}\.)?\w+\S+(\.[a-z]{2,})?$/;
   const textAreaPlaceholder =
     window.innerWidth < 576
       ? 'Комментарий*'
