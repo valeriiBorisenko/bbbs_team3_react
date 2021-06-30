@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import useEventSubscription from '../../hooks/useEventSubscription';
-import { months } from '../../config/constants';
+import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import Api from '../../utils/api';
@@ -104,7 +104,7 @@ function Calendar({
     setIsFiltersUsed(true);
   }
 
-  const debounceFiltration = useDebounce(handleFiltration, 1500);
+  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
     // в дальнейшем надо изменить количество секунд
     if (isFiltersUsed) {
