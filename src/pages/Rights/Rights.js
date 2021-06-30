@@ -34,7 +34,7 @@ const Rights = () => {
   const [categories, setCategories] = useState([]);
 
   // Загрузка данных
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
 
@@ -44,51 +44,72 @@ const Rights = () => {
     setIsFiltersUsed(true);
   };
 
-  // Функция запроса ДАТЫ и её обработка
-  const getRightsData = async (tagsStr = '') => {
+  const getPageData = (tagsStr = '') => {
     const offset = pageSize * pageNumber;
-    const { results, count } = await Api.getRightsData({
-      limit: pageSize,
-      offset,
-      tags: tagsStr,
-    });
-    setArticles(results);
-    setPageCount(Math.ceil(count / pageSize));
-    setIsLoading(false);
-  };
 
-  // Функция запроса тэгов и их обработка
-  const getRingtsTags = async () => {
-    const tags = await Api.getRightsTags();
-    const categoriesArr = await tags.map((tag) => ({
-      filter: tag.slug.toLowerCase(),
-      name: changeCaseOfFirstLetter(tag.name),
-      isActive: false,
-    }));
+    if (isLoadingPage) {
+      Promise.all([
+        Api.getRightsData({
+          limit: pageSize,
+          offset,
+        }),
+        Api.getRightsTags(),
+      ])
+        .then(([{ results, count }, tags]) => {
+          setArticles(results);
+          setPageCount(Math.ceil(count / pageSize));
 
-    setCategories([
-      {
-        filter: ALL_CATEGORIES,
-        name: ALL_CATEGORIES,
-        isActive: true,
-      },
-      ...categoriesArr,
-    ]);
+          const categoriesArr = tags.map((tag) => ({
+            filter: tag.slug.toLowerCase(),
+            name: changeCaseOfFirstLetter(tag.name),
+            isActive: false,
+          }));
+
+          setCategories([
+            {
+              filter: ALL_CATEGORIES,
+              name: ALL_CATEGORIES,
+              isActive: true,
+            },
+            ...categoriesArr,
+          ]);
+
+          setIsLoadingPage(false);
+        })
+        .catch((err) => console.log(err));
+      // .finally(setIsLoadingPage(false));
+      // При таком варианте полоски гридов загружаются быстрее карточек
+    } else {
+      Api.getRightsData({
+        limit: pageSize,
+        offset,
+        tags: tagsStr,
+      })
+        .then(({ results, count }) => {
+          setArticles(results);
+          setPageCount(Math.ceil(count / pageSize));
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
-    const activeCategories = categories
-      .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-      .map((filter) => filter.filter);
+    if (!isLoadingPage) {
+      const activeCategories = categories
+        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+        .map((filter) => filter.filter);
 
-    if (activeCategories.length === 0) {
-      getRightsData();
-      selectOneTag(setCategories, ALL_CATEGORIES);
-    } else {
-      const tagsStr = activeCategories.join(',');
-      getRightsData(tagsStr);
-      deselectOneTag(setCategories, ALL_CATEGORIES);
+      if (activeCategories.length === 0) {
+        getPageData();
+        selectOneTag(setCategories, ALL_CATEGORIES);
+      } else {
+        const tagsStr = activeCategories.join(',');
+        getPageData(tagsStr);
+        deselectOneTag(setCategories, ALL_CATEGORIES);
+      }
+
+      setIsFiltersUsed(false);
     }
   };
 
@@ -102,20 +123,10 @@ const Rights = () => {
     }
   };
 
-  // Отрисовка тэгов при загрузке страницы
+  // Запрос данных для пагинации
   useEffect(() => {
-    setIsLoading(true);
-    getRingtsTags();
-  }, []);
-
-  // delay для фильтрации
-  const debounceFiltration = useDebounce(handleFiltration, 1500);
-  // запуск фильтрации
-  useEffect(() => {
-    setIsLoading(true);
-    debounceFiltration();
-    setIsFiltersUsed(false);
-  }, [pageSize, pageNumber, isFiltersUsed]);
+    getPageData();
+  }, [pageSize, pageNumber]);
 
   // Юз эффект для пагинации
   useEffect(() => {
@@ -133,8 +144,21 @@ const Rights = () => {
     };
   }, []);
 
+  // delay для фильтрации
+  const debounceFiltration = useDebounce(handleFiltration, 1500);
+  // запуск фильтрации
+  useEffect(() => {
+    debounceFiltration();
+  }, [isFiltersUsed]);
+
+  // Отрисовка страницы
+  useEffect(() => {
+    setIsLoadingPage(true);
+    getPageData();
+  }, []);
+
   // глобальный лоадер
-  if (!articles || !categories) {
+  if (isLoadingPage || !articles || !categories) {
     return <Loader isCentered />;
   }
 
@@ -155,11 +179,10 @@ const Rights = () => {
           </ul>
         </div>
       </section>
-      {isLoading ? (
+      {isFiltersUsed ? (
         <Loader isNested />
       ) : (
         <>
-          {/* !!Нужно решить проблему с полосками они жестко захаркожены!! */}
           <CardsSectionWithLines
             pageCount={pageCount}
             pageNumber={pageNumber}
