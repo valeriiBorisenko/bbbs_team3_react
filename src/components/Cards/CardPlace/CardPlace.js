@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { PLACES_URL } from '../../../config/routes';
 import { staticImageUrl } from '../../../config/config';
-import { activityTypePlaces } from '../../../config/constants';
 import { CardAnnotation, Rubric, TitleH2, Card, Caption } from './index';
 
 function CardPlace({
@@ -19,6 +18,7 @@ function CardPlace({
     activityType,
     tags,
   },
+  activityTypes,
   color,
   sectionClass,
   isBig,
@@ -55,6 +55,7 @@ function CardPlace({
     return null;
   };
 
+  //! удалить, тест для фильтров + удалить второй Caption
   const Test = () => tags.map((t) => t.name).join(',');
 
   return (
@@ -92,8 +93,11 @@ function CardPlace({
           </a>
         )}
       </Card>
+
       <CardAnnotation
-        info={`${sex}, ${age} лет, ${activityTypePlaces[activityType]} отдых`}
+        info={`${sex}, ${age} лет, ${
+          activityTypes ? activityTypes[activityType] : 'Развлекательный'
+        } отдых`}
         description={description}
         isMain={isBig}
       />
@@ -109,6 +113,11 @@ CardPlace.propTypes = {
   image: PropTypes.string,
   link: PropTypes.string,
   description: PropTypes.string,
+  gender: PropTypes.string,
+  age: PropTypes.number,
+  activityType: PropTypes.number,
+  tags: PropTypes.objectOf(PropTypes.any),
+  activityTypes: PropTypes.objectOf(PropTypes.string),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
   isBig: PropTypes.bool,
@@ -123,6 +132,11 @@ CardPlace.defaultProps = {
   image: '',
   link: '',
   description: '',
+  gender: 'male',
+  age: 18,
+  activityType: 1,
+  tags: {},
+  activityTypes: {},
   color: 'white',
   isBig: false,
   sectionClass: '',

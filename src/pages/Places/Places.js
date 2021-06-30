@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
+import {
+  useScrollToTop,
+  useDebounce,
+  useActivityTypes,
+} from '../../hooks/index';
 import { COLORS, ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import {
   renderFilterTags,
@@ -35,6 +39,7 @@ const mentorTag = 'Выбор наставников';
 
 function Places({ openPopupCities }) {
   useScrollToTop();
+  const activityTypes = useActivityTypes();
 
   const currentUser = useContext(CurrentUserContext);
 
@@ -221,6 +226,7 @@ function Places({ openPopupCities }) {
           <CardPlace
             key={chosenPlace?.id}
             data={chosenPlace}
+            activityTypes={activityTypes}
             sectionClass="card-container_type_main-article"
             isBig
           />
@@ -230,8 +236,9 @@ function Places({ openPopupCities }) {
       <section className="place__cards-grid">
         {places.map((place, i) => (
           <CardPlace
-            data={place}
             key={place?.id}
+            data={place}
+            activityTypes={activityTypes}
             color={COLORS[i % COLORS.length]}
             sectionClass="card-container_type_article fade-in"
           />

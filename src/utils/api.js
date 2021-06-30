@@ -151,6 +151,13 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
+  static getActivityTypes() {
+    return axios
+      .get(`${baseURL}${apiUrl}/places/activity-types/`)
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
   // работа со страницей справочника
   //! подключено к бекенду
   static getCatalogPageData({ limit, offset }) {
