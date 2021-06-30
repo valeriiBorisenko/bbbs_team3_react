@@ -1,15 +1,17 @@
-/* eslint-disable no-unused-vars */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
-import useEventSubscription from '../../hooks/useEventSubscription';
 import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import Api from '../../utils/api';
+import {
+  getCalendarPageData,
+  getActiveMonthTags,
+  getEventsByFilters,
+} from '../../api/afisha-page';
 import {
   BasePage,
   TitleH1,
@@ -47,7 +49,7 @@ function Calendar({
 
   function getInitialPageData() {
     setIsCityChanging(true);
-    Api.getCalendarPageData()
+    getCalendarPageData()
       .then((calendarEvents) => setCalendarPageData(calendarEvents))
       .catch((error) => console.log(error))
       .finally(() => {
@@ -68,7 +70,7 @@ function Calendar({
   // загрузка фильтров страницы при старте
   useEffect(() => {
     if (currentUser) {
-      Api.getActiveMonthTags()
+      getActiveMonthTags()
         .then((monthsTags) => {
           const customFilters = monthsTags.map((tag) => {
             const filterName = changeCaseOfFirstLetter(months[tag]);
@@ -88,7 +90,7 @@ function Calendar({
     if (isFiltersUsed) {
       const activeFilter = filters.find((filter) => filter.isActive);
       if (activeFilter) {
-        Api.getEventsByFilters(activeFilter.filter)
+        getEventsByFilters(activeFilter.filter)
           .then((filteredEvents) => setCalendarPageData(filteredEvents))
           .catch((error) => console.log(error))
           .finally(() => setIsLoading(false));
