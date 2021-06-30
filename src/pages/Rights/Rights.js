@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Rights.scss';
@@ -19,6 +20,7 @@ import {
   TitleH1,
   CardRights,
   CardsSectionWithLines,
+  AnimatedPageContainer,
 } from './index';
 
 const Rights = () => {
@@ -30,8 +32,8 @@ const Rights = () => {
   const [pageNumber, setPageNumber] = useState(0);
 
   // Стейты с данными Статьи, Теги
-  const [articles, setArticles] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [articles, setArticles] = useState(null);
+  const [categories, setCategories] = useState(null);
 
   // Загрузка данных
   const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -44,58 +46,95 @@ const Rights = () => {
     setIsFiltersUsed(true);
   };
 
-  const getPageData = (tagsStr = '') => {
+  // отрисовка массива фильтров
+  const renderTagsContainder = () => (
+    <div className="tags">
+      <ul className="tags__list">
+        {renderFilterTags(categories, 'checkbox', changeCategory)}
+      </ul>
+    </div>
+  );
+
+  // отрисовка контента страницы
+  const renderMainContent = () => (
+    <>
+      <CardsSectionWithLines
+        pageCount={pageCount}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        sectionClass="rights page__section"
+      >
+        {articles.map((item, i) => (
+          <CardRights
+            key={item.id}
+            title={item.title}
+            tags={item.tags}
+            shape={FIGURES[i % FIGURES.length]}
+            color={COLORS[i % COLORS.length]}
+          />
+        ))}
+      </CardsSectionWithLines>
+    </>
+  );
+
+  // Заглушка на страницу
+  const getPageStub = (text) => (
+    <AnimatedPageContainer titleText={text} buttonText="Вернуться на главную" />
+  );
+
+  const getRightsData = (tagsStr = '', offset = 0) => {
+    Api.getRightsData({
+      limit: pageSize,
+      offset,
+      tags: tagsStr,
+    })
+      .then(({ results, count }) => {
+        setArticles(results);
+        setPageCount(Math.ceil(count / pageSize));
+      })
+      .catch(getPageStub('Ошибка обработки запроса попробуйте чуть позже'))
+      .finally(() => {
+        setIsLoadingPage(false);
+        setIsFiltersUsed(false);
+      });
+  };
+
+  const getRightsTags = () => {
+    Api.getRightsTags()
+      .then((tags) => {
+        const categoriesArr = tags.map((tag) => ({
+          filter: tag.slug.toLowerCase(),
+          name: changeCaseOfFirstLetter(tag.name),
+          isActive: false,
+        }));
+        setCategories([
+          {
+            filter: ALL_CATEGORIES,
+            name: ALL_CATEGORIES,
+            isActive: true,
+          },
+          ...categoriesArr,
+        ]);
+      })
+      .catch(getPageStub('Ошибка обработки запроса попробуйте чуть позже'));
+  };
+
+  const getPageData = (tagsStr) => {
     const offset = pageSize * pageNumber;
 
     if (isLoadingPage) {
-      Promise.all([
-        Api.getRightsData({
-          limit: pageSize,
-          offset,
-        }),
-        Api.getRightsTags(),
-      ])
-        .then(([{ results, count }, tags]) => {
-          setArticles(results);
-          setPageCount(Math.ceil(count / pageSize));
-
-          const categoriesArr = tags.map((tag) => ({
-            filter: tag.slug.toLowerCase(),
-            name: changeCaseOfFirstLetter(tag.name),
-            isActive: false,
-          }));
-
-          setCategories([
-            {
-              filter: ALL_CATEGORIES,
-              name: ALL_CATEGORIES,
-              isActive: true,
-            },
-            ...categoriesArr,
-          ]);
-
-          setIsLoadingPage(false);
-        })
-        .catch((err) => console.log(err));
-      // .finally(setIsLoadingPage(false));
-      // При таком варианте полоски гридов загружаются быстрее карточек
+      getRightsData();
+      getRightsTags();
+    } else if (isFiltersUsed) {
+      getRightsData(tagsStr);
     } else {
-      Api.getRightsData({
-        limit: pageSize,
-        offset,
-        tags: tagsStr,
-      })
-        .then(({ results, count }) => {
-          setArticles(results);
-          setPageCount(Math.ceil(count / pageSize));
-        })
-        .catch((err) => console.log(err));
+      getRightsData(tagsStr, offset);
     }
   };
 
   // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
-    if (!isLoadingPage) {
+    if (!isLoadingPage && isFiltersUsed) {
       const activeCategories = categories
         .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
         .map((filter) => filter.filter);
@@ -108,22 +147,16 @@ const Rights = () => {
         getPageData(tagsStr);
         deselectOneTag(setCategories, ALL_CATEGORIES);
       }
-
-      setIsFiltersUsed(false);
     }
   };
 
-  const listener = (smallQuery, largeQuery) => {
-    if (smallQuery.matches) {
-      setPageSize(4);
-    } else if (largeQuery.matches) {
-      setPageSize(9);
-    } else {
-      setPageSize(16);
-    }
-  };
+  const debounceFiltration = useDebounce(handleFiltration, 1500);
+  // запуск фильтрации
+  useEffect(() => {
+    debounceFiltration();
+  }, [isFiltersUsed]);
 
-  // Запрос данных для пагинации
+  // Отрисовка страницы
   useEffect(() => {
     getPageData();
   }, [pageSize, pageNumber]);
@@ -133,7 +166,16 @@ const Rights = () => {
     const smallQuery = window.matchMedia('(max-width: 1399px)');
     const largeQuery = window.matchMedia('(max-width: 1640px)');
 
-    listener(smallQuery, largeQuery);
+    const listener = () => {
+      if (smallQuery.matches) {
+        setPageSize(4);
+      } else if (largeQuery.matches) {
+        setPageSize(9);
+      } else {
+        setPageSize(16);
+      }
+    };
+    listener();
 
     smallQuery.addEventListener('change', listener);
     largeQuery.addEventListener('change', listener);
@@ -144,18 +186,12 @@ const Rights = () => {
     };
   }, []);
 
-  // delay для фильтрации
-  const debounceFiltration = useDebounce(handleFiltration, 1500);
-  // запуск фильтрации
-  useEffect(() => {
-    debounceFiltration();
-  }, [isFiltersUsed]);
-
-  // Отрисовка страницы
-  useEffect(() => {
-    setIsLoadingPage(true);
-    getPageData();
-  }, []);
+  // залогинен и нет ивентов
+  if (!articles && !isLoadingPage) {
+    getPageStub(
+      'В данный момент статей о правах детей нет, приносим свои извинения.'
+    );
+  }
 
   // глобальный лоадер
   if (isLoadingPage || !articles || !categories) {
@@ -173,34 +209,9 @@ const Rights = () => {
       </Helmet>
       <section className="lead page__section fade-in">
         <TitleH1 title="Права детей" />
-        <div className="tags">
-          <ul className="tags__list">
-            {renderFilterTags(categories, 'checkbox', changeCategory)}
-          </ul>
-        </div>
+        {categories?.length > 1 && renderTagsContainder()}
       </section>
-      {isFiltersUsed ? (
-        <Loader isNested />
-      ) : (
-        <>
-          <CardsSectionWithLines
-            pageCount={pageCount}
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            sectionClass="rights page__section"
-          >
-            {articles.map((item, i) => (
-              <CardRights
-                key={item.id}
-                title={item.title}
-                tags={item.tags}
-                shape={FIGURES[i % FIGURES.length]}
-                color={COLORS[i % COLORS.length]}
-              />
-            ))}
-          </CardsSectionWithLines>
-        </>
-      )}
+      {isFiltersUsed ? <Loader isNested /> : renderMainContent()}
     </BasePage>
   );
 };
