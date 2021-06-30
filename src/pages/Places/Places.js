@@ -51,6 +51,7 @@ function Places({ openPopupCities }) {
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // видна ли главная карточка
   const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(false);
   // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
@@ -177,6 +178,7 @@ function Places({ openPopupCities }) {
   useEffect(() => {
     if (isFiltersUsed) debounceFiltration();
     setIsFiltersUsed(false);
+    setIsFirstRender(false);
   }, [isFiltersUsed]);
 
   // открытие попапа "города" для незарегистрированного
@@ -188,6 +190,7 @@ function Places({ openPopupCities }) {
 
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
+    setIsFirstRender(true);
     setIsCityChanging(true);
     Promise.all([Api.getPlaces({}), Api.getPlacesTags()])
       .then(([placesData, tagsData]) => {
@@ -254,7 +257,7 @@ function Places({ openPopupCities }) {
   );
 
   const renderPageContent = () => {
-    if (places?.length === 0) {
+    if (isFirstRender && places?.length === 0) {
       return renderAnimatedContainer();
     }
     return (
