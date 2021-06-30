@@ -111,21 +111,11 @@ export const changeCaseOfFirstLetter = (str) => {
   return str[0].toUpperCase() + str.slice(1);
 };
 
+// управление падежами месяцев
 export const formatMonthsGenitiveCase = (month) => {
   if (month === 'март' || month === 'август') return `${month}а`;
   return `${month.slice(0, -1)}я`;
 };
-
-export function debounce(callback, time) {
-  let timer;
-
-  return function (args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      callback(args);
-    }, time);
-  };
-}
 
 export const randomizeArray = (arr, size) => {
   if (arr && size < arr.length) {

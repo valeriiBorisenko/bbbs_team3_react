@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
-import PropTypes, { func } from 'prop-types';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop } from '../../hooks/index';
-import { months } from '../../config/constants';
+import { useScrollToTop, useDebounce } from '../../hooks/index';
+import useEventSubscription from '../../hooks/useEventSubscription';
+import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
-import { changeCaseOfFirstLetter, debounce } from '../../utils/utils';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
 import Api from '../../utils/api';
 import {
   BasePage,
@@ -24,6 +25,11 @@ function Calendar({
 }) {
   useScrollToTop();
 
+  // переход между фильтрами, лоадер
+  const [isLoading, setIsLoading] = useState(false);
+  // переход между городами, лоадер
+  const [isCityChanging, setIsCityChanging] = useState(false);
+
   const currentUser = useContext(CurrentUserContext);
 
   // загрузка данных страницы календаря, если ты залогиненный
@@ -39,16 +45,21 @@ function Calendar({
   // нужно ли рисовать фильтры (если месяц всего 1 - не рисуем)
   const dataForCurrentCityExist = calendarPageData?.length > 0;
 
-  function getCalendarPageData() {
+  function getInitialPageData() {
+    setIsCityChanging(true);
     Api.getCalendarPageData()
-      .then((events) => setCalendarPageData(events))
-      .catch((error) => console.log(error));
+      .then((calendarEvents) => setCalendarPageData(calendarEvents))
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setIsLoading(false);
+        setIsCityChanging(false);
+      });
   }
 
   // загрузка главной страницы при старте
   useEffect(() => {
     if (currentUser) {
-      getCalendarPageData();
+      getInitialPageData();
     } else {
       onOpenLoginPopup();
     }
@@ -58,13 +69,13 @@ function Calendar({
   useEffect(() => {
     if (currentUser) {
       Api.getActiveMonthTags()
-        .then((activeMonths) => {
-          const customFilters = activeMonths.map((activeMonth) => {
-            const filterName = changeCaseOfFirstLetter(months[activeMonth]);
+        .then((monthsTags) => {
+          const customFilters = monthsTags.map((tag) => {
+            const filterName = changeCaseOfFirstLetter(months[tag]);
             return {
               isActive: false,
               name: filterName,
-              filter: activeMonth,
+              filter: tag,
             };
           });
           setFilters(customFilters);
@@ -76,15 +87,15 @@ function Calendar({
   function handleFiltration() {
     if (isFiltersUsed) {
       const activeFilter = filters.find((filter) => filter.isActive);
-      console.log(activeFilter);
       if (activeFilter) {
-        console.log('activeFilter IF');
-        Api.getActualEventsForFilter(activeFilter.filter)
-          .then((events) => setCalendarPageData(events))
-          .catch((error) => console.log(error));
+        Api.getEventsByFilters(activeFilter.filter)
+          .then((filteredEvents) => setCalendarPageData(filteredEvents))
+          .catch((error) => console.log(error))
+          .finally(() => setIsLoading(false));
       } else {
-        getCalendarPageData();
+        getInitialPageData();
       }
+      setIsFiltersUsed(false);
     }
   }
 
@@ -93,11 +104,13 @@ function Calendar({
     setIsFiltersUsed(true);
   }
 
+  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
     // в дальнейшем надо изменить количество секунд
-    const debaunceFiltration = debounce(handleFiltration, 1000);
-    debaunceFiltration();
-    setIsFiltersUsed(false);
+    if (isFiltersUsed) {
+      setIsLoading(true);
+    }
+    debounceFiltration();
   }, [isFiltersUsed]);
 
   // отрисовка заглушки
@@ -143,13 +156,21 @@ function Calendar({
         <>
           <TitleH1 title="Календарь" />
 
-          <div className="calendar-page__container">
-            {filters?.length > 1 && renderTagsContainder()}
+          {isCityChanging ? (
+            <Loader isNested />
+          ) : (
+            <div className="calendar-page__container">
+              {filters?.length > 1 && renderTagsContainder()}
 
-            <div className="calendar-page__grid">
-              {renderEventCards(calendarPageData)}
+              {isLoading ? (
+                <Loader isNested />
+              ) : (
+                <div className="calendar-page__grid">
+                  {renderEventCards(calendarPageData)}
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </>
       );
     }
