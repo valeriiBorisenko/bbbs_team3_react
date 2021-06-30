@@ -1,5 +1,3 @@
-/* eslint-disable dot-notation */
-/* eslint-disable no-unused-vars */
 import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
@@ -14,6 +12,7 @@ import {
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { BasePage, TitleH1, CardPlace, PlacesRecommend } from './index';
 import Api from '../../utils/api';
 
@@ -35,7 +34,7 @@ function Places({ openPopupCities }) {
   const [places, setPlaces] = useState([]);
   const [chosenPlace, setChosenPlace] = useState(null);
 
-  // флаг применения фильтров для useEffect
+  // триггер для useEffect
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // видна ли главная карточка
   const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
@@ -43,7 +42,7 @@ function Places({ openPopupCities }) {
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
 
-  // хэндлер клика по фильтру
+  // хэндлер клика по фильтру КАТЕГОРИИ
   const changeCategory = (inputValue, isChecked) => {
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
@@ -60,13 +59,13 @@ function Places({ openPopupCities }) {
   };
 
   // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Выбор наставника"
-  const defineCategories = (tags, chosenPlaces) => {
+  const defineCategories = (tags, chosenPlaceLast) => {
     const categoriesArray = tags.map((tag) => ({
       filter: tag?.slug.toLowerCase(),
-      name: tag?.name[0].toUpperCase() + tag?.name.slice(1),
+      name: changeCaseOfFirstLetter(tag?.name),
       isActive: false,
     }));
-    if (chosenPlaces.length > 0) {
+    if (chosenPlaceLast) {
       return [
         { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
         { filter: mentorTag, name: mentorTag, isActive: false },
@@ -80,26 +79,26 @@ function Places({ openPopupCities }) {
   };
 
   // функция, определяющая карточки по флагу "Выбор наставника"
-  // chosenLast - самая "свежая" карточка "Выбор наставника"
+  // chosenPlaceLast - самая "свежая" карточка "Выбор наставника"
   // restOfPlaces - массив без этой карточки
   const definePlaces = (placesData) => {
     const chosenPlaces = placesData.filter((place) => place?.chosen);
-    const chosenLast = chosenPlaces[chosenPlaces.length - 1];
-    const restOfPlaces = chosenLast
-      ? placesData.filter((place) => place?.id !== chosenLast?.id)
+    const chosenPlaceLast = chosenPlaces[chosenPlaces.length - 1];
+    const restOfPlaces = chosenPlaceLast
+      ? placesData.filter((place) => place?.id !== chosenPlaceLast?.id)
       : placesData;
-    return { chosenPlaces, chosenLast, restOfPlaces };
+    return { chosenPlaceLast, restOfPlaces };
   };
 
   // запрос на все места
   const getAllPlaces = () => {
-    Promise.all([Api.getPlaces(), Api.getPlacesTags()])
+    Promise.all([Api.getPlaces({}), Api.getPlacesTags()])
       .then(([placesData, tagsData]) => {
-        const { chosenPlaces, chosenLast, restOfPlaces } =
-          definePlaces(placesData);
-        setChosenPlace(chosenLast);
+        const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
+        setChosenPlace(chosenPlaceLast);
         setPlaces(restOfPlaces);
-        setCategories(defineCategories(tagsData, chosenPlaces));
+        setCategories(defineCategories(tagsData, chosenPlaceLast));
+        setIsChosenCardHidden(false);
       })
       .catch(console.log);
   };
@@ -126,10 +125,9 @@ function Places({ openPopupCities }) {
       if (!ageFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         getAllPlaces();
-        setIsChosenCardHidden(false);
       } else {
         // + ВОЗРАСТ
-        Api.getPlacesByCategories({
+        Api.getPlaces({
           min_age: ageFilter.range[0],
           max_age: ageFilter.range[1],
         })
@@ -146,7 +144,7 @@ function Places({ openPopupCities }) {
 
     // КАТЕГОРИИ + ВОЗРАСТ (или без него)
     if (activeCategories.length > 0) {
-      Api.getPlacesByCategories({
+      Api.getPlaces({
         chosen: isMentorFlag,
         tags: activeTags,
         min_age: ageFilter?.range[0],

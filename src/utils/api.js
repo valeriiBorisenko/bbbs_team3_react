@@ -132,13 +132,6 @@ export default class Api {
   }
 
   // страница "куда пойти"
-  static getPlaces() {
-    return axios
-      .get(`${baseURL}${apiUrl}/places/`)
-      .then((response) => response.data.results)
-      .catch((err) => Promise.reject(new Error(`${err.message}`)));
-  }
-
   static getPlacesTags() {
     return axios
       .get(`${baseURL}${apiUrl}/places/tags/`)
@@ -148,7 +141,7 @@ export default class Api {
 
   // python was here
   // eslint-disable-next-line camelcase
-  static getPlacesByCategories({ chosen, tags, min_age, max_age }) {
+  static getPlaces({ chosen, tags, min_age, max_age }) {
     return axios
       .get(`${baseURL}${apiUrl}/places/`, {
         params: chosen
