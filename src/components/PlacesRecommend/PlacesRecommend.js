@@ -2,7 +2,7 @@ import './PlacesRecommend.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormRecommendation, PopupRecommendSuccess } from './index';
-import Api from '../../utils/api';
+import { postPlace } from '../../api/places-page';
 
 function PlacesRecommend({ sectionClass }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -38,7 +38,7 @@ function PlacesRecommend({ sectionClass }) {
 
   const handleFormSubmit = (data) => {
     console.log(data);
-    Api.postPlace(createFormData(data))
+    postPlace(createFormData(data))
       .then(() => {
         setIsSuccessPopupOpen(true);
         toggleForm();

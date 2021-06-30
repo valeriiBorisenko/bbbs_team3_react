@@ -24,7 +24,7 @@ import {
   PlacesRecommend,
   AnimatedPageContainer,
 } from './index';
-import Api from '../../utils/api';
+import { getPlaces, getPlacesTags } from '../../api/places-page';
 import { Loader } from '../Calendar';
 
 const ageFilters = [
@@ -130,7 +130,7 @@ function Places({ openPopupCities }) {
       if (!ageFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         setIsLoading(true);
-        Api.getPlaces({})
+        getPlaces({})
           .then((res) => {
             const { chosenPlaceLast, restOfPlaces } = definePlaces(res);
             setChosenPlace(chosenPlaceLast);
@@ -142,7 +142,7 @@ function Places({ openPopupCities }) {
       } else {
         // + ВОЗРАСТ
         setIsLoading(true);
-        Api.getPlaces({
+        getPlaces({
           min_age: ageFilter.range[0],
           max_age: ageFilter.range[1],
         })
@@ -161,7 +161,7 @@ function Places({ openPopupCities }) {
     // КАТЕГОРИИ + ВОЗРАСТ (или без него)
     if (activeCategories.length > 0) {
       setIsLoading(true);
-      Api.getPlaces({
+      getPlaces({
         chosen: isMentorFlag,
         tags: activeTags,
         min_age: ageFilter?.range[0],
@@ -196,7 +196,7 @@ function Places({ openPopupCities }) {
   useEffect(() => {
     setIsFirstRender(true);
     setIsCityChanging(true);
-    Promise.all([Api.getPlaces({}), Api.getPlacesTags()])
+    Promise.all([getPlaces({}), getPlacesTags()])
       .then(([placesData, tagsData]) => {
         const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
         setChosenPlace(chosenPlaceLast);

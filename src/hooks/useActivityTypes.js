@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import Api from '../utils/api';
+import { getActivityTypes } from '../api/places-page';
 
 const useActivityTypes = () => {
   const [activityTypes, setActivityTypes] = useState(null);
 
   useEffect(() => {
-    Api.getActivityTypes().then(setActivityTypes).catch(console.log);
+    getActivityTypes().then(setActivityTypes).catch(console.log);
   }, []);
 
   return activityTypes;

@@ -4,12 +4,10 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { useActivityTypes, useCities } from '../../hooks/index';
-import { regExpImages } from '../../config/constants';
+import { regExpImages, regExpUrl } from '../../config/constants';
 import { Input, Button, ButtonRound } from './index';
 
 function FormRecommendation({ isOpen, onSubmit }) {
-  //! вынести в константы
-  const regExpUrl = /^https?:\/\/(w{3}\.)?\w+\S+(\.[a-z]{2,})?$/;
   const textAreaPlaceholder =
     window.innerWidth < 576
       ? 'Комментарий*'

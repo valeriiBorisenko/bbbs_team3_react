@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import Api from '../utils/api';
+import getCities from '../api/cities';
 
 const useCities = () => {
   const [cities, setCities] = useState(null);
 
   useEffect(() => {
-    Api.getCities().then(setCities).catch(console.log);
+    getCities().then(setCities).catch(console.log);
   }, []);
 
   return cities;
