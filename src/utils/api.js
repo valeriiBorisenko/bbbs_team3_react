@@ -48,13 +48,6 @@ export default class Api {
       .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
-  // страница "куда пойти"
-  static getPlaces() {
-    return axios
-      .get(`${baseURL}${apiUrl}/where-to-go/`) //! заменить /places
-      .then((response) => response.data);
-  }
-
   // регистрация на мероприятие
   //! подключено к бекенду
   static makeEventRegistration(eventId) {

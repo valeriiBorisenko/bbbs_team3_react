@@ -8,7 +8,7 @@ import Questions from './Questions/Questions';
 import Places from './Places/Places';
 import Rights from './Rights/Rights';
 import Movies from './Movies/Movies';
-import ReadAndWatching from './ReadAndWatching/ReadAndWatching';
+import ReadAndWatch from './ReadAndWatch/ReadAndWatch';
 
 export {
   AboutUs,
@@ -20,6 +20,6 @@ export {
   Places,
   Rights,
   Movies,
-  ReadAndWatching,
+  ReadAndWatch,
   Catalog,
 };

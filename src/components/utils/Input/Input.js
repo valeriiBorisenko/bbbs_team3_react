@@ -8,6 +8,11 @@ function Input({
   placeholder,
   register,
   required,
+  max,
+  min,
+  minLength,
+  maxLength,
+  pattern,
   error,
   errorMessage,
   sectionClass,
@@ -34,7 +39,7 @@ function Input({
         type={type}
         name={name}
         placeholder={message || placeholder}
-        {...register(name, { required })}
+        {...register(name, { required, minLength, maxLength })}
       />
     );
   }
@@ -45,7 +50,7 @@ function Input({
       type={type}
       name={name}
       placeholder={message || placeholder}
-      {...register(name, { required })}
+      {...register(name, { required, max, min, minLength, maxLength, pattern })}
     />
   );
 }
@@ -59,6 +64,11 @@ Input.propTypes = {
   onChange: PropTypes.func,
   register: PropTypes.func.isRequired,
   required: PropTypes.bool,
+  max: PropTypes.objectOf(PropTypes.any),
+  min: PropTypes.objectOf(PropTypes.any),
+  maxLength: PropTypes.objectOf(PropTypes.any),
+  minLength: PropTypes.objectOf(PropTypes.any),
+  pattern: PropTypes.objectOf(PropTypes.any),
   error: PropTypes.objectOf(PropTypes.any),
   errorMessage: PropTypes.string,
 };
@@ -69,6 +79,11 @@ Input.defaultProps = {
   isTextarea: false,
   onChange: () => {},
   required: false,
+  max: undefined,
+  min: undefined,
+  maxLength: undefined,
+  minLength: undefined,
+  pattern: undefined,
   error: undefined,
   errorMessage: '',
 };

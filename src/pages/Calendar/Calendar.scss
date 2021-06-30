@@ -57,6 +57,7 @@
       height: 100%;
       background: linear-gradient(90deg, transparent 0%, $background 100%);
       z-index: 1;
+      pointer-events: none;
     }
 
     &::before {
@@ -68,6 +69,7 @@
       height: 100%;
       background: linear-gradient(90deg, $background 0%, transparent 100%);
       z-index: 1;
+      pointer-events: none;
     }
   }
   .tags__list {
