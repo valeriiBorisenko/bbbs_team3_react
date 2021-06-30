@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop } from '../../hooks/index';
-import { COLORS, ALL_CATEGORIES } from '../../config/constants';
+import { useScrollToTop, useDebounce } from '../../hooks/index';
+import { COLORS, ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import {
   renderFilterTags,
   handleCheckboxBehavior,
@@ -159,9 +159,10 @@ function Places({ openPopupCities }) {
     }
   };
 
+  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   // запуск фильтрации
   useEffect(() => {
-    handleFiltration();
+    if (isFiltersUsed) debounceFiltration();
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
