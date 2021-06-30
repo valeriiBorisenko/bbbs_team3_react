@@ -31,12 +31,12 @@ function Questions() {
   // крутилка-лоадер
   const [isLoading, setIsLoading] = useState(false);
   // начальная дата с API
-  const [questionsPageData, setQuestionsPageData] = useState([]);
+  const [questionsPageData, setQuestionsPageData] = useState(null);
 
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // категории фильтрации, состояние кнопок фильтров
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(null);
 
   // форма
   const [questionFormState, setQuestionFormState] = useState(
@@ -235,9 +235,6 @@ function Questions() {
   };
 
   // глобальный лоадер
-  console.log(!questionsPageData);
-  console.log(!categories);
-  console.log(!questionsPageData || !categories);
   if (!questionsPageData || !categories) {
     return <Loader isCentered />;
   }
