@@ -49,6 +49,33 @@ function Questions() {
     formState: { errors },
   } = useForm();
 
+  const setFormState = (isError) => {
+    if (isError) {
+      setQuestionFormState(questionForm.errorSubmit);
+    }
+
+    // успешная надпись
+    setQuestionFormState(questionForm.successSubmit);
+    // почистили форму
+    reset({ question: '' });
+    // вернулись к изначальной
+    setTimeout(() => {
+      setQuestionFormState(questionForm.beforeSubmit);
+    }, 4000);
+  };
+
+  const onFormSubmit = (values) => {
+    console.log(values);
+    const { question } = values;
+    Api.postQuestion({ title: question })
+      .then(() => {
+        setFormState(false);
+      })
+      .catch(() => {
+        setFormState(true);
+      });
+  };
+
   // хэндлер клика по фильтру
   const changeCategory = (inputValue, isChecked) => {
     if (inputValue === ALL_CATEGORIES) {
