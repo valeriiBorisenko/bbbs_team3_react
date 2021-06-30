@@ -82,7 +82,7 @@ const Rights = () => {
     <AnimatedPageContainer titleText={text} buttonText="Вернуться на главную" />
   );
 
-  const getRightsData = (tagsStr = '', offset = 0) => {
+  const getArticlesData = (tagsStr = '', offset = 0) => {
     Api.getRightsData({
       limit: pageSize,
       offset,
@@ -99,7 +99,7 @@ const Rights = () => {
       });
   };
 
-  const getRightsTags = () => {
+  const getArticlesTags = () => {
     Api.getRightsTags()
       .then((tags) => {
         const categoriesArr = tags.map((tag) => ({
@@ -123,12 +123,12 @@ const Rights = () => {
     const offset = pageSize * pageNumber;
 
     if (isLoadingPage) {
-      getRightsData();
-      getRightsTags();
+      getArticlesData();
+      getArticlesTags();
     } else if (isFiltersUsed) {
-      getRightsData(tagsStr);
+      getArticlesData(tagsStr);
     } else {
-      getRightsData(tagsStr, offset);
+      getArticlesData(tagsStr, offset);
     }
   };
 
