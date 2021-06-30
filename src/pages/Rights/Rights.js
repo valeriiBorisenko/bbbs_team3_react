@@ -188,7 +188,7 @@ const Rights = () => {
 
   // залогинен и нет ивентов
   if (!articles && !isLoadingPage) {
-    getPageStub(
+    return getPageStub(
       'В данный момент статей о правах детей нет, приносим свои извинения.'
     );
   }
