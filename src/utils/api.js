@@ -1,8 +1,5 @@
 import axios from 'axios';
-// import setMockedAnswers from './mocked-answers';
 import { apiUrl, baseURL } from '../config/config';
-
-// setMockedAnswers();
 
 axios.defaults.headers.get['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
