@@ -103,24 +103,6 @@ function Places({ openPopupCities }) {
     return { chosenPlaceLast, restOfPlaces };
   };
 
-  // запрос на все места
-  const getAllPlaces = () => {
-    setIsCityChanging(true);
-    Promise.all([Api.getPlaces({}), Api.getPlacesTags()])
-      .then(([placesData, tagsData]) => {
-        const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
-        setChosenPlace(chosenPlaceLast);
-        setPlaces(restOfPlaces);
-        setCategories(defineCategories(tagsData, chosenPlaceLast));
-        setIsChosenCardHidden(false);
-      })
-      .catch(console.log)
-      .finally(() => {
-        setIsLoading(false);
-        setIsCityChanging(false);
-      });
-  };
-
   // функция-фильтратор
   const handleFiltration = () => {
     const ageFilter = ages.find((filter) => filter.isActive);
@@ -143,7 +125,15 @@ function Places({ openPopupCities }) {
       if (!ageFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         setIsLoading(true);
-        getAllPlaces();
+        Api.getPlaces({})
+          .then((res) => {
+            const { chosenPlaceLast, restOfPlaces } = definePlaces(res);
+            setChosenPlace(chosenPlaceLast);
+            setPlaces(restOfPlaces);
+            setIsChosenCardHidden(false);
+          })
+          .catch(console.log)
+          .finally(() => setIsLoading(false));
       } else {
         // + ВОЗРАСТ
         setIsLoading(true);
@@ -196,9 +186,19 @@ function Places({ openPopupCities }) {
     }
   }, []);
 
-  // АПИ
+  // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
-    getAllPlaces();
+    setIsCityChanging(true);
+    Promise.all([Api.getPlaces({}), Api.getPlacesTags()])
+      .then(([placesData, tagsData]) => {
+        const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
+        setChosenPlace(chosenPlaceLast);
+        setPlaces(restOfPlaces);
+        setCategories(defineCategories(tagsData, chosenPlaceLast));
+        setIsChosenCardHidden(false);
+      })
+      .catch(console.log)
+      .finally(() => setIsCityChanging(false));
   }, [currentUser?.city]);
 
   // функции рендера
