@@ -8,7 +8,7 @@ import { useScrollToTop } from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
 import { adminUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
-import Api from '../../utils/api';
+import getMainPageData from '../../api/main-page';
 import {
   BasePage,
   Loader,
@@ -38,19 +38,12 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
     QUESTIONS_COUNT
   );
 
-  const getMainPageData = () => {
-    Api.getMainPageData().then(setMainPageData).catch(console.log); // попап ошибка!
-  };
-
-  // запрос даты главной страницы, если сменили город
+  // запрос даты главной страницы при загрузке и при смене города
   useEffect(() => {
-    getMainPageData();
+    getMainPageData()
+      .then(setMainPageData)
+      .catch((error) => console.log(error));
   }, [currentUser?.city]);
-
-  // запрос даты главной страницы
-  useEffect(() => {
-    getMainPageData();
-  }, []);
 
   // глобальный лоадер (без футера)
   if (!mainPageData) {

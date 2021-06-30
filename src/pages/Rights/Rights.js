@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Rights.scss';
-
 import { ALL_CATEGORIES, FIGURES, COLORS } from '../../config/constants';
 import {
   renderFilterTags,
@@ -12,8 +10,7 @@ import {
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
-import Api from '../../utils/api';
-
+import { getRightsData, getRightsTags } from '../../api/rights-page';
 import {
   BasePage,
   Loader,
@@ -83,7 +80,7 @@ const Rights = () => {
   );
 
   const getArticlesData = (tagsStr = '', offset = 0) => {
-    Api.getRightsData({
+    getRightsData({
       limit: pageSize,
       offset,
       tags: tagsStr,
@@ -100,7 +97,7 @@ const Rights = () => {
   };
 
   const getArticlesTags = () => {
-    Api.getRightsTags()
+    getRightsTags()
       .then((tags) => {
         const categoriesArr = tags.map((tag) => ({
           filter: tag.slug.toLowerCase(),

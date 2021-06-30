@@ -22,7 +22,12 @@ import {
   Button,
   Loader,
 } from './index';
-import Api from '../../utils/api';
+import {
+  getQuestionsPageData,
+  getQuestionsPageTags,
+  getQuestionsByFilters,
+  postQuestion,
+} from '../../api/questions-page';
 
 function Questions() {
   useScrollToTop();
@@ -67,7 +72,7 @@ function Questions() {
 
   const onFormSubmit = (values) => {
     const { question } = values;
-    Api.postQuestion({ title: question })
+    postQuestion({ title: question })
       .then(() => {
         setFormState(false);
       })
@@ -98,7 +103,7 @@ function Questions() {
     // то есть активных нету и сейчас нажато "ВСЕ"
     if (activeCategories.length === 0) {
       console.log('TYT');
-      Api.getQuestionsPageData()
+      getQuestionsPageData()
         .then((allQuestions) => {
           console.log('TYT2');
           setQuestionsPageData(allQuestions);
@@ -109,7 +114,7 @@ function Questions() {
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       const query = activeCategories.join();
-      Api.getQuestionsByFilters(query)
+      getQuestionsByFilters(query)
         .then((filteredQuestions) => setQuestionsPageData(filteredQuestions))
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
@@ -129,7 +134,7 @@ function Questions() {
 
   // API
   useEffect(() => {
-    Promise.all([Api.getQuestionsPageData(), Api.getQuestionsPageTags()])
+    Promise.all([getQuestionsPageData(), getQuestionsPageTags()])
       .then(([questionsData, tagsFilters]) => {
         console.log('TYT3');
         setQuestionsPageData(questionsData);
