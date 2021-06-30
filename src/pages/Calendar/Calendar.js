@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import useEventSubscription from '../../hooks/useEventSubscription';
-import { months } from '../../config/constants';
+import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import Api from '../../utils/api';
@@ -48,7 +48,7 @@ function Calendar({
   function getInitialPageData() {
     setIsCityChanging(true);
     Api.getCalendarPageData()
-      .then((events) => setCalendarPageData(events))
+      .then((calendarEvents) => setCalendarPageData(calendarEvents))
       .catch((error) => console.log(error))
       .finally(() => {
         setIsLoading(false);
@@ -69,13 +69,13 @@ function Calendar({
   useEffect(() => {
     if (currentUser) {
       Api.getActiveMonthTags()
-        .then((activeMonths) => {
-          const customFilters = activeMonths.map((activeMonth) => {
-            const filterName = changeCaseOfFirstLetter(months[activeMonth]);
+        .then((monthsTags) => {
+          const customFilters = monthsTags.map((tag) => {
+            const filterName = changeCaseOfFirstLetter(months[tag]);
             return {
               isActive: false,
               name: filterName,
-              filter: activeMonth,
+              filter: tag,
             };
           });
           setFilters(customFilters);
@@ -88,8 +88,8 @@ function Calendar({
     if (isFiltersUsed) {
       const activeFilter = filters.find((filter) => filter.isActive);
       if (activeFilter) {
-        Api.getActualEventsForFilter(activeFilter.filter)
-          .then((events) => setCalendarPageData(events))
+        Api.getEventsByFilters(activeFilter.filter)
+          .then((filteredEvents) => setCalendarPageData(filteredEvents))
           .catch((error) => console.log(error))
           .finally(() => setIsLoading(false));
       } else {
@@ -104,7 +104,7 @@ function Calendar({
     setIsFiltersUsed(true);
   }
 
-  const debounceFiltration = useDebounce(handleFiltration, 1500);
+  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
     // в дальнейшем надо изменить количество секунд
     if (isFiltersUsed) {

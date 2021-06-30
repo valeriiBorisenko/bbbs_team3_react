@@ -44,7 +44,7 @@ export default class Api {
   }
 
   // ивенты по конкретному месяцу
-  static getActualEventsForFilter(monthNumber) {
+  static getEventsByFilters(monthNumber) {
     return axios
       .get(`${baseURL}${apiUrl}/afisha/events/?months=${monthNumber}`)
       .then((response) => response.data.results)
@@ -147,16 +147,33 @@ export default class Api {
       .then((response) => response.data);
   }
 
-  // работа со странице вопросов
+  // работа со страницей вопросов
+  //! подключено к бекенду
   static getQuestionsPageData() {
     return axios
       .get(`${baseURL}${apiUrl}/questions/`)
-      .then((response) => response.data);
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  static getQuestionsPageTags() {
+    return axios
+      .get(`${baseURL}${apiUrl}/questions/tags/`)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+  }
+
+  static getQuestionsByFilters(query) {
+    return axios
+      .get(`${baseURL}${apiUrl}/questions/?tags=${query}`)
+      .then((response) => response.data.results)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 
   static postQuestion(question) {
     return axios
-      .post(`${baseURL}${apiUrl}/question/`, question)
-      .then((response) => response.data);
+      .post(`${baseURL}${apiUrl}/questions/`, question)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(new Error(`${err.message}`)));
   }
 }
