@@ -80,7 +80,7 @@ function Router({
         <ReadAndWatching />
       </Route>
       <Route exact path={CATALOG_URL}>
-        <Catalog openPopupCities={handleClickPopupCities} />
+        <Catalog />
       </Route>
       <Route path="*">
         <PageNotFound />
