@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import {
-  useScrollToTop,
-  useDebounce,
-  useActivityTypes,
-} from '../../hooks/index';
+import { useDebounce, useActivityTypes } from '../../hooks/index';
 import { COLORS, ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import {
   renderFilterTags,
@@ -37,7 +33,6 @@ const ageFilters = [
 const mentorTag = 'Выбор наставников';
 
 function Places({ openPopupCities }) {
-  useScrollToTop();
   const activityTypes = useActivityTypes();
 
   const currentUser = useContext(CurrentUserContext);
@@ -194,6 +189,7 @@ function Places({ openPopupCities }) {
 
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
+    window.scrollTo({ top: 0 });
     setIsFirstRender(true);
     setIsCityChanging(true);
     Promise.all([getPlaces({}), getPlacesTags()])
