@@ -16,7 +16,6 @@ function CardPlace({
     gender,
     age,
     activityType,
-    tags,
   },
   activityTypes,
   color,
@@ -63,9 +62,6 @@ function CardPlace({
     return null;
   };
 
-  //! удалить, тест для фильтров + удалить второй Caption
-  const Test = () => tags.map((t) => t.name).join(',');
-
   return (
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass={`card-place ${cardSize}`} color={cardColor}>
@@ -82,10 +78,6 @@ function CardPlace({
             <TitleH2 sectionClass="card-place__title" title={title} />
           )}
           <Caption sectionClass="card-place__address" title={address} />
-          <Caption
-            sectionClass="card-place__address card-place__address_test"
-            title={Test()}
-          />
         </div>
 
         {renderImage()}
@@ -124,7 +116,6 @@ CardPlace.propTypes = {
   gender: PropTypes.string,
   age: PropTypes.number,
   activityType: PropTypes.number,
-  tags: PropTypes.objectOf(PropTypes.any),
   activityTypes: PropTypes.arrayOf(PropTypes.object),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
@@ -143,7 +134,6 @@ CardPlace.defaultProps = {
   gender: 'male',
   age: 18,
   activityType: 1,
-  tags: {},
   activityTypes: [],
   color: 'white',
   isBig: false,
