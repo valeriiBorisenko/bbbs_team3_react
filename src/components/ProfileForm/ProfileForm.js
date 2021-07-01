@@ -143,21 +143,35 @@ function ProfileForm({
 
       <Card sectionClass="profile-form__text-container">
         <div className="profile-form__texts">
-          <Input
-            type="text"
-            name="place"
-            placeholder="Место встречи"
-            register={register}
-            required
-            error={errors?.place}
-            errorMessage="Место встречи*"
-          />
+          <div className="profile-form__input-wrap">
+            <Input
+              sectionClass="profile-form__input"
+              type="text"
+              name="place"
+              placeholder="Место встречи"
+              register={register}
+              required
+              minLength={{ value: 5, message: 'Минимальная длина 5 символов' }}
+              maxLength={{
+                value: 128,
+                message: 'Максимальная длина 128 символов',
+              }}
+              error={errors?.place}
+              errorMessage="Место встречи*"
+            />
+            {errors?.place && (
+              <span className="profile-form__input-error">
+                {errors?.place?.message}
+              </span>
+            )}
+          </div>
+
           <Input
             type="text"
             name="date"
             placeholder="Дата __.__.____"
             onFocus={handleFocusDataInput}
-            sectionClass={`profile-form__input_el_date ${
+            sectionClass={`profile-form__input profile-form__input_el_date ${
               errors.date ? 'profile-form__input_el_date-error' : ''
             }`}
             register={register}
@@ -165,17 +179,29 @@ function ProfileForm({
             error={errors?.date}
             errorMessage="Дата*&emsp;"
           />
-          <Input
-            type="text"
-            name="description"
-            placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
-            sectionClass="profile-form__input_el_textarea"
-            register={register}
-            required
-            error={errors?.description}
-            errorMessage="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось*"
-            isTextarea
-          />
+          <div className="profile-form__input-wrap profile-form__input-wrap_textarea">
+            <Input
+              type="text"
+              name="description"
+              placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
+              sectionClass="profile-form__input profile-form__input_el_textarea"
+              register={register}
+              required
+              maxLength={{
+                value: 1024,
+                message: 'Максимальная длина 1024 символа',
+              }}
+              error={errors?.description}
+              errorMessage="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось*"
+              isTextarea
+            />
+            {errors?.description && (
+              <span className="profile-form__input-error">
+                {errors?.description?.message}
+              </span>
+            )}
+          </div>
+
           <div className="profile-form__submit-zone">
             <div className="profile-form__ratings">
               <Rating

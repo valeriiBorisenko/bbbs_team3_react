@@ -3,7 +3,7 @@
 .profile-form {
   max-width: 1170px;
   grid-template-columns: minmax(300px, 470px) minmax(600px, 700px);
-  grid-template-rows: 475px;
+  grid-template-rows: minmax(475px, 1fr);
 
   &__photo-upload {
     position: relative;
@@ -15,6 +15,35 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  &__input-wrap {
+
+    &_textarea {
+      grid-column: 1 / -1;
+      min-height: 286px;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    max-height: 48px;
+
+    &_el_textarea {
+      max-height: 100%;
+      min-height: 286px;
+      resize: none;
+    }
+  }
+
+  &__input-error {
+    position: relative;
+    left: 20px;
+    color: $error;
+    font-family: $protoGrotesk;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 1px;
   }
 
   &__input-upload {
@@ -97,12 +126,6 @@
 
   &__input-upload_hidden .profile-form__caption {
     display: none;
-  }
-
-  &__input_el_textarea {
-    grid-column: 1 / -1;
-    min-height: 286px;
-    resize: none;
   }
 
   &__submit-zone {
