@@ -20,6 +20,7 @@ import CurrentUserContext from './contexts/CurrentUserContext';
 // API
 import AuthApi from './utils/auth';
 import Api from './utils/api';
+import getCities from './api/cities';
 
 function App() {
   const history = useHistory();
@@ -173,7 +174,7 @@ function App() {
 
   // получение списка городов
   useEffect(() => {
-    Api.getCities()
+    getCities()
       .then((citiesList) => setCities(citiesList))
       .catch((error) => console.log(error));
   }, []); //! перенести в хук

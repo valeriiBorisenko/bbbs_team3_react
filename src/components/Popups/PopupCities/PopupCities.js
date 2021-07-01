@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import { Popup, TitleH2 } from './index';
-import Api from '../../../utils/api';
+import { updateUserProfile } from '../../../api/user';
 
 function PopupCities({ cities, isOpen, onClose, onSubmit }) {
   const currentUser = useContext(CurrentUserContext);
@@ -13,7 +13,7 @@ function PopupCities({ cities, isOpen, onClose, onSubmit }) {
 
     const cityId = parseInt(event.nativeEvent.submitter.value, 10);
     if (currentUser) {
-      Api.updateUseProfile({ city: cityId })
+      updateUserProfile({ city: cityId })
         .then((updatedUser) => onSubmit({ ...currentUser, ...updatedUser }))
         .catch((error) => console.log(error));
     }
