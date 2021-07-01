@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
-import { adminUrl } from '../../config/config';
+import { staticImageUrl } from '../../config/config';
 import { regExpImages } from '../../config/constants';
 import { Card, Input, Caption, Rating, Button, ButtonRound } from './index';
 
@@ -65,7 +65,7 @@ function ProfileForm({
       const imageUrl = URL.createObjectURL(file);
       setUserImage({ ...userImage, image: file, imageUrl });
       setFileUploaded(true);
-    } else setValue('image', null);
+    }
   };
 
   useEffect(() => {
@@ -86,12 +86,7 @@ function ProfileForm({
     } else {
       setInputValues({});
       setUserImage(null);
-      reset({
-        place: '',
-        date: '',
-        description: '',
-        mark: '',
-      });
+      reset();
     }
   }, [isOpen, data]);
 
@@ -102,9 +97,9 @@ function ProfileForm({
       className={classNames}
     >
       <Card sectionClass="profile-form__photo-upload">
-        {userImage && (
+        {(userImage?.imageUrl || userImage?.image) && (
           <img
-            src={userImage.imageUrl || `${adminUrl}/media/${userImage.image}`}
+            src={userImage.imageUrl || `${staticImageUrl}/${userImage.image}`}
             alt={data?.place}
             className="profile-form__uploaded-image"
           />
@@ -112,30 +107,20 @@ function ProfileForm({
 
         <div
           className={`profile-form__input-upload ${
-            userImage ? 'profile-form__input-upload_hidden' : ''
+            userImage?.imageUrl || userImage?.image
+              ? 'profile-form__input-upload_hidden'
+              : ''
           }`}
         >
           <label htmlFor="input-upload" className="profile-form__label-file">
-            {isEditMode ? (
-              <input
-                id="input-upload"
-                type="file"
-                accept="image/png, image/jpeg"
-                name="image"
-                className="profile-form__input-file"
-                onChange={(evt) => handleChangeImage(evt.target.files[0])}
-              />
-            ) : (
-              <input
-                id="input-upload"
-                type="file"
-                accept="image/png, image/jpeg"
-                name="image"
-                className="profile-form__input-file"
-                {...register('image', { required: 'Загрузить фото' })}
-                onChange={(evt) => handleChangeImage(evt.target.files[0])}
-              />
-            )}
+            <input
+              id="input-upload"
+              type="file"
+              accept="image/png, image/jpeg"
+              name="image"
+              className="profile-form__input-file"
+              onChange={(evt) => handleChangeImage(evt.target.files[0])}
+            />
             <ButtonRound
               sectionClass={`profile-form__pseudo-button ${
                 errors?.image ? 'profile-form__pseudo-button_error' : ''
