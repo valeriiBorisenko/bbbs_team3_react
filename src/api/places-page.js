@@ -3,9 +3,11 @@
 import axios from 'axios';
 import { apiUrl, baseURL } from '../config/config';
 
-function getPlacesTags() {
+function getPlacesTags({ city }) {
   return axios
-    .get(`${baseURL}${apiUrl}/places/tags/`)
+    .get(`${baseURL}${apiUrl}/places/tags/`, {
+      params: { city },
+    })
     .then((response) => response.data)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }

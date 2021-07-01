@@ -47,8 +47,8 @@ function Places({ openPopupCities }) {
 
   const currentUser = useContext(CurrentUserContext);
 
-  const visitorCity = useLocalStorage(localStUserCity);
-  const userCity = currentUser?.city || visitorCity;
+  const anonymousCity = useLocalStorage(localStUserCity);
+  const userCity = currentUser?.city || anonymousCity;
 
   // места из API
   const [places, setPlaces] = useState(null);
@@ -202,13 +202,14 @@ function Places({ openPopupCities }) {
 
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
-    console.log(userCity);
     if (userCity) {
-      console.log('tyt');
       window.scrollTo({ top: 0 });
       setIsFirstRender(true);
       setIsCityChanging(true);
-      Promise.all([getPlaces({}), getPlacesTags()])
+      Promise.all([
+        getPlaces({ city: userCity }),
+        getPlacesTags({ city: userCity }),
+      ])
         .then(([placesData, tagsData]) => {
           const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
           setChosenPlace(chosenPlaceLast);
