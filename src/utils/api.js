@@ -147,6 +147,16 @@ export default class Api {
       .then((response) => response.data);
   }
 
+  // работа со страницей статей
+
+  static getArticlesPageData({ limit, offset }) {
+    return axios
+      .get(`${baseURL}${apiUrl}/articles/`, {
+        params: { limit, offset },
+      })
+      .then((response) => response.data);
+  }
+
   // работа со странице вопросов
   static getQuestionsPageData() {
     return axios

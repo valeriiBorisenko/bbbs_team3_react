@@ -12,6 +12,7 @@ import {
   Places,
   Movies,
   ReadAndWatching,
+  Articles,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -25,6 +26,7 @@ import {
   READANDWATCHING_URL,
   CATALOG_URL,
   PROFILE_URL,
+  ARTICLES_URL,
 } from '../config/routes';
 
 function Router({
@@ -76,6 +78,9 @@ function Router({
       </Route>
       <Route exact path={CATALOG_URL}>
         <Catalog openPopupCities={handleClickPopupCities} />
+      </Route>
+      <Route exact path={ARTICLES_URL}>
+        <Articles />
       </Route>
       <Route path="*">
         <PageNotFound />
