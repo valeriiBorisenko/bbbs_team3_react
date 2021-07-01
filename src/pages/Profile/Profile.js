@@ -58,6 +58,7 @@ function Profile({ onEventFullDescriptionClick }) {
 
   // скролл контейнера с карточками мероприятий
   const containerEvents = useSmoothHorizontalScroll({ step: 3 });
+  console.log(containerEvents);
 
   // работа с формой
   const scrollAnchorRef = useRef(null);
