@@ -61,3 +61,12 @@ export const deselectOneTag = (setState, tagName) => {
     })
   );
 };
+
+export const deselectAllTags = (setState) => {
+  setState((stateFilters) =>
+    stateFilters.map((filterItem) => {
+      filterItem.isActive = false;
+      return filterItem;
+    })
+  );
+};

@@ -21,8 +21,10 @@ import {
   handleRadioBehavior,
   selectOneTag,
   deselectOneTag,
+  deselectAllTags,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
+import { getlocalStorageData } from '../../hooks/useLocalStorage';
 import {
   BasePage,
   TitleH1,
@@ -47,8 +49,12 @@ function Places({ openPopupCities }) {
 
   const currentUser = useContext(CurrentUserContext);
 
-  const anonymousCity = useLocalStorage(localStUserCity);
-  const userCity = currentUser?.city || anonymousCity;
+  // сохранённый в localStorage город анонимуса
+  const currentAnonymousCity = getlocalStorageData(localStUserCity);
+  // слушатель localStorage, если анонимус захочет поменять город
+  const anonymousCityChanged = useLocalStorage(localStUserCity);
+  const userCity =
+    currentUser?.city || currentAnonymousCity || anonymousCityChanged;
 
   // места из API
   const [places, setPlaces] = useState(null);
@@ -137,8 +143,7 @@ function Places({ openPopupCities }) {
     if (activeCategories.length === 0) {
       if (!ageFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
-        setIsLoading(true);
-        getPlaces({})
+        getPlaces({ city: userCity })
           .then((res) => {
             const { chosenPlaceLast, restOfPlaces } = definePlaces(res);
             setChosenPlace(chosenPlaceLast);
@@ -149,10 +154,10 @@ function Places({ openPopupCities }) {
           .finally(() => setIsLoading(false));
       } else {
         // + ВОЗРАСТ
-        setIsLoading(true);
         getPlaces({
           min_age: ageFilter.range[0],
           max_age: ageFilter.range[1],
+          city: userCity,
         })
           .then((res) => {
             setPlaces(res);
@@ -168,12 +173,12 @@ function Places({ openPopupCities }) {
 
     // КАТЕГОРИИ + ВОЗРАСТ (или без него)
     if (activeCategories.length > 0) {
-      setIsLoading(true);
       getPlaces({
         chosen: isMentorFlag,
         tags: activeTags,
         min_age: ageFilter?.range[0],
         max_age: ageFilter?.range[1],
+        city: userCity,
       })
         .then((res) => {
           setPlaces(res);
@@ -188,14 +193,17 @@ function Places({ openPopupCities }) {
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   // запуск фильтрации
   useEffect(() => {
-    if (isFiltersUsed) debounceFiltration();
+    if (isFiltersUsed) {
+      setIsLoading(true);
+      debounceFiltration();
+    }
     setIsFiltersUsed(false);
     setIsFirstRender(false);
   }, [isFiltersUsed]);
 
   // открытие попапа "города" для незарегистрированного
   useEffect(() => {
-    if (!currentUser) {
+    if (!userCity) {
       openPopupCities();
     }
   }, []);
@@ -204,6 +212,7 @@ function Places({ openPopupCities }) {
   useEffect(() => {
     if (userCity) {
       window.scrollTo({ top: 0 });
+      deselectAllTags(setAges);
       setIsFirstRender(true);
       setIsCityChanging(true);
       Promise.all([
@@ -232,33 +241,40 @@ function Places({ openPopupCities }) {
     </div>
   );
 
-  const renderPlaces = () => (
-    <>
-      {chosenPlace && !isChosenCardHidden && (
-        <section className="place__main fade-in">
-          <CardPlace
-            key={chosenPlace?.id}
-            data={chosenPlace}
-            activityTypes={activityTypes}
-            sectionClass="card-container_type_main-article"
-            isBig
-          />
-        </section>
-      )}
+  const renderPlaces = () => {
+    if (places?.length > 0) {
+      return (
+        <>
+          {chosenPlace && !isChosenCardHidden && (
+            <section className="places__main fade-in">
+              <CardPlace
+                key={chosenPlace?.id}
+                data={chosenPlace}
+                activityTypes={activityTypes}
+                sectionClass="card-container_type_main-article"
+                isBig
+              />
+            </section>
+          )}
 
-      <section className="place__cards-grid">
-        {places.map((place, i) => (
-          <CardPlace
-            key={place?.id}
-            data={place}
-            activityTypes={activityTypes}
-            color={COLORS[i % COLORS.length]}
-            sectionClass="card-container_type_article fade-in"
-          />
-        ))}
-      </section>
-    </>
-  );
+          <section className="places__cards-grid">
+            {places.map((place, i) => (
+              <CardPlace
+                key={place?.id}
+                data={place}
+                activityTypes={activityTypes}
+                color={COLORS[i % COLORS.length]}
+                sectionClass="card-container_type_article fade-in"
+              />
+            ))}
+          </section>
+        </>
+      );
+    }
+    return (
+      <p className="places__paragraph">По вашему запросу ничего не нашлось</p>
+    );
+  };
 
   const renderAnimatedContainer = () => (
     <>
@@ -310,7 +326,7 @@ function Places({ openPopupCities }) {
           content="Куда вы можете пойти, что рекомендуют наши наставники"
         />
       </Helmet>
-      <section className="place page__section fade-in">
+      <section className="places page__section fade-in">
         {renderPageContent()}
       </section>
     </BasePage>
