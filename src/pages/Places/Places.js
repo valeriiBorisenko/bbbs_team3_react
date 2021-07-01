@@ -3,7 +3,7 @@ import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/index';
 import {
   useDebounce,
   useActivityTypes,
@@ -267,7 +267,7 @@ function Places({ openPopupCities }) {
             titleText="Рекомендуемых мест для вашего города ещё нет, но они обязательно появятся!"
             buttonText="Вернуться на главную"
           />
-          {currentUser && <PlacesRecommend />}
+          {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
         </>
       ) : (
         <Loader isNested />
@@ -285,7 +285,7 @@ function Places({ openPopupCities }) {
         {!isCityChanging ? (
           <>
             {renderTags()}
-            {currentUser && <PlacesRecommend />}
+            {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
 
             {!isLoading ? <>{renderPlaces()}</> : <Loader isNested />}
           </>

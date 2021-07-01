@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { FormRecommendation, PopupRecommendSuccess } from './index';
 import { postPlace } from '../../api/places-page';
 
-function PlacesRecommend({ sectionClass }) {
+function PlacesRecommend({ sectionClass, activityTypes }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
 
@@ -95,7 +95,11 @@ function PlacesRecommend({ sectionClass }) {
             , и мы добавим вашу&nbsp;рекомендацию.
           </p>
           {/* вызов формы */}
-          <FormRecommendation isOpen={isFormOpen} onSubmit={handleFormSubmit} />
+          <FormRecommendation
+            isOpen={isFormOpen}
+            onSubmit={handleFormSubmit}
+            activityTypes={activityTypes}
+          />
         </div>
       </section>
       <PopupRecommendSuccess
@@ -107,10 +111,12 @@ function PlacesRecommend({ sectionClass }) {
 }
 
 PlacesRecommend.propTypes = {
+  activityTypes: PropTypes.arrayOf(PropTypes.object),
   sectionClass: PropTypes.string,
 };
 
 PlacesRecommend.defaultProps = {
+  activityTypes: [],
   sectionClass: '',
 };
 

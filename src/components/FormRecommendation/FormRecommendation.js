@@ -4,17 +4,15 @@ import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { CitiesContext } from '../../contexts/index';
-import { useActivityTypes } from '../../hooks/index';
 import { regExpImages, regExpUrl } from '../../config/constants';
 import { Input, Button, ButtonRound } from './index';
 
-function FormRecommendation({ isOpen, onSubmit }) {
+function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const textAreaPlaceholder =
     window.innerWidth < 576
       ? 'Комментарий*'
       : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
 
-  const activityTypes = useActivityTypes();
   const cities = useContext(CitiesContext);
 
   const {
@@ -281,11 +279,13 @@ function FormRecommendation({ isOpen, onSubmit }) {
 }
 
 FormRecommendation.propTypes = {
+  activityTypes: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   onSubmit: PropTypes.func,
 };
 
 FormRecommendation.defaultProps = {
+  activityTypes: [],
   isOpen: false,
   onSubmit: () => {},
 };
