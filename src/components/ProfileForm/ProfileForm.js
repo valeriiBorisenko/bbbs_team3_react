@@ -51,6 +51,11 @@ function ProfileForm({
     setFileUploaded(false);
   };
 
+  const handleFocusDataInput = (evt) => {
+    // eslint-disable-next-line no-param-reassign
+    evt.currentTarget.type = 'date';
+  };
+
   const handleChangeRating = (value) => {
     setInputValues({ ...inputValues, mark: value });
   };
@@ -160,9 +165,10 @@ function ProfileForm({
             errorMessage="Место встречи*"
           />
           <Input
-            type="date"
+            type="text"
             name="date"
-            placeholder="Дата&emsp;"
+            placeholder="Дата __.__.____"
+            onFocus={handleFocusDataInput}
             sectionClass={`profile-form__input_el_date ${
               errors.date ? 'profile-form__input_el_date-error' : ''
             }`}

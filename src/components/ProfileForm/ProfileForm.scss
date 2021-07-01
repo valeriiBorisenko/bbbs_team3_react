@@ -2,7 +2,7 @@
 
 .profile-form {
   max-width: 1170px;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: minmax(300px, 470px) minmax(600px, 700px);
   grid-template-rows: 475px;
 
   &__photo-upload {
@@ -97,16 +97,6 @@
 
   &__input-upload_hidden .profile-form__caption {
     display: none;
-  }
-
-  &__input_el_date:not(:focus):not(.has-value):before {
-    color: $lightGray;
-    content: attr(placeholder);
-  }
-
-  &__input_el_date-error:not(:focus):not(.has-value):before {
-    color: $error;
-    content: attr(placeholder);
   }
 
   &__input_el_textarea {
