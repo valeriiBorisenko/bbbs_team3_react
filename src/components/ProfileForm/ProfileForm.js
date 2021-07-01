@@ -68,6 +68,13 @@ function ProfileForm({
     }
   };
 
+  const handleCloseForm = () => {
+    setInputValues({});
+    setUserImage(null);
+    reset();
+    onClose();
+  };
+
   useEffect(() => {
     if (inputValues?.mark) setCaption(captions[inputValues.mark]);
     else setCaption('Оцените проведенное время');
@@ -83,10 +90,6 @@ function ProfileForm({
         setValue('description', data.description);
         setValue('mark', data.mark);
       }
-    } else {
-      setInputValues({});
-      setUserImage(null);
-      reset();
     }
   }, [isOpen, data]);
 
@@ -212,7 +215,7 @@ function ProfileForm({
                 title={`${isEditMode ? 'Отмена' : 'Удалить'}`}
                 color="gray-borderless"
                 sectionClass="profile-form__button_el_delete"
-                onClick={onClose}
+                onClick={handleCloseForm}
               />
               <Button
                 title={`${isEditMode ? 'Сохранить' : 'Добавить'}`}
