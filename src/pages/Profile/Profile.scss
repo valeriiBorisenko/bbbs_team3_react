@@ -54,7 +54,7 @@
     align-items: center;
   
     &::after {
-      content: 'Добавить фото';
+      content: 'Добавить встречу';
       white-space: nowrap;
       color: $blue;
       font-family: $protoGrotesk;
@@ -100,30 +100,50 @@
   }
 }
 
+@include atDesktop1024 {
+  .profile {
+    &__button-add-diary {
+      &::after {
+        margin-left: 55px;
+        font-size: 12px;
+        line-height: 1.41;
+      }
+    }
+  }
+}
+
 @include atTablet {
   .profile {
     &__events {
       margin-right: -60px;
       margin-left: -60px;
+      margin-bottom: 20px;
+    }
+
+    &__title {
+      margin-bottom: 20px;
+    }
+
+    &__diaries {
+      padding-top: 20px;
+    }
+
+    &__form-container {
+      margin-bottom: 20px;
     }
   }
 }
 
 @include atMobile {
   .profile {
-    &__title {
-      margin-bottom: 20px;
-    }
-
     &__events {
       margin-right: -15px;
       margin-left: -15px;
-      margin-bottom: 20px;
     }
 
     &__button-add-diary {
       height: 40px;
-      padding: 0 0 0 55px;
+      // padding: 0 0 0 55px;
       font-size: 12px;
       line-height: 1.42;
     }

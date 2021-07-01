@@ -17,6 +17,7 @@ function Input({
   errorMessage,
   sectionClass,
   isTextarea,
+  onFocus,
 }) {
   const message = error ? errorMessage : '';
 
@@ -50,6 +51,7 @@ function Input({
       type={type}
       name={name}
       placeholder={message || placeholder}
+      onFocus={onFocus}
       {...register(name, { required, max, min, minLength, maxLength, pattern })}
     />
   );
@@ -71,6 +73,7 @@ Input.propTypes = {
   pattern: PropTypes.objectOf(PropTypes.any),
   error: PropTypes.objectOf(PropTypes.any),
   errorMessage: PropTypes.string,
+  onFocus: PropTypes.func,
 };
 
 Input.defaultProps = {
@@ -86,6 +89,7 @@ Input.defaultProps = {
   pattern: undefined,
   error: undefined,
   errorMessage: '',
+  onFocus: () => {},
 };
 
 export default Input;

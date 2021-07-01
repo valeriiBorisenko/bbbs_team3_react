@@ -1,12 +1,15 @@
 import './PopupCities.scss';
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
-import CurrentUserContext from '../../../contexts/CurrentUserContext';
+import { CurrentUserContext, CitiesContext } from '../../../contexts/index';
 import { Popup, TitleH2 } from './index';
 import { updateUserProfile } from '../../../api/user';
+import { setlocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStUserCity } from '../../../config/constants';
 
-function PopupCities({ cities, isOpen, onClose, onSubmit }) {
+function PopupCities({ isOpen, onClose, onSubmit }) {
   const currentUser = useContext(CurrentUserContext);
+  const cities = useContext(CitiesContext);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -14,10 +17,15 @@ function PopupCities({ cities, isOpen, onClose, onSubmit }) {
     const cityId = parseInt(event.nativeEvent.submitter.value, 10);
     if (currentUser) {
       updateUserProfile({ city: cityId })
-        .then((updatedUser) => onSubmit({ ...currentUser, ...updatedUser }))
-        .catch((error) => console.log(error));
+        .then((updatedUser) => {
+          onSubmit({ ...currentUser, ...updatedUser });
+          onClose();
+        })
+        .catch(console.log);
+    } else {
+      setlocalStorageData(localStUserCity, cityId);
+      onClose();
     }
-    onClose();
   }
 
   return (
@@ -26,7 +34,6 @@ function PopupCities({ cities, isOpen, onClose, onSubmit }) {
         type="cities"
         typeContainer="cities"
         isOpen={isOpen}
-        onClose={onClose}
         withoutCloseButton
       >
         <form className="popup__form" onSubmit={handleSubmit}>
@@ -72,14 +79,12 @@ function PopupCities({ cities, isOpen, onClose, onSubmit }) {
 }
 
 PopupCities.propTypes = {
-  cities: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
 PopupCities.defaultProps = {
-  cities: [],
   isOpen: false,
   onClose: () => {},
   onSubmit: () => {},

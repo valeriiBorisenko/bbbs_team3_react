@@ -57,3 +57,5 @@ export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif|bmp)$/i;
 export const regExpUrl = /^https?:\/\/(w{3}\.)?\w+\S+(\.[a-z]{2,})?$/;
 
 export const DELAY_DEBOUNCE = 1500;
+
+export const localStUserCity = 'userCity';

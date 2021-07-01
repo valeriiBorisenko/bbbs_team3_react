@@ -1,20 +1,19 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import './FormRecommendation.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { useActivityTypes, useCities } from '../../hooks/index';
+import { CitiesContext } from '../../contexts/index';
 import { regExpImages, regExpUrl } from '../../config/constants';
 import { Input, Button, ButtonRound } from './index';
 
-function FormRecommendation({ isOpen, onSubmit }) {
+function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const textAreaPlaceholder =
     window.innerWidth < 576
       ? 'Комментарий*'
       : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
 
-  const activityTypes = useActivityTypes();
-  const cities = useCities();
+  const cities = useContext(CitiesContext);
 
   const {
     register,
@@ -80,7 +79,7 @@ function FormRecommendation({ isOpen, onSubmit }) {
       noValidate
     >
       <div className="form-recom__input-container">
-        <div className="form-recom__input-wrap form-recom__input-wrap_indentation">
+        <div className="form-recom__input-wrap form-recom__input-wrap_meduim form-recom__input-wrap_indentation">
           <Input
             sectionClass="form-recom__input"
             type="text"
@@ -100,7 +99,7 @@ function FormRecommendation({ isOpen, onSubmit }) {
           )}
         </div>
 
-        <div className="form-recom__input-wrap">
+        <div className="form-recom__input-wrap form-recom__input-wrap_meduim">
           <Input
             sectionClass="form-recom__input"
             type="text"
@@ -175,7 +174,7 @@ function FormRecommendation({ isOpen, onSubmit }) {
             Девочка
           </span>
         </label>
-        <div className="form-recom__input-wrap">
+        <div className="form-recom__input-wrap form-recom__input-wrap_narrow">
           <Input
             sectionClass="form-recom__input"
             type="number"
@@ -183,8 +182,8 @@ function FormRecommendation({ isOpen, onSubmit }) {
             placeholder="Возраст*"
             register={register}
             required
-            max={{ value: 25, message: 'Максимальный возраст 25 лет' }}
-            min={{ value: 1, message: 'Минимальный возраст 1 год' }}
+            max={{ value: 25, message: 'Макс. возраст 25 лет' }}
+            min={{ value: 1, message: 'Мин. возраст 1 год' }}
             error={errors?.age}
             errorMessage="Возраст*"
           />
@@ -280,11 +279,13 @@ function FormRecommendation({ isOpen, onSubmit }) {
 }
 
 FormRecommendation.propTypes = {
+  activityTypes: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   onSubmit: PropTypes.func,
 };
 
 FormRecommendation.defaultProps = {
+  activityTypes: [],
   isOpen: false,
   onSubmit: () => {},
 };

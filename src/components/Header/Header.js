@@ -7,14 +7,15 @@ import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { CurrentUserContext, CitiesContext } from '../../contexts/index';
 import { useClickOutside } from '../../hooks/index';
 import { PROFILE_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
 import { NavBar, UserMenuButton } from './index';
 
-function Header({ onUserButtonClick, onLogout, onCityChange, cities }) {
+function Header({ onUserButtonClick, onLogout, onCityChange }) {
   const { pathname } = useLocation();
   const currentUser = useContext(CurrentUserContext);
+  const cities = useContext(CitiesContext);
 
   const [userCityName, setUserCityName] = useState('');
 
@@ -132,14 +133,12 @@ Header.propTypes = {
   onUserButtonClick: PropTypes.func,
   onCityChange: PropTypes.func,
   onLogout: PropTypes.func,
-  cities: PropTypes.arrayOf(PropTypes.object),
 };
 
 Header.defaultProps = {
   onUserButtonClick: () => {},
   onCityChange: () => {},
   onLogout: () => {},
-  cities: [],
 };
 
 export default Header;
