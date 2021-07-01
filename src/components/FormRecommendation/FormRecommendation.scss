@@ -12,7 +12,7 @@
   padding: 0 70px;
 
   &_opened {
-    min-height: 541px;
+    min-height: 520px;
     padding-top: 40px;
     animation: fade-in .5s ease 1s forwards;
   }
@@ -27,17 +27,25 @@
   }
 
   &__input-wrap {
-    position: relative;
-    flex-grow: 1;
+    max-width: 100%;
+    width: 100%;
+    margin-bottom: 20px;
 
     &_indentation {
       margin-right: 30px;
+    }
+
+    &_medium {
+      max-width: 340px;
+    }
+
+    &_narrow {
+      max-width: 170px;
     }
   }
 
   &__input {
     width: 100%;
-    margin-bottom: 25px;
 
     &_textarea {
       overflow-y: visible;
@@ -47,8 +55,7 @@
   }
 
   &__input-error {
-    position: absolute;
-    bottom: 9px;
+    position: relative;
     left: 10px;
     color: $error;
     font-family: $protoGrotesk;
@@ -191,41 +198,7 @@
     &_opened {
       padding-top: 40px;
     }
-  }
-}
 
-@include atTabletL {
-  .form-recom {
-    &_opened {
-      min-height: 718px;
-    }
-    
-    &__input-container {
-      flex-direction: column;
-    }
-
-    &__input-wrap {
-      &_indentation {
-        margin-right: 0;
-      }
-    }
-
-    &__input {
-      margin-bottom: 20px;
-    }
-
-    &__input-error {
-      bottom: 5px;
-    }
-
-    &__label {
-      margin: 0 0 20px;
-    }
-  }
-}
-
-@include atDesktop1024 {
-  .form-recom {
     &__add-photo {
       &::after {
         font-size: 12px;
@@ -236,10 +209,43 @@
   }
 }
 
+@include atTabletL {
+  .form-recom {
+    &_opened {
+      min-height: 627px;
+    }
+    
+    &__input-container {
+      flex-direction: column;
+    }
+
+    &__input-wrap {
+      
+      margin-bottom: 10px;
+
+      &_indentation {
+        margin-right: 0;
+      }
+
+      &_narrow {
+        max-width: 100%;
+      }
+    }
+
+    &__select {
+      margin-bottom: 10px;
+    }
+
+    &__label {
+      margin: 0 0 10px;
+    }
+  }
+}
+
 @include atMobile {
   .form-recom {
     &_opened {
-      min-height: 668px;
+      min-height: 585px;
       padding-top: 30px;
     }
 

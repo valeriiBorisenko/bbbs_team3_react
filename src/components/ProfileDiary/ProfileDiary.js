@@ -99,22 +99,12 @@ function ProfileDiary({ data, onEdit, onDelete }) {
 
 ProfileDiary.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  image: PropTypes.string,
-  description: PropTypes.string,
-  place: PropTypes.string,
-  mark: PropTypes.string,
-  date: PropTypes.string,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
 };
 
 ProfileDiary.defaultProps = {
   data: {},
-  image: '',
-  description: '',
-  place: '',
-  mark: 'neutral',
-  date: '',
   onEdit: () => {},
   onDelete: () => {},
 };

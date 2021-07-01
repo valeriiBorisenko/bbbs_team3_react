@@ -79,7 +79,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
       noValidate
     >
       <div className="form-recom__input-container">
-        <div className="form-recom__input-wrap form-recom__input-wrap_indentation">
+        <div className="form-recom__input-wrap form-recom__input-wrap_meduim form-recom__input-wrap_indentation">
           <Input
             sectionClass="form-recom__input"
             type="text"
@@ -99,7 +99,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
           )}
         </div>
 
-        <div className="form-recom__input-wrap">
+        <div className="form-recom__input-wrap form-recom__input-wrap_meduim">
           <Input
             sectionClass="form-recom__input"
             type="text"
@@ -174,7 +174,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             Девочка
           </span>
         </label>
-        <div className="form-recom__input-wrap">
+        <div className="form-recom__input-wrap form-recom__input-wrap_narrow">
           <Input
             sectionClass="form-recom__input"
             type="number"
@@ -182,8 +182,8 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             placeholder="Возраст*"
             register={register}
             required
-            max={{ value: 25, message: 'Максимальный возраст 25 лет' }}
-            min={{ value: 1, message: 'Минимальный возраст 1 год' }}
+            max={{ value: 25, message: 'Макс. возраст 25 лет' }}
+            min={{ value: 1, message: 'Мин. возраст 1 год' }}
             error={errors?.age}
             errorMessage="Возраст*"
           />
