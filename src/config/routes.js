@@ -11,3 +11,4 @@ export const VIDEO_URL = '/video';
 export const ARTICLES_URL = '/articles';
 export const MOVIES_URL = '/movies';
 export const BOOKS_URL = '/books';
+export const VIDEO = '/video';
