@@ -4,8 +4,17 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useDebounce, useActivityTypes } from '../../hooks/index';
-import { COLORS, ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
+import {
+  useDebounce,
+  useActivityTypes,
+  useLocalStorage,
+} from '../../hooks/index';
+import {
+  COLORS,
+  ALL_CATEGORIES,
+  DELAY_DEBOUNCE,
+  localStUserCity,
+} from '../../config/constants';
 import {
   renderFilterTags,
   handleCheckboxBehavior,
@@ -14,7 +23,6 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { getlocalStorageData } from '../../utils/local-storage';
 import {
   BasePage,
   TitleH1,
@@ -38,6 +46,9 @@ function Places({ openPopupCities }) {
   const activityTypes = useActivityTypes();
 
   const currentUser = useContext(CurrentUserContext);
+
+  const visitorCity = useLocalStorage(localStUserCity);
+  const userCity = currentUser?.city || visitorCity;
 
   // места из API
   const [places, setPlaces] = useState(null);
@@ -189,34 +200,26 @@ function Places({ openPopupCities }) {
     }
   }, []);
 
-  const [visitorCity, setVisitorCity] = useState(null);
-  const userCity = currentUser?.city || visitorCity;
-
-  const show = () => {
-    setVisitorCity(getlocalStorageData('visitorCity'));
-  };
-
-  useEffect(() => {
-    window.addEventListener('changeLocalStorage', show, false);
-    return () => window.removeEventListener('changeLocalStorage', show, false);
-  }, []);
-
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
-    window.scrollTo({ top: 0 });
-    setIsFirstRender(true);
-    setIsCityChanging(true);
-    Promise.all([getPlaces({}), getPlacesTags()])
-      .then(([placesData, tagsData]) => {
-        const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
-        setChosenPlace(chosenPlaceLast);
-        setPlaces(restOfPlaces);
-        setCategories(defineCategories(tagsData, chosenPlaceLast));
-        setIsChosenCardHidden(false);
-      })
-      .catch(console.log)
-      .finally(() => setIsCityChanging(false));
-  }, [currentUser?.city]);
+    console.log(userCity);
+    if (userCity) {
+      console.log('tyt');
+      window.scrollTo({ top: 0 });
+      setIsFirstRender(true);
+      setIsCityChanging(true);
+      Promise.all([getPlaces({}), getPlacesTags()])
+        .then(([placesData, tagsData]) => {
+          const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
+          setChosenPlace(chosenPlaceLast);
+          setPlaces(restOfPlaces);
+          setCategories(defineCategories(tagsData, chosenPlaceLast));
+          setIsChosenCardHidden(false);
+        })
+        .catch(console.log)
+        .finally(() => setIsCityChanging(false));
+    }
+  }, [userCity]);
 
   // функции рендера
   const renderTags = () => (

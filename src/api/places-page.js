@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+// python was here
 import axios from 'axios';
 import { apiUrl, baseURL } from '../config/config';
 
@@ -8,14 +10,12 @@ function getPlacesTags() {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-// python was here
-// eslint-disable-next-line camelcase
-function getPlaces({ chosen, tags, min_age, max_age }) {
+function getPlaces({ chosen, tags, min_age, max_age, city }) {
   return axios
     .get(`${baseURL}${apiUrl}/places/`, {
       params: chosen
-        ? { chosen, tags, min_age, max_age }
-        : { tags, min_age, max_age },
+        ? { chosen, tags, min_age, max_age, city }
+        : { tags, min_age, max_age, city },
     })
     .then((response) => response.data.results)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));

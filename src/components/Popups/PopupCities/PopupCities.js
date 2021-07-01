@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { CurrentUserContext, CitiesContext } from '../../../contexts/index';
 import { Popup, TitleH2 } from './index';
 import { updateUserProfile } from '../../../api/user';
-import { setlocalStorageData } from '../../../utils/local-storage';
+import { setlocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStUserCity } from '../../../config/constants';
 
 function PopupCities({ isOpen, onClose, onSubmit }) {
   const currentUser = useContext(CurrentUserContext);
@@ -22,7 +23,7 @@ function PopupCities({ isOpen, onClose, onSubmit }) {
         })
         .catch(console.log);
     } else {
-      setlocalStorageData('visitorCity', cityId);
+      setlocalStorageData(localStUserCity, cityId);
       onClose();
     }
   }
