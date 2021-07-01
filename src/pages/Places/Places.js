@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
@@ -13,6 +14,7 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
+import { getlocalStorageData } from '../../utils/local-storage';
 import {
   BasePage,
   TitleH1,
@@ -45,11 +47,11 @@ function Places({ openPopupCities }) {
   const [isLoading, setIsLoading] = useState(false);
   // переход между городами, лоадер
   const [isCityChanging, setIsCityChanging] = useState(false);
-
   // триггер для useEffect
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // видна ли главная карточка
   const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
+  // стейт для определения первой отрисовки страницы
   const [isFirstRender, setIsFirstRender] = useState(false);
   // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
@@ -185,6 +187,18 @@ function Places({ openPopupCities }) {
     if (!currentUser) {
       openPopupCities();
     }
+  }, []);
+
+  const [visitorCity, setVisitorCity] = useState(null);
+  const userCity = currentUser?.city || visitorCity;
+
+  const show = () => {
+    setVisitorCity(getlocalStorageData('visitorCity'));
+  };
+
+  useEffect(() => {
+    window.addEventListener('changeLocalStorage', show, false);
+    return () => window.removeEventListener('changeLocalStorage', show, false);
   }, []);
 
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках

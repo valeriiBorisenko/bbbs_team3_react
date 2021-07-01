@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import './FormRecommendation.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { useActivityTypes, useCities } from '../../hooks/index';
+import { CitiesContext } from '../../contexts/index';
+import { useActivityTypes } from '../../hooks/index';
 import { regExpImages, regExpUrl } from '../../config/constants';
 import { Input, Button, ButtonRound } from './index';
 
@@ -14,7 +15,7 @@ function FormRecommendation({ isOpen, onSubmit }) {
       : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
 
   const activityTypes = useActivityTypes();
-  const cities = useCities();
+  const cities = useContext(CitiesContext);
 
   const {
     register,
