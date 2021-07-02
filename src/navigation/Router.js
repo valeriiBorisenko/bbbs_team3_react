@@ -15,7 +15,7 @@ import {
   ReadAndWatch,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
-import CurrentUserContext from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../contexts/index';
 import {
   MAIN_PAGE_URL,
   ABOUT_US_URL,
@@ -44,44 +44,54 @@ function Router({
       <Route exact path={MAIN_PAGE_URL}>
         <MainPage
           onEventSignUpClick={handleEventBooking}
-          onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+          onEventDescriptionClick={handleClickPopupAboutEventOpened}
         />
       </Route>
+
       <Route exact path={ABOUT_US_URL}>
         <AboutUs />
       </Route>
+
       <Route path={AFISHA_URL}>
         <Calendar
           onEventSignUpClick={handleEventBooking}
-          onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+          onEventDescriptionClick={handleClickPopupAboutEventOpened}
           onOpenLoginPopup={handleClickPopupLoginOpened}
         />
       </Route>
+
       <Route path={QUESTIONS_URL}>
         <Questions />
       </Route>
+
       <ProtectedRoute
         exact
         path={PROFILE_URL}
         component={Profile}
-        onEventFullDescriptionClick={handleClickPopupAboutEventOpened}
+        onEventDescriptionClick={handleClickPopupAboutEventOpened}
         isAuth={!!currentUser}
       />
+
       <Route exact path={PLACES_URL}>
         <Places openPopupCities={handleClickPopupCities} />
       </Route>
+
       <Route exact path={RIGHTS_URL}>
         <Rights />
       </Route>
+
       <Route exact path={MOVIES_URL}>
         <Movies />
       </Route>
+
       <Route exact path={READ_AND_WATCH_URL}>
         <ReadAndWatch />
       </Route>
+
       <Route exact path={CATALOG_URL}>
         <Catalog />
       </Route>
+
       <Route path="*">
         <PageNotFound />
       </Route>

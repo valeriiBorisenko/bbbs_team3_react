@@ -2,20 +2,17 @@ import './PopupConfirmation.scss';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../../utils/utils';
 import { Popup, Button, TitleH2 } from './index';
+import { getLocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStAfishaEvent } from '../../../config/constants';
 
-function PopupConfirmation({
-  isOpen,
-  onClose,
-  onConfirmButtonClick,
-  cardData,
-}) {
-  const { title, startAt, endAt } = cardData;
-  const startDay = formatDate(startAt);
-  const endDay = formatDate(endAt);
+function PopupConfirmation({ isOpen, onClose, onConfirmButtonClick }) {
+  const card = getLocalStorageData(localStAfishaEvent);
+  const startDay = formatDate(card?.startAt);
+  const endDay = formatDate(card?.endAt);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onConfirmButtonClick(cardData, cardData.id);
+    onConfirmButtonClick(card);
   };
 
   return (
@@ -31,11 +28,11 @@ function PopupConfirmation({
         </p>
         <TitleH2
           sectionClass="popup__title_type_calendar"
-          title={`«${title}»`}
+          title={`«${card?.title}»`}
         />
         <TitleH2
           sectionClass="popup__title_type_calendar"
-          title={`${startDay.day} ${startDay.monthName} с ${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
+          title={`${startDay?.day} ${startDay?.monthName} с ${startDay?.hour}:${startDay?.minutes} - ${endDay?.hour}:${endDay?.minutes}`}
         />
         <div className="popup__buttons_type_calendar">
           <Button
@@ -55,14 +52,12 @@ PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onConfirmButtonClick: PropTypes.func,
-  cardData: PropTypes.objectOf(PropTypes.any),
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: () => {},
   onConfirmButtonClick: () => {},
-  cardData: {},
 };
 
 export default PopupConfirmation;

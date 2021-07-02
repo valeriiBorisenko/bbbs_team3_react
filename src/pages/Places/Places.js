@@ -48,10 +48,10 @@ function Places({ openPopupCities }) {
 
   const currentUser = useContext(CurrentUserContext);
 
-  const { getlocalStorageData } = useLocalStorage(localStUserCity, true);
+  const getLocalStorageItem = useLocalStorage(localStUserCity);
 
   // сохранённый в localStorage город анонимуса
-  const currentAnonymousCity = getlocalStorageData();
+  const currentAnonymousCity = getLocalStorageItem();
   const userCity = currentUser?.city || currentAnonymousCity;
 
   // места из API

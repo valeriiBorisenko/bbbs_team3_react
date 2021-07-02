@@ -5,12 +5,11 @@ import { CurrentUserContext, CitiesContext } from '../../../contexts/index';
 import { Popup, TitleH2 } from './index';
 import { updateUserProfile } from '../../../api/user';
 import { localStUserCity } from '../../../config/constants';
-import { useLocalStorage } from '../../../hooks/index';
+import { dispatchLocalStorageEvent } from '../../../hooks/useLocalStorage';
 
 function PopupCities({ isOpen, onClose, onSubmit }) {
   const currentUser = useContext(CurrentUserContext);
   const cities = useContext(CitiesContext);
-  const { setlocalStorageData } = useLocalStorage(localStUserCity, false);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -24,7 +23,7 @@ function PopupCities({ isOpen, onClose, onSubmit }) {
         })
         .catch(console.log);
     } else {
-      setlocalStorageData(cityId);
+      dispatchLocalStorageEvent(localStUserCity, cityId);
       onClose();
     }
   }

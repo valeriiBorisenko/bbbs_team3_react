@@ -19,8 +19,16 @@ import {
 import { CurrentUserContext, CitiesContext } from './contexts/index';
 // API
 import AuthApi from './utils/auth';
-import Api from './utils/api';
+import {
+  makeEventRegistration,
+  cancelEventRegistration,
+} from './api/event-participants';
+// хуки
 import { useCities } from './hooks/index';
+import {
+  setRegisterOnEvent,
+  cancelRegisterOnEvent,
+} from './hooks/useEventSubscription';
 
 function App() {
   const history = useHistory();
@@ -42,7 +50,7 @@ function App() {
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
 
   // выбранная карточка при открытии попапа (календарь)
-  const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
+  // const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
@@ -66,10 +74,7 @@ function App() {
     setIsPopupLoginOpen(true);
   }
 
-  function handleClickPopupAboutEventOpened(cardData) {
-    // запоминаем карточку
-    setSelectedCalendarCard(cardData);
-    // открываем попап подтвердить
+  function handleClickPopupAboutEventOpened() {
     setIsPopupAboutDescriptionOpen(true);
   }
 
@@ -124,40 +129,31 @@ function App() {
   }
 
   // работает с запросом Api (booked)
-  function registerOnEvent(cardData, cardId) {
-    Api.makeEventRegistration({ event: cardId })
+  function registerOnEvent(card) {
+    makeEventRegistration({ event: card.id })
       //! нужна перекраска карточки без подзагрузок (в идеале)
-      .then(() => setSelectedCalendarCard(cardData))
+      .then(() => setRegisterOnEvent())
       .then(() => handleClickPopupSuccessfullyOpened())
-      .catch((error) => console.log(error));
+      .catch(console.log);
     // или переносить это в карточку + юзать стейт
     // или использовать контекст
   }
 
-  function cancelEventRegistration(cardData, cardId) {
-    Api.cancelEventRegistration(cardId)
+  function cancelRegistration(card) {
+    cancelEventRegistration(card.id)
       //! нужна перекраска карточки без подзагрузок (в идеале)
-      .then(() => console.log('Успешно!'))
-      .catch((error) => console.log(error));
+      .then(() => cancelRegisterOnEvent())
+      .catch(console.log);
     // или переносить это в карточку + юзать стейт
     // или использовать контекст
   }
 
-  function handleEventBooking(cardData, cardId, isEventBooked) {
-    console.log('bookingHandler');
-    console.log(cardData);
-    console.log(cardId);
-    console.log(isEventBooked);
-    // console.log(cardData.id);
-    // console.log(isEventBooked);
-    if (isEventBooked) {
-      console.log('мы не записаны');
+  function handleEventBooking(card) {
+    if (card?.booked) {
       // мы записаны на ивент, надо отписаться
-      cancelEventRegistration(cardData, cardId);
+      cancelRegistration(card);
     } else {
-      console.log('мы не записаны');
       // мы НЕ записаны на ивент, надо открыть попап "подтвердите"
-      setSelectedCalendarCard(cardData); // отмечаем карточку
       setIsPopupAboutDescriptionOpen(false); // закрываем попап подробно
       handleClickPopupConfirmationOpened(); // открываем попап "подтвердите"
     }
@@ -211,12 +207,10 @@ function App() {
               onClose={closeAllPopups}
               onConfirmButtonClick={registerOnEvent}
               onErrorClick={handleClickPopupErrorOpened}
-              cardData={selectedCalendarCard}
             />
             <PopupSuccessfully
               isOpen={isPopupSuccessfullyOpen}
               onClose={closeAllPopups}
-              cardData={selectedCalendarCard}
             />
             <PopupLogin
               isOpen={isPopupLoginOpen}
@@ -228,7 +222,6 @@ function App() {
               onClose={closeAllPopups}
               onEventSignUpClick={handleEventBooking}
               onErrorClick={handleClickPopupErrorOpened}
-              cardData={selectedCalendarCard}
             />
             <PopupCities
               isOpen={isPopupCitiesOpen}

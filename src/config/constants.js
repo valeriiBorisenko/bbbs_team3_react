@@ -59,3 +59,4 @@ export const regExpUrl = /^https?:\/\/(w{3}\.)?\w+\S+(\.[a-z]{2,})?$/;
 export const DELAY_DEBOUNCE = 1500;
 
 export const localStUserCity = 'userCity';
+export const localStAfishaEvent = 'afishaEvent';

@@ -1,27 +1,19 @@
 import PropTypes from 'prop-types';
 import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
 import { Popup, Button, TitleH2 } from './index';
+import { getLocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStAfishaEvent } from '../../../config/constants';
 
-function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick, cardData }) {
-  const {
-    booked,
-    tags,
-    title,
-    startAt,
-    endAt,
-    address,
-    contact,
-    remainSeats,
-    description,
-  } = cardData;
+function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick }) {
+  const card = getLocalStorageData(localStAfishaEvent);
 
-  const startDateParts = formatDate(startAt);
-  const endDayParts = formatDate(endAt);
-  const isDisabled = remainSeats < 1;
+  const startDateParts = formatDate(card?.startAt);
+  const endDayParts = formatDate(card?.endAt);
+  const isDisabled = card?.remainSeats < 1;
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    onEventSignUpClick(cardData, cardData.id, cardData.booked);
+    onEventSignUpClick(card);
   }
 
   return (
@@ -34,35 +26,37 @@ function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick, cardData }) {
       <form className="popup__form" onSubmit={handleSubmit}>
         <div className="calendar__caption">
           <div className="calendar__info">
-            <p className="calendar__type">{getCardType(tags)}</p>
+            <p className="calendar__type">{getCardType(card?.tags)}</p>
             <p className="calendar__weekday">
-              {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
+              {`${startDateParts?.monthName} / ${startDateParts?.weekdayName}`}
             </p>
           </div>
           <div className="calendar__about">
             <TitleH2
-              title={title}
+              title={card?.title}
               sectionClass="calendar__title calendar__title_type_popup"
             />
-            <p className="calendar__date">{startDateParts.day}</p>
+            <p className="calendar__date">{startDateParts?.day}</p>
           </div>
         </div>
         <div className="calendar__meetup">
           <ul className="calendar__info-list">
             <li className="calendar__info-item">
               <p className="calendar__time">
-                {`${startDateParts.hour}:${startDateParts.minutes} - ${endDayParts.hour}:${endDayParts.minutes}`}
+                {`${startDateParts?.hour}:${startDateParts?.minutes} - ${endDayParts?.hour}:${endDayParts?.minutes}`}
               </p>
             </li>
             <li className="calendar__info-item">
-              <p className="calendar__place">{address}</p>
+              <p className="calendar__place">{card?.address}</p>
             </li>
             <li className="calendar__info-item">
-              <p className="calendar__contact">{contact}</p>
+              <p className="calendar__contact">{card?.contact}</p>
             </li>
           </ul>
           <div className="calendar__description">
-            <p className="paragraph calendar__desc-paragraph">{description}</p>
+            <p className="paragraph calendar__desc-paragraph">
+              {card?.description}
+            </p>
           </div>
           <div className="calendar__submit">
             <Button
@@ -71,14 +65,16 @@ function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick, cardData }) {
               titleSelected="Отменить запись"
               sectionClass="button_action_confirm"
               isSubmittable
-              isBooked={booked}
+              isBooked={card?.booked}
               isDisabled={isDisabled}
             />
             <p className="calendar__place-left">
               {/* если запись закрыта, то карточка не должна быть выделенной */}
               {(isDisabled && 'Запись закрыта') ||
-                (!booked &&
-                  `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
+                (!card?.booked &&
+                  `Осталось ${card?.remainSeats} ${formatWordCase(
+                    card?.remainSeats
+                  )}`)}
             </p>
           </div>
         </div>
@@ -91,14 +87,12 @@ PopupAboutEvent.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onEventSignUpClick: PropTypes.func,
-  cardData: PropTypes.objectOf(PropTypes.any),
 };
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
   onClose: () => {},
   onEventSignUpClick: () => {},
-  cardData: {},
 };
 
 export default PopupAboutEvent;

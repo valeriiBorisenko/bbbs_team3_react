@@ -2,7 +2,7 @@ import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts/index';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
@@ -22,7 +22,7 @@ import {
 
 function Calendar({
   onEventSignUpClick,
-  onEventFullDescriptionClick,
+  onEventDescriptionClick,
   onOpenLoginPopup,
 }) {
   useScrollToTop();
@@ -150,7 +150,7 @@ function Calendar({
         key={cardData.id}
         cardData={cardData}
         onEventSignUpClick={onEventSignUpClick}
-        onEventFullDescriptionClick={onEventFullDescriptionClick}
+        onEventDescriptionClick={onEventDescriptionClick}
         sectionClass="fade-in"
       />
     ));
@@ -214,13 +214,13 @@ function Calendar({
 }
 Calendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
+  onEventDescriptionClick: PropTypes.func,
   onOpenLoginPopup: PropTypes.func,
 };
 
 Calendar.defaultProps = {
   onEventSignUpClick: () => {},
-  onEventFullDescriptionClick: () => {},
+  onEventDescriptionClick: () => {},
   onOpenLoginPopup: () => {},
 };
 

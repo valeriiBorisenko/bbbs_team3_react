@@ -1,27 +1,29 @@
-/* eslint-disable consistent-return */
 import { useEffect } from 'react';
 
-const useLocalStorage = (key, isListen) => {
-  const setlocalStorageData = (value) => {
-    const event = new Event('changeLocalStorage');
-    localStorage.setItem(key, JSON.stringify(value));
-    window.dispatchEvent(event);
-  };
+// вспомогательные функции
+export const setLocalStorageData = (key, value) =>
+  localStorage.setItem(key, JSON.stringify(value));
 
-  const getlocalStorageData = () => JSON.parse(localStorage.getItem(key));
+export const getLocalStorageData = (key) =>
+  JSON.parse(localStorage.getItem(key));
 
+export const dispatchLocalStorageEvent = (key, value) => {
+  const event = new Event('changeLocalStorage');
+  setLocalStorageData(key, value);
+  window.dispatchEvent(event);
+};
+
+// хук слушает изменение определённого ключа в localStorage и возвращает его значение при любом изменении
+// работает в связке с dispatchLocalStorageEvent
+const useLocalStorage = (key) => {
+  const getLocalStorageItem = () => getLocalStorageData(key);
   useEffect(() => {
-    if (isListen) {
-      window.addEventListener('changeLocalStorage', getlocalStorageData);
-      return () =>
-        window.removeEventListener('changeLocalStorage', getlocalStorageData);
-    }
+    window.addEventListener('changeLocalStorage', getLocalStorageItem);
+    return () =>
+      window.removeEventListener('changeLocalStorage', getLocalStorageItem);
   }, []);
 
-  return {
-    setlocalStorageData,
-    getlocalStorageData,
-  };
+  return getLocalStorageItem;
 };
 
 export default useLocalStorage;
