@@ -3,7 +3,13 @@ import { useEffect, useState } from 'react';
 import { useScrollToTop } from '../../hooks/index';
 
 import { COLORS } from '../../config/constants';
-import { BasePage, TitleH1, CardArticle, Paginate } from './index';
+import {
+  BasePage,
+  TitleH1,
+  CardArticle,
+  Paginate,
+  AnimatedPageContainer,
+} from './index';
 import Api from '../../utils/api';
 import './Articles.scss';
 
@@ -53,6 +59,20 @@ function Articles() {
     };
   }, []);
 
+  // отрисовка заглушки
+  function returnAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText="Информация появится в ближайшее время."
+        buttonText="Вернуться на главную"
+      />
+    );
+  }
+
+  if (!articlesPageData.length) {
+    return returnAnimatedContainer();
+  }
+
   return (
     <BasePage>
       <Helmet>
@@ -80,7 +100,6 @@ function Articles() {
                   key={item.id}
                   color={COLORS[(i + 1) % COLORS.length]}
                   data={item}
-                  link=""
                   sectionClass="card-container_type_article fade-in"
                 />
               ))}

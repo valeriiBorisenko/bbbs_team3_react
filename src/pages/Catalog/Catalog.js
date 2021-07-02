@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { BasePage, TitleH1, TitleH2, CardsSectionWithLines } from './index';
+import {
+  BasePage,
+  TitleH1,
+  TitleH2,
+  CardsSectionWithLines,
+  AnimatedPageContainer,
+} from './index';
 import Api from '../../utils/api';
 import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
 import { FIGURES } from '../../config/constants';
@@ -49,6 +55,20 @@ function Catalog() {
       largeQuery.removeEventListener('change', listener);
     };
   }, []);
+
+  // отрисовка заглушки
+  function returnAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText="Информация появится в ближайшее время."
+        buttonText="Вернуться на главную"
+      />
+    );
+  }
+
+  if (!catalogPageData.length) {
+    return returnAnimatedContainer();
+  }
 
   return (
     <BasePage>

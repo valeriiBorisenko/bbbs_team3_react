@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import { CardAnnotation, TitleH2, Card, Caption } from './index';
 
 function CardArticle({
-  data: { title, info, annotation, imageUrl },
+  data: { title, info, annotation, imageUrl, articleUrl },
   isMain,
   color,
-  link,
   sectionClass,
 }) {
   const cardColor = isMain ? 'yellow' : color;
@@ -19,7 +18,7 @@ function CardArticle({
         color={cardColor}
       >
         <div className="card-article__title-wrap">
-          <Link to={link} className="card-article__link-wrap">
+          <Link to={articleUrl} className="card-article__link-wrap">
             <TitleH2 sectionClass="card-article__title" title={title} />
           </Link>
           <Caption sectionClass="card-article__info" title={info} />
@@ -27,7 +26,7 @@ function CardArticle({
 
         {isMain && (
           <Link
-            to={link}
+            to={articleUrl}
             className="card-article__link-wrap card-article__link-wrap_content_article-img"
           >
             <img src={imageUrl} alt={title} className="card-article__image" />
@@ -35,7 +34,7 @@ function CardArticle({
         )}
 
         <a
-          href={link}
+          href={articleUrl}
           className="link card-article__link"
           target="_blank"
           rel="noopener noreferrer"
@@ -53,7 +52,7 @@ CardArticle.propTypes = {
   title: PropTypes.string,
   info: PropTypes.string,
   imageUrl: PropTypes.string,
-  link: PropTypes.string,
+  articleUrl: PropTypes.string,
   annotation: PropTypes.string,
   color: PropTypes.string,
   sectionClass: PropTypes.string,
@@ -65,7 +64,7 @@ CardArticle.defaultProps = {
   title: '',
   info: '',
   imageUrl: '',
-  link: '',
+  articleUrl: '',
   annotation: '',
   color: 'white',
   isMain: false,
