@@ -2,35 +2,57 @@ import './Movies.scss';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { useScrollToTop, useDebounce } from '../../hooks';
-import Api from '../../utils/api';
-import { BasePage, TitleH1, CardFilm, CardAnnotation } from './index';
+import {
+  getMoviesPageData,
+  getActiveMoviesTags,
+  getActualMoviesForFilter,
+} from '../../api/movies-page';
+import { BasePage, TitleH1, CardFilm, CardAnnotation, Loader } from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { DELAY_DEBOUNCE } from '../../config/constants';
-import { handleRadioBehavior, renderFilterTags } from '../../utils/filter-tags';
+import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
+import {
+  handleCheckboxBehavior,
+  renderFilterTags,
+  selectOneTag,
+  deselectOneTag,
+} from '../../utils/filter-tags';
 
 function Movies() {
   useScrollToTop();
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [moviesPageData, setMoviesPageData] = useState(null);
+  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+  const [categories, setCategories] = useState(null);
   const [pageSize, setPageSize] = useState(16);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
-  const [moviesPageData, setMoviesPageData] = useState([]);
-  const [filters, setFilters] = useState(null);
-  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
-    setIsLoading(true);
     const offset = pageSize * pageNumber;
-    Api.getMoviesPageData({ limit: pageSize, offset }).then(
-      ({ results, count }) => {
-        setMoviesPageData(results);
-        setPageCount(Math.ceil(count / pageSize));
-        setIsLoading(false);
-      }
-    );
+    Promise.all([
+      getMoviesPageData({ limit: pageSize, offset }),
+      getActiveMoviesTags(),
+    ])
+      .then(([moviesData, tagsFilters]) => {
+        setMoviesPageData(moviesData.results);
+        setPageCount(Math.ceil(moviesData.count / pageSize));
+
+        const customFilters = tagsFilters.map((tag) => {
+          const filterName = changeCaseOfFirstLetter(tag.name);
+          return {
+            isActive: false,
+            name: filterName,
+            filter: tag.slug,
+          };
+        });
+        setCategories([
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+          ...customFilters,
+        ]);
+      })
+      .catch((error) => console.log(error));
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
@@ -56,41 +78,41 @@ function Movies() {
     };
   }, []);
 
-  useEffect(() => {
-    Api.getActiveMoviesTags()
-      .then((activeMovies) => {
-        const customFilters = activeMovies.map((activeMovie) => {
-          const filterName = changeCaseOfFirstLetter(activeMovie.name);
-          return {
-            isActive: false,
-            name: filterName,
-            filter: activeMovie,
-          };
-        });
-        setFilters(customFilters);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  function handleFiltration() {
-    if (isFiltersUsed) {
-      const activeFilter = filters.find((filter) => filter.isActive);
-      console.log(activeFilter);
-      if (activeFilter) {
-        console.log('activeFilter IF');
-        Api.getActualMoviesForFilter(activeFilter.filter)
-          .then((movies) => setMoviesPageData(movies))
-          .catch((error) => console.log(error));
-      } else {
-        setMoviesPageData();
-      }
+  const changeCategory = (inputValue, isChecked) => {
+    if (inputValue === ALL_CATEGORIES) {
+      selectOneTag(setCategories, ALL_CATEGORIES);
+    } else {
+      handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
-  }
-
-  function handleFilterClick(inputValue, isChecked) {
-    handleRadioBehavior(setFilters, { inputValue, isChecked });
+    setIsLoading(true);
     setIsFiltersUsed(true);
-  }
+  };
+
+  const handleFiltration = () => {
+    const activeCategories = categories
+      .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+      .map((filter) => filter.filter);
+    console.log(activeCategories);
+
+    if (activeCategories.length === 0) {
+      getMoviesPageData()
+        .then((allMovies) => {
+          setMoviesPageData(allMovies);
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setIsLoading(false));
+
+      selectOneTag(setCategories, ALL_CATEGORIES);
+    } else {
+      const query = activeCategories.join();
+      getActualMoviesForFilter(query)
+        .then((filteredMovies) => setMoviesPageData(filteredMovies))
+        .catch((error) => console.log(error))
+        .finally(() => setIsLoading(false));
+
+      deselectOneTag(setCategories, ALL_CATEGORIES);
+    }
+  };
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
@@ -100,14 +122,63 @@ function Movies() {
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  function renderTagsContainder() {
-    return (
-      <div className="tags fade-in">
-        <ul className="tags__list">
-          {renderFilterTags(filters, 'movies', handleFilterClick)}
-        </ul>
-      </div>
-    );
+  // контейнер с фильмами
+  const renderMoviesContainer = () => (
+    <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
+      {moviesPageData.map((movie) => (
+        <li className="card-container" key={movie.id}>
+          <CardFilm
+            data={movie}
+            pageCount={pageCount}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+          />
+          <CardAnnotation description={movie.annotation} />
+        </li>
+      ))}
+    </ul>
+  );
+
+  // контейнер фильтров
+  const renderTagsContainer = () => (
+    <div className="tags tags_content_long-list">
+      <ul className="tags__list tags__list_type_long">
+        {renderFilterTags(categories, 'tag', changeCategory)}
+      </ul>
+    </div>
+  );
+
+  // главная функция рендеринга
+  const renderPageContent = () => {
+    if (moviesPageData.length > 0) {
+      return (
+        <>
+          <TitleH1 title="Фильмы" />
+
+          {/* рендер фильтров */}
+          {categories?.length > 1 && renderTagsContainer()}
+
+          {/* рендерим фильмы */}
+          {isLoading ? <Loader isNested /> : renderMoviesContainer()}
+
+          {pageCount > 1 && (
+            <Paginate
+              sectionClass="cards-section__pagination"
+              pageCount={pageCount}
+              value={pageNumber}
+              onChange={setPageNumber}
+            />
+          )}
+        </>
+      );
+    }
+
+    return null;
+  };
+
+  // глобальный лоадер
+  if (!moviesPageData || !categories) {
+    return <Loader isCentered />;
   }
 
   return (
@@ -120,31 +191,7 @@ function Movies() {
         />
       </Helmet>
       <section className="movies page__section fade-in">
-        <TitleH1 title="Фильмы" />
-        {filters?.length > 1 && renderTagsContainder()}
-        {!isLoading && (
-          <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
-            {moviesPageData.map((item) => (
-              <li className="card-container" key={item.id}>
-                <CardFilm
-                  data={item}
-                  pageCount={pageCount}
-                  pageNumber={pageNumber}
-                  setPageNumber={setPageNumber}
-                />
-                <CardAnnotation description={item.annotation} />
-              </li>
-            ))}
-          </ul>
-        )}
-        {pageCount > 1 && (
-          <Paginate
-            sectionClass="cards-section__pagination"
-            pageCount={pageCount}
-            value={pageNumber}
-            onChange={setPageNumber}
-          />
-        )}
+        {renderPageContent()}
       </section>
     </BasePage>
   );
