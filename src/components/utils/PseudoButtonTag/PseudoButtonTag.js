@@ -27,7 +27,7 @@ function PseudoButtonTag({ name, value, title, isActive, onClick }) {
 
 PseudoButtonTag.propTypes = {
   name: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   title: PropTypes.string,
   isActive: PropTypes.bool,
   onClick: PropTypes.func,

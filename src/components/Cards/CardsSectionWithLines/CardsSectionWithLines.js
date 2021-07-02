@@ -7,10 +7,11 @@ function CardsSectionWithLines({
   children,
   pageNumber,
   setPageNumber,
+  sectionClass,
 }) {
   return (
     <>
-      <section className="cards-section">
+      <section className={`cards-section ${sectionClass}`}>
         <div className="cards-section__line" />
         <div className="cards-section__line" />
         <div className="cards-section__line" />
@@ -33,6 +34,7 @@ CardsSectionWithLines.propTypes = {
   children: PropTypes.node,
   pageNumber: PropTypes.number,
   setPageNumber: PropTypes.func,
+  sectionClass: PropTypes.string,
 };
 
 CardsSectionWithLines.defaultProps = {
@@ -40,6 +42,7 @@ CardsSectionWithLines.defaultProps = {
   children: null,
   pageNumber: 0,
   setPageNumber: () => {},
+  sectionClass: '',
 };
 
 export default CardsSectionWithLines;

@@ -19,7 +19,7 @@ export const formatDate = (date) => {
   const parsedDate = new Date(date);
   let day = parsedDate.getDate();
   const weekdayName = weekdays[parsedDate.getDay()];
-  const monthName = months[parsedDate.getMonth()];
+  const monthName = months[parsedDate.getMonth() + 1]; // потому что months начинается с 1, а не 0
   const hour = String(parsedDate.getHours());
   const year = String(parsedDate.getFullYear());
   let minutes = parsedDate.getMinutes();
@@ -92,22 +92,23 @@ export const getCardType = (tags) => {
   return undefined;
 };
 
-// повторить схему (цвета/фигуры) : индекс, длина массива, который рендерится, схема(массив)
-export const repeatSchema = (idx, size, schema) => {
-  const repeats = Math.ceil(size / schema.length);
-  const array = Array.from({ length: repeats }, () => schema).flat();
-  return array[idx];
-};
-
 export const questionForm = {
-  before: {
+  beforeSubmit: {
     title:
       'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список',
-    sectionClass: '',
+    titleClass: '',
+    formVisibilityClass: '',
   },
-  after: {
-    title: 'Спасибо! Мы приняли ваш вопрос',
-    sectionClass: 'question-form_invisible',
+  successSubmit: {
+    title:
+      'Спасибо! Мы приняли ваш вопрос. Ваш вопрос опубликуют, как только он пройдет проверку и модератор даст на него ответ!',
+    titleClass: 'add-question__title_success',
+    formVisibilityClass: 'question-form_invisible',
+  },
+  errorSubmit: {
+    title:
+      'Произошла ошибка при отправке вашего вопроса! Попробуйте повторить позже или обратиться в службу поддержки!',
+    titleClass: 'add-question__title_error',
   },
 };
 
@@ -118,18 +119,18 @@ export const changeCaseOfFirstLetter = (str) => {
   return str[0].toUpperCase() + str.slice(1);
 };
 
+// управление падежами месяцев
 export const formatMonthsGenitiveCase = (month) => {
   if (month === 'март' || month === 'август') return `${month}а`;
   return `${month.slice(0, -1)}я`;
 };
 
-export function debounce(callback, time) {
-  let timer;
-
-  return function (args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      callback(args);
-    }, time);
-  };
-}
+export const randomizeArray = (arr, size) => {
+  if (arr && size < arr.length) {
+    const array = arr.slice();
+    return [...Array(size)].map(
+      () => array.splice(Math.floor(Math.random() * array.length), 1)[0]
+    );
+  }
+  return arr;
+};

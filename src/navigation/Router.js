@@ -10,8 +10,9 @@ import {
   Catalog,
   Questions,
   Places,
+  Rights,
   Movies,
-  ReadAndWatching,
+  ReadAndWatch,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -21,8 +22,9 @@ import {
   AFISHA_URL,
   QUESTIONS_URL,
   PLACES_URL,
+  RIGHTS_URL,
   MOVIES_URL,
-  READANDWATCHING_URL,
+  READ_AND_WATCH_URL,
   CATALOG_URL,
   PROFILE_URL,
 } from '../config/routes';
@@ -68,14 +70,17 @@ function Router({
       <Route exact path={PLACES_URL}>
         <Places openPopupCities={handleClickPopupCities} />
       </Route>
+      <Route exact path={RIGHTS_URL}>
+        <Rights />
+      </Route>
       <Route exact path={MOVIES_URL}>
         <Movies />
       </Route>
-      <Route exact path={READANDWATCHING_URL}>
-        <ReadAndWatching />
+      <Route exact path={READ_AND_WATCH_URL}>
+        <ReadAndWatch />
       </Route>
       <Route exact path={CATALOG_URL}>
-        <Catalog openPopupCities={handleClickPopupCities} />
+        <Catalog />
       </Route>
       <Route path="*">
         <PageNotFound />

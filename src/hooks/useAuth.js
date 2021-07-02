@@ -1,9 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import AuthApi from '../utils/auth';
 import { MAIN_PAGE_URL } from '../config/routes';
 
-const useAuth = ({ setCurrentUser, closeAllPopups }) => {
+const useAuth = ({ closeAllPopups }) => {
+  const [currentUser, setCurrentUser] = useState(null);
+
   const history = useHistory();
 
   const handleLogout = useCallback(() => {
@@ -32,6 +34,7 @@ const useAuth = ({ setCurrentUser, closeAllPopups }) => {
   };
 
   return {
+    currentUser,
     handleLogout,
     handleLogin,
   };

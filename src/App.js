@@ -16,20 +16,21 @@ import {
   PopupError,
 } from './components/Popups/index';
 // логины, авторизация
-import CurrentUserContext from './contexts/CurrentUserContext';
+import { CurrentUserContext, CitiesContext } from './contexts/index';
 // API
 import AuthApi from './utils/auth';
 import Api from './utils/api';
+import { useCities } from './hooks/index';
 
 function App() {
   const history = useHistory();
 
-  // текущий юзер
+  // текущий юзер/контекст
   const [currentUser, setCurrentUser] = useState(null);
   const [isCheckingToken, setIsCheckingToken] = useState(true);
 
-  // список городов
-  const [cities, setCities] = useState(null); //! вынести в хук
+  // список городов/контекст
+  const cities = useCities();
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
@@ -49,7 +50,6 @@ function App() {
     setIsPopupSuccessfullyOpen(false);
     setIsPopupLoginOpen(false);
     setIsPopupAboutDescriptionOpen(false);
-    setIsPopupCitiesOpen(false);
     setIsPopupErrorOpen(false);
   }
 
@@ -75,6 +75,10 @@ function App() {
 
   function handleClickPopupCities() {
     setIsPopupCitiesOpen(true);
+  }
+
+  function closePopupCities() {
+    setIsPopupCitiesOpen(false);
   }
 
   function handleClickPopupErrorOpened() {
@@ -122,17 +126,19 @@ function App() {
   // работает с запросом Api (booked)
   function registerOnEvent(cardData, cardId) {
     Api.makeEventRegistration({ event: cardId })
+      //! нужна перекраска карточки без подзагрузок (в идеале)
       .then(() => setSelectedCalendarCard(cardData))
       .then(() => handleClickPopupSuccessfullyOpened())
       .catch((error) => console.log(error));
-    // нужна перекраска карточки без подзагрузок (в идеале)
     // или переносить это в карточку + юзать стейт
     // или использовать контекст
   }
 
   function cancelEventRegistration(cardData, cardId) {
-    Api.cancelEventRegistration(cardId).catch((error) => console.log(error));
-    // нужна перекраска карточки без подзагрузок (в идеале)
+    Api.cancelEventRegistration(cardId)
+      //! нужна перекраска карточки без подзагрузок (в идеале)
+      .then(() => console.log('Успешно!'))
+      .catch((error) => console.log(error));
     // или переносить это в карточку + юзать стейт
     // или использовать контекст
   }
@@ -169,13 +175,6 @@ function App() {
     checkToken();
   }, []);
 
-  // получение списка городов
-  useEffect(() => {
-    Api.getCities()
-      .then((citiesList) => setCities(citiesList))
-      .catch((error) => console.log(error));
-  }, []); //! перенести в хук
-
   // эффект закрытия модалок по Escape
   useEffect(() => {
     window.addEventListener('keyup', (evt) => {
@@ -194,52 +193,52 @@ function App() {
 
   return (
     <HelmetProvider>
-      <CurrentUserContext.Provider value={currentUser}>
-        <div className="page">
-          <Header
-            onLogout={handleLogout}
-            onUserButtonClick={handleUserButtonClick}
-            onCityChange={handleClickPopupCities}
-            cities={cities}
-          />
-          {!isCheckingToken ? (
-            <Router handlers={handlers} />
-          ) : (
-            <Loader isCentered />
-          )}
-          <PopupConfirmation
-            isOpen={isPopupConfirmationOpen}
-            onClose={closeAllPopups}
-            onConfirmButtonClick={registerOnEvent}
-            onErrorClick={handleClickPopupErrorOpened}
-            cardData={selectedCalendarCard}
-          />
-          <PopupSuccessfully
-            isOpen={isPopupSuccessfullyOpen}
-            onClose={closeAllPopups}
-            cardData={selectedCalendarCard}
-          />
-          <PopupLogin
-            isOpen={isPopupLoginOpen}
-            onClose={closeAllPopups}
-            onLoginFormSubmit={handleLogin}
-          />
-          <PopupAboutEvent
-            isOpen={isPopupAboutDescriptionOpen}
-            onClose={closeAllPopups}
-            onEventSignUpClick={handleEventBooking}
-            onErrorClick={handleClickPopupErrorOpened}
-            cardData={selectedCalendarCard}
-          />
-          <PopupCities
-            cities={cities}
-            isOpen={isPopupCitiesOpen}
-            onClose={closeAllPopups}
-            onSubmit={setCurrentUser}
-          />
-          <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
-        </div>
-      </CurrentUserContext.Provider>
+      <CitiesContext.Provider value={cities}>
+        <CurrentUserContext.Provider value={currentUser}>
+          <div className="page">
+            <Header
+              onLogout={handleLogout}
+              onUserButtonClick={handleUserButtonClick}
+              onCityChange={handleClickPopupCities}
+            />
+            {!isCheckingToken ? (
+              <Router handlers={handlers} />
+            ) : (
+              <Loader isCentered />
+            )}
+            <PopupConfirmation
+              isOpen={isPopupConfirmationOpen}
+              onClose={closeAllPopups}
+              onConfirmButtonClick={registerOnEvent}
+              onErrorClick={handleClickPopupErrorOpened}
+              cardData={selectedCalendarCard}
+            />
+            <PopupSuccessfully
+              isOpen={isPopupSuccessfullyOpen}
+              onClose={closeAllPopups}
+              cardData={selectedCalendarCard}
+            />
+            <PopupLogin
+              isOpen={isPopupLoginOpen}
+              onClose={closeAllPopups}
+              onLoginFormSubmit={handleLogin}
+            />
+            <PopupAboutEvent
+              isOpen={isPopupAboutDescriptionOpen}
+              onClose={closeAllPopups}
+              onEventSignUpClick={handleEventBooking}
+              onErrorClick={handleClickPopupErrorOpened}
+              cardData={selectedCalendarCard}
+            />
+            <PopupCities
+              isOpen={isPopupCitiesOpen}
+              onClose={closePopupCities}
+              onSubmit={setCurrentUser}
+            />
+            <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
+          </div>
+        </CurrentUserContext.Provider>
+      </CitiesContext.Provider>
     </HelmetProvider>
   );
 }

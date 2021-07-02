@@ -55,6 +55,7 @@
       outline: none;
       background-color: transparent;
       transition: .3s ease;
+      padding: 0;
 
       &:hover {
         color: $darkBlue;
@@ -64,25 +65,8 @@
   }
 }
 
-@include atDesktop1440 {
-  .recommendation_place_page {
-    margin: 0 135px;
-  }
-}
-
-@include atDesktop1024 {
-  .recommendation_place_page {
-    margin: 0 127px;
-  }
-}
-
 @include atTablet {
   .recommendation{
-    &_place_page {
-      padding-top: 30px;
-      margin: 0 60px;
-    }
-
     &__container {
       padding-top: 15px;
       padding-bottom: 30px;
@@ -102,9 +86,7 @@
 
 @include atMobile {
   .recommendation {
-    &_place_page {
-      margin: 0 15px;
-    }
+    max-width: 450px;
 
     &__close-button {
       margin-right: 15px;

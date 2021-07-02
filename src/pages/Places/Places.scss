@@ -1,44 +1,69 @@
 @import './styles/utils.scss';
 
-.place__main {
-  padding-top: 80px;
-  padding-bottom: 80px;
-}
+.places {
+  &__main {
+    padding-top: 80px;
+  }
 
-.place__cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(290px, 1fr));
-  gap: 80px 30px;
+  &__cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(290px, 1fr));
+    gap: 80px 30px;
+    padding-top: 80px;
+  }
+
+  &__paragraph {
+    width: fit-content;
+    margin: 0 auto;
+    padding-top: 80px;
+    font-family: $protoGrotesk;
+    font-weight: 300;
+    font-size: 23px;
+    line-height: 1.3;
+    color: $black;
+    text-align: center;
+  }
 }
 
 @include atDesktop1279 {
-  .place__cards-grid {
-    grid-template-columns: repeat(2, minmax(290px, 1fr));
+  .places {
+    &__cards-grid {
+      grid-template-columns: repeat(2, minmax(290px, 1fr));
+    }
   }
 }
 
 @include atDesktop1024 {
-  .place__main {
-    padding-top: 50px;
-    padding-bottom: 0;
-  }
+  .places {
+    &__main {
+      padding-top: 50px;
+    }
 
-  .place__cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    padding-top: 50px;
-    row-gap: 30px;
+    &__cards-grid {
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      padding-top: 50px;
+      row-gap: 30px;
+    }
+
+    &__paragraph {
+      padding-top: 50px;
+    }
   }
 }
 
 @include atTablet {
-  .place__cards-grid {
-    grid-template-columns: 1fr;
-    padding-top: 30px;
+  .places {
+    &__cards-grid {
+      grid-template-columns: 1fr;
+      padding-top: 30px;
+    }
   }
 }
 
 @include atMobileL {
-  .place__main {
-    padding-top: 30px;
+  .places {
+    &__main {
+      padding-top: 30px;
+    }
   }
 }

@@ -6,7 +6,9 @@ import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import { useScrollToTop } from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
-import Api from '../../utils/api';
+import { adminUrl } from '../../config/config';
+import { randomizeArray } from '../../utils/utils';
+import getMainPageData from '../../api/main-page';
 import {
   BasePage,
   Loader,
@@ -21,32 +23,33 @@ import {
   CardQuestion,
 } from './index';
 
+// количество отображаемых карточек с фильмами и вопросами
+const MOVIES_COUNT = 4;
+const QUESTIONS_COUNT = 3;
+
 function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
   const [mainPageData, setMainPageData] = useState(null);
+  const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
+  const randomQuestions = randomizeArray(
+    mainPageData?.questions,
+    QUESTIONS_COUNT
+  );
 
-  function getMainPageData() {
-    Api.getMainPageData()
-      .then((data) => setMainPageData(data))
-      .catch((error) => console.log(error)); // попап ошибка!
-  }
-
-  // запрос даты главной страницы, если сменили город
+  // запрос даты главной страницы при загрузке и при смене города
   useEffect(() => {
-    getMainPageData();
+    getMainPageData()
+      .then(setMainPageData)
+      .catch((error) => console.log(error));
   }, [currentUser?.city]);
 
-  // запрос даты главной страницы
-  useEffect(() => {
-    getMainPageData();
-  }, []);
-
+  // глобальный лоадер (без футера)
   if (!mainPageData) {
     return <Loader isCentered />;
   }
-  console.log(mainPageData);
+
   return (
     <BasePage>
       <Helmet>
@@ -58,24 +61,24 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
       </Helmet>
       <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
-          {currentUser && mainPageData.event ? (
+          {currentUser && mainPageData?.event ? (
             <CardCalendar
-              key={mainPageData.event.id}
-              cardData={mainPageData.event}
+              key={mainPageData?.event?.id}
+              cardData={mainPageData?.event}
               onEventSignUpClick={onEventSignUpClick}
               onEventFullDescriptionClick={onEventFullDescriptionClick}
             />
           ) : (
             <CardStub />
           )}
-          <Card sectionClass="lead__media" key={mainPageData.history.id}>
+          <Card sectionClass="lead__media" key={mainPageData?.history?.id}>
             <img
-              src={mainPageData.history.imageUrl}
-              alt={mainPageData.history.title}
+              src={`${adminUrl}/media/${mainPageData?.history?.image}`}
+              alt={mainPageData?.history?.title}
               className="card__media-img"
             />
             <Link to="/stories" className="lead__link">
-              {mainPageData.history.title}
+              {mainPageData?.history?.title}
             </Link>
           </Card>
         </div>
@@ -83,28 +86,36 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
 
       <section className="place main-section page__section fade-in">
         <CardPlace
-          key={mainPageData.place.id}
-          data={mainPageData.place}
+          key={mainPageData?.place?.id}
+          data={mainPageData?.place}
           sectionClass="card-container_type_main-article"
-          isMain
+          isBig
+          isMainPage
         />
       </section>
 
-      <section className="articles main-section page__section fade-in">
-        <Link to="/articles" className="main-section__link">
-          <CardArticleBig
-            key={mainPageData.articles[0].id}
-            data={mainPageData.articles[0]}
-          />
-        </Link>
-      </section>
+      {mainPageData?.articles.length > 0 && (
+        <section className="articles main-section page__section fade-in">
+          <Link to="/articles" className="main-section__link">
+            <CardArticleBig
+              key={mainPageData?.articles[0]?.id}
+              title={mainPageData?.articles[0]?.title}
+              color="blue"
+            />
+          </Link>
+        </section>
+      )}
 
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
-        {mainPageData.movies.map((item) => (
+        {randomMovies.map((item) => (
           <Link
             to="/films"
-            className="main-section__link card-pagination_page_main"
-            key={item.id}
+            className={`main-section__link ${
+              randomMovies.length > 1
+                ? `movies_pagination movies_pagination_${randomMovies.length}`
+                : ''
+            }`}
+            key={item?.id}
           >
             <CardFilm data={item} />
           </Link>
@@ -114,8 +125,8 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
       <section className="video main-section page__section fade-in">
         <Link to="/video" className="main-section__link">
           <CardVideoMain
-            key={mainPageData.video.id}
-            data={mainPageData.video}
+            key={mainPageData?.video?.id}
+            data={mainPageData?.video}
           />
         </Link>
       </section>
@@ -127,11 +138,13 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
             link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
           />
           <div className="main-questions__container">
-            {mainPageData.questions.map((item) => (
+            {randomQuestions.map((item) => (
               <Link
                 to={QUESTIONS_URL}
-                className="main-section__link main-section__link_el_question"
-                key={item.id}
+                className={`main-section__link main-section__link_el_question ${
+                  randomQuestions.length > 2 ? ' main-questions_pagination' : ''
+                }`}
+                key={item?.id}
               >
                 <CardQuestion data={item} />
               </Link>
@@ -140,15 +153,17 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
         </div>
       </section>
 
-      <section className="articles main-section page__section fade-in">
-        <Link to="/articles" className="main-section__link">
-          <CardArticleBig
-            key={mainPageData.articles[1].id}
-            //! опасное место, лучше отталкиваться от сколько всего articles пришло
-            data={mainPageData.articles[1]}
-          />
-        </Link>
-      </section>
+      {mainPageData?.articles.length > 1 && (
+        <section className="articles main-section page__section fade-in">
+          <Link to="/articles" className="main-section__link">
+            <CardArticleBig
+              key={mainPageData?.articles[1]?.id}
+              title={mainPageData?.articles[1]?.title}
+              color="green"
+            />
+          </Link>
+        </section>
+      )}
     </BasePage>
   );
 }
@@ -156,13 +171,11 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
 MainPage.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventFullDescriptionClick: PropTypes.func,
-  // dataMain: PropTypes.objectOf(PropTypes.any)
 };
 
 MainPage.defaultProps = {
   onEventSignUpClick: () => {},
   onEventFullDescriptionClick: () => {},
-  // dataMain: {}
 };
 
 export default MainPage;

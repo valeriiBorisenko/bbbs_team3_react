@@ -1,25 +1,24 @@
 import './CardArticleBig.scss';
 import PropTypes from 'prop-types';
 import TitleH3 from '../../utils/TitleH3/TitleH3';
+import Card from '../../utils/Card/Card';
 
-function CardArticleBig({ data: { color, title } }) {
+function CardArticleBig({ title, color }) {
   return (
-    <article className="card-article" style={{ backgroundColor: color }}>
+    <Card sectionClass="card-article" color={color}>
       <TitleH3 sectionClass="card-article__title" title={title} />
       <span className="link card-article__link">читать статью</span>
-    </article>
+    </Card>
   );
 }
 
 CardArticleBig.propTypes = {
-  data: PropTypes.objectOf(PropTypes.any),
   color: PropTypes.string,
   title: PropTypes.string,
 };
 
 CardArticleBig.defaultProps = {
-  data: {},
-  color: '#fff',
+  color: 'white',
   title: '',
 };
 

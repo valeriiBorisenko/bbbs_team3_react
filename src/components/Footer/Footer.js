@@ -5,7 +5,8 @@ import {
   ABOUT_US_URL,
   QUESTIONS_URL,
   PLACES_URL,
-  READANDWATCHING_URL,
+  RIGHTS_URL,
+  READ_AND_WATCH_URL,
 } from '../../config/routes';
 import { footerLogoPath, NavItem } from './index';
 
@@ -29,7 +30,7 @@ function Footer() {
         <p className="footer__brand">&copy; Старшие Братья Старшие Сестры</p>
         <div className="footer__copyright">
           <p className="footer__authors">
-            Разработка – студенты{' '}
+            {'Разработка – студенты '}
             <a
               href="https://praktikum.yandex.ru/"
               className="footer__production"
@@ -40,7 +41,7 @@ function Footer() {
             </a>
           </p>
           <p className="footer__design">
-            Концепция и дизайн –{' '}
+            {'Концепция и дизайн – '}
             <a
               href="https://krkr.design/"
               className="footer__production"
@@ -86,14 +87,14 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href={READANDWATCHING_URL}
+            href={READ_AND_WATCH_URL}
             linkText="читать и смотреть"
           />
           {/* права детей */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/"
+            href={RIGHTS_URL}
             linkText="права детей"
           />
           {/* истории */}

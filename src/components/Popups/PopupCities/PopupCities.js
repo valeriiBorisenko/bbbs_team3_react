@@ -1,23 +1,31 @@
 import './PopupCities.scss';
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
-import CurrentUserContext from '../../../contexts/CurrentUserContext';
+import { CurrentUserContext, CitiesContext } from '../../../contexts/index';
 import { Popup, TitleH2 } from './index';
-import Api from '../../../utils/api';
+import { updateUserProfile } from '../../../api/user';
+import { setlocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStUserCity } from '../../../config/constants';
 
-function PopupCities({ cities, isOpen, onClose, onSubmit }) {
+function PopupCities({ isOpen, onClose, onSubmit }) {
   const currentUser = useContext(CurrentUserContext);
+  const cities = useContext(CitiesContext);
 
   function handleSubmit(event) {
     event.preventDefault();
 
     const cityId = parseInt(event.nativeEvent.submitter.value, 10);
     if (currentUser) {
-      Api.updateUseProfile({ city: cityId })
-        .then((updatedUser) => onSubmit({ ...currentUser, ...updatedUser }))
-        .catch((error) => console.log(error));
+      updateUserProfile({ city: cityId })
+        .then((updatedUser) => {
+          onSubmit({ ...currentUser, ...updatedUser });
+          onClose();
+        })
+        .catch(console.log);
+    } else {
+      setlocalStorageData(localStUserCity, cityId);
+      onClose();
     }
-    onClose();
   }
 
   return (
@@ -26,41 +34,42 @@ function PopupCities({ cities, isOpen, onClose, onSubmit }) {
         type="cities"
         typeContainer="cities"
         isOpen={isOpen}
-        onClose={onClose}
         withoutCloseButton
       >
         <form className="popup__form" onSubmit={handleSubmit}>
           <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />
           <div className="cities__container">
             <ul className="cities__list cities__list_type_primary">
-              {cities
-                .filter((item) => item.isPrimary === true)
-                .map((item) => (
-                  <li className="cities__list-item" key={item.id}>
-                    <button
-                      className="cities__city"
-                      type="submit"
-                      value={item.id}
-                    >
-                      {item.name}
-                    </button>
-                  </li>
-                ))}
+              {cities &&
+                cities
+                  .filter((item) => item.isPrimary === true)
+                  .map((item) => (
+                    <li className="cities__list-item" key={item.id}>
+                      <button
+                        className="cities__city"
+                        type="submit"
+                        value={item.id}
+                      >
+                        {item.name}
+                      </button>
+                    </li>
+                  ))}
             </ul>
             <ul className="cities__list">
-              {cities
-                .filter((item) => item.isPrimary !== true)
-                .map((item) => (
-                  <li className="cities__list-item" key={item.id}>
-                    <button
-                      className="cities__city"
-                      type="submit"
-                      value={item.id}
-                    >
-                      {item.name}
-                    </button>
-                  </li>
-                ))}
+              {cities &&
+                cities
+                  .filter((item) => item.isPrimary !== true)
+                  .map((item) => (
+                    <li className="cities__list-item" key={item.id}>
+                      <button
+                        className="cities__city"
+                        type="submit"
+                        value={item.id}
+                      >
+                        {item.name}
+                      </button>
+                    </li>
+                  ))}
             </ul>
           </div>
         </form>
@@ -70,14 +79,12 @@ function PopupCities({ cities, isOpen, onClose, onSubmit }) {
 }
 
 PopupCities.propTypes = {
-  cities: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
 PopupCities.defaultProps = {
-  cities: [],
   isOpen: false,
   onClose: () => {},
   onSubmit: () => {},

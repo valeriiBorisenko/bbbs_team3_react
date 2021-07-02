@@ -8,7 +8,8 @@ import {
   ABOUT_US_URL,
   QUESTIONS_URL,
   PLACES_URL,
-  READANDWATCHING_URL,
+  RIGHTS_URL,
+  READ_AND_WATCH_URL,
 } from '../../config/routes';
 import {
   NavItem,
@@ -73,13 +74,13 @@ function NavBar({
           <NavItemWithDropdown
             sectionWrapperClass="menu__list-item menu__dropdown-item"
             linkText="Читать и смотреть"
-            href={READANDWATCHING_URL}
+            href={READ_AND_WATCH_URL}
           />
           {/* Права детей */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="#"
+            href={RIGHTS_URL}
             linkText="Права детей"
           />
           {/* Истории */}

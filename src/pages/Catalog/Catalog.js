@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { BasePage, TitleH1, TitleH2, CardsSectionWithLines } from './index';
-import Api from '../../utils/api';
+import getCatalogPageData from '../../api/catalog-page';
 import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
 import { FIGURES } from '../../config/constants';
 import './Catalog.scss';
@@ -17,7 +17,7 @@ function Catalog() {
   useEffect(() => {
     setIsLoading(true);
     const offset = pageSize * pageNumber;
-    Api.getCatalogPageData({ limit: pageSize, offset }).then(
+    getCatalogPageData({ limit: pageSize, offset }).then(
       ({ results, count }) => {
         setCatalogPageData(results);
         setPageCount(Math.ceil(count / pageSize));
@@ -69,6 +69,7 @@ function Catalog() {
             pageCount={pageCount}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
+            sectionClass="catalog__gap"
           >
             {catalogPageData.map((item, i) => (
               <CardCatalog

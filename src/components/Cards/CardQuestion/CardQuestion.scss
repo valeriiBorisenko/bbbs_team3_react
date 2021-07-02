@@ -3,38 +3,46 @@
 .card-question {
   padding: 50px 50px 47px;
   position: relative;
-}
+  width: 100%;
 
-.card-question__rubric {
-  align-self: flex-start;
-  background-color: $background;
-}
+  &__rubric {
+    align-self: flex-start;
+    background-color: $background;
+  }
 
-.card-question__title {
-  max-width: 770px;
-  margin: 0 0 17px;
-}
+  &__title {
+    max-width: 770px;
+    margin: 0 0 17px;
+  }
 
-.question__wrap {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
+  &__tags {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  &__wrap {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 @include atDesktop1024 {
   .card-question {
     padding: 30px 15px 15px;
   }
-
-  .question__tags {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
 }
 
 @include atMobile {
-  .question__tags {
-    flex-direction: column;
+  .card-question {
+    padding: 30px 15px 15px;
+
+    &__tags {
+      flex-direction: column;
+    }
   }
 }

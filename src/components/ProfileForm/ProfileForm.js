@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
-import { adminUrl } from '../../config/config';
+import { staticImageUrl } from '../../config/config';
 import { regExpImages } from '../../config/constants';
 import { Card, Input, Caption, Rating, Button, ButtonRound } from './index';
 
@@ -51,6 +51,11 @@ function ProfileForm({
     setFileUploaded(false);
   };
 
+  const handleFocusDataInput = (evt) => {
+    // eslint-disable-next-line no-param-reassign
+    evt.currentTarget.type = 'date';
+  };
+
   const handleChangeRating = (value) => {
     setInputValues({ ...inputValues, mark: value });
   };
@@ -60,7 +65,14 @@ function ProfileForm({
       const imageUrl = URL.createObjectURL(file);
       setUserImage({ ...userImage, image: file, imageUrl });
       setFileUploaded(true);
-    } else setValue('image', null);
+    }
+  };
+
+  const handleCloseForm = () => {
+    setInputValues({});
+    setUserImage(null);
+    reset();
+    onClose();
   };
 
   useEffect(() => {
@@ -78,15 +90,6 @@ function ProfileForm({
         setValue('description', data.description);
         setValue('mark', data.mark);
       }
-    } else {
-      setInputValues({});
-      setUserImage(null);
-      reset({
-        place: '',
-        date: '',
-        description: '',
-        mark: '',
-      });
     }
   }, [isOpen, data]);
 
@@ -97,9 +100,9 @@ function ProfileForm({
       className={classNames}
     >
       <Card sectionClass="profile-form__photo-upload">
-        {userImage && (
+        {(userImage?.imageUrl || userImage?.image) && (
           <img
-            src={userImage.imageUrl || `${adminUrl}/media/${userImage.image}`}
+            src={userImage.imageUrl || `${staticImageUrl}/${userImage.image}`}
             alt={data?.place}
             className="profile-form__uploaded-image"
           />
@@ -107,30 +110,20 @@ function ProfileForm({
 
         <div
           className={`profile-form__input-upload ${
-            userImage ? 'profile-form__input-upload_hidden' : ''
+            userImage?.imageUrl || userImage?.image
+              ? 'profile-form__input-upload_hidden'
+              : ''
           }`}
         >
           <label htmlFor="input-upload" className="profile-form__label-file">
-            {isEditMode ? (
-              <input
-                id="input-upload"
-                type="file"
-                accept="image/png, image/jpeg"
-                name="image"
-                className="profile-form__input-file"
-                onChange={(evt) => handleChangeImage(evt.target.files[0])}
-              />
-            ) : (
-              <input
-                id="input-upload"
-                type="file"
-                accept="image/png, image/jpeg"
-                name="image"
-                className="profile-form__input-file"
-                {...register('image', { required: 'Загрузить фото' })}
-                onChange={(evt) => handleChangeImage(evt.target.files[0])}
-              />
-            )}
+            <input
+              id="input-upload"
+              type="file"
+              accept="image/png, image/jpeg"
+              name="image"
+              className="profile-form__input-file"
+              onChange={(evt) => handleChangeImage(evt.target.files[0])}
+            />
             <ButtonRound
               sectionClass={`profile-form__pseudo-button ${
                 errors?.image ? 'profile-form__pseudo-button_error' : ''
@@ -150,20 +143,35 @@ function ProfileForm({
 
       <Card sectionClass="profile-form__text-container">
         <div className="profile-form__texts">
+          <div className="profile-form__input-wrap">
+            <Input
+              sectionClass="profile-form__input"
+              type="text"
+              name="place"
+              placeholder="Место встречи"
+              register={register}
+              required
+              minLength={{ value: 5, message: 'Минимальная длина 5 символов' }}
+              maxLength={{
+                value: 128,
+                message: 'Максимальная длина 128 символов',
+              }}
+              error={errors?.place}
+              errorMessage="Место встречи*"
+            />
+            {errors?.place && (
+              <span className="profile-form__input-error">
+                {errors?.place?.message}
+              </span>
+            )}
+          </div>
+
           <Input
             type="text"
-            name="place"
-            placeholder="Место встречи"
-            register={register}
-            required
-            error={errors?.place}
-            errorMessage="Место встречи*"
-          />
-          <Input
-            type="date"
             name="date"
-            placeholder="Дата&emsp;"
-            sectionClass={`profile-form__input_el_date ${
+            placeholder="Дата __.__.____"
+            onFocus={handleFocusDataInput}
+            sectionClass={`profile-form__input profile-form__input_el_date ${
               errors.date ? 'profile-form__input_el_date-error' : ''
             }`}
             register={register}
@@ -171,17 +179,29 @@ function ProfileForm({
             error={errors?.date}
             errorMessage="Дата*&emsp;"
           />
-          <Input
-            type="text"
-            name="description"
-            placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
-            sectionClass="profile-form__input_el_textarea"
-            register={register}
-            required
-            error={errors?.description}
-            errorMessage="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось*"
-            isTextarea
-          />
+          <div className="profile-form__input-wrap profile-form__input-wrap_textarea">
+            <Input
+              type="text"
+              name="description"
+              placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
+              sectionClass="profile-form__input profile-form__input_el_textarea"
+              register={register}
+              required
+              maxLength={{
+                value: 1024,
+                message: 'Максимальная длина 1024 символа',
+              }}
+              error={errors?.description}
+              errorMessage="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось*"
+              isTextarea
+            />
+            {errors?.description && (
+              <span className="profile-form__input-error">
+                {errors?.description?.message}
+              </span>
+            )}
+          </div>
+
           <div className="profile-form__submit-zone">
             <div className="profile-form__ratings">
               <Rating
@@ -221,7 +241,7 @@ function ProfileForm({
                 title={`${isEditMode ? 'Отмена' : 'Удалить'}`}
                 color="gray-borderless"
                 sectionClass="profile-form__button_el_delete"
-                onClick={onClose}
+                onClick={handleCloseForm}
               />
               <Button
                 title={`${isEditMode ? 'Сохранить' : 'Добавить'}`}

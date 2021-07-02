@@ -1,11 +1,12 @@
 import './Movies.scss';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
-import { useScrollToTop } from '../../hooks';
+import { useScrollToTop, useDebounce } from '../../hooks';
 import Api from '../../utils/api';
 import { BasePage, TitleH1, CardFilm, CardAnnotation } from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
-import { changeCaseOfFirstLetter, debounce } from '../../utils/utils';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
+import { DELAY_DEBOUNCE } from '../../config/constants';
 import { handleRadioBehavior, renderFilterTags } from '../../utils/filter-tags';
 
 function Movies() {
@@ -91,10 +92,11 @@ function Movies() {
     setIsFiltersUsed(true);
   }
 
+  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
-    // в дальнейшем надо изменить количество секунд
-    const debaunceFiltration = debounce(handleFiltration, 1000);
-    debaunceFiltration();
+    if (isFiltersUsed) {
+      debounceFiltration();
+    }
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
