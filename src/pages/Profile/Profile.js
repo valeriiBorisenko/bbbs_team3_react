@@ -38,8 +38,6 @@ function Profile({ onEventDescriptionClick }) {
   const [formDataToEdit, setFormDataToEdit] = useState(null);
   const [isDeleteDiaryPopupOpen, setIsDeleteDiaryPopupOpen] = useState(false);
 
-  useSubscriptionEvents(setEvents);
-
   useEffect(() => {
     getCalendarPageData()
       .then((res) => {
@@ -51,6 +49,19 @@ function Profile({ onEventDescriptionClick }) {
   useEffect(() => {
     getProfileDiariesData().then(setDiaries).catch(console.log);
   }, []);
+
+  // отписка от ивентов
+  const unsubcribedEvent = useSubscriptionEvents();
+
+  useEffect(() => {
+    if (unsubcribedEvent) {
+      setEvents(() =>
+        events.filter((event) =>
+          event.id === unsubcribedEvent.id ? null : event
+        )
+      );
+    }
+  }, [unsubcribedEvent]);
 
   // работа с карточками мероприятий календаря
   const openEventCard = () => {
