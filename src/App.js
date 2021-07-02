@@ -125,24 +125,18 @@ function App() {
     }
   }
 
-  // работает с запросом Api (booked)
   function registerOnEvent(card) {
     makeEventRegistration({ event: card.id })
-      //! нужна перекраска карточки без подзагрузок (в идеале)
       .then(() => setRegisterOnEvent())
       .then(() => handleClickPopupSuccessfullyOpened())
       .catch(console.log);
-    // или переносить это в карточку + юзать стейт
-    // или использовать контекст
   }
 
   function cancelRegistration(card) {
     cancelEventRegistration(card.id)
-      //! нужна перекраска карточки без подзагрузок (в идеале)
       .then(() => cancelRegisterOnEvent())
+      .then(() => setIsPopupAboutDescriptionOpen(false))
       .catch(console.log);
-    // или переносить это в карточку + юзать стейт
-    // или использовать контекст
   }
 
   function handleEventBooking(card) {
@@ -150,7 +144,7 @@ function App() {
       // мы записаны на ивент, надо отписаться
       cancelRegistration(card);
     } else {
-      // мы НЕ записаны на ивент, надо открыть попап "подтвердите"
+      // мы НЕ записаны на ивент
       setIsPopupAboutDescriptionOpen(false); // закрываем попап подробно
       handleClickPopupConfirmationOpened(); // открываем попап "подтвердите"
     }
