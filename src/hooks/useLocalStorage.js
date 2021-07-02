@@ -15,7 +15,7 @@ export const dispatchLocalStorageEvent = (key, value) => {
 
 // хук слушает изменение определённого ключа в localStorage и возвращает его значение при любом изменении
 // работает в связке с dispatchLocalStorageEvent
-const useLocalStorage = (key) => {
+export const useLocalStorage = (key) => {
   const getLocalStorageItem = () => getLocalStorageData(key);
   useEffect(() => {
     window.addEventListener('changeLocalStorage', getLocalStorageItem);
@@ -25,5 +25,3 @@ const useLocalStorage = (key) => {
 
   return getLocalStorageItem;
 };
-
-export default useLocalStorage;

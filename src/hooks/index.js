@@ -5,8 +5,8 @@ import useAuth from './useAuth';
 import useCities from './useCities';
 import useDebounce from './useDebounce';
 import useActivityTypes from './useActivityTypes';
-import useLocalStorage from './useLocalStorage';
-import useSubscriptionEvents from './useSubscriptionEvents';
+import { useLocalStorage } from './useLocalStorage';
+import { useSubscriptionEvents } from './useSubscriptionEvents';
 
 export {
   useClickOutside,

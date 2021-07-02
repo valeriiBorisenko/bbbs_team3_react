@@ -12,7 +12,7 @@ export const cancelRegisterOnEvent = () => {
   window.dispatchEvent(cancel);
 };
 
-const useSubscriptionEvents = () => {
+export const useSubscriptionEvents = () => {
   const [card, setCard] = useState(null);
   const cancel = () => {
     const newEvent = getLocalStorageData(localStAfishaEvent);
@@ -37,5 +37,3 @@ const useSubscriptionEvents = () => {
 
   return card;
 };
-
-export default useSubscriptionEvents;
