@@ -5,7 +5,7 @@ import useAuth from './useAuth';
 import useCities from './useCities';
 import useDebounce from './useDebounce';
 import useActivityTypes from './useActivityTypes';
-import { useLocalStorage } from './useLocalStorage';
+import useLocalStorage from './useLocalStorage';
 
 export {
   useClickOutside,

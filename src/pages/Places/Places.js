@@ -24,7 +24,6 @@ import {
   deselectAllTags,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { getlocalStorageData } from '../../hooks/useLocalStorage';
 import {
   BasePage,
   TitleH1,
@@ -49,12 +48,11 @@ function Places({ openPopupCities }) {
 
   const currentUser = useContext(CurrentUserContext);
 
+  const { getlocalStorageData } = useLocalStorage(localStUserCity);
+
   // сохранённый в localStorage город анонимуса
-  const currentAnonymousCity = getlocalStorageData(localStUserCity);
-  // слушатель localStorage, если анонимус захочет поменять город
-  const anonymousCityChanged = useLocalStorage(localStUserCity);
-  const userCity =
-    currentUser?.city || currentAnonymousCity || anonymousCityChanged;
+  const currentAnonymousCity = getlocalStorageData();
+  const userCity = currentUser?.city || currentAnonymousCity;
 
   // места из API
   const [places, setPlaces] = useState(null);

@@ -1,26 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-export const setlocalStorageData = (key, value) => {
-  const event = new Event('changeLocalStorage');
-  localStorage.setItem(key, JSON.stringify(value));
-  window.dispatchEvent(event);
-};
-
-export const getlocalStorageData = (key) =>
-  JSON.parse(localStorage.getItem(key));
-
-export const useLocalStorage = (key) => {
-  const [localStorageItem, setLocalStorageItem] = useState(null);
-
-  const setItem = () => {
-    setLocalStorageItem(getlocalStorageData(key));
+const useLocalStorage = (key) => {
+  const setlocalStorageData = (value) => {
+    const event = new Event('changeLocalStorage');
+    localStorage.setItem(key, JSON.stringify(value));
+    window.dispatchEvent(event);
   };
 
+  const getlocalStorageData = () => JSON.parse(localStorage.getItem(key));
+
   useEffect(() => {
-    window.addEventListener('changeLocalStorage', setItem, false);
+    window.addEventListener('changeLocalStorage', getlocalStorageData);
     return () =>
-      window.removeEventListener('changeLocalStorage', setItem, false);
+      window.removeEventListener('changeLocalStorage', getlocalStorageData);
   }, []);
 
-  return localStorageItem;
+  return {
+    setlocalStorageData,
+    getlocalStorageData,
+  };
 };
+
+export default useLocalStorage;
