@@ -28,7 +28,7 @@ import { useCities } from './hooks/index';
 import {
   setRegisterOnEvent,
   cancelRegisterOnEvent,
-} from './hooks/useEventSubscription';
+} from './hooks/useSubscriptionEvents';
 
 function App() {
   const history = useHistory();
@@ -48,9 +48,6 @@ function App() {
     useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
-
-  // выбранная карточка при открытии попапа (календарь)
-  // const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {

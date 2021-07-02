@@ -3,7 +3,12 @@ import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { CurrentUserContext } from '../../contexts/index';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
+import {
+  useScrollToTop,
+  useDebounce,
+  useSubscriptionEvents,
+} from '../../hooks/index';
+// import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
@@ -36,6 +41,9 @@ function Calendar({
 
   // загрузка данных страницы календаря, если ты залогиненный
   const [calendarPageData, setCalendarPageData] = useState(null);
+
+  // покраска карточек
+  useSubscriptionEvents(setCalendarPageData);
 
   // весь список доступных фильтров
   // { isActive, name, filter }

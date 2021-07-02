@@ -3,7 +3,11 @@ import { Helmet } from 'react-helmet-async';
 import './Profile.scss';
 import PropTypes from 'prop-types';
 import { CurrentUserContext } from '../../contexts/index';
-import { useSmoothHorizontalScroll, useScrollToTop } from '../../hooks/index';
+import {
+  useSmoothHorizontalScroll,
+  useScrollToTop,
+  useSubscriptionEvents,
+} from '../../hooks/index';
 import {
   BasePage,
   ProfileEventCard,
@@ -19,7 +23,6 @@ import {
   editDiary,
   deleteDiary,
 } from '../../api/profile-page';
-import { getBookedEvents } from '../../api/event-participants';
 import { getCalendarPageData } from '../../api/afisha-page';
 import { Loader } from '../Calendar';
 
@@ -35,14 +38,12 @@ function Profile({ onEventDescriptionClick }) {
   const [formDataToEdit, setFormDataToEdit] = useState(null);
   const [isDeleteDiaryPopupOpen, setIsDeleteDiaryPopupOpen] = useState(false);
 
+  useSubscriptionEvents(setEvents);
+
   useEffect(() => {
-    Promise.all([getCalendarPageData(), getBookedEvents()])
-      .then(([calendarData, participantsData]) => {
-        const eventIds = participantsData.map((event) => event.event);
-        const bookedEvents = calendarData.filter((event) =>
-          eventIds.includes(event.id)
-        );
-        setEvents(bookedEvents);
+    getCalendarPageData()
+      .then((res) => {
+        setEvents(() => res.filter((event) => event.booked));
       })
       .catch(console.log);
   }, [currentUser?.city]);

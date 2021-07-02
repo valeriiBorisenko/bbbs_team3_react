@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop } from '../../hooks/index';
+import { useScrollToTop, useSubscriptionEvents } from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
 import { adminUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
@@ -38,6 +38,8 @@ function MainPage({ onEventSignUpClick, onEventDescriptionClick }) {
     QUESTIONS_COUNT
   );
 
+  const subcribedEvent = useSubscriptionEvents();
+
   // запрос даты главной страницы при загрузке и при смене города
   useEffect(() => {
     getMainPageData()
@@ -64,7 +66,7 @@ function MainPage({ onEventSignUpClick, onEventDescriptionClick }) {
           {currentUser && mainPageData?.event ? (
             <CardCalendar
               key={mainPageData?.event?.id}
-              cardData={mainPageData?.event}
+              cardData={subcribedEvent || mainPageData?.event}
               onEventSignUpClick={onEventSignUpClick}
               onEventDescriptionClick={onEventDescriptionClick}
             />
