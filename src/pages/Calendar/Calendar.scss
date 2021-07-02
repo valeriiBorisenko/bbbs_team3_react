@@ -23,7 +23,7 @@
 .calendar-page__grid {
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(auto-fill, minmax(470px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(470px, 520px));
   grid-template-rows: 414px;
   grid-auto-rows: 414px;
   gap: 30px;
@@ -42,9 +42,16 @@
   }
 }
 
+@media screen and (max-width: 863px) {
+  .calendar-page__grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 240px));
+  }
+}
+
 @include atTablet {
   .calendar-page__grid {
-    grid-template-columns: 1fr;
+    // grid-template-columns: repeat(auto-fill, minmax(auto, 200px));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 240px));
   }
 
   .tags {
@@ -80,6 +87,14 @@
       display: none;
     }
     flex-wrap: nowrap;
+  }
+}
+
+
+@media screen and (max-width: 577px) {
+  .calendar-page__grid {
+    // grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
   }
 }
 
