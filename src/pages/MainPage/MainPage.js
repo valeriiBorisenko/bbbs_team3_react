@@ -27,7 +27,7 @@ import {
 const MOVIES_COUNT = 4;
 const QUESTIONS_COUNT = 3;
 
-function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
+function MainPage({ onEventSignUpClick, onEventDescriptionClick }) {
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
@@ -66,7 +66,7 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
               key={mainPageData?.event?.id}
               cardData={mainPageData?.event}
               onEventSignUpClick={onEventSignUpClick}
-              onEventFullDescriptionClick={onEventFullDescriptionClick}
+              onEventDescriptionClick={onEventDescriptionClick}
             />
           ) : (
             <CardStub />
@@ -170,12 +170,12 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
 
 MainPage.propTypes = {
   onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
+  onEventDescriptionClick: PropTypes.func,
 };
 
 MainPage.defaultProps = {
   onEventSignUpClick: () => {},
-  onEventFullDescriptionClick: () => {},
+  onEventDescriptionClick: () => {},
 };
 
 export default MainPage;

@@ -23,7 +23,7 @@ import { getBookedEvents } from '../../api/event-participants';
 import { getCalendarPageData } from '../../api/afisha-page';
 import { Loader } from '../Calendar';
 
-function Profile({ onEventFullDescriptionClick }) {
+function Profile({ onEventDescriptionClick }) {
   useScrollToTop();
 
   const currentUser = useContext(CurrentUserContext);
@@ -52,8 +52,8 @@ function Profile({ onEventFullDescriptionClick }) {
   }, []);
 
   // работа с карточками мероприятий календаря
-  const openEventCard = (data) => {
-    onEventFullDescriptionClick(data);
+  const openEventCard = () => {
+    onEventDescriptionClick();
   };
 
   // скролл контейнера с карточками мероприятий
@@ -269,11 +269,11 @@ function Profile({ onEventFullDescriptionClick }) {
 }
 
 Profile.propTypes = {
-  onEventFullDescriptionClick: PropTypes.func,
+  onEventDescriptionClick: PropTypes.func,
 };
 
 Profile.defaultProps = {
-  onEventFullDescriptionClick: () => {},
+  onEventDescriptionClick: () => {},
 };
 
 export default Profile;
