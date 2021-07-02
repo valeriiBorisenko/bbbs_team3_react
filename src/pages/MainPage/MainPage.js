@@ -37,17 +37,46 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
     mainPageData?.questions,
     QUESTIONS_COUNT
   );
+  const [isCityChanging, setIsCityChanging] = useState(false);
+  console.log(isCityChanging);
 
   // запрос даты главной страницы при загрузке и при смене города
   useEffect(() => {
-    getMainPageData()
-      .then(setMainPageData)
-      .catch((error) => console.log(error));
+    console.log('смена города юзера');
+    if (currentUser) {
+      setIsCityChanging(true);
+      getMainPageData()
+        .then((data) => setMainPageData(data))
+        .catch((error) => console.log(error))
+        .finally(() => setIsCityChanging(false));
+    }
   }, [currentUser?.city]);
+
+  useEffect(() => {
+    console.log('первая загрузка');
+    getMainPageData()
+      .then((data) => setMainPageData(data))
+      .catch((error) => console.log(error));
+  }, []);
 
   // глобальный лоадер (без футера)
   if (!mainPageData) {
     return <Loader isCentered />;
+  }
+
+  function renderEventsSection() {
+    if (currentUser && mainPageData?.event) {
+      return (
+        <CardCalendar
+          key={mainPageData?.event?.id}
+          cardData={mainPageData?.event}
+          onEventSignUpClick={onEventSignUpClick}
+          onEventFullDescriptionClick={onEventFullDescriptionClick}
+        />
+      );
+    }
+
+    return <CardStub />;
   }
 
   return (
@@ -61,16 +90,7 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
       </Helmet>
       <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
-          {currentUser && mainPageData?.event ? (
-            <CardCalendar
-              key={mainPageData?.event?.id}
-              cardData={mainPageData?.event}
-              onEventSignUpClick={onEventSignUpClick}
-              onEventFullDescriptionClick={onEventFullDescriptionClick}
-            />
-          ) : (
-            <CardStub />
-          )}
+          {isCityChanging ? <Loader isNested /> : renderEventsSection()}
           <Card sectionClass="lead__media" key={mainPageData?.history?.id}>
             <img
               src={`${adminUrl}/media/${mainPageData?.history?.image}`}
