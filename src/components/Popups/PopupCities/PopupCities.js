@@ -10,7 +10,7 @@ import { useLocalStorage } from '../../../hooks/index';
 function PopupCities({ isOpen, onClose, onSubmit }) {
   const currentUser = useContext(CurrentUserContext);
   const cities = useContext(CitiesContext);
-  const { setlocalStorageData } = useLocalStorage(localStUserCity);
+  const { setlocalStorageData } = useLocalStorage(localStUserCity, false);
 
   function handleSubmit(event) {
     event.preventDefault();

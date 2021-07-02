@@ -1,6 +1,7 @@
+/* eslint-disable consistent-return */
 import { useEffect } from 'react';
 
-const useLocalStorage = (key) => {
+const useLocalStorage = (key, isListen) => {
   const setlocalStorageData = (value) => {
     const event = new Event('changeLocalStorage');
     localStorage.setItem(key, JSON.stringify(value));
@@ -10,9 +11,11 @@ const useLocalStorage = (key) => {
   const getlocalStorageData = () => JSON.parse(localStorage.getItem(key));
 
   useEffect(() => {
-    window.addEventListener('changeLocalStorage', getlocalStorageData);
-    return () =>
-      window.removeEventListener('changeLocalStorage', getlocalStorageData);
+    if (isListen) {
+      window.addEventListener('changeLocalStorage', getlocalStorageData);
+      return () =>
+        window.removeEventListener('changeLocalStorage', getlocalStorageData);
+    }
   }, []);
 
   return {
