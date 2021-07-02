@@ -8,7 +8,6 @@ import {
   useDebounce,
   useSubscriptionEvents,
 } from '../../hooks/index';
-// import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
@@ -41,9 +40,6 @@ function Calendar({
 
   // загрузка данных страницы календаря, если ты залогиненный
   const [calendarPageData, setCalendarPageData] = useState(null);
-
-  // покраска карточек
-  useSubscriptionEvents(setCalendarPageData);
 
   // весь список доступных фильтров
   // { isActive, name, filter }
@@ -122,6 +118,19 @@ function Calendar({
     }
     debounceFiltration();
   }, [isFiltersUsed]);
+
+  // подписка/отписка от ивентов
+  const subcribedEvent = useSubscriptionEvents();
+
+  useEffect(() => {
+    if (subcribedEvent) {
+      setCalendarPageData(() =>
+        calendarPageData.map((event) =>
+          event.id === subcribedEvent.id ? subcribedEvent : event
+        )
+      );
+    }
+  }, [subcribedEvent]);
 
   // рендеринг
   // отрисовка заглушки

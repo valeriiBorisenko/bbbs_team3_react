@@ -12,26 +12,18 @@ export const cancelRegisterOnEvent = () => {
   window.dispatchEvent(cancel);
 };
 
-const useSubscriptionEvents = (setEvents) => {
+const useSubscriptionEvents = () => {
   const [card, setCard] = useState(null);
   const cancel = () => {
     const newEvent = getLocalStorageData(localStAfishaEvent);
     newEvent.booked = false;
-    if (setEvents) {
-      setEvents((events) =>
-        events.map((event) => (event.id === newEvent.id ? newEvent : event))
-      );
-    } else setCard(newEvent);
+    setCard(newEvent);
   };
 
   const register = () => {
     const newEvent = getLocalStorageData(localStAfishaEvent);
     newEvent.booked = true;
-    if (setEvents) {
-      setEvents((events) =>
-        events.map((event) => (event.id === newEvent.id ? newEvent : event))
-      );
-    } else setCard(newEvent);
+    setCard(newEvent);
   };
 
   useEffect(() => {
