@@ -21,6 +21,7 @@ import {
   Input,
   Button,
   Loader,
+  AnimatedPageContainer,
 } from './index';
 import {
   getQuestionsPageData,
@@ -156,6 +157,17 @@ function Questions() {
   }, []);
 
   // рендеринг
+  // заглушка, если нет даты
+  function returnAnimatedContainer() {
+    console.log('ЗАГЛУШКА');
+    return (
+      <AnimatedPageContainer
+        titleText="В данный момент страница вопросов пуста. Возвращайтесь позже!"
+        buttonText="Вернуться на главную"
+      />
+    );
+  }
+
   // форма вопросов
   const renderQuestionForm = () => (
     <>
@@ -234,6 +246,12 @@ function Questions() {
           {currentUser && renderQuestionForm()}
         </>
       );
+    }
+
+    // залогинен и нет ивентов
+    const isDataForPage = questionsPageData.length > 1;
+    if (!isDataForPage) {
+      return returnAnimatedContainer();
     }
 
     return null;
