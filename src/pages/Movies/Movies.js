@@ -21,24 +21,31 @@ import {
 function Movies() {
   useScrollToTop();
 
+  // Загрузка данных
   const [isLoading, setIsLoading] = useState(false);
+  // Стейты с данными Фильмов, Теги
   const [moviesPageData, setMoviesPageData] = useState(null);
-  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [categories, setCategories] = useState(null);
+  // флаг применения фильтров
+  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+  // Стейты для пагинации
   const [pageSize, setPageSize] = useState(16);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
   useEffect(() => {
     const offset = pageSize * pageNumber;
-    Promise.all([
-      getMoviesPageData({ limit: pageSize, offset }),
-      getActiveMoviesTags(),
-    ])
-      .then(([moviesData, tagsFilters]) => {
+    getMoviesPageData({ limit: pageSize, offset })
+      .then((moviesData) => {
         setMoviesPageData(moviesData.results);
         setPageCount(Math.ceil(moviesData.count / pageSize));
+      })
+      .catch((error) => console.log(error));
+  }, [pageSize, pageNumber]);
 
+  useEffect(() => {
+    getActiveMoviesTags()
+      .then((tagsFilters) => {
         const customFilters = tagsFilters.map((tag) => {
           const filterName = changeCaseOfFirstLetter(tag.name);
           return {
@@ -53,14 +60,17 @@ function Movies() {
         ]);
       })
       .catch((error) => console.log(error));
-  }, [pageSize, pageNumber]);
+  }, []);
 
   useEffect(() => {
+    const mobileQuery = window.matchMedia('(max-width: 767px)');
     const smallQuery = window.matchMedia('(max-width: 1399px)');
     const largeQuery = window.matchMedia('(max-width: 1640px)');
 
     const listener = () => {
-      if (smallQuery.matches) {
+      if (mobileQuery.matches) {
+        setPageSize(2);
+      } else if (smallQuery.matches) {
         setPageSize(4);
       } else if (largeQuery.matches) {
         setPageSize(12);
@@ -106,7 +116,10 @@ function Movies() {
     } else {
       const query = activeCategories.join();
       getActualMoviesForFilter(query)
-        .then((filteredMovies) => setMoviesPageData(filteredMovies))
+        .then((filteredMovies) => {
+          setMoviesPageData(filteredMovies);
+          setPageCount(Math.ceil(filteredMovies.length / pageSize));
+        })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
 
