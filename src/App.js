@@ -140,7 +140,7 @@ function App() {
   }
 
   function handleEventBooking(card) {
-    if (card?.booked) {
+    if (card.booked) {
       // мы записаны на ивент, надо отписаться
       cancelRegistration(card);
     } else {
