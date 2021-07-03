@@ -3,12 +3,12 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 
-function BasePage({ children, title, description }) {
+function BasePage({ children, headTitle, headDescription }) {
   return (
     <>
       <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
+        <title>{headTitle}</title>
+        <meta name="description" content={headDescription} />
       </Helmet>
       <Header />
       <main className="main">{children}</main>
@@ -19,8 +19,8 @@ function BasePage({ children, title, description }) {
 
 BasePage.propTypes = {
   children: PropTypes.node,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  headTitle: PropTypes.string.isRequired,
+  headDescription: PropTypes.string.isRequired,
 };
 
 BasePage.defaultProps = {
