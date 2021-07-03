@@ -8,6 +8,14 @@ import {
   useSubscriptionEvents,
 } from '../../hooks/index';
 import {
+  getProfileDiariesData,
+  createDiary,
+  editDiary,
+  deleteDiary,
+} from '../../api/profile-page';
+import { getCalendarPageData } from '../../api/afisha-page';
+import { DELAY_RENDER } from '../../config/constants';
+import {
   BasePage,
   ProfileEventCard,
   TitleH2,
@@ -15,15 +23,8 @@ import {
   ProfileDiary,
   PopupDeleteDiary,
   ButtonRound,
+  Loader,
 } from './index';
-import {
-  getProfileDiariesData,
-  createDiary,
-  editDiary,
-  deleteDiary,
-} from '../../api/profile-page';
-import { getCalendarPageData } from '../../api/afisha-page';
-import { Loader } from '../Calendar';
 
 function Profile() {
   useScrollToTop();
@@ -96,7 +97,7 @@ function Profile() {
       setIsEditMode(true);
       setFormDataToEdit(data);
       openForm(data);
-    }, 100);
+    }, DELAY_RENDER);
   };
 
   const createFormData = (data) => {

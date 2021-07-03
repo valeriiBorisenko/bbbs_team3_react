@@ -13,6 +13,7 @@ import {
   COLORS,
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
+  DELAY_RENDER,
   localStUserCity,
 } from '../../config/constants';
 import {
@@ -205,7 +206,7 @@ function Places() {
     if (!userCity) {
       setTimeout(() => {
         openPopupCities();
-      }, 100);
+      }, DELAY_RENDER);
     }
   }, []);
 

@@ -8,7 +8,7 @@ import {
   useSubscriptionEvents,
   useEventBooking,
 } from '../../hooks/index';
-import { months, DELAY_DEBOUNCE } from '../../config/constants';
+import { months, DELAY_DEBOUNCE, DELAY_RENDER } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
@@ -66,7 +66,7 @@ function Calendar() {
     } else {
       setTimeout(() => {
         openPopupLogin();
-      }, 100);
+      }, DELAY_RENDER);
     }
   }, [currentUser]);
 
