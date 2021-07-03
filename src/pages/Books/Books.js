@@ -102,9 +102,11 @@ function Books() {
     console.log(activeCategories);
 
     if (activeCategories.length === 0) {
-      getBooksPageData()
-        .then((allBooks) => {
-          setBooksPageData(allBooks);
+      const offset = pageSize * pageNumber;
+      getBooksPageData({ limit: pageSize, offset })
+        .then((booksData) => {
+          setBooksPageData(booksData.results);
+          setPageCount(Math.ceil(booksData.count / pageSize));
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));

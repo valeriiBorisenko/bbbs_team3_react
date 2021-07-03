@@ -105,9 +105,11 @@ function Movies() {
     console.log(activeCategories);
 
     if (activeCategories.length === 0) {
-      getMoviesPageData()
-        .then((allMovies) => {
-          setMoviesPageData(allMovies);
+      const offset = pageSize * pageNumber;
+      getMoviesPageData({ limit: pageSize, offset })
+        .then((moviesData) => {
+          setMoviesPageData(moviesData.results);
+          setPageCount(Math.ceil(moviesData.count / pageSize));
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
