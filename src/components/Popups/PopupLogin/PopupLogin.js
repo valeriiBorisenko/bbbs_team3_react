@@ -29,10 +29,7 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
   }
 
   useEffect(() => {
-    reset({
-      username: '',
-      password: '',
-    });
+    reset();
   }, [isOpen]);
 
   return (

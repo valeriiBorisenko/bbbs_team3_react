@@ -60,3 +60,4 @@ export const DELAY_DEBOUNCE = 1500;
 
 export const localStUserCity = 'userCity';
 export const localStAfishaEvent = 'afishaEvent';
+export const jwt = 'jwt';

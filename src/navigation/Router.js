@@ -52,7 +52,7 @@ function Router({
         <AboutUs />
       </Route>
 
-      <Route path={AFISHA_URL}>
+      <Route exact path={AFISHA_URL}>
         <Calendar
           onEventSignUpClick={handleEventBooking}
           onEventDescriptionClick={handleClickPopupAboutEventOpened}
@@ -60,7 +60,7 @@ function Router({
         />
       </Route>
 
-      <Route path={QUESTIONS_URL}>
+      <Route exact path={QUESTIONS_URL}>
         <Questions />
       </Route>
 

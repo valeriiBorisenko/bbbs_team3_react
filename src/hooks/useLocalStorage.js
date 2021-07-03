@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 export const setLocalStorageData = (key, value) =>
   localStorage.setItem(key, JSON.stringify(value));
 
+export const removeLocalStorageData = (key) => localStorage.removeItem(key);
+
 export const getLocalStorageData = (key) =>
   JSON.parse(localStorage.getItem(key));
 

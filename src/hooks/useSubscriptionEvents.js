@@ -14,6 +14,7 @@ export const cancelRegisterOnEvent = () => {
 
 export const useSubscriptionEvents = () => {
   const [card, setCard] = useState(null);
+
   const cancel = () => {
     const newEvent = getLocalStorageData(localStAfishaEvent);
     newEvent.booked = false;

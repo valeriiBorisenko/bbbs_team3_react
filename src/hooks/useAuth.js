@@ -1,28 +1,35 @@
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import AuthApi from '../utils/auth';
+import AuthApi from '../api/auth';
+import { getUserData } from '../api/user';
 import { MAIN_PAGE_URL } from '../config/routes';
+import {
+  setLocalStorageData,
+  removeLocalStorageData,
+  getLocalStorageData,
+} from './useLocalStorage';
+import { jwt } from '../config/constants';
 
-const useAuth = ({ closeAllPopups }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+const useAuth = (setCurrentUser, closeAllPopups) => {
+  const [isCheckingToken, setIsCheckingToken] = useState(true);
 
   const history = useHistory();
 
   const handleLogout = useCallback(() => {
     AuthApi.clearAuth();
     setCurrentUser(null);
-    localStorage.removeItem('jwt');
+    removeLocalStorageData(jwt);
     history.push(MAIN_PAGE_URL);
   }, []);
 
-  const handleLogin = ({ login, password }) => {
-    AuthApi.authorize(login, password)
-      .then((data) => {
-        const { access, refresh } = data.token;
+  const handleLogin = useCallback((loginData) => {
+    AuthApi.authorize(loginData)
+      .then((token) => {
+        const { access, refresh } = token;
         if (refresh && access) {
           AuthApi.setAuth(access);
-          localStorage.setItem('jwt', access);
-          AuthApi.getUserData()
+          setLocalStorageData(jwt, access);
+          getUserData()
             .then((userData) => {
               setCurrentUser(userData.userData);
             })
@@ -31,12 +38,27 @@ const useAuth = ({ closeAllPopups }) => {
         }
       })
       .catch(console.log); // авторизация (работа с сервером) закончилась ошибкой
-  };
+  }, []);
+
+  const checkToken = useCallback(() => {
+    const token = getLocalStorageData(jwt);
+    if (token) {
+      AuthApi.setAuth(token);
+      getUserData()
+        .then((userData) => setCurrentUser(userData))
+        .then(() => setIsCheckingToken(false))
+        .catch((error) => console.log(error)); // при получении userData возникла проблема
+    } else {
+      setIsCheckingToken(false);
+    }
+  }, []);
 
   return {
-    currentUser,
+    isCheckingToken,
     handleLogout,
     handleLogin,
+    checkToken,
   };
 };
+
 export default useAuth;

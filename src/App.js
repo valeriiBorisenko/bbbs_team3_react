@@ -5,7 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header/Header';
 import Router from './navigation/Router';
 import Loader from './components/utils/Loader/Loader';
-import { MAIN_PAGE_URL, PROFILE_URL } from './config/routes';
+import { PROFILE_URL } from './config/routes';
 // попапы
 import {
   PopupConfirmation,
@@ -18,13 +18,13 @@ import {
 // логины, авторизация
 import { CurrentUserContext, CitiesContext } from './contexts/index';
 // API
-import AuthApi from './utils/auth';
+// import AuthApi from './utils/auth';
 import {
   makeEventRegistration,
   cancelEventRegistration,
 } from './api/event-participants';
 // хуки
-import { useCities } from './hooks/index';
+import { useCities, useAuth } from './hooks/index';
 import {
   setRegisterOnEvent,
   cancelRegisterOnEvent,
@@ -32,13 +32,6 @@ import {
 
 function App() {
   const history = useHistory();
-
-  // текущий юзер/контекст
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isCheckingToken, setIsCheckingToken] = useState(true);
-
-  // список городов/контекст
-  const cities = useCities();
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
@@ -87,43 +80,15 @@ function App() {
     setIsPopupErrorOpen(true);
   }
 
-  //! api
-  function handleLogin(loginData) {
-    AuthApi.authorize(loginData)
-      .then((token) => {
-        const { access, refresh } = token;
-        if (refresh && access) {
-          AuthApi.setAuth(access);
-          localStorage.setItem('jwt', access);
-          AuthApi.getUserData()
-            .then((userData) => setCurrentUser(userData))
-            .then(() => closeAllPopups())
-            .catch((error) => console.log(error)); // при получении данных юзера произошла ошибка
-        }
-      })
-      .catch((error) => console.log(error)); // авторизация (работа с сервером) закончилась ошибкой
-  }
+  // текущий юзер/контекст
+  const [currentUser, setCurrentUser] = useState(null);
+  const { isCheckingToken, handleLogout, handleLogin, checkToken } = useAuth(
+    setCurrentUser,
+    closeAllPopups
+  );
 
-  function handleLogout() {
-    AuthApi.clearAuth();
-    setCurrentUser(null);
-    localStorage.removeItem('jwt');
-    history.push(MAIN_PAGE_URL);
-  }
-
-  // проверка токена между сессиями
-  function checkToken() {
-    const token = localStorage.getItem('jwt');
-    if (token) {
-      AuthApi.setAuth(token);
-      AuthApi.getUserData()
-        .then((userData) => setCurrentUser(userData))
-        .then(() => setIsCheckingToken(false))
-        .catch((error) => console.log(error)); // при получении userData возникла проблема
-    } else {
-      setIsCheckingToken(false);
-    }
-  }
+  // список городов/контекст
+  const cities = useCities();
 
   function registerOnEvent(card) {
     makeEventRegistration({ event: card.id })
