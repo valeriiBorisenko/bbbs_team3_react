@@ -33,7 +33,6 @@ function MainPage() {
   const { openPopupAboutEvent } = useContext(PopupsContext);
 
   const [mainPageData, setMainPageData] = useState(null);
-  console.log(mainPageData);
 
   const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
   const randomQuestions = randomizeArray(
