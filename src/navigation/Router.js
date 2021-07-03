@@ -13,6 +13,7 @@ import {
   Rights,
   Movies,
   ReadAndWatch,
+  Books,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -27,6 +28,7 @@ import {
   READ_AND_WATCH_URL,
   CATALOG_URL,
   PROFILE_URL,
+  BOOKS_URL,
 } from '../config/routes';
 
 function Router({
@@ -81,6 +83,9 @@ function Router({
       </Route>
       <Route exact path={CATALOG_URL}>
         <Catalog />
+      </Route>
+      <Route exact path={BOOKS_URL}>
+        <Books />
       </Route>
       <Route path="*">
         <PageNotFound />

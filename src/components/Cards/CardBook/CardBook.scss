@@ -1,0 +1,83 @@
+@import './styles/utils.scss';
+
+.card-book {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  margin: 0 auto;
+  padding: 30px 90px;
+  box-sizing: border-box;
+}
+
+.card-book__cover {
+  width: 100%;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  box-sizing: border-box;
+  text-decoration: unset;
+  text-align: center;
+}
+
+.card-book__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-book__border {
+  width: 66px;
+  border: 1px solid $black;
+  margin-bottom: 20px;
+}
+
+.card-book__text {  
+  max-height: 3em;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  box-orient: vertical;
+
+}
+
+@include atDesktop1639 {
+  .card-book {
+    padding: 30px 65px;
+  }
+}
+
+@include atDesktop1440 {
+  .card-book__cover {
+    min-height: 272px;
+  }
+}
+
+@include atDesktop1024 {
+  .card-book {
+    padding: 30px 85px;
+  }
+}
+
+@include atTabletL {
+  .card-book {
+    padding: 30px 45px
+  }
+
+  .card-book__cover {
+    padding: 15px;
+  }
+
+  .card-book__border {
+    width: 60px;
+    margin-bottom: 15px;
+  }
+}

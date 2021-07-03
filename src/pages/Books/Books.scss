@@ -1,0 +1,19 @@
+@import './styles/utils.scss';
+
+.books__cards {
+  padding: 0;
+  margin: 0;
+  margin-top: 80px;
+}
+
+@include atDesktop1024 {
+  .books__cards {
+    margin-top: 50px;
+  }
+}
+
+@include atMobileL {
+  .books__cards {
+    margin-top: 30px;
+  }
+}
