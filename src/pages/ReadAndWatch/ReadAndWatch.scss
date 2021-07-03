@@ -1,0 +1,134 @@
+.readwatch {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #224cff;
+  margin-bottom: 50px;
+}
+
+.readwatch__heading {
+  font-family: 'Proto', Arial, sans-serif;
+  font-weight: 300;
+  font-size: 44px;
+  line-height: 50px;
+  text-align: center;
+  color: #224cff;
+  text-decoration: none;
+}
+
+.readwatch__heading:hover {
+  color: #2e2468;
+}
+
+.readwatch__pagination {
+  display: flex;
+  list-style: none;
+  position: absolute;
+  right: 0;
+  bottom: 25px;
+  font-size: 0;
+  color: transparent;
+}
+
+.readwatch__back {
+  margin-right: 25px;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+  background-image: url('../../../assets/img/forward.svg');
+  transform: rotate(0.5turn);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+
+.readwatch__back:disabled {
+  background-image: url('../../../assets/img/back.svg');
+}
+
+.readwatch__forward {
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+  background-image: url('../../../assets/img/forward.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+
+.readwatch__forward .disabled {
+  background-image: url('../../../assets/img/back.svg');
+  rotate: 180deg;
+}
+
+.readwatch__back-link {
+  display: block;
+  height: 100%;
+}
+.readwatch__forward-link {
+  display: block;
+  height: 100%;
+}
+
+@media (max-width: 1024px) {
+  .readwatch__heading {
+    text-align: left;
+  }
+
+  .readwatch {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .readwatch__heading {
+    text-align: left;
+    font-size: 23px;
+    line-height: 30px;
+  }
+
+  .readwatch__back {
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .readwatch__forward {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.books {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 1440px) {
+  .books {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1120px) {
+  .books {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 820px) {
+  .books {
+    grid-template-columns: 1fr;
+  }
+}
