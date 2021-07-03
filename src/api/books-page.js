@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { apiUrl, baseURL } from '../config/config';
 
-// работа со страницей фильмы
-function getMoviesPageData({ limit, offset }) {
+// работа со страницей книги
+function getBooksPageData({ limit, offset }) {
   return axios
-    .get(`${baseURL}${apiUrl}/movies/`, {
+    .get(`${baseURL}${apiUrl}/books/`, {
       params: { limit, offset },
     })
     .then((response) => response.data)
@@ -12,19 +12,19 @@ function getMoviesPageData({ limit, offset }) {
 }
 
 // все активные теги (фильтры)
-function getActiveMoviesTags() {
+function getActiveBooksTags() {
   return axios
-    .get(`${baseURL}${apiUrl}/movies/tags/`)
+    .get(`${baseURL}${apiUrl}/books/types/`)
     .then((response) => response.data)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
 // фильмы по конкретному тегу
-function getActualMoviesForFilter(movies) {
+function getActualBooksForFilter(books) {
   return axios
-    .get(`${baseURL}${apiUrl}/movies/?tags=${movies}`)
+    .get(`${baseURL}${apiUrl}/books/?types=${books}`)
     .then((response) => response.data.results)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-export { getMoviesPageData, getActiveMoviesTags, getActualMoviesForFilter };
+export { getBooksPageData, getActiveBooksTags, getActualBooksForFilter };
