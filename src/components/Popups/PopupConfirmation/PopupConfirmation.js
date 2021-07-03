@@ -3,16 +3,19 @@ import PropTypes from 'prop-types';
 import { formatDate } from '../../../utils/utils';
 import { Popup, Button, TitleH2 } from './index';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
+import { useEventBooking } from '../../../hooks/index';
 import { localStAfishaEvent } from '../../../config/constants';
 
-function PopupConfirmation({ isOpen, onClose, onConfirmButtonClick }) {
+function PopupConfirmation({ isOpen, onClose }) {
+  const { registerOnEvent } = useEventBooking();
   const card = getLocalStorageData(localStAfishaEvent);
+
   const startDay = formatDate(card?.startAt);
   const endDay = formatDate(card?.endAt);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onConfirmButtonClick(card);
+    registerOnEvent(card);
   };
 
   return (
@@ -51,13 +54,11 @@ function PopupConfirmation({ isOpen, onClose, onConfirmButtonClick }) {
 PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onConfirmButtonClick: PropTypes.func,
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: () => {},
-  onConfirmButtonClick: () => {},
 };
 
 export default PopupConfirmation;

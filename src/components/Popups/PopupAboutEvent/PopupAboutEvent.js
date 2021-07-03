@@ -2,9 +2,11 @@ import PropTypes from 'prop-types';
 import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
 import { Popup, Button, TitleH2 } from './index';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
+import { useEventBooking } from '../../../hooks/index';
 import { localStAfishaEvent } from '../../../config/constants';
 
-function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick }) {
+function PopupAboutEvent({ isOpen, onClose }) {
+  const { handleEventBooking } = useEventBooking();
   const card = getLocalStorageData(localStAfishaEvent);
 
   const startDateParts = formatDate(card?.startAt);
@@ -13,7 +15,7 @@ function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick }) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    onEventSignUpClick(card);
+    handleEventBooking(card);
   }
 
   return (
@@ -86,13 +88,11 @@ function PopupAboutEvent({ isOpen, onClose, onEventSignUpClick }) {
 PopupAboutEvent.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onEventSignUpClick: PropTypes.func,
 };
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
   onClose: () => {},
-  onEventSignUpClick: () => {},
 };
 
 export default PopupAboutEvent;

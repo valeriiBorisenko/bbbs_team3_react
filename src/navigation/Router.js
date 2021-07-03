@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import {
   AboutUs,
   Profile,
@@ -29,23 +28,13 @@ import {
   PROFILE_URL,
 } from '../config/routes';
 
-function Router({
-  handlers: {
-    handleEventBooking,
-    handleClickPopupAboutEventOpened,
-    handleClickPopupLoginOpened,
-    handleClickPopupCities,
-  },
-}) {
-  const currentUser = useContext(CurrentUserContext);
+function Router() {
+  const { currentUser } = useContext(CurrentUserContext);
 
   return (
     <Switch>
       <Route exact path={MAIN_PAGE_URL}>
-        <MainPage
-          onEventSignUpClick={handleEventBooking}
-          onEventDescriptionClick={handleClickPopupAboutEventOpened}
-        />
+        <MainPage />
       </Route>
 
       <Route exact path={ABOUT_US_URL}>
@@ -53,11 +42,7 @@ function Router({
       </Route>
 
       <Route exact path={AFISHA_URL}>
-        <Calendar
-          onEventSignUpClick={handleEventBooking}
-          onEventDescriptionClick={handleClickPopupAboutEventOpened}
-          onOpenLoginPopup={handleClickPopupLoginOpened}
-        />
+        <Calendar />
       </Route>
 
       <Route exact path={QUESTIONS_URL}>
@@ -68,12 +53,11 @@ function Router({
         exact
         path={PROFILE_URL}
         component={Profile}
-        onEventDescriptionClick={handleClickPopupAboutEventOpened}
         isAuth={!!currentUser}
       />
 
       <Route exact path={PLACES_URL}>
-        <Places openPopupCities={handleClickPopupCities} />
+        <Places />
       </Route>
 
       <Route exact path={RIGHTS_URL}>
@@ -98,13 +82,5 @@ function Router({
     </Switch>
   );
 }
-
-Router.propTypes = {
-  handlers: PropTypes.objectOf(PropTypes.any),
-};
-
-Router.defaultProps = {
-  handlers: {},
-};
 
 export default Router;

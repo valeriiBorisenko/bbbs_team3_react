@@ -1,8 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Profile.scss';
-import PropTypes from 'prop-types';
-import { CurrentUserContext } from '../../contexts/index';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useSmoothHorizontalScroll,
   useScrollToTop,
@@ -26,10 +25,11 @@ import {
 import { getCalendarPageData } from '../../api/afisha-page';
 import { Loader } from '../Calendar';
 
-function Profile({ onEventDescriptionClick }) {
+function Profile() {
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupAboutEvent } = useContext(PopupsContext);
 
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
@@ -65,7 +65,7 @@ function Profile({ onEventDescriptionClick }) {
 
   // работа с карточками мероприятий календаря
   const openEventCard = () => {
-    onEventDescriptionClick();
+    openPopupAboutEvent();
   };
 
   // скролл контейнера с карточками мероприятий
@@ -279,13 +279,5 @@ function Profile({ onEventDescriptionClick }) {
     </BasePage>
   );
 }
-
-Profile.propTypes = {
-  onEventDescriptionClick: PropTypes.func,
-};
-
-Profile.defaultProps = {
-  onEventDescriptionClick: () => {},
-};
 
 export default Profile;

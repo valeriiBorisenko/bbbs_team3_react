@@ -1,12 +1,15 @@
 import './MainPage.scss';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop, useSubscriptionEvents } from '../../hooks/index';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
+import {
+  useScrollToTop,
+  useSubscriptionEvents,
+  useEventBooking,
+} from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
-import { adminUrl } from '../../config/config';
+import { staticImageUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
 import getMainPageData from '../../api/main-page';
 import {
@@ -27,10 +30,12 @@ import {
 const MOVIES_COUNT = 4;
 const QUESTIONS_COUNT = 3;
 
-function MainPage({ onEventSignUpClick, onEventDescriptionClick }) {
+function MainPage() {
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupAboutEvent } = useContext(PopupsContext);
+
   const [mainPageData, setMainPageData] = useState(null);
   const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
   const randomQuestions = randomizeArray(
@@ -38,6 +43,7 @@ function MainPage({ onEventSignUpClick, onEventDescriptionClick }) {
     QUESTIONS_COUNT
   );
 
+  const { handleEventBooking } = useEventBooking();
   const subcribedEvent = useSubscriptionEvents();
 
   // запрос даты главной страницы при загрузке и при смене города
@@ -67,15 +73,15 @@ function MainPage({ onEventSignUpClick, onEventDescriptionClick }) {
             <CardCalendar
               key={mainPageData?.event?.id}
               cardData={subcribedEvent || mainPageData?.event}
-              onEventSignUpClick={onEventSignUpClick}
-              onEventDescriptionClick={onEventDescriptionClick}
+              onEventSignUpClick={handleEventBooking}
+              onEventDescriptionClick={openPopupAboutEvent}
             />
           ) : (
             <CardStub />
           )}
           <Card sectionClass="lead__media" key={mainPageData?.history?.id}>
             <img
-              src={`${adminUrl}/media/${mainPageData?.history?.image}`}
+              src={`${staticImageUrl}/${mainPageData?.history?.image}`}
               alt={mainPageData?.history?.title}
               className="card__media-img"
             />
@@ -169,15 +175,5 @@ function MainPage({ onEventSignUpClick, onEventDescriptionClick }) {
     </BasePage>
   );
 }
-
-MainPage.propTypes = {
-  onEventSignUpClick: PropTypes.func,
-  onEventDescriptionClick: PropTypes.func,
-};
-
-MainPage.defaultProps = {
-  onEventSignUpClick: () => {},
-  onEventDescriptionClick: () => {},
-};
 
 export default MainPage;

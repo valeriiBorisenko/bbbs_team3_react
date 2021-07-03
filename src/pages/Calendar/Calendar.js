@@ -1,12 +1,12 @@
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
-import { CurrentUserContext } from '../../contexts/index';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useScrollToTop,
   useDebounce,
   useSubscriptionEvents,
+  useEventBooking,
 } from '../../hooks/index';
 import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
@@ -24,19 +24,16 @@ import {
   Loader,
 } from './index';
 
-function Calendar({
-  onEventSignUpClick,
-  onEventDescriptionClick,
-  onOpenLoginPopup,
-}) {
+function Calendar() {
   useScrollToTop();
+
+  const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupLogin, openPopupAboutEvent } = useContext(PopupsContext);
 
   // переход между фильтрами, лоадер
   const [isLoading, setIsLoading] = useState(false);
   // переход между городами, лоадер
   const [isCityChanging, setIsCityChanging] = useState(false);
-
-  const { currentUser } = useContext(CurrentUserContext);
 
   // загрузка данных страницы календаря, если ты залогиненный
   const [calendarPageData, setCalendarPageData] = useState(null);
@@ -67,7 +64,7 @@ function Calendar({
     if (currentUser) {
       getInitialPageData();
     } else {
-      onOpenLoginPopup();
+      openPopupLogin();
     }
   }, [currentUser]);
 
@@ -120,6 +117,7 @@ function Calendar({
   }, [isFiltersUsed]);
 
   // подписка/отписка от ивентов
+  const { handleEventBooking } = useEventBooking();
   const subcribedEvent = useSubscriptionEvents();
 
   useEffect(() => {
@@ -166,8 +164,8 @@ function Calendar({
       <CardCalendar
         key={cardData.id}
         cardData={cardData}
-        onEventSignUpClick={onEventSignUpClick}
-        onEventDescriptionClick={onEventDescriptionClick}
+        onEventSignUpClick={handleEventBooking}
+        onEventDescriptionClick={openPopupAboutEvent}
         sectionClass="fade-in"
       />
     ));
@@ -229,16 +227,5 @@ function Calendar({
     </BasePage>
   );
 }
-Calendar.propTypes = {
-  onEventSignUpClick: PropTypes.func,
-  onEventDescriptionClick: PropTypes.func,
-  onOpenLoginPopup: PropTypes.func,
-};
-
-Calendar.defaultProps = {
-  onEventSignUpClick: () => {},
-  onEventDescriptionClick: () => {},
-  onOpenLoginPopup: () => {},
-};
 
 export default Calendar;

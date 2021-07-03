@@ -9,20 +9,17 @@ import {
   PopupSuccessfully,
   PopupAboutEvent,
   PopupError,
+  PopupCities,
+  PopupLogin,
 } from './components/Popups/index';
 // логины, авторизация
-import { CurrentUserContext, CitiesContext } from './contexts/index';
-// API
 import {
-  makeEventRegistration,
-  cancelEventRegistration,
-} from './api/event-participants';
+  CurrentUserContext,
+  CitiesContext,
+  PopupsContext,
+} from './contexts/index';
 // хуки
 import { useCities, useAuth } from './hooks/index';
-import {
-  setRegisterOnEvent,
-  cancelRegisterOnEvent,
-} from './hooks/useSubscriptionEvents';
 
 function App() {
   // стейт переменные попапов
@@ -31,6 +28,8 @@ function App() {
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] =
     useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
+  const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
+  const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
@@ -38,23 +37,33 @@ function App() {
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupErrorOpen(false);
+    setIsPopupLoginOpen(false);
+    setIsPopupCitiesOpen(false);
   }
 
-  function handleClickPopupConfirmationOpened() {
+  function openPopupConfirmation() {
     setIsPopupConfirmationOpen(true);
   }
 
-  function handleClickPopupSuccessfullyOpened() {
+  function openPopupSuccessfully() {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(true);
   }
 
-  function handleClickPopupAboutEventOpened() {
+  function openPopupAboutEvent() {
     setIsPopupAboutDescriptionOpen(true);
   }
 
-  function handleClickPopupErrorOpened() {
+  function openPopupError() {
     setIsPopupErrorOpen(true);
+  }
+
+  function openPopupCities() {
+    setIsPopupCitiesOpen(true);
+  }
+
+  function openPopupLogin() {
+    setIsPopupLoginOpen(true);
   }
 
   // текущий юзер/контекст
@@ -67,31 +76,6 @@ function App() {
 
   // список городов/контекст
   const cities = useCities();
-
-  function registerOnEvent(card) {
-    makeEventRegistration({ event: card.id })
-      .then(() => setRegisterOnEvent())
-      .then(() => handleClickPopupSuccessfullyOpened())
-      .catch(console.log);
-  }
-
-  function cancelRegistration(card) {
-    cancelEventRegistration(card.id)
-      .then(() => cancelRegisterOnEvent())
-      .then(() => setIsPopupAboutDescriptionOpen(false))
-      .catch(console.log);
-  }
-
-  function handleEventBooking(card) {
-    if (card.booked) {
-      // мы записаны на ивент, надо отписаться
-      cancelRegistration(card);
-    } else {
-      // мы НЕ записаны на ивент
-      setIsPopupAboutDescriptionOpen(false); // закрываем попап подробно
-      handleClickPopupConfirmationOpened(); // открываем попап "подтвердите"
-    }
-  }
 
   useEffect(() => {
     checkToken();
@@ -106,39 +90,43 @@ function App() {
     });
   }, []);
 
-  const handlers = {
-    handleEventBooking,
-    handleClickPopupAboutEventOpened,
-  };
-
   return (
     <HelmetProvider>
       <CitiesContext.Provider value={cities}>
         <CurrentUserContext.Provider value={{ currentUser, updateUser }}>
-          <div className="page">
-            {!isCheckingToken ? (
-              <Router handlers={handlers} />
-            ) : (
-              <Loader isCentered />
-            )}
-            <PopupConfirmation
-              isOpen={isPopupConfirmationOpen}
-              onClose={closeAllPopups}
-              onConfirmButtonClick={registerOnEvent}
-              onErrorClick={handleClickPopupErrorOpened}
-            />
-            <PopupSuccessfully
-              isOpen={isPopupSuccessfullyOpen}
-              onClose={closeAllPopups}
-            />
-            <PopupAboutEvent
-              isOpen={isPopupAboutDescriptionOpen}
-              onClose={closeAllPopups}
-              onEventSignUpClick={handleEventBooking}
-              onErrorClick={handleClickPopupErrorOpened}
-            />
-            <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
-          </div>
+          <PopupsContext.Provider
+            value={{
+              closeAllPopups,
+              openPopupConfirmation,
+              openPopupSuccessfully,
+              openPopupAboutEvent,
+              openPopupError,
+              openPopupCities,
+              openPopupLogin,
+            }}
+          >
+            <div className="page">
+              {!isCheckingToken ? <Router /> : <Loader isCentered />}
+              <PopupConfirmation
+                isOpen={isPopupConfirmationOpen}
+                onClose={closeAllPopups}
+              />
+              <PopupSuccessfully
+                isOpen={isPopupSuccessfullyOpen}
+                onClose={closeAllPopups}
+              />
+              <PopupAboutEvent
+                isOpen={isPopupAboutDescriptionOpen}
+                onClose={closeAllPopups}
+              />
+              <PopupLogin isOpen={isPopupLoginOpen} onClose={closeAllPopups} />
+              <PopupCities
+                isOpen={isPopupCitiesOpen}
+                onClose={closeAllPopups}
+              />
+              <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
+            </div>
+          </PopupsContext.Provider>
         </CurrentUserContext.Provider>
       </CitiesContext.Provider>
     </HelmetProvider>

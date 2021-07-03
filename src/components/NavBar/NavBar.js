@@ -238,7 +238,7 @@ function NavBar({
         <li className="menu__button-item">
           <UserIconButton
             sectionClass="mobile-link"
-            isAuthorized={currentUser}
+            isAuthorized={!!currentUser}
             handleClick={onUserButtonClick}
           />
         </li>

@@ -3,7 +3,7 @@ import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
-import { CurrentUserContext } from '../../contexts/index';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useDebounce,
   useActivityTypes,
@@ -43,10 +43,11 @@ const ageFilters = [
 
 const mentorTag = 'Выбор наставников';
 
-function Places({ openPopupCities }) {
+function Places() {
   const activityTypes = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupCities } = useContext(PopupsContext);
 
   const getLocalStorageItem = useLocalStorage(localStUserCity);
 
@@ -330,13 +331,5 @@ function Places({ openPopupCities }) {
     </BasePage>
   );
 }
-
-Places.propTypes = {
-  openPopupCities: PropTypes.func,
-};
-
-Places.defaultProps = {
-  openPopupCities: () => {},
-};
 
 export default Places;

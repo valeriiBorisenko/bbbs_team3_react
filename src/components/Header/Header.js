@@ -2,18 +2,25 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import './Header.scss';
-import PropTypes from 'prop-types';
-import { CurrentUserContext, CitiesContext } from '../../contexts/index';
+import {
+  CurrentUserContext,
+  CitiesContext,
+  PopupsContext,
+} from '../../contexts/index';
 import { useClickOutside, useAuth } from '../../hooks/index';
 import { PROFILE_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
 import { NavBar, UserMenuButton } from './index';
 
-function Header({ openPopupLogin, closePopupLogin, onCityChange }) {
+function Header() {
   const history = useHistory();
   const { pathname } = useLocation();
+
   const { currentUser, updateUser } = useContext(CurrentUserContext);
+  const { openPopupCities, openPopupLogin, closeAllPopups } =
+    useContext(PopupsContext);
   const cities = useContext(CitiesContext);
-  const { handleLogout } = useAuth(updateUser, closePopupLogin);
+
+  const { handleLogout } = useAuth(updateUser, closeAllPopups);
 
   function handleUserButtonClick() {
     if (currentUser) {
@@ -93,7 +100,7 @@ function Header({ openPopupLogin, closePopupLogin, onCityChange }) {
           onUserButtonClick={handleUserButtonClick}
           onBurgerButtonClick={toggleMobileMenu}
           userCityName={userCityName}
-          onCityChangeClick={onCityChange}
+          onCityChangeClick={openPopupCities}
           onLogout={handleLogout}
           isMobileMenuOpen={isMobileMenuOpen}
         />
@@ -107,7 +114,7 @@ function Header({ openPopupLogin, closePopupLogin, onCityChange }) {
                   : 'Изменить ваш город'
               }
               sectionClass="mobile-link"
-              handleClick={onCityChange}
+              handleClick={openPopupCities}
             />
             <UserMenuButton
               title="Выйти"
@@ -125,7 +132,7 @@ function Header({ openPopupLogin, closePopupLogin, onCityChange }) {
                   ? `${userCityName}. Изменить город`
                   : 'Изменить ваш город'
               }
-              handleClick={onCityChange}
+              handleClick={openPopupCities}
               sectionClass="mobile-link"
             />
           </div>
@@ -134,17 +141,5 @@ function Header({ openPopupLogin, closePopupLogin, onCityChange }) {
     </header>
   );
 }
-
-Header.propTypes = {
-  openPopupLogin: PropTypes.func,
-  closePopupLogin: PropTypes.func,
-  onCityChange: PropTypes.func,
-};
-
-Header.defaultProps = {
-  openPopupLogin: () => {},
-  closePopupLogin: () => {},
-  onCityChange: () => {},
-};
 
 export default Header;
