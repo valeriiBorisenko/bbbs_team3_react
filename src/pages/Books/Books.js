@@ -7,7 +7,14 @@ import {
   getActiveBooksTags,
   getActualBooksForFilter,
 } from '../../api/books-page';
-import { BasePage, TitleH1, CardBook, CardAnnotation, Loader } from './index';
+import {
+  BasePage,
+  TitleH1,
+  CardBook,
+  CardAnnotation,
+  Loader,
+  AnimatedPageContainer,
+} from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
@@ -134,6 +141,16 @@ function Books() {
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
+  // контейнер заглушки
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText="В данный момент страница с книгами пуста. Возвращайтесь позже!"
+        buttonText="Вернуться на главную"
+      />
+    );
+  }
+
   // контейнер с книгами
   const renderBooksContainer = () => (
     <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
@@ -183,6 +200,10 @@ function Books() {
           )}
         </>
       );
+    }
+    const isDataForPage = booksPageData.length > 1;
+    if (!isDataForPage) {
+      return renderAnimatedContainer();
     }
 
     return null;

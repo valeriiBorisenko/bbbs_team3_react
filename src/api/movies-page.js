@@ -12,7 +12,7 @@ function getMoviesPageData({ limit, offset }) {
 }
 
 // все активные теги (фильтры)
-function getActiveMoviesTags() {
+function getMoviesPageFilter() {
   return axios
     .get(`${baseURL}${apiUrl}/movies/tags/`)
     .then((response) => response.data)
@@ -20,11 +20,11 @@ function getActiveMoviesTags() {
 }
 
 // фильмы по конкретному тегу
-function getActualMoviesForFilter(movies) {
+function getActualMoviesPageFilter(movies) {
   return axios
     .get(`${baseURL}${apiUrl}/movies/?tags=${movies}`)
     .then((response) => response.data.results)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-export { getMoviesPageData, getActiveMoviesTags, getActualMoviesForFilter };
+export { getMoviesPageData, getMoviesPageFilter, getActualMoviesPageFilter };

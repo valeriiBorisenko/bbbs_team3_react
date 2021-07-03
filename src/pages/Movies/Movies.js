@@ -1,13 +1,20 @@
 import './Movies.scss';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
-import { useScrollToTop, useDebounce } from '../../hooks';
+import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
   getMoviesPageData,
-  getActiveMoviesTags,
-  getActualMoviesForFilter,
+  getMoviesPageFilter,
+  getActualMoviesPageFilter,
 } from '../../api/movies-page';
-import { BasePage, TitleH1, CardFilm, CardAnnotation, Loader } from './index';
+import {
+  BasePage,
+  TitleH1,
+  CardFilm,
+  CardAnnotation,
+  Loader,
+  AnimatedPageContainer,
+} from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
@@ -36,15 +43,15 @@ function Movies() {
   useEffect(() => {
     const offset = pageSize * pageNumber;
     getMoviesPageData({ limit: pageSize, offset })
-      .then((moviesData) => {
-        setMoviesPageData(moviesData.results);
-        setPageCount(Math.ceil(moviesData.count / pageSize));
+      .then((booksData) => {
+        setMoviesPageData(booksData.results);
+        setPageCount(Math.ceil(booksData.count / pageSize));
       })
       .catch((error) => console.log(error));
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    getActiveMoviesTags()
+    getMoviesPageFilter()
       .then((tagsFilters) => {
         const customFilters = tagsFilters.map((tag) => {
           const filterName = changeCaseOfFirstLetter(tag.name);
@@ -107,9 +114,9 @@ function Movies() {
     if (activeCategories.length === 0) {
       const offset = pageSize * pageNumber;
       getMoviesPageData({ limit: pageSize, offset })
-        .then((moviesData) => {
-          setMoviesPageData(moviesData.results);
-          setPageCount(Math.ceil(moviesData.count / pageSize));
+        .then((booksData) => {
+          setMoviesPageData(booksData.results);
+          setPageCount(Math.ceil(booksData.count / pageSize));
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
@@ -117,10 +124,10 @@ function Movies() {
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       const query = activeCategories.join();
-      getActualMoviesForFilter(query)
-        .then((filteredMovies) => {
-          setMoviesPageData(filteredMovies);
-          setPageCount(Math.ceil(filteredMovies.length / pageSize));
+      getActualMoviesPageFilter(query)
+        .then((filteredBooks) => {
+          setMoviesPageData(filteredBooks);
+          setPageCount(Math.ceil(filteredBooks.length / pageSize));
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
@@ -136,6 +143,16 @@ function Movies() {
     }
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
+
+  // контейнер заглушки
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText="В данный момент страница c фильмами пуста. Возвращайтесь позже!"
+        buttonText="Вернуться на главную"
+      />
+    );
+  }
 
   // контейнер с фильмами
   const renderMoviesContainer = () => (
@@ -187,7 +204,10 @@ function Movies() {
         </>
       );
     }
-
+    const isDataForPage = moviesPageData.length > 1;
+    if (!isDataForPage) {
+      return renderAnimatedContainer();
+    }
     return null;
   };
 
