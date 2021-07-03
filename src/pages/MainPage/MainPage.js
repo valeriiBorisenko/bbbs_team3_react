@@ -33,24 +33,60 @@ function MainPage() {
   const { openPopupAboutEvent } = useContext(PopupsContext);
 
   const [mainPageData, setMainPageData] = useState(null);
+  console.log(mainPageData);
+
   const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
   const randomQuestions = randomizeArray(
     mainPageData?.questions,
     QUESTIONS_COUNT
   );
 
+  // запись/отписка на мероприятия
   const { handleEventBooking, selectedEvent } = useEventBooking();
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setMainPageData({ ...mainPageData, event: selectedEvent });
+    }
+  }, [selectedEvent]);
+
+  const [isCityChanging, setIsCityChanging] = useState(false);
 
   // запрос даты главной страницы при загрузке и при смене города
   useEffect(() => {
-    getMainPageData()
-      .then(setMainPageData)
-      .catch((error) => console.log(error));
+    if (currentUser) {
+      setIsCityChanging(true);
+      getMainPageData()
+        .then((data) => setMainPageData(data))
+        .catch((error) => console.log(error))
+        .finally(() => setIsCityChanging(false));
+    }
   }, [currentUser?.city]);
+
+  useEffect(() => {
+    getMainPageData()
+      .then((data) => setMainPageData(data))
+      .catch((error) => console.log(error));
+  }, []);
 
   // глобальный лоадер (без футера)
   if (!mainPageData) {
     return <Loader isCentered />;
+  }
+
+  function renderEventsSection() {
+    if (currentUser && mainPageData?.event) {
+      return (
+        <CardCalendar
+          key={mainPageData?.event?.id}
+          cardData={mainPageData?.event}
+          onEventSignUpClick={handleEventBooking}
+          onEventDescriptionClick={openPopupAboutEvent}
+        />
+      );
+    }
+
+    return <CardStub />;
   }
 
   return (
@@ -64,16 +100,8 @@ function MainPage() {
       </Helmet>
       <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
-          {currentUser && mainPageData?.event ? (
-            <CardCalendar
-              key={mainPageData?.event?.id}
-              cardData={selectedEvent || mainPageData?.event}
-              onEventSignUpClick={handleEventBooking}
-              onEventDescriptionClick={openPopupAboutEvent}
-            />
-          ) : (
-            <CardStub />
-          )}
+          {isCityChanging ? <Loader isNested /> : renderEventsSection()}
+
           <Card sectionClass="lead__media" key={mainPageData?.history?.id}>
             <img
               src={`${staticImageUrl}/${mainPageData?.history?.image}`}

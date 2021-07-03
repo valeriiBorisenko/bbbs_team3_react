@@ -7,7 +7,8 @@ function getCatalogPageData({ limit, offset }) {
     .get(`${baseURL}${apiUrl}/catalog/`, {
       params: { limit, offset },
     })
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
 export default getCatalogPageData;
