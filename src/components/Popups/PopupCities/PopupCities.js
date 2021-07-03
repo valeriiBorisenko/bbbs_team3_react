@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { CurrentUserContext, CitiesContext } from '../../../contexts/index';
 import { Popup, TitleH2 } from './index';
 import { updateUserProfile } from '../../../api/user';
-import { setlocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStUserCity } from '../../../config/constants';
+import { dispatchLocalStorageEvent } from '../../../hooks/useLocalStorage';
 
-function PopupCities({ isOpen, onClose, onSubmit }) {
-  const currentUser = useContext(CurrentUserContext);
+function PopupCities({ isOpen, onClose }) {
+  const { currentUser, updateUser } = useContext(CurrentUserContext);
   const cities = useContext(CitiesContext);
 
   function handleSubmit(event) {
@@ -17,13 +17,13 @@ function PopupCities({ isOpen, onClose, onSubmit }) {
     const cityId = parseInt(event.nativeEvent.submitter.value, 10);
     if (currentUser) {
       updateUserProfile({ city: cityId })
-        .then((updatedUser) => {
-          onSubmit({ ...currentUser, ...updatedUser });
+        .then((res) => {
+          updateUser(res);
           onClose();
         })
         .catch(console.log);
     } else {
-      setlocalStorageData(localStUserCity, cityId);
+      dispatchLocalStorageEvent(localStUserCity, cityId);
       onClose();
     }
   }
@@ -34,6 +34,7 @@ function PopupCities({ isOpen, onClose, onSubmit }) {
         type="cities"
         typeContainer="cities"
         isOpen={isOpen}
+        onClose={onClose}
         withoutCloseButton
       >
         <form className="popup__form" onSubmit={handleSubmit}>
@@ -81,13 +82,11 @@ function PopupCities({ isOpen, onClose, onSubmit }) {
 PopupCities.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onSubmit: PropTypes.func,
 };
 
 PopupCities.defaultProps = {
   isOpen: false,
   onClose: () => {},
-  onSubmit: () => {},
 };
 
 export default PopupCities;

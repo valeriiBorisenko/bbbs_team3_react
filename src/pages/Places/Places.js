@@ -3,7 +3,7 @@ import './Places.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
-import { CurrentUserContext } from '../../contexts/index';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useDebounce,
   useActivityTypes,
@@ -13,6 +13,7 @@ import {
   COLORS,
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
+  DELAY_RENDER,
   localStUserCity,
 } from '../../config/constants';
 import {
@@ -24,7 +25,6 @@ import {
   deselectAllTags,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { getlocalStorageData } from '../../hooks/useLocalStorage';
 import {
   BasePage,
   TitleH1,
@@ -44,17 +44,17 @@ const ageFilters = [
 
 const mentorTag = 'Выбор наставников';
 
-function Places({ openPopupCities }) {
+function Places() {
   const activityTypes = useActivityTypes();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupCities } = useContext(PopupsContext);
+
+  const getLocalStorageItem = useLocalStorage(localStUserCity);
 
   // сохранённый в localStorage город анонимуса
-  const currentAnonymousCity = getlocalStorageData(localStUserCity);
-  // слушатель localStorage, если анонимус захочет поменять город
-  const anonymousCityChanged = useLocalStorage(localStUserCity);
-  const userCity =
-    currentUser?.city || currentAnonymousCity || anonymousCityChanged;
+  const currentAnonymousCity = getLocalStorageItem();
+  const userCity = currentUser?.city || currentAnonymousCity;
 
   // места из API
   const [places, setPlaces] = useState(null);
@@ -204,7 +204,9 @@ function Places({ openPopupCities }) {
   // открытие попапа "города" для незарегистрированного
   useEffect(() => {
     if (!userCity) {
-      openPopupCities();
+      setTimeout(() => {
+        openPopupCities();
+      }, DELAY_RENDER);
     }
   }, []);
 
@@ -332,13 +334,5 @@ function Places({ openPopupCities }) {
     </BasePage>
   );
 }
-
-Places.propTypes = {
-  openPopupCities: PropTypes.func,
-};
-
-Places.defaultProps = {
-  openPopupCities: () => {},
-};
 
 export default Places;
