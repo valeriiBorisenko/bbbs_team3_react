@@ -2,16 +2,17 @@
 
 .movies__cards {
   padding: 0;
+  margin-top: 80px;
 }
 
 @include atDesktop1024 {
   .movies__cards {
-    padding-top: 50px;
+    margin-top: 50px;
   }
 }
 
 @include atMobileL {
   .movies__cards {
-    padding-top: 30px;
+    margin-top: 30px;
   }
 }
