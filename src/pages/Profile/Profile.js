@@ -29,7 +29,7 @@ import { Loader } from '../Calendar';
 function Profile({ onEventDescriptionClick }) {
   useScrollToTop();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);

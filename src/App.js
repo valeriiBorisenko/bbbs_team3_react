@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
-import { useHistory } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import Header from './components/Header/Header';
 import Router from './navigation/Router';
 import Loader from './components/utils/Loader/Loader';
-import { PROFILE_URL } from './config/routes';
 // попапы
 import {
   PopupConfirmation,
   PopupSuccessfully,
-  PopupLogin,
   PopupAboutEvent,
-  PopupCities,
   PopupError,
 } from './components/Popups/index';
 // логины, авторизация
 import { CurrentUserContext, CitiesContext } from './contexts/index';
 // API
-// import AuthApi from './utils/auth';
 import {
   makeEventRegistration,
   cancelEventRegistration,
@@ -31,22 +25,17 @@ import {
 } from './hooks/useSubscriptionEvents';
 
 function App() {
-  const history = useHistory();
-
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
-  const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] =
     useState(false);
-  const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(false);
-    setIsPopupLoginOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupErrorOpen(false);
   }
@@ -60,20 +49,8 @@ function App() {
     setIsPopupSuccessfullyOpen(true);
   }
 
-  function handleClickPopupLoginOpened() {
-    setIsPopupLoginOpen(true);
-  }
-
   function handleClickPopupAboutEventOpened() {
     setIsPopupAboutDescriptionOpen(true);
-  }
-
-  function handleClickPopupCities() {
-    setIsPopupCitiesOpen(true);
-  }
-
-  function closePopupCities() {
-    setIsPopupCitiesOpen(false);
   }
 
   function handleClickPopupErrorOpened() {
@@ -82,10 +59,11 @@ function App() {
 
   // текущий юзер/контекст
   const [currentUser, setCurrentUser] = useState(null);
-  const { isCheckingToken, handleLogout, handleLogin, checkToken } = useAuth(
-    setCurrentUser,
-    closeAllPopups
-  );
+  const updateUser = (data) => {
+    setCurrentUser(data);
+  };
+
+  const { isCheckingToken, checkToken } = useAuth(updateUser);
 
   // список городов/контекст
   const cities = useCities();
@@ -115,14 +93,6 @@ function App() {
     }
   }
 
-  function handleUserButtonClick() {
-    if (currentUser) {
-      history.push(PROFILE_URL);
-    } else {
-      handleClickPopupLoginOpened();
-    }
-  }
-
   useEffect(() => {
     checkToken();
   }, []);
@@ -139,20 +109,13 @@ function App() {
   const handlers = {
     handleEventBooking,
     handleClickPopupAboutEventOpened,
-    handleClickPopupLoginOpened,
-    handleClickPopupCities,
   };
 
   return (
     <HelmetProvider>
       <CitiesContext.Provider value={cities}>
-        <CurrentUserContext.Provider value={currentUser}>
+        <CurrentUserContext.Provider value={{ currentUser, updateUser }}>
           <div className="page">
-            <Header
-              onLogout={handleLogout}
-              onUserButtonClick={handleUserButtonClick}
-              onCityChange={handleClickPopupCities}
-            />
             {!isCheckingToken ? (
               <Router handlers={handlers} />
             ) : (
@@ -168,21 +131,11 @@ function App() {
               isOpen={isPopupSuccessfullyOpen}
               onClose={closeAllPopups}
             />
-            <PopupLogin
-              isOpen={isPopupLoginOpen}
-              onClose={closeAllPopups}
-              onLoginFormSubmit={handleLogin}
-            />
             <PopupAboutEvent
               isOpen={isPopupAboutDescriptionOpen}
               onClose={closeAllPopups}
               onEventSignUpClick={handleEventBooking}
               onErrorClick={handleClickPopupErrorOpened}
-            />
-            <PopupCities
-              isOpen={isPopupCitiesOpen}
-              onClose={closePopupCities}
-              onSubmit={setCurrentUser}
             />
             <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
           </div>

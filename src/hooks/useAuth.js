@@ -10,7 +10,7 @@ import {
 } from './useLocalStorage';
 import { jwt } from '../config/constants';
 
-const useAuth = (setCurrentUser, closeAllPopups) => {
+const useAuth = (setCurrentUser, closeLoginPopup) => {
   const [isCheckingToken, setIsCheckingToken] = useState(true);
 
   const history = useHistory();
@@ -33,7 +33,7 @@ const useAuth = (setCurrentUser, closeAllPopups) => {
             .then((userData) => {
               setCurrentUser(userData.userData);
             })
-            .then(() => closeAllPopups())
+            .then(() => closeLoginPopup())
             .catch(console.log); // при получении данных произошла ошибка
         }
       })

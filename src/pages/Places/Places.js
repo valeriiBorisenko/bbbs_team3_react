@@ -46,7 +46,7 @@ const mentorTag = 'Выбор наставников';
 function Places({ openPopupCities }) {
   const activityTypes = useActivityTypes();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   const getLocalStorageItem = useLocalStorage(localStUserCity);
 

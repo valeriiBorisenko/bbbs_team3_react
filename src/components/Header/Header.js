@@ -1,21 +1,27 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-// !onClick в <header> используется исключительно для
-// !делегирования функции закрытия мобильного меню по клику на ссылки
-// !https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/no-static-element-interactions.md#case-the-event-handler-is-only-being-used-to-capture-bubbled-events
-
 import { useState, useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import './Header.scss';
 import PropTypes from 'prop-types';
 import { CurrentUserContext, CitiesContext } from '../../contexts/index';
-import { useClickOutside } from '../../hooks/index';
+import { useClickOutside, useAuth } from '../../hooks/index';
 import { PROFILE_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
 import { NavBar, UserMenuButton } from './index';
 
-function Header({ onUserButtonClick, onLogout, onCityChange }) {
+function Header({ openPopupLogin, closePopupLogin, onCityChange }) {
+  const history = useHistory();
   const { pathname } = useLocation();
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser, updateUser } = useContext(CurrentUserContext);
   const cities = useContext(CitiesContext);
+  const { handleLogout } = useAuth(updateUser, closePopupLogin);
+
+  function handleUserButtonClick() {
+    if (currentUser) {
+      history.push(PROFILE_URL);
+    } else {
+      openPopupLogin();
+    }
+  }
 
   const [userCityName, setUserCityName] = useState('');
 
@@ -84,11 +90,11 @@ function Header({ onUserButtonClick, onLogout, onCityChange }) {
     >
       <div className="header__container">
         <NavBar
-          onUserButtonClick={onUserButtonClick}
+          onUserButtonClick={handleUserButtonClick}
           onBurgerButtonClick={toggleMobileMenu}
           userCityName={userCityName}
           onCityChangeClick={onCityChange}
-          onLogout={onLogout}
+          onLogout={handleLogout}
           isMobileMenuOpen={isMobileMenuOpen}
         />
 
@@ -106,7 +112,7 @@ function Header({ onUserButtonClick, onLogout, onCityChange }) {
             <UserMenuButton
               title="Выйти"
               sectionClass="mobile-link"
-              handleClick={onLogout}
+              handleClick={handleLogout}
             />
           </div>
         )}
@@ -130,15 +136,15 @@ function Header({ onUserButtonClick, onLogout, onCityChange }) {
 }
 
 Header.propTypes = {
-  onUserButtonClick: PropTypes.func,
+  openPopupLogin: PropTypes.func,
+  closePopupLogin: PropTypes.func,
   onCityChange: PropTypes.func,
-  onLogout: PropTypes.func,
 };
 
 Header.defaultProps = {
-  onUserButtonClick: () => {},
+  openPopupLogin: () => {},
+  closePopupLogin: () => {},
   onCityChange: () => {},
-  onLogout: () => {},
 };
 
 export default Header;

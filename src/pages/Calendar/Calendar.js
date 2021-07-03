@@ -36,7 +36,7 @@ function Calendar({
   // переход между городами, лоадер
   const [isCityChanging, setIsCityChanging] = useState(false);
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   // загрузка данных страницы календаря, если ты залогиненный
   const [calendarPageData, setCalendarPageData] = useState(null);

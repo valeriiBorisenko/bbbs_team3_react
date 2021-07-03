@@ -32,7 +32,7 @@ import {
 function Questions() {
   useScrollToTop();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
   // крутилка-лоадер
   const [isLoading, setIsLoading] = useState(false);
   // начальная дата с API

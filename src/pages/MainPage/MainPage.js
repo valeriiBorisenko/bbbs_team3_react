@@ -30,7 +30,7 @@ const QUESTIONS_COUNT = 3;
 function MainPage({ onEventSignUpClick, onEventDescriptionClick }) {
   useScrollToTop();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
   const [mainPageData, setMainPageData] = useState(null);
   const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
   const randomQuestions = randomizeArray(
