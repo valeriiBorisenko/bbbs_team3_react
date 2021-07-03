@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
 import { HelmetProvider } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
 import Router from './navigation/Router';
 import Loader from './components/utils/Loader/Loader';
 // попапы
@@ -22,6 +23,8 @@ import {
 import { useCities, useAuth } from './hooks/index';
 
 function App() {
+  const { pathname } = useLocation();
+
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
@@ -68,9 +71,7 @@ function App() {
 
   // текущий юзер/контекст
   const [currentUser, setCurrentUser] = useState(null);
-  const updateUser = (data) => {
-    setCurrentUser(data);
-  };
+  const updateUser = (value) => setCurrentUser(value);
 
   const { isCheckingToken, checkToken } = useAuth(updateUser);
 
@@ -80,6 +81,11 @@ function App() {
   useEffect(() => {
     checkToken();
   }, []);
+
+  // закрытие всех попапов при смене страницы
+  useEffect(() => {
+    closeAllPopups();
+  }, [pathname]);
 
   // эффект закрытия модалок по Escape
   useEffect(() => {

@@ -203,7 +203,9 @@ function Places() {
   // открытие попапа "города" для незарегистрированного
   useEffect(() => {
     if (!userCity) {
-      openPopupCities();
+      setTimeout(() => {
+        openPopupCities();
+      }, 100);
     }
   }, []);
 

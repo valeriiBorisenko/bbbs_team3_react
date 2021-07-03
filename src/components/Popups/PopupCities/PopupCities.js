@@ -34,6 +34,7 @@ function PopupCities({ isOpen, onClose }) {
         type="cities"
         typeContainer="cities"
         isOpen={isOpen}
+        onClose={onClose}
         withoutCloseButton
       >
         <form className="popup__form" onSubmit={handleSubmit}>

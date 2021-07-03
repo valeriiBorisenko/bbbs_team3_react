@@ -64,7 +64,9 @@ function Calendar() {
     if (currentUser) {
       getInitialPageData();
     } else {
-      openPopupLogin();
+      setTimeout(() => {
+        openPopupLogin();
+      }, 100);
     }
   }, [currentUser]);
 

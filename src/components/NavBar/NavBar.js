@@ -27,7 +27,7 @@ function NavBar({
   onLogout,
   userCityName,
 }) {
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   return (
     <nav className="menu">
