@@ -5,7 +5,6 @@ import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useScrollToTop,
   useDebounce,
-  useSubscriptionEvents,
   useEventBooking,
 } from '../../hooks/index';
 import { months, DELAY_DEBOUNCE, DELAY_RENDER } from '../../config/constants';
@@ -119,18 +118,17 @@ function Calendar() {
   }, [isFiltersUsed]);
 
   // подписка/отписка от ивентов
-  const { handleEventBooking } = useEventBooking();
-  const subcribedEvent = useSubscriptionEvents();
+  const { handleEventBooking, selectedEvent } = useEventBooking();
 
   useEffect(() => {
-    if (subcribedEvent) {
+    if (selectedEvent) {
       setCalendarPageData(() =>
         calendarPageData.map((event) =>
-          event.id === subcribedEvent.id ? subcribedEvent : event
+          event.id === selectedEvent.id ? selectedEvent : event
         )
       );
     }
-  }, [subcribedEvent]);
+  }, [selectedEvent]);
 
   // рендеринг
   // отрисовка заглушки

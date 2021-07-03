@@ -5,7 +5,7 @@ import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useSmoothHorizontalScroll,
   useScrollToTop,
-  useSubscriptionEvents,
+  useEventBooking,
 } from '../../hooks/index';
 import {
   getProfileDiariesData,
@@ -52,17 +52,15 @@ function Profile() {
   }, []);
 
   // отписка от ивентов
-  const unsubcribedEvent = useSubscriptionEvents();
+  const { selectedEvent } = useEventBooking();
 
   useEffect(() => {
-    if (unsubcribedEvent) {
+    if (selectedEvent) {
       setEvents(() =>
-        events.filter((event) =>
-          event.id === unsubcribedEvent.id ? null : event
-        )
+        events.filter((event) => (event.id === selectedEvent.id ? null : event))
       );
     }
-  }, [unsubcribedEvent]);
+  }, [selectedEvent]);
 
   // работа с карточками мероприятий календаря
   const openEventCard = () => {

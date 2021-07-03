@@ -3,11 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
-import {
-  useScrollToTop,
-  useSubscriptionEvents,
-  useEventBooking,
-} from '../../hooks/index';
+import { useScrollToTop, useEventBooking } from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
@@ -43,8 +39,7 @@ function MainPage() {
     QUESTIONS_COUNT
   );
 
-  const { handleEventBooking } = useEventBooking();
-  const subcribedEvent = useSubscriptionEvents();
+  const { handleEventBooking, selectedEvent } = useEventBooking();
 
   // запрос даты главной страницы при загрузке и при смене города
   useEffect(() => {
@@ -72,7 +67,7 @@ function MainPage() {
           {currentUser && mainPageData?.event ? (
             <CardCalendar
               key={mainPageData?.event?.id}
-              cardData={subcribedEvent || mainPageData?.event}
+              cardData={selectedEvent || mainPageData?.event}
               onEventSignUpClick={handleEventBooking}
               onEventDescriptionClick={openPopupAboutEvent}
             />
