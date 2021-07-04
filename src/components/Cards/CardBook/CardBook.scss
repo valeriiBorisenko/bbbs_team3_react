@@ -5,12 +5,13 @@
   height: 100%;
   align-items: center;
   margin: 0 auto;
-  padding: 30px 90px;
   box-sizing: border-box;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .card-book__cover {
-  width: 100%;
+  width: 240px;
   min-height: 320px;
   display: flex;
   flex-direction: column;
@@ -46,33 +47,16 @@
   -webkit-box-orient: vertical;
   line-clamp: 2;
   box-orient: vertical;
-
-}
-
-@include atDesktop1639 {
-  .card-book {
-    padding: 30px 65px;
-  }
-}
-
-@include atDesktop1440 {
-  .card-book__cover {
-    min-height: 272px;
-  }
-}
-
-@include atDesktop1024 {
-  .card-book {
-    padding: 30px 85px;
-  }
 }
 
 @include atTabletL {
+
   .card-book {
-    padding: 30px 45px
+    padding: 30px 45px;
   }
 
   .card-book__cover {
+    width: 100%;
     padding: 15px;
   }
 

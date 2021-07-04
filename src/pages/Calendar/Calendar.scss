@@ -36,22 +36,16 @@
   }
 }
 
-@include atDesktop1023 {
+@include atDesktop1024 {
   .calendar-page__grid {
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  }
-}
-
-@media screen and (max-width: 863px) {
-  .calendar-page__grid {
-    grid-template-columns: repeat(auto-fill, minmax(230px, 240px));
+    grid-template-columns: repeat(2, minmax(290px, 1fr));
   }
 }
 
 @include atTablet {
   .calendar-page__grid {
     // grid-template-columns: repeat(auto-fill, minmax(auto, 200px));
-    grid-template-columns: repeat(auto-fill, minmax(200px, 240px));
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   }
 
   .tags {
@@ -90,13 +84,6 @@
   }
 }
 
-
-@media screen and (max-width: 577px) {
-  .calendar-page__grid {
-    // grid-template-columns: 1fr;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
-  }
-}
 
 @include atMobile {
   .calendar-page__grid {

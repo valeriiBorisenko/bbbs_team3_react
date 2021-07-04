@@ -7,7 +7,14 @@ import {
   getActiveBooksTags,
   getActualBooksForFilter,
 } from '../../api/books-page';
-import { BasePage, TitleH1, CardBook, CardAnnotation, Loader } from './index';
+import {
+  BasePage,
+  TitleH1,
+  CardBook,
+  CardAnnotation,
+  Loader,
+  AnimatedPageContainer,
+} from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
@@ -102,9 +109,11 @@ function Books() {
     console.log(activeCategories);
 
     if (activeCategories.length === 0) {
-      getBooksPageData()
-        .then((allBooks) => {
-          setBooksPageData(allBooks);
+      const offset = pageSize * pageNumber;
+      getBooksPageData({ limit: pageSize, offset })
+        .then((booksData) => {
+          setBooksPageData(booksData.results);
+          setPageCount(Math.ceil(booksData.count / pageSize));
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
@@ -131,6 +140,16 @@ function Books() {
     }
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
+
+  // контейнер заглушки
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText="В данный момент страница с книгами пуста. Возвращайтесь позже!"
+        buttonText="Вернуться на главную"
+      />
+    );
+  }
 
   // контейнер с книгами
   const renderBooksContainer = () => (
@@ -181,6 +200,10 @@ function Books() {
           )}
         </>
       );
+    }
+    const isDataForPage = booksPageData.length > 1;
+    if (!isDataForPage) {
+      return renderAnimatedContainer();
     }
 
     return null;
