@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import './Profile.scss';
+import profilePageTexts from '../../locales/profile-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useSmoothHorizontalScroll,
@@ -13,7 +13,7 @@ import {
   editDiary,
   deleteDiary,
 } from '../../api/profile-page';
-import { getCalendarPageData } from '../../api/afisha-page';
+import { getBookedEvents } from '../../api/event-participants';
 import { DELAY_RENDER } from '../../config/constants';
 import {
   BasePage,
@@ -27,6 +27,14 @@ import {
 } from './index';
 
 function Profile() {
+  const {
+    headTitle,
+    headDescription,
+    eventsTitle,
+    eventsTitleNoResults,
+    formTitle,
+  } = profilePageTexts;
+
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);
@@ -40,10 +48,16 @@ function Profile() {
   const [isDeleteDiaryPopupOpen, setIsDeleteDiaryPopupOpen] = useState(false);
 
   useEffect(() => {
-    getCalendarPageData()
-      .then((res) => {
-        setEvents(() => res.filter((event) => event.booked));
-      })
+    getBookedEvents()
+      .then((eventsData) =>
+        setEvents(() =>
+          eventsData.map(({ event }) => {
+            const updatedEvent = event;
+            updatedEvent.booked = true;
+            return updatedEvent;
+          })
+        )
+      )
       .catch(console.log);
   }, [currentUser?.city]);
 
@@ -63,9 +77,7 @@ function Profile() {
   }, [selectedEvent]);
 
   // работа с карточками мероприятий календаря
-  const openEventCard = () => {
-    openPopupAboutEvent();
-  };
+  const openEventCard = () => openPopupAboutEvent();
 
   // скролл контейнера с карточками мероприятий
   const containerEvents = useSmoothHorizontalScroll({ step: 3 });
@@ -160,10 +172,7 @@ function Profile() {
   };
 
   // функции рендера
-  const titleH1 =
-    events?.length > 0
-      ? 'Вы записаны на мероприятия:'
-      : 'У вас нет записи на мероприятия';
+  const titleH1 = events?.length > 0 ? eventsTitle : eventsTitleNoResults;
 
   const renderEventCards = () => {
     if (events && events.length > 0) {
@@ -171,7 +180,7 @@ function Profile() {
         <>
           {events.map((item) => (
             <ProfileEventCard
-              key={item.id}
+              key={item?.id}
               data={item}
               onOpen={openEventCard}
             />
@@ -201,10 +210,7 @@ function Profile() {
       return (
         <>
           {!isEditMode && (
-            <TitleH2
-              sectionClass="profile__title fade-in"
-              title="Составьте историю вашей дружбы с младшим. Эта страница доступна только вам."
-            />
+            <TitleH2 sectionClass="profile__title fade-in" title={formTitle} />
           )}
           <ProfileForm
             sectionClass="profile__diary-form fade-in"
@@ -243,11 +249,7 @@ function Profile() {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Личный кабинет</title>
-        <meta name="description" content="Личный кабинет наставника" />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="profile fade-in">
         <div className="profile__events-area page__section">
           <TitleH2 sectionClass="profile__title" title={titleH1} />

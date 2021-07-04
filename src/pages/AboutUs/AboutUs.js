@@ -1,6 +1,6 @@
 import './AboutUs.scss';
-import { useScrollToTop } from '../../hooks/index';
 import aboutUsTexts from '../../locales/about-us-page-RU.js';
+import { useScrollToTop } from '../../hooks/index';
 import {
   BasePage,
   TitleH3,
@@ -12,7 +12,6 @@ import {
 } from './index';
 
 function AboutUs() {
-  useScrollToTop();
   const {
     headTitle,
     headDescription,
@@ -23,6 +22,8 @@ function AboutUs() {
     blockquote,
     cards,
   } = aboutUsTexts;
+
+  useScrollToTop();
 
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
