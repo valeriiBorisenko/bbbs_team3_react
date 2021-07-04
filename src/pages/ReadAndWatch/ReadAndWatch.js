@@ -9,18 +9,58 @@ import { BasePage, Loader, AnimatedPageContainer } from './index';
 import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWatchSection';
 // import useReadWatch from '../../hooks/useReadWatch'; //!
 
-// АПИ
+//! АПИ
+// запрос каталога
 import getCatalogPageDatа from '../../api/catalog-page';
-import { getBooksPageData } from '../../api/books-page';
+// запрос видео //! внести
+import getVideosPageData from '../../api/videos-page';
+// запрос статей
+import getArticlesPageData from '../../api/articles-page';
+// запрос фильмов
 import { getMoviesPageData } from '../../api/movies-page';
+// запрос книг
+import { getBooksPageData } from '../../api/books-page';
 
 function ReadAndWatch() {
   const [pageSize, setPageSize] = useState(4);
-  const [pageCount, setPageCount] = useState(0);
+  // const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
-  // const { catalogData, videosData, articlesData, moviesData, booksData } =
-  //   useReadWatch();
+  // дата каждой секции
+  const [catalogData, setCatalogData] = useState([]);
+  const [moviesData, setMoviesData] = useState([]);
+  // видео не хватает
+  const [booksData, setBooksData] = useState([]);
+  const [articlesData, setArticlesData] = useState([]);
+
+  function getCatalog({ limit, offset }) {
+    getCatalogPageDatа({ limit, offset })
+      //! тут надо принимать { results, count }
+      .then((catalogs) => setCatalogData(catalogs))
+      .catch((error) => console.log(error));
+  }
+
+  function getMovies({ limit, offset }) {
+    getMoviesPageData({ limit, offset })
+      .then((movies) => setMoviesData(movies))
+      .catch((error) => console.log(error));
+  }
+
+  function getBooks({ limit, offset }) {
+    getBooksPageData({ limit, offset })
+      .then((books) => setBooksData(books))
+      .catch((error) => console.log(error));
+  }
+
+  function getArticles({ limit, offset }) {
+    getArticlesPageData({ limit, offset })
+      .then((articles) => setArticlesData(articles))
+      .catch((error) => console.log(error));
+  }
+
+  // стейты 5 страниц
+
+  // const { catalogData, moviesData, booksData } = useReadWatch();
 
   useEffect(() => {
     // 1 элемент в ряду
@@ -57,11 +97,27 @@ function ReadAndWatch() {
   }, []);
   console.log(pageSize);
 
-  // useEffect(() => {
-  //   const offset = pageSize * pageNumber;
-  //   useReadWatch({ limit: pageSize, offset });
+  function getPageDataOnStart({ limit, offset }) {
+    Promise.all([
+      getCatalog({ limit, offset }),
+      getMovies({ limit, offset }),
+      getBooks({ limit, offset }),
+      getArticles({ limit, offset }),
+    ])
+      .then(([catalogs, movies, books, articles]) => {
+        setCatalogData(catalogs);
+        setMoviesData(movies);
+        setBooksData(books);
+        setArticlesData(articles);
+      })
+      .catch((error) => console.log(error));
+  }
 
-  // }, [pageSize, pageNumber]);
+  useEffect(() => {
+    const offset = pageSize * pageNumber;
+    // console.log({ limit: pageSize, offset });
+    getPageDataOnStart({ limit: pageSize, offset });
+  }, []);
 
   return (
     <BasePage>
@@ -78,29 +134,29 @@ function ReadAndWatch() {
           sectionTitle="Справочник"
           path="/read-watch/catalog" // ссылка на страницу
           elementsPerSection={pageSize}
-          // data={guideData}
+          data={catalogData}
         />
-        {/* Видео */}
-        <ReadAndWatchSection
+        {/* //! Видео */}
+        {/* <ReadAndWatchSection
           sectionTitle="Видео"
           path="/read-watch/videos" // ссылка на страницу
           elementsPerSection={pageSize}
           // data={videosData}
           // handleCardClick={handleVideoClick}
-        />
-        {/* Статьи */}
+        /> */}
+        {/* //! Статьи */}
         <ReadAndWatchSection
           sectionTitle="Статьи"
           path="/read-watch/articles" // ссылка на страницу
           elementsPerSection={pageSize}
-          // data={articlesData}
+          data={articlesData}
         />
         {/* Фильмы */}
         <ReadAndWatchSection
           sectionTitle="Фильмы"
           path="/read-watch/movies" // ссылка на страницу
           elementsPerSection={pageSize}
-          // data={moviesData}
+          data={moviesData}
           // handleCardClick={handleVideoClick}
         />
         {/* Книги */}
@@ -108,7 +164,7 @@ function ReadAndWatch() {
           sectionTitle="Книги"
           path="/read-watch/books" // ссылка на страницу
           elementsPerSection={pageSize}
-          // data={booksData}
+          data={booksData}
         />
       </section>
     </BasePage>
