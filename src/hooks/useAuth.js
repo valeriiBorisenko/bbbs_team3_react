@@ -8,7 +8,7 @@ import {
   removeLocalStorageData,
   getLocalStorageData,
 } from './useLocalStorage';
-import { jwt } from '../config/constants';
+import { jwt, localStUserCity } from '../config/constants';
 
 const useAuth = (setCurrentUser, closeAllPopups) => {
   const [isCheckingToken, setIsCheckingToken] = useState(true);
@@ -19,6 +19,7 @@ const useAuth = (setCurrentUser, closeAllPopups) => {
     AuthApi.clearAuth();
     setCurrentUser(null);
     removeLocalStorageData(jwt);
+    removeLocalStorageData(localStUserCity);
     history.push(MAIN_PAGE_URL);
   };
 
