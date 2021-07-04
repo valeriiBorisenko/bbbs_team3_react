@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
 import './Places.scss';
-import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
+import placesPageTexts from '../../locales/places-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useDebounce,
@@ -31,20 +29,49 @@ import {
   CardPlace,
   PlacesRecommend,
   AnimatedPageContainer,
+  Loader,
 } from './index';
 import { getPlaces, getPlacesTags } from '../../api/places-page';
-import { Loader } from '../Calendar';
-
-const ageFilters = [
-  { filter: '8-10 лет', name: '8-10 лет', isActive: false, range: [8, 10] },
-  { filter: '11-13 лет', name: '11-13 лет', isActive: false, range: [11, 13] },
-  { filter: '14-18 лет', name: '14-18 лет', isActive: false, range: [14, 18] },
-  { filter: '18+ лет', name: '18+ лет', isActive: false, range: [18, 100] },
-];
-
-const mentorTag = 'Выбор наставников';
 
 function Places() {
+  const {
+    headTitle,
+    headDescription,
+    title,
+    animatedContainerText,
+    animatedContainerButtonText,
+    paragraphNoContent,
+    mentorTag,
+    ageFilterNames,
+  } = placesPageTexts;
+
+  const ageFilters = [
+    {
+      filter: ageFilterNames[0],
+      name: ageFilterNames[0],
+      isActive: false,
+      range: [8, 10],
+    },
+    {
+      filter: ageFilterNames[1],
+      name: ageFilterNames[1],
+      isActive: false,
+      range: [11, 13],
+    },
+    {
+      filter: ageFilterNames[2],
+      name: ageFilterNames[2],
+      isActive: false,
+      range: [14, 18],
+    },
+    {
+      filter: ageFilterNames[3],
+      name: ageFilterNames[3],
+      isActive: false,
+      range: [18, 100],
+    },
+  ];
+
   const activityTypes = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
@@ -144,8 +171,8 @@ function Places() {
       if (!ageFilter) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         getPlaces({ city: userCity })
-          .then((res) => {
-            const { chosenPlaceLast, restOfPlaces } = definePlaces(res);
+          .then((placesData) => {
+            const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
             setChosenPlace(chosenPlaceLast);
             setPlaces(restOfPlaces);
             setIsChosenCardHidden(false);
@@ -159,8 +186,8 @@ function Places() {
           max_age: ageFilter.range[1],
           city: userCity,
         })
-          .then((res) => {
-            setPlaces(res);
+          .then((placesData) => {
+            setPlaces(placesData);
             setIsChosenCardHidden(true);
           })
           .catch(console.log)
@@ -180,8 +207,8 @@ function Places() {
         max_age: ageFilter?.range[1],
         city: userCity,
       })
-        .then((res) => {
-          setPlaces(res);
+        .then((placesData) => {
+          setPlaces(placesData);
           setIsChosenCardHidden(true);
         })
         .catch(console.log)
@@ -273,9 +300,7 @@ function Places() {
         </>
       );
     }
-    return (
-      <p className="places__paragraph">По вашему запросу ничего не нашлось</p>
-    );
+    return <p className="places__paragraph">{paragraphNoContent}</p>;
   };
 
   const renderAnimatedContainer = () => (
@@ -283,8 +308,8 @@ function Places() {
       {!isCityChanging ? (
         <>
           <AnimatedPageContainer
-            titleText="Рекомендуемых мест для вашего города ещё нет, но они обязательно появятся!"
-            buttonText="Вернуться на главную"
+            titleText={animatedContainerText}
+            buttonText={animatedContainerButtonText}
           />
           {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
         </>
@@ -300,7 +325,7 @@ function Places() {
     }
     return (
       <>
-        <TitleH1 title="Куда пойти" />
+        <TitleH1 title={title} />
         {!isCityChanging ? (
           <>
             {renderTags()}
@@ -320,14 +345,7 @@ function Places() {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Куда пойти</title>
-        <meta
-          name="description"
-          content="Куда вы можете пойти, что рекомендуют наши наставники"
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="places page__section fade-in">
         {renderPageContent()}
       </section>
