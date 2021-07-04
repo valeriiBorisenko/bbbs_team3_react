@@ -14,7 +14,7 @@
   }
 }
 
-@include atDesktop1024 {
+@include atDesktop1217 {
   .cards-grid {
     grid-template-columns: repeat(2, minmax(290px, 1fr));
     padding-top: 50px;
@@ -22,7 +22,7 @@
   }
 }
 
-@include atTablet {
+@include atTabletL {
   .cards-grid {
     grid-template-columns: 1fr;
     padding-top: 30px;
