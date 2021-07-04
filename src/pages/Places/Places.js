@@ -17,7 +17,6 @@ import {
 import {
   renderFilterTags,
   handleCheckboxBehavior,
-  handleRadioBehavior,
   selectOneTag,
   deselectOneTag,
   deselectAllTags,
@@ -47,28 +46,24 @@ function Places() {
 
   const ageFilters = [
     {
-      filter: ageFilterNames[0],
-      name: ageFilterNames[0],
+      filter: ageFilterNames[0].filter,
+      name: ageFilterNames[0].name,
       isActive: false,
-      range: [8, 10],
     },
     {
-      filter: ageFilterNames[1],
-      name: ageFilterNames[1],
+      filter: ageFilterNames[1].filter,
+      name: ageFilterNames[1].name,
       isActive: false,
-      range: [11, 13],
     },
     {
-      filter: ageFilterNames[2],
-      name: ageFilterNames[2],
+      filter: ageFilterNames[2].filter,
+      name: ageFilterNames[2].name,
       isActive: false,
-      range: [14, 18],
     },
     {
-      filter: ageFilterNames[3],
-      name: ageFilterNames[3],
+      filter: ageFilterNames[3].filter,
+      name: ageFilterNames[3].name,
       isActive: false,
-      range: [18, 100],
     },
   ];
 
@@ -113,7 +108,7 @@ function Places() {
 
   // хэндлер клика по фильтру ВОЗРАСТ
   const changeAge = (inputValue, isChecked) => {
-    handleRadioBehavior(setAges, { inputValue, isChecked });
+    handleCheckboxBehavior(setAges, { inputValue, isChecked });
     setIsFiltersUsed(true);
   };
 
@@ -151,8 +146,6 @@ function Places() {
 
   // функция-фильтратор
   const handleFiltration = () => {
-    const ageFilter = ages.find((filter) => filter.isActive);
-
     const activeCategories = categories.filter(
       (category) => category.isActive && category.filter !== ALL_CATEGORIES
     );
@@ -162,13 +155,18 @@ function Places() {
       .map((tag) => tag.filter)
       .join(',');
 
+    const activeAges = ages
+      .filter((age) => age.isActive)
+      .map((age) => age.filter)
+      .join(',');
+
     const isMentorFlag = activeCategories.some(
       (tag) => tag.filter === mentorTag
     );
 
     // ВСЕ
     if (activeCategories.length === 0) {
-      if (!ageFilter) {
+      if (activeAges.length === 0) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         getPlaces({ city: userCity })
           .then((placesData) => {
@@ -182,8 +180,7 @@ function Places() {
       } else {
         // + ВОЗРАСТ
         getPlaces({
-          min_age: ageFilter.range[0],
-          max_age: ageFilter.range[1],
+          age_restriction: activeAges,
           city: userCity,
         })
           .then((placesData) => {
@@ -203,8 +200,7 @@ function Places() {
       getPlaces({
         chosen: isMentorFlag,
         tags: activeTags,
-        min_age: ageFilter?.range[0],
-        max_age: ageFilter?.range[1],
+        age_restriction: activeAges,
         city: userCity,
       })
         .then((placesData) => {

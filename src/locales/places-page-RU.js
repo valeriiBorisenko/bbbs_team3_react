@@ -7,7 +7,12 @@ const placesPageTexts = {
   animatedContainerButtonText: 'Вернуться на главную',
   paragraphNoContent: 'По вашему запросу ничего не нашлось.',
   mentorTag: 'Выбор наставников',
-  ageFilterNames: ['8-10 лет', '11-13 лет', '14-18 лет', '18+ лет'],
+  ageFilterNames: [
+    { filter: '8-10', name: '8-10 лет' },
+    { filter: '11-13', name: '11-13 лет' },
+    { filter: '14-17', name: '14-17 лет' },
+    { filter: '18', name: '18+ лет' },
+  ],
 };
 
 export default placesPageTexts;
