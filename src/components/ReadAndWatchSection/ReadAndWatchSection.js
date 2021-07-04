@@ -13,6 +13,8 @@ function ReadAndWatchSection({
   sectionTitle,
   path,
   data,
+  getData,
+  setData,
   handleCardClick,
   elementsPerSection,
 }) {
@@ -75,12 +77,15 @@ ReadAndWatchSection.propTypes = {
   sectionTitle: PropTypes.string.isRequired,
   path: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
+  setData: PropTypes.func,
   handleCardClick: PropTypes.func,
   elementsPerSection: PropTypes.number.isRequired,
 };
 
 ReadAndWatchSection.defaultProps = {
   path: '',
+  getData: () => {},
+  setData: () => {},
   handleCardClick: () => {},
 };
 
@@ -90,6 +95,7 @@ export default ReadAndWatchSection;
 /*
 <CardCatalog title="" shape="" image="" sectionClass="" />
 <CardArticle data="" color="" sectionClass="" />
+<CardFilm data="" handleClick="" children="" />
 <CardFilm data="" handleClick="" children="" />
 <CardBook data="" />
 */
