@@ -86,7 +86,7 @@ function Places() {
   const [isLoading, setIsLoading] = useState(false);
   // переход между городами, лоадер
   const [isCityChanging, setIsCityChanging] = useState(false);
-  // триггер для useEffect
+  // триггер фильтра для useEffect
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // видна ли главная карточка
   const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
@@ -224,15 +224,6 @@ function Places() {
     setIsFirstRender(false);
   }, [isFiltersUsed]);
 
-  // открытие попапа "города" для незарегистрированного
-  useEffect(() => {
-    if (!userCity) {
-      setTimeout(() => {
-        openPopupCities();
-      }, DELAY_RENDER);
-    }
-  }, []);
-
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
     if (userCity) {
@@ -255,6 +246,15 @@ function Places() {
         .finally(() => setIsCityChanging(false));
     }
   }, [userCity]);
+
+  useEffect(() => {
+    if (!userCity) {
+      console.log('render');
+      setTimeout(() => {
+        openPopupCities();
+      }, DELAY_RENDER);
+    }
+  }, []);
 
   // функции рендера
   const renderTags = () => (
