@@ -1,5 +1,9 @@
 import PropTypes from 'prop-types';
-import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
+import {
+  formatDate,
+  formatWordCase,
+  changeCaseOfFirstLetter,
+} from '../../../utils/utils';
 import { Popup, Button, TitleH2 } from './index';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks/index';
@@ -28,7 +32,9 @@ function PopupAboutEvent({ isOpen, onClose }) {
       <form className="popup__form" onSubmit={handleSubmit}>
         <div className="calendar__caption">
           <div className="calendar__info">
-            <p className="calendar__type">{getCardType(card?.tags)}</p>
+            <p className="calendar__type">
+              {changeCaseOfFirstLetter(card?.tags?.name)}
+            </p>
             <p className="calendar__weekday">
               {`${startDateParts?.monthName} / ${startDateParts?.weekdayName}`}
             </p>
