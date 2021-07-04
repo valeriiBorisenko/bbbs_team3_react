@@ -30,6 +30,7 @@ function Movies() {
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPagination, setIsLoadingPagination] = useState(false);
   // Стейты с данными Фильмов, Теги
   const [moviesPageData, setMoviesPageData] = useState(null);
   const [categories, setCategories] = useState(null);
@@ -130,7 +131,10 @@ function Movies() {
           setPageCount(Math.ceil(filteredBooks.length / pageSize));
         })
         .catch((error) => console.log(error))
-        .finally(() => setIsLoading(false));
+        .finally(() => {
+          setIsLoading(false);
+          setIsLoadingPagination(false);
+        });
 
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
@@ -155,21 +159,24 @@ function Movies() {
   }
 
   // контейнер с фильмами
-  const renderMoviesContainer = () => (
-    <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
-      {moviesPageData.map((movie) => (
-        <li className="card-container" key={movie.id}>
-          <CardFilm
-            data={movie}
-            pageCount={pageCount}
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-          />
-          <CardAnnotation description={movie.annotation} />
-        </li>
-      ))}
-    </ul>
-  );
+  const renderMoviesContainer = () =>
+    isLoadingPagination ? (
+      <Loader isNested />
+    ) : (
+      <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
+        {moviesPageData.map((movie) => (
+          <li className="card-container" key={movie.id}>
+            <CardFilm
+              data={movie}
+              pageCount={pageCount}
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+            />
+            <CardAnnotation description={movie.annotation} />
+          </li>
+        ))}
+      </ul>
+    );
 
   // контейнер фильтров
   const renderTagsContainer = () => (
