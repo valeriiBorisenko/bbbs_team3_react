@@ -18,7 +18,6 @@
   line-height: 50px;
   text-align: center;
   color: #224cff;
-  // text-decoration: none;
 }
 
 .readwatch__heading:hover {
@@ -69,7 +68,6 @@
 
 .readwatch__forward .disabled {
   background-image: url('../../assets/arrow-right-grey.svg');
-  // rotate: 180deg;
 }
 
 .readwatch__back-link {
@@ -81,15 +79,13 @@
   height: 100%;
 }
 
-.readwatch__section {
-  // padding-top: 80px;
-}
-
-
-@media atDesktop1024 {
-  .readwatch__section {
-    // padding-top: 50px;
-  }
+.readwatch__item-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 @media (max-width: 1024px) {
@@ -121,15 +117,6 @@
   }
 }
 
-.readwatch__item-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
 @media (max-width: 1440px) {
   .readwatch__item-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -145,11 +132,5 @@
 @media (max-width: 820px) {
   .readwatch__item-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-@media atTablet {
-  .readwatch__section {
-    // padding-top: 30px;
   }
 }
