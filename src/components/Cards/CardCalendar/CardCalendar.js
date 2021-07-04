@@ -1,6 +1,10 @@
 import './CardCalendar.scss';
 import PropTypes from 'prop-types';
-import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
+import {
+  formatDate,
+  formatWordCase,
+  changeCaseOfFirstLetter,
+} from '../../../utils/utils';
 import { ButtonDots, Button } from './index';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
@@ -52,7 +56,9 @@ function CardCalendar({
     <article className={classNames}>
       <div className="calendar__caption">
         <div className="calendar__info">
-          <p className="calendar__type">{getCardType(tags)}</p>
+          <p className="calendar__type">
+            {changeCaseOfFirstLetter(tags?.name)}
+          </p>
           <p className="calendar__weekday">
             {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
           </p>
