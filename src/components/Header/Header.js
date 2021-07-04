@@ -7,8 +7,9 @@ import {
   CitiesContext,
   PopupsContext,
 } from '../../contexts/index';
-import { useClickOutside, useAuth } from '../../hooks/index';
+import { useClickOutside, useAuth, useLocalStorage } from '../../hooks/index';
 import { PROFILE_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
+import { localStUserCity } from '../../config/constants';
 import { NavBar, UserMenuButton } from './index';
 
 function Header() {
@@ -31,14 +32,23 @@ function Header() {
   }
 
   const [userCityName, setUserCityName] = useState('');
+  let currentAnonymousCity;
+
+  if (pathname === PLACES_URL) {
+    const getLocalStorageItem = useLocalStorage(localStUserCity);
+    currentAnonymousCity = getLocalStorageItem();
+  }
+
+  // сохранённый в localStorage город анонимуса
+  const userCity = currentUser?.city || currentAnonymousCity;
 
   // определение города пользователя, используется в кнопках
   useEffect(() => {
-    if (cities && currentUser) {
-      const currentCity = cities.find((city) => city.id === currentUser.city);
-      setUserCityName(currentCity.name);
+    if (cities && userCity) {
+      const currentCity = cities.find((city) => city?.id === userCity);
+      setUserCityName(currentCity?.name);
     }
-  }, [cities, currentUser]);
+  }, [cities, userCity]);
 
   // меню бургер
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

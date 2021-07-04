@@ -1,6 +1,6 @@
 import './NavBar.scss';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
@@ -27,6 +27,7 @@ function NavBar({
   onLogout,
   userCityName,
 }) {
+  const { pathname } = useLocation();
   const { currentUser } = useContext(CurrentUserContext);
 
   return (
@@ -158,6 +159,24 @@ function NavBar({
             title="Выйти"
             sectionClass="mobile-link"
             handleClick={onLogout}
+          />
+        </div>
+      )}
+
+      {!currentUser && pathname === PLACES_URL && (
+        <div
+          className={`menu__user-info ${
+            !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
+          }`}
+        >
+          <UserMenuButton
+            title={
+              userCityName
+                ? `${userCityName}. Изменить город`
+                : 'Изменить ваш город'
+            }
+            handleClick={onCityChangeClick}
+            sectionClass="mobile-link"
           />
         </div>
       )}

@@ -16,10 +16,10 @@ function ProfileEventCard({ data, onOpen }) {
   return (
     <Card sectionClass="profile-event-card" onClick={handleOpen}>
       <div className="profile-event-card__date">
-        <span className="profile-event-card__day">{startDay.day}</span>
-        <span className="profile-event-card__month">{startDay.monthName}</span>
+        <span className="profile-event-card__day">{startDay?.day}</span>
+        <span className="profile-event-card__month">{startDay?.monthName}</span>
       </div>
-      <p className="profile-event-card__title">{data.title}</p>
+      <p className="profile-event-card__title">{data?.title}</p>
     </Card>
   );
 }
