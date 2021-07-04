@@ -1,10 +1,13 @@
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
-import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
-import { months, DELAY_DEBOUNCE } from '../../config/constants';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
+import {
+  useScrollToTop,
+  useDebounce,
+  useEventBooking,
+} from '../../hooks/index';
+import { months, DELAY_DEBOUNCE, DELAY_RENDER } from '../../config/constants';
 import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
@@ -20,19 +23,16 @@ import {
   Loader,
 } from './index';
 
-function Calendar({
-  onEventSignUpClick,
-  onEventFullDescriptionClick,
-  onOpenLoginPopup,
-}) {
+function Calendar() {
   useScrollToTop();
+
+  const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupLogin, openPopupAboutEvent } = useContext(PopupsContext);
 
   // переход между фильтрами, лоадер
   const [isLoading, setIsLoading] = useState(false);
   // переход между городами, лоадер
   const [isCityChanging, setIsCityChanging] = useState(false);
-
-  const currentUser = useContext(CurrentUserContext);
 
   // загрузка данных страницы календаря, если ты залогиненный
   const [calendarPageData, setCalendarPageData] = useState(null);
@@ -63,7 +63,9 @@ function Calendar({
     if (currentUser) {
       getInitialPageData();
     } else {
-      onOpenLoginPopup();
+      setTimeout(() => {
+        openPopupLogin();
+      }, DELAY_RENDER);
     }
   }, [currentUser]);
 
@@ -115,6 +117,19 @@ function Calendar({
     debounceFiltration();
   }, [isFiltersUsed]);
 
+  // подписка/отписка от ивентов
+  const { handleEventBooking, selectedEvent } = useEventBooking();
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setCalendarPageData(() =>
+        calendarPageData.map((event) =>
+          event.id === selectedEvent.id ? selectedEvent : event
+        )
+      );
+    }
+  }, [selectedEvent]);
+
   // рендеринг
   // отрисовка заглушки
   function returnAnimatedContainer() {
@@ -149,8 +164,8 @@ function Calendar({
       <CardCalendar
         key={cardData.id}
         cardData={cardData}
-        onEventSignUpClick={onEventSignUpClick}
-        onEventFullDescriptionClick={onEventFullDescriptionClick}
+        onEventSignUpClick={handleEventBooking}
+        onEventDescriptionClick={openPopupAboutEvent}
         sectionClass="fade-in"
       />
     ));
@@ -212,16 +227,5 @@ function Calendar({
     </BasePage>
   );
 }
-Calendar.propTypes = {
-  onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
-  onOpenLoginPopup: PropTypes.func,
-};
-
-Calendar.defaultProps = {
-  onEventSignUpClick: () => {},
-  onEventFullDescriptionClick: () => {},
-  onOpenLoginPopup: () => {},
-};
 
 export default Calendar;

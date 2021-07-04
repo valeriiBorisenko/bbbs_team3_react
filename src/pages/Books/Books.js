@@ -1,13 +1,13 @@
-import './Movies.scss';
+import './Books.scss';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
-import { useScrollToTop, useDebounce } from '../../hooks';
+import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
-  getMoviesPageData,
-  getActiveMoviesTags,
-  getActualMoviesForFilter,
-} from '../../api/movies-page';
-import { BasePage, TitleH1, CardFilm, CardAnnotation, Loader } from './index';
+  getBooksPageData,
+  getActiveBooksTags,
+  getActualBooksForFilter,
+} from '../../api/books-page';
+import { BasePage, TitleH1, CardBook, CardAnnotation, Loader } from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
@@ -18,13 +18,13 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 
-function Movies() {
+function Books() {
   useScrollToTop();
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(false);
-  // Стейты с данными Фильмов, Теги
-  const [moviesPageData, setMoviesPageData] = useState(null);
+  // Стейты с данными Книг, Теги
+  const [booksPageData, setBooksPageData] = useState(null);
   const [categories, setCategories] = useState(null);
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
@@ -35,16 +35,16 @@ function Movies() {
 
   useEffect(() => {
     const offset = pageSize * pageNumber;
-    getMoviesPageData({ limit: pageSize, offset })
-      .then((moviesData) => {
-        setMoviesPageData(moviesData.results);
-        setPageCount(Math.ceil(moviesData.count / pageSize));
+    getBooksPageData({ limit: pageSize, offset })
+      .then((booksData) => {
+        setBooksPageData(booksData.results);
+        setPageCount(Math.ceil(booksData.count / pageSize));
       })
       .catch((error) => console.log(error));
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    getActiveMoviesTags()
+    getActiveBooksTags()
       .then((tagsFilters) => {
         const customFilters = tagsFilters.map((tag) => {
           const filterName = changeCaseOfFirstLetter(tag.name);
@@ -63,15 +63,12 @@ function Movies() {
   }, []);
 
   useEffect(() => {
-    const mobileQuery = window.matchMedia('(max-width: 767px)');
     const smallQuery = window.matchMedia('(max-width: 1399px)');
     const largeQuery = window.matchMedia('(max-width: 1640px)');
 
     const listener = () => {
-      if (mobileQuery.matches) {
+      if (smallQuery.matches) {
         setPageSize(2);
-      } else if (smallQuery.matches) {
-        setPageSize(4);
       } else if (largeQuery.matches) {
         setPageSize(12);
       } else {
@@ -105,9 +102,9 @@ function Movies() {
     console.log(activeCategories);
 
     if (activeCategories.length === 0) {
-      getMoviesPageData()
-        .then((allMovies) => {
-          setMoviesPageData(allMovies);
+      getBooksPageData()
+        .then((allBooks) => {
+          setBooksPageData(allBooks);
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
@@ -115,10 +112,10 @@ function Movies() {
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       const query = activeCategories.join();
-      getActualMoviesForFilter(query)
-        .then((filteredMovies) => {
-          setMoviesPageData(filteredMovies);
-          setPageCount(Math.ceil(filteredMovies.length / pageSize));
+      getActualBooksForFilter(query)
+        .then((filteredBooks) => {
+          setBooksPageData(filteredBooks);
+          setPageCount(Math.ceil(filteredBooks.length / pageSize));
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
@@ -135,18 +132,18 @@ function Movies() {
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  // контейнер с фильмами
-  const renderMoviesContainer = () => (
-    <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
-      {moviesPageData.map((movie) => (
-        <li className="card-container" key={movie.id}>
-          <CardFilm
-            data={movie}
+  // контейнер с книгами
+  const renderBooksContainer = () => (
+    <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
+      {booksPageData.map((books) => (
+        <li className="card-container" key={books.id}>
+          <CardBook
+            data={books}
             pageCount={pageCount}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
           />
-          <CardAnnotation description={movie.annotation} />
+          <CardAnnotation description={books.annotation} />
         </li>
       ))}
     </ul>
@@ -163,16 +160,16 @@ function Movies() {
 
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (moviesPageData.length > 0) {
+    if (booksPageData.length > 0) {
       return (
         <>
-          <TitleH1 title="Фильмы" />
+          <TitleH1 title="Книги" />
 
           {/* рендер фильтров */}
           {categories?.length > 1 && renderTagsContainer()}
 
-          {/* рендерим фильмы */}
-          {isLoading ? <Loader isNested /> : renderMoviesContainer()}
+          {/* рендерим книги */}
+          {isLoading ? <Loader isNested /> : renderBooksContainer()}
 
           {pageCount > 1 && (
             <Paginate
@@ -190,24 +187,24 @@ function Movies() {
   };
 
   // глобальный лоадер
-  if (!moviesPageData || !categories) {
+  if (!booksPageData || !categories) {
     return <Loader isCentered />;
   }
 
   return (
     <BasePage>
       <Helmet>
-        <title>Фильмы</title>
+        <title>Книги</title>
         <meta
           name="description"
-          content="Подборка фильмов, которые можно посмотреть, с аннотацией к ним"
+          content="Подборка книг, которые можно почитать, с аннотацией к ним"
         />
       </Helmet>
-      <section className="movies page__section fade-in">
+      <section className="books page__section fade-in">
         {renderPageContent()}
       </section>
     </BasePage>
   );
 }
 
-export default Movies;
+export default Books;

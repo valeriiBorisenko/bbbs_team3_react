@@ -27,7 +27,7 @@ function NavBar({
   onLogout,
   userCityName,
 }) {
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   return (
     <nav className="menu">
@@ -238,7 +238,7 @@ function NavBar({
         <li className="menu__button-item">
           <UserIconButton
             sectionClass="mobile-link"
-            isAuthorized={currentUser}
+            isAuthorized={!!currentUser}
             handleClick={onUserButtonClick}
           />
         </li>

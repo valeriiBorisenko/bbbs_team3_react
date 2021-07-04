@@ -1,12 +1,11 @@
 import './MainPage.scss';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop } from '../../hooks/index';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
+import { useScrollToTop, useEventBooking } from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
-import { adminUrl } from '../../config/config';
+import { staticImageUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
 import getMainPageData from '../../api/main-page';
 import {
@@ -27,22 +26,33 @@ import {
 const MOVIES_COUNT = 4;
 const QUESTIONS_COUNT = 3;
 
-function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
+function MainPage() {
   useScrollToTop();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupAboutEvent } = useContext(PopupsContext);
+
   const [mainPageData, setMainPageData] = useState(null);
+
   const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
   const randomQuestions = randomizeArray(
     mainPageData?.questions,
     QUESTIONS_COUNT
   );
+
+  // запись/отписка на мероприятия
+  const { handleEventBooking, selectedEvent } = useEventBooking();
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setMainPageData({ ...mainPageData, event: selectedEvent });
+    }
+  }, [selectedEvent]);
+
   const [isCityChanging, setIsCityChanging] = useState(false);
-  console.log(isCityChanging);
 
   // запрос даты главной страницы при загрузке и при смене города
   useEffect(() => {
-    console.log('смена города юзера');
     if (currentUser) {
       setIsCityChanging(true);
       getMainPageData()
@@ -53,7 +63,6 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
   }, [currentUser?.city]);
 
   useEffect(() => {
-    console.log('первая загрузка');
     getMainPageData()
       .then((data) => setMainPageData(data))
       .catch((error) => console.log(error));
@@ -70,8 +79,8 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
         <CardCalendar
           key={mainPageData?.event?.id}
           cardData={mainPageData?.event}
-          onEventSignUpClick={onEventSignUpClick}
-          onEventFullDescriptionClick={onEventFullDescriptionClick}
+          onEventSignUpClick={handleEventBooking}
+          onEventDescriptionClick={openPopupAboutEvent}
         />
       );
     }
@@ -91,9 +100,10 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
       <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
           {isCityChanging ? <Loader isNested /> : renderEventsSection()}
+
           <Card sectionClass="lead__media" key={mainPageData?.history?.id}>
             <img
-              src={`${adminUrl}/media/${mainPageData?.history?.image}`}
+              src={`${staticImageUrl}/${mainPageData?.history?.image}`}
               alt={mainPageData?.history?.title}
               className="card__media-img"
             />
@@ -187,15 +197,5 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
     </BasePage>
   );
 }
-
-MainPage.propTypes = {
-  onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
-};
-
-MainPage.defaultProps = {
-  onEventSignUpClick: () => {},
-  onEventFullDescriptionClick: () => {},
-};
 
 export default MainPage;

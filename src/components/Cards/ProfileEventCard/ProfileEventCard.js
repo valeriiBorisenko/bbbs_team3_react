@@ -2,12 +2,15 @@ import './ProfileEventCard.scss';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../../utils/utils';
 import Card from '../../utils/Card/Card';
+import { setLocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStAfishaEvent } from '../../../config/constants';
 
 function ProfileEventCard({ data, onOpen }) {
-  const startDay = formatDate(data.startAt);
+  const startDay = formatDate(data?.startAt);
 
   const handleOpen = () => {
-    onOpen(data);
+    setLocalStorageData(localStAfishaEvent, data);
+    onOpen();
   };
 
   return (

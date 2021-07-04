@@ -1,9 +1,20 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Profile.scss';
-import PropTypes from 'prop-types';
-import { CurrentUserContext } from '../../contexts/index';
-import { useSmoothHorizontalScroll, useScrollToTop } from '../../hooks/index';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
+import {
+  useSmoothHorizontalScroll,
+  useScrollToTop,
+  useEventBooking,
+} from '../../hooks/index';
+import {
+  getProfileDiariesData,
+  createDiary,
+  editDiary,
+  deleteDiary,
+} from '../../api/profile-page';
+import { getCalendarPageData } from '../../api/afisha-page';
+import { DELAY_RENDER } from '../../config/constants';
 import {
   BasePage,
   ProfileEventCard,
@@ -12,21 +23,14 @@ import {
   ProfileDiary,
   PopupDeleteDiary,
   ButtonRound,
+  Loader,
 } from './index';
-import {
-  getProfileDiariesData,
-  createDiary,
-  editDiary,
-  deleteDiary,
-} from '../../api/profile-page';
-import { getBookedEvents } from '../../api/event-participants';
-import { getCalendarPageData } from '../../api/afisha-page';
-import { Loader } from '../Calendar';
 
-function Profile({ onEventFullDescriptionClick }) {
+function Profile() {
   useScrollToTop();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupAboutEvent } = useContext(PopupsContext);
 
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
@@ -36,13 +40,9 @@ function Profile({ onEventFullDescriptionClick }) {
   const [isDeleteDiaryPopupOpen, setIsDeleteDiaryPopupOpen] = useState(false);
 
   useEffect(() => {
-    Promise.all([getCalendarPageData(), getBookedEvents()])
-      .then(([calendarData, participantsData]) => {
-        const eventIds = participantsData.map((event) => event.event);
-        const bookedEvents = calendarData.filter((event) =>
-          eventIds.includes(event.id)
-        );
-        setEvents(bookedEvents);
+    getCalendarPageData()
+      .then((res) => {
+        setEvents(() => res.filter((event) => event.booked));
       })
       .catch(console.log);
   }, [currentUser?.city]);
@@ -51,9 +51,20 @@ function Profile({ onEventFullDescriptionClick }) {
     getProfileDiariesData().then(setDiaries).catch(console.log);
   }, []);
 
+  // отписка от ивентов
+  const { selectedEvent } = useEventBooking();
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setEvents(() =>
+        events.filter((event) => (event.id === selectedEvent.id ? null : event))
+      );
+    }
+  }, [selectedEvent]);
+
   // работа с карточками мероприятий календаря
-  const openEventCard = (data) => {
-    onEventFullDescriptionClick(data);
+  const openEventCard = () => {
+    openPopupAboutEvent();
   };
 
   // скролл контейнера с карточками мероприятий
@@ -84,7 +95,7 @@ function Profile({ onEventFullDescriptionClick }) {
       setIsEditMode(true);
       setFormDataToEdit(data);
       openForm(data);
-    }, 100);
+    }, DELAY_RENDER);
   };
 
   const createFormData = (data) => {
@@ -267,13 +278,5 @@ function Profile({ onEventFullDescriptionClick }) {
     </BasePage>
   );
 }
-
-Profile.propTypes = {
-  onEventFullDescriptionClick: PropTypes.func,
-};
-
-Profile.defaultProps = {
-  onEventFullDescriptionClick: () => {},
-};
 
 export default Profile;

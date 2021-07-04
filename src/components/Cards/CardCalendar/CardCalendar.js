@@ -2,12 +2,14 @@ import './CardCalendar.scss';
 import PropTypes from 'prop-types';
 import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
 import { ButtonDots, Button } from './index';
+import { setLocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStAfishaEvent } from '../../../config/constants';
 
 function CardCalendar({
   cardData,
   isModal,
   onEventSignUpClick,
-  onEventFullDescriptionClick,
+  onEventDescriptionClick,
   sectionClass,
 }) {
   const {
@@ -29,11 +31,13 @@ function CardCalendar({
   const isDisabled = remainSeats < 1;
 
   function changeStateOfEvent() {
-    onEventSignUpClick(cardData, cardData.id, cardData.booked);
+    setLocalStorageData(localStAfishaEvent, cardData);
+    onEventSignUpClick(cardData);
   }
 
   function prepareDataForAboutEventPopup() {
-    onEventFullDescriptionClick(cardData);
+    setLocalStorageData(localStAfishaEvent, cardData);
+    onEventDescriptionClick();
   }
 
   const classNames = [
@@ -103,7 +107,7 @@ CardCalendar.propTypes = {
   cardData: PropTypes.objectOf(PropTypes.any),
   isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
+  onEventDescriptionClick: PropTypes.func,
   sectionClass: PropTypes.string,
 };
 
@@ -111,7 +115,7 @@ CardCalendar.defaultProps = {
   cardData: {},
   isModal: false,
   onEventSignUpClick: () => {},
-  onEventFullDescriptionClick: () => {},
+  onEventDescriptionClick: () => {},
   sectionClass: '',
 };
 

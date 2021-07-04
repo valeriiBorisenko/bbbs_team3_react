@@ -1,179 +1,91 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
-import { useHistory } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import Header from './components/Header/Header';
+import { useLocation } from 'react-router-dom';
 import Router from './navigation/Router';
 import Loader from './components/utils/Loader/Loader';
-import { MAIN_PAGE_URL, PROFILE_URL } from './config/routes';
 // попапы
 import {
   PopupConfirmation,
   PopupSuccessfully,
-  PopupLogin,
   PopupAboutEvent,
-  PopupCities,
   PopupError,
+  PopupCities,
+  PopupLogin,
 } from './components/Popups/index';
 // логины, авторизация
-import { CurrentUserContext, CitiesContext } from './contexts/index';
-// API
-import AuthApi from './utils/auth';
-import Api from './utils/api';
-import { useCities } from './hooks/index';
+import {
+  CurrentUserContext,
+  CitiesContext,
+  PopupsContext,
+} from './contexts/index';
+// хуки
+import { useCities, useAuth } from './hooks/index';
 
 function App() {
-  const history = useHistory();
-
-  // текущий юзер/контекст
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isCheckingToken, setIsCheckingToken] = useState(true);
-
-  // список городов/контекст
-  const cities = useCities();
+  const { pathname } = useLocation();
 
   // стейт переменные попапов
   const [isPopupConfirmationOpen, setIsPopupConfirmationOpen] = useState(false);
-  const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
   const [isPopupSuccessfullyOpen, setIsPopupSuccessfullyOpen] = useState(false);
   const [isPopupAboutDescriptionOpen, setIsPopupAboutDescriptionOpen] =
     useState(false);
-  const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
-
-  // выбранная карточка при открытии попапа (календарь)
-  const [selectedCalendarCard, setSelectedCalendarCard] = useState({});
+  const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
+  const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(false);
-    setIsPopupLoginOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupErrorOpen(false);
+    setIsPopupLoginOpen(false);
+    setIsPopupCitiesOpen(false);
   }
 
-  function handleClickPopupConfirmationOpened() {
+  function openPopupConfirmation() {
     setIsPopupConfirmationOpen(true);
   }
 
-  function handleClickPopupSuccessfullyOpened() {
+  function openPopupSuccessfully() {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(true);
   }
 
-  function handleClickPopupLoginOpened() {
-    setIsPopupLoginOpen(true);
-  }
-
-  function handleClickPopupAboutEventOpened(cardData) {
-    // запоминаем карточку
-    setSelectedCalendarCard(cardData);
-    // открываем попап подтвердить
+  function openPopupAboutEvent() {
     setIsPopupAboutDescriptionOpen(true);
   }
 
-  function handleClickPopupCities() {
-    setIsPopupCitiesOpen(true);
-  }
-
-  function closePopupCities() {
-    setIsPopupCitiesOpen(false);
-  }
-
-  function handleClickPopupErrorOpened() {
+  function openPopupError() {
     setIsPopupErrorOpen(true);
   }
 
-  //! api
-  function handleLogin(loginData) {
-    AuthApi.authorize(loginData)
-      .then((token) => {
-        const { access, refresh } = token;
-        if (refresh && access) {
-          AuthApi.setAuth(access);
-          localStorage.setItem('jwt', access);
-          AuthApi.getUserData()
-            .then((userData) => setCurrentUser(userData))
-            .then(() => closeAllPopups())
-            .catch((error) => console.log(error)); // при получении данных юзера произошла ошибка
-        }
-      })
-      .catch((error) => console.log(error)); // авторизация (работа с сервером) закончилась ошибкой
+  function openPopupCities() {
+    setIsPopupCitiesOpen(true);
   }
 
-  function handleLogout() {
-    AuthApi.clearAuth();
-    setCurrentUser(null);
-    localStorage.removeItem('jwt');
-    history.push(MAIN_PAGE_URL);
+  function openPopupLogin() {
+    setIsPopupLoginOpen(true);
   }
 
-  // проверка токена между сессиями
-  function checkToken() {
-    const token = localStorage.getItem('jwt');
-    if (token) {
-      AuthApi.setAuth(token);
-      AuthApi.getUserData()
-        .then((userData) => setCurrentUser(userData))
-        .then(() => setIsCheckingToken(false))
-        .catch((error) => console.log(error)); // при получении userData возникла проблема
-    } else {
-      setIsCheckingToken(false);
-    }
-  }
+  // текущий юзер/контекст
+  const [currentUser, setCurrentUser] = useState(null);
+  const updateUser = (value) => setCurrentUser(value);
 
-  // работает с запросом Api (booked)
-  function registerOnEvent(cardData, cardId) {
-    Api.makeEventRegistration({ event: cardId })
-      //! нужна перекраска карточки без подзагрузок (в идеале)
-      .then(() => setSelectedCalendarCard(cardData))
-      .then(() => handleClickPopupSuccessfullyOpened())
-      .catch((error) => console.log(error));
-    // или переносить это в карточку + юзать стейт
-    // или использовать контекст
-  }
+  const { isCheckingToken, checkToken } = useAuth(updateUser);
 
-  function cancelEventRegistration(cardData, cardId) {
-    Api.cancelEventRegistration(cardId)
-      //! нужна перекраска карточки без подзагрузок (в идеале)
-      .then(() => console.log('Успешно!'))
-      .catch((error) => console.log(error));
-    // или переносить это в карточку + юзать стейт
-    // или использовать контекст
-  }
-
-  function handleEventBooking(cardData, cardId, isEventBooked) {
-    console.log('bookingHandler');
-    console.log(cardData);
-    console.log(cardId);
-    console.log(isEventBooked);
-    // console.log(cardData.id);
-    // console.log(isEventBooked);
-    if (isEventBooked) {
-      console.log('мы не записаны');
-      // мы записаны на ивент, надо отписаться
-      cancelEventRegistration(cardData, cardId);
-    } else {
-      console.log('мы не записаны');
-      // мы НЕ записаны на ивент, надо открыть попап "подтвердите"
-      setSelectedCalendarCard(cardData); // отмечаем карточку
-      setIsPopupAboutDescriptionOpen(false); // закрываем попап подробно
-      handleClickPopupConfirmationOpened(); // открываем попап "подтвердите"
-    }
-  }
-
-  function handleUserButtonClick() {
-    if (currentUser) {
-      history.push(PROFILE_URL);
-    } else {
-      handleClickPopupLoginOpened();
-    }
-  }
+  // список городов/контекст
+  const cities = useCities();
 
   useEffect(() => {
     checkToken();
   }, []);
+
+  // закрытие всех попапов при смене страницы
+  useEffect(() => {
+    closeAllPopups();
+  }, [pathname]);
 
   // эффект закрытия модалок по Escape
   useEffect(() => {
@@ -184,59 +96,43 @@ function App() {
     });
   }, []);
 
-  const handlers = {
-    handleEventBooking,
-    handleClickPopupAboutEventOpened,
-    handleClickPopupLoginOpened,
-    handleClickPopupCities,
-  };
-
   return (
     <HelmetProvider>
       <CitiesContext.Provider value={cities}>
-        <CurrentUserContext.Provider value={currentUser}>
-          <div className="page">
-            <Header
-              onLogout={handleLogout}
-              onUserButtonClick={handleUserButtonClick}
-              onCityChange={handleClickPopupCities}
-            />
-            {!isCheckingToken ? (
-              <Router handlers={handlers} />
-            ) : (
-              <Loader isCentered />
-            )}
-            <PopupConfirmation
-              isOpen={isPopupConfirmationOpen}
-              onClose={closeAllPopups}
-              onConfirmButtonClick={registerOnEvent}
-              onErrorClick={handleClickPopupErrorOpened}
-              cardData={selectedCalendarCard}
-            />
-            <PopupSuccessfully
-              isOpen={isPopupSuccessfullyOpen}
-              onClose={closeAllPopups}
-              cardData={selectedCalendarCard}
-            />
-            <PopupLogin
-              isOpen={isPopupLoginOpen}
-              onClose={closeAllPopups}
-              onLoginFormSubmit={handleLogin}
-            />
-            <PopupAboutEvent
-              isOpen={isPopupAboutDescriptionOpen}
-              onClose={closeAllPopups}
-              onEventSignUpClick={handleEventBooking}
-              onErrorClick={handleClickPopupErrorOpened}
-              cardData={selectedCalendarCard}
-            />
-            <PopupCities
-              isOpen={isPopupCitiesOpen}
-              onClose={closePopupCities}
-              onSubmit={setCurrentUser}
-            />
-            <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
-          </div>
+        <CurrentUserContext.Provider value={{ currentUser, updateUser }}>
+          <PopupsContext.Provider
+            value={{
+              closeAllPopups,
+              openPopupConfirmation,
+              openPopupSuccessfully,
+              openPopupAboutEvent,
+              openPopupError,
+              openPopupCities,
+              openPopupLogin,
+            }}
+          >
+            <div className="page">
+              {!isCheckingToken ? <Router /> : <Loader isCentered />}
+              <PopupConfirmation
+                isOpen={isPopupConfirmationOpen}
+                onClose={closeAllPopups}
+              />
+              <PopupSuccessfully
+                isOpen={isPopupSuccessfullyOpen}
+                onClose={closeAllPopups}
+              />
+              <PopupAboutEvent
+                isOpen={isPopupAboutDescriptionOpen}
+                onClose={closeAllPopups}
+              />
+              <PopupLogin isOpen={isPopupLoginOpen} onClose={closeAllPopups} />
+              <PopupCities
+                isOpen={isPopupCitiesOpen}
+                onClose={closeAllPopups}
+              />
+              <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
+            </div>
+          </PopupsContext.Provider>
         </CurrentUserContext.Provider>
       </CitiesContext.Provider>
     </HelmetProvider>
