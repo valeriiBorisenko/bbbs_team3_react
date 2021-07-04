@@ -21,6 +21,7 @@ import {
   CardVideoMain,
   Widget,
   CardQuestion,
+  Rubric,
 } from './index';
 
 // количество отображаемых карточек с фильмами и вопросами
@@ -117,7 +118,15 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
             }`}
             key={item?.id}
           >
-            <CardFilm data={item} />
+            <CardFilm data={item}>
+              <ul className="card-film__rubric-list">
+                {item?.tags.map((tag) => (
+                  <li key={tag.id}>
+                    <Rubric title={tag.name} sectionClass="card-film__rubric" />
+                  </li>
+                ))}
+              </ul>
+            </CardFilm>
           </Link>
         ))}
       </section>
