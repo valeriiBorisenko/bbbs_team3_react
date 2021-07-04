@@ -8,7 +8,8 @@ import CardCatalog from '../Cards/CardCatalog/CardCatalog';
 import CardArticle from '../Cards/CardArticle/CardArticle';
 // карточка фильмы
 import CardFilm from '../Cards/CardFilm/CardFilm';
-//! карточка книги (нету)
+// карточка книги
+import CardBook from '../Cards/CardBook/CardBook';
 
 // import CardPlace from '../../components/Cards/';
 import CardsSectionWithLines from '../Cards/CardsSectionWithLines/CardsSectionWithLines';
@@ -21,6 +22,7 @@ export {
   CardCatalog,
   CardArticle,
   CardFilm,
+  CardBook,
   CardsSectionWithLines,
   AnimatedPageContainer,
 };

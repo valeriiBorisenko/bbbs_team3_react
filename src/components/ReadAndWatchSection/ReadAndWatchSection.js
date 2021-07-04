@@ -1,10 +1,13 @@
-/* eslint-disable no-undef */
+/* eslint-disable react/jsx-props-no-spreading */
+// /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 
 import PropTypes from 'prop-types';
 import './ReadAndWatchSection.scss';
 import { Link } from 'react-router-dom';
-import { TitleH3, CardCatalog, CardArticle, CardFilm } from './index';
+import { TitleH3, CardCatalog, CardArticle, CardFilm, CardBook } from './index';
+
+// CardFilm - и для видео и для фильмов!!
 
 function ReadAndWatchSection({
   sectionTitle,
@@ -13,12 +16,15 @@ function ReadAndWatchSection({
   handleCardClick,
   elementsPerSection,
 }) {
+  console.log(data);
   return (
     <section>
       <div className="readwatch__container">
         <Link className="readwatch__heading-link" to={path}>
           <TitleH3 title={sectionTitle} sectionClass="readwatch__heading" />
         </Link>
+        <button type="button">вперед</button>
+        <button type="button">назад</button>
 
         {/* <ReactPaginate
           pageCount={pageCount}
@@ -35,80 +41,32 @@ function ReadAndWatchSection({
         /> */}
       </div>
 
-      <ul className="readwatch__item-grid">
-        <li>
-          <div className="card-catalog cards-section__item">
-            <div className="card-figure card-figure_color_yellow card-figure_form_circle card-catalog_type_shaped">
-              <img
-                className="card-catalog__image"
-                src="https://picsum.photos/870/520"
-                alt="Дети"
-              />
-            </div>
-            <h2 className="section-title card-catalog__title">Дети</h2>
-          </div>
-        </li>
-        <li>
-          <div className="card-catalog cards-section__item">
-            <div className="card-figure card-figure_color_yellow card-figure_form_circle card-catalog_type_shaped">
-              <img
-                className="card-catalog__image"
-                src="https://picsum.photos/870/520"
-                alt="Дети"
-              />
-            </div>
-            <h2 className="section-title card-catalog__title">Дети</h2>
-          </div>
-        </li>
-        <li>
-          <div className="card-catalog cards-section__item">
-            <div className="card-figure card-figure_color_yellow card-figure_form_circle card-catalog_type_shaped">
-              <img
-                className="card-catalog__image"
-                src="https://picsum.photos/870/520"
-                alt="Дети"
-              />
-            </div>
-            <h2 className="section-title card-catalog__title">Дети</h2>
-          </div>
-        </li>
-        <li>
-          <div className="card-catalog cards-section__item">
-            <div className="card-figure card-figure_color_yellow card-figure_form_circle card-catalog_type_shaped">
-              <img
-                className="card-catalog__image"
-                src="https://picsum.photos/870/520"
-                alt="Дети"
-              />
-            </div>
-            <h2 className="section-title card-catalog__title">Дети</h2>
-          </div>
-        </li>
-      </ul>
       {/* список карточек для Справочника */}
       {/* {sectionTitle === 'Справочник' && (
-        <ul className="guide">{currentPageData}</ul>
+        <ul className="readwatch__item-grid">{currentSectionData}</ul>
       )} */}
 
       {/* список карточек для Видео */}
       {/* {sectionTitle === 'Видео' && (
-        <ul className="movies">{currentPageData}</ul>
+        <ul className="movies">{currentSectionData}</ul>
       )} */}
 
       {/* список карточек для Статей */}
       {/* {sectionTitle === 'Статьи' && (
         <section className="events-grid events-grid_place_raw">
-          {currentPageData}
+          {currentSectionData}
         </section>
       )} */}
 
       {/* список карточек для Фильмов */}
       {/* {sectionTitle === 'Фильмы' && (
-        <ul className="movies">{currentPageData}</ul>
+        <ul className="readwatch__item-grid">{currentSectionData}</ul>
       )} */}
 
       {/* список карточек для Книг */}
-      {/* {sectionTitle === 'Книги' && <ul className="books">{currentPageData}</ul>} */}
+      {/* {sectionTitle === 'Книги' && (
+        <ul className="readwatch__item-grid">{currentSectionData}</ul>
+      )} */}
     </section>
   );
 }
@@ -127,3 +85,11 @@ ReadAndWatchSection.defaultProps = {
 };
 
 export default ReadAndWatchSection;
+
+// как заполнять компоненты карточек
+/*
+<CardCatalog title="" shape="" image="" sectionClass="" />
+<CardArticle data="" color="" sectionClass="" />
+<CardFilm data="" handleClick="" children="" />
+<CardBook data="" />
+*/
