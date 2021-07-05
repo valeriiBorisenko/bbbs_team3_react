@@ -9,6 +9,7 @@ import {
   CardArticle,
   Paginate,
   AnimatedPageContainer,
+  Loader,
 } from './index';
 import getArticlesPageData from '../../api/articles-page';
 import './Articles.scss';
@@ -31,6 +32,7 @@ function Articles() {
         setArticlesPageData(results);
         setPageCount(Math.ceil(count / pageSize));
       })
+      .catch(() => {})
       .finally(() => {
         setIsLoading(false);
       });
@@ -61,7 +63,7 @@ function Articles() {
   }, []);
 
   // отрисовка заглушки
-  function returnAnimatedContainer() {
+  function renderAnimatedContainer() {
     return (
       <AnimatedPageContainer
         titleText="Информация появится в ближайшее время."
@@ -70,23 +72,13 @@ function Articles() {
     );
   }
 
-  if (!articlesPageData.length && !isLoading) {
-    return returnAnimatedContainer();
-  }
-
-  return (
-    <BasePage>
-      <Helmet>
-        <title>Статьи</title>
-        <meta
-          name="description"
-          content="Статьи, которые рекомендуют наши наставники"
-        />
-      </Helmet>
+  function renderPageContent() {
+    return (
       <section className="articles page__section fade-in">
         <TitleH1 title="Статьи" />
-        {isLoading && 'gffdffgdfg'}
-        {!isLoading && (
+        {isLoading ? (
+          <Loader isCentered />
+        ) : (
           <>
             <section className="articles__main fade-in">
               <CardArticle
@@ -117,6 +109,21 @@ function Articles() {
           </>
         )}
       </section>
+    );
+  }
+
+  return (
+    <BasePage>
+      <Helmet>
+        <title>Статьи</title>
+        <meta
+          name="description"
+          content="Статьи, которые рекомендуют наши наставники"
+        />
+      </Helmet>
+      {!articlesPageData.length && !isLoading
+        ? renderAnimatedContainer()
+        : renderPageContent()}
     </BasePage>
   );
 }

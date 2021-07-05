@@ -6,6 +6,7 @@ import {
   TitleH2,
   CardsSectionWithLines,
   AnimatedPageContainer,
+  Loader,
 } from './index';
 import getCatalogPageData from '../../api/catalog-page';
 import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
@@ -57,7 +58,7 @@ function Catalog() {
   }, []);
 
   // отрисовка заглушки
-  function returnAnimatedContainer() {
+  function renderAnimatedContainer() {
     return (
       <AnimatedPageContainer
         titleText="Информация появится в ближайшее время."
@@ -66,16 +67,8 @@ function Catalog() {
     );
   }
 
-  if (!catalogPageData.length && !isLoading) {
-    return returnAnimatedContainer();
-  }
-
-  return (
-    <BasePage>
-      <Helmet>
-        <title>Справочник</title>
-        <meta name="description" content="Справочник полезных статей" />
-      </Helmet>
+  function renderPageContent() {
+    return (
       <section className="catalog page__section fade-in">
         <TitleH1 sectionClass="catalog__title" title="Справочник" />
         <TitleH2
@@ -84,7 +77,9 @@ function Catalog() {
           рассказанную на вводном тренинге. Если вы захотите освежить свои знания, и&nbsp;напомнить
           себе о&nbsp;чем-то."
         />
-        {!isLoading && (
+        {isLoading ? (
+          <Loader isCentered />
+        ) : (
           <CardsSectionWithLines
             pageCount={pageCount}
             pageNumber={pageNumber}
@@ -103,6 +98,18 @@ function Catalog() {
           </CardsSectionWithLines>
         )}
       </section>
+    );
+  }
+
+  return (
+    <BasePage>
+      <Helmet>
+        <title>Справочник</title>
+        <meta name="description" content="Справочник полезных статей" />
+      </Helmet>
+      {!catalogPageData.length && !isLoading
+        ? renderAnimatedContainer()
+        : renderPageContent()}
     </BasePage>
   );
 }
