@@ -1,9 +1,20 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import './Profile.scss';
-import PropTypes from 'prop-types';
-import { CurrentUserContext } from '../../contexts/index';
-import { useSmoothHorizontalScroll, useScrollToTop } from '../../hooks/index';
+import profilePageTexts from '../../locales/profile-page-RU';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
+import {
+  useSmoothHorizontalScroll,
+  useScrollToTop,
+  useEventBooking,
+} from '../../hooks/index';
+import {
+  getProfileDiariesData,
+  createDiary,
+  editDiary,
+  deleteDiary,
+} from '../../api/profile-page';
+import { getBookedEvents } from '../../api/event-participants';
+import { DELAY_RENDER } from '../../config/constants';
 import {
   BasePage,
   ProfileEventCard,
@@ -12,21 +23,22 @@ import {
   ProfileDiary,
   PopupDeleteDiary,
   ButtonRound,
+  Loader,
 } from './index';
-import {
-  getProfileDiariesData,
-  createDiary,
-  editDiary,
-  deleteDiary,
-} from '../../api/profile-page';
-import { getBookedEvents } from '../../api/event-participants';
-import { getCalendarPageData } from '../../api/afisha-page';
-import { Loader } from '../Calendar';
 
-function Profile({ onEventFullDescriptionClick }) {
+function Profile() {
+  const {
+    headTitle,
+    headDescription,
+    eventsTitle,
+    eventsTitleNoResults,
+    formTitle,
+  } = profilePageTexts;
+
   useScrollToTop();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupAboutEvent } = useContext(PopupsContext);
 
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
@@ -36,14 +48,16 @@ function Profile({ onEventFullDescriptionClick }) {
   const [isDeleteDiaryPopupOpen, setIsDeleteDiaryPopupOpen] = useState(false);
 
   useEffect(() => {
-    Promise.all([getCalendarPageData(), getBookedEvents()])
-      .then(([calendarData, participantsData]) => {
-        const eventIds = participantsData.map((event) => event.event);
-        const bookedEvents = calendarData.filter((event) =>
-          eventIds.includes(event.id)
-        );
-        setEvents(bookedEvents);
-      })
+    getBookedEvents()
+      .then((eventsData) =>
+        setEvents(() =>
+          eventsData.map(({ event }) => {
+            const updatedEvent = event;
+            updatedEvent.booked = true;
+            return updatedEvent;
+          })
+        )
+      )
       .catch(console.log);
   }, [currentUser?.city]);
 
@@ -51,10 +65,21 @@ function Profile({ onEventFullDescriptionClick }) {
     getProfileDiariesData().then(setDiaries).catch(console.log);
   }, []);
 
+  // отписка от ивентов
+  const { selectedEvent } = useEventBooking();
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setEvents(() =>
+        events.filter((event) =>
+          event?.id === selectedEvent?.id ? null : event
+        )
+      );
+    }
+  }, [selectedEvent]);
+
   // работа с карточками мероприятий календаря
-  const openEventCard = (data) => {
-    onEventFullDescriptionClick(data);
-  };
+  const openEventCard = () => openPopupAboutEvent();
 
   // скролл контейнера с карточками мероприятий
   const containerEvents = useSmoothHorizontalScroll({ step: 3 });
@@ -84,32 +109,34 @@ function Profile({ onEventFullDescriptionClick }) {
       setIsEditMode(true);
       setFormDataToEdit(data);
       openForm(data);
-    }, 100);
+    }, DELAY_RENDER);
   };
 
   const createFormData = (data) => {
     const formData = new FormData();
-    if (data.id) formData.append('id', data.id);
-    if (data.image) formData.append('image', data.image);
-    formData.append('date', data.date);
-    formData.append('place', data.place);
-    formData.append('description', data.description);
-    formData.append('mark', data.mark);
+    if (data?.id) formData.append('id', data?.id);
+    if (data?.image) formData.append('image', data?.image);
+    formData.append('date', data?.date);
+    formData.append('place', data?.place);
+    formData.append('description', data?.description);
+    formData.append('mark', data?.mark);
     return formData;
   };
 
   const handleCreateDiary = (data) => {
     createDiary(createFormData(data))
-      .then((res) => setDiaries([res, ...diaries]))
+      .then((newDiary) => setDiaries([newDiary, ...diaries]))
       .catch(console.log)
       .finally(() => closeForm());
   };
 
   const handleEditDiary = (data) => {
-    editDiary(data.id, createFormData(data))
-      .then((res) =>
+    editDiary(data?.id, createFormData(data))
+      .then((newDiary) =>
         setDiaries(() =>
-          diaries.map((diary) => (diary.id === res.id ? res : diary))
+          diaries.map((diary) =>
+            diary?.id === newDiary?.id ? newDiary : diary
+          )
         )
       )
       .catch(console.log)
@@ -118,7 +145,7 @@ function Profile({ onEventFullDescriptionClick }) {
 
   const handleSubmitDiary = (data) => {
     const diary = data;
-    if (!diary.mark) {
+    if (!diary?.mark) {
       diary.mark = 'neutral';
     }
     if (isEditMode) handleEditDiary(diary);
@@ -138,10 +165,12 @@ function Profile({ onEventFullDescriptionClick }) {
   };
 
   const handleDeleteDiary = (diary) => {
-    deleteDiary(diary.id, diary)
+    deleteDiary(diary?.id, diary)
       .then(() =>
         setDiaries(() =>
-          diaries.filter((prev) => (prev.id === diary.id ? null : prev))
+          diaries.filter((prevDiary) =>
+            prevDiary?.id === diary?.id ? null : prevDiary
+          )
         )
       )
       .catch(console.log)
@@ -149,18 +178,15 @@ function Profile({ onEventFullDescriptionClick }) {
   };
 
   // функции рендера
-  const titleH1 =
-    events?.length > 0
-      ? 'Вы записаны на мероприятия:'
-      : 'У вас нет записи на мероприятия';
+  const titleH1 = events?.length > 0 ? eventsTitle : eventsTitleNoResults;
 
   const renderEventCards = () => {
-    if (events && events.length > 0) {
+    if (events && events?.length > 0) {
       return (
         <>
           {events.map((item) => (
             <ProfileEventCard
-              key={item.id}
+              key={item?.id}
               data={item}
               onOpen={openEventCard}
             />
@@ -172,7 +198,7 @@ function Profile({ onEventFullDescriptionClick }) {
   };
 
   const renderAddDiaryButton = () => {
-    if (!isFormOpen && diaries && diaries.length > 0) {
+    if (!isFormOpen && diaries && diaries?.length > 0) {
       return (
         <ButtonRound
           sectionClass="profile__button-add-diary fade-in"
@@ -186,14 +212,11 @@ function Profile({ onEventFullDescriptionClick }) {
   };
 
   const renderDiaryForm = () => {
-    if (isFormOpen || (diaries && diaries.length === 0)) {
+    if (isFormOpen || (diaries && diaries?.length === 0)) {
       return (
         <>
           {!isEditMode && (
-            <TitleH2
-              sectionClass="profile__title fade-in"
-              title="Составьте историю вашей дружбы с младшим. Эта страница доступна только вам."
-            />
+            <TitleH2 sectionClass="profile__title fade-in" title={formTitle} />
           )}
           <ProfileForm
             sectionClass="profile__diary-form fade-in"
@@ -210,12 +233,12 @@ function Profile({ onEventFullDescriptionClick }) {
   };
 
   const renderDiaries = () => {
-    if (diaries && diaries.length > 0) {
+    if (diaries && diaries?.length > 0) {
       return (
         <>
           {diaries.map((diary) => (
             <ProfileDiary
-              key={diary.id}
+              key={diary?.id}
               data={diary}
               onEdit={handleEditMode}
               onDelete={openDeleteDiaryPopup}
@@ -232,48 +255,38 @@ function Profile({ onEventFullDescriptionClick }) {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Личный кабинет</title>
-        <meta name="description" content="Личный кабинет наставника" />
-      </Helmet>
-      <section className="profile fade-in">
-        <div className="profile__events-area page__section">
-          <TitleH2 sectionClass="profile__title" title={titleH1} />
-          <div className="profile__events" ref={containerEvents}>
-            {renderEventCards()}
-          </div>
-        </div>
-
-        <div className="profile__diaries page__section">
-          <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
-          <div className="profile__diaries-container">
-            <div className="profile__form-container">
-              {renderAddDiaryButton()}
-
-              {renderDiaryForm()}
+    <>
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
+        <section className="profile fade-in">
+          <div className="profile__events-area page__section">
+            <TitleH2 sectionClass="profile__title" title={titleH1} />
+            <div className="profile__events" ref={containerEvents}>
+              {renderEventCards()}
             </div>
-
-            {renderDiaries()}
           </div>
-        </div>
-      </section>
+
+          <div className="profile__diaries page__section">
+            <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
+            <div className="profile__diaries-container">
+              <div className="profile__form-container">
+                {renderAddDiaryButton()}
+
+                {renderDiaryForm()}
+              </div>
+
+              {renderDiaries()}
+            </div>
+          </div>
+        </section>
+      </BasePage>
       <PopupDeleteDiary
         isOpen={isDeleteDiaryPopupOpen}
         cardData={selectedDiary}
         onClose={closeDeleteDiaryPopup}
         onCardDelete={handleDeleteDiary}
       />
-    </BasePage>
+    </>
   );
 }
-
-Profile.propTypes = {
-  onEventFullDescriptionClick: PropTypes.func,
-};
-
-Profile.defaultProps = {
-  onEventFullDescriptionClick: () => {},
-};
 
 export default Profile;

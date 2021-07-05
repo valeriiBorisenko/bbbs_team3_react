@@ -23,7 +23,7 @@ function UserIconButton({ sectionClass, isAuthorized, handleClick }) {
 
 UserIconButton.propTypes = {
   sectionClass: PropTypes.string,
-  isAuthorized: PropTypes.objectOf(PropTypes.any),
+  isAuthorized: PropTypes.bool,
   handleClick: PropTypes.func,
 };
 

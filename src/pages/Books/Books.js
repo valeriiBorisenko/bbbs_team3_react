@@ -1,16 +1,16 @@
-import './Movies.scss';
+import './Books.scss';
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
-  getMoviesPageData,
-  getMoviesPageFilter,
-  getActualMoviesPageFilter,
-} from '../../api/movies-page';
+  getBooksPageData,
+  getActiveBooksTags,
+  getActualBooksForFilter,
+} from '../../api/books-page';
 import {
   BasePage,
   TitleH1,
-  CardFilm,
+  CardBook,
   CardAnnotation,
   Loader,
   AnimatedPageContainer,
@@ -25,14 +25,13 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 
-function Movies() {
+function Books() {
   useScrollToTop();
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingPagination, setIsLoadingPagination] = useState(false);
-  // Стейты с данными Фильмов, Теги
-  const [moviesPageData, setMoviesPageData] = useState(null);
+  // Стейты с данными Книг, Теги
+  const [booksPageData, setBooksPageData] = useState(null);
   const [categories, setCategories] = useState(null);
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
@@ -43,16 +42,16 @@ function Movies() {
 
   useEffect(() => {
     const offset = pageSize * pageNumber;
-    getMoviesPageData({ limit: pageSize, offset })
+    getBooksPageData({ limit: pageSize, offset })
       .then((booksData) => {
-        setMoviesPageData(booksData.results);
+        setBooksPageData(booksData.results);
         setPageCount(Math.ceil(booksData.count / pageSize));
       })
       .catch((error) => console.log(error));
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    getMoviesPageFilter()
+    getActiveBooksTags()
       .then((tagsFilters) => {
         const customFilters = tagsFilters.map((tag) => {
           const filterName = changeCaseOfFirstLetter(tag.name);
@@ -71,15 +70,12 @@ function Movies() {
   }, []);
 
   useEffect(() => {
-    const mobileQuery = window.matchMedia('(max-width: 767px)');
     const smallQuery = window.matchMedia('(max-width: 1399px)');
     const largeQuery = window.matchMedia('(max-width: 1640px)');
 
     const listener = () => {
-      if (mobileQuery.matches) {
+      if (smallQuery.matches) {
         setPageSize(2);
-      } else if (smallQuery.matches) {
-        setPageSize(4);
       } else if (largeQuery.matches) {
         setPageSize(12);
       } else {
@@ -114,10 +110,10 @@ function Movies() {
 
     if (activeCategories.length === 0) {
       const offset = pageSize * pageNumber;
-      getMoviesPageData({ limit: pageSize, offset })
-        .then((moviesData) => {
-          setMoviesPageData(moviesData.results);
-          setPageCount(Math.ceil(moviesData.count / pageSize));
+      getBooksPageData({ limit: pageSize, offset })
+        .then((booksData) => {
+          setBooksPageData(booksData.results);
+          setPageCount(Math.ceil(booksData.count / pageSize));
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
@@ -125,16 +121,13 @@ function Movies() {
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       const query = activeCategories.join();
-      getActualMoviesPageFilter(query)
+      getActualBooksForFilter(query)
         .then((filteredBooks) => {
-          setMoviesPageData(filteredBooks);
+          setBooksPageData(filteredBooks);
           setPageCount(Math.ceil(filteredBooks.length / pageSize));
         })
         .catch((error) => console.log(error))
-        .finally(() => {
-          setIsLoading(false);
-          setIsLoadingPagination(false);
-        });
+        .finally(() => setIsLoading(false));
 
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
@@ -152,31 +145,28 @@ function Movies() {
   function renderAnimatedContainer() {
     return (
       <AnimatedPageContainer
-        titleText="В данный момент страница c фильмами пуста. Возвращайтесь позже!"
+        titleText="В данный момент страница с книгами пуста. Возвращайтесь позже!"
         buttonText="Вернуться на главную"
       />
     );
   }
 
-  // контейнер с фильмами
-  const renderMoviesContainer = () =>
-    isLoadingPagination ? (
-      <Loader isNested />
-    ) : (
-      <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
-        {moviesPageData.map((movie) => (
-          <li className="card-container" key={movie.id}>
-            <CardFilm
-              data={movie}
-              pageCount={pageCount}
-              pageNumber={pageNumber}
-              setPageNumber={setPageNumber}
-            />
-            <CardAnnotation description={movie.annotation} />
-          </li>
-        ))}
-      </ul>
-    );
+  // контейнер с книгами
+  const renderBooksContainer = () => (
+    <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
+      {booksPageData.map((books) => (
+        <li className="card-container" key={books.id}>
+          <CardBook
+            data={books}
+            pageCount={pageCount}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+          />
+          <CardAnnotation description={books.annotation} />
+        </li>
+      ))}
+    </ul>
+  );
 
   // контейнер фильтров
   const renderTagsContainer = () => (
@@ -189,16 +179,16 @@ function Movies() {
 
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (moviesPageData.length > 0) {
+    if (booksPageData.length > 0) {
       return (
         <>
-          <TitleH1 title="Фильмы" />
+          <TitleH1 title="Книги" />
 
           {/* рендер фильтров */}
           {categories?.length > 1 && renderTagsContainer()}
 
-          {/* рендерим фильмы */}
-          {isLoading ? <Loader isNested /> : renderMoviesContainer()}
+          {/* рендерим книги */}
+          {isLoading ? <Loader isNested /> : renderBooksContainer()}
 
           {pageCount > 1 && (
             <Paginate
@@ -211,32 +201,33 @@ function Movies() {
         </>
       );
     }
-    const isDataForPage = moviesPageData.length > 1;
+    const isDataForPage = booksPageData.length > 1;
     if (!isDataForPage) {
       return renderAnimatedContainer();
     }
+
     return null;
   };
 
   // глобальный лоадер
-  if (!moviesPageData || !categories) {
+  if (!booksPageData || !categories) {
     return <Loader isCentered />;
   }
 
   return (
     <BasePage>
       <Helmet>
-        <title>Фильмы</title>
+        <title>Книги</title>
         <meta
           name="description"
-          content="Подборка фильмов, которые можно посмотреть, с аннотацией к ним"
+          content="Подборка книг, которые можно почитать, с аннотацией к ним"
         />
       </Helmet>
-      <section className="movies page__section fade-in">
+      <section className="books page__section fade-in">
         {renderPageContent()}
       </section>
     </BasePage>
   );
 }
 
-export default Movies;
+export default Books;

@@ -5,15 +5,10 @@
   width: 100%;
   height: 158px;
   flex-shrink: 0;
-  margin-right: 30px;
   padding: 30px;
 
   &:hover {
     cursor: pointer;
-  }
-
-  &:last-of-type {
-    margin-right: 0;
   }
 
   &__date {
@@ -66,14 +61,6 @@
     max-height: 108px;
     padding: 15px;
 
-    &:first-of-type {
-      margin-left: 60px;
-    }
-
-    &:last-of-type {
-      margin-right: 15px;
-    }
-
     &__day {
       font-size: 37px;
       line-height: 1.05;
@@ -87,14 +74,6 @@
     &__title {
       font-size: 12px;
       line-height: 1.2;
-    }
-  }
-}
-
-@include atMobile {
-  .profile-event-card {
-    &:first-of-type {
-      margin-left: 15px;
     }
   }
 }

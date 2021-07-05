@@ -1,9 +1,7 @@
-/* eslint-disable no-unused-vars */
 import './Places.scss';
-import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useContext } from 'react';
-import { CurrentUserContext } from '../../contexts/index';
+import placesPageTexts from '../../locales/places-page-RU';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useDebounce,
   useActivityTypes,
@@ -13,48 +11,72 @@ import {
   COLORS,
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
+  DELAY_RENDER,
   localStUserCity,
 } from '../../config/constants';
 import {
   renderFilterTags,
   handleCheckboxBehavior,
-  handleRadioBehavior,
   selectOneTag,
   deselectOneTag,
   deselectAllTags,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { getlocalStorageData } from '../../hooks/useLocalStorage';
 import {
   BasePage,
   TitleH1,
   CardPlace,
   PlacesRecommend,
   AnimatedPageContainer,
+  Loader,
 } from './index';
 import { getPlaces, getPlacesTags } from '../../api/places-page';
-import { Loader } from '../Calendar';
 
-const ageFilters = [
-  { filter: '8-10 лет', name: '8-10 лет', isActive: false, range: [8, 10] },
-  { filter: '11-13 лет', name: '11-13 лет', isActive: false, range: [11, 13] },
-  { filter: '14-18 лет', name: '14-18 лет', isActive: false, range: [14, 18] },
-  { filter: '18+ лет', name: '18+ лет', isActive: false, range: [18, 100] },
-];
+function Places() {
+  const {
+    headTitle,
+    headDescription,
+    title,
+    animatedContainerText,
+    animatedContainerButtonText,
+    paragraphNoContent,
+    mentorTag,
+    ageFilterNames,
+  } = placesPageTexts;
 
-const mentorTag = 'Выбор наставников';
+  const ageFilters = [
+    {
+      filter: ageFilterNames[0].filter,
+      name: ageFilterNames[0].name,
+      isActive: false,
+    },
+    {
+      filter: ageFilterNames[1].filter,
+      name: ageFilterNames[1].name,
+      isActive: false,
+    },
+    {
+      filter: ageFilterNames[2].filter,
+      name: ageFilterNames[2].name,
+      isActive: false,
+    },
+    {
+      filter: ageFilterNames[3].filter,
+      name: ageFilterNames[3].name,
+      isActive: false,
+    },
+  ];
 
-function Places({ openPopupCities }) {
   const activityTypes = useActivityTypes();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupCities } = useContext(PopupsContext);
+
+  const getLocalStorageItem = useLocalStorage(localStUserCity);
 
   // сохранённый в localStorage город анонимуса
-  const currentAnonymousCity = getlocalStorageData(localStUserCity);
-  // слушатель localStorage, если анонимус захочет поменять город
-  const anonymousCityChanged = useLocalStorage(localStUserCity);
-  const userCity =
-    currentUser?.city || currentAnonymousCity || anonymousCityChanged;
+  const currentAnonymousCity = getLocalStorageItem();
+  const userCity = currentUser?.city || currentAnonymousCity;
 
   // места из API
   const [places, setPlaces] = useState(null);
@@ -64,7 +86,7 @@ function Places({ openPopupCities }) {
   const [isLoading, setIsLoading] = useState(false);
   // переход между городами, лоадер
   const [isCityChanging, setIsCityChanging] = useState(false);
-  // триггер для useEffect
+  // триггер фильтра для useEffect
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // видна ли главная карточка
   const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
@@ -86,7 +108,7 @@ function Places({ openPopupCities }) {
 
   // хэндлер клика по фильтру ВОЗРАСТ
   const changeAge = (inputValue, isChecked) => {
-    handleRadioBehavior(setAges, { inputValue, isChecked });
+    handleCheckboxBehavior(setAges, { inputValue, isChecked });
     setIsFiltersUsed(true);
   };
 
@@ -124,8 +146,6 @@ function Places({ openPopupCities }) {
 
   // функция-фильтратор
   const handleFiltration = () => {
-    const ageFilter = ages.find((filter) => filter.isActive);
-
     const activeCategories = categories.filter(
       (category) => category.isActive && category.filter !== ALL_CATEGORIES
     );
@@ -135,17 +155,22 @@ function Places({ openPopupCities }) {
       .map((tag) => tag.filter)
       .join(',');
 
+    const activeAges = ages
+      .filter((age) => age.isActive)
+      .map((age) => age.filter)
+      .join(',');
+
     const isMentorFlag = activeCategories.some(
       (tag) => tag.filter === mentorTag
     );
 
     // ВСЕ
     if (activeCategories.length === 0) {
-      if (!ageFilter) {
+      if (activeAges.length === 0) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
         getPlaces({ city: userCity })
-          .then((res) => {
-            const { chosenPlaceLast, restOfPlaces } = definePlaces(res);
+          .then((placesData) => {
+            const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
             setChosenPlace(chosenPlaceLast);
             setPlaces(restOfPlaces);
             setIsChosenCardHidden(false);
@@ -155,12 +180,11 @@ function Places({ openPopupCities }) {
       } else {
         // + ВОЗРАСТ
         getPlaces({
-          min_age: ageFilter.range[0],
-          max_age: ageFilter.range[1],
+          age_restriction: activeAges,
           city: userCity,
         })
-          .then((res) => {
-            setPlaces(res);
+          .then((placesData) => {
+            setPlaces(placesData);
             setIsChosenCardHidden(true);
           })
           .catch(console.log)
@@ -176,12 +200,11 @@ function Places({ openPopupCities }) {
       getPlaces({
         chosen: isMentorFlag,
         tags: activeTags,
-        min_age: ageFilter?.range[0],
-        max_age: ageFilter?.range[1],
+        age_restriction: activeAges,
         city: userCity,
       })
-        .then((res) => {
-          setPlaces(res);
+        .then((placesData) => {
+          setPlaces(placesData);
           setIsChosenCardHidden(true);
         })
         .catch(console.log)
@@ -200,13 +223,6 @@ function Places({ openPopupCities }) {
     setIsFiltersUsed(false);
     setIsFirstRender(false);
   }, [isFiltersUsed]);
-
-  // открытие попапа "города" для незарегистрированного
-  useEffect(() => {
-    if (!userCity) {
-      openPopupCities();
-    }
-  }, []);
 
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
@@ -230,6 +246,15 @@ function Places({ openPopupCities }) {
         .finally(() => setIsCityChanging(false));
     }
   }, [userCity]);
+
+  useEffect(() => {
+    if (!userCity) {
+      console.log('render');
+      setTimeout(() => {
+        openPopupCities();
+      }, DELAY_RENDER);
+    }
+  }, []);
 
   // функции рендера
   const renderTags = () => (
@@ -271,9 +296,7 @@ function Places({ openPopupCities }) {
         </>
       );
     }
-    return (
-      <p className="places__paragraph">По вашему запросу ничего не нашлось</p>
-    );
+    return <p className="places__paragraph">{paragraphNoContent}</p>;
   };
 
   const renderAnimatedContainer = () => (
@@ -281,8 +304,8 @@ function Places({ openPopupCities }) {
       {!isCityChanging ? (
         <>
           <AnimatedPageContainer
-            titleText="Рекомендуемых мест для вашего города ещё нет, но они обязательно появятся!"
-            buttonText="Вернуться на главную"
+            titleText={animatedContainerText}
+            buttonText={animatedContainerButtonText}
           />
           {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
         </>
@@ -298,7 +321,7 @@ function Places({ openPopupCities }) {
     }
     return (
       <>
-        <TitleH1 title="Куда пойти" />
+        <TitleH1 title={title} />
         {!isCityChanging ? (
           <>
             {renderTags()}
@@ -318,27 +341,12 @@ function Places({ openPopupCities }) {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Куда пойти</title>
-        <meta
-          name="description"
-          content="Куда вы можете пойти, что рекомендуют наши наставники"
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="places page__section fade-in">
         {renderPageContent()}
       </section>
     </BasePage>
   );
 }
-
-Places.propTypes = {
-  openPopupCities: PropTypes.func,
-};
-
-Places.defaultProps = {
-  openPopupCities: () => {},
-};
 
 export default Places;

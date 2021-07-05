@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext } from 'react';
 
-const CitiesContext = React.createContext();
+const CitiesContext = createContext();
 export default CitiesContext;

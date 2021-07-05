@@ -9,6 +9,7 @@ import Places from './Places/Places';
 import Rights from './Rights/Rights';
 import Movies from './Movies/Movies';
 import ReadAndWatch from './ReadAndWatch/ReadAndWatch';
+import Books from './Books/Books';
 
 export {
   AboutUs,
@@ -22,4 +23,5 @@ export {
   Movies,
   ReadAndWatch,
   Catalog,
+  Books,
 };
