@@ -1,6 +1,6 @@
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
-import { Helmet } from 'react-helmet-async';
+import calendarPageTexts from '../../locales/calendar-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useScrollToTop,
@@ -24,6 +24,9 @@ import {
 } from './index';
 
 function Calendar() {
+  const { headTitle, headDescription, title, animatedContainerText } =
+    calendarPageTexts;
+
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);
@@ -138,10 +141,7 @@ function Calendar() {
         {isCityChanging ? (
           <Loader isNested />
         ) : (
-          <AnimatedPageContainer
-            titleText="Мы работаем над планом мероприятий на ближайшие месяцы."
-            buttonText="Вернуться на главную"
-          />
+          <AnimatedPageContainer titleText={animatedContainerText} />
         )}
       </>
     );
@@ -178,7 +178,7 @@ function Calendar() {
     if (currentUser && dataForCurrentCityExist) {
       return (
         <>
-          <TitleH1 title="Календарь" />
+          <TitleH1 title={title} />
 
           {isCityChanging ? (
             <Loader isNested />
@@ -213,14 +213,7 @@ function Calendar() {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Календарь</title>
-        <meta
-          name="description"
-          content="Календарь событий и мероприятий для наставников"
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="calendar-page page__section fade-in">
         {renderPageContent()}
       </section>

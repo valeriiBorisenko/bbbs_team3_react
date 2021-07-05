@@ -1,14 +1,23 @@
 @import './styles/utils.scss';
 
 .profile-event-card {
+  box-sizing: border-box;
   max-width: 270px;
   width: 100%;
   height: 158px;
   flex-shrink: 0;
-  padding: 30px;
+  outline: none;
+  border: none;
+  background-color: transparent;
 
   &:hover {
     cursor: pointer;
+  }
+
+  &__card {
+    width: 100%;
+    height: 100%;
+    padding: 30px;
   }
 
   &__date {
@@ -43,6 +52,7 @@
     line-height: 1.36;
     letter-spacing: 0.2px;
     color: $black;
+    text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -moz-box;
@@ -59,7 +69,10 @@
   .profile-event-card {
     max-width: 205px;
     max-height: 108px;
-    padding: 15px;
+
+    &__card {
+      padding: 15px;
+    }
 
     &__day {
       font-size: 37px;

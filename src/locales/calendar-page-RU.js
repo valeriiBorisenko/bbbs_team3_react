@@ -4,7 +4,6 @@ const calendarPageTexts = {
   title: 'Календарь',
   animatedContainerText:
     'Мы работаем над планом мероприятий на ближайшие месяцы.',
-  animatedContainerButtonText: 'Вернуться на главную',
 };
 
 export default calendarPageTexts;
