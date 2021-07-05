@@ -1,24 +1,21 @@
 /* eslint-disable react/jsx-props-no-spreading */
-//! не дает использовать spread на пропсах, в дальнейшем заменить!
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import { Redirect, Route } from 'react-router-dom';
+import { CurrentUserContext } from '../../contexts/index';
 
 function ProtectedRoute({ component: Component, ...props }) {
+  const { currentUser } = useContext(CurrentUserContext);
+
   return (
     <Route>
-      {() => (props.isAuth ? <Component {...props} /> : <Redirect to="/" />)}
+      {() => (currentUser ? <Component {...props} /> : <Redirect to="/" />)}
     </Route>
   );
 }
 
 ProtectedRoute.propTypes = {
   component: PropTypes.func.isRequired,
-  isAuth: PropTypes.bool,
-  path: PropTypes.string.isRequired,
-};
-
-ProtectedRoute.defaultProps = {
-  isAuth: false,
 };
 
 export default ProtectedRoute;

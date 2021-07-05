@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import {
   AboutUs,
@@ -15,7 +14,6 @@ import {
   Books,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
-import { CurrentUserContext } from '../contexts/index';
 import {
   MAIN_PAGE_URL,
   ABOUT_US_URL,
@@ -31,8 +29,6 @@ import {
 } from '../config/routes';
 
 function Router() {
-  const { currentUser } = useContext(CurrentUserContext);
-
   return (
     <Switch>
       <Route exact path={MAIN_PAGE_URL}>
@@ -51,12 +47,7 @@ function Router() {
         <Questions />
       </Route>
 
-      <ProtectedRoute
-        exact
-        path={PROFILE_URL}
-        component={Profile}
-        isAuth={!!currentUser}
-      />
+      <ProtectedRoute exact path={PROFILE_URL} component={Profile} />
 
       <Route exact path={PLACES_URL}>
         <Places />
