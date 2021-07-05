@@ -2,9 +2,10 @@ import './CardArticle.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { CardAnnotation, TitleH2, Card, Caption } from './index';
+import { staticImageUrl } from '../../../config/config';
 
 function CardArticle({
-  data: { title, info, annotation, imageUrl, articleUrl },
+  data: { title, info, annotation, image, articleUrl },
   isMain,
   color,
   sectionClass,
@@ -29,7 +30,11 @@ function CardArticle({
             to={articleUrl}
             className="article-card__link-wrap article-card__link-wrap_content_article-img"
           >
-            <img src={imageUrl} alt={title} className="article-card__image" />
+            <img
+              src={`${staticImageUrl}/${image}`}
+              alt={title}
+              className="article-card__image"
+            />
           </Link>
         )}
 
@@ -51,7 +56,7 @@ CardArticle.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   title: PropTypes.string,
   info: PropTypes.string,
-  imageUrl: PropTypes.string,
+  image: PropTypes.string,
   articleUrl: PropTypes.string,
   annotation: PropTypes.string,
   color: PropTypes.string,
@@ -63,7 +68,7 @@ CardArticle.defaultProps = {
   data: {},
   title: '',
   info: '',
-  imageUrl: '',
+  image: '',
   articleUrl: '',
   annotation: '',
   color: 'white',
