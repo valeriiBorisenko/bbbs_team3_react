@@ -1,7 +1,7 @@
 import './MainPage.scss';
 import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import mainPageTexts from '../../locales/main-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import { useScrollToTop, useEventBooking } from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
@@ -27,6 +27,7 @@ const MOVIES_COUNT = 4;
 const QUESTIONS_COUNT = 3;
 
 function MainPage() {
+  const { headTitle, headDescription } = mainPageTexts;
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);
@@ -89,14 +90,7 @@ function MainPage() {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>наставники.про</title>
-        <meta
-          name="description"
-          content="Наставники.про – цифровая информационная платформа организации «Старшие Братья Старшие Сестры». Созданная для поддержки наставников программы."
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
           {isCityChanging ? <Loader isNested /> : renderEventsSection()}
