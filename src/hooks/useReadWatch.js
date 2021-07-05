@@ -1,29 +1,63 @@
 /* eslint-disable no-shadow */
 // /* eslint-disable import/named */
 // /* eslint-disable no-unused-vars */
-// import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 // import CurrentUserContext from '../contexts/CurrentUserContext';
-// import { getCatalogPageData } from '../api/catalog-page';
-// import { getBooksPageData } from '../api/books-page';
-// import { getMoviesPageData } from '../api/movies-page';
+import getCatalogPageData from '../api/catalog-page';
+import { getBooksPageData } from '../api/books-page';
+import { getMoviesPageData } from '../api/movies-page';
 // // import {  } from '../api/books-page';
 // // import {  } from '../api/books-page';
 
-// function useReadWatch({ limit, offset }) {
-//   const [catalogData, setCatalogData] = useState([]);
-//   const [videosData, setVideosData] = useState([]);
-//   const [articlesData, setArticlesData] = useState([]);
-//   const [moviesData, setMoviesData] = useState([]);
-//   const [booksData, setBooksData] = useState([]);
-//   const currentUser = useContext(CurrentUserContext);
+export default function useReadWatch({ limit, offset }) {
+  // const [catalogData, setCatalogData] = useState([]);
+  // const [videosData, setVideosData] = useState([]);
+  // const [articlesData, setArticlesData] = useState([]);
+  // const [moviesData, setMoviesData] = useState([]);
+  // const [booksData, setBooksData] = useState([]);
+  // const currentUser = useContext(CurrentUserContext);
 
-//   function getCatalogData({ limit, offset }) {}
-//   function getVideoData({ limit, offset }) {}
-//   function getArticleData({ limit, offset }) {}
-//   function getMoviesData({ limit, offset }) {}
-//   function getBooksData({ limit, offset }) {}
+  function getCatalog({ limit, offset }) {
+    getCatalogPageData({ limit, offset })
+      .then((result) => console.log(result))
+      .catch((error) => console.log(error));
+  }
 
-//   return { catalogData, videosData, articlesData, moviesData, booksData };
-// }
+  function getMovies({ limit, offset }) {
+    getMoviesPageData({ limit, offset })
+      .then((result) => console.log(result))
+      .catch((error) => console.log(error));
+  }
 
-// export default useReadWatch;
+  function getBooks({ limit, offset }) {
+    getBooksPageData({ limit, offset })
+      .then((result) => console.log(result))
+      .catch((error) => console.log(error));
+  }
+
+  useEffect(() => {
+    Promise.all([
+      getCatalogPageData({ limit, offset }),
+      // Api.getVideos(),
+      // Api.getArticles(),
+      getMoviesPageData({ limit, offset }),
+      getBooksPageData({ limit, offset }),
+    ])
+      .then(([materials, movies, books]) => {
+        // setCatalogData(materials);
+        // Неавторизованный пользователь не видит видео с тегом "Ресурсная группа"
+        // setVideosData(
+        //   videos.filter(
+        //     ({ tag }) => currentUser || !currentUser === (tag.name !== 'Ресурсная группа')
+        //   )
+        // );
+        // setArticlesData(articles);
+        // setMoviesData(movies);
+        // setBooksData(books);
+      })
+      .catch(console.log);
+  }, []);
+
+  return { getCatalog, getMovies };
+  // return { catalogData, videosData, articlesData, moviesData, booksData };
+}
