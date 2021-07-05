@@ -28,6 +28,12 @@ import {
 const TEXT_STUB_NOPE_DATA =
   'В данный момент страница со статьями о правах детей пуста. Возвращайтесь позже!';
 
+const PAGE_SIZE_PAGINATE = {
+  small: 4,
+  medium: 9,
+  big: 16,
+};
+
 const Rights = () => {
   useScrollToTop();
 
@@ -53,14 +59,10 @@ const Rights = () => {
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
+      deselectOneTag(setCategories, ALL_CATEGORIES);
     }
     setIsFiltersUsed(true);
   };
-
-  // Заглушка на страницу
-  const getPageStub = (text) => (
-    <AnimatedPageContainer titleText={text} buttonText="Вернуться на главную" />
-  );
 
   // отрисовка массива фильтров
   const renderTagsContainer = () => (
@@ -95,22 +97,26 @@ const Rights = () => {
 
   // отрисовка контента страницы
   const renderMainContent = () => {
-    // залогинен и нет ивентов
+    // залогинен и нет статей
     if (!articles && !isLoadingPage) {
-      return getPageStub(TEXT_STUB_NOPE_DATA);
+      return (
+        <AnimatedPageContainer
+          titleText={TEXT_STUB_NOPE_DATA}
+          buttonText="Вернуться на главную"
+        />
+      );
     }
 
-    if (articles && categories && !isLoadingPage) {
-      return isFiltersUsed ? <Loader isNested /> : renderCards();
-    }
-    return null;
+    return isFiltersUsed ? <Loader isNested /> : renderCards();
   };
 
-  const getArticlesData = (tagsStr = '', offset = 0) => {
+  const getArticlesData = (tags = '') => {
+    const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
+
     getRightsData({
       limit: pageSize,
       offset,
-      tags: tagsStr,
+      tags,
     })
       .then(({ results, count }) => {
         setArticles(results);
@@ -141,47 +147,37 @@ const Rights = () => {
       .catch((err) => console.log(err));
   };
 
-  const getPageData = (tagsStr) => {
-    const offset = pageSize * pageNumber;
-
-    if (isLoadingPage) {
-      getArticlesData();
-      getArticlesTags();
-    } else if (isFiltersUsed) {
-      getArticlesData(tagsStr);
-    } else {
-      getArticlesData(tagsStr, offset);
-    }
-  };
-
   // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
     if (!isLoadingPage && isFiltersUsed) {
       const activeCategories = categories
         .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter);
+        .map((filter) => filter.filter)
+        .join(',');
 
-      if (activeCategories.length === 0) {
-        getPageData();
+      if (activeCategories === '') {
         selectOneTag(setCategories, ALL_CATEGORIES);
-      } else {
-        const tagsStr = activeCategories.join(',');
-        getPageData(tagsStr);
-        deselectOneTag(setCategories, ALL_CATEGORIES);
       }
+
+      getArticlesData(activeCategories);
     }
   };
 
+  // Фильтрация с делэем
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
-  // запуск фильтрации
   useEffect(() => {
     debounceFiltration();
   }, [isFiltersUsed]);
 
-  // Отрисовка страницы
+  // Первая отрисовка страницы + переход по страницам пагинации
   useEffect(() => {
-    setIsLoadingPaginate(true);
-    getPageData();
+    if (isLoadingPage) {
+      getArticlesData();
+      getArticlesTags();
+    } else {
+      setIsLoadingPaginate(true);
+      getArticlesData();
+    }
   }, [pageSize, pageNumber]);
 
   // Юз эффект для пагинации
@@ -191,11 +187,11 @@ const Rights = () => {
 
     const listener = () => {
       if (smallQuery.matches) {
-        setPageSize(4);
+        setPageSize(PAGE_SIZE_PAGINATE.small);
       } else if (largeQuery.matches) {
-        setPageSize(9);
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
-        setPageSize(16);
+        setPageSize(PAGE_SIZE_PAGINATE.big);
       }
     };
     listener();
