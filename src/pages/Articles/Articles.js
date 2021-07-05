@@ -26,13 +26,14 @@ function Articles() {
   useEffect(() => {
     setIsLoading(true);
     const offset = pageSize * pageNumber;
-    Api.getArticlesPageData({ limit: pageSize, offset }).then(
-      ({ results, count }) => {
+    Api.getArticlesPageData({ limit: pageSize, offset })
+      .then(({ results, count }) => {
         setArticlesPageData(results);
         setPageCount(Math.ceil(count / pageSize));
+      })
+      .finally(() => {
         setIsLoading(false);
-      }
-    );
+      });
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
@@ -69,7 +70,7 @@ function Articles() {
     );
   }
 
-  if (!articlesPageData.length) {
+  if (!articlesPageData.length && !isLoading) {
     return returnAnimatedContainer();
   }
 
@@ -84,6 +85,7 @@ function Articles() {
       </Helmet>
       <section className="articles page__section fade-in">
         <TitleH1 title="Статьи" />
+        {isLoading && 'gffdffgdfg'}
         {!isLoading && (
           <>
             <section className="articles__main fade-in">
@@ -103,15 +105,15 @@ function Articles() {
                   sectionClass="card-container_type_article fade-in"
                 />
               ))}
-              {pageCount > 1 && (
-                <Paginate
-                  sectionClass="cards-section__pagination"
-                  pageCount={pageCount}
-                  value={pageNumber}
-                  onChange={setPageNumber}
-                />
-              )}
             </section>
+            {pageCount > 1 && (
+              <Paginate
+                sectionClass="cards-section__pagination"
+                pageCount={pageCount}
+                value={pageNumber}
+                onChange={setPageNumber}
+              />
+            )}
           </>
         )}
       </section>

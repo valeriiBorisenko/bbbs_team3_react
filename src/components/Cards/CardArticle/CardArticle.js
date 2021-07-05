@@ -14,28 +14,28 @@ function CardArticle({
   return (
     <article className={`card-container ${sectionClass}`}>
       <Card
-        sectionClass={`card-article ${isMain ? 'card-article_main' : ''}`}
+        sectionClass={`article-card ${isMain ? 'article-card_main' : ''}`}
         color={cardColor}
       >
-        <div className="card-article__title-wrap">
-          <Link to={articleUrl} className="card-article__link-wrap">
-            <TitleH2 sectionClass="card-article__title" title={title} />
+        <div className="article-card__title-wrap">
+          <Link to={articleUrl} className="article-card__link-wrap">
+            <TitleH2 sectionClass="article-card__title" title={title} />
           </Link>
-          <Caption sectionClass="card-article__info" title={info} />
+          <Caption sectionClass="article-card__info" title={info} />
         </div>
 
         {isMain && (
           <Link
             to={articleUrl}
-            className="card-article__link-wrap card-article__link-wrap_content_article-img"
+            className="article-card__link-wrap article-card__link-wrap_content_article-img"
           >
-            <img src={imageUrl} alt={title} className="card-article__image" />
+            <img src={imageUrl} alt={title} className="article-card__image" />
           </Link>
         )}
 
         <a
           href={articleUrl}
-          className="link card-article__link"
+          className="link article-card__link"
           target="_blank"
           rel="noopener noreferrer"
         >
