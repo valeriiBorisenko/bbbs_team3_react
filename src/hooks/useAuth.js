@@ -1,31 +1,37 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import AuthApi from '../utils/auth';
+import AuthApi from '../api/auth';
+import { getUserData } from '../api/user';
 import { MAIN_PAGE_URL } from '../config/routes';
+import {
+  setLocalStorageData,
+  removeLocalStorageData,
+  getLocalStorageData,
+} from './useLocalStorage';
+import { jwt, localStUserCity } from '../config/constants';
 
-const useAuth = ({ closeAllPopups }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+const useAuth = (setCurrentUser, closeAllPopups) => {
+  const [isCheckingToken, setIsCheckingToken] = useState(true);
 
   const history = useHistory();
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = () => {
     AuthApi.clearAuth();
     setCurrentUser(null);
-    localStorage.removeItem('jwt');
+    removeLocalStorageData(jwt);
+    removeLocalStorageData(localStUserCity);
     history.push(MAIN_PAGE_URL);
-  }, []);
+  };
 
-  const handleLogin = ({ login, password }) => {
-    AuthApi.authorize(login, password)
-      .then((data) => {
-        const { access, refresh } = data.token;
+  const handleLogin = (loginData) => {
+    AuthApi.authorize(loginData)
+      .then((token) => {
+        const { access, refresh } = token;
         if (refresh && access) {
           AuthApi.setAuth(access);
-          localStorage.setItem('jwt', access);
-          AuthApi.getUserData()
-            .then((userData) => {
-              setCurrentUser(userData.userData);
-            })
+          setLocalStorageData(jwt, access);
+          getUserData()
+            .then((res) => setCurrentUser(res))
             .then(() => closeAllPopups())
             .catch(console.log); // при получении данных произошла ошибка
         }
@@ -33,10 +39,25 @@ const useAuth = ({ closeAllPopups }) => {
       .catch(console.log); // авторизация (работа с сервером) закончилась ошибкой
   };
 
+  const checkToken = () => {
+    const token = getLocalStorageData(jwt);
+    if (token) {
+      AuthApi.setAuth(token);
+      getUserData()
+        .then((res) => setCurrentUser(res))
+        .then(() => setIsCheckingToken(false))
+        .catch((error) => console.log(error)); // при получении userData возникла проблема
+    } else {
+      setIsCheckingToken(false);
+    }
+  };
+
   return {
-    currentUser,
+    isCheckingToken,
     handleLogout,
     handleLogin,
+    checkToken,
   };
 };
+
 export default useAuth;

@@ -23,7 +23,7 @@
 .calendar-page__grid {
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(auto-fill, minmax(470px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(470px, 520px));
   grid-template-rows: 414px;
   grid-auto-rows: 414px;
   gap: 30px;
@@ -36,15 +36,16 @@
   }
 }
 
-@include atDesktop1023 {
+@include atDesktop1024 {
   .calendar-page__grid {
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    grid-template-columns: repeat(2, minmax(290px, 1fr));
   }
 }
 
 @include atTablet {
   .calendar-page__grid {
-    grid-template-columns: 1fr;
+    // grid-template-columns: repeat(auto-fill, minmax(auto, 200px));
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   }
 
   .tags {
@@ -57,6 +58,7 @@
       height: 100%;
       background: linear-gradient(90deg, transparent 0%, $background 100%);
       z-index: 1;
+      pointer-events: none;
     }
 
     &::before {
@@ -68,6 +70,7 @@
       height: 100%;
       background: linear-gradient(90deg, $background 0%, transparent 100%);
       z-index: 1;
+      pointer-events: none;
     }
   }
   .tags__list {
@@ -80,6 +83,7 @@
     flex-wrap: nowrap;
   }
 }
+
 
 @include atMobile {
   .calendar-page__grid {

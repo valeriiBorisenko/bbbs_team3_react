@@ -1,13 +1,19 @@
 import './CardCalendar.scss';
 import PropTypes from 'prop-types';
-import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
+import {
+  formatDate,
+  formatWordCase,
+  changeCaseOfFirstLetter,
+} from '../../../utils/utils';
 import { ButtonDots, Button } from './index';
+import { setLocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStAfishaEvent } from '../../../config/constants';
 
 function CardCalendar({
   cardData,
   isModal,
   onEventSignUpClick,
-  onEventFullDescriptionClick,
+  onEventDescriptionClick,
   sectionClass,
 }) {
   const {
@@ -29,11 +35,13 @@ function CardCalendar({
   const isDisabled = remainSeats < 1;
 
   function changeStateOfEvent() {
-    onEventSignUpClick(cardData, cardData.id, cardData.booked);
+    setLocalStorageData(localStAfishaEvent, cardData);
+    onEventSignUpClick(cardData);
   }
 
   function prepareDataForAboutEventPopup() {
-    onEventFullDescriptionClick(cardData);
+    setLocalStorageData(localStAfishaEvent, cardData);
+    onEventDescriptionClick();
   }
 
   const classNames = [
@@ -48,7 +56,9 @@ function CardCalendar({
     <article className={classNames}>
       <div className="calendar__caption">
         <div className="calendar__info">
-          <p className="calendar__type">{getCardType(tags)}</p>
+          <p className="calendar__type">
+            {changeCaseOfFirstLetter(tags?.name)}
+          </p>
           <p className="calendar__weekday">
             {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
           </p>
@@ -103,7 +113,7 @@ CardCalendar.propTypes = {
   cardData: PropTypes.objectOf(PropTypes.any),
   isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
+  onEventDescriptionClick: PropTypes.func,
   sectionClass: PropTypes.string,
 };
 
@@ -111,7 +121,7 @@ CardCalendar.defaultProps = {
   cardData: {},
   isModal: false,
   onEventSignUpClick: () => {},
-  onEventFullDescriptionClick: () => {},
+  onEventDescriptionClick: () => {},
   sectionClass: '',
 };
 

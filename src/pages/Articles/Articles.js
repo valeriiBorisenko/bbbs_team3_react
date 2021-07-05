@@ -10,7 +10,7 @@ import {
   Paginate,
   AnimatedPageContainer,
 } from './index';
-import Api from '../../utils/api';
+import getArticlesPageData from '../../api/articles-page';
 import './Articles.scss';
 
 function Articles() {
@@ -26,7 +26,7 @@ function Articles() {
   useEffect(() => {
     setIsLoading(true);
     const offset = pageSize * pageNumber;
-    Api.getArticlesPageData({ limit: pageSize, offset })
+    getArticlesPageData({ limit: pageSize, offset })
       .then(({ results, count }) => {
         setArticlesPageData(results);
         setPageCount(Math.ceil(count / pageSize));

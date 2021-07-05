@@ -56,6 +56,14 @@
 .add-question__title {
   max-width: 650px;
   margin: 0;
+
+  &_error {
+    color: $error;
+  }
+
+  &_success {
+    color: $green;
+  }
 }
 
 .question-form__add-question {

@@ -1,6 +1,6 @@
 import './NavBar.scss';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {
@@ -8,7 +8,8 @@ import {
   ABOUT_US_URL,
   QUESTIONS_URL,
   PLACES_URL,
-  READANDWATCHING_URL,
+  RIGHTS_URL,
+  READ_AND_WATCH_URL,
 } from '../../config/routes';
 import {
   NavItem,
@@ -26,7 +27,8 @@ function NavBar({
   onLogout,
   userCityName,
 }) {
-  const currentUser = useContext(CurrentUserContext);
+  const { pathname } = useLocation();
+  const { currentUser } = useContext(CurrentUserContext);
 
   return (
     <nav className="menu">
@@ -73,13 +75,13 @@ function NavBar({
           <NavItemWithDropdown
             sectionWrapperClass="menu__list-item menu__dropdown-item"
             linkText="Читать и смотреть"
-            href={READANDWATCHING_URL}
+            href={READ_AND_WATCH_URL}
           />
           {/* Права детей */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="#"
+            href={RIGHTS_URL}
             linkText="Права детей"
           />
           {/* Истории */}
@@ -161,6 +163,24 @@ function NavBar({
         </div>
       )}
 
+      {!currentUser && pathname === PLACES_URL && (
+        <div
+          className={`menu__user-info ${
+            !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
+          }`}
+        >
+          <UserMenuButton
+            title={
+              userCityName
+                ? `${userCityName}. Изменить город`
+                : 'Изменить ваш город'
+            }
+            handleClick={onCityChangeClick}
+            sectionClass="mobile-link"
+          />
+        </div>
+      )}
+
       <button
         onClick={onBurgerButtonClick}
         className={`menu__burger ${
@@ -237,7 +257,7 @@ function NavBar({
         <li className="menu__button-item">
           <UserIconButton
             sectionClass="mobile-link"
-            isAuthorized={currentUser}
+            isAuthorized={!!currentUser}
             handleClick={onUserButtonClick}
           />
         </li>

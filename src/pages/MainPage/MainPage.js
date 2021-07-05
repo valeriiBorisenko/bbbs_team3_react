@@ -1,14 +1,13 @@
 import './MainPage.scss';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import { useScrollToTop } from '../../hooks/index';
+import { CurrentUserContext, PopupsContext } from '../../contexts/index';
+import { useScrollToTop, useEventBooking } from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
-import { adminUrl } from '../../config/config';
+import { staticImageUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
-import Api from '../../utils/api';
+import getMainPageData from '../../api/main-page';
 import {
   BasePage,
   Loader,
@@ -27,34 +26,66 @@ import {
 const MOVIES_COUNT = 4;
 const QUESTIONS_COUNT = 3;
 
-function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
+function MainPage() {
   useScrollToTop();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
+  const { openPopupAboutEvent } = useContext(PopupsContext);
+
   const [mainPageData, setMainPageData] = useState(null);
+
   const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
   const randomQuestions = randomizeArray(
     mainPageData?.questions,
     QUESTIONS_COUNT
   );
 
-  const getMainPageData = () => {
-    Api.getMainPageData().then(setMainPageData).catch(console.log); // попап ошибка!
-  };
+  // запись/отписка на мероприятия
+  const { handleEventBooking, selectedEvent } = useEventBooking();
 
-  // запрос даты главной страницы, если сменили город
   useEffect(() => {
-    getMainPageData();
+    if (selectedEvent) {
+      setMainPageData({ ...mainPageData, event: selectedEvent });
+    }
+  }, [selectedEvent]);
+
+  const [isCityChanging, setIsCityChanging] = useState(false);
+
+  // запрос даты главной страницы при загрузке и при смене города
+  useEffect(() => {
+    if (currentUser) {
+      setIsCityChanging(true);
+      getMainPageData()
+        .then((data) => setMainPageData(data))
+        .catch((error) => console.log(error))
+        .finally(() => setIsCityChanging(false));
+    }
   }, [currentUser?.city]);
 
-  // запрос даты главной страницы
   useEffect(() => {
-    getMainPageData();
+    getMainPageData()
+      .then((data) => setMainPageData(data))
+      .catch((error) => console.log(error));
   }, []);
 
   // глобальный лоадер (без футера)
   if (!mainPageData) {
     return <Loader isCentered />;
+  }
+
+  function renderEventsSection() {
+    if (currentUser && mainPageData?.event) {
+      return (
+        <CardCalendar
+          key={mainPageData?.event?.id}
+          cardData={mainPageData?.event}
+          onEventSignUpClick={handleEventBooking}
+          onEventDescriptionClick={openPopupAboutEvent}
+        />
+      );
+    }
+
+    return <CardStub />;
   }
 
   return (
@@ -68,19 +99,11 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
       </Helmet>
       <section className="lead page__section fade-in">
         <div className="card-container card-container_type_identical">
-          {currentUser && mainPageData?.event ? (
-            <CardCalendar
-              key={mainPageData?.event?.id}
-              cardData={mainPageData?.event}
-              onEventSignUpClick={onEventSignUpClick}
-              onEventFullDescriptionClick={onEventFullDescriptionClick}
-            />
-          ) : (
-            <CardStub />
-          )}
+          {isCityChanging ? <Loader isNested /> : renderEventsSection()}
+
           <Card sectionClass="lead__media" key={mainPageData?.history?.id}>
             <img
-              src={`${adminUrl}/media/${mainPageData?.history?.image}`}
+              src={`${staticImageUrl}/${mainPageData?.history?.image}`}
               alt={mainPageData?.history?.title}
               className="card__media-img"
             />
@@ -96,7 +119,8 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
           key={mainPageData?.place?.id}
           data={mainPageData?.place}
           sectionClass="card-container_type_main-article"
-          isMain
+          isBig
+          isMainPage
         />
       </section>
 
@@ -173,15 +197,5 @@ function MainPage({ onEventSignUpClick, onEventFullDescriptionClick }) {
     </BasePage>
   );
 }
-
-MainPage.propTypes = {
-  onEventSignUpClick: PropTypes.func,
-  onEventFullDescriptionClick: PropTypes.func,
-};
-
-MainPage.defaultProps = {
-  onEventSignUpClick: () => {},
-  onEventFullDescriptionClick: () => {},
-};
 
 export default MainPage;
