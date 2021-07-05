@@ -4,7 +4,8 @@ const questionsPageTexts = {
   title: 'Ответы на вопросы',
   animatedContainerText:
     'В данный момент страница вопросов пуста. Возвращайтесь позже!',
-  animatedContainerButtonText: 'Вернуться на главную',
+  formPlaceholder: 'Введите вопрос',
+  formSubmitButton: 'Отправить',
 };
 
 export default questionsPageTexts;

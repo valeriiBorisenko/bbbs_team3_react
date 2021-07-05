@@ -38,7 +38,6 @@ function Places() {
     headDescription,
     title,
     animatedContainerText,
-    animatedContainerButtonText,
     paragraphNoContent,
     mentorTag,
     ageFilterNames,
@@ -249,7 +248,6 @@ function Places() {
 
   useEffect(() => {
     if (!userCity) {
-      console.log('render');
       setTimeout(() => {
         openPopupCities();
       }, DELAY_RENDER);
@@ -303,10 +301,7 @@ function Places() {
     <>
       {!isCityChanging ? (
         <>
-          <AnimatedPageContainer
-            titleText={animatedContainerText}
-            buttonText={animatedContainerButtonText}
-          />
+          <AnimatedPageContainer titleText={animatedContainerText} />
           {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
         </>
       ) : (

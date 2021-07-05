@@ -4,7 +4,6 @@ const placesPageTexts = {
   title: 'Куда пойти',
   animatedContainerText:
     'Рекомендуемых мест для выбранного города ещё нет, но они обязательно появятся!',
-  animatedContainerButtonText: 'Вернуться на главную',
   paragraphNoContent: 'По вашему запросу ничего не нашлось.',
   mentorTag: 'Выбор наставников',
   ageFilterNames: [
