@@ -113,18 +113,24 @@ function App() {
           >
             <div className="page">
               {!isCheckingToken ? <Router /> : <Loader isCentered />}
-              <PopupConfirmation
-                isOpen={isPopupConfirmationOpen}
-                onClose={closeAllPopups}
-              />
-              <PopupSuccessfully
-                isOpen={isPopupSuccessfullyOpen}
-                onClose={closeAllPopups}
-              />
-              <PopupAboutEvent
-                isOpen={isPopupAboutDescriptionOpen}
-                onClose={closeAllPopups}
-              />
+
+              {currentUser && (
+                <>
+                  <PopupConfirmation
+                    isOpen={isPopupConfirmationOpen}
+                    onClose={closeAllPopups}
+                  />
+                  <PopupSuccessfully
+                    isOpen={isPopupSuccessfullyOpen}
+                    onClose={closeAllPopups}
+                  />
+                  <PopupAboutEvent
+                    isOpen={isPopupAboutDescriptionOpen}
+                    onClose={closeAllPopups}
+                  />
+                </>
+              )}
+
               <PopupLogin isOpen={isPopupLoginOpen} onClose={closeAllPopups} />
               <PopupCities
                 isOpen={isPopupCitiesOpen}
