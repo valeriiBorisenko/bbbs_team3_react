@@ -11,22 +11,12 @@ import { localStAfishaEvent } from '../../../config/constants';
 
 function CardCalendar({
   cardData,
-  isModal,
   onEventSignUpClick,
   onEventDescriptionClick,
   sectionClass,
 }) {
-  const {
-    booked,
-    tags,
-    title,
-    startAt,
-    endAt,
-    address,
-    contact,
-    remainSeats,
-    description,
-  } = cardData;
+  const { booked, tags, title, startAt, endAt, address, contact, remainSeats } =
+    cardData;
 
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
@@ -82,11 +72,6 @@ function CardCalendar({
             <p className="calendar__contact">{contact}</p>
           </li>
         </ul>
-        {isModal && (
-          <div className="calendar__description">
-            <p className="calendar__desc-paragraph">{description}</p>
-          </div>
-        )}
         <div className="calendar__submit">
           <Button
             title="Записаться"
@@ -111,7 +96,6 @@ function CardCalendar({
 
 CardCalendar.propTypes = {
   cardData: PropTypes.objectOf(PropTypes.any),
-  isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
   onEventDescriptionClick: PropTypes.func,
   sectionClass: PropTypes.string,
@@ -119,7 +103,6 @@ CardCalendar.propTypes = {
 
 CardCalendar.defaultProps = {
   cardData: {},
-  isModal: false,
   onEventSignUpClick: () => {},
   onEventDescriptionClick: () => {},
   sectionClass: '',

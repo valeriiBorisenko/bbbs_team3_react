@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Scrollbars } from 'react-custom-scrollbars';
 import {
   formatDate,
   formatWordCase,
@@ -40,7 +41,7 @@ function PopupAboutEvent({ isOpen, onClose }) {
                 {`${startDateParts?.monthName} / ${startDateParts?.weekdayName}`}
               </p>
             </div>
-            <div className="calendar__about">
+            <div className="calendar__about calendar__about_modal">
               <TitleH2
                 title={card?.title}
                 sectionClass="calendar__title calendar__title_type_popup"
@@ -63,10 +64,15 @@ function PopupAboutEvent({ isOpen, onClose }) {
               </li>
             </ul>
             <div className="calendar__description">
-              <p className="paragraph calendar__desc-paragraph">
-                {card?.description}
-              </p>
+              <Scrollbars
+                renderThumbVertical={() => <div className="calendar__thumb" />}
+              >
+                <p className="paragraph calendar__desc-paragraph">
+                  {card?.description}
+                </p>
+              </Scrollbars>
             </div>
+
             <div className="calendar__submit">
               <Button
                 color="blue"
