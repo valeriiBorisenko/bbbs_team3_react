@@ -1,9 +1,8 @@
 import React from 'react';
 import './CardRights.scss';
-
 import PropTypes from 'prop-types';
-
-import { CardFigure, Rubric } from './index';
+import { Rubric } from '../../utils/index';
+import CardFigure from '../CardFigure/CardFigure';
 
 function CardRights({ title, tags, shape, color }) {
   return (

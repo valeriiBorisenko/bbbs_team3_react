@@ -1,7 +1,8 @@
 import './CardVideoMain.scss';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 import { formatDuration } from '../../../utils/utils';
-import { Card, TitleH2 } from './index';
+import { Card, TitleH2 } from '../../utils/index';
 
 function CardVideoMain({
   data: { title, info, link, imageUrl, duration },
@@ -22,7 +23,7 @@ function CardVideoMain({
           type="button"
           onClick={handleClick}
         >
-          смотреть видео
+          {texts.linkText}
         </button>
       </Card>
 
@@ -34,7 +35,7 @@ function CardVideoMain({
         >
           <img
             src={imageUrl}
-            alt="Превью видео"
+            alt={texts.imageAlt}
             className="card-video-main__image"
           />
           {hours > 0 ? (

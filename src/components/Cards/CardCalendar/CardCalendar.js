@@ -1,11 +1,12 @@
 import './CardCalendar.scss';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 import {
   formatDate,
   formatWordCase,
   changeCaseOfFirstLetter,
 } from '../../../utils/utils';
-import { ButtonDots, Button } from './index';
+import { ButtonDots, Button } from '../../utils/index';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 
@@ -15,6 +16,13 @@ function CardCalendar({
   onEventDescriptionClick,
   sectionClass,
 }) {
+  const {
+    buttonTitle,
+    buttonTitleSelected,
+    buttonTitleDisabled,
+    remainSeatsText,
+  } = texts;
+
   const { booked, tags, title, startAt, endAt, address, contact, remainSeats } =
     cardData;
 
@@ -74,8 +82,8 @@ function CardCalendar({
         </ul>
         <div className="calendar__submit">
           <Button
-            title="Записаться"
-            titleSelected="Отменить запись"
+            title={buttonTitle}
+            titleSelected={buttonTitleSelected}
             color="blue"
             isDisabled={isDisabled}
             onClick={changeStateOfEvent}
@@ -83,9 +91,11 @@ function CardCalendar({
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
-            {(isDisabled && 'Запись закрыта') ||
+            {(isDisabled && buttonTitleDisabled) ||
               (!booked &&
-                `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
+                `${remainSeatsText} ${remainSeats} ${formatWordCase(
+                  remainSeats
+                )}`)}
           </p>
           <ButtonDots handleClick={prepareDataForAboutEventPopup} />
         </div>

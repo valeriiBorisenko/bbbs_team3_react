@@ -1,9 +1,11 @@
 import './CardPlace.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 import { PLACES_URL } from '../../../config/routes';
 import { staticImageUrl } from '../../../config/config';
-import { CardAnnotation, Rubric, TitleH2, Card, Caption } from './index';
+import { Rubric, TitleH2, Card, Caption } from '../../utils';
+import CardAnnotation from '../CardAnnotation/CardAnnotation';
 
 function CardPlace({
   data: {
@@ -23,9 +25,16 @@ function CardPlace({
   isBig,
   isMainPage,
 }) {
+  const {
+    genderMale,
+    genderFemale,
+    linkText,
+    chosenTagText,
+    activityTypeDefault,
+  } = texts;
   const cardColor = isBig ? 'yellow' : color;
   const cardSize = isBig ? 'card-place_main' : '';
-  const sex = gender === 'male' ? 'Мальчик' : 'Девочка';
+  const sex = gender === 'male' ? genderMale : genderFemale;
 
   const types = activityTypes
     ? activityTypes.reduce((obj, { id, name }) => {
@@ -66,7 +75,7 @@ function CardPlace({
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass={`card-place ${cardSize}`} color={cardColor}>
         {chosen && (
-          <Rubric title="Выбор наставника" sectionClass="card-place__rubric" />
+          <Rubric title={chosenTagText} sectionClass="card-place__rubric" />
         )}
 
         <div className="card-place__title-wrap">
@@ -89,14 +98,14 @@ function CardPlace({
             target="_blank"
             rel="noopener noreferrer"
           >
-            перейти на сайт
+            {linkText}
           </a>
         )}
       </Card>
 
       <CardAnnotation
         info={`${sex}, ${age} лет, ${
-          activityTypes ? types[activityType] : 'Развлекательный'
+          activityTypes ? types[activityType] : { activityTypeDefault }
         } отдых`}
         description={description}
         isMain={isBig}

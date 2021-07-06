@@ -1,7 +1,8 @@
 import './CardQuestion.scss';
 import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Rubric, TitleH2, Card, ButtonRound } from './index';
+import texts from './locales/RU';
+import { Rubric, TitleH2, Card, ButtonRound } from '../../utils/index';
 
 function CardQuestion({
   data: { title, tags, answer },
@@ -57,7 +58,7 @@ function CardQuestion({
         </ul>
         {isQuestionsPage && (
           <ButtonRound
-            label="Показать ответ"
+            label={texts.labelText}
             sectionClass="button-round__questions-page"
             color="lightblue"
             onClick={handleClickButton}

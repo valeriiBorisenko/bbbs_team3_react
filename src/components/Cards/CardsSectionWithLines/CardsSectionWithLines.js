@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import './CardsSectionWithLines.scss';
-import Paginate from '../../utils/Paginate/Paginate';
+import PropTypes from 'prop-types';
+import { Paginate } from '../../utils/index';
 
 function CardsSectionWithLines({
   pageCount,
