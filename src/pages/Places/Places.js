@@ -230,10 +230,7 @@ function Places() {
       deselectAllTags(setAges);
       setIsFirstRender(true);
       setIsCityChanging(true);
-      Promise.all([
-        getPlaces({ city: userCity }),
-        getPlacesTags({ city: userCity }),
-      ])
+      Promise.all([getPlaces({ city: userCity }), getPlacesTags()])
         .then(([placesData, tagsData]) => {
           const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
           setChosenPlace(chosenPlaceLast);
