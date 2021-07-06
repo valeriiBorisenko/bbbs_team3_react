@@ -1,10 +1,6 @@
 @import './styles/utils.scss';
 
 .card-catalog {
-  width: 370px;
-  margin-left: auto;
-  margin-right: auto;
-
   &__title {
     text-align: center;
     margin-top: 20px;
@@ -25,26 +21,40 @@
     overflow: hidden;
     width: 100%;
     object-fit: cover;
-    height: 370px;
   }
 
   &__link-wrap {
     width: 100%;
+    text-decoration: none;   
+  }
+
+  &__image-wrap {
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-self: auto;
+    text-align: center;
+    flex: 1;
     text-decoration: none;
+
+    &::before {
+      content: '';
+      padding-bottom: 100%;
+    }
 
     &:hover .card-catalog__image {
       transform: scale(1);
-    }
+    } 
   }
 }
 
 @include atDesktop1024 {
   .card-catalog {
-    width: 290px;
-
     &_type_shaped {
       margin: 0 auto;
-      height: 290px;
     }
   }
 }
