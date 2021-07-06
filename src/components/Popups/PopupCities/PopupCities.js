@@ -1,12 +1,14 @@
 import './PopupCities.scss';
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 import { CurrentUserContext, CitiesContext } from '../../../contexts/index';
-import { Popup, TitleH2 } from './index';
 import { updateUserProfile } from '../../../api/user';
 import { localStUserCity, DELAY_DEBOUNCE } from '../../../config/constants';
 import { dispatchLocalStorageEvent } from '../../../hooks/useLocalStorage';
 import { useDebounce } from '../../../hooks/index';
+import Popup from '../Popup/Popup';
+import { TitleH2 } from '../../utils/index';
 
 function PopupCities({ isOpen, onClose }) {
   const { currentUser, updateUser } = useContext(CurrentUserContext);
@@ -39,7 +41,7 @@ function PopupCities({ isOpen, onClose }) {
         withoutCloseButton
       >
         <div className="popup__form">
-          <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />
+          <TitleH2 title={texts.title} sectionClass="cities__title" />
           <div className="cities__container">
             <ul className="cities__list cities__list_type_primary">
               {cities &&
@@ -49,7 +51,7 @@ function PopupCities({ isOpen, onClose }) {
                     <li className="cities__list-item" key={item?.id}>
                       <button
                         className="cities__city"
-                        type="submit"
+                        type="button"
                         value={item?.id}
                         onClick={(evt) => debounceSubmitCity(evt)}
                       >
@@ -66,7 +68,7 @@ function PopupCities({ isOpen, onClose }) {
                     <li className="cities__list-item" key={item?.id}>
                       <button
                         className="cities__city"
-                        type="submit"
+                        type="button"
                         value={item?.id}
                         onClick={(evt) => debounceSubmitCity(evt)}
                       >

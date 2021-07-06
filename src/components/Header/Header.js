@@ -1,16 +1,18 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+import './Header.scss';
 import { useState, useEffect, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import './Header.scss';
 import {
   CurrentUserContext,
   CitiesContext,
   PopupsContext,
 } from '../../contexts/index';
+import texts from './locales/RU';
 import { useClickOutside, useAuth, useLocalStorage } from '../../hooks/index';
 import { PROFILE_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
 import { localStUserCity } from '../../config/constants';
-import { NavBar, UserMenuButton } from './index';
+import NavBar from '../NavBar/NavBar';
+import { UserMenuButton } from '../utils/index';
 
 function Header() {
   const history = useHistory();
@@ -120,14 +122,14 @@ function Header() {
             <UserMenuButton
               title={
                 userCityName
-                  ? `${userCityName}. Изменить город`
-                  : 'Изменить ваш город'
+                  ? `${userCityName}. ${texts.changeCity}`
+                  : texts.changeCityDefault
               }
               sectionClass="mobile-link"
               handleClick={openPopupCities}
             />
             <UserMenuButton
-              title="Выйти"
+              title={texts.logoutText}
               sectionClass="mobile-link"
               handleClick={handleLogout}
             />
@@ -139,8 +141,8 @@ function Header() {
             <UserMenuButton
               title={
                 userCityName
-                  ? `${userCityName}. Изменить город`
-                  : 'Изменить ваш город'
+                  ? `${userCityName}. ${texts.changeCity}`
+                  : texts.changeCityDefault
               }
               handleClick={openPopupCities}
               sectionClass="mobile-link"

@@ -1,10 +1,12 @@
 import './PopupConfirmation.scss';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 import { formatDate } from '../../../utils/utils';
-import { Popup, Button, TitleH2 } from './index';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks/index';
 import { localStAfishaEvent } from '../../../config/constants';
+import Popup from '../Popup/Popup';
+import { Button, TitleH2 } from '../../utils/index';
 
 function PopupConfirmation({ isOpen, onClose }) {
   const { registerOnEvent } = useEventBooking();
@@ -27,7 +29,7 @@ function PopupConfirmation({ isOpen, onClose }) {
     >
       <form className="popup__form" onSubmit={handleSubmit}>
         <p className="section-title popup__title_type_calendar">
-          Подтвердить запись на мероприятие
+          {texts.title}
         </p>
         <TitleH2
           sectionClass="popup__title_type_calendar"
@@ -40,11 +42,15 @@ function PopupConfirmation({ isOpen, onClose }) {
         <div className="popup__buttons_type_calendar">
           <Button
             color="blue"
-            title="Подтвердить запись"
+            title={texts.submitButtonText}
             sectionClass="popup__button_type_calendar"
             isSubmittable
           />
-          <Button color="black" title="Отменить" onClick={onClose} />
+          <Button
+            color="black"
+            title={texts.cancelButtonText}
+            onClick={onClose}
+          />
         </div>
       </form>
     </Popup>
