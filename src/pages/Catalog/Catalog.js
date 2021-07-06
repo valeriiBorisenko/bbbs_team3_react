@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { BasePage, TitleH1, TitleH2, CardsSectionWithLines } from './index';
+import {
+  BasePage,
+  TitleH1,
+  TitleH2,
+  CardsSectionWithLines,
+  AnimatedPageContainer,
+  Loader,
+} from './index';
 import getCatalogPageData from '../../api/catalog-page';
 import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
 import { FIGURES } from '../../config/constants';
@@ -50,12 +57,18 @@ function Catalog() {
     };
   }, []);
 
-  return (
-    <BasePage>
-      <Helmet>
-        <title>Справочник</title>
-        <meta name="description" content="Справочник полезных статей" />
-      </Helmet>
+  // отрисовка заглушки
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText="Информация появится в ближайшее время."
+        buttonText="Вернуться на главную"
+      />
+    );
+  }
+
+  function renderPageContent() {
+    return (
       <section className="catalog page__section fade-in">
         <TitleH1 sectionClass="catalog__title" title="Справочник" />
         <TitleH2
@@ -64,7 +77,9 @@ function Catalog() {
           рассказанную на вводном тренинге. Если вы захотите освежить свои знания, и&nbsp;напомнить
           себе о&nbsp;чем-то."
         />
-        {!isLoading && (
+        {isLoading ? (
+          <Loader isNested />
+        ) : (
           <CardsSectionWithLines
             pageCount={pageCount}
             pageNumber={pageNumber}
@@ -83,6 +98,18 @@ function Catalog() {
           </CardsSectionWithLines>
         )}
       </section>
+    );
+  }
+
+  return (
+    <BasePage>
+      <Helmet>
+        <title>Справочник</title>
+        <meta name="description" content="Справочник полезных статей" />
+      </Helmet>
+      {!catalogPageData.length && !isLoading
+        ? renderAnimatedContainer()
+        : renderPageContent()}
     </BasePage>
   );
 }

@@ -11,6 +11,7 @@ import {
   Rights,
   Movies,
   ReadAndWatch,
+  Articles,
   Books,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
@@ -25,6 +26,7 @@ import {
   READ_AND_WATCH_URL,
   CATALOG_URL,
   PROFILE_URL,
+  ARTICLES_URL,
   BOOKS_URL,
 } from '../config/routes';
 
@@ -71,6 +73,9 @@ function Router() {
 
       <Route exact path={BOOKS_URL}>
         <Books />
+      </Route>
+      <Route exact path={ARTICLES_URL}>
+        <Articles />
       </Route>
 
       <Route path="*">

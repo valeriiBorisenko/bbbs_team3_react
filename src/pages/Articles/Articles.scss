@@ -1,0 +1,44 @@
+@import './styles/utils.scss';
+
+.articles__main {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.articles__cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(290px, 1fr));
+  gap: 80px 30px;
+}
+
+@include atDesktop1279 {
+  .articles__cards-grid {
+    grid-template-columns: repeat(2, minmax(290px, 1fr));
+  }
+}
+
+@include atDesktop1024 {
+  .articles__main {
+    padding-top: 50px;
+    padding-bottom: 0;
+  }
+
+  .articles__cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    padding-top: 50px;
+    row-gap: 30px;
+  }
+}
+
+@include atTablet {
+  .articles__cards-grid {
+    grid-template-columns: 1fr;
+    padding-top: 30px;
+  }
+}
+
+@include atMobileL {
+  .articles__main {
+    padding-top: 30px;
+  }
+}
