@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import TitleH2 from '../../utils/TitleH2/TitleH2';
-import CardFigure from '../CardFigure/CardFigure';
 import './CardCatalog.scss';
+import PropTypes from 'prop-types';
+import { TitleH2 } from '../../utils/index';
+import CardFigure from '../CardFigure/CardFigure';
 
 function CardCatalog({ title, shape, image, sectionClass, link }) {
   return (
