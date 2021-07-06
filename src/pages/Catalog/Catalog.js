@@ -78,7 +78,7 @@ function Catalog() {
           себе о&nbsp;чем-то."
         />
         {isLoading ? (
-          <Loader isCentered />
+          <Loader isNested />
         ) : (
           <CardsSectionWithLines
             pageCount={pageCount}

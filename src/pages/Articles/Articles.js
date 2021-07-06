@@ -27,7 +27,9 @@ function Articles() {
   useEffect(() => {
     setIsLoading(true);
     const offset = pageSize * pageNumber;
-    getArticlesPageData({ limit: pageSize, offset })
+    const fixedPageSize = pageNumber === 0 ? pageSize + 1 : pageSize;
+    const fixedOffset = pageNumber > 0 ? offset + 1 : offset;
+    getArticlesPageData({ limit: fixedPageSize, offset: fixedOffset })
       .then(({ results, count }) => {
         setArticlesPageData(results);
         setPageCount(Math.ceil(count / pageSize));
@@ -62,6 +64,11 @@ function Articles() {
     };
   }, []);
 
+  const mainCard = articlesPageData.find((item) => item.pinnedFullSize);
+  const cardsWithoutMain = articlesPageData.filter(
+    (item) => !item.pinnedFullSize
+  );
+
   // отрисовка заглушки
   function renderAnimatedContainer() {
     return (
@@ -77,19 +84,21 @@ function Articles() {
       <section className="articles page__section fade-in">
         <TitleH1 title="Статьи" />
         {isLoading ? (
-          <Loader isCentered />
+          <Loader isNested />
         ) : (
           <>
-            <section className="articles__main fade-in">
-              <CardArticle
-                data={articlesPageData.find((item) => item.main)}
-                sectionClass="card-container_type_main-article"
-                isMain
-              />
-            </section>
+            {mainCard && (
+              <section className="articles__main fade-in">
+                <CardArticle
+                  data={mainCard}
+                  sectionClass="card-container_type_main-article"
+                  isMain
+                />
+              </section>
+            )}
 
             <section className="articles__cards-grid">
-              {articlesPageData.map((item, i) => (
+              {cardsWithoutMain.map((item, i) => (
                 <CardArticle
                   key={item.id}
                   color={COLORS[(i + 1) % COLORS.length]}
