@@ -14,9 +14,8 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
-
-    transform: scale(1);
-    transition: .3s ease-in-out;
+    transform: scale(1.15);
+    transition: .6s linear;
   }
 
   &_type_shaped {
@@ -34,7 +33,7 @@
     text-decoration: none;
 
     &:hover .card-catalog__image {
-      transform: scale(1.3);
+      transform: scale(1);
     }
   }
 }

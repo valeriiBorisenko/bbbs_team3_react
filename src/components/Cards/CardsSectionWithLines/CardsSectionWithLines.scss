@@ -1,12 +1,11 @@
 @import './styles/utils.scss';
 
-// Lod55: Убрал gap отступы они отличаются со страницей Catrlog
-// Прокинул gap через sectionClassCards
-
 .cards-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
+  grid-gap: 80px 30px;
+  padding-top: 80px;
 
   &__line {
     grid-column: 1 / -1;
@@ -27,11 +26,6 @@
 
   &__pagination {
     margin: 90px auto 70px;
-  }
-
-  &__item {
-    margin-top: 30px;
-    margin-bottom: 30px;
   }
 }
 
@@ -58,6 +52,7 @@
   .cards-section {
     padding-top: 50px;
     grid-template-rows: max-content [third-line] 1px max-content;
+    grid-gap: 30px;
   }
 }
 

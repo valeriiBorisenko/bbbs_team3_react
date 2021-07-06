@@ -1,7 +1,6 @@
-import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
+import articlesPageTexts from '../../locales/articles-page-RU';
 import { useScrollToTop } from '../../hooks/index';
-
 import { COLORS } from '../../config/constants';
 import {
   BasePage,
@@ -15,9 +14,11 @@ import getArticlesPageData from '../../api/articles-page';
 import './Articles.scss';
 
 function Articles() {
+  const { headTitle, headDescription, title, animatedContainerText } =
+    articlesPageTexts;
   useScrollToTop();
 
-  const [pageSize, setPageSize] = useState(16);
+  const [pageSize, setPageSize] = useState(12);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -25,6 +26,7 @@ function Articles() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    window.scrollTo({ top: 0 });
     setIsLoading(true);
     const offset = pageSize * pageNumber;
     const fixedPageSize = pageNumber === 0 ? pageSize + 1 : pageSize;
@@ -41,26 +43,21 @@ function Articles() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const smallQuery = window.matchMedia('(max-width: 1024px)');
 
     const listener = () => {
       if (smallQuery.matches) {
         setPageSize(2);
-      } else if (largeQuery.matches) {
-        setPageSize(12);
       } else {
-        setPageSize(16);
+        setPageSize(12);
       }
     };
     listener();
 
     smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
 
     return () => {
       smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
     };
   }, []);
 
@@ -71,18 +68,13 @@ function Articles() {
 
   // отрисовка заглушки
   function renderAnimatedContainer() {
-    return (
-      <AnimatedPageContainer
-        titleText="Информация появится в ближайшее время."
-        buttonText="Вернуться на главную"
-      />
-    );
+    return <AnimatedPageContainer titleText={animatedContainerText} />;
   }
 
   function renderPageContent() {
     return (
       <section className="articles page__section fade-in">
-        <TitleH1 title="Статьи" />
+        <TitleH1 title={title} />
         {isLoading ? (
           <Loader isNested />
         ) : (
@@ -122,14 +114,7 @@ function Articles() {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Статьи</title>
-        <meta
-          name="description"
-          content="Статьи, которые рекомендуют наши наставники"
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       {!articlesPageData.length && !isLoading
         ? renderAnimatedContainer()
         : renderPageContent()}

@@ -2,13 +2,13 @@
 
 .articles__main {
   padding-top: 80px;
-  padding-bottom: 80px;
 }
 
 .articles__cards-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(290px, 1fr));
   gap: 80px 30px;
+  padding-top: 80px;
 }
 
 @include atDesktop1279 {
@@ -20,7 +20,6 @@
 @include atDesktop1024 {
   .articles__main {
     padding-top: 50px;
-    padding-bottom: 0;
   }
 
   .articles__cards-grid {
