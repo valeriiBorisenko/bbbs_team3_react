@@ -31,6 +31,7 @@ function CardsSectionWithLines({
       tablet.removeEventListener('change', listener);
     };
   }, []);
+
   return (
     <>
       {isLoading ? (

@@ -37,7 +37,7 @@ const Rights = () => {
   useScrollToTop();
 
   // Стейты для пагинации
-  const [pageSize, setPageSize] = useState(PAGE_SIZE_PAGINATE.big);
+  const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -46,7 +46,7 @@ const Rights = () => {
   const [categories, setCategories] = useState(null);
 
   // Загрузка данных
-  const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // Загрузка данных при переключении пагинации
@@ -107,6 +107,7 @@ const Rights = () => {
 
   const getArticlesData = (tags) => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
+    console.log({ pageSize });
 
     getRightsData({
       limit: pageSize,
@@ -145,39 +146,36 @@ const Rights = () => {
 
   // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
-    if (!isLoadingPage && isFiltersUsed) {
+    if (categories) {
+      console.log('filters');
       const activeCategories = categories
         .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter);
-
-      const searchStr = activeCategories.join(',');
+        .map((filter) => filter.filter)
+        .join(',');
 
       if (activeCategories.length === 0) {
         selectOneTag(setCategories, ALL_CATEGORIES);
       }
-
-      getArticlesData(searchStr);
+      getArticlesData(activeCategories);
     }
   };
 
   // Фильтрация с делэем
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
-  useEffect(() => {
-    debounceFiltration();
-  }, [isFiltersUsed]);
 
-  // Первая отрисовка страницы + переход по страницам пагинации
+  // Первая отрисовка страницы
   useEffect(() => {
     if (isLoadingPage) {
+      console.log('first render');
       getArticlesData();
       getArticlesTags();
     }
-
-    if (!isLoadingPage && !isFiltersUsed) {
+    if (articles) {
+      console.log('triggered');
+      debounceFiltration();
       setIsLoadingPaginate(true);
-      getArticlesData();
     }
-  }, [pageSize, pageNumber]);
+  }, [isFiltersUsed, pageSize, pageNumber]);
 
   // Юз эффект для пагинации
   useEffect(() => {
@@ -192,6 +190,7 @@ const Rights = () => {
       } else {
         setPageSize(PAGE_SIZE_PAGINATE.big);
       }
+      setIsLoadingPage(true);
     };
     listener();
 

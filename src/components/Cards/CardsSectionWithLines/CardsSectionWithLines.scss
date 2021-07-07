@@ -51,7 +51,7 @@
 
 @include atDesktop1024 {
   .cards-section {
-    padding-top: 36px;
+    padding: 36px 0 30px;
     grid-template-rows: max-content [first-line] 1px max-content;
 
     &__pagination {
@@ -66,7 +66,7 @@
 
 @include atTabletL {
   .cards-section {
-    padding-top: 0;
+    padding: 0;
     grid-template-columns: 1fr;
     grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
   }
