@@ -26,7 +26,6 @@ function Articles() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    window.scrollTo({ top: 0 });
     setIsLoading(true);
     const offset = pageSize * pageNumber;
     const fixedPageSize = pageNumber === 0 ? pageSize + 1 : pageSize;
