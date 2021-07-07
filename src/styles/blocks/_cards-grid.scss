@@ -10,19 +10,19 @@
 
 @include atDesktop1440 {
   .cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    grid-template-columns: repeat(3, minmax(290px, 1fr));
   }
 }
 
-@include atDesktop1024 {
+@include atDesktop1217 {
   .cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    grid-template-columns: repeat(2, minmax(290px, 1fr));
     padding-top: 50px;
     row-gap: 30px;
   }
 }
 
-@include atTablet {
+@include atTabletL {
   .cards-grid {
     grid-template-columns: 1fr;
     padding-top: 30px;

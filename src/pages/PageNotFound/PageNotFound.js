@@ -1,22 +1,16 @@
 import './PageNotFound.scss';
-import { Helmet } from 'react-helmet-async';
+import page404Texts from '../../locales/404-page-RU';
 import { useScrollToTop } from '../../hooks/index';
 import { BasePage, AnimatedPageContainer } from './index';
 
 function PageNotFound() {
+  const { headTitle, headDescription, animatedContainerText } = page404Texts;
+
   useScrollToTop();
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Страницы не существует</title>
-        <meta name="description" content="Запрашиваемая страница не найдена" />
-      </Helmet>
-      <AnimatedPageContainer
-        is404
-        titleText="К сожалению, запрашиваемая страница не найдена. Попробуйте перейти на главную страницу"
-        buttonText="Вернуться на главную"
-      />
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <AnimatedPageContainer titleText={animatedContainerText} is404 />
     </BasePage>
   );
 }

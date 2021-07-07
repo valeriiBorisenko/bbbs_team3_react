@@ -20,6 +20,8 @@
     overflow-x: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    margin-right: -75px;
+    margin-left: -75px;
     &::-webkit-scrollbar {
       width: 0;
       height: 0;
@@ -82,9 +84,42 @@
   }
 }
 
+.profile-event-card {
+  margin-right: 30px;
+
+  &:first-of-type {
+    margin-left: 75px;
+  }
+
+  &:last-of-type {
+    margin-right: 75px;
+  }
+}
+
+@include atDesktop1440 {
+  .profile {
+    &__events {
+      margin-left: -135px;
+      margin-right: -135px;
+    }
+  }
+
+  .profile-event-card {
+    &:first-of-type {
+      margin-left: 135px;
+    }
+
+    &:last-of-type {
+      margin-right: 135px;
+    }
+  }
+}
+
 @include atDesktop1380 {
-  .profile__scroll-anchor {
-    top: 0;
+  .profile {
+      &__scroll-anchor {
+      top: 0;
+    }
   }
 }
 
@@ -132,6 +167,16 @@
       margin-bottom: 20px;
     }
   }
+
+  .profile-event-card {
+    &:first-of-type {
+      margin-left: 60px;
+    }
+
+    &:last-of-type {
+      margin-right: 60px;
+    }
+  }
 }
 
 @include atMobile {
@@ -143,13 +188,22 @@
 
     &__button-add-diary {
       height: 40px;
-      // padding: 0 0 0 55px;
       font-size: 12px;
       line-height: 1.42;
     }
 
     &__diary-form {
       margin-top: 20px;
+    }
+  }
+
+  .profile-event-card {
+    &:first-of-type {
+      margin-left: 15px;
+    }
+
+    &:last-of-type {
+      margin-right: 15px;
     }
   }
 }

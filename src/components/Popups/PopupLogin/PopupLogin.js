@@ -25,9 +25,9 @@ function PopupLogin({ isOpen, onClose }) {
 
   //! аварийный перевод на главную, если не хочешь логиниться
   const history = useHistory();
-  const location = useLocation();
+  const { pathname } = useLocation();
   function closePopup() {
-    if (location.pathname === AFISHA_URL) {
+    if (pathname === AFISHA_URL) {
       history.push('/');
     }
     onClose();

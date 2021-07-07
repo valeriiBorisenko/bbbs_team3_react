@@ -6,7 +6,8 @@ function getArticlesPageData({ limit, offset }) {
     .get(`${baseURL}${apiUrl}/articles/`, {
       params: { limit, offset },
     })
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
 export default getArticlesPageData;
