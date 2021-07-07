@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import './CardsSectionWithLines.scss';
+import { useEffect, useState } from 'react';
 import { Paginate, Loader } from '../../utils/index';
 import renderThoseDamnedLines from '../../../utils/render-lines';
 
@@ -13,6 +14,20 @@ function CardsSectionWithLines({
   dataLength,
   pageSize,
 }) {
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    const tablet = window.matchMedia('(max-width: 900px)');
+
+    const listener = () => setIsTablet(true);
+    listener();
+
+    tablet.addEventListener('change', listener);
+
+    return () => {
+      tablet.removeEventListener('change', listener);
+    };
+  }, []);
   return (
     <>
       {isLoading ? (
@@ -20,7 +35,7 @@ function CardsSectionWithLines({
       ) : (
         <>
           <section className={`cards-section ${sectionClass}`}>
-            {renderThoseDamnedLines(dataLength, pageSize)}
+            {renderThoseDamnedLines(dataLength, pageSize, isTablet)}
             {children}
           </section>
         </>

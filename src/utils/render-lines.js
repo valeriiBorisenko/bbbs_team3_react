@@ -1,7 +1,7 @@
 //! хардкод
 // eslint-disable-next-line consistent-return
-function renderThoseDamnedLines(dataLength, pageSize) {
-  if (window.innerWidth < 901) {
+function renderThoseDamnedLines(dataLength, pageSize, isTablet) {
+  if (isTablet) {
     if (dataLength < 2) {
       return null;
     }
