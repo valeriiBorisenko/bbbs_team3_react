@@ -63,7 +63,99 @@ const Rights = () => {
     setIsFiltersUsed(true);
   };
 
-  // отрисовка массива фильтров
+  const getArticlesData = (tags) => {
+    const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
+
+    getRightsData({
+      limit: pageSize,
+      offset,
+      tags,
+    })
+      .then(({ results, count }) => {
+        setPageCount(Math.ceil(count / pageSize));
+        setArticles(results);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoadingPage(false);
+        setIsLoadingPaginate(false);
+      });
+  };
+
+  const getArticlesTags = () => {
+    getRightsTags()
+      .then((tags) => {
+        const categoriesArr = tags.map((tag) => ({
+          filter: tag?.slug.toLowerCase(),
+          name: changeCaseOfFirstLetter(tag?.name),
+          isActive: false,
+        }));
+
+        setCategories([
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+          ...categoriesArr,
+        ]);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // функция-фильтратор с использованием АПИ
+  const handleFiltration = () => {
+    if (categories) {
+      const activeCategories = categories
+        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+        .map((filter) => filter.filter)
+        .join(',');
+
+      if (activeCategories.length === 0) {
+        selectOneTag(setCategories, ALL_CATEGORIES);
+      }
+      getArticlesData(activeCategories);
+    }
+  };
+
+  // Фильтрация с делэем
+  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
+
+  // Первая отрисовка страницы
+  useEffect(() => {
+    if (isLoadingPage) {
+      getArticlesData();
+      getArticlesTags();
+    } else {
+      debounceFiltration();
+      setIsLoadingPaginate(true);
+    }
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed, pageSize, pageNumber]);
+
+  // Юз эффект для пагинации
+  useEffect(() => {
+    const smallQuery = window.matchMedia('(max-width: 1399px)');
+    const largeQuery = window.matchMedia('(max-width: 1640px)');
+
+    const listener = () => {
+      if (smallQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.small);
+      } else if (largeQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
+      } else {
+        setPageSize(PAGE_SIZE_PAGINATE.big);
+      }
+      setIsLoadingPage(true);
+    };
+    listener();
+
+    smallQuery.addEventListener('change', listener);
+    largeQuery.addEventListener('change', listener);
+
+    return () => {
+      smallQuery.removeEventListener('change', listener);
+      largeQuery.removeEventListener('change', listener);
+    };
+  }, []);
+
+  // функции рендеров
   const renderTagsContainer = () => (
     <div className="tags">
       <ul className="tags__list">
@@ -104,104 +196,6 @@ const Rights = () => {
 
     return isFiltersUsed ? <Loader isNested /> : renderCards();
   };
-
-  const getArticlesData = (tags) => {
-    const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
-    console.log({ pageSize });
-
-    getRightsData({
-      limit: pageSize,
-      offset,
-      tags,
-    })
-      .then(({ results, count }) => {
-        setPageCount(Math.ceil(count / pageSize));
-        return results;
-      })
-      .then((results) => setArticles(results))
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setIsLoadingPage(false);
-        setIsLoadingPaginate(false);
-        setIsFiltersUsed(false);
-      });
-  };
-
-  const getArticlesTags = () => {
-    getRightsTags()
-      .then((tags) => {
-        const categoriesArr = tags.map((tag) => ({
-          filter: tag?.slug.toLowerCase(),
-          name: changeCaseOfFirstLetter(tag?.name),
-          isActive: false,
-        }));
-
-        setCategories([
-          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-          ...categoriesArr,
-        ]);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  // функция-фильтратор с использованием АПИ
-  const handleFiltration = () => {
-    if (categories) {
-      console.log('filters');
-      const activeCategories = categories
-        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter)
-        .join(',');
-
-      if (activeCategories.length === 0) {
-        selectOneTag(setCategories, ALL_CATEGORIES);
-      }
-      getArticlesData(activeCategories);
-    }
-  };
-
-  // Фильтрация с делэем
-  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
-
-  // Первая отрисовка страницы
-  useEffect(() => {
-    if (isLoadingPage) {
-      console.log('first render');
-      getArticlesData();
-      getArticlesTags();
-    }
-    if (articles) {
-      console.log('triggered');
-      debounceFiltration();
-      setIsLoadingPaginate(true);
-    }
-  }, [isFiltersUsed, pageSize, pageNumber]);
-
-  // Юз эффект для пагинации
-  useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
-
-    const listener = () => {
-      if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else if (largeQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.medium);
-      } else {
-        setPageSize(PAGE_SIZE_PAGINATE.big);
-      }
-      setIsLoadingPage(true);
-    };
-    listener();
-
-    smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
-
-    return () => {
-      smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
-    };
-  }, []);
 
   // глобальный лоадер
   if (isLoadingPage) {
