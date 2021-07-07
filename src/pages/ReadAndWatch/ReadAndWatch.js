@@ -12,8 +12,8 @@ import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWat
 //! АПИ
 // запрос каталога
 import getCatalogPageDatа from '../../api/catalog-page';
-// запрос видео //! внести
-import getVideosPageData from '../../api/videos-page';
+// запрос видео
+import { getVideoPageData } from '../../api/videos-page';
 // запрос статей
 import getArticlesPageData from '../../api/articles-page';
 // запрос фильмов
@@ -72,7 +72,7 @@ function ReadAndWatch() {
   }
 
   function getVideos({ limit, offset }) {
-    getVideosPageData({ limit, offset })
+    getVideoPageData({ limit, offset })
       .then(({ results, count }) => {
         //! count
         setArticlesData(results);
@@ -125,7 +125,7 @@ function ReadAndWatch() {
       getMoviesPageData({ limit, offset }),
       getBooksPageData({ limit, offset }),
       getArticlesPageData({ limit, offset }),
-      getVideosPageData({ limit, offset }),
+      getVideoPageData({ limit, offset }),
     ])
       .then(([catalogs, movies, books, articles, videos]) => {
         setCatalogData(catalogs);

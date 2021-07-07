@@ -77,6 +77,7 @@ ReadAndWatchSection.propTypes = {
   sectionTitle: PropTypes.string.isRequired,
   path: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
+  getData: PropTypes.func,
   setData: PropTypes.func,
   handleCardClick: PropTypes.func,
   elementsPerSection: PropTypes.number.isRequired,
@@ -93,9 +94,14 @@ export default ReadAndWatchSection;
 
 // как заполнять компоненты карточек
 /*
+* каталог
 <CardCatalog title="" shape="" image="" sectionClass="" />
+* статья
 <CardArticle data="" color="" sectionClass="" />
+* фильмы
 <CardFilm data="" handleClick="" children="" />
+* видео
 <CardFilm data="" handleClick="" children="" />
+* книги
 <CardBook data="" />
 */
