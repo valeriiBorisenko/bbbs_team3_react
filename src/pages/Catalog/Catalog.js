@@ -85,6 +85,8 @@ function Catalog() {
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
         isLoading={isLoadingPaginate}
+        dataLength={catalogPageData.length}
+        pageSize={pageSize}
       >
         {catalogPageData.map((item, i) => (
           <CardCatalog

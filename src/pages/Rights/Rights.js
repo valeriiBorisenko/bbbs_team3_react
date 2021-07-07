@@ -79,6 +79,8 @@ const Rights = () => {
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
         isLoading={isLoadingPaginate}
+        dataLength={articles.length}
+        pageSize={pageSize}
       >
         {articles.map((item, i) => (
           <CardRights

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import './CardsSectionWithLines.scss';
 import { Paginate, Loader } from '../../utils/index';
+import renderThoseDamnedLines from '../../../utils/render-lines';
 
 function CardsSectionWithLines({
   pageCount,
@@ -9,6 +10,8 @@ function CardsSectionWithLines({
   setPageNumber,
   sectionClass,
   isLoading,
+  dataLength,
+  pageSize,
 }) {
   return (
     <>
@@ -17,9 +20,7 @@ function CardsSectionWithLines({
       ) : (
         <>
           <section className={`cards-section ${sectionClass}`}>
-            <div className="cards-section__line" />
-            <div className="cards-section__line" />
-            <div className="cards-section__line" />
+            {renderThoseDamnedLines(dataLength, pageSize)}
             {children}
           </section>
         </>
@@ -44,6 +45,8 @@ CardsSectionWithLines.propTypes = {
   setPageNumber: PropTypes.func,
   sectionClass: PropTypes.string,
   isLoading: PropTypes.bool,
+  dataLength: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
 };
 
 CardsSectionWithLines.defaultProps = {
