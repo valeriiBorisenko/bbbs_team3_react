@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 // /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './ReadAndWatchSection.scss';
 import { Link } from 'react-router-dom';
@@ -15,18 +15,44 @@ function ReadAndWatchSection({
   data,
   getData,
   setData,
+  totalPages,
   handleCardClick,
   elementsPerSection,
 }) {
-  console.log(data);
+  // data должна быть массивом!
+  const [pageNumber, setPageNumber] = useState(0);
+  console.log(`я на ${pageNumber} странице из ${totalPages} страниц`);
+  console.log(sectionTitle);
+  console.log(pageNumber);
+
+  function back() {
+    setPageNumber((previousValue) => {
+      setData(() => getData({ elementsPerSection, number: previousValue - 1 }));
+      // getData({ elementsPerSection, number: previousValue + 1 });
+      return previousValue - 1;
+    });
+  }
+
+  function forward() {
+    setPageNumber((previousValue) => {
+      setData(() => getData({ elementsPerSection, number: previousValue + 1 }));
+      // getData({ elementsPerSection, number: previousValue + 1 });
+      return previousValue + 1;
+    });
+  }
+
   return (
     <section>
       <div className="readwatch__container">
         <Link className="readwatch__heading-link" to={path}>
           <TitleH3 title={sectionTitle} sectionClass="readwatch__heading" />
         </Link>
-        <button type="button">вперед</button>
-        <button type="button">назад</button>
+        <button onClick={back} type="button">
+          назад
+        </button>
+        <button onClick={forward} type="button">
+          вперед
+        </button>
 
         {/* <ReactPaginate
           pageCount={pageCount}
@@ -78,6 +104,7 @@ ReadAndWatchSection.propTypes = {
   path: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
   getData: PropTypes.func,
+  totalPages: PropTypes.number.isRequired,
   setData: PropTypes.func,
   handleCardClick: PropTypes.func,
   elementsPerSection: PropTypes.number.isRequired,
