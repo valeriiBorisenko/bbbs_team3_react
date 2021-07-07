@@ -1,3 +1,4 @@
+import './Articles.scss';
 import { useEffect, useState } from 'react';
 import articlesPageTexts from '../../locales/articles-page-RU';
 import { useScrollToTop } from '../../hooks/index';
@@ -11,34 +12,48 @@ import {
   Loader,
 } from './index';
 import getArticlesPageData from '../../api/articles-page';
-import './Articles.scss';
+
+const PAGE_SIZE_PAGINATE = {
+  small: 2,
+  big: 12,
+};
 
 function Articles() {
   const { headTitle, headDescription, title, textStubNoData } =
     articlesPageTexts;
   useScrollToTop();
 
-  const [pageSize, setPageSize] = useState(12);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE_PAGINATE.big);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
   const [articlesPageData, setArticlesPageData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
+  function getPageData() {
     const offset = pageSize * pageNumber;
     const fixedPageSize = pageNumber === 0 ? pageSize + 1 : pageSize;
     const fixedOffset = pageNumber > 0 ? offset + 1 : offset;
+
     getArticlesPageData({ limit: fixedPageSize, offset: fixedOffset })
       .then(({ results, count }) => {
         setArticlesPageData(results);
         setPageCount(Math.ceil(count / pageSize));
       })
-      .catch(() => {})
+      .catch((err) => console.log(err))
       .finally(() => {
-        setIsLoading(false);
+        setIsLoadingPaginate(false);
+        setIsLoadingPage(false);
       });
+  }
+
+  useEffect(() => {
+    if (!isLoadingPage) {
+      setIsLoadingPaginate(true);
+    }
+
+    getPageData();
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
@@ -46,9 +61,9 @@ function Articles() {
 
     const listener = () => {
       if (smallQuery.matches) {
-        setPageSize(2);
+        setPageSize(PAGE_SIZE_PAGINATE.small);
       } else {
-        setPageSize(12);
+        setPageSize(PAGE_SIZE_PAGINATE.big);
       }
     };
     listener();
@@ -60,9 +75,9 @@ function Articles() {
     };
   }, []);
 
-  const mainCard = articlesPageData.find((item) => item.pinnedFullSize);
+  const mainCard = articlesPageData.find((item) => item?.pinnedFullSize);
   const cardsWithoutMain = articlesPageData.filter(
-    (item) => !item.pinnedFullSize
+    (item) => !item?.pinnedFullSize
   );
 
   // отрисовка заглушки
@@ -70,24 +85,40 @@ function Articles() {
     return <AnimatedPageContainer titleText={textStubNoData} />;
   }
 
+  function renderPagination() {
+    if (pageCount > 1) {
+      return (
+        <Paginate
+          sectionClass="cards-section__pagination"
+          pageCount={pageCount}
+          value={pageNumber}
+          onChange={setPageNumber}
+        />
+      );
+    }
+    return null;
+  }
+
   function renderPageContent() {
     return (
       <section className="articles page__section fade-in">
         <TitleH1 title={title} />
-        {isLoading ? (
+
+        {isLoadingPaginate ? (
           <Loader isNested />
         ) : (
           <>
-            {mainCard && (
-              <section className="articles__main fade-in">
-                <CardArticle
-                  data={mainCard}
-                  sectionClass="card-container_type_main-article"
-                  isMain
-                />
-              </section>
-            )}
-
+            <>
+              {mainCard && (
+                <section className="articles__main fade-in">
+                  <CardArticle
+                    data={mainCard}
+                    sectionClass="card-container_type_main-article"
+                    isMain
+                  />
+                </section>
+              )}
+            </>
             <section className="articles__cards-grid">
               {cardsWithoutMain.map((item, i) => (
                 <CardArticle
@@ -98,23 +129,21 @@ function Articles() {
                 />
               ))}
             </section>
-            {pageCount > 1 && (
-              <Paginate
-                sectionClass="cards-section__pagination"
-                pageCount={pageCount}
-                value={pageNumber}
-                onChange={setPageNumber}
-              />
-            )}
           </>
         )}
+
+        {renderPagination()}
       </section>
     );
   }
 
+  if (isLoadingPage) {
+    return <Loader isCentered />;
+  }
+
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {!articlesPageData.length && !isLoading
+      {!articlesPageData && !isLoadingPage
         ? renderAnimatedContainer()
         : renderPageContent()}
     </BasePage>

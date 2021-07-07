@@ -37,7 +37,7 @@ const Rights = () => {
   useScrollToTop();
 
   // Стейты для пагинации
-  const [pageSize, setPageSize] = useState(16);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE_PAGINATE.big);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
