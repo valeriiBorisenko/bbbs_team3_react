@@ -97,7 +97,6 @@ const Rights = () => {
 
   // отрисовка контента страницы
   const renderMainContent = () => {
-    // залогинен и нет статей
     if (!articles && !isLoadingPage) {
       return (
         <AnimatedPageContainer
