@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 import { Rubric } from '../../utils/index';
 import CardFigure from '../CardFigure/CardFigure';
 
-function CardRights({ title, tags, shape, color }) {
+function CardRights({ title, tags, shape, color, sectionClass }) {
   return (
-    <div className="rights__card">
-      <a href="/" className="rights__link">
+    <div className={`rights-card ${sectionClass}`}>
+      <a href="/" className="rights-card__link">
         <CardFigure shape={shape} title={title} color={color}>
-          <div className="rights__block">
+          <div className="rights-card__block">
             {tags.map((tag) => (
               <Rubric
                 key={tag.id}
-                sectionClass="rights__rubric"
+                sectionClass="rights-card__rubric"
                 title={tag.name}
               />
             ))}
@@ -29,6 +29,7 @@ CardRights.propTypes = {
   shape: PropTypes.string,
   tags: PropTypes.arrayOf(Array),
   color: PropTypes.string,
+  sectionClass: PropTypes.string,
 };
 
 CardRights.defaultProps = {
@@ -36,6 +37,7 @@ CardRights.defaultProps = {
   shape: 'square',
   tags: [],
   color: '',
+  sectionClass: '',
 };
 
 export default CardRights;

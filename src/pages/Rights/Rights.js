@@ -85,6 +85,7 @@ const Rights = () => {
         {articles.map((item, i) => (
           <CardRights
             key={item?.id}
+            sectionClass="cards-section__item"
             title={item?.title}
             tags={item?.tags}
             shape={FIGURES[i % FIGURES.length]}
