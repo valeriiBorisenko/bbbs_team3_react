@@ -3,11 +3,19 @@ import './ProfileForm.scss';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import texts from './locales/RU';
 import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { staticImageUrl } from '../../config/config';
 import { regExpImages } from '../../config/constants';
-import { Card, Input, Caption, Rating, Button, ButtonRound } from './index';
+import {
+  Card,
+  Input,
+  Caption,
+  Rating,
+  Button,
+  ButtonRound,
+} from '../utils/index';
 
 function ProfileForm({
   data,
@@ -77,7 +85,7 @@ function ProfileForm({
 
   useEffect(() => {
     if (inputValues?.mark) setCaption(captions[inputValues.mark]);
-    else setCaption('Оцените проведенное время');
+    else setCaption(texts.rateCaptionText);
   }, [inputValues.mark]);
 
   useEffect(() => {
@@ -133,7 +141,7 @@ function ProfileForm({
             />
           </label>
           <Caption
-            title="Загрузить фото"
+            title={texts.uploadCaptionText}
             sectionClass={`profile-form__caption ${
               errors?.image ? 'profile-form__caption_error' : ''
             }`}
@@ -148,7 +156,7 @@ function ProfileForm({
               sectionClass="profile-form__input"
               type="text"
               name="place"
-              placeholder="Место встречи"
+              placeholder={texts.placePlaceholder}
               register={register}
               required
               minLength={{ value: 5, message: 'Минимальная длина 5 символов' }}
@@ -157,7 +165,7 @@ function ProfileForm({
                 message: 'Максимальная длина 128 символов',
               }}
               error={errors?.place}
-              errorMessage="Место встречи*"
+              errorMessage={`${texts.placePlaceholder}*`}
             />
             {errors?.place && (
               <span className="profile-form__input-error">
@@ -169,7 +177,7 @@ function ProfileForm({
           <Input
             type="text"
             name="date"
-            placeholder="Дата __.__.____"
+            placeholder={texts.datePlaceholder}
             onFocus={handleFocusDataInput}
             sectionClass={`profile-form__input profile-form__input_el_date ${
               errors.date ? 'profile-form__input_el_date-error' : ''
@@ -177,13 +185,13 @@ function ProfileForm({
             register={register}
             required
             error={errors?.date}
-            errorMessage="Дата*&emsp;"
+            errorMessage={texts.datePlaceholderError}
           />
           <div className="profile-form__input-wrap profile-form__input-wrap_textarea">
             <Input
               type="text"
               name="description"
-              placeholder="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось"
+              placeholder={texts.descrPlaceholder}
               sectionClass="profile-form__input profile-form__input_el_textarea"
               register={register}
               required
@@ -192,7 +200,7 @@ function ProfileForm({
                 message: 'Максимальная длина 1024 символа',
               }}
               error={errors?.description}
-              errorMessage="Опишите вашу встречу, какие чувства вы испытывали, что понравилось / не понравилось*"
+              errorMessage={`${texts.descrPlaceholder}*`}
               isTextarea
             />
             {errors?.description && (
@@ -238,13 +246,17 @@ function ProfileForm({
             </div>
             <div className="profile-form__buttons">
               <Button
-                title={`${isEditMode ? 'Отмена' : 'Удалить'}`}
+                title={`${
+                  isEditMode ? texts.buttonCancelText : texts.buttonDeleteText
+                }`}
                 color="gray-borderless"
                 sectionClass="profile-form__button_el_delete"
                 onClick={handleCloseForm}
               />
               <Button
-                title={`${isEditMode ? 'Сохранить' : 'Добавить'}`}
+                title={`${
+                  isEditMode ? texts.buttonSaveText : texts.buttonAddText
+                }`}
                 sectionClass="profile-form__button_el_add"
                 isDisabled={
                   !!(errors.place || errors.date || errors.description)

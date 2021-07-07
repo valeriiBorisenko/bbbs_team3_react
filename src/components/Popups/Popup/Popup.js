@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import './Popup.scss';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 
 function Popup({
   children,
@@ -29,7 +30,7 @@ function Popup({
           <button
             className="popup__close"
             type="button"
-            aria-label="закрыть попап"
+            aria-label={texts.closeButtonLabel}
             onClick={onClose}
           />
         )}

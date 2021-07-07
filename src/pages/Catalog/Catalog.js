@@ -1,8 +1,6 @@
-// lod55:Немного подшаманил лоадеры на странице
-// p.s Карина надеюсь ты не против)
-
-import React, { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import './Catalog.scss';
+import { useEffect, useState } from 'react';
+import catalogPageTexts from '../../locales/catalog-page-RU';
 import {
   BasePage,
   TitleH1,
@@ -14,62 +12,24 @@ import {
 import getCatalogPageData from '../../api/catalog-page';
 import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
 import { FIGURES } from '../../config/constants';
-import './Catalog.scss';
+
+const PAGE_SIZE_PAGINATE = {
+  small: 4,
+  medium: 9,
+  big: 16,
+};
 
 function Catalog() {
-  const [pageSize, setPageSize] = useState(16);
+  const { headTitle, headDescription, title, subtitle, textStubNoData } =
+    catalogPageTexts;
+
+  const [pageSize, setPageSize] = useState(PAGE_SIZE_PAGINATE.big);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
   const [catalogPageData, setCatalogPageData] = useState([]);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
-
-  function renderCards() {
-    return (
-      <CardsSectionWithLines
-        pageCount={pageCount}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-        sectionClass="catalog__gap"
-        isLoading={isLoadingPaginate}
-      >
-        {catalogPageData.map((item, i) => (
-          <CardCatalog
-            sectionClass="cards-section__item"
-            key={item.id}
-            title={item.title}
-            image={item.imageUrl}
-            shape={FIGURES[i % FIGURES.length]}
-          />
-        ))}
-      </CardsSectionWithLines>
-    );
-  }
-
-  function renderPageContent() {
-    if (!catalogPageData && !isLoadingPage) {
-      return (
-        <AnimatedPageContainer
-          titleText="Информация появится в ближайшее время."
-          buttonText="Вернуться на главную"
-        />
-      );
-    }
-
-    return (
-      <section className="catalog page__section fade-in">
-        <TitleH1 sectionClass="catalog__title" title="Справочник" />
-        <TitleH2
-          sectionClass="catalog__subtitle"
-          title="Памятка новичка&nbsp;&mdash; наши материалы, где сможете найти всю базовую информацию,
-          рассказанную на вводном тренинге. Если вы захотите освежить свои знания, и&nbsp;напомнить
-          себе о&nbsp;чем-то."
-        />
-        {renderCards()}
-      </section>
-    );
-  }
 
   function getPageData() {
     const offset = pageSize * pageNumber;
@@ -100,11 +60,11 @@ function Catalog() {
 
     const listener = () => {
       if (smallQuery.matches) {
-        setPageSize(4);
+        setPageSize(PAGE_SIZE_PAGINATE.small);
       } else if (largeQuery.matches) {
-        setPageSize(9);
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
-        setPageSize(16);
+        setPageSize(PAGE_SIZE_PAGINATE.big);
       }
     };
     listener();
@@ -118,16 +78,49 @@ function Catalog() {
     };
   }, []);
 
+  function renderCards() {
+    return (
+      <CardsSectionWithLines
+        pageCount={pageCount}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        isLoading={isLoadingPaginate}
+        dataLength={catalogPageData.length}
+        pageSize={pageSize}
+      >
+        {catalogPageData.map((item, i) => (
+          <CardCatalog
+            sectionClass="cards-section__item"
+            key={item?.id}
+            title={item?.title}
+            image={item?.imageUrl}
+            shape={FIGURES[i % FIGURES.length]}
+          />
+        ))}
+      </CardsSectionWithLines>
+    );
+  }
+
+  function renderPageContent() {
+    if (!catalogPageData && !isLoadingPage) {
+      return <AnimatedPageContainer titleText={textStubNoData} />;
+    }
+
+    return (
+      <section className="catalog page__section fade-in">
+        <TitleH1 sectionClass="catalog__title" title={title} />
+        <TitleH2 sectionClass="catalog__subtitle" title={subtitle} />
+        {renderCards()}
+      </section>
+    );
+  }
+
   if (isLoadingPage) {
     return <Loader isCentered />;
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Справочник</title>
-        <meta name="description" content="Справочник полезных статей" />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       {renderPageContent()}
     </BasePage>
   );

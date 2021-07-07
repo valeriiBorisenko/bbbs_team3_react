@@ -1,8 +1,7 @@
 import './NavItemWithDropdown.scss';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import DropDownMenu from '../utils/DropDownMenu/DropDownMenu';
-import { CATALOG_URL } from '../../config/routes';
+import { DropDownMenu } from '../utils/index';
 
 function NavItemWithDropdown({ sectionWrapperClass, linkText, href }) {
   return (
@@ -11,16 +10,7 @@ function NavItemWithDropdown({ sectionWrapperClass, linkText, href }) {
         {linkText}
       </NavLink>
 
-      <DropDownMenu
-        sectionWrapperClass="menu__dropdown-list"
-        links={[
-          { text: 'Справочник', link: CATALOG_URL },
-          { text: 'Видео', link: CATALOG_URL },
-          { text: 'Статьи', link: CATALOG_URL },
-          { text: 'Фильмы', link: CATALOG_URL },
-          { text: 'Книги', link: CATALOG_URL },
-        ]}
-      />
+      <DropDownMenu sectionWrapperClass="menu__dropdown-list" />
     </li>
   );
 }

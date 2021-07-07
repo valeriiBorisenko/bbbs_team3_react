@@ -1,8 +1,11 @@
+import './AnimatedPageContainer.scss';
 import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Lottie from 'lottie-web';
-import { animation404, TitleH2 } from './index';
+import texts from './locales/RU';
+import animation404 from '../../assets/animation/Illustration_404.json';
+import { TitleH2 } from '../utils/index';
 
 function AnimatedPageContainer({ is404, titleText, buttonText }) {
   const animationContainer = useRef();
@@ -20,7 +23,7 @@ function AnimatedPageContainer({ is404, titleText, buttonText }) {
   return (
     <div className="animated-section">
       <div ref={animationContainer} className="animated-section__animation" />
-      {is404 && <h1 className="page-not-found-title">404</h1>}
+      {is404 && <h1 className="page-not-found-title">{texts.title404}</h1>}
       <TitleH2 title={titleText} sectionClass="animated-section__subtitle" />
       <Link className="button animated-section__link button_color_blue" to="/">
         {buttonText}
@@ -38,7 +41,7 @@ AnimatedPageContainer.propTypes = {
 AnimatedPageContainer.defaultProps = {
   is404: false,
   titleText: '',
-  buttonText: 'Вернуться на главную',
+  buttonText: texts.buttonText,
 };
 
 export default AnimatedPageContainer;

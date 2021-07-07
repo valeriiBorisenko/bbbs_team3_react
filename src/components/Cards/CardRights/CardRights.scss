@@ -1,12 +1,8 @@
 @import './styles/utils.scss';
 
-.rights__card {
-  margin-bottom: 80px;
-  margin-top:  80px;
-}
-
-.rights__link {
+.rights-card__link {
   max-width: 420px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -23,27 +19,16 @@
   }
 }
 
-.rights__rubric {
-  margin-top: 17px;
+.rights-card__block {
+  margin-top: 10px;
+}
+
+.rights-card__rubric {
+  margin-top: 5px;
   margin-right: 5px;
   align-self: center;
 
   &:last-of-type {
     margin-right: 0px;
-  }
-}
-
-@include atDesktop1024 {
-  .rights__card {
-    margin-bottom: 60px;
-    margin-top:  60px;
-  }
-}
-
-
-@include atMobile {
-  .rights__card {
-    margin-bottom: 30px;
-    margin-top:  30px;
   }
 }

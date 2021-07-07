@@ -1,6 +1,7 @@
 @import './styles/utils.scss';
 
 .card-figure {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -8,6 +9,7 @@
   overflow: hidden;
   width: 100%;
   object-fit: cover;
+  padding: 10px;
 
   &_color_yellow {
     background-color: $yellow;

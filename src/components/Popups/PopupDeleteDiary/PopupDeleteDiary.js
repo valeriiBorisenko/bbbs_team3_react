@@ -1,8 +1,10 @@
 import './PopupDeleteDiary.scss';
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import texts from './locales/RU';
 import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
-import { Popup, TitleH2, Button } from './index';
+import Popup from '../Popup/Popup';
+import { TitleH2, Button } from '../../utils/index';
 
 function PopupDeleteDiary({ isOpen, onClose, onCardDelete, cardData }) {
   const { place, date } = cardData;
@@ -31,23 +33,22 @@ function PopupDeleteDiary({ isOpen, onClose, onCardDelete, cardData }) {
     >
       <form className="popup__form" onSubmit={handleSubmit}>
         <TitleH2
-          title={`Удалить встречу в ${place} ${parseInt(
-            day.day,
-            10
-          )} ${month} ${day.year}?`}
+          title={`${texts.title} ${place} ${parseInt(day.day, 10)} ${month} ${
+            day.year
+          }?`}
           sectionClass="popup-diary__title"
         />
         <div className="popup-diary__buttons">
           <Button
             color="gray"
             sectionClass="popup-diary__button"
-            title="Удалить"
+            title={texts.submitButtonText}
             isSubmittable
           />
           <Button
             color="black"
             sectionClass="popup-diary__button"
-            title="Отмена"
+            title={texts.cancelButtonText}
             onClick={onClose}
           />
         </div>

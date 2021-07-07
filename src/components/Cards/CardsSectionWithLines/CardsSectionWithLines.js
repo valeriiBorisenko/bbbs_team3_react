@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import './CardsSectionWithLines.scss';
-import Paginate from '../../utils/Paginate/Paginate';
-import Loader from '../../utils/Loader/Loader';
+import { useEffect, useState } from 'react';
+import { Paginate, Loader } from '../../utils/index';
+import renderThoseDamnedLines from '../../../utils/render-lines';
 
 function CardsSectionWithLines({
   pageCount,
@@ -10,7 +11,26 @@ function CardsSectionWithLines({
   setPageNumber,
   sectionClass,
   isLoading,
+  dataLength,
+  pageSize,
 }) {
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    const tablet = window.matchMedia('(max-width: 900px)');
+
+    const listener = () => {
+      if (tablet.matches) setIsTablet(true);
+      else setIsTablet(false);
+    };
+    listener();
+
+    tablet.addEventListener('change', listener);
+
+    return () => {
+      tablet.removeEventListener('change', listener);
+    };
+  }, []);
   return (
     <>
       {isLoading ? (
@@ -18,9 +38,7 @@ function CardsSectionWithLines({
       ) : (
         <>
           <section className={`cards-section ${sectionClass}`}>
-            <div className="cards-section__line" />
-            <div className="cards-section__line" />
-            <div className="cards-section__line" />
+            {renderThoseDamnedLines(dataLength, pageSize, isTablet)}
             {children}
           </section>
         </>
@@ -45,6 +63,8 @@ CardsSectionWithLines.propTypes = {
   setPageNumber: PropTypes.func,
   sectionClass: PropTypes.string,
   isLoading: PropTypes.bool,
+  dataLength: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
 };
 
 CardsSectionWithLines.defaultProps = {

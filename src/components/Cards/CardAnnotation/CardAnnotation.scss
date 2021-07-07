@@ -12,6 +12,11 @@
       margin-top: 95px;
     }
   }
+
+  &__caption {
+    box-sizing: border-box;
+    padding-right: 10px;
+  }
 }
 
 .card-annotation__thumb {
@@ -20,7 +25,8 @@
 }
 
 .card-annotation__desc {
-  padding-right: 8px;
+  box-sizing: border-box;
+  padding-right: 10px;
 }
 
 @include atDesktop1199 {

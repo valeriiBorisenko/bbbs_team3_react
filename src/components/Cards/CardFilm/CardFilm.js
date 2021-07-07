@@ -1,6 +1,8 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
-import { Rubric, TitleH2, Card } from './index';
+import texts from './locales/RU';
+import { staticImageUrl } from '../../../config/config';
+import { Rubric, TitleH2, Card } from '../../utils/index';
 
 function CardFilm({ data: { image, title, info, link, tags }, handleClick }) {
   return (
@@ -12,7 +14,7 @@ function CardFilm({ data: { image, title, info, link, tags }, handleClick }) {
           onClick={handleClick}
         >
           <img
-            src={`http://127.0.0.1/media/${image}`}
+            src={`${staticImageUrl}/${image}`}
             alt="Превью видео"
             className="card-film__preview"
           />
@@ -37,7 +39,7 @@ function CardFilm({ data: { image, title, info, link, tags }, handleClick }) {
           href={link}
           onClick={handleClick}
         >
-          смотреть трейлер
+          {texts.lintText}
         </button>
       </div>
     </Card>

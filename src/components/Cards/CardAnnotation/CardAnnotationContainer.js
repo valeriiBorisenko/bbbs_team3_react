@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars';
-import Caption from '../../utils/Caption/Caption';
+import { Caption } from '../../utils/index';
 
 function CardAnnotationContainer({ caption, children }) {
   return (

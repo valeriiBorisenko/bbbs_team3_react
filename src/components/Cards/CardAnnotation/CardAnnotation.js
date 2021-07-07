@@ -1,6 +1,6 @@
 import './CardAnnotation.scss';
 import PropTypes from 'prop-types';
-import Card from '../../utils/Card/Card';
+import { Card } from '../../utils/index';
 import CardAnnotationContainer from './CardAnnotationContainer';
 
 function CardAnnotation({ info, description, isMain }) {

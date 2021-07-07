@@ -1,9 +1,10 @@
 import './ProfileEventCard.scss';
 import PropTypes from 'prop-types';
-import { formatDate } from '../../../utils/utils';
-import Card from '../../utils/Card/Card';
+import texts from './locales/RU';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
+import { formatDate } from '../../../utils/utils';
+import { Card } from '../../utils/index';
 
 function ProfileEventCard({ data, onOpen }) {
   const startDay = formatDate(data?.startAt);
@@ -17,7 +18,7 @@ function ProfileEventCard({ data, onOpen }) {
     <button
       className="profile-event-card"
       type="button"
-      aria-label="Открыть карточку"
+      aria-label={texts.buttonLabel}
       onClick={handleOpen}
     >
       <Card sectionClass="profile-event-card__card">

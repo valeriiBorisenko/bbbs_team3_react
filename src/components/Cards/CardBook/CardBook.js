@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import './CardBook.scss';
-import { Card, TitleH2 } from './index';
+import PropTypes from 'prop-types';
+import { Card, TitleH2 } from '../../utils/index';
 
 function CardBook({
   data: {

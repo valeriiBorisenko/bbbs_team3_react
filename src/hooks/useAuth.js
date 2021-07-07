@@ -5,10 +5,10 @@ import { getUserData } from '../api/user';
 import { MAIN_PAGE_URL } from '../config/routes';
 import {
   setLocalStorageData,
-  removeLocalStorageData,
   getLocalStorageData,
+  clearLocalStorage,
 } from './useLocalStorage';
-import { jwt, localStUserCity } from '../config/constants';
+import { jwt } from '../config/constants';
 
 const useAuth = (setCurrentUser, closeAllPopups) => {
   const [isCheckingToken, setIsCheckingToken] = useState(true);
@@ -18,8 +18,7 @@ const useAuth = (setCurrentUser, closeAllPopups) => {
   const handleLogout = () => {
     AuthApi.clearAuth();
     setCurrentUser(null);
-    removeLocalStorageData(jwt);
-    removeLocalStorageData(localStUserCity);
+    clearLocalStorage();
     history.push(MAIN_PAGE_URL);
   };
 

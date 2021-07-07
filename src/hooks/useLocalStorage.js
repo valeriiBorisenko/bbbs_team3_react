@@ -6,6 +6,8 @@ export const setLocalStorageData = (key, value) =>
 
 export const removeLocalStorageData = (key) => localStorage.removeItem(key);
 
+export const clearLocalStorage = () => localStorage.clear();
+
 export const getLocalStorageData = (key) =>
   JSON.parse(localStorage.getItem(key));
 
