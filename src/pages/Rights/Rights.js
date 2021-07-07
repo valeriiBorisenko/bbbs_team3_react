@@ -1,7 +1,3 @@
-// lod55
-// Bug: Во время использования фильтров если изменилось кол-во страниц пагинации
-// уходит лишний запрос на бэк из-за этого отрисовывается весь список статей
-// p.s в процессе исправления
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Rights.scss';
@@ -122,9 +118,10 @@ const Rights = () => {
       tags,
     })
       .then(({ results, count }) => {
-        setArticles(results);
         setPageCount(Math.ceil(count / pageSize));
+        return results;
       })
+      .then((results) => setArticles(results))
       .catch((err) => console.log(err))
       .finally(() => {
         setIsLoadingPage(false);
@@ -166,7 +163,7 @@ const Rights = () => {
       if (categories.length - 1 === activeCategories.length) {
         selectOneTag(setCategories, ALL_CATEGORIES);
       }
-      console.log('использую');
+
       getArticlesData(searchStr);
     }
   };
@@ -175,7 +172,6 @@ const Rights = () => {
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
     debounceFiltration();
-    console.log('1');
   }, [isFiltersUsed]);
 
   // Первая отрисовка страницы + переход по страницам пагинации
@@ -189,8 +185,6 @@ const Rights = () => {
       setIsLoadingPaginate(true);
       getArticlesData();
     }
-
-    console.log('2');
   }, [pageSize, pageNumber]);
 
   // Юз эффект для пагинации
