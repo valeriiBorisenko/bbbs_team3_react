@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { formatDuration } from '../../../utils/utils';
 import { Card, TitleH2 } from './index';
 
-function CardVideoMain({
-  data: { title, info, link, imageUrl, duration },
-  handleClick,
-}) {
+const BASE_MEDIA_URL = 'http://127.0.0.1/media/';
+
+function CardVideoMain({ data, handleClick }) {
+  const { title, info, link, image, duration } = data;
   const { hours, minutes, seconds } = formatDuration(duration);
 
   return (
@@ -28,12 +28,12 @@ function CardVideoMain({
 
       <Card sectionClass="card-video-main__video">
         <button
-          className="card-video-main__button"
+          className="card-video-main__button card-video-main__button_video"
           type="button"
           onClick={handleClick}
         >
           <img
-            src={imageUrl}
+            src={`${BASE_MEDIA_URL}${image}`}
             alt="Превью видео"
             className="card-video-main__image"
           />
@@ -50,21 +50,11 @@ function CardVideoMain({
 
 CardVideoMain.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  title: PropTypes.string,
-  info: PropTypes.string,
-  link: PropTypes.string,
-  imageUrl: PropTypes.string,
-  duration: PropTypes.number,
   handleClick: PropTypes.func,
 };
 
 CardVideoMain.defaultProps = {
   data: {},
-  title: '',
-  info: '',
-  link: '',
-  imageUrl: '',
-  duration: 0,
   handleClick: () => {},
 };
 
