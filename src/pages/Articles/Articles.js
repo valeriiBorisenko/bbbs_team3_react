@@ -99,38 +99,39 @@ function Articles() {
     return null;
   }
 
+  function renderCards() {
+    return (
+      <>
+        {mainCard && (
+          <section className="articles__main fade-in">
+            <CardArticle
+              data={mainCard}
+              sectionClass="card-container_type_main-article"
+              isMain
+            />
+          </section>
+        )}
+
+        <section className="articles__cards-grid">
+          {cardsWithoutMain.map((item, i) => (
+            <CardArticle
+              key={item.id}
+              color={COLORS[(i + 1) % COLORS.length]}
+              data={item}
+              sectionClass="card-container_type_article fade-in"
+            />
+          ))}
+        </section>
+      </>
+    );
+  }
+
   function renderPageContent() {
     return (
       <section className="articles page__section fade-in">
         <TitleH1 title={title} />
 
-        {isLoadingPaginate ? (
-          <Loader isNested />
-        ) : (
-          <>
-            <>
-              {mainCard && (
-                <section className="articles__main fade-in">
-                  <CardArticle
-                    data={mainCard}
-                    sectionClass="card-container_type_main-article"
-                    isMain
-                  />
-                </section>
-              )}
-            </>
-            <section className="articles__cards-grid">
-              {cardsWithoutMain.map((item, i) => (
-                <CardArticle
-                  key={item.id}
-                  color={COLORS[(i + 1) % COLORS.length]}
-                  data={item}
-                  sectionClass="card-container_type_article fade-in"
-                />
-              ))}
-            </section>
-          </>
-        )}
+        {isLoadingPaginate ? <Loader isNested /> : renderCards()}
 
         {renderPagination()}
       </section>

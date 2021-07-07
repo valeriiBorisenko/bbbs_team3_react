@@ -61,7 +61,6 @@
 
     &__pagination {
       height: 38px;
-      margin: 30px auto;
     }
 
     &__item {
@@ -80,10 +79,6 @@
       &:nth-of-type(-n + 2) {
         display: block;
       }
-    }
-
-    &__pagination {
-      margin: 0 auto;
     }
   }
 }

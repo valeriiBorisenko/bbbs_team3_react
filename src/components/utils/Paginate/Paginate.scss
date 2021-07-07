@@ -69,7 +69,9 @@
     }
 
     &_type_disabled {
-      display: none;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
     }
   }
 }
@@ -91,8 +93,8 @@
         line-height: 17px;
 
         &_type_active {
-          padding-left: 16px;
-          padding-right: 16px;
+          padding-left: 10px;
+          padding-right: 10px;
 
             &::after {
               width: 38px;
