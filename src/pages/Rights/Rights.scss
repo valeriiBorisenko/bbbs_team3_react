@@ -1,18 +1,1 @@
 @import './styles/utils.scss';
-
-.rights {
-  grid-gap: 0 30px;
-  padding: 0;
-}
-
-@include atDesktop1024 {
-  .rights {
-    grid-gap: 30px;
-  }
-}
-
-@include atTablet {
-  .rights {
-    grid-gap: 30px;
-  }
-}

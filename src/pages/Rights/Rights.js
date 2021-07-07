@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import rightsPageTexts from '../../locales/rights-page-RU';
 import './Rights.scss';
 import {
   ALL_CATEGORIES,
@@ -25,9 +25,6 @@ import {
   AnimatedPageContainer,
 } from './index';
 
-const TEXT_STUB_NOPE_DATA =
-  'В данный момент страница со статьями о правах детей пуста. Возвращайтесь позже!';
-
 const PAGE_SIZE_PAGINATE = {
   small: 4,
   medium: 9,
@@ -35,6 +32,8 @@ const PAGE_SIZE_PAGINATE = {
 };
 
 const Rights = () => {
+  const { headTitle, headDescription, title, textStubNoData } = rightsPageTexts;
+
   useScrollToTop();
 
   // Стейты для пагинации
@@ -79,14 +78,13 @@ const Rights = () => {
         pageCount={pageCount}
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
-        sectionClass="rights page__section"
         isLoading={isLoadingPaginate}
       >
         {articles.map((item, i) => (
           <CardRights
-            key={item.id}
-            title={item.title}
-            tags={item.tags}
+            key={item?.id}
+            title={item?.title}
+            tags={item?.tags}
             shape={FIGURES[i % FIGURES.length]}
             color={COLORS[i % COLORS.length]}
           />
@@ -98,18 +96,13 @@ const Rights = () => {
   // отрисовка контента страницы
   const renderMainContent = () => {
     if (!articles && !isLoadingPage) {
-      return (
-        <AnimatedPageContainer
-          titleText={TEXT_STUB_NOPE_DATA}
-          buttonText="Вернуться на главную"
-        />
-      );
+      return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
     return isFiltersUsed ? <Loader isNested /> : renderCards();
   };
 
-  const getArticlesData = (tags = '') => {
+  const getArticlesData = (tags) => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
 
     getRightsData({
@@ -134,8 +127,8 @@ const Rights = () => {
     getRightsTags()
       .then((tags) => {
         const categoriesArr = tags.map((tag) => ({
-          filter: tag.slug.toLowerCase(),
-          name: changeCaseOfFirstLetter(tag.name),
+          filter: tag?.slug.toLowerCase(),
+          name: changeCaseOfFirstLetter(tag?.name),
           isActive: false,
         }));
 
@@ -156,11 +149,7 @@ const Rights = () => {
 
       const searchStr = activeCategories.join(',');
 
-      if (searchStr === '') {
-        selectOneTag(setCategories, ALL_CATEGORIES);
-      }
-
-      if (categories.length - 1 === activeCategories.length) {
+      if (activeCategories.length === 0) {
         selectOneTag(setCategories, ALL_CATEGORIES);
       }
 
@@ -218,19 +207,12 @@ const Rights = () => {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Права детей</title>
-        <meta
-          name="description"
-          content="Информационные рубрики о правах детей"
-        />
-      </Helmet>
-      <section className="lead page__section fade-in">
-        <TitleH1 title="Права детей" />
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="rights page__section fade-in">
+        <TitleH1 title={title} />
         {categories?.length > 1 && renderTagsContainer()}
+        {renderMainContent()}
       </section>
-      {renderMainContent()}
     </BasePage>
   );
 };

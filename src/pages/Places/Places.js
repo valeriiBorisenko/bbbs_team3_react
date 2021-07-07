@@ -37,7 +37,7 @@ function Places() {
     headTitle,
     headDescription,
     title,
-    animatedContainerText,
+    textStubNoData,
     paragraphNoContent,
     mentorTag,
     ageFilterNames,
@@ -298,7 +298,7 @@ function Places() {
     <>
       {!isCityChanging ? (
         <>
-          <AnimatedPageContainer titleText={animatedContainerText} />
+          <AnimatedPageContainer titleText={textStubNoData} />
           {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
         </>
       ) : (

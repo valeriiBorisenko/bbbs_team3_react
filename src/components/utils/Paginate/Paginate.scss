@@ -3,7 +3,6 @@
 .pagination {
   display: flex;
   justify-content: center;
-  max-width: 475px;
   width: 100%;
   padding: 0;
 
@@ -77,8 +76,6 @@
 
 @include atDesktop1024 {
   .pagination {
-    margin: 60px auto 50px;
-    max-width: 305px;
 
     &__arrow-element {
       width: 20px;

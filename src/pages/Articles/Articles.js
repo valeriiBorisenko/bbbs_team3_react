@@ -14,7 +14,7 @@ import getArticlesPageData from '../../api/articles-page';
 import './Articles.scss';
 
 function Articles() {
-  const { headTitle, headDescription, title, animatedContainerText } =
+  const { headTitle, headDescription, title, textStubNoData } =
     articlesPageTexts;
   useScrollToTop();
 
@@ -67,7 +67,7 @@ function Articles() {
 
   // отрисовка заглушки
   function renderAnimatedContainer() {
-    return <AnimatedPageContainer titleText={animatedContainerText} />;
+    return <AnimatedPageContainer titleText={textStubNoData} />;
   }
 
   function renderPageContent() {
