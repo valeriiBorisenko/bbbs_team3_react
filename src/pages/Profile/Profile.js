@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.scss';
 import profilePageTexts from '../../locales/profile-page-RU';
-import { CurrentUserContext, PopupsContext } from '../../contexts/index';
+import { PopupsContext } from '../../contexts/index';
 import {
   useSmoothHorizontalScroll,
   useScrollToTop,
@@ -37,7 +37,6 @@ function Profile() {
 
   useScrollToTop();
 
-  const { currentUser } = useContext(CurrentUserContext);
   const { openPopupAboutEvent } = useContext(PopupsContext);
 
   const [events, setEvents] = useState(null);
@@ -59,7 +58,7 @@ function Profile() {
         )
       )
       .catch(console.log);
-  }, [currentUser?.city]);
+  }, []);
 
   useEffect(() => {
     getProfileDiariesData().then(setDiaries).catch(console.log);
