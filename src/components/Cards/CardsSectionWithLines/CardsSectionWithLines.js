@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import './CardsSectionWithLines.scss';
 import Paginate from '../../utils/Paginate/Paginate';
+import Loader from '../../utils/Loader/Loader';
 
 function CardsSectionWithLines({
   pageCount,
@@ -8,15 +9,23 @@ function CardsSectionWithLines({
   pageNumber,
   setPageNumber,
   sectionClass,
+  isLoading,
 }) {
   return (
     <>
-      <section className={`cards-section ${sectionClass}`}>
-        <div className="cards-section__line" />
-        <div className="cards-section__line" />
-        <div className="cards-section__line" />
-        {children}
-      </section>
+      {isLoading ? (
+        <Loader isNested />
+      ) : (
+        <>
+          <section className={`cards-section ${sectionClass}`}>
+            <div className="cards-section__line" />
+            <div className="cards-section__line" />
+            <div className="cards-section__line" />
+            {children}
+          </section>
+        </>
+      )}
+
       {pageCount > 1 && (
         <Paginate
           sectionClass="cards-section__pagination"
@@ -35,6 +44,7 @@ CardsSectionWithLines.propTypes = {
   pageNumber: PropTypes.number,
   setPageNumber: PropTypes.func,
   sectionClass: PropTypes.string,
+  isLoading: PropTypes.bool,
 };
 
 CardsSectionWithLines.defaultProps = {
@@ -43,6 +53,7 @@ CardsSectionWithLines.defaultProps = {
   pageNumber: 0,
   setPageNumber: () => {},
   sectionClass: '',
+  isLoading: false,
 };
 
 export default CardsSectionWithLines;

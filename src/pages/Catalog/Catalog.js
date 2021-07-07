@@ -1,3 +1,6 @@
+// lod55:Немного подшаманил лоадеры на странице
+// p.s Карина надеюсь ты не против)
+
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
@@ -19,18 +22,76 @@ function Catalog() {
   const [pageNumber, setPageNumber] = useState(0);
 
   const [catalogPageData, setCatalogPageData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
+  function renderCards() {
+    return (
+      <CardsSectionWithLines
+        pageCount={pageCount}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        sectionClass="catalog__gap"
+        isLoading={isLoadingPaginate}
+      >
+        {catalogPageData.map((item, i) => (
+          <CardCatalog
+            sectionClass="cards-section__item"
+            key={item.id}
+            title={item.title}
+            image={item.imageUrl}
+            shape={FIGURES[i % FIGURES.length]}
+          />
+        ))}
+      </CardsSectionWithLines>
+    );
+  }
+
+  function renderPageContent() {
+    if (!catalogPageData && !isLoadingPage) {
+      return (
+        <AnimatedPageContainer
+          titleText="Информация появится в ближайшее время."
+          buttonText="Вернуться на главную"
+        />
+      );
+    }
+
+    return (
+      <section className="catalog page__section fade-in">
+        <TitleH1 sectionClass="catalog__title" title="Справочник" />
+        <TitleH2
+          sectionClass="catalog__subtitle"
+          title="Памятка новичка&nbsp;&mdash; наши материалы, где сможете найти всю базовую информацию,
+          рассказанную на вводном тренинге. Если вы захотите освежить свои знания, и&nbsp;напомнить
+          себе о&nbsp;чем-то."
+        />
+        {renderCards()}
+      </section>
+    );
+  }
+
+  function getPageData() {
     const offset = pageSize * pageNumber;
-    getCatalogPageData({ limit: pageSize, offset }).then(
-      ({ results, count }) => {
+
+    getCatalogPageData({ limit: pageSize, offset })
+      .then(({ results, count }) => {
         setCatalogPageData(results);
         setPageCount(Math.ceil(count / pageSize));
-        setIsLoading(false);
-      }
-    );
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoadingPaginate(false);
+        setIsLoadingPage(false);
+      });
+  }
+
+  useEffect(() => {
+    if (!isLoadingPage) {
+      setIsLoadingPaginate(true);
+    }
+
+    getPageData();
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
@@ -57,48 +118,8 @@ function Catalog() {
     };
   }, []);
 
-  // отрисовка заглушки
-  function renderAnimatedContainer() {
-    return (
-      <AnimatedPageContainer
-        titleText="Информация появится в ближайшее время."
-        buttonText="Вернуться на главную"
-      />
-    );
-  }
-
-  function renderPageContent() {
-    return (
-      <section className="catalog page__section fade-in">
-        <TitleH1 sectionClass="catalog__title" title="Справочник" />
-        <TitleH2
-          sectionClass="catalog__subtitle"
-          title="Памятка новичка&nbsp;&mdash; наши материалы, где сможете найти всю базовую информацию,
-          рассказанную на вводном тренинге. Если вы захотите освежить свои знания, и&nbsp;напомнить
-          себе о&nbsp;чем-то."
-        />
-        {isLoading ? (
-          <Loader isNested />
-        ) : (
-          <CardsSectionWithLines
-            pageCount={pageCount}
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            sectionClass="catalog__gap"
-          >
-            {catalogPageData.map((item, i) => (
-              <CardCatalog
-                sectionClass="cards-section__item"
-                key={item.id}
-                title={item.title}
-                image={item.imageUrl}
-                shape={FIGURES[i % FIGURES.length]}
-              />
-            ))}
-          </CardsSectionWithLines>
-        )}
-      </section>
-    );
+  if (isLoadingPage) {
+    return <Loader isCentered />;
   }
 
   return (
@@ -107,9 +128,7 @@ function Catalog() {
         <title>Справочник</title>
         <meta name="description" content="Справочник полезных статей" />
       </Helmet>
-      {!catalogPageData.length && !isLoading
-        ? renderAnimatedContainer()
-        : renderPageContent()}
+      {renderPageContent()}
     </BasePage>
   );
 }
