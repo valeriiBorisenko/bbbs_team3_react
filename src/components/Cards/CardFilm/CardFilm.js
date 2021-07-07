@@ -1,9 +1,12 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
 import { TitleH2, Card, Caption } from './index';
+import { changeCaseOfFirstLetter } from '../../../utils/utils';
+
+const BASE_MEDIA_URL = 'http://127.0.0.1/media';
 
 function CardFilm({ data, handleClick, children }) {
-  const { imageUrl, title, info, link } = data;
+  const { image, title, info, link } = data;
   return (
     <Card sectionClass="card-film">
       <div className="card-film__video">
@@ -13,7 +16,7 @@ function CardFilm({ data, handleClick, children }) {
           onClick={handleClick}
         >
           <img
-            src={`${imageUrl}`}
+            src={`${BASE_MEDIA_URL}${image}`}
             alt="Превью видео"
             className="card-film__preview"
           />
@@ -23,8 +26,14 @@ function CardFilm({ data, handleClick, children }) {
 
       <div className="card-film__video-info">
         <div className="card-film__title-wrap">
-          <TitleH2 sectionClass="card-film__title" title={title} />
-          <Caption sectionClass="card-film__info" title={info} />
+          <TitleH2
+            sectionClass="card-film__title"
+            title={changeCaseOfFirstLetter(title)}
+          />
+          <Caption
+            sectionClass="card-film__info"
+            title={changeCaseOfFirstLetter(info)}
+          />
         </div>
         <button
           type="button"
