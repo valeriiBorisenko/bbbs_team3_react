@@ -30,7 +30,9 @@ function ReadAndWatchSection({
       return;
     }
     setPageNumber((previousValue) => {
-      setData(() => getData({ elementsPerSection, number: previousValue - 1 }));
+      //! ОШИБКА! ты итак в getCatalog сеттишь дату!!! через setCatalogData
+      // setData(() => getData({ elementsPerSection, number: previousValue - 1 }));
+      getData({ elementsPerSection, number: previousValue - 1 });
       return previousValue - 1;
     });
   }
@@ -40,7 +42,8 @@ function ReadAndWatchSection({
       return;
     }
     setPageNumber((previousValue) => {
-      setData(() => getData({ elementsPerSection, number: previousValue + 1 }));
+      // setData(() => getData({ elementsPerSection, number: previousValue + 1 }));
+      getData({ elementsPerSection, number: previousValue + 1 });
       return previousValue + 1;
     });
   }
