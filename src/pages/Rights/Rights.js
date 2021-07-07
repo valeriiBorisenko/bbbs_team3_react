@@ -51,7 +51,6 @@ const Rights = () => {
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // Загрузка данных при переключении пагинации
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
-  const [isLoadingFilters, setIsLoadingFilters] = useState(false);
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
   const changeCategory = (inputValue, isChecked) => {
@@ -103,16 +102,27 @@ const Rights = () => {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
-    return isLoadingFilters ? <Loader isNested /> : renderCards();
+    return isFiltersUsed ? <Loader isNested /> : renderCards();
   };
 
-  const getArticlesData = (tags) => {
+  const getActiveTags = () => {
+    if (categories) {
+      return categories
+        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+        .map((filter) => filter.filter)
+        .join(',');
+    }
+    return null;
+  };
+
+  const getArticlesData = (activeCategories) => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
+    const activeTags = activeCategories || getActiveTags();
 
     getRightsData({
       limit: pageSize,
       offset,
-      tags,
+      tags: activeTags,
     })
       .then(({ results, count }) => {
         setPageCount(Math.ceil(count / pageSize));
@@ -123,7 +133,7 @@ const Rights = () => {
       .finally(() => {
         setIsLoadingPage(false);
         setIsLoadingPaginate(false);
-        setIsLoadingFilters(false);
+        setIsFiltersUsed(false);
       });
   };
 
@@ -146,13 +156,10 @@ const Rights = () => {
 
   // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
-    if (categories) {
-      const activeCategories = categories
-        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter)
-        .join(',');
+    if (categories && isFiltersUsed) {
+      const activeCategories = getActiveTags();
 
-      if (activeCategories?.length === 0) {
+      if (activeCategories.length === 0) {
         selectOneTag(setCategories, ALL_CATEGORIES);
       }
       getArticlesData(activeCategories);
@@ -161,12 +168,11 @@ const Rights = () => {
 
   /// Фильтрация с делэем
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
+  const debouncePaginate = useDebounce(getArticlesData, DELAY_DEBOUNCE);
   useEffect(() => {
     if (isFiltersUsed) {
       debounceFiltration();
-      setIsLoadingFilters(true);
     }
-    setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
   // Первая отрисовка страницы + переход по страницам пагинации
@@ -178,7 +184,7 @@ const Rights = () => {
 
     if (!isLoadingPage && !isFiltersUsed) {
       setIsLoadingPaginate(true);
-      debounceFiltration();
+      debouncePaginate();
     }
   }, [pageSize, pageNumber]);
 
