@@ -2,8 +2,10 @@ import './CardFilm.scss';
 import PropTypes from 'prop-types';
 import { TitleH2, Card, Caption } from './index';
 
+const BASE_MEDIA_URL = 'http://127.0.0.1/media/';
+
 function CardFilm({ data, handleClick, children }) {
-  const { imageUrl, title, info, link } = data;
+  const { image, title, info, link } = data;
   return (
     <Card sectionClass="card-film">
       <div className="card-film__video">
@@ -13,7 +15,7 @@ function CardFilm({ data, handleClick, children }) {
           onClick={handleClick}
         >
           <img
-            src={`${imageUrl}`}
+            src={`${BASE_MEDIA_URL}${image}`}
             alt="Превью видео"
             className="card-film__preview"
           />
