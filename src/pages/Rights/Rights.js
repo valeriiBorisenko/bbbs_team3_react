@@ -51,6 +51,7 @@ const Rights = () => {
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // Загрузка данных при переключении пагинации
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+  const [isLoadingFilters, setIsLoadingFilters] = useState(false);
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
   const changeCategory = (inputValue, isChecked) => {
@@ -102,7 +103,7 @@ const Rights = () => {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
-    return isFiltersUsed ? <Loader isNested /> : renderCards();
+    return isLoadingFilters ? <Loader isNested /> : renderCards();
   };
 
   const getArticlesData = (tags) => {
@@ -122,6 +123,7 @@ const Rights = () => {
       .finally(() => {
         setIsLoadingPage(false);
         setIsLoadingPaginate(false);
+        setIsLoadingFilters(false);
       });
   };
 
@@ -154,7 +156,6 @@ const Rights = () => {
         selectOneTag(setCategories, ALL_CATEGORIES);
       }
       getArticlesData(activeCategories);
-      setIsFiltersUsed(false);
     }
   };
 
@@ -163,7 +164,9 @@ const Rights = () => {
   useEffect(() => {
     if (isFiltersUsed) {
       debounceFiltration();
+      setIsLoadingFilters(true);
     }
+    setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
   // Первая отрисовка страницы + переход по страницам пагинации
