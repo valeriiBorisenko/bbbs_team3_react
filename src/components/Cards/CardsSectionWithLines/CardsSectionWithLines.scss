@@ -5,7 +5,6 @@
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
   grid-gap: 0 30px;
-  padding-top: 80px;
 
   &__line {
     grid-column: 1 / -1;
@@ -25,7 +24,10 @@
   }
 
   &__pagination {
-    margin: 70px auto;
+    height: 50px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
   }
 
   &__item {
@@ -54,8 +56,13 @@
 
 @include atDesktop1024 {
   .cards-section {
-    padding-top: 50px;
+    padding-top: 36px;
     grid-template-rows: max-content [third-line] 1px max-content;
+
+    &__pagination {
+      height: 38px;
+      margin: 30px auto;
+    }
 
     &__item {
       margin: 30px auto;
@@ -65,6 +72,7 @@
 
 @include atTabletL {
   .cards-section {
+    padding-top: 0;
     grid-template-columns: 1fr;
     grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
 
@@ -73,11 +81,9 @@
         display: block;
       }
     }
-  }
-}
 
-@include atMobile {
-  .cards-section {
-    padding-top: 30px;
+    &__pagination {
+      margin: 0 auto;
+    }
   }
 }
