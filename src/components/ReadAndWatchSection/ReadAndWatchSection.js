@@ -26,17 +26,21 @@ function ReadAndWatchSection({
   console.log(pageNumber);
 
   function back() {
+    if (pageNumber === 0) {
+      return;
+    }
     setPageNumber((previousValue) => {
       setData(() => getData({ elementsPerSection, number: previousValue - 1 }));
-      // getData({ elementsPerSection, number: previousValue + 1 });
       return previousValue - 1;
     });
   }
 
   function forward() {
+    if (pageNumber === totalPages - 1) {
+      return;
+    }
     setPageNumber((previousValue) => {
       setData(() => getData({ elementsPerSection, number: previousValue + 1 }));
-      // getData({ elementsPerSection, number: previousValue + 1 });
       return previousValue + 1;
     });
   }
