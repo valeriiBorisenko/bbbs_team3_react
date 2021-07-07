@@ -27,6 +27,16 @@
 .calendar__title {
   margin: 0 15px 0 0;
   max-width: 320px;
+  max-height: 4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  box-orient: vertical;
 }
 
 .calendar__weekday {
@@ -48,7 +58,7 @@
 .calendar__about {
   display: flex;
   justify-content: space-between;
-  margin: 0 auto 50px;
+  margin: 0 auto;
 }
 
 .calendar__info-list {
@@ -79,6 +89,7 @@
 .calendar__description {
   margin-top: 30px;
   max-height: 182px;
+  
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: rgba($lightGray, .6) transparent;
@@ -162,7 +173,8 @@
   }
 
   .calendar__title {
-    max-width: 246px;
+    font-size: 19px;
+    line-height: 1.2;
   }
 
   .calendar__place-left {
@@ -172,10 +184,6 @@
 }
 
 @include atDesktop1024 {
-  .calendar__title {
-    font-size: 19px;
-    line-height: 1.2;
-  }
 
   .calendar__caption {
     font-size: 12px;
@@ -210,11 +218,7 @@
 }
 
 @include atMobile {
-  .calendar__title {
-    max-width: 166px;
-  }
-
-  .calendar__image-done {
+   .calendar__image-done {
     background-size: 260px 106px;
     width: 260px;
     height: 106px;

@@ -1,12 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import './PopupLogin.scss';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { CurrentUserContext } from '../../../contexts/index';
+import { useAuth } from '../../../hooks/index';
 import { AFISHA_URL } from '../../../config/routes';
 import { Popup, Input, Button, TitleH2 } from './index';
 
-function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
+function PopupLogin({ isOpen, onClose }) {
+  const { updateUser } = useContext(CurrentUserContext);
+  const { handleLogin } = useAuth(updateUser, onClose);
+
   const {
     register,
     handleSubmit,
@@ -15,24 +20,21 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
   } = useForm();
 
   function onFormSubmit(values) {
-    onLoginFormSubmit(values);
+    handleLogin(values);
   }
 
   //! аварийный перевод на главную, если не хочешь логиниться
   const history = useHistory();
-  const location = useLocation();
+  const { pathname } = useLocation();
   function closePopup() {
-    if (location.pathname === AFISHA_URL) {
+    if (pathname === AFISHA_URL) {
       history.push('/');
     }
     onClose();
   }
 
   useEffect(() => {
-    reset({
-      username: '',
-      password: '',
-    });
+    reset();
   }, [isOpen]);
 
   return (
@@ -90,7 +92,6 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
 PopupLogin.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onLoginFormSubmit: PropTypes.func.isRequired,
 };
 
 export default PopupLogin;

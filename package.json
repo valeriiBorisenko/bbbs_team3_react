@@ -28,7 +28,9 @@
     "eject": "react-scripts eject",
     "prettier": "prettier --write src/**/*.js",
     "lint": "eslint --debug src/",
-    "lint:fix": "eslint --debug src/ --fix"
+    "lint:fix": "eslint --debug src/ --fix",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "husky": {
     "hooks": {
@@ -69,6 +71,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "gh-pages": "^3.2.3",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "prettier": "2.3.0"

@@ -1,5 +1,5 @@
 import './CardQuestion.scss';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Rubric, TitleH2, Card, ButtonRound } from './index';
 
@@ -8,21 +8,41 @@ function CardQuestion({
   sectionClass,
   isQuestionsPage,
 }) {
-  const [isClick, setIsClick] = useState(false);
-
+  const [isOpened, setIsOpened] = useState(false);
+  const [isAnimated, setIsAnimated] = useState(false);
+  const ref = useRef();
   function handleClickButton() {
-    setIsClick(!isClick);
+    if (isOpened) {
+      setIsAnimated(false);
+      setTimeout(() => {
+        setIsOpened(false);
+      }, 300);
+    } else {
+      setIsOpened(true);
+      setTimeout(() => {
+        setIsAnimated(true);
+      }, 300);
+    }
   }
 
-  const answerRender = (
-    <div
-      className={`card-question__answer ${
-        isClick ? 'card-question__answer_visible' : ''
-      }`}
-    >
-      <p className="paragraph card-question__paragraph">{answer}</p>
-    </div>
-  );
+  const getDynamicStyle = () => {
+    if (isOpened) {
+      return {
+        minHeight: ref.current.clientHeight,
+      };
+    }
+
+    return {
+      height: 0,
+    };
+  };
+
+  const answerWrapperClassNames = [
+    'card-question__answer',
+    isOpened ? 'card-question__answer_opened' : '',
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <Card sectionClass={`card-question ${sectionClass}`}>
@@ -41,11 +61,22 @@ function CardQuestion({
             sectionClass="button-round__questions-page"
             color="lightblue"
             onClick={handleClickButton}
-            isClick={isClick}
+            isClick={isOpened}
           />
         )}
       </div>
-      {isQuestionsPage && isClick && answerRender}
+      {isQuestionsPage && (
+        <div className={answerWrapperClassNames} style={getDynamicStyle()}>
+          <p
+            ref={ref}
+            className={`paragraph card-question__paragraph card-question__answer_text-hidden ${
+              isAnimated ? 'card-question__answer_text-active' : ''
+            }`}
+          >
+            {answer}
+          </p>
+        </div>
+      )}
     </Card>
   );
 }

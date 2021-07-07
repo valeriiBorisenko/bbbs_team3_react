@@ -47,11 +47,11 @@
     }
 
     &_type_identical {
-      grid-template-rows: 414px;
+      grid-template-rows: 420px;
     }
 
     &_type_iframe {
-      grid-template-columns: 370px 1fr;
+      grid-template-columns: 410px 1fr;
     }
 
     &_type_main-video {
@@ -105,6 +105,14 @@
     &_type_main-video {
       grid-template-rows: minmax(585px, 1fr);
     }
+  }
+}
+
+@media screen and (max-width: 970px) {
+  .card-container_type_iframe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
 

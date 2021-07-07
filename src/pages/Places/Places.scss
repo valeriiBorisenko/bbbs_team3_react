@@ -1,6 +1,6 @@
 @import './styles/utils.scss';
 
-.place {
+.places {
   &__main {
     padding-top: 80px;
   }
@@ -11,10 +11,22 @@
     gap: 80px 30px;
     padding-top: 80px;
   }
+
+  &__paragraph {
+    width: fit-content;
+    margin: 0 auto;
+    padding-top: 80px;
+    font-family: $protoGrotesk;
+    font-weight: 300;
+    font-size: 23px;
+    line-height: 1.3;
+    color: $black;
+    text-align: center;
+  }
 }
 
 @include atDesktop1279 {
-  .place {
+  .places {
     &__cards-grid {
       grid-template-columns: repeat(2, minmax(290px, 1fr));
     }
@@ -22,7 +34,7 @@
 }
 
 @include atDesktop1024 {
-  .place {
+  .places {
     &__main {
       padding-top: 50px;
     }
@@ -32,11 +44,15 @@
       padding-top: 50px;
       row-gap: 30px;
     }
+
+    &__paragraph {
+      padding-top: 50px;
+    }
   }
 }
 
 @include atTablet {
-  .place {
+  .places {
     &__cards-grid {
       grid-template-columns: 1fr;
       padding-top: 30px;
@@ -45,7 +61,7 @@
 }
 
 @include atMobileL {
-  .place {
+  .places {
     &__main {
       padding-top: 30px;
     }

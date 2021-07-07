@@ -7,14 +7,16 @@ function getRightsData({ limit, offset, tags }) {
     .get(`${baseURL}${apiUrl}/rights/`, {
       params: { tags, limit, offset },
     })
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
 // получение категорий прав (список фильтров)
 function getRightsTags() {
   return axios
     .get(`${baseURL}${apiUrl}/rights/tags/`)
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
 export { getRightsData, getRightsTags };

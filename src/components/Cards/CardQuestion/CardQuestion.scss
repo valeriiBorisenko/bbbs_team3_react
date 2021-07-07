@@ -1,9 +1,11 @@
 @import './styles/utils.scss';
 
 .card-question {
+  // position: relative;
   padding: 50px 50px 47px;
   position: relative;
   width: 100%;
+  transition: all 0.5s linear;
 
   &__rubric {
     align-self: flex-start;
@@ -28,6 +30,35 @@
     position: relative;
     display: flex;
     justify-content: space-between;
+  }
+
+  &__answer {
+    height: 0;
+    min-height: 0;
+    opacity: 0;
+    transition: min-height, 0.3s ease-out;
+  }
+
+  &__answer_opened {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    opacity: 1;
+  }
+
+  &__answer_text-hidden {
+    opacity: 0;
+    transition: opacity 0.15s linear;
+  }
+
+  &__answer_text-active {
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .card-question__answer_opened {
+    margin-top: 5px;
+    margin-bottom: 10px;
   }
 }
 

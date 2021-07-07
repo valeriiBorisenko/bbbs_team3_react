@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { formatDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
-import { adminUrl } from '../../config/config';
+import { staticImageUrl } from '../../config/config';
+import defaultImage from '../../assets/icon-logo-no-text.svg';
 import {
   Card,
   TitleH2,
@@ -35,8 +36,10 @@ function ProfileDiary({ data, onEdit, onDelete }) {
     <div className="card-container profile-diary">
       <Card sectionClass="profile-diary__image-container">
         <img
-          className="profile-diary__image"
-          src={`${adminUrl}/media/${image}`}
+          className={
+            image ? 'profile-diary__image' : 'profile-diary__image_default'
+          }
+          src={image ? `${staticImageUrl}/${image}` : defaultImage}
           alt={place}
         />
       </Card>
@@ -96,22 +99,12 @@ function ProfileDiary({ data, onEdit, onDelete }) {
 
 ProfileDiary.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  image: PropTypes.string,
-  description: PropTypes.string,
-  place: PropTypes.string,
-  mark: PropTypes.string,
-  date: PropTypes.string,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
 };
 
 ProfileDiary.defaultProps = {
   data: {},
-  image: '',
-  description: '',
-  place: '',
-  mark: 'neutral',
-  date: '',
   onEdit: () => {},
   onDelete: () => {},
 };

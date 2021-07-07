@@ -1,19 +1,14 @@
 import './Widget.scss';
 import PropTypes from 'prop-types';
-import Card from '../Card/Card';
 
 function Widget({ link, title }) {
   return (
-    <Card sectionClass="widget" color="blue">
-      <iframe
-        className="widget__iframe"
-        title={title}
-        src={link}
-        scrolling="no"
-        allowFullScreen
-        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-      />
-    </Card>
+    <iframe
+      className="widget-facebook"
+      title={title}
+      src={link}
+      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+    />
   );
 }
 

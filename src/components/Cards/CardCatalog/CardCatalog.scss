@@ -14,6 +14,9 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
+
+    transform: scale(1);
+    transition: .3s ease-in-out;
   }
 
   &_type_shaped {
@@ -24,6 +27,15 @@
     width: 100%;
     object-fit: cover;
     height: 370px;
+  }
+
+  &__link-wrap {
+    width: 100%;
+    text-decoration: none;
+
+    &:hover .card-catalog__image {
+      transform: scale(1.3);
+    }
   }
 }
 

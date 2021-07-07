@@ -1,9 +1,8 @@
-/* eslint-disable no-unused-vars */
 import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Helmet } from 'react-helmet-async';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
+import questionsPageTexts from '../../locales/questions-page-RU';
+import { CurrentUserContext } from '../../contexts/index';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
@@ -21,6 +20,7 @@ import {
   Input,
   Button,
   Loader,
+  AnimatedPageContainer,
 } from './index';
 import {
   getQuestionsPageData,
@@ -30,9 +30,18 @@ import {
 } from '../../api/questions-page';
 
 function Questions() {
+  const {
+    headTitle,
+    headDescription,
+    title,
+    animatedContainerText,
+    formPlaceholder,
+    formSubmitButton,
+  } = questionsPageTexts;
+
   useScrollToTop();
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
   // крутилка-лоадер
   const [isLoading, setIsLoading] = useState(false);
   // начальная дата с API
@@ -102,10 +111,8 @@ function Questions() {
 
     // то есть активных нету и сейчас нажато "ВСЕ"
     if (activeCategories.length === 0) {
-      console.log('TYT');
       getQuestionsPageData()
         .then((allQuestions) => {
-          console.log('TYT2');
           setQuestionsPageData(allQuestions);
         })
         .catch((error) => console.log(error))
@@ -136,7 +143,6 @@ function Questions() {
   useEffect(() => {
     Promise.all([getQuestionsPageData(), getQuestionsPageTags()])
       .then(([questionsData, tagsFilters]) => {
-        console.log('TYT3');
         setQuestionsPageData(questionsData);
 
         const customFilters = tagsFilters.map((tag) => {
@@ -156,6 +162,11 @@ function Questions() {
   }, []);
 
   // рендеринг
+  // заглушка, если нет даты
+  function returnAnimatedContainer() {
+    return <AnimatedPageContainer titleText={animatedContainerText} />;
+  }
+
   // форма вопросов
   const renderQuestionForm = () => (
     <>
@@ -172,15 +183,15 @@ function Questions() {
             <Input
               type="text"
               name="question"
-              placeholder="Введите вопрос"
+              placeholder={formPlaceholder}
               register={register}
               required
               error={errors?.question}
-              errorMessage="Введите вопрос*"
+              errorMessage={`${formPlaceholder}*`}
               sectionClass="input__question-form"
             />
             <Button
-              title="Отправить"
+              title={formSubmitButton}
               color="black"
               sectionClass="question-form__button"
               isSubmittable
@@ -221,7 +232,7 @@ function Questions() {
     if (questionsPageData.length > 0) {
       return (
         <>
-          <TitleH1 title="Ответы на вопросы" />
+          <TitleH1 title={title} />
 
           {/* рендер фильтров */}
           {categories?.length > 1 && renderTagsContainer()}
@@ -236,6 +247,12 @@ function Questions() {
       );
     }
 
+    // залогинен и нет ивентов
+    const isDataForPage = questionsPageData.length > 1;
+    if (!isDataForPage) {
+      return returnAnimatedContainer();
+    }
+
     return null;
   };
 
@@ -245,14 +262,7 @@ function Questions() {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Ответы на вопросы</title>
-        <meta
-          name="description"
-          content="Страница с ответами на основные вопросы"
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="questions-page page__section fade-in">
         {renderPageContent()}
       </section>

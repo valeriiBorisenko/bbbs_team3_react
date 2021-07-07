@@ -24,7 +24,7 @@ const useSmoothHorizontalScroll = ({ step }) => {
       ref.current.addEventListener('wheel', scrollByWheel);
       return () => ref.current.removeEventListener('wheel', scrollByWheel);
     }
-  }, []);
+  }, [ref.current]);
 
   return ref;
 };

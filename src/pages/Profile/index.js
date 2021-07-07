@@ -5,6 +5,7 @@ import ProfileForm from '../../components/ProfileForm/ProfileForm';
 import ProfileDiary from '../../components/ProfileDiary/ProfileDiary';
 import PopupDeleteDiary from '../../components/Popups/PopupDeleteDiary/PopupDeleteDiary';
 import ButtonRound from '../../components/utils/ButtonRound/ButtonRound';
+import Loader from '../../components/utils/Loader/Loader';
 
 export {
   BasePage,
@@ -14,4 +15,5 @@ export {
   ProfileDiary,
   PopupDeleteDiary,
   ButtonRound,
+  Loader,
 };
