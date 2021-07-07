@@ -152,10 +152,15 @@ const Rights = () => {
     if (!isLoadingPage && isFiltersUsed) {
       const activeCategories = categories
         .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter)
-        .join(',');
+        .map((filter) => filter.filter);
 
-      if (activeCategories === '') {
+      const searchStr = activeCategories.join(',');
+
+      if (searchStr === '') {
+        selectOneTag(setCategories, ALL_CATEGORIES);
+      }
+
+      if (categories.length - 1 === activeCategories.length) {
         selectOneTag(setCategories, ALL_CATEGORIES);
       }
 
