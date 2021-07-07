@@ -19,7 +19,10 @@ function CardsSectionWithLines({
   useEffect(() => {
     const tablet = window.matchMedia('(max-width: 900px)');
 
-    const listener = () => setIsTablet(true);
+    const listener = () => {
+      if (tablet.matches) setIsTablet(true);
+      else setIsTablet(false);
+    };
     listener();
 
     tablet.addEventListener('change', listener);
