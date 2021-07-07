@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './ReadAndWatch.scss';
+import readAndWatchPageTexts from '../../locales/read-and-watch-page-RU';
 import { BasePage, Loader, AnimatedPageContainer } from './index';
 import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWatchSection';
 // import useReadWatch from '../../hooks/useReadWatch'; //!
@@ -22,6 +23,8 @@ import { getMoviesPageData } from '../../api/movies-page';
 import { getBooksPageData } from '../../api/books-page';
 
 function ReadAndWatch() {
+  const { headTitle, headDescription } = readAndWatchPageTexts;
+
   const [pageSize, setPageSize] = useState(4);
   // const [pageCounter, setPageCount] = useState({});
   const [pageNumber, setPageNumber] = useState(0);
@@ -144,14 +147,7 @@ function ReadAndWatch() {
   }, []);
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Ответы на вопросы</title>
-        <meta
-          name="description"
-          content="Страница с ответами на основные вопросы"
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="readwatch-page page__section fade-in">
         {/* Справочник */}
         <ReadAndWatchSection
