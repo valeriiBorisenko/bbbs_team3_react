@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Rights.scss';
-import { ALL_CATEGORIES, FIGURES, COLORS } from '../../config/constants';
+import {
+  ALL_CATEGORIES,
+  FIGURES,
+  COLORS,
+  DELAY_DEBOUNCE,
+} from '../../config/constants';
 import {
   renderFilterTags,
   handleCheckboxBehavior,
@@ -20,6 +25,15 @@ import {
   AnimatedPageContainer,
 } from './index';
 
+const TEXT_STUB_NOPE_DATA =
+  'В данный момент страница со статьями о правах детей пуста. Возвращайтесь позже!';
+
+const PAGE_SIZE_PAGINATE = {
+  small: 4,
+  medium: 9,
+  big: 16,
+};
+
 const Rights = () => {
   useScrollToTop();
 
@@ -36,15 +50,22 @@ const Rights = () => {
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+  // Загрузка данных при переключении пагинации
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
   const changeCategory = (inputValue, isChecked) => {
-    handleCheckboxBehavior(setCategories, { inputValue, isChecked });
+    if (inputValue === ALL_CATEGORIES) {
+      selectOneTag(setCategories, ALL_CATEGORIES);
+    } else {
+      handleCheckboxBehavior(setCategories, { inputValue, isChecked });
+      deselectOneTag(setCategories, ALL_CATEGORIES);
+    }
     setIsFiltersUsed(true);
   };
 
   // отрисовка массива фильтров
-  const renderTagsContainder = () => (
+  const renderTagsContainer = () => (
     <div className="tags">
       <ul className="tags__list">
         {renderFilterTags(categories, 'checkbox', changeCategory)}
@@ -52,14 +73,14 @@ const Rights = () => {
     </div>
   );
 
-  // отрисовка контента страницы
-  const renderMainContent = () => (
+  const renderCards = () => (
     <>
       <CardsSectionWithLines
         pageCount={pageCount}
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
         sectionClass="rights page__section"
+        isLoading={isLoadingPaginate}
       >
         {articles.map((item, i) => (
           <CardRights
@@ -74,24 +95,37 @@ const Rights = () => {
     </>
   );
 
-  // Заглушка на страницу
-  const getPageStub = (text) => (
-    <AnimatedPageContainer titleText={text} buttonText="Вернуться на главную" />
-  );
+  // отрисовка контента страницы
+  const renderMainContent = () => {
+    if (!articles && !isLoadingPage) {
+      return (
+        <AnimatedPageContainer
+          titleText={TEXT_STUB_NOPE_DATA}
+          buttonText="Вернуться на главную"
+        />
+      );
+    }
 
-  const getArticlesData = (tagsStr = '', offset = 0) => {
+    return isFiltersUsed ? <Loader isNested /> : renderCards();
+  };
+
+  const getArticlesData = (tags = '') => {
+    const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
+
     getRightsData({
       limit: pageSize,
       offset,
-      tags: tagsStr,
+      tags,
     })
       .then(({ results, count }) => {
-        setArticles(results);
         setPageCount(Math.ceil(count / pageSize));
+        return results;
       })
-      .catch(getPageStub('Ошибка обработки запроса попробуйте чуть позже'))
+      .then((results) => setArticles(results))
+      .catch((err) => console.log(err))
       .finally(() => {
         setIsLoadingPage(false);
+        setIsLoadingPaginate(false);
         setIsFiltersUsed(false);
       });
   };
@@ -104,29 +138,13 @@ const Rights = () => {
           name: changeCaseOfFirstLetter(tag.name),
           isActive: false,
         }));
+
         setCategories([
-          {
-            filter: ALL_CATEGORIES,
-            name: ALL_CATEGORIES,
-            isActive: true,
-          },
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
           ...categoriesArr,
         ]);
       })
-      .catch(getPageStub('Ошибка обработки запроса попробуйте чуть позже'));
-  };
-
-  const getPageData = (tagsStr) => {
-    const offset = pageSize * pageNumber;
-
-    if (isLoadingPage) {
-      getArticlesData();
-      getArticlesTags();
-    } else if (isFiltersUsed) {
-      getArticlesData(tagsStr);
-    } else {
-      getArticlesData(tagsStr, offset);
-    }
+      .catch((err) => console.log(err));
   };
 
   // функция-фильтратор с использованием АПИ
@@ -136,26 +154,37 @@ const Rights = () => {
         .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
         .map((filter) => filter.filter);
 
-      if (activeCategories.length === 0) {
-        getPageData();
+      const searchStr = activeCategories.join(',');
+
+      if (searchStr === '') {
         selectOneTag(setCategories, ALL_CATEGORIES);
-      } else {
-        const tagsStr = activeCategories.join(',');
-        getPageData(tagsStr);
-        deselectOneTag(setCategories, ALL_CATEGORIES);
       }
+
+      if (categories.length - 1 === activeCategories.length) {
+        selectOneTag(setCategories, ALL_CATEGORIES);
+      }
+
+      getArticlesData(searchStr);
     }
   };
 
-  const debounceFiltration = useDebounce(handleFiltration, 1500);
-  // запуск фильтрации
+  // Фильтрация с делэем
+  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
     debounceFiltration();
   }, [isFiltersUsed]);
 
-  // Отрисовка страницы
+  // Первая отрисовка страницы + переход по страницам пагинации
   useEffect(() => {
-    getPageData();
+    if (isLoadingPage) {
+      getArticlesData();
+      getArticlesTags();
+    }
+
+    if (!isLoadingPage && !isFiltersUsed) {
+      setIsLoadingPaginate(true);
+      getArticlesData();
+    }
   }, [pageSize, pageNumber]);
 
   // Юз эффект для пагинации
@@ -165,11 +194,11 @@ const Rights = () => {
 
     const listener = () => {
       if (smallQuery.matches) {
-        setPageSize(4);
+        setPageSize(PAGE_SIZE_PAGINATE.small);
       } else if (largeQuery.matches) {
-        setPageSize(9);
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
-        setPageSize(16);
+        setPageSize(PAGE_SIZE_PAGINATE.big);
       }
     };
     listener();
@@ -183,15 +212,8 @@ const Rights = () => {
     };
   }, []);
 
-  // залогинен и нет ивентов
-  if (!articles && !isLoadingPage) {
-    return getPageStub(
-      'В данный момент страница со статьями о правах детей пуста. Возвращайтесь позже!'
-    );
-  }
-
   // глобальный лоадер
-  if (isLoadingPage || !articles || !categories) {
+  if (isLoadingPage) {
     return <Loader isCentered />;
   }
 
@@ -206,9 +228,9 @@ const Rights = () => {
       </Helmet>
       <section className="lead page__section fade-in">
         <TitleH1 title="Права детей" />
-        {categories?.length > 1 && renderTagsContainder()}
+        {categories?.length > 1 && renderTagsContainer()}
       </section>
-      {isFiltersUsed ? <Loader isNested /> : renderMainContent()}
+      {renderMainContent()}
     </BasePage>
   );
 };

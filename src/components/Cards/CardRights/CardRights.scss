@@ -1,5 +1,10 @@
 @import './styles/utils.scss';
 
+.rights__card {
+  margin-bottom: 80px;
+  margin-top:  80px;
+}
+
 .rights__link {
   max-width: 420px;
   margin-left: auto;
@@ -25,5 +30,20 @@
 
   &:last-of-type {
     margin-right: 0px;
+  }
+}
+
+@include atDesktop1024 {
+  .rights__card {
+    margin-bottom: 60px;
+    margin-top:  60px;
+  }
+}
+
+
+@include atMobile {
+  .rights__card {
+    margin-bottom: 30px;
+    margin-top:  30px;
   }
 }

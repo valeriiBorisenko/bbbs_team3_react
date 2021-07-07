@@ -22,6 +22,7 @@ const Paginate = ({ pageCount, sectionClass, value, onChange }) => {
       marginPagesDisplayed={1}
       forcePage={value}
       onPageChange={({ selected }) => onChange(selected)}
+      initialPage={0}
     />
   );
 };

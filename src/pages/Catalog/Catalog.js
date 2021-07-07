@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import catalogPageTexts from '../../locales/catalog-page-RU';
+import { Helmet } from 'react-helmet-async';
 import {
   BasePage,
   TitleH1,
@@ -14,26 +14,81 @@ import { FIGURES } from '../../config/constants';
 import './Catalog.scss';
 
 function Catalog() {
-  const { headTitle, headDescription, title, subtitle, animatedContainerText } =
-    catalogPageTexts;
-
   const [pageSize, setPageSize] = useState(16);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
   const [catalogPageData, setCatalogPageData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
+  function renderCards() {
+    return (
+      <CardsSectionWithLines
+        pageCount={pageCount}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        sectionClass="catalog__gap"
+        isLoading={isLoadingPaginate}
+      >
+        {catalogPageData.map((item, i) => (
+          <CardCatalog
+            sectionClass="cards-section__item"
+            key={item.id}
+            title={item.title}
+            image={item.imageUrl}
+            shape={FIGURES[i % FIGURES.length]}
+          />
+        ))}
+      </CardsSectionWithLines>
+    );
+  }
+
+  function renderPageContent() {
+    if (!catalogPageData && !isLoadingPage) {
+      return (
+        <AnimatedPageContainer
+          titleText="Информация появится в ближайшее время."
+          buttonText="Вернуться на главную"
+        />
+      );
+    }
+
+    return (
+      <section className="catalog page__section fade-in">
+        <TitleH1 sectionClass="catalog__title" title="Справочник" />
+        <TitleH2
+          sectionClass="catalog__subtitle"
+          title="Памятка новичка&nbsp;&mdash; наши материалы, где сможете найти всю базовую информацию,
+          рассказанную на вводном тренинге. Если вы захотите освежить свои знания, и&nbsp;напомнить
+          себе о&nbsp;чем-то."
+        />
+        {renderCards()}
+      </section>
+    );
+  }
+
+  function getPageData() {
     const offset = pageSize * pageNumber;
+
     getCatalogPageData({ limit: pageSize, offset })
       .then(({ results, count }) => {
         setCatalogPageData(results);
         setPageCount(Math.ceil(count / pageSize));
       })
-      .catch(console.log)
-      .finally(() => setIsLoading(false));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoadingPaginate(false);
+        setIsLoadingPage(false);
+      });
+  }
+
+  useEffect(() => {
+    if (!isLoadingPage) {
+      setIsLoadingPaginate(true);
+    }
+
+    getPageData();
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
@@ -60,45 +115,17 @@ function Catalog() {
     };
   }, []);
 
-  // отрисовка заглушки
-  function renderAnimatedContainer() {
-    return <AnimatedPageContainer titleText={animatedContainerText} />;
-  }
-
-  function renderPageContent() {
-    return (
-      <section className="catalog page__section fade-in">
-        <TitleH1 sectionClass="catalog__title" title={title} />
-        <TitleH2 sectionClass="catalog__subtitle" title={subtitle} />
-        {isLoading ? (
-          <Loader isNested />
-        ) : (
-          <CardsSectionWithLines
-            pageCount={pageCount}
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            sectionClass="catalog__gap"
-          >
-            {catalogPageData.map((item, i) => (
-              <CardCatalog
-                sectionClass="cards-section__item"
-                key={item.id}
-                title={item.title}
-                image={item.imageUrl}
-                shape={FIGURES[i % FIGURES.length]}
-              />
-            ))}
-          </CardsSectionWithLines>
-        )}
-      </section>
-    );
+  if (isLoadingPage) {
+    return <Loader isCentered />;
   }
 
   return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {!catalogPageData.length && !isLoading
-        ? renderAnimatedContainer()
-        : renderPageContent()}
+    <BasePage>
+      <Helmet>
+        <title>Справочник</title>
+        <meta name="description" content="Справочник полезных статей" />
+      </Helmet>
+      {renderPageContent()}
     </BasePage>
   );
 }
