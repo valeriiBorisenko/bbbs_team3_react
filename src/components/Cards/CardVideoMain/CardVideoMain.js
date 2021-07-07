@@ -1,9 +1,9 @@
 import './CardVideoMain.scss';
 import PropTypes from 'prop-types';
-import { formatDuration } from '../../../utils/utils';
+import { formatDuration, changeCaseOfFirstLetter } from '../../../utils/utils';
 import { Card, TitleH2 } from './index';
 
-const BASE_MEDIA_URL = 'http://127.0.0.1/media/';
+const BASE_MEDIA_URL = 'http://127.0.0.1/media';
 
 function CardVideoMain({ data, handleClick }) {
   const { title, info, link, image, duration } = data;
@@ -13,8 +13,13 @@ function CardVideoMain({ data, handleClick }) {
     <div className="card-container card-container_type_main-video">
       <Card sectionClass="card-video-main" color="yellow">
         <div className="card-video-main__title-wrap">
-          <TitleH2 sectionClass="card-video-main__title" title={title} />
-          <p className="caption card-video-main__info">{info}</p>
+          <TitleH2
+            sectionClass="card-video-main__title"
+            title={changeCaseOfFirstLetter(title)}
+          />
+          <p className="caption card-video-main__info">
+            {changeCaseOfFirstLetter(info)}
+          </p>
         </div>
         <button
           href={link}

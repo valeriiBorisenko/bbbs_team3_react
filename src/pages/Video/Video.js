@@ -32,14 +32,6 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-const defMainVideo = {
-  duration: 134,
-  image: '/code/project/media/videos/2_pic.jpg',
-  info: 'Иван Рустаев, выпускник программы',
-  link: 'https://youtu.be/H980rXfjdq4',
-  title: 'Эфир с выпускником нашей программы',
-};
-
 const Video = () => {
   useScrollToTop();
 
@@ -49,7 +41,8 @@ const Video = () => {
   const [pageNumber, setPageNumber] = useState(0);
 
   // Стейты с данными
-  const [mainVideo, setMainVideo] = useState(defMainVideo);
+  const [mainVideo, setMainVideo] = useState({});
+
   const [video, setVideo] = useState(null);
   const [categories, setCategories] = useState(null);
 
@@ -134,15 +127,21 @@ const Video = () => {
 
   const getVideoData = (tags = '') => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
-    // next: null
-    // previous: null
+
     getVideoPageData({
       limit: pageSize,
       offset,
       tags,
     })
-      .then(({ results, count, previous }) => {
-        // setMainVideo(previous);
+      .then(({ results, count }) => {
+        if (isLoadingPage) {
+          const fullSizeVideo = results.filter(
+            (item) => item.pinnedFullSize
+          )[0];
+          console.log('tyt');
+          setMainVideo(fullSizeVideo);
+        }
+
         setVideo(results);
         setPageCount(Math.ceil(count / pageSize));
       })
@@ -176,10 +175,15 @@ const Video = () => {
     if (!isLoadingPage && isFiltersUsed) {
       const activeCategories = categories
         .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter)
-        .join(',');
+        .map((filter) => filter.filter);
 
-      if (activeCategories === '') {
+      const searchStr = activeCategories.join(',');
+
+      if (searchStr === '') {
+        selectOneTag(setCategories, ALL_CATEGORIES);
+      }
+
+      if (categories.length - 1 === activeCategories.length) {
         selectOneTag(setCategories, ALL_CATEGORIES);
       }
 
@@ -215,7 +219,7 @@ const Video = () => {
       } else if (largeQuery.matches) {
         setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
-        setPageSize(PAGE_SIZE_PAGINATE.big);
+        setPageSize(4);
       }
     };
     listener();
