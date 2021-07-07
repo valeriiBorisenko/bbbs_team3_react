@@ -23,7 +23,7 @@ function Catalog() {
   const { headTitle, headDescription, title, subtitle, textStubNoData } =
     catalogPageTexts;
 
-  const [pageSize, setPageSize] = useState(PAGE_SIZE_PAGINATE.big);
+  const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -47,11 +47,13 @@ function Catalog() {
   }
 
   useEffect(() => {
+    if (pageSize) {
+      getPageData();
+    }
+
     if (!isLoadingPage) {
       setIsLoadingPaginate(true);
     }
-
-    getPageData();
   }, [pageSize, pageNumber]);
 
   useEffect(() => {

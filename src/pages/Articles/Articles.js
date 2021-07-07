@@ -23,7 +23,7 @@ function Articles() {
     articlesPageTexts;
   useScrollToTop();
 
-  const [pageSize, setPageSize] = useState(PAGE_SIZE_PAGINATE.big);
+  const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -49,11 +49,13 @@ function Articles() {
   }
 
   useEffect(() => {
+    if (pageSize) {
+      getPageData();
+    }
+
     if (!isLoadingPage) {
       setIsLoadingPaginate(true);
     }
-
-    getPageData();
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
