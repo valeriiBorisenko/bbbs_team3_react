@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import './Video.scss';
 import videoPageTexts from '../../locales/video-page-RU';
@@ -21,6 +20,7 @@ import {
 } from '../../utils/filter-tags';
 import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
 import { changeCaseOfFirstLetter, formatDuration } from '../../utils/utils';
+import { PopupVideo } from '../../components/Popups/index';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -43,10 +43,25 @@ const Video = () => {
   const [video, setVideo] = useState(null);
   const [categories, setCategories] = useState(null);
 
+  const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState({});
+
   // Стейты состояний
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+
+  const handleVideoClick = (data) => {
+    setIsVideoPopupOpen(true);
+
+    setSelectedVideo({
+      ...data,
+    });
+  };
+
+  const closeAllPopups = () => {
+    setIsVideoPopupOpen(false);
+  };
 
   // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
@@ -60,15 +75,13 @@ const Video = () => {
   };
 
   // Фильтры страницы
-  const renderTagsContainer = () => {
-    if (mainVideo && video && !isLoadingPage) {
-      <div className="tags">
-        <ul className="tags__list">
-          {renderFilterTags(categories, 'checkbox', changeCategory)}
-        </ul>
-      </div>;
-    }
-  };
+  const renderTagsContainer = () => (
+    <div className="tags">
+      <ul className="tags__list">
+        {renderFilterTags(categories, 'checkbox', changeCategory)}
+      </ul>
+    </div>
+  );
 
   // Карточки с видео страницы
   const renderCards = () => (
@@ -77,7 +90,7 @@ const Video = () => {
         const { hours, minutes, seconds } = formatDuration(item.duration);
 
         return (
-          <CardFilm key={item.id} data={item}>
+          <CardFilm key={item.id} data={item} onClick={handleVideoClick}>
             {hours > 0 ? (
               <p className="card-film__duration paragraph">{`${hours}:${minutes}:${seconds}`}</p>
             ) : (
@@ -94,7 +107,7 @@ const Video = () => {
     isLoadingPaginate ? (
       <Loader isNested />
     ) : (
-      <section className="cards-grid cards-grid_content_small-cards page__section">
+      <section className="video__cards cards-grid cards-grid_content_small-cards page__section">
         {renderCards()}
       </section>
     );
@@ -107,9 +120,11 @@ const Video = () => {
 
     return (
       <>
-        <section className="main-card page__section">
-          <CardVideoMain data={mainVideo} />
-        </section>
+        {mainVideo && (
+          <section className="video__main-card page__section">
+            <CardVideoMain data={mainVideo} onClick={handleVideoClick} />
+          </section>
+        )}
 
         {isFiltersUsed ? (
           <Loader isNested />
@@ -118,7 +133,7 @@ const Video = () => {
             {loadingContentPagination()}
 
             {pageCount > 1 && (
-              <section className="cards-paginate">
+              <section className="video__cards-paginate">
                 <Paginate
                   sectionClass="cards-section__pagination "
                   pageCount={pageCount}
@@ -178,8 +193,10 @@ const Video = () => {
       }),
     ])
       .then(([tags, { results, count }]) => {
+        console.log(results);
         setPageCount(Math.ceil(count / pageSize));
         setVideo(results);
+        console.log(results);
 
         const fullSizeVideo = results.filter((item) => item.pinnedFullSize)[0];
         setMainVideo(fullSizeVideo);
@@ -203,22 +220,13 @@ const Video = () => {
 
   // Функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
-    if (!isLoadingPage && isFiltersUsed) {
-      const activeCategories = categories
-        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter);
+    if (categories && isFiltersUsed) {
+      const activeCategories = getActiveTags();
 
-      const searchStr = activeCategories.join(',');
-
-      if (searchStr === '') {
+      if (activeCategories.length === 0) {
         selectOneTag(setCategories, ALL_CATEGORIES);
       }
-
-      if (categories.length - 1 === activeCategories.length) {
-        selectOneTag(setCategories, ALL_CATEGORIES);
-      }
-
-      getVideoData(searchStr);
+      getVideoData(activeCategories);
     }
   };
 
@@ -278,10 +286,16 @@ const Video = () => {
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="lead page__section">
         <TitleH1 title={title} />
-        {categories?.length > 1 && renderTagsContainer()}
+        {categories?.length > 1 && !isLoadingPage && renderTagsContainer()}
       </section>
 
       {renderMainContent()}
+
+      <PopupVideo
+        data={selectedVideo}
+        onClose={closeAllPopups}
+        isOpen={isVideoPopupOpen}
+      />
     </BasePage>
   );
 };

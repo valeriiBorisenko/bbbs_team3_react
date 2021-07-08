@@ -1,10 +1,13 @@
 @import './styles/utils.scss';
 
-.main-card {
-  margin-top: 80px;
-  margin-bottom: 80px;
+.video {
+  &__main-card {
+    margin-top: 80px;
+  }
+  
+  &__cards {
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
 }
 
-.cards-paginate {
-  margin-top: 80px;
-}
