@@ -5,8 +5,11 @@ import { changeCaseOfFirstLetter } from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 
-function CardFilm({ data, handleClick, children }) {
+function CardFilm({ data, onClick, children }) {
   const { image, title, info, link } = data;
+
+  const handleClick = () => onClick(data);
+
   return (
     <Card sectionClass="card-film">
       <div className="card-film__video">
@@ -50,13 +53,13 @@ function CardFilm({ data, handleClick, children }) {
 
 CardFilm.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  handleClick: PropTypes.func,
+  onClick: PropTypes.func,
   children: PropTypes.node,
 };
 
 CardFilm.defaultProps = {
   data: {},
-  handleClick: () => {},
+  onClick: () => {},
   children: null,
 };
 

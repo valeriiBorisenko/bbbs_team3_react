@@ -5,9 +5,11 @@ import { Card, TitleH2, Caption } from '../../utils/index';
 import { formatDuration, changeCaseOfFirstLetter } from '../../../utils/utils';
 import { staticImageUrl } from '../../../config/config';
 
-function CardVideoMain({ data, handleClick }) {
+function CardVideoMain({ data, onClick }) {
   const { title, info, link, image, duration } = data;
   const { hours, minutes, seconds } = formatDuration(duration);
+
+  const handleClick = () => onClick(data);
 
   return (
     <div className="card-container card-container_type_main-video">
@@ -56,12 +58,12 @@ function CardVideoMain({ data, handleClick }) {
 
 CardVideoMain.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  handleClick: PropTypes.func,
+  onClick: PropTypes.func,
 };
 
 CardVideoMain.defaultProps = {
   data: {},
-  handleClick: () => {},
+  onClick: () => {},
 };
 
 export default CardVideoMain;
