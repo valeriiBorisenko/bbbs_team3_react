@@ -6,15 +6,15 @@ import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
 import { TitleH2, Caption } from '../../utils/index';
 
-function youtubeParser(url) {
+function parserLinkYoutube(link) {
   const regExp =
     /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-  const match = url.match(regExp);
+  const match = link.match(regExp);
   return match && match[7].length === 11 ? match[7] : false;
 }
 
 function getUrlThumbnail(link) {
-  const id = youtubeParser(link);
+  const id = parserLinkYoutube(link);
   const imagePreview = `http://img.youtube.com/vi/${id}/maxresdefault.jpg`;
   return imagePreview;
 }

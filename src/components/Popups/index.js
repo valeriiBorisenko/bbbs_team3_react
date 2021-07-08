@@ -5,6 +5,7 @@ import PopupLogin from './PopupLogin/PopupLogin';
 import PopupAboutEvent from './PopupAboutEvent/PopupAboutEvent';
 import PopupCities from './PopupCities/PopupCities';
 import PopupError from './PopupError/PopupError';
+import PopupVideo from './PopupVideo/PopupVideo';
 
 export {
   PopupConfirmation,
@@ -14,4 +15,5 @@ export {
   PopupAboutEvent,
   PopupCities,
   PopupError,
+  PopupVideo,
 };
