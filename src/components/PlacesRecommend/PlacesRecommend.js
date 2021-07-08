@@ -1,7 +1,9 @@
 import './PlacesRecommend.scss';
 import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { FormRecommendation, PopupRecommendSuccess } from './index';
+import texts from './locales/RU';
+import { PopupRecommendSuccess } from '../Popups/index';
+import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
 
 function PlacesRecommend({ sectionClass, activityTypes }) {
@@ -47,7 +49,6 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   };
 
   const handleFormSubmit = (data) => {
-    console.log(data);
     postPlace(createFormData(data))
       .then(() => {
         setIsSuccessPopupOpen(true);
@@ -78,21 +79,20 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
             <button
               className="recommendation__close-button"
               type="button"
-              aria-label="закрыть попап"
+              aria-label={texts.closeButtonlabel}
               onClick={closeForm}
             />
           )}
           <p className="section-title recommendation__text">
-            Если вы были в интересном месте и хотите порекомендовать его
-            другим&nbsp;наставникам –&nbsp;
+            {texts.recommendadionTextPart1}
             <button
               className="recommendation__text-link"
               type="button"
               onClick={openForm}
             >
-              заполните&nbsp;форму
+              {texts.recommendadionButton}
             </button>
-            , и мы добавим вашу&nbsp;рекомендацию.
+            {texts.recommendadionTextPart2}
           </p>
           {/* вызов формы */}
           <FormRecommendation

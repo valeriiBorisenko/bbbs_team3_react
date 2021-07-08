@@ -2,7 +2,10 @@ import './PopupRecommendSuccess.scss';
 import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
-import { animationRecommendSuccess, Popup, Button } from './index';
+import animationRecommendSuccess from '../../../assets/animation/ill_popup_recommend-success.json';
+import texts from './locales/RU';
+import Popup from '../Popup/Popup';
+import { Button } from '../../utils/index';
 
 function PopupRecommendSuccess({ isOpen, onClose }) {
   const animationContainer = useRef(null);
@@ -27,13 +30,12 @@ function PopupRecommendSuccess({ isOpen, onClose }) {
     >
       <div ref={animationContainer} className="popup__animation-recommend" />
       <p className="section-title popup__title_type_calendar popup__title_type_recommend-success">
-        Спасибо, мы проверим информацию, и скоро все пользователи смогут увидеть
-        вашу рекомендацию
+        {texts.title}
       </p>
       <div className="popup__buttons_type_calendar">
         <Button
           color="black"
-          title="Вернуться к рекомендациям"
+          title={texts.buttonText}
           sectionClass="popup__button_type_successfully"
           onClick={onClose}
         />

@@ -2,10 +2,13 @@ import { useRef, useEffect } from 'react';
 import './PopupSuccessfully.scss';
 import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
+import animationSuccess from '../../../assets/animation/ill_popup_success.json';
+import texts from './locales/RU';
 import { formatDate } from '../../../utils/utils';
-import { animationSuccess, Popup, TitleH2, Button } from './index';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
+import Popup from '../Popup/Popup';
+import { TitleH2, Button } from '../../utils/index';
 
 function PopupSuccessfully({ isOpen, onClose }) {
   const card = getLocalStorageData(localStAfishaEvent);
@@ -34,7 +37,7 @@ function PopupSuccessfully({ isOpen, onClose }) {
     >
       <div ref={animationContainer} className="popup__animation-success" />
       <p className="section-title popup__title_type_calendar">
-        Вы записаны на мероприятие
+        {texts.popupTitle}
       </p>
       <TitleH2
         sectionClass="popup__title_type_calendar"
@@ -45,12 +48,12 @@ function PopupSuccessfully({ isOpen, onClose }) {
         title={`${startDay?.day} ${startDay?.monthName} с ${startDay?.hour}:${startDay?.minutes} - ${endDay?.hour}:${endDay?.minutes}`}
       />
       <p className="section-title popup__title_type_calendar popup__title_type_successfully">
-        Если у вас не получится прийти — отмените, пожалуйста, запись.
+        {texts.paragraph}
       </p>
       <div className="popup__buttons_type_calendar">
         <Button
           color="black"
-          title="Вернуться к календарю"
+          title={texts.buttonText}
           sectionClass="popup__button_type_successfully"
           onClick={onClose}
         />

@@ -1,32 +1,30 @@
 import './CardCalendar.scss';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 import {
   formatDate,
   formatWordCase,
   changeCaseOfFirstLetter,
 } from '../../../utils/utils';
-import { ButtonDots, Button } from './index';
+import { ButtonDots, Button } from '../../utils/index';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 
 function CardCalendar({
   cardData,
-  isModal,
   onEventSignUpClick,
   onEventDescriptionClick,
   sectionClass,
 }) {
   const {
-    booked,
-    tags,
-    title,
-    startAt,
-    endAt,
-    address,
-    contact,
-    remainSeats,
-    description,
-  } = cardData;
+    buttonTitle,
+    buttonTitleSelected,
+    buttonTitleDisabled,
+    remainSeatsText,
+  } = texts;
+
+  const { booked, tags, title, startAt, endAt, address, contact, remainSeats } =
+    cardData;
 
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
@@ -82,15 +80,10 @@ function CardCalendar({
             <p className="calendar__contact">{contact}</p>
           </li>
         </ul>
-        {isModal && (
-          <div className="calendar__description">
-            <p className="calendar__desc-paragraph">{description}</p>
-          </div>
-        )}
         <div className="calendar__submit">
           <Button
-            title="Записаться"
-            titleSelected="Отменить запись"
+            title={buttonTitle}
+            titleSelected={buttonTitleSelected}
             color="blue"
             isDisabled={isDisabled}
             onClick={changeStateOfEvent}
@@ -98,9 +91,11 @@ function CardCalendar({
           />
           <p className="calendar__place-left">
             {/* если запись закрыта, то карточка не должна быть выделенной */}
-            {(isDisabled && 'Запись закрыта') ||
+            {(isDisabled && buttonTitleDisabled) ||
               (!booked &&
-                `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
+                `${remainSeatsText} ${remainSeats} ${formatWordCase(
+                  remainSeats
+                )}`)}
           </p>
           <ButtonDots handleClick={prepareDataForAboutEventPopup} />
         </div>
@@ -111,7 +106,6 @@ function CardCalendar({
 
 CardCalendar.propTypes = {
   cardData: PropTypes.objectOf(PropTypes.any),
-  isModal: PropTypes.bool,
   onEventSignUpClick: PropTypes.func,
   onEventDescriptionClick: PropTypes.func,
   sectionClass: PropTypes.string,
@@ -119,7 +113,6 @@ CardCalendar.propTypes = {
 
 CardCalendar.defaultProps = {
   cardData: {},
-  isModal: false,
   onEventSignUpClick: () => {},
   onEventDescriptionClick: () => {},
   sectionClass: '',

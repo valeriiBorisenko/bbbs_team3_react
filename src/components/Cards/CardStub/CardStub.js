@@ -1,5 +1,6 @@
 import './CardStub.scss';
-import { Card, LogoBlue, TitleH2 } from './index';
+import texts from './locales/RU';
+import { Card, LogoBlue, TitleH2 } from '../../utils/index';
 
 function CardStub() {
   return (
@@ -7,7 +8,7 @@ function CardStub() {
       <div className="stub__upper-element">
         <a
           className="stub__logo"
-          href="https://www.nastavniki.org/o-nas/ob-organizaczii/"
+          href={texts.link}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -15,10 +16,7 @@ function CardStub() {
         </a>
       </div>
       <div className="stub__content">
-        <TitleH2
-          sectionClass="stub__text"
-          title="Наставники.про – цифровая информационная платформа организации «Старшие Братья Старшие Сестры». Созданная для поддержки наставников программы."
-        />
+        <TitleH2 sectionClass="stub__text" title={texts.title} />
       </div>
     </Card>
   );

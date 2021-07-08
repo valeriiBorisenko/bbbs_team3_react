@@ -1,12 +1,10 @@
-import React from 'react';
+import './Paginate.scss';
 import ReactPaginate from 'react-paginate';
 import PropTypes from 'prop-types';
-import './Paginate.scss';
 import { useScrollToTop } from '../../../hooks/index';
 
 const Paginate = ({ pageCount, sectionClass, value, onChange }) => {
-  useScrollToTop();
-
+  useScrollToTop(value);
   return (
     <ReactPaginate
       containerClassName={`pagination ${sectionClass}`}
@@ -22,6 +20,7 @@ const Paginate = ({ pageCount, sectionClass, value, onChange }) => {
       marginPagesDisplayed={1}
       forcePage={value}
       onPageChange={({ selected }) => onChange(selected)}
+      initialPage={0}
     />
   );
 };

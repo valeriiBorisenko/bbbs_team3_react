@@ -33,6 +33,7 @@ function ReadAndWatchSection({
       //! ОШИБКА! ты итак в getCatalog сеттишь дату!!! через setCatalogData
       // setData(() => getData({ elementsPerSection, number: previousValue - 1 }));
       getData({ elementsPerSection, number: previousValue - 1 });
+      // getData({ elementsPerSection, number: previousValue - 1 });
       return previousValue - 1;
     });
   }

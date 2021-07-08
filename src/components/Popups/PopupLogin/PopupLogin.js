@@ -1,12 +1,14 @@
-import { useEffect, useContext } from 'react';
 import './PopupLogin.scss';
+import { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import texts from './locales/RU';
 import { CurrentUserContext } from '../../../contexts/index';
 import { useAuth } from '../../../hooks/index';
 import { AFISHA_URL } from '../../../config/routes';
-import { Popup, Input, Button, TitleH2 } from './index';
+import Popup from '../Popup/Popup';
+import { Input, Button, TitleH2 } from '../../utils/index';
 
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
@@ -45,42 +47,36 @@ function PopupLogin({ isOpen, onClose }) {
       onClose={closePopup}
     >
       <form className="popup__form" onSubmit={handleSubmit(onFormSubmit)}>
-        <TitleH2 sectionClass="popup__title_type_sign-in" title="Вход" />
-        <p className="paragraph popup__sign-in">
-          Вход в личный кабинет доступен наставникам программы «Старшие Братья
-          Старшие Сёстры».
-        </p>
-        <p className="paragraph popup__sign-in">
-          Пожалуйста, введите логин и пароль из письма. Если вам не приходило
-          письмо, свяжитесь с вашим куратором.
-        </p>
+        <TitleH2 sectionClass="popup__title_type_sign-in" title={texts.title} />
+        <p className="paragraph popup__sign-in">{texts.firstParagraph}</p>
+        <p className="paragraph popup__sign-in">{texts.secondParagraph}</p>
         <Input
           sectionClass="popup__input"
           type="text"
           name="username"
-          placeholder="Логин"
+          placeholder={texts.loginPlaceholder}
           register={register}
           required
           error={errors?.username}
-          errorMessage="Логин*"
+          errorMessage={`${texts.loginPlaceholder}*`}
         />
         <Input
           sectionClass="popup__input"
           type="password"
           name="password"
-          placeholder="Пароль"
+          placeholder={texts.passwordPlaceholder}
           register={register}
           required
           error={errors?.password}
-          errorMessage="Пароль*"
+          errorMessage={`${texts.passwordPlaceholder}*`}
         />
         <a href="/" className="popup__forgot-password">
-          Забыли пароль?
+          {texts.forgotButtonText}
         </a>
         <Button
           sectionClass="popup__button_type_sign-in"
           color="blue"
-          title="Войти"
+          title={texts.submitButtonText}
           isDisabled={!!(errors.username || errors.password)}
           isSubmittable
         />

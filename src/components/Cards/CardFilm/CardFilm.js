@@ -1,9 +1,9 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
-import { TitleH2, Card, Caption } from './index';
+import { TitleH2, Card, Caption } from '../../utils/index';
 import { changeCaseOfFirstLetter } from '../../../utils/utils';
-
-const BASE_MEDIA_URL = 'http://127.0.0.1/media';
+import texts from './locales/RU';
+import { staticImageUrl } from '../../../config/config';
 
 function CardFilm({ data, handleClick, children }) {
   const { image, title, info, link } = data;
@@ -16,8 +16,8 @@ function CardFilm({ data, handleClick, children }) {
           onClick={handleClick}
         >
           <img
-            src={`${BASE_MEDIA_URL}${image}`}
-            alt="Превью видео"
+            src={`${staticImageUrl}/${image}`}
+            alt={`Превью к видео: ${title}`}
             className="card-film__preview"
           />
           {children}
@@ -41,7 +41,7 @@ function CardFilm({ data, handleClick, children }) {
           href={link}
           onClick={handleClick}
         >
-          смотреть трейлер
+          {texts.lintText}
         </button>
       </div>
     </Card>

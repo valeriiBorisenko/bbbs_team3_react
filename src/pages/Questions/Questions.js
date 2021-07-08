@@ -34,7 +34,7 @@ function Questions() {
     headTitle,
     headDescription,
     title,
-    animatedContainerText,
+    textStubNoData,
     formPlaceholder,
     formSubmitButton,
   } = questionsPageTexts;
@@ -164,7 +164,7 @@ function Questions() {
   // рендеринг
   // заглушка, если нет даты
   function returnAnimatedContainer() {
-    return <AnimatedPageContainer titleText={animatedContainerText} />;
+    return <AnimatedPageContainer titleText={textStubNoData} />;
   }
 
   // форма вопросов

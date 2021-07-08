@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import './Footer.scss';
+import { Link } from 'react-router-dom';
 import {
   AFISHA_URL,
   ABOUT_US_URL,
@@ -7,8 +7,19 @@ import {
   PLACES_URL,
   RIGHTS_URL,
   READ_AND_WATCH_URL,
+  HISTORY_URL,
+  AFISHA_TITLE,
+  ABOUT_US_TITLE,
+  PLACES_TITLE,
+  QUESTIONS_TITLE,
+  READ_AND_WATCH_TITLE,
+  RIGHTS_TITLE,
+  HISTORY_TITLE,
 } from '../../config/routes';
-import { footerLogoPath, NavItem } from './index';
+import texts from './locales/RU';
+import socialLinks from '../../utils/social-links';
+import footerLogoPath from '../../assets/footer-logo.svg';
+import { NavItem } from '../utils/index';
 
 function Footer() {
   return (
@@ -17,38 +28,35 @@ function Footer() {
         <img
           className="footer__logo-image"
           src={footerLogoPath}
-          alt="Логотип Старшие Братья Старшие Сестры России"
+          alt={texts.logoAlt}
         />
       </Link>
-      <a
-        className="button footer__button"
-        href="https://www.nastavniki.org/campaign/pomoch-dengami/"
-      >
-        Помочь деньгами
+      <a className="button footer__button" href={texts.helpButtonLink}>
+        {texts.helpButtonText}
       </a>
       <div className="footer__column footer__column_content_concept">
-        <p className="footer__brand">&copy; Старшие Братья Старшие Сестры</p>
+        <p className="footer__brand">{texts.copyright}</p>
         <div className="footer__copyright">
           <p className="footer__authors">
-            {'Разработка – студенты '}
+            {texts.devText}
             <a
-              href="https://praktikum.yandex.ru/"
+              href={texts.devLink}
               className="footer__production"
               target="_blank"
               rel="noreferrer"
             >
-              Яндекс.Практикум
+              {texts.devOrg}
             </a>
           </p>
           <p className="footer__design">
-            {'Концепция и дизайн – '}
+            {texts.designText}
             <a
-              href="https://krkr.design/"
+              href={texts.designLink}
               className="footer__production"
               target="_blank"
               rel="noreferrer"
             >
-              krkr.design
+              {texts.designOrg}
             </a>
           </p>
         </div>
@@ -60,88 +68,66 @@ function Footer() {
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={ABOUT_US_URL}
-            linkText="о проекте"
+            linkText={ABOUT_US_TITLE}
           />
           {/* каленарь */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={AFISHA_URL}
-            linkText="календарь"
+            linkText={AFISHA_TITLE}
           />
           {/* куда пойти */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={PLACES_URL}
-            linkText="куда пойти"
+            linkText={PLACES_TITLE}
           />
           {/* вопросы */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={QUESTIONS_URL}
-            linkText="вопросы"
+            linkText={QUESTIONS_TITLE}
           />
           {/* читать и смотреть */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={READ_AND_WATCH_URL}
-            linkText="читать и смотреть"
+            linkText={READ_AND_WATCH_TITLE}
           />
           {/* права детей */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={RIGHTS_URL}
-            linkText="права детей"
+            linkText={RIGHTS_TITLE}
           />
           {/* истории */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href="/"
-            linkText="истории"
+            href={HISTORY_URL}
+            linkText={HISTORY_TITLE}
           />
         </ul>
       </div>
       <div className="footer__column footer__column_content_social">
         <ul className="footer__column-list">
-          {/* fb */}
-          <NavItem
-            sectionWrapperClass="footer__column-links"
-            sectionLinkClass="footer__column-link"
-            href={{
-              path: 'https://www.facebook.com/BigBrothers.BigSisters.Russia/',
-            }}
-            linkText="facebook"
-            rel="noreferrer"
-          />
-          {/* vk */}
-          <NavItem
-            sectionWrapperClass="footer__column-links"
-            sectionLinkClass="footer__column-link"
-            href={{ path: 'https://vk.com/big.brothers.big.sisters' }}
-            linkText="vkontakte"
-            rel="noreferrer"
-          />
-          {/* insta */}
-          <NavItem
-            sectionWrapperClass="footer__column-links"
-            sectionLinkClass="footer__column-link"
-            href={{ path: 'https://www.instagram.com/nastavniki_org/' }}
-            linkText="instagram"
-            rel="noreferrer"
-          />
-          {/* youtube */}
-          <NavItem
-            sectionWrapperClass="footer__column-links"
-            sectionLinkClass="footer__column-link"
-            href={{ path: 'https://www.youtube.com/user/Nastavniki/' }}
-            linkText="youtube"
-            rel="noreferrer"
-          />
+          {socialLinks.map((link) => (
+            <li key={link?.id} className="footer__column-links">
+              <a
+                className="footer__column-link"
+                href={link?.url}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {link?.title}
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
     </footer>

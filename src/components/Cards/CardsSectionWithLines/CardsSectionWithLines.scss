@@ -1,12 +1,10 @@
 @import './styles/utils.scss';
 
-// Lod55: Убрал gap отступы они отличаются со страницей Catrlog
-// Прокинул gap через sectionClassCards
-
 .cards-section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
+  grid-gap: 0 30px;
 
   &__line {
     grid-column: 1 / -1;
@@ -26,12 +24,15 @@
   }
 
   &__pagination {
-    margin: 90px auto 70px;
+    height: 50px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
   }
 
   &__item {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    width: 100%;
+    margin: 80px auto;
   }
 }
 
@@ -43,39 +44,30 @@
 
 @include atDesktop1199 {
   .cards-section {
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    grid-template-rows: max-content [third-line] 1px max-content;
-
-    &__line {
-      &:nth-of-type(-n + 2) {
-        display: none;
-      }
-    }
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    grid-template-rows: max-content [first-line] 1px max-content;
   }
 }
 
 @include atDesktop1024 {
   .cards-section {
-    padding-top: 50px;
-    grid-template-rows: max-content [third-line] 1px max-content;
+    padding: 36px 0 30px;
+    grid-template-rows: max-content [first-line] 1px max-content;
+
+    &__pagination {
+      height: 38px;
+    }
+
+    &__item {
+      margin: 30px auto;
+    }
   }
 }
 
 @include atTabletL {
   .cards-section {
+    padding: 0;
     grid-template-columns: 1fr;
     grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
-
-    &__line {
-      &:nth-of-type(-n + 2) {
-        display: block;
-      }
-    }
-  }
-}
-
-@include atMobile {
-  .cards-section {
-    padding-top: 30px;
   }
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import texts from './locales/RU';
 import {
   AFISHA_URL,
   ABOUT_US_URL,
@@ -10,14 +11,24 @@ import {
   PLACES_URL,
   RIGHTS_URL,
   READ_AND_WATCH_URL,
+  HISTORY_URL,
+  MAIN_PAGE_TITLE,
+  ABOUT_US_TITLE,
+  AFISHA_TITLE,
+  PLACES_TITLE,
+  QUESTIONS_TITLE,
+  READ_AND_WATCH_TITLE,
+  RIGHTS_TITLE,
+  HISTORY_TITLE,
 } from '../../config/routes';
+import socialLinks from '../../utils/social-links';
+import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import {
   NavItem,
-  NavItemWithDropdown,
   SearchButton,
   UserIconButton,
   UserMenuButton,
-} from './index';
+} from '../utils/index';
 
 function NavBar({
   isMobileMenuOpen,
@@ -34,7 +45,7 @@ function NavBar({
     <nav className="menu">
       {/* логотип */}
       <Link to="/" target="_self" className="menu__logo mobile-link">
-        наставники.про
+        {MAIN_PAGE_TITLE}
       </Link>
       {/* обычное меню */}
       <div
@@ -48,33 +59,33 @@ function NavBar({
             sectionWrapperClass="menu__list-item menu__list-item_hidden"
             sectionLinkClass="menu__link mobile-link"
             href={ABOUT_US_URL}
-            linkText="О проекте"
+            linkText={ABOUT_US_TITLE}
           />
           {/* Календарь */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
             href={AFISHA_URL}
-            linkText="Календарь"
+            linkText={AFISHA_TITLE}
           />
           {/* Куда пойти */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
             href={PLACES_URL}
-            linkText="Куда пойти"
+            linkText={PLACES_TITLE}
           />
           {/* Вопросы */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
             href={QUESTIONS_URL}
-            linkText="Вопросы"
+            linkText={QUESTIONS_TITLE}
           />
           {/* выпадающее меню  "Читать и смотреть" */}
           <NavItemWithDropdown
             sectionWrapperClass="menu__list-item menu__dropdown-item"
-            linkText="Читать и смотреть"
+            linkText={READ_AND_WATCH_TITLE}
             href={READ_AND_WATCH_URL}
           />
           {/* Права детей */}
@@ -82,14 +93,14 @@ function NavBar({
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
             href={RIGHTS_URL}
-            linkText="Права детей"
+            linkText={RIGHTS_TITLE}
           />
           {/* Истории */}
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href="#"
-            linkText="Истории"
+            href={HISTORY_URL}
+            linkText={HISTORY_TITLE}
           />
         </ul>
 
@@ -98,45 +109,18 @@ function NavBar({
             !isMobileMenuOpen ? 'menu__list_hidden' : ''
           }`}
         >
-          {/* facebook */}
-          <NavItem
-            sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link mobile-link"
-            href={{
-              pathname:
-                'https://www.facebook.com/BigBrothers.BigSisters.Russia/',
-            }}
-            linkText="facebook"
-            target="_blank"
-            rel="noopener noreferrer"
-          />
-          {/* vkontakte */}
-          <NavItem
-            sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link mobile-link"
-            href={{ pathname: 'https://vk.com/big.brothers.big.sisters' }}
-            linkText="vkontakte"
-            target="_blank"
-            rel="noopener noreferrer"
-          />
-          {/* instagram */}
-          <NavItem
-            sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link mobile-link"
-            href={{ pathname: 'https://www.instagram.com/nastavniki_org/' }}
-            linkText="instagram"
-            target="_blank"
-            rel="noopener noreferrer"
-          />
-          {/* youtube */}
-          <NavItem
-            sectionWrapperClass="menu__list-item"
-            sectionLinkClass="menu__link mobile-link"
-            href={{ pathname: 'https://www.youtube.com/user/Nastavniki/' }}
-            linkText="youtube"
-            target="_blank"
-            rel="noopener noreferrer"
-          />
+          {socialLinks.map((link) => (
+            <li key={link?.id} className="menu__list-item">
+              <a
+                className="menu__link mobile-link"
+                href={link?.url}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {link?.title}
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -149,14 +133,14 @@ function NavBar({
           <UserMenuButton
             title={
               userCityName
-                ? `${userCityName}. Изменить город`
-                : 'Изменить ваш город'
+                ? `${userCityName}. ${texts.changeCity}`
+                : texts.changeCityDefault
             }
             handleClick={onCityChangeClick}
             sectionClass="mobile-link"
           />
           <UserMenuButton
-            title="Выйти"
+            title={texts.logoutText}
             sectionClass="mobile-link"
             handleClick={onLogout}
           />
@@ -172,8 +156,8 @@ function NavBar({
           <UserMenuButton
             title={
               userCityName
-                ? `${userCityName}. Изменить город`
-                : 'Изменить ваш город'
+                ? `${userCityName}. ${texts.changeCity}`
+                : texts.changeCityDefault
             }
             handleClick={onCityChangeClick}
             sectionClass="mobile-link"
@@ -201,7 +185,7 @@ function NavBar({
               <input
                 type="text"
                 name="search"
-                placeholder="Поиск"
+                placeholder={texts.searchPlaceholder}
                 className="search__input paragraph"
               />
               <ul className="search__option-list">

@@ -1,8 +1,10 @@
 import './CardArticle.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { CardAnnotation, TitleH2, Card, Caption } from './index';
+import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
+import CardAnnotation from '../CardAnnotation/CardAnnotation';
+import { TitleH2, Card, Caption } from '../../utils/index';
 
 function CardArticle({
   data: { title, info, annotation, image, articleUrl },
@@ -44,7 +46,7 @@ function CardArticle({
           target="_blank"
           rel="noopener noreferrer"
         >
-          читать на сайте
+          {texts.linkText}
         </a>
       </Card>
       <CardAnnotation description={annotation} isMain={isMain} />

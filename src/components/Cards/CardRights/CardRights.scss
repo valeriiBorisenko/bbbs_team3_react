@@ -1,7 +1,8 @@
 @import './styles/utils.scss';
 
-.rights__link {
+.rights-card__link {
   max-width: 420px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -18,8 +19,12 @@
   }
 }
 
-.rights__rubric {
-  margin-top: 17px;
+.rights-card__block {
+  margin-top: 10px;
+}
+
+.rights-card__rubric {
+  margin-top: 5px;
   margin-right: 5px;
   align-self: center;
 

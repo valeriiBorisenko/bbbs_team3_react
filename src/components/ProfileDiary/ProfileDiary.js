@@ -1,18 +1,13 @@
 import './ProfileDiary.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 import { formatDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { staticImageUrl } from '../../config/config';
 import defaultImage from '../../assets/icon-logo-no-text.svg';
-import {
-  Card,
-  TitleH2,
-  CardAnnotationContainer,
-  Rating,
-  Caption,
-  Button,
-} from './index';
+import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationContainer';
+import { Card, TitleH2, Rating, Caption, Button } from '../utils/index';
 
 function ProfileDiary({ data, onEdit, onDelete }) {
   const { image, place, description, mark, date } = data;
@@ -74,18 +69,18 @@ function ProfileDiary({ data, onEdit, onDelete }) {
           </div>
           <div className="profile-diary__action-elements">
             <Button
-              title="Поделиться с куратором"
+              title={texts.buttonShareText}
               color="gray-borderless"
               sectionClass="profile-diary__button"
             />
             <Button
-              title="Редактировать"
+              title={texts.buttonEditText}
               color="gray-borderless"
               sectionClass="profile-diary__button"
               onClick={handleEditButtonClick}
             />
             <Button
-              title="Удалить"
+              title={texts.buttonDeleteText}
               color="gray-borderless"
               sectionClass="profile-diary__button"
               onClick={handleDeleteButtonClick}
