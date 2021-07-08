@@ -17,7 +17,7 @@ function CardFilm({ data, handleClick, children }) {
         >
           <img
             src={`${staticImageUrl}/${image}`}
-            alt="Превью видео"
+            alt={`Превью к видео: ${title}`}
             className="card-film__preview"
           />
           {children}

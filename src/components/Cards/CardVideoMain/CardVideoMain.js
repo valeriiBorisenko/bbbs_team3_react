@@ -40,7 +40,7 @@ function CardVideoMain({ data, handleClick }) {
         >
           <img
             src={`${staticImageUrl}/${image}`}
-            alt={texts.imageAlt}
+            alt={`${texts.imageAlt}: ${title}`}
             className="card-video-main__image"
           />
           {hours > 0 ? (

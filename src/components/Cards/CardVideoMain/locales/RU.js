@@ -1,6 +1,6 @@
 const texts = {
   linkText: 'смотреть видео',
-  imageAlt: 'Превью видео',
+  imageAlt: 'Превью к видео',
 };
 
 export default texts;
