@@ -21,10 +21,10 @@ function renderThoseDamnedLines(dataLength, pageSize, isTablet) {
       <div className="cards-section__line" />
     </>
   );
+
   if (isTablet) {
-    if (dataLength < 2) {
-      return null;
-    }
+    if (dataLength < 2) return null;
+
     if (dataLength < 3) return renderOneLine();
 
     if (dataLength < 4) return renderTwoLines();
@@ -34,9 +34,8 @@ function renderThoseDamnedLines(dataLength, pageSize, isTablet) {
 
   switch (pageSize) {
     case 16: {
-      if (dataLength < 5) {
-        return null;
-      }
+      if (dataLength < 5) return null;
+
       if (dataLength < 9) return renderOneLine();
 
       if (dataLength < 13) return renderTwoLines();
@@ -44,17 +43,14 @@ function renderThoseDamnedLines(dataLength, pageSize, isTablet) {
       return renderThreeLines();
     }
     case 9: {
-      if (dataLength < 4) {
-        return null;
-      }
+      if (dataLength < 4) return null;
+
       if (dataLength < 7) return renderOneLine();
 
       return renderTwoLines();
     }
     default: {
-      if (dataLength < 3) {
-        return null;
-      }
+      if (dataLength < 3) return null;
 
       return renderOneLine();
     }

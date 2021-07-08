@@ -232,6 +232,7 @@ function Places() {
       setIsCityChanging(true);
       Promise.all([getPlaces({ city: userCity }), getPlacesTags()])
         .then(([placesData, tagsData]) => {
+          console.log('Triggered');
           const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
           setChosenPlace(chosenPlaceLast);
           setPlaces(restOfPlaces);
@@ -242,7 +243,7 @@ function Places() {
         .finally(() => setIsCityChanging(false));
     }
   }, [userCity]);
-
+  console.log('PLACES');
   useEffect(() => {
     if (!userCity) {
       setTimeout(() => {
