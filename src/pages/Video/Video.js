@@ -60,23 +60,29 @@ const Video = () => {
   };
 
   // Фильтры страницы
-  const renderTagsContainer = () => (
-    <div className="tags">
-      <ul className="tags__list">
-        {renderFilterTags(categories, 'checkbox', changeCategory)}
-      </ul>
-    </div>
-  );
+  const renderTagsContainer = () => {
+    if (mainVideo && video && !isLoadingPage) {
+      <div className="tags">
+        <ul className="tags__list">
+          {renderFilterTags(categories, 'checkbox', changeCategory)}
+        </ul>
+      </div>;
+    }
+  };
 
   // Карточки с видео страницы
   const renderCards = () => (
     <>
       {video.map((item) => {
-        const { minutes, seconds } = formatDuration(item.duration);
+        const { hours, minutes, seconds } = formatDuration(item.duration);
 
         return (
           <CardFilm key={item.id} data={item}>
-            <p className="card-film__duration paragraph">{`${minutes}:${seconds}`}</p>
+            {hours > 0 ? (
+              <p className="card-film__duration paragraph">{`${hours}:${minutes}:${seconds}`}</p>
+            ) : (
+              <p className="card-film__duration paragraph">{`${minutes}:${seconds}`}</p>
+            )}
           </CardFilm>
         );
       })}
@@ -112,12 +118,15 @@ const Video = () => {
             {loadingContentPagination()}
 
             {pageCount > 1 && (
-              <Paginate
-                sectionClass="cards-section__pagination"
-                pageCount={pageCount}
-                value={pageNumber}
-                onChange={setPageNumber}
-              />
+              <section className="cards-paginate">
+                <Paginate
+                  sectionClass="cards-section__pagination "
+                  pageCount={pageCount}
+                  value={pageNumber}
+                  onChange={setPageNumber}
+                  isUseScroll={false}
+                />
+              </section>
             )}
           </>
         )}
@@ -151,28 +160,30 @@ const Video = () => {
         return results;
       })
       .then((results) => {
-        if (isLoadingPage) {
-          const fullSizeVideo = results.filter(
-            (item) => item.pinnedFullSize
-          )[0];
-
-          setMainVideo(fullSizeVideo);
-        }
-
         setVideo(results);
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        setIsLoadingPage(false);
         setIsFiltersUsed(false);
         setIsLoadingPaginate(false);
       });
   };
 
-  // Функция обработки запроса АПИ с тегами
-  const getVideoTags = () => {
-    getVideoPageTags()
-      .then((tags) => {
+  // Функция обработки запросов АПИ для первой загрузки страницы
+  const getFirstPageData = () => {
+    Promise.all([
+      getVideoPageTags(),
+      getVideoPageData({
+        limit: pageSize,
+      }),
+    ])
+      .then(([tags, { results, count }]) => {
+        setPageCount(Math.ceil(count / pageSize));
+        setVideo(results);
+
+        const fullSizeVideo = results.filter((item) => item.pinnedFullSize)[0];
+        setMainVideo(fullSizeVideo);
+
         const categoriesArr = tags.map((tag) => ({
           filter: tag?.slug.toLowerCase(),
           name: changeCaseOfFirstLetter(tag?.name),
@@ -184,7 +195,10 @@ const Video = () => {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoadingPage(false);
+      });
   };
 
   // Функция-фильтратор с использованием АПИ
@@ -221,8 +235,7 @@ const Video = () => {
   // Загрузка страницы, динамическая пагинация, динамический ресайз
   useEffect(() => {
     if (isLoadingPage && pageSize) {
-      getVideoData();
-      getVideoTags();
+      getFirstPageData();
     }
 
     if (!isLoadingPage && !isFiltersUsed) {
