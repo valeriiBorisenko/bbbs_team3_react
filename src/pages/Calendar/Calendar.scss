@@ -1,23 +1,9 @@
 @import './styles/utils.scss';
 
-.tags {
-  padding-top: 25px;
-  position: relative;
-}
-
-.tags__list {
-  margin: 0 auto;
-  padding: 0;
-  max-width: 1100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  list-style-type: none;
-  flex-wrap: wrap;
-}
-
-.tags__list-item {
-  margin-top: 15px;
+.calendar-page {
+  &__title {
+    margin-bottom: 25px;
+  }
 }
 
 .calendar-page__grid {
@@ -37,6 +23,12 @@
 }
 
 @include atDesktop1024 {
+  .calendar-page {
+    &__title {
+      margin-bottom: 10px;
+    }
+  }
+
   .calendar-page__grid {
     grid-template-columns: repeat(2, minmax(290px, 1fr));
   }
@@ -44,43 +36,7 @@
 
 @include atTablet {
   .calendar-page__grid {
-    // grid-template-columns: repeat(auto-fill, minmax(auto, 200px));
     grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  }
-
-  .tags {
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: -1px;
-      width: 40px;
-      height: 100%;
-      background: linear-gradient(90deg, transparent 0%, $background 100%);
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -1px;
-      width: 40px;
-      height: 100%;
-      background: linear-gradient(90deg, $background 0%, transparent 100%);
-      z-index: 1;
-      pointer-events: none;
-    }
-  }
-  .tags__list {
-    justify-content: flex-start;
-    overflow-x: scroll;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    flex-wrap: nowrap;
   }
 }
 

@@ -1,8 +1,18 @@
 @import './styles/utils.scss';
 
 .places {
+  &__title {
+    margin-bottom: 25px;
+  }
+
   &__main {
     padding-top: 80px;
+  }
+
+  &__tags {
+    > .tags__list {
+      justify-content: center;
+    }
   }
 
   &__cards-grid {
@@ -35,6 +45,10 @@
 
 @include atDesktop1024 {
   .places {
+    &__title {
+      margin-bottom: 10px;
+    }
+
     &__main {
       padding-top: 50px;
     }
@@ -64,6 +78,16 @@
   .places {
     &__main {
       padding-top: 30px;
+    }
+  }
+}
+
+@include atMobileSmall {
+  .places {
+    &__tags {
+      > .tags__list {
+        justify-content: flex-start;
+      }
     }
   }
 }

@@ -14,13 +14,13 @@ import {
   CardAnnotation,
   Loader,
   AnimatedPageContainer,
+  TagsList,
 } from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import {
   handleCheckboxBehavior,
-  renderFilterTags,
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
@@ -168,24 +168,21 @@ function Books() {
     </ul>
   );
 
-  // контейнер фильтров
-  const renderTagsContainer = () => (
-    <div className="tags tags_content_long-list">
-      <ul className="tags__list tags__list_type_long">
-        {renderFilterTags(categories, 'tag', changeCategory)}
-      </ul>
-    </div>
-  );
-
   // главная функция рендеринга
   const renderPageContent = () => {
     if (booksPageData.length > 0) {
       return (
         <>
-          <TitleH1 title="Книги" />
+          <TitleH1 title="Книги" sectionClass="books__title" />
 
           {/* рендер фильтров */}
-          {categories?.length > 1 && renderTagsContainer()}
+          {categories?.length > 1 && (
+            <TagsList
+              filterList={categories}
+              name="tag"
+              handleClick={changeCategory}
+            />
+          )}
 
           {/* рендерим книги */}
           {isLoading ? <Loader isNested /> : renderBooksContainer()}
