@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import './ReadAndWatchSection.scss';
 import { Link } from 'react-router-dom';
 import { TitleH3, CardCatalog, CardArticle, CardFilm, CardBook } from './index';
-
 // CardFilm - и для видео и для фильмов!!
 
 function ReadAndWatchSection({
@@ -18,12 +17,13 @@ function ReadAndWatchSection({
   totalPages,
   handleCardClick,
   elementsPerSection,
+  children,
 }) {
   // data должна быть массивом!
   const [pageNumber, setPageNumber] = useState(0);
   console.log(`я на ${pageNumber} странице из ${totalPages} страниц`);
   console.log(sectionTitle);
-  console.log(pageNumber);
+  // console.log(pageNumber);
 
   function back() {
     if (pageNumber === 0) {
@@ -51,7 +51,7 @@ function ReadAndWatchSection({
 
   return (
     <section>
-      <div className="readwatch__container">
+      <div className="readwatch__cont ainer">
         <Link className="readwatch__heading-link" to={path}>
           <TitleH3 title={sectionTitle} sectionClass="readwatch__heading" />
         </Link>
@@ -61,7 +61,6 @@ function ReadAndWatchSection({
         <button onClick={forward} type="button">
           вперед
         </button>
-
         {/* <ReactPaginate
           pageCount={pageCount}
           marginPagesDisplayed={0}
@@ -76,6 +75,7 @@ function ReadAndWatchSection({
           onPageChange={handlePageClick}
         /> */}
       </div>
+      <ul className="readwatch__item-grid">{children}</ul>
 
       {/* список карточек для Справочника */}
       {/* {sectionTitle === 'Справочник' && (
@@ -116,6 +116,7 @@ ReadAndWatchSection.propTypes = {
   setData: PropTypes.func,
   handleCardClick: PropTypes.func,
   elementsPerSection: PropTypes.number.isRequired,
+  children: PropTypes.element.isRequired,
 };
 
 ReadAndWatchSection.defaultProps = {
