@@ -94,7 +94,6 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
             </button>
             {texts.recommendadionTextPart2}
           </p>
-          {/* вызов формы */}
           <FormRecommendation
             isOpen={isFormOpen}
             onSubmit={handleFormSubmit}

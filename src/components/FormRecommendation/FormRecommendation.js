@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
 import './FormRecommendation.scss';
 import { useContext, useEffect, useState } from 'react';
@@ -6,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import texts from './locales/RU';
 import { CitiesContext } from '../../contexts/index';
 import { regExpImages, regExpUrl } from '../../config/constants';
-import { Input, Button, ButtonRound } from '../utils/index';
+import { Input, Button, ButtonRound, DropDownSelect } from '../utils/index';
 
 function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const {
@@ -208,7 +209,13 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
         </div>
       </div>
 
-      <select
+      <DropDownSelect
+        placeholder={activityPlaceholder}
+        options={activityTypes}
+        inputName="activity"
+      />
+
+      {/* <select
         className={`form-recom__select ${
           errors?.activityType ? 'form-recom__select_error' : ''
         }`}
@@ -224,9 +231,9 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
               {name}
             </option>
           ))}
-      </select>
+      </select> */}
 
-      <select
+      {/* <select
         className={`form-recom__select ${
           errors?.city ? 'form-recom__select_error' : ''
         }`}
@@ -242,7 +249,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
               {name}
             </option>
           ))}
-      </select>
+      </select> */}
 
       <div className="form-recom__input-wrap">
         <Input
