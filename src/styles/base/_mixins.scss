@@ -91,3 +91,9 @@
     @content;
   }
 }
+
+@mixin atMobileSmall {
+  @media screen and (max-width: 380px) {
+    @content;
+  }
+}

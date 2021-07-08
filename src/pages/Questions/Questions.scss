@@ -6,12 +6,16 @@
   padding: 0;
   padding-top: 80px;
   list-style: none;
-}
 
-.questions__list-item {
-  margin-bottom: 30px;
-  &:last-of-type {
-    margin-bottom: 0;
+  &__title {
+    margin-bottom: 25px;
+  }
+
+  &__list-item {
+    margin-bottom: 30px;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -91,6 +95,10 @@
 @include atDesktop1024 {
   .questions {
     padding-top: 50px;
+
+    &__title {
+      margin-bottom: 10px;
+    }
   }
 
   .card__questions_type_questions-page {
