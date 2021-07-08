@@ -1,7 +1,7 @@
-import { Helmet } from 'react-helmet-async';
+import './Articles.scss';
 import { useEffect, useState } from 'react';
+import articlesPageTexts from '../../locales/articles-page-RU';
 import { useScrollToTop } from '../../hooks/index';
-
 import { COLORS } from '../../config/constants';
 import {
   BasePage,
@@ -12,125 +12,141 @@ import {
   Loader,
 } from './index';
 import getArticlesPageData from '../../api/articles-page';
-import './Articles.scss';
+
+const PAGE_SIZE_PAGINATE = {
+  small: 2,
+  big: 12,
+};
 
 function Articles() {
+  const { headTitle, headDescription, title, textStubNoData } =
+    articlesPageTexts;
   useScrollToTop();
 
-  const [pageSize, setPageSize] = useState(16);
+  const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
   const [articlesPageData, setArticlesPageData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
+  function getPageData() {
     const offset = pageSize * pageNumber;
     const fixedPageSize = pageNumber === 0 ? pageSize + 1 : pageSize;
     const fixedOffset = pageNumber > 0 ? offset + 1 : offset;
+
     getArticlesPageData({ limit: fixedPageSize, offset: fixedOffset })
       .then(({ results, count }) => {
         setArticlesPageData(results);
         setPageCount(Math.ceil(count / pageSize));
       })
-      .catch(() => {})
+      .catch((err) => console.log(err))
       .finally(() => {
-        setIsLoading(false);
+        setIsLoadingPaginate(false);
+        setIsLoadingPage(false);
       });
+  }
+
+  useEffect(() => {
+    if (pageSize) {
+      getPageData();
+    }
+
+    if (!isLoadingPage) {
+      setIsLoadingPaginate(true);
+    }
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const smallQuery = window.matchMedia('(max-width: 1024px)');
 
     const listener = () => {
       if (smallQuery.matches) {
-        setPageSize(2);
-      } else if (largeQuery.matches) {
-        setPageSize(12);
+        setPageSize(PAGE_SIZE_PAGINATE.small);
       } else {
-        setPageSize(16);
+        setPageSize(PAGE_SIZE_PAGINATE.big);
       }
     };
     listener();
 
     smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
 
     return () => {
       smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
     };
   }, []);
 
-  const mainCard = articlesPageData.find((item) => item.pinnedFullSize);
+  const mainCard = articlesPageData.find((item) => item?.pinnedFullSize);
   const cardsWithoutMain = articlesPageData.filter(
-    (item) => !item.pinnedFullSize
+    (item) => !item?.pinnedFullSize
   );
 
   // отрисовка заглушки
   function renderAnimatedContainer() {
+    return <AnimatedPageContainer titleText={textStubNoData} />;
+  }
+
+  function renderPagination() {
+    if (pageCount > 1) {
+      return (
+        <Paginate
+          sectionClass="cards-section__pagination"
+          pageCount={pageCount}
+          value={pageNumber}
+          onChange={setPageNumber}
+        />
+      );
+    }
+    return null;
+  }
+
+  function renderCards() {
     return (
-      <AnimatedPageContainer
-        titleText="Информация появится в ближайшее время."
-        buttonText="Вернуться на главную"
-      />
+      <>
+        {mainCard && (
+          <section className="articles__main fade-in">
+            <CardArticle
+              data={mainCard}
+              sectionClass="card-container_type_main-article"
+              isMain
+            />
+          </section>
+        )}
+
+        <section className="articles__cards-grid">
+          {cardsWithoutMain.map((item, i) => (
+            <CardArticle
+              key={item.id}
+              color={COLORS[(i + 1) % COLORS.length]}
+              data={item}
+              sectionClass="card-container_type_article fade-in"
+            />
+          ))}
+        </section>
+      </>
     );
   }
 
   function renderPageContent() {
     return (
       <section className="articles page__section fade-in">
-        <TitleH1 title="Статьи" />
-        {isLoading ? (
-          <Loader isNested />
-        ) : (
-          <>
-            {mainCard && (
-              <section className="articles__main fade-in">
-                <CardArticle
-                  data={mainCard}
-                  sectionClass="card-container_type_main-article"
-                  isMain
-                />
-              </section>
-            )}
+        <TitleH1 title={title} />
 
-            <section className="articles__cards-grid">
-              {cardsWithoutMain.map((item, i) => (
-                <CardArticle
-                  key={item.id}
-                  color={COLORS[(i + 1) % COLORS.length]}
-                  data={item}
-                  sectionClass="card-container_type_article fade-in"
-                />
-              ))}
-            </section>
-            {pageCount > 1 && (
-              <Paginate
-                sectionClass="cards-section__pagination"
-                pageCount={pageCount}
-                value={pageNumber}
-                onChange={setPageNumber}
-              />
-            )}
-          </>
-        )}
+        {isLoadingPaginate ? <Loader isNested /> : renderCards()}
+
+        {renderPagination()}
       </section>
     );
   }
 
+  if (isLoadingPage) {
+    return <Loader isCentered />;
+  }
+
   return (
-    <BasePage>
-      <Helmet>
-        <title>Статьи</title>
-        <meta
-          name="description"
-          content="Статьи, которые рекомендуют наши наставники"
-        />
-      </Helmet>
-      {!articlesPageData.length && !isLoading
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      {!articlesPageData && !isLoadingPage
         ? renderAnimatedContainer()
         : renderPageContent()}
     </BasePage>

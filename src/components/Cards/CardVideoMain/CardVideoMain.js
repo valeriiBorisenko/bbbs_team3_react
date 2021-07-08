@@ -1,9 +1,9 @@
 import './CardVideoMain.scss';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
+import { Card, TitleH2, Caption } from '../../utils/index';
 import { formatDuration, changeCaseOfFirstLetter } from '../../../utils/utils';
-import { Card, TitleH2 } from './index';
-
-const BASE_MEDIA_URL = 'http://127.0.0.1/media';
+import { staticImageUrl } from '../../../config/config';
 
 function CardVideoMain({ data, handleClick }) {
   const { title, info, link, image, duration } = data;
@@ -17,9 +17,10 @@ function CardVideoMain({ data, handleClick }) {
             sectionClass="card-video-main__title"
             title={changeCaseOfFirstLetter(title)}
           />
-          <p className="caption card-video-main__info">
-            {changeCaseOfFirstLetter(info)}
-          </p>
+          <Caption
+            sectionClass="card-video-main__info"
+            title={changeCaseOfFirstLetter(info)}
+          />
         </div>
         <button
           href={link}
@@ -27,7 +28,7 @@ function CardVideoMain({ data, handleClick }) {
           type="button"
           onClick={handleClick}
         >
-          смотреть видео
+          {texts.linkText}
         </button>
       </Card>
 
@@ -38,8 +39,8 @@ function CardVideoMain({ data, handleClick }) {
           onClick={handleClick}
         >
           <img
-            src={`${BASE_MEDIA_URL}${image}`}
-            alt="Превью видео"
+            src={`${staticImageUrl}/${image}`}
+            alt={texts.imageAlt}
             className="card-video-main__image"
           />
           {hours > 0 ? (

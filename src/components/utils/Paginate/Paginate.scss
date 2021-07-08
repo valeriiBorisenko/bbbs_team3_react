@@ -2,14 +2,23 @@
 
 .pagination {
   display: flex;
-  justify-content: space-evenly;
-  max-width: 475px;
+  justify-content: center;
   width: 100%;
   padding: 0;
 
   &__element {
     list-style: none;
     cursor: pointer;
+    margin-left: 15px;
+    margin-right: 15px;
+
+    &:first-of-type {
+      margin-left: 0;
+    }
+
+    &:last-of-type {
+      margin-right: 0;
+    }
 
     &-link {
       font-style: normal;
@@ -22,6 +31,9 @@
       position: relative;
 
       &_type_active {
+        padding-left: 20px;
+        padding-right: 20px;
+
         &::after {
           content: '';
           position: absolute;
@@ -48,21 +60,24 @@
     height: 30px;
     color: transparent;
     background-size: contain;
+    background-repeat: no-repeat;
+    margin: 0 0 0 40px;
 
     &_type_previous {
       transform: rotate(180deg);
+      margin: 0 40px 0 0;
     }
 
     &_type_disabled {
-      display: none;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
     }
   }
 }
 
 @include atDesktop1024 {
   .pagination {
-    margin: 60px auto 50px;
-    max-width: 305px;
 
     &__arrow-element {
       width: 20px;
@@ -70,16 +85,32 @@
     }
 
     &__element {
+      margin-left: 10px;
+      margin-right: 10px;
+
       &-link {
         font-size: 14px;
         line-height: 17px;
 
         &_type_active {
-          &::after {
-            width: 38px;
-            height: 38px;
-          }
+          padding-left: 10px;
+          padding-right: 10px;
+
+            &::after {
+              width: 38px;
+              height: 38px;
+            }
         }
+      }
+    }
+
+    &__arrow-element {
+      width: 20px;
+      height: 20px;
+      margin: 0 0 0 25px;
+  
+      &_type_previous {
+        margin: 0 25px 0 0;
       }
     }
   }

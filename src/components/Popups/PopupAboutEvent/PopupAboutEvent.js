@@ -1,15 +1,25 @@
 import PropTypes from 'prop-types';
+import { Scrollbars } from 'react-custom-scrollbars';
+import texts from './locales/RU';
 import {
   formatDate,
   formatWordCase,
   changeCaseOfFirstLetter,
 } from '../../../utils/utils';
-import { Popup, Button, TitleH2 } from './index';
+import Popup from '../Popup/Popup';
+import { Button, TitleH2 } from '../../utils/index';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks/index';
 import { localStAfishaEvent } from '../../../config/constants';
 
 function PopupAboutEvent({ isOpen, onClose }) {
+  const {
+    buttonTitle,
+    buttonTitleSelected,
+    buttonTitleDisabled,
+    remainSeatsText,
+  } = texts;
+
   const { handleEventBooking } = useEventBooking();
   const card = getLocalStorageData(localStAfishaEvent);
 
@@ -40,7 +50,7 @@ function PopupAboutEvent({ isOpen, onClose }) {
                 {`${startDateParts?.monthName} / ${startDateParts?.weekdayName}`}
               </p>
             </div>
-            <div className="calendar__about">
+            <div className="calendar__about calendar__about_modal">
               <TitleH2
                 title={card?.title}
                 sectionClass="calendar__title calendar__title_type_popup"
@@ -63,15 +73,20 @@ function PopupAboutEvent({ isOpen, onClose }) {
               </li>
             </ul>
             <div className="calendar__description">
-              <p className="paragraph calendar__desc-paragraph">
-                {card?.description}
-              </p>
+              <Scrollbars
+                renderThumbVertical={() => <div className="calendar__thumb" />}
+              >
+                <p className="paragraph calendar__desc-paragraph">
+                  {card?.description}
+                </p>
+              </Scrollbars>
             </div>
+
             <div className="calendar__submit">
               <Button
                 color="blue"
-                title="Записаться"
-                titleSelected="Отменить запись"
+                title={buttonTitle}
+                titleSelected={buttonTitleSelected}
                 sectionClass="button_action_confirm"
                 isSubmittable
                 isBooked={card?.booked}
@@ -79,9 +94,9 @@ function PopupAboutEvent({ isOpen, onClose }) {
               />
               <p className="calendar__place-left">
                 {/* если запись закрыта, то карточка не должна быть выделенной */}
-                {(isDisabled && 'Запись закрыта') ||
+                {(isDisabled && buttonTitleDisabled) ||
                   (!card?.booked &&
-                    `Осталось ${card?.remainSeats} ${formatWordCase(
+                    `${remainSeatsText} ${card?.remainSeats} ${formatWordCase(
                       card?.remainSeats
                     )}`)}
               </p>

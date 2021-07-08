@@ -40,8 +40,7 @@
   }
 
   &__answer_opened {
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 30px;
     opacity: 1;
   }
 
@@ -55,16 +54,14 @@
   }
 }
 
-@media screen and (max-width: 1100px) {
-  .card-question__answer_opened {
-    margin-top: 5px;
-    margin-bottom: 10px;
-  }
-}
-
 @include atDesktop1024 {
   .card-question {
     padding: 30px 15px 15px;
+
+    &__answer_opened {
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
   }
 }
 

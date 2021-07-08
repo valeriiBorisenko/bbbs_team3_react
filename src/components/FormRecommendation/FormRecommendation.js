@@ -3,15 +3,28 @@ import './FormRecommendation.scss';
 import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import texts from './locales/RU';
 import { CitiesContext } from '../../contexts/index';
 import { regExpImages, regExpUrl } from '../../config/constants';
-import { Input, Button, ButtonRound } from './index';
+import { Input, Button, ButtonRound } from '../utils/index';
 
 function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
+  const {
+    titlePlaceholder,
+    linkPlaceholder,
+    addressPlaceholder,
+    genderMale,
+    genderFemale,
+    agePlaceholder,
+    activityPlaceholder,
+    cityPlaceholder,
+    descPlaceholder,
+    descPlaceholderMobile,
+    photoPlaceholder,
+    buttonText,
+  } = texts;
   const textAreaPlaceholder =
-    window.innerWidth < 576
-      ? 'Комментарий*'
-      : 'Комментарий* Поделитесь впечатлениями о проведенном времени';
+    window.innerWidth < 576 ? descPlaceholderMobile : descPlaceholder;
 
   const cities = useContext(CitiesContext);
 
@@ -84,13 +97,13 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             sectionClass="form-recom__input"
             type="text"
             name="title"
-            placeholder="Название*"
+            placeholder={titlePlaceholder}
             register={register}
             required
             minLength={{ value: 5, message: 'Минимальная длина 5 символов' }}
             maxLength={{ value: 50, message: 'Максимальная длина 50 символов' }}
             error={errors?.title}
-            errorMessage="Название*"
+            errorMessage={titlePlaceholder}
           />
           {errors?.title && (
             <span className="form-recom__input-error">
@@ -104,7 +117,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             sectionClass="form-recom__input"
             type="text"
             name="link"
-            placeholder="Сайт"
+            placeholder={linkPlaceholder}
             register={register}
             pattern={{
               value: regExpUrl,
@@ -124,13 +137,13 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
           sectionClass="form-recom__input"
           type="text"
           name="address"
-          placeholder="Адрес*"
+          placeholder={addressPlaceholder}
           register={register}
           required
           minLength={{ value: 5, message: 'Минимальная длина 5 символов' }}
           maxLength={{ value: 50, message: 'Максимальная длина 50 символов' }}
           error={errors?.address}
-          errorMessage="Адрес*"
+          errorMessage={addressPlaceholder}
         />
         {errors?.address && (
           <span className="form-recom__input-error">
@@ -154,7 +167,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
               errors?.gender ? 'form-recom__pseudo-radio_error' : ''
             }`}
           >
-            Мальчик
+            {genderMale}
           </span>
         </label>
         <label className="form-recom__label" htmlFor="formRecommendationGirl">
@@ -171,7 +184,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
               errors?.gender ? 'form-recom__pseudo-radio_error' : ''
             }`}
           >
-            Девочка
+            {genderFemale}
           </span>
         </label>
         <div className="form-recom__input-wrap form-recom__input-wrap_narrow">
@@ -179,13 +192,13 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             sectionClass="form-recom__input"
             type="number"
             name="age"
-            placeholder="Возраст*"
+            placeholder={agePlaceholder}
             register={register}
             required
             max={{ value: 25, message: 'Макс. возраст 25 лет' }}
             min={{ value: 1, message: 'Мин. возраст 1 год' }}
             error={errors?.age}
-            errorMessage="Возраст*"
+            errorMessage={agePlaceholder}
           />
           {errors?.age && (
             <span className="form-recom__input-error">
@@ -200,10 +213,10 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
           errors?.activityType ? 'form-recom__select_error' : ''
         }`}
         name="activityType"
-        {...register('activityType', { required: 'Тип отдыха*' })}
+        {...register('activityType', { required: activityPlaceholder })}
       >
         <option value="" className="form-recom__option" hidden>
-          Тип отдыха*
+          {activityPlaceholder}
         </option>
         {activityTypes &&
           activityTypes.map(({ id, name }) => (
@@ -218,10 +231,10 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
           errors?.city ? 'form-recom__select_error' : ''
         }`}
         name="city"
-        {...register('city', { required: 'Город*' })}
+        {...register('city', { required: cityPlaceholder })}
       >
         <option value="" className="form-recom__option" hidden>
-          Город*
+          {cityPlaceholder}
         </option>
         {cities &&
           cities.map(({ id, name }) => (
@@ -259,7 +272,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             name="image"
             accept="image/png, image/jpeg"
             className="form-recom__input-radio"
-            {...register('image', { required: 'Добавить фото' })}
+            {...register('image', { required: photoPlaceholder })}
             onChange={(evt) => handleChangeImage(evt.target.files)}
           />
           <ButtonRound
@@ -272,7 +285,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
           />
         </label>
 
-        <Button title="Отправить" color="blue" isSubmittable />
+        <Button title={buttonText} color="blue" isSubmittable />
       </div>
     </form>
   );

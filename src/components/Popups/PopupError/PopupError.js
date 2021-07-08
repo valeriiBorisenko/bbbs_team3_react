@@ -1,6 +1,8 @@
 import './PopupError.scss';
 import PropTypes from 'prop-types';
-import { Popup, Button, TitleH2 } from './index';
+import Popup from '../Popup/Popup';
+import { Button, TitleH2 } from '../../utils/index';
+//! текст прокинуть через пропс
 
 function PopupError({ isOpen, onClose }) {
   return (

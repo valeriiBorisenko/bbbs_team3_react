@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import './Catalog.scss';
+import { useEffect, useState } from 'react';
+import catalogPageTexts from '../../locales/catalog-page-RU';
 import {
   BasePage,
   TitleH1,
@@ -11,26 +12,48 @@ import {
 import getCatalogPageData from '../../api/catalog-page';
 import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
 import { FIGURES } from '../../config/constants';
-import './Catalog.scss';
+
+const PAGE_SIZE_PAGINATE = {
+  small: 4,
+  medium: 9,
+  big: 16,
+};
 
 function Catalog() {
-  const [pageSize, setPageSize] = useState(16);
+  const { headTitle, headDescription, title, subtitle, textStubNoData } =
+    catalogPageTexts;
+
+  const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
   const [catalogPageData, setCatalogPageData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
+  function getPageData() {
     const offset = pageSize * pageNumber;
-    getCatalogPageData({ limit: pageSize, offset }).then(
-      ({ results, count }) => {
+
+    getCatalogPageData({ limit: pageSize, offset })
+      .then(({ results, count }) => {
         setCatalogPageData(results);
         setPageCount(Math.ceil(count / pageSize));
-        setIsLoading(false);
-      }
-    );
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoadingPaginate(false);
+        setIsLoadingPage(false);
+      });
+  }
+
+  useEffect(() => {
+    if (pageSize) {
+      getPageData();
+    }
+
+    if (!isLoadingPage) {
+      setIsLoadingPaginate(true);
+    }
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
@@ -39,11 +62,11 @@ function Catalog() {
 
     const listener = () => {
       if (smallQuery.matches) {
-        setPageSize(4);
+        setPageSize(PAGE_SIZE_PAGINATE.small);
       } else if (largeQuery.matches) {
-        setPageSize(9);
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
-        setPageSize(16);
+        setPageSize(PAGE_SIZE_PAGINATE.big);
       }
     };
     listener();
@@ -57,59 +80,50 @@ function Catalog() {
     };
   }, []);
 
-  // отрисовка заглушки
-  function renderAnimatedContainer() {
+  function renderCards() {
     return (
-      <AnimatedPageContainer
-        titleText="Информация появится в ближайшее время."
-        buttonText="Вернуться на главную"
-      />
+      <CardsSectionWithLines
+        pageCount={pageCount}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        isLoading={isLoadingPaginate}
+        dataLength={catalogPageData.length}
+        pageSize={pageSize}
+      >
+        {catalogPageData.map((item, i) => (
+          <CardCatalog
+            sectionClass="cards-section__item"
+            key={item?.id}
+            title={item?.title}
+            image={item?.imageUrl}
+            shape={FIGURES[i % FIGURES.length]}
+          />
+        ))}
+      </CardsSectionWithLines>
     );
   }
 
   function renderPageContent() {
+    if (!catalogPageData && !isLoadingPage) {
+      return <AnimatedPageContainer titleText={textStubNoData} />;
+    }
+
     return (
       <section className="catalog page__section fade-in">
-        <TitleH1 sectionClass="catalog__title" title="Справочник" />
-        <TitleH2
-          sectionClass="catalog__subtitle"
-          title="Памятка новичка&nbsp;&mdash; наши материалы, где сможете найти всю базовую информацию,
-          рассказанную на вводном тренинге. Если вы захотите освежить свои знания, и&nbsp;напомнить
-          себе о&nbsp;чем-то."
-        />
-        {isLoading ? (
-          <Loader isNested />
-        ) : (
-          <CardsSectionWithLines
-            pageCount={pageCount}
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            sectionClass="catalog__gap"
-          >
-            {catalogPageData.map((item, i) => (
-              <CardCatalog
-                sectionClass="cards-section__item"
-                key={item.id}
-                title={item.title}
-                image={item.imageUrl}
-                shape={FIGURES[i % FIGURES.length]}
-              />
-            ))}
-          </CardsSectionWithLines>
-        )}
+        <TitleH1 sectionClass="catalog__title" title={title} />
+        <TitleH2 sectionClass="catalog__subtitle" title={subtitle} />
+        {renderCards()}
       </section>
     );
   }
 
+  if (isLoadingPage) {
+    return <Loader isCentered />;
+  }
+
   return (
-    <BasePage>
-      <Helmet>
-        <title>Справочник</title>
-        <meta name="description" content="Справочник полезных статей" />
-      </Helmet>
-      {!catalogPageData.length && !isLoading
-        ? renderAnimatedContainer()
-        : renderPageContent()}
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      {renderPageContent()}
     </BasePage>
   );
 }

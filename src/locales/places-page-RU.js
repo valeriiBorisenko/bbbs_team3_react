@@ -2,7 +2,7 @@ const placesPageTexts = {
   headTitle: 'Куда пойти',
   headDescription: 'Куда вы можете пойти, что рекомендуют наши наставники.',
   title: 'Куда пойти',
-  animatedContainerText:
+  textStubNoData:
     'Рекомендуемых мест для выбранного города ещё нет, но они обязательно появятся!',
   paragraphNoContent: 'По вашему запросу ничего не нашлось.',
   mentorTag: 'Выбор наставников',

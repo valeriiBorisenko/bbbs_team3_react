@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import rightsPageTexts from '../../locales/rights-page-RU';
 import './Rights.scss';
-import { ALL_CATEGORIES, FIGURES, COLORS } from '../../config/constants';
+import {
+  ALL_CATEGORIES,
+  FIGURES,
+  COLORS,
+  DELAY_DEBOUNCE,
+} from '../../config/constants';
 import {
   renderFilterTags,
   handleCheckboxBehavior,
@@ -20,11 +25,19 @@ import {
   AnimatedPageContainer,
 } from './index';
 
+const PAGE_SIZE_PAGINATE = {
+  small: 4,
+  medium: 9,
+  big: 16,
+};
+
 const Rights = () => {
+  const { headTitle, headDescription, title, textStubNoData } = rightsPageTexts;
+
   useScrollToTop();
 
   // Стейты для пагинации
-  const [pageSize, setPageSize] = useState(16);
+  const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -36,15 +49,22 @@ const Rights = () => {
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+  // Загрузка данных при переключении пагинации
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
   const changeCategory = (inputValue, isChecked) => {
-    handleCheckboxBehavior(setCategories, { inputValue, isChecked });
+    if (inputValue === ALL_CATEGORIES) {
+      selectOneTag(setCategories, ALL_CATEGORIES);
+    } else {
+      handleCheckboxBehavior(setCategories, { inputValue, isChecked });
+      deselectOneTag(setCategories, ALL_CATEGORIES);
+    }
     setIsFiltersUsed(true);
   };
 
-  // отрисовка массива фильтров
-  const renderTagsContainder = () => (
+  // функции рендеров
+  const renderTagsContainer = () => (
     <div className="tags">
       <ul className="tags__list">
         {renderFilterTags(categories, 'checkbox', changeCategory)}
@@ -52,20 +72,22 @@ const Rights = () => {
     </div>
   );
 
-  // отрисовка контента страницы
-  const renderMainContent = () => (
+  const renderCards = () => (
     <>
       <CardsSectionWithLines
         pageCount={pageCount}
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
-        sectionClass="rights page__section"
+        isLoading={isLoadingPaginate}
+        dataLength={articles.length}
+        pageSize={pageSize}
       >
         {articles.map((item, i) => (
           <CardRights
-            key={item.id}
-            title={item.title}
-            tags={item.tags}
+            key={item?.id}
+            sectionClass="cards-section__item"
+            title={item?.title}
+            tags={item?.tags}
             shape={FIGURES[i % FIGURES.length]}
             color={COLORS[i % COLORS.length]}
           />
@@ -74,24 +96,43 @@ const Rights = () => {
     </>
   );
 
-  // Заглушка на страницу
-  const getPageStub = (text) => (
-    <AnimatedPageContainer titleText={text} buttonText="Вернуться на главную" />
-  );
+  // отрисовка контента страницы
+  const renderMainContent = () => {
+    if (!articles && !isLoadingPage) {
+      return <AnimatedPageContainer titleText={textStubNoData} />;
+    }
 
-  const getArticlesData = (tagsStr = '', offset = 0) => {
+    return isFiltersUsed ? <Loader isNested /> : renderCards();
+  };
+
+  const getActiveTags = () => {
+    if (categories) {
+      return categories
+        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+        .map((filter) => filter.filter)
+        .join(',');
+    }
+    return null;
+  };
+
+  const getArticlesData = (activeCategories) => {
+    const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
+    const activeTags = activeCategories || getActiveTags();
+
     getRightsData({
       limit: pageSize,
       offset,
-      tags: tagsStr,
+      tags: activeTags,
     })
       .then(({ results, count }) => {
-        setArticles(results);
         setPageCount(Math.ceil(count / pageSize));
+        return results;
       })
-      .catch(getPageStub('Ошибка обработки запроса попробуйте чуть позже'))
+      .then((results) => setArticles(results))
+      .catch((err) => console.log(err))
       .finally(() => {
         setIsLoadingPage(false);
+        setIsLoadingPaginate(false);
         setIsFiltersUsed(false);
       });
   };
@@ -100,62 +141,51 @@ const Rights = () => {
     getRightsTags()
       .then((tags) => {
         const categoriesArr = tags.map((tag) => ({
-          filter: tag.slug.toLowerCase(),
-          name: changeCaseOfFirstLetter(tag.name),
+          filter: tag?.slug.toLowerCase(),
+          name: changeCaseOfFirstLetter(tag?.name),
           isActive: false,
         }));
+
         setCategories([
-          {
-            filter: ALL_CATEGORIES,
-            name: ALL_CATEGORIES,
-            isActive: true,
-          },
+          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
           ...categoriesArr,
         ]);
       })
-      .catch(getPageStub('Ошибка обработки запроса попробуйте чуть позже'));
-  };
-
-  const getPageData = (tagsStr) => {
-    const offset = pageSize * pageNumber;
-
-    if (isLoadingPage) {
-      getArticlesData();
-      getArticlesTags();
-    } else if (isFiltersUsed) {
-      getArticlesData(tagsStr);
-    } else {
-      getArticlesData(tagsStr, offset);
-    }
+      .catch((err) => console.log(err));
   };
 
   // функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
-    if (!isLoadingPage && isFiltersUsed) {
-      const activeCategories = categories
-        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter);
+    if (categories && isFiltersUsed) {
+      const activeCategories = getActiveTags();
 
       if (activeCategories.length === 0) {
-        getPageData();
         selectOneTag(setCategories, ALL_CATEGORIES);
-      } else {
-        const tagsStr = activeCategories.join(',');
-        getPageData(tagsStr);
-        deselectOneTag(setCategories, ALL_CATEGORIES);
       }
+      getArticlesData(activeCategories);
     }
   };
 
-  const debounceFiltration = useDebounce(handleFiltration, 1500);
-  // запуск фильтрации
+  /// Фильтрация с делэем
+  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
+  const debouncePaginate = useDebounce(getArticlesData, DELAY_DEBOUNCE);
   useEffect(() => {
-    debounceFiltration();
+    if (isFiltersUsed) {
+      debounceFiltration();
+    }
   }, [isFiltersUsed]);
 
-  // Отрисовка страницы
+  // Первая отрисовка страницы + переход по страницам пагинации
   useEffect(() => {
-    getPageData();
+    if (isLoadingPage && pageSize) {
+      getArticlesData();
+      getArticlesTags();
+    }
+
+    if (!isLoadingPage && !isFiltersUsed) {
+      setIsLoadingPaginate(true);
+      debouncePaginate();
+    }
   }, [pageSize, pageNumber]);
 
   // Юз эффект для пагинации
@@ -165,11 +195,11 @@ const Rights = () => {
 
     const listener = () => {
       if (smallQuery.matches) {
-        setPageSize(4);
+        setPageSize(PAGE_SIZE_PAGINATE.small);
       } else if (largeQuery.matches) {
-        setPageSize(9);
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
-        setPageSize(16);
+        setPageSize(PAGE_SIZE_PAGINATE.big);
       }
     };
     listener();
@@ -183,32 +213,18 @@ const Rights = () => {
     };
   }, []);
 
-  // залогинен и нет ивентов
-  if (!articles && !isLoadingPage) {
-    return getPageStub(
-      'В данный момент страница со статьями о правах детей пуста. Возвращайтесь позже!'
-    );
-  }
-
   // глобальный лоадер
-  if (isLoadingPage || !articles || !categories) {
+  if (isLoadingPage) {
     return <Loader isCentered />;
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Права детей</title>
-        <meta
-          name="description"
-          content="Информационные рубрики о правах детей"
-        />
-      </Helmet>
-      <section className="lead page__section fade-in">
-        <TitleH1 title="Права детей" />
-        {categories?.length > 1 && renderTagsContainder()}
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="rights page__section fade-in">
+        <TitleH1 title={title} />
+        {categories?.length > 1 && renderTagsContainer()}
+        {renderMainContent()}
       </section>
-      {isFiltersUsed ? <Loader isNested /> : renderMainContent()}
     </BasePage>
   );
 };

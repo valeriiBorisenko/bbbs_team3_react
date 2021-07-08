@@ -24,7 +24,7 @@ import {
 } from './index';
 
 function Calendar() {
-  const { headTitle, headDescription, title, animatedContainerText } =
+  const { headTitle, headDescription, title, textStubNoData } =
     calendarPageTexts;
 
   useScrollToTop();
@@ -141,7 +141,7 @@ function Calendar() {
         {isCityChanging ? (
           <Loader isNested />
         ) : (
-          <AnimatedPageContainer titleText={animatedContainerText} />
+          <AnimatedPageContainer titleText={textStubNoData} />
         )}
       </>
     );

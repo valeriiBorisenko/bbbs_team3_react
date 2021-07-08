@@ -75,23 +75,6 @@ export const formatWordCase = (remainSeats) => {
   return 'мест';
 };
 
-// вернет заголовок состоящий из тегов
-// принимает массив тегов
-export const getCardType = (tags) => {
-  if (tags) {
-    return tags.map((tag, idx) => {
-      if (tags.length === 1) {
-        return `${tag.name}`;
-      }
-      if (idx !== tags.length - 1) {
-        return `${tag.name} + `;
-      }
-      return `${tag.name.toLowerCase()}`;
-    });
-  }
-  return undefined;
-};
-
 export const questionForm = {
   beforeSubmit: {
     title:
