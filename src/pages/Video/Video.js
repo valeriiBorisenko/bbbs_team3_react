@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import './Video.scss';
-
+import videoPageTexts from '../../locales/video-page-RU';
 import {
   BasePage,
   Loader,
@@ -23,9 +22,6 @@ import {
 import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
 import { changeCaseOfFirstLetter, formatDuration } from '../../utils/utils';
 
-const TEXT_STUB_NOPE_DATA =
-  'В данный момент страница с видео пуста. Возвращайтесь позже!';
-
 const PAGE_SIZE_PAGINATE = {
   small: 4,
   medium: 9,
@@ -35,25 +31,24 @@ const PAGE_SIZE_PAGINATE = {
 const Video = () => {
   useScrollToTop();
 
+  const { headTitle, headDescription, title, textStubNoData } = videoPageTexts;
+
   // Стейты для пагинации
-  const [pageSize, setPageSize] = useState(16);
+  const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
   // Стейты с данными
   const [mainVideo, setMainVideo] = useState({});
-
   const [video, setVideo] = useState(null);
   const [categories, setCategories] = useState(null);
 
-  // Загрузка данных
+  // Стейты состояний
   const [isLoadingPage, setIsLoadingPage] = useState(true);
-  // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-  // Загрузка данных при переключении пагинации
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
-  // хэндлер клика по фильтру КАТЕГОРИЯ
+  // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
@@ -64,7 +59,7 @@ const Video = () => {
     setIsFiltersUsed(true);
   };
 
-  // отрисовка массива фильтров
+  // Фильтры страницы
   const renderTagsContainer = () => (
     <div className="tags">
       <ul className="tags__list">
@@ -73,6 +68,7 @@ const Video = () => {
     </div>
   );
 
+  // Карточки с видео страницы
   const renderCards = () => (
     <>
       {video.map((item) => {
@@ -87,16 +83,20 @@ const Video = () => {
     </>
   );
 
-  // отрисовка контента страницы
+  // Загрузка карточек при нажатии на пагинацию
+  const loadingContentPagination = () =>
+    isLoadingPaginate ? (
+      <Loader isNested />
+    ) : (
+      <section className="cards-grid cards-grid_content_small-cards page__section">
+        {renderCards()}
+      </section>
+    );
+
+  // Контент страницы
   const renderMainContent = () => {
-    // залогинен и нет статей
     if (!video && !mainVideo && !isLoadingPage) {
-      return (
-        <AnimatedPageContainer
-          titleText={TEXT_STUB_NOPE_DATA}
-          buttonText="Вернуться на главную"
-        />
-      );
+      return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
     return (
@@ -105,45 +105,61 @@ const Video = () => {
           <CardVideoMain data={mainVideo} />
         </section>
 
-        {isFiltersUsed || isLoadingPaginate ? (
-          <Loader isCentered />
+        {isFiltersUsed ? (
+          <Loader isNested />
         ) : (
-          <section className="cards-grid cards-grid_content_small-cards page__section">
-            {renderCards()}
-          </section>
-        )}
+          <>
+            {loadingContentPagination()}
 
-        {pageCount > 1 && (
-          <Paginate
-            sectionClass="page__section"
-            pageCount={pageCount}
-            value={pageNumber}
-            onChange={setPageNumber}
-          />
+            {pageCount > 1 && (
+              <Paginate
+                sectionClass="cards-section__pagination"
+                pageCount={pageCount}
+                value={pageNumber}
+                onChange={setPageNumber}
+              />
+            )}
+          </>
         )}
       </>
     );
   };
 
-  const getVideoData = (tags = '') => {
+  // Сортировка значений Тэгов для АПИ
+  const getActiveTags = () => {
+    if (categories) {
+      return categories
+        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+        .map((filter) => filter.filter)
+        .join(',');
+    }
+    return null;
+  };
+
+  // Функция обработки запроса АПИ с карточками
+  const getVideoData = (activeCategories) => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
+    const activeTags = activeCategories || getActiveTags();
 
     getVideoPageData({
       limit: pageSize,
       offset,
-      tags,
+      tags: activeTags,
     })
       .then(({ results, count }) => {
+        setPageCount(Math.ceil(count / pageSize));
+        return results;
+      })
+      .then((results) => {
         if (isLoadingPage) {
           const fullSizeVideo = results.filter(
             (item) => item.pinnedFullSize
           )[0];
-          console.log('tyt');
+
           setMainVideo(fullSizeVideo);
         }
 
         setVideo(results);
-        setPageCount(Math.ceil(count / pageSize));
       })
       .catch((err) => console.log(err))
       .finally(() => {
@@ -153,12 +169,13 @@ const Video = () => {
       });
   };
 
+  // Функция обработки запроса АПИ с тегами
   const getVideoTags = () => {
     getVideoPageTags()
       .then((tags) => {
         const categoriesArr = tags.map((tag) => ({
-          filter: tag.slug.toLowerCase(),
-          name: changeCaseOfFirstLetter(tag.name),
+          filter: tag?.slug.toLowerCase(),
+          name: changeCaseOfFirstLetter(tag?.name),
           isActive: false,
         }));
 
@@ -170,7 +187,7 @@ const Video = () => {
       .catch((err) => console.log(err));
   };
 
-  // функция-фильтратор с использованием АПИ
+  // Функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
     if (!isLoadingPage && isFiltersUsed) {
       const activeCategories = categories
@@ -187,28 +204,34 @@ const Video = () => {
         selectOneTag(setCategories, ALL_CATEGORIES);
       }
 
-      getVideoData(activeCategories);
+      getVideoData(searchStr);
     }
   };
 
-  // Фильтрация с делэем
+  // Дэлеи для динамических запросов
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
+  const debouncePaginate = useDebounce(getVideoData, DELAY_DEBOUNCE);
+  // Динамические фильтры
   useEffect(() => {
-    debounceFiltration();
+    if (isFiltersUsed) {
+      debounceFiltration();
+    }
   }, [isFiltersUsed]);
 
-  // Первая отрисовка страницы + переход по страницам пагинации
+  // Загрузка страницы, динамическая пагинация, динамический ресайз
   useEffect(() => {
-    if (isLoadingPage) {
+    if (isLoadingPage && pageSize) {
       getVideoData();
       getVideoTags();
-    } else {
+    }
+
+    if (!isLoadingPage && !isFiltersUsed) {
       setIsLoadingPaginate(true);
-      getVideoData();
+      debouncePaginate();
     }
   }, [pageSize, pageNumber]);
 
-  // Юз эффект для пагинации
+  // Резайз пагинации
   useEffect(() => {
     const smallQuery = window.matchMedia('(max-width: 1399px)');
     const largeQuery = window.matchMedia('(max-width: 1640px)');
@@ -219,7 +242,7 @@ const Video = () => {
       } else if (largeQuery.matches) {
         setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
-        setPageSize(4);
+        setPageSize(PAGE_SIZE_PAGINATE.big);
       }
     };
     listener();
@@ -233,19 +256,15 @@ const Video = () => {
     };
   }, []);
 
-  // глобальный лоадер
+  // Лоадер при загрузке страницы
   if (isLoadingPage) {
     return <Loader isCentered />;
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Видео</title>
-        <meta name="description" content="Страница с видео контентом" />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="lead page__section">
-        <TitleH1 title="Видео" />
+        <TitleH1 title={title} />
         {categories?.length > 1 && renderTagsContainer()}
       </section>
 
