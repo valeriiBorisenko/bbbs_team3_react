@@ -1,6 +1,6 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
-import { TitleH2, Card, Caption } from './index';
+import { TitleH2, Card, Caption } from '../../utils/index';
 import { changeCaseOfFirstLetter } from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
