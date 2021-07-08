@@ -1,6 +1,6 @@
 import './Books.scss';
-import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
+import booksPageTexts from '../../locales/books-page-RU';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
   getBooksPageData,
@@ -26,6 +26,8 @@ import {
 } from '../../utils/filter-tags';
 
 function Books() {
+  const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
+
   useScrollToTop();
 
   // Загрузка данных
@@ -143,12 +145,7 @@ function Books() {
 
   // контейнер заглушки
   function renderAnimatedContainer() {
-    return (
-      <AnimatedPageContainer
-        titleText="В данный момент страница с книгами пуста. Возвращайтесь позже!"
-        buttonText="Вернуться на главную"
-      />
-    );
+    return <AnimatedPageContainer titleText={textStubNoData} />;
   }
 
   // контейнер с книгами
@@ -173,7 +170,7 @@ function Books() {
     if (booksPageData.length > 0) {
       return (
         <>
-          <TitleH1 title="Книги" sectionClass="books__title" />
+          <TitleH1 title={title} sectionClass="books__title" />
 
           {/* рендер фильтров */}
           {categories?.length > 1 && (
@@ -212,14 +209,7 @@ function Books() {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Книги</title>
-        <meta
-          name="description"
-          content="Подборка книг, которые можно почитать, с аннотацией к ним"
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="books page__section fade-in">
         {renderPageContent()}
       </section>

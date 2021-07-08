@@ -1,6 +1,6 @@
 import './Movies.scss';
-import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
+import moviesPageTexts from '../../locales/movies-page-RU';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
   getMoviesPageData,
@@ -26,6 +26,8 @@ import {
 } from '../../utils/filter-tags';
 
 function Movies() {
+  const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
+
   useScrollToTop();
 
   // Загрузка данных
@@ -150,12 +152,7 @@ function Movies() {
 
   // контейнер заглушки
   function renderAnimatedContainer() {
-    return (
-      <AnimatedPageContainer
-        titleText="В данный момент страница c фильмами пуста. Возвращайтесь позже!"
-        buttonText="Вернуться на главную"
-      />
-    );
+    return <AnimatedPageContainer titleText={textStubNoData} />;
   }
 
   // контейнер с фильмами
@@ -183,7 +180,7 @@ function Movies() {
     if (moviesPageData.length > 0) {
       return (
         <>
-          <TitleH1 title="Фильмы" sectionClass="movies__title" />
+          <TitleH1 title={title} sectionClass="movies__title" />
 
           {/* рендер фильтров */}
           {categories?.length > 1 && (
@@ -221,14 +218,7 @@ function Movies() {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Фильмы</title>
-        <meta
-          name="description"
-          content="Подборка фильмов, которые можно посмотреть, с аннотацией к ним"
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="movies page__section fade-in">
         {renderPageContent()}
       </section>
