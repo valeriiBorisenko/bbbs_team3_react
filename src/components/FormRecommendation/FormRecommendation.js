@@ -24,7 +24,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
     buttonText,
   } = texts;
 
-  const [textAreaPlaceholder, setTextAreaPlaceholder] = useState(false);
+  const [textAreaPlaceholder, setTextAreaPlaceholder] = useState('');
 
   useEffect(() => {
     const mobile = window.matchMedia('(max-width: 576px)');
