@@ -23,8 +23,24 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
     photoPlaceholder,
     buttonText,
   } = texts;
-  const textAreaPlaceholder =
-    window.innerWidth < 576 ? descPlaceholderMobile : descPlaceholder;
+
+  const [textAreaPlaceholder, setTextAreaPlaceholder] = useState(false);
+
+  useEffect(() => {
+    const mobile = window.matchMedia('(max-width: 576px)');
+
+    const listener = () => {
+      if (mobile.matches) setTextAreaPlaceholder(descPlaceholderMobile);
+      else setTextAreaPlaceholder(descPlaceholder);
+    };
+    listener();
+
+    mobile.addEventListener('change', listener);
+
+    return () => {
+      mobile.removeEventListener('change', listener);
+    };
+  }, []);
 
   const cities = useContext(CitiesContext);
 
