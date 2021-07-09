@@ -2,6 +2,7 @@
 import './DropDownSelect.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 
 function DropDownSelect({
   placeholder,
@@ -48,6 +49,7 @@ function DropDownSelect({
   return (
     <div className={classNames}>
       <button
+        aria-label={`${texts.buttonAriaLabel} ${placeholder}`}
         className={classNamesButton}
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -67,6 +69,7 @@ function DropDownSelect({
           options.map((option) => (
             <li key={option?.id} className="select__option">
               <label
+                aria-label={option?.name}
                 htmlFor={`${option?.id}-${option?.name}`}
                 className="select__label"
               >
