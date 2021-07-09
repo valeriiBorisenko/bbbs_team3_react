@@ -12,6 +12,7 @@ import {
   PopupError,
   PopupCities,
   PopupLogin,
+  PopupRecommendSuccess,
 } from './components/Popups/index';
 // логины, авторизация
 import {
@@ -33,6 +34,8 @@ function App() {
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
+  const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
+    useState(false);
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
@@ -42,6 +45,7 @@ function App() {
     setIsPopupErrorOpen(false);
     setIsPopupLoginOpen(false);
     setIsPopupCitiesOpen(false);
+    setIsPopupRecommendSuccessOpen(false);
   }
 
   function openPopupConfirmation() {
@@ -67,6 +71,10 @@ function App() {
 
   function openPopupLogin() {
     setIsPopupLoginOpen(true);
+  }
+
+  function openPopupRecommendSuccess() {
+    setIsPopupRecommendSuccessOpen(true);
   }
 
   // текущий юзер/контекст
@@ -109,6 +117,7 @@ function App() {
               openPopupError,
               openPopupCities,
               openPopupLogin,
+              openPopupRecommendSuccess,
             }}
           >
             <div className="page">
@@ -131,6 +140,10 @@ function App() {
                 onClose={closeAllPopups}
               />
               <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
+              <PopupRecommendSuccess
+                isOpen={isPopupRecommendSuccessOpen}
+                onClose={closeAllPopups}
+              />
             </div>
           </PopupsContext.Provider>
         </CurrentUserContext.Provider>

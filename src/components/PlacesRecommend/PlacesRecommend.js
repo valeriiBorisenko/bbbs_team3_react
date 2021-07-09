@@ -1,14 +1,15 @@
 import './PlacesRecommend.scss';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { PopupRecommendSuccess } from '../Popups/index';
+import { PopupsContext } from '../../contexts/index';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
 
 function PlacesRecommend({ sectionClass, activityTypes }) {
+  const { openPopupRecommendSuccess } = useContext(PopupsContext);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
 
   const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
@@ -22,16 +23,6 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   const openForm = () => {
     setIsFormOpen(true);
     scrollToForm();
-  };
-
-  const closeSuccessPopup = () => {
-    setIsSuccessPopupOpen(false);
-  };
-
-  const closeSuccessPopupOnEsc = (evt) => {
-    if (evt.key === 'Escape') {
-      closeSuccessPopup();
-    }
   };
 
   const createFormData = (data) => {
@@ -51,7 +42,7 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   const handleFormSubmit = (data) => {
     postPlace(createFormData(data))
       .then(() => {
-        setIsSuccessPopupOpen(true);
+        openPopupRecommendSuccess(true);
         closeForm();
       })
       .catch(console.log);
@@ -65,11 +56,6 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   ]
     .join(' ')
     .trim();
-
-  useEffect(() => {
-    window.addEventListener('keyup', closeSuccessPopupOnEsc);
-    return () => window.removeEventListener('keyup', closeSuccessPopupOnEsc);
-  }, []);
 
   return (
     <>
@@ -101,10 +87,6 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
           />
         </div>
       </section>
-      <PopupRecommendSuccess
-        isOpen={isSuccessPopupOpen}
-        onClose={closeSuccessPopup}
-      />
     </>
   );
 }
