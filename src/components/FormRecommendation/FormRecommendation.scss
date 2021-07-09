@@ -127,27 +127,6 @@
     }
   }
 
-  &__select {
-    height: 48px;
-    margin-bottom: 20px;
-    box-sizing: border-box;
-    outline: none;
-    border: none;
-    border-radius: 30px;
-    padding: 13px 20px 16px;
-    color: $lightGray;
-    background-color: $background;
-    font-family: $protoGrotesk;
-    font-weight: 300;
-    font-size: 15px;
-    line-height: 1.3;
-    letter-spacing: 0.2px;
-  
-    &_error {
-      color: $error;
-    }
-  }
-
   &__submit-zone {
     display: flex;
     justify-content: space-between;

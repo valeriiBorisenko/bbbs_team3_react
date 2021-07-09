@@ -46,6 +46,8 @@
   }
 
   &__arrow {
+    width: 24px;
+    height: 19px;
     stroke: $lightGray;
     transition: .2s ease;
 
@@ -106,6 +108,7 @@
   }
 
   &__span {
+    display: block;
     box-sizing: border-box;
     color: $lightGray;
     background-color: $background;
@@ -120,6 +123,43 @@
     &:hover {
       cursor: pointer;
       color: $black;
+    }
+  }
+}
+
+@include atTabletL {
+  .select {
+    margin-bottom: 10px;
+  }
+
+}
+
+@include atMobile {
+  .select {
+    height: 44px;
+
+    &__button {
+      height: 44px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    &__arrow {
+      width: 20px;
+      height: 17px;
+    }
+
+    &__dropdown {
+      top: 38px;
+    }
+
+    &__option {
+      padding-bottom: 7px;
+    }
+
+    &__span {
+      font-size: 12px;
+      line-height: 1.4;
     }
   }
 }

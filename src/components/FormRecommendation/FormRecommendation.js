@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
 import './FormRecommendation.scss';
 import { useContext, useEffect, useState } from 'react';
@@ -55,7 +54,6 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   };
 
   const onFormSubmit = (values) => {
-    console.log(values);
     let inputFields = Object.assign(values);
     if (fileUploaded && userImage) {
       inputFields = {
@@ -227,42 +225,6 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
         register={register}
         isFormOpen={isOpen}
       />
-
-      {/* <select
-        className={`form-recom__select ${
-          errors?.activityType ? 'form-recom__select_error' : ''
-        }`}
-        name="activityType"
-        {...register('activityType', { required: activityPlaceholder })}
-      >
-        <option value="" className="form-recom__option" hidden>
-          {activityPlaceholder}
-        </option>
-        {activityTypes &&
-          activityTypes.map(({ id, name }) => (
-            <option key={id} value={id} className="form-recom__option">
-              {name}
-            </option>
-          ))}
-      </select> */}
-
-      {/* <select
-        className={`form-recom__select ${
-          errors?.city ? 'form-recom__select_error' : ''
-        }`}
-        name="city"
-        {...register('city', { required: cityPlaceholder })}
-      >
-        <option value="" className="form-recom__option" hidden>
-          {cityPlaceholder}
-        </option>
-        {cities &&
-          cities.map(({ id, name }) => (
-            <option key={id} value={id} className="form-recom__option">
-              {name}
-            </option>
-          ))}
-      </select> */}
 
       <div className="form-recom__input-wrap">
         <Input
