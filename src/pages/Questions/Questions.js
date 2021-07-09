@@ -1,9 +1,12 @@
 import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import questionsPageTexts from '../../locales/questions-page-RU';
 import { CurrentUserContext } from '../../contexts/index';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
+import {
+  useScrollToTop,
+  useDebounce,
+  useFormWithValidation,
+} from '../../hooks/index';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
 import {
@@ -57,12 +60,8 @@ function Questions() {
     questionForm.beforeSubmit
   );
 
-  const {
-    register,
-    reset,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormWithValidation();
 
   const setFormState = (isError) => {
     if (isError) {
@@ -72,14 +71,15 @@ function Questions() {
     // успешная надпись
     setQuestionFormState(questionForm.successSubmit);
     // почистили форму
-    reset({ question: '' });
+    resetForm();
     // вернулись к изначальной
     setTimeout(() => {
       setQuestionFormState(questionForm.beforeSubmit);
     }, 4000);
   };
 
-  const onFormSubmit = (values) => {
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
     const { question } = values;
     postQuestion({ title: question })
       .then(() => {
@@ -177,17 +177,20 @@ function Questions() {
         />
         <form
           className={`question-form ${questionFormState.formVisibilityClass}`}
-          onSubmit={handleSubmit(onFormSubmit)}
+          onSubmit={(evt) => handleSubmit(evt)}
         >
           <fieldset className="question-form__add-question">
             <Input
+              id="questionsFormInput"
               type="text"
               name="question"
               placeholder={formPlaceholder}
-              register={register}
+              onChange={handleChange}
+              value={values?.question}
+              minLength="10"
+              maxLength="200"
               required
               error={errors?.question}
-              errorMessage={`${formPlaceholder}*`}
               sectionClass="input__question-form"
             />
             <Button
@@ -195,7 +198,7 @@ function Questions() {
               color="black"
               sectionClass="question-form__button"
               isSubmittable
-              isDisabled={!!errors.question}
+              isDisabled={!isValid}
             />
           </fieldset>
         </form>
