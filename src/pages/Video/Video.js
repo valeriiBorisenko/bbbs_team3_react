@@ -9,23 +9,22 @@ import {
   CardVideoMain,
   CardFilm,
   AnimatedPageContainer,
+  TagsList,
 } from './index';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
-  renderFilterTags,
   handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
 import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
-import getMainPageData from '../../api/main-page';
 import { changeCaseOfFirstLetter, formatDuration } from '../../utils/utils';
 import { PopupVideo } from '../../components/Popups/index';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
-  medium: 9,
+  medium: 12,
   big: 16,
 };
 
@@ -51,6 +50,7 @@ const Video = () => {
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+  const [isShowMainCard, setIsShowMainCard] = useState(true);
 
   // При клике на карточку открываем попап
   // записываем ДАТУ в стейт, а стейт пробрасываем в попап
@@ -71,20 +71,27 @@ const Video = () => {
   const changeCategory = (inputValue, isChecked) => {
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
+      setIsShowMainCard(true);
     } else {
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
       deselectOneTag(setCategories, ALL_CATEGORIES);
+      setIsShowMainCard(false);
     }
     setIsFiltersUsed(true);
   };
 
+  // ---!!!! Наверное стоит вынести это куда то раз повторяется на разных страницах?
+  const getMainCard = (arr) => arr.find((item) => item?.pinnedFullSize);
+  const getCardsWithoutMain = (arr) =>
+    arr.filter((item) => !item?.pinnedFullSize);
+
   // Фильтры страницы
   const renderTagsContainer = () => (
-    <div className="tags">
-      <ul className="tags__list">
-        {renderFilterTags(categories, 'checkbox', changeCategory)}
-      </ul>
-    </div>
+    <TagsList
+      filterList={categories}
+      name="video"
+      handleClick={changeCategory}
+    />
   );
 
   // Карточки с видео страницы
@@ -111,9 +118,17 @@ const Video = () => {
     isLoadingPaginate ? (
       <Loader isNested />
     ) : (
-      <section className="video__cards cards-grid cards-grid_content_small-cards page__section">
-        {renderCards()}
-      </section>
+      <>
+        {mainVideo && isShowMainCard && (
+          <section className="video__main-card page__section">
+            <CardVideoMain data={mainVideo} onClick={handleVideoClick} />
+          </section>
+        )}
+
+        <section className="video__cards cards-grid cards-grid_content_small-cards page__section">
+          {renderCards()}
+        </section>
+      </>
     );
 
   // Контент страницы
@@ -124,12 +139,6 @@ const Video = () => {
 
     return (
       <>
-        {mainVideo && (
-          <section className="video__main-card page__section">
-            <CardVideoMain data={mainVideo} onClick={handleVideoClick} />
-          </section>
-        )}
-
         {isFiltersUsed ? (
           <Loader isNested />
         ) : (
@@ -143,7 +152,6 @@ const Video = () => {
                   pageCount={pageCount}
                   value={pageNumber}
                   onChange={setPageNumber}
-                  isUseScroll={false}
                 />
               </section>
             )}
@@ -167,11 +175,14 @@ const Video = () => {
   // Функция обработки запроса АПИ с карточками
   const getVideoData = (activeCategories) => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
+    const fixedPageSize =
+      pageNumber === 0 && isShowMainCard ? pageSize + 1 : pageSize;
+    const fixedOffset = pageNumber && isShowMainCard > 0 ? offset + 1 : offset;
     const activeTags = activeCategories || getActiveTags();
 
     getVideoPageData({
-      limit: pageSize,
-      offset,
+      limit: fixedPageSize,
+      offset: fixedOffset,
       tags: activeTags,
     })
       .then(({ results, count }) => {
@@ -179,7 +190,13 @@ const Video = () => {
         return results;
       })
       .then((results) => {
-        setVideo(results);
+        setMainVideo(getMainCard(results));
+
+        if (isShowMainCard) {
+          setVideo(getCardsWithoutMain(results));
+        } else {
+          setVideo(results);
+        }
       })
       .catch((err) => console.log(err))
       .finally(() => {
@@ -189,21 +206,18 @@ const Video = () => {
   };
 
   // Функция обработки запросов АПИ для первой загрузки страницы
-  // Делаю запрос главной страницы для отображения главноего видео
-  // Главное видео встает один раз при загруке
-  // ps Не приходится писать сортировать дату и искать нужную карточку
   const getFirstPageData = () => {
     Promise.all([
       getVideoPageTags(),
       getVideoPageData({
-        limit: pageSize,
+        limit: pageSize + 1,
       }),
-      getMainPageData(),
     ])
-      .then(([tags, { results, count }, mainPageData]) => {
+      .then(([tags, { results, count }]) => {
         setPageCount(Math.ceil(count / pageSize));
-        setMainVideo(mainPageData.video);
-        setVideo(results);
+
+        setMainVideo(getMainCard(results));
+        setVideo(getCardsWithoutMain(results));
 
         const categoriesArr = tags.map((tag) => ({
           filter: tag?.slug.toLowerCase(),
@@ -229,7 +243,9 @@ const Video = () => {
 
       if (activeCategories.length === 0) {
         selectOneTag(setCategories, ALL_CATEGORIES);
+        getVideoData(activeCategories);
       }
+
       getVideoData(activeCategories);
     }
   };
@@ -258,8 +274,8 @@ const Video = () => {
 
   // Резайз пагинации
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const smallQuery = window.matchMedia('(max-width: 1023px)');
+    const largeQuery = window.matchMedia('(max-width: 1439px)');
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -289,7 +305,7 @@ const Video = () => {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="lead page__section">
-        <TitleH1 title={title} />
+        <TitleH1 title={title} sectionClass="video__title" />
         {categories?.length > 1 && !isLoadingPage && renderTagsContainer()}
       </section>
 

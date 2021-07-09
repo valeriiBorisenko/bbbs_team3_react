@@ -1,7 +1,7 @@
 @import './styles/utils.scss';
 
 .popup {
-  &__container_type_video{
+  &__container_type_video {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,4 +27,17 @@
     margin-top: 5px;
     margin-bottom: 20px;
   }
+
+  @include atTablet {
+    &__container_type_video {
+      height: 60vh;
+    }
+  }
+
+  @include atMobile {
+    &_type_video {
+      display: none;
+    }
+  }
+
 }

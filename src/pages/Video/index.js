@@ -5,6 +5,7 @@ import Paginate from '../../components/utils/Paginate/Paginate';
 import CardVideoMain from '../../components/Cards/CardVideoMain/CardVideoMain';
 import CardFilm from '../../components/Cards/CardFilm/CardFilm';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
+import TagsList from '../../components/TagsList/TagsList';
 
 export {
   BasePage,
@@ -14,4 +15,5 @@ export {
   CardVideoMain,
   CardFilm,
   AnimatedPageContainer,
+  TagsList,
 };

@@ -4,11 +4,9 @@ import PropTypes from 'prop-types';
 import { useScrollToTop } from '../../../hooks/index';
 
 const Paginate = (props) => {
-  const { pageCount, sectionClass, value, onChange, isUseScroll } = props;
+  const { pageCount, sectionClass, value, onChange } = props;
 
-  if (isUseScroll) {
-    useScrollToTop(value);
-  }
+  useScrollToTop(value);
 
   return (
     <ReactPaginate
@@ -35,13 +33,11 @@ Paginate.propTypes = {
   onChange: PropTypes.func,
   pageCount: PropTypes.number.isRequired,
   sectionClass: PropTypes.string,
-  isUseScroll: PropTypes.bool,
 };
 
 Paginate.defaultProps = {
   onChange: () => {},
   sectionClass: '',
-  isUseScroll: true,
 };
 
 export default Paginate;

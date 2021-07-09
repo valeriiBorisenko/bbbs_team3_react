@@ -43,16 +43,18 @@ const PopupVideo = ({ data, isOpen, onClose }) => {
         <Loader isNested />
       ) : (
         <>
-          <iframe
-            title="youTubePlayer"
-            id="playeryt"
-            className="popup__video-iframe"
-            src={videoSrc}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            seamless
-          />
+          {isOpen && (
+            <iframe
+              title="youTubePlayer"
+              id="playeryt"
+              className="popup__video-iframe"
+              src={videoSrc}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              seamless
+            />
+          )}
 
           <TitleH2 sectionClass="popup__video-title" title={title} />
           <Caption sectionClass="popup__video-caption" title={info} />

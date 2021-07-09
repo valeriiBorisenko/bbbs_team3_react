@@ -239,7 +239,7 @@ const Rights = () => {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="rights page__section fade-in">
-        <TitleH1 title={title} />
+        <TitleH1 title={title} sectionClass="rights__title" />
         {categories?.length > 1 && renderTagsContainer()}
         {renderMainContent()}
       </section>

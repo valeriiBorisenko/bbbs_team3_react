@@ -1,5 +1,6 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { TitleH2, Card, Caption } from '../../utils/index';
 import { changeCaseOfFirstLetter } from '../../../utils/utils';
 import texts from './locales/RU';
@@ -8,23 +9,55 @@ import { staticImageUrl } from '../../../config/config';
 function CardFilm({ data, onClick, children }) {
   const { image, title, info, link } = data;
 
+  // Стейт записывает ширину окна
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  // Пробрасываем данные в попап
   const handleClick = () => onClick(data);
+
+  // Рендерим верхную часть с фоткой и props.children из компонета выше
+  const renderPrewiew = () => (
+    <>
+      <img
+        src={`${staticImageUrl}/${image}`}
+        alt={`Превью к видео: ${title}`}
+        className="card-film__preview"
+      />
+      {children}
+    </>
+  );
+
+  // Редерим либо кнопку либо ссылку в зависимости от ширины
+  // Пробрасываем елементы в функцию в завизимости от положения
+  const renderVideoPlayback = (childrenElem) =>
+    windowWidth >= 767 ? (
+      <button
+        className="link card-film__button"
+        type="button"
+        onClick={handleClick}
+      >
+        {childrenElem}
+      </button>
+    ) : (
+      <a href={link} className="link card-film__button">
+        {childrenElem}
+      </a>
+    );
+
+  // Следит за шириной экрана и записывает в стейт
+  // Стоит таймер для ограничения отрисовок
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    const timer = setTimeout(() => {
+      setWindowWidth(window.innerWidth);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [window.innerWidth]);
 
   return (
     <Card sectionClass="card-film">
       <div className="card-film__video">
-        <button
-          className="card-film__button"
-          type="button"
-          onClick={handleClick}
-        >
-          <img
-            src={`${staticImageUrl}/${image}`}
-            alt={`Превью к видео: ${title}`}
-            className="card-film__preview"
-          />
-          {children}
-        </button>
+        {renderVideoPlayback(renderPrewiew())}
       </div>
 
       <div className="card-film__video-info">
@@ -38,14 +71,7 @@ function CardFilm({ data, onClick, children }) {
             title={changeCaseOfFirstLetter(info)}
           />
         </div>
-        <button
-          type="button"
-          className="link card-film__button"
-          href={link}
-          onClick={handleClick}
-        >
-          {texts.lintText}
-        </button>
+        {link && renderVideoPlayback(texts.lintText)}
       </div>
     </Card>
   );
