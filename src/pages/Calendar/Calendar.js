@@ -8,7 +8,7 @@ import {
   useEventBooking,
 } from '../../hooks/index';
 import { months, DELAY_DEBOUNCE, DELAY_RENDER } from '../../config/constants';
-import { renderFilterTags, handleRadioBehavior } from '../../utils/filter-tags';
+import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
   getCalendarPageData,
@@ -21,6 +21,7 @@ import {
   CardCalendar,
   AnimatedPageContainer,
   Loader,
+  TagsList,
 } from './index';
 
 function Calendar() {
@@ -147,17 +148,6 @@ function Calendar() {
     );
   }
 
-  // отрисовка массива фильтров
-  function renderTagsContainder() {
-    return (
-      <div className="tags fade-in">
-        <ul className="tags__list">
-          {renderFilterTags(filters, 'month', handleFilterClick)}
-        </ul>
-      </div>
-    );
-  }
-
   // отрисовка карточек ивентов
   function renderEventCardsContainer() {
     const cards = calendarPageData.map((cardData) => (
@@ -178,13 +168,19 @@ function Calendar() {
     if (currentUser && dataForCurrentCityExist) {
       return (
         <>
-          <TitleH1 title={title} />
+          <TitleH1 title={title} sectionClass="calendar-page__title" />
 
           {isCityChanging ? (
             <Loader isNested />
           ) : (
             <div className="calendar-page__container">
-              {filters?.length > 1 && renderTagsContainder()}
+              {filters?.length > 1 && (
+                <TagsList
+                  filterList={filters}
+                  name="month"
+                  handleClick={handleFilterClick}
+                />
+              )}
 
               {isLoading ? (
                 <Loader isNested />

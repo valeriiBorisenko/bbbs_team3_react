@@ -1,6 +1,6 @@
 import './Movies.scss';
-import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
+import moviesPageTexts from '../../locales/movies-page-RU';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
   getMoviesPageData,
@@ -14,18 +14,20 @@ import {
   CardAnnotation,
   Loader,
   AnimatedPageContainer,
+  TagsList,
 } from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import {
   handleCheckboxBehavior,
-  renderFilterTags,
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
 
 function Movies() {
+  const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
+
   useScrollToTop();
 
   // Загрузка данных
@@ -150,12 +152,7 @@ function Movies() {
 
   // контейнер заглушки
   function renderAnimatedContainer() {
-    return (
-      <AnimatedPageContainer
-        titleText="В данный момент страница c фильмами пуста. Возвращайтесь позже!"
-        buttonText="Вернуться на главную"
-      />
-    );
+    return <AnimatedPageContainer titleText={textStubNoData} />;
   }
 
   // контейнер с фильмами
@@ -178,24 +175,21 @@ function Movies() {
       </ul>
     );
 
-  // контейнер фильтров
-  const renderTagsContainer = () => (
-    <div className="tags tags_content_long-list">
-      <ul className="tags__list tags__list_type_long">
-        {renderFilterTags(categories, 'tag', changeCategory)}
-      </ul>
-    </div>
-  );
-
   // главная функция рендеринга
   const renderPageContent = () => {
     if (moviesPageData.length > 0) {
       return (
         <>
-          <TitleH1 title="Фильмы" />
+          <TitleH1 title={title} sectionClass="movies__title" />
 
           {/* рендер фильтров */}
-          {categories?.length > 1 && renderTagsContainer()}
+          {categories?.length > 1 && (
+            <TagsList
+              filterList={categories}
+              name="tag"
+              handleClick={changeCategory}
+            />
+          )}
 
           {/* рендерим фильмы */}
           {isLoading ? <Loader isNested /> : renderMoviesContainer()}
@@ -224,14 +218,7 @@ function Movies() {
   }
 
   return (
-    <BasePage>
-      <Helmet>
-        <title>Фильмы</title>
-        <meta
-          name="description"
-          content="Подборка фильмов, которые можно посмотреть, с аннотацией к ним"
-        />
-      </Helmet>
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="movies page__section fade-in">
         {renderPageContent()}
       </section>

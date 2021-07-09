@@ -7,7 +7,6 @@ import { useScrollToTop, useDebounce } from '../../hooks/index';
 import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
 import {
-  renderFilterTags,
   handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
@@ -21,6 +20,7 @@ import {
   Button,
   Loader,
   AnimatedPageContainer,
+  TagsList,
 } from './index';
 import {
   getQuestionsPageData,
@@ -218,24 +218,21 @@ function Questions() {
     </ul>
   );
 
-  // контейнер фильтров
-  const renderTagsContainer = () => (
-    <div className="tags tags_content_long-list">
-      <ul className="tags__list tags__list_type_long">
-        {renderFilterTags(categories, 'tag', changeCategory)}
-      </ul>
-    </div>
-  );
-
   // главная функция рендеринга
   const renderPageContent = () => {
     if (questionsPageData.length > 0) {
       return (
         <>
-          <TitleH1 title={title} />
+          <TitleH1 title={title} sectionClass="questions__title" />
 
           {/* рендер фильтров */}
-          {categories?.length > 1 && renderTagsContainer()}
+          {categories?.length > 1 && (
+            <TagsList
+              filterList={categories}
+              name="tag"
+              handleClick={changeCategory}
+            />
+          )}
 
           {/* рендерим сами вопросы */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
