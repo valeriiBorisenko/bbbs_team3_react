@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import './DropDownSelect.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 function DropDownSelect({
@@ -10,6 +10,7 @@ function DropDownSelect({
   error,
   register,
   sectionClass,
+  isFormOpen,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [optionSelected, setOptionSelected] = useState(null);
@@ -36,6 +37,13 @@ function DropDownSelect({
   ]
     .join(' ')
     .trim();
+
+  useEffect(() => {
+    if (isFormOpen) {
+      setOptionSelected(null);
+      setIsOpen(false);
+    }
+  }, [isFormOpen]);
 
   return (
     <div className={classNames}>
@@ -74,7 +82,7 @@ function DropDownSelect({
                     setOptionSelected(option?.name);
                     setIsOpen(!isOpen);
                   }}
-                  {...register(inputName, { required: inputName })}
+                  {...register(inputName, { required: placeholder })}
                 />
                 <span className="select__span">{option?.name}</span>
               </label>
@@ -92,6 +100,7 @@ DropDownSelect.propTypes = {
   error: PropTypes.objectOf(PropTypes.any),
   register: PropTypes.func.isRequired,
   sectionClass: PropTypes.string,
+  isFormOpen: PropTypes.bool,
 };
 
 DropDownSelect.defaultProps = {
@@ -100,6 +109,7 @@ DropDownSelect.defaultProps = {
   inputName: '',
   error: undefined,
   sectionClass: '',
+  isFormOpen: false,
 };
 
 export default DropDownSelect;

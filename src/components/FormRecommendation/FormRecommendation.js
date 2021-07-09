@@ -216,6 +216,16 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
         inputName="activityType"
         error={errors?.activityType}
         register={register}
+        isFormOpen={isOpen}
+      />
+
+      <DropDownSelect
+        placeholder={cityPlaceholder}
+        options={cities}
+        inputName="city"
+        error={errors?.city}
+        register={register}
+        isFormOpen={isOpen}
       />
 
       {/* <select

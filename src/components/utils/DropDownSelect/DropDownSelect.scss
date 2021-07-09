@@ -73,6 +73,7 @@
     border-radius: 0 0 30px 30px;
     box-shadow: 0px 10px 10px rgba($black, 0.14);
     transition: .3s ease;
+    z-index: 10;
 
     &_opened {
       visibility: visible;
