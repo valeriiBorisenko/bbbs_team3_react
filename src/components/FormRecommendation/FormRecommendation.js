@@ -55,6 +55,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   };
 
   const onFormSubmit = (values) => {
+    console.log(values);
     let inputFields = Object.assign(values);
     if (fileUploaded && userImage) {
       inputFields = {
@@ -212,7 +213,9 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
       <DropDownSelect
         placeholder={activityPlaceholder}
         options={activityTypes}
-        inputName="activity"
+        inputName="activityType"
+        error={errors?.activityType}
+        register={register}
       />
 
       {/* <select

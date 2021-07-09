@@ -1,14 +1,25 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import './DropDownSelect.scss';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-function DropDownSelect({ placeholder, options, inputName, sectionClass }) {
+function DropDownSelect({
+  placeholder,
+  options,
+  inputName,
+  error,
+  register,
+  sectionClass,
+}) {
   const [isOpen, setIsOpen] = useState(false);
+  const [optionSelected, setOptionSelected] = useState(null);
 
   const classNames = ['select', sectionClass].join(' ').trim();
   const classNamesButton = [
     'select__button',
     isOpen ? 'select__button_pressed' : '',
+    optionSelected ? 'select__button_selected' : '',
+    error ? 'select__button_error' : '',
   ]
     .join(' ')
     .trim();
@@ -21,6 +32,7 @@ function DropDownSelect({ placeholder, options, inputName, sectionClass }) {
   const classNamesArrow = [
     'select__arrow',
     isOpen ? 'select__arrow_pressed' : '',
+    error ? 'select__arrow_error' : '',
   ]
     .join(' ')
     .trim();
@@ -32,7 +44,7 @@ function DropDownSelect({ placeholder, options, inputName, sectionClass }) {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {placeholder}
+        {optionSelected || placeholder}
         <svg
           width="24"
           height="19"
@@ -53,9 +65,16 @@ function DropDownSelect({ placeholder, options, inputName, sectionClass }) {
                 className="select__label"
               >
                 <input
+                  id={`${option?.id}-${option?.name}`}
                   className="select__input"
+                  type="radio"
                   name={inputName}
                   value={option?.id}
+                  onClick={() => {
+                    setOptionSelected(option?.name);
+                    setIsOpen(!isOpen);
+                  }}
+                  {...register(inputName, { required: inputName })}
                 />
                 <span className="select__span">{option?.name}</span>
               </label>
@@ -70,6 +89,8 @@ DropDownSelect.propTypes = {
   placeholder: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.any),
   inputName: PropTypes.string,
+  error: PropTypes.objectOf(PropTypes.any),
+  register: PropTypes.func.isRequired,
   sectionClass: PropTypes.string,
 };
 
@@ -77,6 +98,7 @@ DropDownSelect.defaultProps = {
   placeholder: '',
   options: [],
   inputName: '',
+  error: undefined,
   sectionClass: '',
 };
 
