@@ -3,6 +3,7 @@ import './DropDownSelect.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { useClickOutside } from '../../../hooks/index';
 
 function DropDownSelect({
   placeholder,
@@ -39,6 +40,8 @@ function DropDownSelect({
     .join(' ')
     .trim();
 
+  const dropdownRef = useClickOutside(() => setIsOpen(false));
+
   useEffect(() => {
     if (isFormOpen) {
       setOptionSelected(null);
@@ -64,7 +67,7 @@ function DropDownSelect({
           <path d="M5 7L11.8814 14L19 7" />
         </svg>
       </button>
-      <ul className={classNamesDropDown}>
+      <ul className={classNamesDropDown} ref={dropdownRef}>
         {options &&
           options.map((option) => (
             <li key={option?.id} className="select__option">
