@@ -55,7 +55,7 @@ function DropDownSelect({
         aria-label={`${texts.buttonAriaLabel} ${placeholder}`}
         className={classNamesButton}
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen(true)}
       >
         {optionSelected || placeholder}
         <svg
@@ -68,6 +68,14 @@ function DropDownSelect({
         </svg>
       </button>
       <ul className={classNamesDropDown} ref={dropdownRef}>
+        <li aria-hidden="true">
+          <button
+            className="select__option_hidden"
+            aria-hidden="true"
+            type="button"
+            onClick={() => setIsOpen(false)}
+          />
+        </li>
         {options &&
           options.map((option) => (
             <li key={option?.id} className="select__option">
