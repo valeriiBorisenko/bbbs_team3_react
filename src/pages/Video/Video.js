@@ -19,6 +19,7 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
+import getMainPageData from '../../api/main-page';
 import { changeCaseOfFirstLetter, formatDuration } from '../../utils/utils';
 import { PopupVideo } from '../../components/Popups/index';
 
@@ -51,6 +52,8 @@ const Video = () => {
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
+  // При клике на карточку открываем попап
+  // записываем ДАТУ в стейт, а стейт пробрасываем в попап
   const handleVideoClick = (data) => {
     setIsVideoPopupOpen(true);
 
@@ -59,6 +62,7 @@ const Video = () => {
     });
   };
 
+  // Закрытие попапа
   const closeAllPopups = () => {
     setIsVideoPopupOpen(false);
   };
@@ -185,21 +189,21 @@ const Video = () => {
   };
 
   // Функция обработки запросов АПИ для первой загрузки страницы
+  // Делаю запрос главной страницы для отображения главноего видео
+  // Главное видео встает один раз при загруке
+  // ps Не приходится писать сортировать дату и искать нужную карточку
   const getFirstPageData = () => {
     Promise.all([
       getVideoPageTags(),
       getVideoPageData({
         limit: pageSize,
       }),
+      getMainPageData(),
     ])
-      .then(([tags, { results, count }]) => {
-        console.log(results);
+      .then(([tags, { results, count }, mainPageData]) => {
         setPageCount(Math.ceil(count / pageSize));
+        setMainVideo(mainPageData.video);
         setVideo(results);
-        console.log(results);
-
-        const fullSizeVideo = results.filter((item) => item.pinnedFullSize)[0];
-        setMainVideo(fullSizeVideo);
 
         const categoriesArr = tags.map((tag) => ({
           filter: tag?.slug.toLowerCase(),
