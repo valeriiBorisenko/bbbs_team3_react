@@ -16,8 +16,9 @@ import {
   AnimatedPageContainer,
 } from './index';
 import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWatchSection';
+// import CatalogSliderSection from '../../components/CatalogSliderSection';
 import { FIGURES } from '../../config/constants';
-import useReadWatch from '../../hooks/useReadWatch'; //!
+// import useReadWatch from '../../hooks/useReadWatch'; //!
 
 //! АПИ
 // запрос каталога
@@ -149,136 +150,32 @@ function ReadAndWatch() {
     };
   }, []);
 
-  function initialLoading({ limit, offset }) {
-    console.log('initialLoading');
-    Promise.all([
-      getCatalogPageDatа({ limit, offset }),
-      getMoviesPageData({ limit, offset }),
-      getBooksPageData({ limit, offset }),
-      getArticlesPageData({ limit, offset }),
-      getVideoPageData({ limit, offset }),
-    ])
-      .then(([catalogs, movies, books, articles, videos]) => {
-        console.log('THEN');
-        // элементы массива это не массивы, а объекты вида:
-        // count: 21, next: "", previous: null, results
-        // из каждого нужно results и count
-        console.log(movies);
-        console.log(books);
-        console.log(articles);
-        setCatalogData(catalogs.results);
-        setMoviesData(movies.results);
-        setBooksData(books.results);
-        setArticlesData(articles.results);
-        setVideosData(videos.results);
-
-        setPageCounter({
-          catalogsTotalPages: Math.ceil(catalogs.count / pageSize),
-          moviesTotalPages: Math.ceil(movies.count / pageSize),
-          booksTotalPages: Math.ceil(books.count / pageSize),
-          articlesTotalPages: Math.ceil(articles.count / pageSize),
-          videosTotalPages: Math.ceil(videos.count / pageSize),
-        });
-      })
-      .catch((error) => console.log(error));
-  }
-
-  useEffect(() => {
-    console.log('USEEFFECT READ_AND_WATCH');
-    if (pageSize) {
-      const offset = pageSize * pageNumber;
-      // console.log({ limit: pageSize, offset });
-      //! делаем запрос всех 5 апи с учетом текущего размера экрана
-      initialLoading({ limit: pageSize, offset });
-    }
-  }, [pageSize]);
-
-  function renderCatalogSectionSlider() {
-    console.log('renderCatalogSectionSlider');
-    return (
-      <ReadAndWatchSection
-        sectionTitle="Справочник"
-        path="/read-watch/catalog" // ссылка на страницу
-        elementsPerSection={pageSize}
-        // data={catalogData}
-        getData={getCatalog}
-        setData={setCatalogData}
-        totalPages={pageCounter?.catalogsTotalPages}
-      >
-        {catalogData &&
-          catalogData.map((item, index) => (
-            <CardCatalog
-              sectionClass="cards-section__item"
-              key={item?.id}
-              title={item?.title}
-              image={item?.imageUrl}
-              shape={FIGURES[index % FIGURES.length]}
-            />
-          ))}
-      </ReadAndWatchSection>
-    );
-  }
-
   function renderPageContent() {
-    return <>{renderCatalogSectionSlider()}</>;
-  }
+    if (pageSize) {
+      // Справочник
+      return (
+        <ReadAndWatchSection
+          pageSize={pageSize}
+          getDataFromApi={getCatalogPageDatа}
+          CardTemplate={CardCatalog}
+          path="/catalog"
+          sectionTitle="Справочник"
+        />
+      );
+    }
 
+    return null;
+  }
+  // страница создает - 5 компонентов секций (они отличаются только названиями заголовка и ссылкой, а так же датой внутри)
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="readwatch-page page__section fade-in">
-        {/* {renderPageContent()} */}
+        {renderPageContent()}
         {/* Справочник */}
-        {/* <ReadAndWatchSection
-          sectionTitle="Справочник"
-          path="/read-watch/catalog" // ссылка на страницу
-          elementsPerSection={pageSize}
-          data={catalogData}
-          getData={getCatalog}
-          setData={setCatalogData}
-          totalPages={pageCounter?.catalogsTotalPages}
-        /> */}
         {/* Видео */}
-        {/* <ReadAndWatchSection
-          sectionTitle="Видео"
-          path="/read-watch/videos" // ссылка на страницу
-          elementsPerSection={pageSize}
-          data={videosData}
-          getData={getVideos}
-          setData={setVideosData}
-          totalPages={pageCounter?.moviesTotalPages}
-          // handleCardClick={handleVideoClick}
-        /> */}
         {/* Статьи */}
-        {/* <ReadAndWatchSection
-          sectionTitle="Статьи"
-          path="/read-watch/articles" // ссылка на страницу
-          elementsPerSection={pageSize}
-          data={articlesData}
-          getData={getArticles}
-          setData={setArticlesData}
-          totalPages={pageCounter?.booksTotalPages}
-        /> */}
         {/* Фильмы */}
-        {/* <ReadAndWatchSection
-          sectionTitle="Фильмы"
-          path="/read-watch/movies" // ссылка на страницу
-          elementsPerSection={pageSize}
-          data={moviesData}
-          getData={getMovies}
-          setData={setMoviesData}
-          totalPages={pageCounter?.articlesTotalPages}
-          // handleCardClick={handleVideoClick}
-        /> */}
         {/* Книги */}
-        {/* <ReadAndWatchSection
-          sectionTitle="Книги"
-          path="/read-watch/books" // ссылка на страницу
-          elementsPerSection={pageSize}
-          data={booksData}
-          getData={getBooks}
-          setData={setBooksData}
-          totalPages={pageCounter?.videosTotalPages}
-        /> */}
       </section>
     </BasePage>
   );
@@ -295,4 +192,61 @@ export default ReadAndWatch;
 * pageCount - выставляет общее кол во страниц
 * pageNumber - выставляет текущий номер страницы, на каком мы сейчас
 
+* LIMIT -- это размер страницы (4-3-2 элемента в ряд). Он же pageSize.
+* OFFSET -- это pageSize * pageNumber.
  */
+
+/*
+
+{/* <ReadAndWatchSection
+          sectionTitle="Справочник"
+          path="/read-watch/catalog" // ссылка на страницу
+          elementsPerSection={pageSize}
+          data={catalogData}
+          getData={getCatalog}
+          setData={setCatalogData}
+          totalPages={pageCounter?.catalogsTotalPages}
+        />
+         Видео
+         <ReadAndWatchSection
+          sectionTitle="Видео"
+          path="/read-watch/videos" // ссылка на страницу
+          elementsPerSection={pageSize}
+          data={videosData}
+          getData={getVideos}
+          setData={setVideosData}
+          totalPages={pageCounter?.moviesTotalPages}
+          // handleCardClick={handleVideoClick}
+        />
+         Статьи
+         <ReadAndWatchSection
+          sectionTitle="Статьи"
+          path="/read-watch/articles" // ссылка на страницу
+          elementsPerSection={pageSize}
+          data={articlesData}
+          getData={getArticles}
+          setData={setArticlesData}
+          totalPages={pageCounter?.booksTotalPages}
+        />
+         Фильмы
+        <ReadAndWatchSection
+          sectionTitle="Фильмы"
+          path="/read-watch/movies" // ссылка на страницу
+          elementsPerSection={pageSize}
+          data={moviesData}
+          getData={getMovies}
+          setData={setMoviesData}
+          totalPages={pageCounter?.articlesTotalPages}
+          // handleCardClick={handleVideoClick}
+        />
+         Книги
+        <ReadAndWatchSection
+          sectionTitle="Книги"
+          path="/read-watch/books" // ссылка на страницу
+          elementsPerSection={pageSize}
+          data={booksData}
+          getData={getBooks}
+          setData={setBooksData}
+          totalPages={pageCounter?.videosTotalPages}
+        />
+      */
