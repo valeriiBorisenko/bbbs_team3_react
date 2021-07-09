@@ -13,12 +13,6 @@ const PopupVideo = ({ data, isOpen, onClose }) => {
   const [videoSrc, setVideoSrc] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Обнуляем юзстейт с ссылкой при закрытии
-  const close = () => {
-    onClose();
-    setVideoSrc(null);
-  };
-
   // без асинк/евейт мелькает предыдущее видео при открытии нового
   const getSrcFrame = async () => {
     const src = await parserLinkYoutube(link);
@@ -30,7 +24,7 @@ const PopupVideo = ({ data, isOpen, onClose }) => {
     }, 2 * 1000);
   };
 
-  // При открытии нового попапас с видео
+  // При открытии нового попапа с видео
   // запускаем загруку и парсер
   useEffect(() => {
     setIsLoading(true);
@@ -42,7 +36,7 @@ const PopupVideo = ({ data, isOpen, onClose }) => {
       type="video"
       typeContainer="video"
       isOpen={isOpen}
-      onClose={close}
+      onClose={onClose}
       withoutCloseButton
     >
       {isLoading ? (
@@ -53,7 +47,7 @@ const PopupVideo = ({ data, isOpen, onClose }) => {
             title="youTubePlayer"
             id="playeryt"
             className="popup__video-iframe"
-            src={`${videoSrc}`}
+            src={videoSrc}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
