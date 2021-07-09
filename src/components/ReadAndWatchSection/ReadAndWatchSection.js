@@ -1,52 +1,77 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/jsx-props-no-spreading */
 // /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import './ReadAndWatchSection.scss';
 import { Link } from 'react-router-dom';
-import { TitleH3, CardCatalog, CardArticle, CardFilm, CardBook } from './index';
-// CardFilm - и для видео и для фильмов!!
+import { TitleH3, CardCatalog } from './index';
+import getCatalogPageDatа from '../../api/catalog-page';
+import { FIGURES } from '../../config/constants';
+// import './ReadAndWatchSection.scss';
 
 function ReadAndWatchSection({
-  sectionTitle,
+  pageSize,
+  getDataFromApi,
+  CardTemplate,
   path,
-  data,
-  getData,
-  setData,
-  totalPages,
-  handleCardClick,
-  elementsPerSection,
-  children,
+  sectionTitle,
 }) {
-  // data должна быть массивом!
+  console.log('ReadAndWatchSection', sectionTitle);
   const [pageNumber, setPageNumber] = useState(0);
-  console.log(`я на ${pageNumber} странице из ${totalPages} страниц`);
-  console.log(sectionTitle);
-  // console.log(pageNumber);
+  const [totalPages, setTotalPages] = useState(null);
+  const [sectionData, setSectionData] = useState(null);
 
-  function back() {
-    if (pageNumber === 0) {
-      return;
-    }
-    setPageNumber((previousValue) => {
-      //! ОШИБКА! ты итак в getCatalog сеттишь дату!!! через setCatalogData
-      // setData(() => getData({ elementsPerSection, number: previousValue - 1 }));
-      getData({ elementsPerSection, number: previousValue - 1 });
-      // getData({ elementsPerSection, number: previousValue - 1 });
-      return previousValue - 1;
-    });
+  console.log(`я на ${pageNumber} странице из ${totalPages} страниц`);
+
+  function addNewData() {
+    const offset = pageSize * pageNumber;
+    // лучше всего limit умножать на 2 или 3, чтобы получить 2 страницы
+    getDataFromApi({ limit: pageSize, offset })
+      .then(({ results }) => {
+        // setTotalPages(Math.ceil(count / pageSize));
+        setSectionData((previousData) => ({
+          ...previousData,
+          ...results,
+        }));
+      })
+      .catch((error) => console.log(error));
   }
 
-  function forward() {
-    if (pageNumber === totalPages - 1) {
-      return;
+  useEffect(() => {
+    // isLoading=true, finally=false
+    const offset = pageSize * pageNumber;
+    console.log('offset', offset);
+    console.log('pageSize', pageSize);
+    // надо сделать так, чтобы запрашивалось 3 страницы хотя бы
+
+    getDataFromApi({ limit: pageSize, offset })
+      .then(({ results, count }) => {
+        console.log(count);
+        console.log(pageSize);
+        console.log(count / pageSize);
+        setTotalPages(Math.ceil(count / pageSize));
+        setSectionData(results);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  function renderCards() {
+    if (sectionData) {
+      return (
+        <>
+          {sectionData.map((item, index) => (
+            <CardCatalog
+              key={item?.id}
+              sectionClass="cards-section__item"
+              {...item}
+            />
+          ))}
+        </>
+      );
     }
-    setPageNumber((previousValue) => {
-      // setData(() => getData({ elementsPerSection, number: previousValue + 1 }));
-      getData({ elementsPerSection, number: previousValue + 1 });
-      return previousValue + 1;
-    });
+
+    return null;
   }
 
   return (
@@ -55,75 +80,20 @@ function ReadAndWatchSection({
         <Link className="readwatch__heading-link" to={path}>
           <TitleH3 title={sectionTitle} sectionClass="readwatch__heading" />
         </Link>
-        <button onClick={back} type="button">
-          назад
-        </button>
-        <button onClick={forward} type="button">
-          вперед
-        </button>
-        {/* <ReactPaginate
-          pageCount={pageCount}
-          marginPagesDisplayed={0}
-          pageRangeDisplayed={perPage}
-          containerClassName="readwatch__pagination"
-          previousClassName="readwatch__back"
-          nextClassName="readwatch__forward"
-          previousLinkClassName="readwatch__back-link"
-          nextLinkClassName="readwatch__forward-link"
-          nextLabel=""
-          previousLabel=""
-          onPageChange={handlePageClick}
-        /> */}
+        <button type="button">назад</button>
+        <button type="button">вперед</button>
       </div>
-      <ul className="readwatch__item-grid">{children}</ul>
-
-      {/* список карточек для Справочника */}
-      {/* {sectionTitle === 'Справочник' && (
-        <ul className="readwatch__item-grid">{currentSectionData}</ul>
-      )} */}
-
-      {/* список карточек для Видео */}
-      {/* {sectionTitle === 'Видео' && (
-        <ul className="movies">{currentSectionData}</ul>
-      )} */}
-
-      {/* список карточек для Статей */}
-      {/* {sectionTitle === 'Статьи' && (
-        <section className="events-grid events-grid_place_raw">
-          {currentSectionData}
-        </section>
-      )} */}
-
-      {/* список карточек для Фильмов */}
-      {/* {sectionTitle === 'Фильмы' && (
-        <ul className="readwatch__item-grid">{currentSectionData}</ul>
-      )} */}
-
-      {/* список карточек для Книг */}
-      {/* {sectionTitle === 'Книги' && (
-        <ul className="readwatch__item-grid">{currentSectionData}</ul>
-      )} */}
+      <ul className="readwatch__item-grid">{renderCards()}</ul>
     </section>
   );
 }
 
 ReadAndWatchSection.propTypes = {
+  pageSize: PropTypes.number.isRequired,
+  getDataFromApi: PropTypes.number.isRequired,
+  CardTemplate: PropTypes.number.isRequired,
+  path: PropTypes.string.isRequired,
   sectionTitle: PropTypes.string.isRequired,
-  path: PropTypes.string,
-  data: PropTypes.arrayOf(PropTypes.any).isRequired,
-  getData: PropTypes.func,
-  totalPages: PropTypes.number.isRequired,
-  setData: PropTypes.func,
-  handleCardClick: PropTypes.func,
-  elementsPerSection: PropTypes.number.isRequired,
-  children: PropTypes.element.isRequired,
-};
-
-ReadAndWatchSection.defaultProps = {
-  path: '',
-  getData: () => {},
-  setData: () => {},
-  handleCardClick: () => {},
 };
 
 export default ReadAndWatchSection;
@@ -141,3 +111,26 @@ export default ReadAndWatchSection;
 * книги
 <CardBook data="" />
 */
+
+/* <ReactPaginate
+  pageCount={pageCount}
+  marginPagesDisplayed={0}
+  pageRangeDisplayed={perPage}
+  containerClassName="readwatch__pagination"
+  previousClassName="readwatch__back"
+  nextClassName="readwatch__forward"
+  previousLinkClassName="readwatch__back-link"
+  nextLinkClassName="readwatch__forward-link"
+  nextLabel=""
+  previousLabel=""
+  onPageChange={handlePageClick}
+/> */
+
+/* <CardCatalog {...{}}
+              sectionClass="cards-section__item"
+              key={item?.id}
+              props={...item}
+              title={item?.title}
+              image={item?.imageUrl}
+              shape={FIGURES[index % FIGURES.length]}
+            /> */
