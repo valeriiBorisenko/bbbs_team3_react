@@ -14,6 +14,16 @@
   letter-spacing: 0.2px;
   color: $black;
 
+  &::-webkit-input-placeholder {
+    color: $lightGray;
+    opacity: 1;
+  }
+
+  &::-moz-placeholder {
+    color: $lightGray;
+    opacity: 1;
+  }
+
   &::placeholder {
     color: $lightGray;
     opacity: 1;
@@ -21,6 +31,16 @@
 }
 
 .input__error {
+  &::-webkit-input-placeholder {
+    color: $error;
+    opacity: 1;
+  }
+
+  &::-moz-placeholder {
+    color: $error;
+    opacity: 1;
+  }
+
   &::placeholder {
     color: $error;
   }
