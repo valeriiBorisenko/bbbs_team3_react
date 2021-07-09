@@ -1,5 +1,4 @@
 import './Footer.scss';
-import { Link } from 'react-router-dom';
 import {
   AFISHA_URL,
   ABOUT_US_URL,
@@ -17,21 +16,31 @@ import {
   HISTORY_TITLE,
 } from '../../config/routes';
 import texts from './locales/RU';
-import socialLinks from '../../utils/social-links';
+import { socialLinks } from '../../utils/external-links';
 import footerLogoPath from '../../assets/footer-logo.svg';
 import { NavItem } from '../utils/index';
 
 function Footer() {
   return (
     <footer className="footer">
-      <Link to="/" className="footer__logo" target="_self">
+      <a
+        href={texts.logoLink}
+        className="footer__logo"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <img
           className="footer__logo-image"
           src={footerLogoPath}
           alt={texts.logoAlt}
         />
-      </Link>
-      <a className="button footer__button" href={texts.helpButtonLink}>
+      </a>
+      <a
+        className="button footer__button"
+        href={texts.helpButtonLink}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {texts.helpButtonText}
       </a>
       <div className="footer__column footer__column_content_concept">

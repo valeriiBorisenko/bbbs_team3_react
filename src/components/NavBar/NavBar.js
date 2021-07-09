@@ -21,7 +21,7 @@ import {
   RIGHTS_TITLE,
   HISTORY_TITLE,
 } from '../../config/routes';
-import socialLinks from '../../utils/social-links';
+import { socialLinks } from '../../utils/external-links';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import {
   NavItem,

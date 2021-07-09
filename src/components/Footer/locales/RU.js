@@ -1,13 +1,16 @@
+import { bbbsLinks, developmentLinks } from '../../../utils/external-links';
+
 const texts = {
   logoAlt: 'Логотип Старшие Братья Старшие Сестры России',
+  logoLink: bbbsLinks.about,
   helpButtonText: 'Помочь деньгами',
-  helpButtonLink: 'https://www.nastavniki.org/campaign/pomoch-dengami/',
+  helpButtonLink: bbbsLinks.donations,
   devText: 'Разработка – студенты ',
-  devLink: 'https://praktikum.yandex.ru/',
-  devOrg: 'Яндекс.Практикум',
+  devLink: developmentLinks.praktikum.url,
+  devOrg: developmentLinks.praktikum.title,
   designText: 'Концепция и дизайн – ',
-  designLink: 'https://krkr.design/',
-  designOrg: 'krkr.design',
+  designLink: developmentLinks.design.url,
+  designOrg: developmentLinks.design.title,
   copyright: `${'\u00A9'} Старшие Братья Старшие Сестры`,
 };
 
