@@ -1,7 +1,13 @@
 @import './styles/utils.scss';
 
+.input-wrap {
+  width: 100%;
+  display: block;
+}
+
 .input {
   box-sizing: border-box;
+  width: 100%;
   outline: none;
   border: none;
   border-radius: 30px;
@@ -56,8 +62,22 @@
   }
 }
 
+.input__error-message {
+  position: relative;
+  left: 10px;
+  color: $error;
+  font-family: $protoGrotesk;
+  font-size: 11px;
+  line-height: 1;
+}
+
 @include atMobile {
   .input {
     font-size: 12px;
+  }
+
+  .input__error-message {
+    font-size: 10px;
+    line-height: .9;
   }
 }

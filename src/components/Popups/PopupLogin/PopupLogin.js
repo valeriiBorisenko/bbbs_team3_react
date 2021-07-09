@@ -2,10 +2,9 @@ import './PopupLogin.scss';
 import { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import texts from './locales/RU';
 import { CurrentUserContext } from '../../../contexts/index';
-import { useAuth } from '../../../hooks/index';
+import { useAuth, useFormWithValidation } from '../../../hooks/index';
 import { AFISHA_URL } from '../../../config/routes';
 import Popup from '../Popup/Popup';
 import { Input, Button, TitleH2 } from '../../utils/index';
@@ -14,14 +13,11 @@ function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
   const { handleLogin } = useAuth(updateUser, onClose);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormWithValidation();
 
-  function onFormSubmit(values) {
+  function handleSubmit(evt) {
+    evt.preventDefault();
     handleLogin(values);
   }
 
@@ -36,7 +32,7 @@ function PopupLogin({ isOpen, onClose }) {
   }
 
   useEffect(() => {
-    reset();
+    resetForm();
   }, [isOpen]);
 
   return (
@@ -46,30 +42,41 @@ function PopupLogin({ isOpen, onClose }) {
       isOpen={isOpen}
       onClose={closePopup}
     >
-      <form className="popup__form" onSubmit={handleSubmit(onFormSubmit)}>
+      <form
+        className="popup__form"
+        onSubmit={(evt) => handleSubmit(evt)}
+        noValidate
+      >
         <TitleH2 sectionClass="popup__title_type_sign-in" title={texts.title} />
         <p className="paragraph popup__sign-in">{texts.firstParagraph}</p>
         <p className="paragraph popup__sign-in">{texts.secondParagraph}</p>
+
         <Input
+          id="loginUsernameInput"
           sectionClass="popup__input"
           type="text"
           name="username"
           placeholder={texts.loginPlaceholder}
-          register={register}
-          required
+          onChange={handleChange}
+          value={values?.username}
           error={errors?.username}
-          errorMessage={`${texts.loginPlaceholder}*`}
+          minLength="2"
+          required
         />
+
         <Input
+          id="loginPasswordInput"
           sectionClass="popup__input"
           type="password"
           name="password"
           placeholder={texts.passwordPlaceholder}
-          register={register}
-          required
+          onChange={handleChange}
+          value={values?.password}
           error={errors?.password}
-          errorMessage={`${texts.passwordPlaceholder}*`}
+          minLength="8"
+          required
         />
+
         <a href="/" className="popup__forgot-password">
           {texts.forgotButtonText}
         </a>
@@ -77,7 +84,7 @@ function PopupLogin({ isOpen, onClose }) {
           sectionClass="popup__button_type_sign-in"
           color="blue"
           title={texts.submitButtonText}
-          isDisabled={!!(errors.username || errors.password)}
+          isDisabled={!isValid}
           isSubmittable
         />
       </form>

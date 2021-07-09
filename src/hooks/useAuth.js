@@ -32,10 +32,10 @@ const useAuth = (setCurrentUser, closeAllPopups) => {
           getUserData()
             .then((res) => setCurrentUser(res))
             .then(() => closeAllPopups())
-            .catch(console.log); // при получении данных произошла ошибка
+            .catch(console.dir); // при получении данных произошла ошибка
         }
       })
-      .catch(console.log); // авторизация (работа с сервером) закончилась ошибкой
+      .catch(console.dir); // авторизация (работа с сервером) закончилась ошибкой
   };
 
   const checkToken = () => {
