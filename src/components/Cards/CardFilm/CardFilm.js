@@ -1,6 +1,6 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TitleH2, Card, Caption } from '../../utils/index';
 import { changeCaseOfFirstLetter } from '../../../utils/utils';
 import texts from './locales/RU';
