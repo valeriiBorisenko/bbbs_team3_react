@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import mainPageTexts from '../../locales/main-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
-import { useScrollToTop, useEventBooking } from '../../hooks/index';
+import {
+  useScrollToTop,
+  useEventBooking,
+  useActivityTypes,
+} from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
@@ -40,6 +44,8 @@ function MainPage() {
     mainPageData?.questions,
     QUESTIONS_COUNT
   );
+
+  const activityTypes = useActivityTypes();
 
   // запись/отписка на мероприятия
   const { handleEventBooking, selectedEvent } = useEventBooking();
@@ -113,6 +119,7 @@ function MainPage() {
           key={mainPageData?.place?.id}
           data={mainPageData?.place}
           sectionClass="card-container_type_main-article"
+          activityTypes={activityTypes}
           isBig
           isMainPage
         />

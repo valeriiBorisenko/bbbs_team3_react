@@ -250,16 +250,6 @@ function Places() {
     }
   }, []);
 
-  // функции рендера
-  // const renderTags = () => (
-  //   <div className="tags">
-  //     <ul className="tags__list">
-  //       {renderFilterTags(categories, 'category', changeCategory)}
-  //     </ul>
-  //     <ul className="tags__list">{renderFilterTags(ages, 'age', changeAge)}</ul>
-  //   </div>
-  // );
-
   const renderPlaces = () => {
     if (places?.length > 0) {
       return (
