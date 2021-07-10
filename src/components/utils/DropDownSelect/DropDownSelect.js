@@ -9,6 +9,7 @@ function DropDownSelect({
   placeholder,
   options,
   inputName,
+  onChange,
   error,
   sectionClass,
   isFormOpen,
@@ -93,6 +94,7 @@ function DropDownSelect({
                     setOptionSelected(option?.name);
                     setIsOpen(!isOpen);
                   }}
+                  onChange={onChange}
                 />
                 <span className="select__span">{option?.name}</span>
               </label>
@@ -107,7 +109,8 @@ DropDownSelect.propTypes = {
   placeholder: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.any),
   inputName: PropTypes.string,
-  error: PropTypes.objectOf(PropTypes.any),
+  onChange: PropTypes.func,
+  error: PropTypes.string,
   sectionClass: PropTypes.string,
   isFormOpen: PropTypes.bool,
 };
@@ -116,6 +119,7 @@ DropDownSelect.defaultProps = {
   placeholder: '',
   options: [],
   inputName: '',
+  onChange: () => {},
   error: undefined,
   sectionClass: '',
   isFormOpen: false,

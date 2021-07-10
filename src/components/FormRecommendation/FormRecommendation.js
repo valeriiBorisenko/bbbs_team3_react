@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
 import './FormRecommendation.scss';
 import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { CitiesContext } from '../../contexts/index';
-import { regExpImages, regExpUrl } from '../../config/constants';
+import { regExpImages } from '../../config/constants';
 import { useFormWithValidation } from '../../hooks/index';
 import { Input, Button, ButtonRound, DropDownSelect } from '../utils/index';
 
@@ -20,7 +19,6 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
     cityPlaceholder,
     descPlaceholder,
     descPlaceholderMobile,
-    photoPlaceholder,
     buttonText,
   } = texts;
 
@@ -52,23 +50,12 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
     errors,
     isValid,
     resetForm,
-    setValues,
     handleChangeFiles,
   } = useFormWithValidation();
 
-  console.log(values);
-
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    // let inputFields = Object.assign(values);
-    // if (fileUploaded && userImage) {
-    //   inputFields = {
-    //     ...inputFields,
-    //     image: userImage[0],
-    //   };
-    // }
-    console.log({ values });
-    // onSubmit(values);
+    onSubmit(values);
   };
 
   useEffect(() => {
@@ -97,134 +84,174 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
       onSubmit={handleSubmit}
       noValidate
     >
-      <div className="form-recom__input-container">
-        <Input
-          sectionClass="form-recom__input-wrap form-recom__input-wrap_medium form-recom__input-wrap_indentation"
-          type="text"
-          name="title"
-          placeholder={titlePlaceholder}
-          required
-          minLength="5"
-          maxLength="50"
-          error={errors?.title}
-        />
+      {isOpen && (
+        <>
+          <div className="form-recom__input-container">
+            <Input
+              id="formRecommendTitle"
+              sectionClass="form-recom__input-wrap form-recom__input-wrap_medium form-recom__input-wrap_indentation"
+              type="text"
+              name="title"
+              placeholder={titlePlaceholder}
+              onChange={handleChange}
+              value={values.title}
+              required
+              minLength="5"
+              maxLength="50"
+              error={errors?.title}
+            />
 
-        <Input
-          sectionClass="form-recom__input-wrap form-recom__input-wrap_medium"
-          type="text"
-          name="link"
-          placeholder={linkPlaceholder}
-          pattern={regExpUrl}
-          error={errors?.link}
-        />
-      </div>
+            <Input
+              id="formRecommendLink"
+              sectionClass="form-recom__input-wrap form-recom__input-wrap_medium"
+              type="text"
+              name="link"
+              placeholder={linkPlaceholder}
+              onChange={handleChange}
+              value={values.link}
+              error={errors?.link}
+            />
+          </div>
 
-      <Input
-        sectionClass="form-recom__input-wrap"
-        type="text"
-        name="address"
-        placeholder={addressPlaceholder}
-        required
-        minLength="5"
-        maxLength="50"
-        error={errors?.address}
-      />
-
-      <div className="form-recom__input-container">
-        <label className="form-recom__label" htmlFor="formRecommendationBoy">
-          <input
-            id="formRecommendationBoy"
-            className="form-recom__input-radio"
-            type="radio"
-            name="gender"
-            value="male"
+          <Input
+            sectionClass="form-recom__input-wrap"
+            type="text"
+            name="address"
+            placeholder={addressPlaceholder}
+            onChange={handleChange}
+            value={values.address}
+            required
+            minLength="5"
+            maxLength="50"
+            error={errors?.address}
           />
-          <span
-            className={`form-recom__pseudo-radio ${
-              errors?.gender ? 'form-recom__pseudo-radio_error' : ''
-            }`}
-          >
-            {genderMale}
-          </span>
-        </label>
-        <label className="form-recom__label" htmlFor="formRecommendationGirl">
-          <input
-            id="formRecommendationGirl"
-            className="form-recom__input-radio"
-            type="radio"
-            name="gender"
-            value="female"
+
+          <div className="form-recom__input-container">
+            <label
+              className="form-recom__label"
+              htmlFor="formRecommendationBoy"
+            >
+              <input
+                id="formRecommendationBoy"
+                className="form-recom__input-radio"
+                type="radio"
+                name="gender"
+                onChange={handleChange}
+                value="male"
+                required
+              />
+              <span
+                className={`form-recom__pseudo-radio ${
+                  errors?.gender ? 'form-recom__pseudo-radio_error' : ''
+                }`}
+              >
+                {genderMale}
+              </span>
+            </label>
+            <label
+              className="form-recom__label"
+              htmlFor="formRecommendationGirl"
+            >
+              <input
+                id="formRecommendationGirl"
+                className="form-recom__input-radio"
+                type="radio"
+                name="gender"
+                onChange={handleChange}
+                value="female"
+                required
+              />
+              <span
+                className={`form-recom__pseudo-radio ${
+                  errors?.gender ? 'form-recom__pseudo-radio_error' : ''
+                }`}
+              >
+                {genderFemale}
+              </span>
+            </label>
+
+            <Input
+              sectionClass="form-recom__input-wrap form-recom__input-wrap_narrow"
+              type="number"
+              name="age"
+              placeholder={agePlaceholder}
+              onChange={handleChange}
+              value={values.age}
+              required
+              max="25"
+              min="1"
+              error={errors?.age}
+            />
+          </div>
+
+          <DropDownSelect
+            placeholder={activityPlaceholder}
+            options={activityTypes}
+            inputName="activityType"
+            onChange={handleChange}
+            error={errors?.activityType}
+            isFormOpen={isOpen}
           />
-          <span
-            className={`form-recom__pseudo-radio ${
-              errors?.gender ? 'form-recom__pseudo-radio_error' : ''
-            }`}
-          >
-            {genderFemale}
-          </span>
-        </label>
 
-        <Input
-          sectionClass="form-recom__input-wrap form-recom__input-wrap_narrow"
-          type="number"
-          name="age"
-          placeholder={agePlaceholder}
-          required
-          max={25}
-          min={1}
-          error={errors?.age}
-        />
-      </div>
-
-      <DropDownSelect
-        placeholder={activityPlaceholder}
-        options={activityTypes}
-        inputName="activityType"
-        error={errors?.activityType}
-        isFormOpen={isOpen}
-      />
-
-      <DropDownSelect
-        placeholder={cityPlaceholder}
-        options={cities}
-        inputName="city"
-        error={errors?.city}
-        isFormOpen={isOpen}
-      />
-
-      <Input
-        sectionClass="form-recom__input form-recom__input_textarea"
-        type="text"
-        name="description"
-        placeholder={textAreaPlaceholder}
-        required
-        maxLength="200"
-        error={errors?.description}
-        isTextarea
-      />
-
-      <div className="form-recom__submit-zone">
-        <label htmlFor="formRecomInputUpload">
-          <input
-            id="formRecomInputUpload"
-            type="file"
-            name="image"
-            accept="image/png, image/jpeg"
-            className="form-recom__input-radio"
-            onChange={handleChangeFiles}
+          <DropDownSelect
+            placeholder={cityPlaceholder}
+            options={cities}
+            inputName="city"
+            onChange={handleChange}
+            error={errors?.city}
+            isFormOpen={isOpen}
           />
-          <ButtonRound
-            sectionClass={`form-recom__add-photo ${
-              errors?.image ? 'form-recom__add-photo_error' : ''
-            }`}
-            color={`${errors?.image ? 'error' : 'lightGray'}`}
-            isSmall
-            isSpan
-          />
-        </label>
 
-        <Button title={buttonText} color="blue" isSubmittable />
-      </div>
+          <Input
+            sectionClass="form-recom__input form-recom__input_textarea"
+            type="text"
+            name="description"
+            placeholder={textAreaPlaceholder}
+            onChange={handleChange}
+            value={values.description}
+            required
+            maxLength="200"
+            error={errors?.description}
+            isTextarea
+          />
+
+          <div className="form-recom__submit-zone">
+            <div className="form-recom__add-photo">
+              {errors?.image && (
+                <span className="form-recom__add-photo_error">
+                  {errors?.image}
+                </span>
+              )}
+              <label htmlFor="formRecomInputUpload">
+                <input
+                  id="formRecomInputUpload"
+                  type="file"
+                  name="image"
+                  accept="image/png, image/jpeg"
+                  className="form-recom__input-radio"
+                  onChange={(evt) => handleChangeFiles(evt, regExpImages)}
+                  required
+                />
+                <ButtonRound
+                  sectionClass={`form-recom__add-photo-btn ${
+                    errors?.image ? 'form-recom__add-photo-btn_error' : ''
+                  }`}
+                  color={`${errors?.image ? 'error' : 'lightGray'}`}
+                  isSmall
+                  isSpan
+                />
+              </label>
+            </div>
+
+            <Button
+              title={buttonText}
+              color="blue"
+              isDisabled={!isValid}
+              isSubmittable
+            />
+          </div>
+        </>
+      )}
     </form>
   );
 }

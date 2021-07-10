@@ -121,10 +121,23 @@
   &__submit-zone {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
   }
 
   &__add-photo {
+    display: flex;
+    flex-direction: column;
+
+    &_error {
+      color: $error;
+      font-family: $protoGrotesk;
+      font-size: 11px;
+      line-height: 1.2;
+      margin-bottom: 5px;
+    }
+  }
+
+  &__add-photo-btn {
     display: flex;
     align-items: center;
   
@@ -170,7 +183,7 @@
       min-height: 509px;
     }
 
-    &__add-photo {
+    &__add-photo-btn {
       &::after {
         font-size: 12px;
         line-height: 1.42;
