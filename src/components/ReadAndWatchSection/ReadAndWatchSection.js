@@ -5,10 +5,8 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { TitleH3, CardCatalog } from './index';
-// import getCatalogPageDatа from '../../api/catalog-page';
+import TitleH3 from '../utils/TitleH3/TitleH3';
 import { FIGURES } from '../../config/constants';
-// import './ReadAndWatchSection.scss';
 
 function ReadAndWatchSection({
   pageSize,
@@ -18,14 +16,14 @@ function ReadAndWatchSection({
   sectionTitle,
 }) {
   console.log('ReadAndWatchSection', sectionTitle);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(null);
   const [sectionData, setSectionData] = useState(null);
 
-  console.log(`я на ${pageNumber} странице из ${totalPages} страниц`);
+  console.log(`я на ${pageIndex} странице из ${totalPages} страниц`);
 
   function addNewData() {
-    const offset = pageSize * pageNumber;
+    const offset = pageSize * pageIndex;
     // лучше всего limit умножать на 2 или 3, чтобы получить 2 страницы
     getDataFromApi({ limit: pageSize, offset })
       .then(({ results }) => {
@@ -40,7 +38,7 @@ function ReadAndWatchSection({
 
   useEffect(() => {
     // isLoading=true, finally=false
-    const offset = pageSize * pageNumber;
+    const offset = pageSize * pageIndex;
     console.log('offset', offset);
     console.log('pageSize', pageSize);
     // надо сделать так, чтобы запрашивалось 3 страницы хотя бы
@@ -61,7 +59,7 @@ function ReadAndWatchSection({
       return (
         <>
           {sectionData.map((item, i) => (
-            <CardCatalog
+            <CardTemplate
               key={item?.id}
               sectionClass="cards-section__item"
               shape={FIGURES[i % FIGURES.length]} // нужно только для 1 вида секции
