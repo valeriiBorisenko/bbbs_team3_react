@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 // /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
 import { TitleH3, LinkableHeading } from './index';
@@ -16,8 +16,11 @@ function ReadAndWatchSection({
   sectionTitle,
 }) {
   console.log('ReadAndWatchSection', sectionTitle);
+  const ref = useRef();
 
+  // индекс страницы
   const [pageIndex, setPageIndex] = useState(0);
+  // всего возможных страниц при текущем разрешении
   const [totalPages, setTotalPages] = useState(null);
   const [sectionData, setSectionData] = useState(null);
 
@@ -32,28 +35,26 @@ function ReadAndWatchSection({
     { width: 1441, itemsToShow: pageSize, itemsToScroll: pageSize },
   ];
 
-  function addNewData() {
-    const offset = pageSize * pageIndex;
+  function addNewData(newPageIndex) {
+    //! перед сном: мне нужно правильно запросить новые дополнительные объекты, а то я получаю те же 12 объектов
+    // возможно дело в pageIndex;
+    //! сделал, остается тут по уму все расписать, а не просто число 3!!
+    const offset = pageSize * 3;
+    const loadThreePages = pageSize * 3;
     // лучше всего limit умножать на 2 или 3, чтобы получить 2 страницы
-    getDataFromApi({ limit: pageSize, offset })
-      .then(({ results }) => {
-        // setTotalPages(Math.ceil(count / pageSize));
-        setSectionData((previousData) => ({
-          ...previousData,
-          ...results,
-        }));
-      })
-      .catch((error) => console.log(error));
+    return getDataFromApi({ limit: loadThreePages, offset });
   }
 
   // с лоадером: isLoading=true, finally=false
   useEffect(() => {
     const offset = pageSize * pageIndex;
+    const loadThreePages = pageSize * 3;
+    console.log(`загрузим данные на ${loadThreePages} элементов`);
     console.log('offset', offset);
     console.log('pageSize', pageSize);
     // надо сделать так, чтобы запрашивалось 3 страницы хотя бы
 
-    getDataFromApi({ limit: pageSize, offset })
+    getDataFromApi({ limit: loadThreePages, offset })
       .then(({ results, count }) => {
         // console.log(count);
         // console.log(pageSize);
@@ -64,20 +65,46 @@ function ReadAndWatchSection({
       .catch((error) => console.log(error));
   }, [pageSize]);
 
-  function slideToNextHandler(currentItem, newPageIndex) {
+  function slideBackHandler(currentItem, newPageIndex) {
+    console.log('=== slideBackHandler FUNC');
+    setPageIndex((prevIndex) => prevIndex - 1);
+  }
+
+  function slideNextHandler(currentItem, newPageIndex) {
     // console.log(currentItem);
-    console.log('onChange FUNC');
+    console.log('=== slideToNextHandler FUNC');
     console.log('newPageIndex', newPageIndex);
     console.log('totalPages', totalPages);
 
-    const isBeforeLastPage = totalPages - 2 === newPageIndex;
-    // const isForwardScroll = newPageIndex > pageIndex;
-    // const isLastPage = totalPages - 1 === pageIndex;
+    const pagesLoadedNow = ref.current.getNumOfPages();
+    console.log('pagesLoadedNow', pagesLoadedNow);
+    const isPenultimatePage = pagesLoadedNow - 2 === newPageIndex;
+    // const isScrollNext = newPageIndex > pageIndex;
+    const isLastPage = pagesLoadedNow - 1 === pageIndex;
+
+    const isNoMoreDataInApi = pagesLoadedNow === totalPages;
+    // if (isNoMoreDataInApi) {
+    //   return;
+    // }
 
     // значит произошел скрол вперед + это предпоследняя страница
-    if (isBeforeLastPage || isLastPage) {
-      setTotalPages();
-      setCurrentPageIndex((prev) => prev - 1);
+    if (isPenultimatePage || isLastPage) {
+      console.log('ЭТО ПРЕДПОСЛЕДНЯЯ ИЛИ ПОСЛЕДНЯЯ СТРАНИЦА');
+
+      addNewData(newPageIndex)
+        .then(({ results }) => {
+          console.log(
+            'мы загрузили дополнительные данные и прибавили к текущим'
+          );
+          setSectionData((previousData) => {
+            console.log(previousData);
+            console.log(results);
+          });
+          setPageIndex((prevIndex) => prevIndex + 1);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      setPageIndex((prevIndex) => prevIndex + 1);
     }
   }
 
@@ -96,7 +123,7 @@ function ReadAndWatchSection({
       return cardArray;
     }
 
-    return null;
+    return [];
   }
 
   return (
@@ -113,14 +140,15 @@ function ReadAndWatchSection({
       {/* мой контейнер */}
       <div className="readwatch__slider-container">
         <Carousel
+          ref={ref}
           pagination={false}
           outerSpacing={0}
           itemPadding={slidesPadding}
           breakPoints={breakPoints}
           disableArrowsOnEnd
-          // onChange={onChange}
           showEmptySlots
-          onNextEnd={slideToNextHandler}
+          onNextEnd={slideNextHandler}
+          onPrevEnd={slideBackHandler}
         >
           {renderCardsForSlider()}
         </Carousel>
