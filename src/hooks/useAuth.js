@@ -35,12 +35,12 @@ const useAuth = (setCurrentUser) => {
           AuthApi.setAuth(access);
           setLocalStorageData(jwt, access);
           getUserData()
-            .then((res) => setCurrentUser(res))
+            .then((userData) => setCurrentUser(userData))
             .then(() => popups.closeAllPopups())
-            .catch((err) => errors.setError({ message: err })); // при получении данных произошла ошибка
+            .catch((err) => errors.setError(err)); // при получении данных произошла ошибка
         }
       })
-      .catch((err) => errors.setError({ message: err })); // авторизация (работа с сервером) закончилась ошибкой
+      .catch((err) => errors.setError(err)); // авторизация (работа с сервером) закончилась ошибкой
   };
 
   const checkToken = () => {
@@ -48,7 +48,7 @@ const useAuth = (setCurrentUser) => {
     if (token) {
       AuthApi.setAuth(token);
       getUserData()
-        .then((res) => setCurrentUser(res))
+        .then((userData) => setCurrentUser(userData))
         .then(() => setIsCheckingToken(false))
         .catch((error) => console.log(error)); // при получении userData возникла проблема
     } else {

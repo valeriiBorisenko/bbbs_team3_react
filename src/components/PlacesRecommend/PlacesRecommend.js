@@ -2,12 +2,14 @@ import './PlacesRecommend.scss';
 import { useState, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { PopupsContext } from '../../contexts/index';
+import { PopupsContext, ErrorsContext } from '../../contexts/index';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
 
 function PlacesRecommend({ sectionClass, activityTypes }) {
   const { openPopupRecommendSuccess } = useContext(PopupsContext);
+  // eslint-disable-next-line no-unused-vars
+  const { setError } = useContext(ErrorsContext);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
 
@@ -45,7 +47,7 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
         openPopupRecommendSuccess(true);
         closeForm();
       })
-      .catch(console.log);
+      .catch((err) => setError(err));
   };
 
   const classNames = [

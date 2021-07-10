@@ -12,6 +12,14 @@ import { Input, Button, TitleH2 } from '../../utils/index';
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
   const { serverError, clearError } = useContext(ErrorsContext);
+
+  const errorsString = serverError
+    ? Object.values(serverError)
+        .map((err) => err)
+        .join(' ')
+        .trim()
+    : '';
+
   const { handleLogin } = useAuth(updateUser);
 
   const { values, handleChange, errors, isValid, resetForm } =
@@ -82,7 +90,7 @@ function PopupLogin({ isOpen, onClose }) {
         <a href="/" className="popup__forgot-password">
           {texts.forgotButtonText}
         </a>
-        <span className="popup__error">{serverError?.message}</span>
+        <span className="popup__error">{errorsString}</span>
         <Button
           sectionClass="popup__button_type_sign-in"
           color="blue"
