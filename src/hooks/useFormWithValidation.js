@@ -16,13 +16,15 @@ const useFormWithValidation = () => {
   const handleChangeFiles = (evt, pattern) => {
     const file = evt.target.files[0];
     const { name } = evt.target;
+
+    if (!file) {
+      return;
+    }
+
     if (file && pattern.test(file.name)) {
       setValues({ ...values, [name]: file });
       setErrors({ ...errors, [name]: '' });
     } else {
-      const copy = values;
-      delete copy[name];
-      setValues(copy);
       setErrors({ ...errors, [name]: 'Некорректный формат файла' });
     }
     setIsValid(evt.target.closest('form').checkValidity());
