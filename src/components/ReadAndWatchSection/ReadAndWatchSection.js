@@ -21,6 +21,7 @@ function ReadAndWatchSection({
   const [totalPages, setTotalPages] = useState(null);
   const [sectionData, setSectionData] = useState(null);
 
+  console.log(`размер страницы сейчас: ${pageSize}`);
   console.log(`я на ${pageIndex} странице из ${totalPages} страниц`);
 
   const slidesPadding = [0, 15, 0, 15]; // вынести в константы
@@ -61,7 +62,7 @@ function ReadAndWatchSection({
         setSectionData(results);
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [pageSize]);
 
   function slideToNextHandler(currentItem, newPageIndex) {
     // console.log(currentItem);
