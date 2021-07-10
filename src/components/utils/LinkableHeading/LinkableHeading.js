@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 function LinkableHeading({
-  Component: TitleComponent,
+  Component: HeadingComponent,
   title,
   path,
   titleSectionClass,
@@ -10,7 +10,7 @@ function LinkableHeading({
 }) {
   return (
     <Link className={linkSectionClass} to={path}>
-      <TitleComponent title={title} sectionClass={titleSectionClass} />
+      <HeadingComponent title={title} sectionClass={titleSectionClass} />
     </Link>
   );
 }
