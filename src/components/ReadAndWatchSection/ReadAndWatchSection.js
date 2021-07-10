@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 // /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
 import { TitleH3, LinkableHeading } from './index';
@@ -16,7 +16,6 @@ function ReadAndWatchSection({
   sectionTitle,
 }) {
   console.log('ReadAndWatchSection', sectionTitle);
-  const ref = useRef();
 
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(null);
@@ -64,6 +63,23 @@ function ReadAndWatchSection({
       .catch((error) => console.log(error));
   }, []);
 
+  function slideToNextHandler(currentItem, newPageIndex) {
+    // console.log(currentItem);
+    console.log('onChange FUNC');
+    console.log('newPageIndex', newPageIndex);
+    console.log('totalPages', totalPages);
+
+    const isBeforeLastPage = totalPages - 2 === newPageIndex;
+    // const isForwardScroll = newPageIndex > pageIndex;
+    // const isLastPage = totalPages - 1 === pageIndex;
+
+    // значит произошел скрол вперед + это предпоследняя страница
+    if (isBeforeLastPage || isLastPage) {
+      setTotalPages();
+      setCurrentPageIndex((prev) => prev - 1);
+    }
+  }
+
   function renderCardsForSlider() {
     if (sectionData) {
       const cardArray = sectionData.map((item, i) => (
@@ -100,6 +116,10 @@ function ReadAndWatchSection({
           outerSpacing={0}
           itemPadding={slidesPadding}
           breakPoints={breakPoints}
+          disableArrowsOnEnd
+          // onChange={onChange}
+          showEmptySlots
+          onNextEnd={slideToNextHandler}
         >
           {renderCardsForSlider()}
         </Carousel>

@@ -3,7 +3,6 @@
 
 // import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import './ReadAndWatch.scss';
 import readAndWatchPageTexts from '../../locales/read-and-watch-page-RU';
 import {
@@ -16,9 +15,6 @@ import {
   AnimatedPageContainer,
 } from './index';
 import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWatchSection';
-// import CatalogSliderSection from '../../components/CatalogSliderSection';
-import { FIGURES } from '../../config/constants';
-// import useReadWatch from '../../hooks/useReadWatch'; //!
 
 //! АПИ
 // запрос каталога
@@ -38,83 +34,11 @@ function ReadAndWatch() {
 
   // определяет сколько объектов показывать в ряду
   const [pageSize, setPageSize] = useState(null);
-  // выставляет общее кол во страниц
-  // сколько их всего будет при таком размере экрана и количестве элементов на странице
-  // const [pageCount, setPageCount] = useState(0);
-  const [pageCounter, setPageCounter] = useState({});
-  // выставляет текущий номер страницы, на каком мы сейчас
-  const [pageNumber, setPageNumber] = useState(0);
-
-  // дата каждой секции
-  const [catalogData, setCatalogData] = useState(null);
-  const [moviesData, setMoviesData] = useState(null);
-  const [videosData, setVideosData] = useState(null);
-  const [booksData, setBooksData] = useState(null);
-  const [articlesData, setArticlesData] = useState(null);
 
   // const [isLoading, setIsLoading] = useState(false);
   // const isAllData =
   //   catalogData && moviesData && videosData && booksData && articlesData;
 
-  // при последующих загрузках
-  function getCatalog({ elementsPerSection, number }) {
-    console.log('getCatalog отдельная функция');
-    const offset = pageSize * number;
-    // limit = pageSize
-    // getCatalogPageDatа({ limit: pageSize, offset })
-    getCatalogPageDatа({ limit: pageSize, offset })
-      //! тут надо принимать { results, count }
-      .then(({ results, count }) => {
-        //! count используй
-        setCatalogData(results);
-      })
-      .catch((error) => console.log(error));
-  }
-
-  function getMovies({ limit, offset }) {
-    // const offset = pageSize * pageNumber;
-    // getMoviesPageData({ limit: pageSize, offset })
-    getMoviesPageData({ limit, offset })
-      .then(({ results, count }) => {
-        //! count используй
-        setMoviesData(results);
-      })
-      .catch((error) => console.log(error));
-  }
-
-  function getBooks({ limit, offset }) {
-    // const offset = pageSize * pageNumber;
-    // getBooksPageData({ limit: pageSize, offset })
-    getBooksPageData({ limit, offset })
-      .then(({ results, count }) => {
-        //! count используй
-        setBooksData(results);
-      })
-      .catch((error) => console.log(error));
-  }
-
-  function getArticles({ limit, offset }) {
-    // const offset = pageSize * pageNumber;
-    // getArticlesPageData({ limit: pageSize, offset })
-    getArticlesPageData({ limit, offset })
-      .then(({ results, count }) => {
-        //! count используй
-        setArticlesData(results);
-      })
-      .catch((error) => console.log(error));
-  }
-
-  function getVideos({ limit, offset }) {
-    // const offset = pageSize * pageNumber;
-    // getVideoPageData({ limit: pageSize, offset })
-    getVideoPageData({ limit, offset })
-      .then(({ results, count }) => {
-        //! count используй
-        setArticlesData(results);
-      })
-      .catch((error) => console.log(error));
-  }
-  console.log('СТРАНИЦА');
   useEffect(() => {
     console.log('юзЕФФЕКТ -- определи размер экрана');
     // 1 элемент в ряду
