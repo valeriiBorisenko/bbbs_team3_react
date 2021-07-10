@@ -4,8 +4,7 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { TitleH3, LinkableTitle } from './index';
+import { TitleH3, LinkableHeading } from './index';
 import { FIGURES } from '../../config/constants';
 
 function ReadAndWatchSection({
@@ -75,7 +74,15 @@ function ReadAndWatchSection({
 
   return (
     <section>
-      <div className="readwatch__container" />
+      <div className="readwatch__container">
+        <LinkableHeading
+          title={sectionTitle}
+          path={path}
+          titleSectionClass="readwatch__heading"
+          linkSectionClass="readwatch__heading-link"
+          Component={TitleH3}
+        />
+      </div>
       <ul className="readwatch__item-grid">{renderCards()}</ul>
     </section>
   );
