@@ -75,7 +75,9 @@ function Router() {
 
       <Route
         path={CATALOG_ITEM_URL}
-        render={({ match }) => <CatalogArticle articleId={match.articleId} />}
+        render={({ match }) => (
+          <CatalogArticle articleId={match.params.articleId} />
+        )}
       />
 
       <Route exact path={BOOKS_URL}>

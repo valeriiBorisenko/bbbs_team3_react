@@ -4,7 +4,7 @@ import mockArticleData from '../pages/CatalogArticle/CatalogArticle.json';
 
 function getCatalogArticlePageData({ articleId } = {}) {
   if (articleId === 'mock') {
-    return Promise.resolve(mockArticleData);
+    return Promise.resolve({ result: mockArticleData });
   }
   return axios
     .get(`${baseURL}${apiUrl}/catalog-article/`, { params: { articleId } })

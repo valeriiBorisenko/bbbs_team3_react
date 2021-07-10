@@ -12,8 +12,8 @@ function CatalogArticle({ articleId }) {
 
   useEffect(() => {
     getCatalogArticlePageData({ articleId })
-      .then(({ results }) => {
-        setCatalogArticlePageData(results);
+      .then(({ result }) => {
+        setCatalogArticlePageData(result);
       })
       .catch((err) => console.log(err))
       .finally(() => {
