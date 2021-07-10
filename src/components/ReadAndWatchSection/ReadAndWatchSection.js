@@ -36,8 +36,8 @@ function ReadAndWatchSection({
       .catch((error) => console.log(error));
   }
 
+  // с лоадером: isLoading=true, finally=false
   useEffect(() => {
-    // isLoading=true, finally=false
     const offset = pageSize * pageIndex;
     console.log('offset', offset);
     console.log('pageSize', pageSize);
@@ -45,9 +45,9 @@ function ReadAndWatchSection({
 
     getDataFromApi({ limit: pageSize, offset })
       .then(({ results, count }) => {
-        console.log(count);
-        console.log(pageSize);
-        console.log(count / pageSize);
+        // console.log(count);
+        // console.log(pageSize);
+        // console.log(count / pageSize);
         setTotalPages(Math.ceil(count / pageSize));
         setSectionData(results);
       })
