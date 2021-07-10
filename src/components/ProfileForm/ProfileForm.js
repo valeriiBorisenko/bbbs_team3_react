@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
 import './ProfileForm.scss';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { useFormWithValidation } from '../../hooks/index';
-import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { staticImageUrl } from '../../config/config';
 import { regExpImages } from '../../config/constants';
@@ -29,9 +27,8 @@ function ProfileForm({
     .join(' ')
     .trim();
 
-  const [caption, setCaption] = useState('');
+  const [caption, setCaption] = useState(texts.rateCaptionText);
   const [userImage, setUserImage] = useState(null);
-  const [fileUploaded, setFileUploaded] = useState(false);
 
   const {
     values,
@@ -45,32 +42,24 @@ function ProfileForm({
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    // let inputFields = Object.assign(values);
-    // if (userImage?.image) {
-    //   inputFields = {
-    //     ...inputFields,
-    //     image: userImage.image,
-    //   };
-    // }
-    // onSubmit(inputFields);
-    // console.log(values);
-    setFileUploaded(false);
+    if (!values?.mark) {
+      values.mark = 'neutral';
+    }
+    onSubmit(values);
   };
-  console.log({ values });
-  console.log({ errors });
 
   const handleFocusDataInput = (evt) => {
     // eslint-disable-next-line no-param-reassign
     evt.currentTarget.type = 'date';
   };
 
-  // const handleChangeImage = (file) => {
-  //   if (file && regExpImages.test(file.name)) {
-  //     const imageUrl = URL.createObjectURL(file);
-  //     setUserImage({ ...userImage, image: file, imageUrl });
-  //     setFileUploaded(true);
-  //   }
-  // };
+  const handleChangeImage = () => {
+    if (values?.image) {
+      // ссылка-блоб для отображения загруженной картинки
+      const imageUrl = URL.createObjectURL(values.image);
+      setUserImage({ ...userImage, imageUrl });
+    }
+  };
 
   const handleCloseForm = () => {
     setUserImage(null);
@@ -83,6 +72,10 @@ function ProfileForm({
     if (values?.mark) setCaption(captions[values.mark]);
     else setCaption(texts.rateCaptionText);
   }, [values.mark]);
+
+  useEffect(() => {
+    handleChangeImage();
+  }, [values.image]);
 
   useEffect(() => {
     if (isOpen) {
@@ -116,10 +109,11 @@ function ProfileForm({
 
         <div
           className={`profile-form__input-upload ${
-            userImage?.imageUrl || userImage?.image
+            (userImage?.imageUrl || userImage?.image) && !errors?.image
               ? 'profile-form__input-upload_hidden'
               : ''
-          }`}
+          } ${errors?.image ? 'profile-form__input-upload_error' : ''}
+          `}
         >
           <label htmlFor="input-upload" className="profile-form__label-file">
             <input
@@ -140,7 +134,7 @@ function ProfileForm({
             />
           </label>
           <Caption
-            title={texts.uploadCaptionText}
+            title={errors?.image || texts.uploadCaptionText}
             sectionClass={`profile-form__caption ${
               errors?.image ? 'profile-form__caption_error' : ''
             }`}

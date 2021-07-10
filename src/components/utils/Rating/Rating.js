@@ -8,7 +8,6 @@ function Rating({
   ratingType,
   sectionClass,
   checked,
-  // onClick,
   onChange,
 }) {
   const classNames = ['rating', sectionClass].join(' ').trim();
@@ -29,7 +28,6 @@ function Rating({
         name={name}
         value={value}
         defaultChecked={checked}
-        // onClick={() => onClick(value)}
         onChange={onChange}
       />
       <span className={pseudoButtonClassNames} />
@@ -44,7 +42,6 @@ Rating.propTypes = {
   ratingType: PropTypes.string,
   sectionClass: PropTypes.string,
   checked: PropTypes.bool,
-  // onClick: PropTypes.func,
   onChange: PropTypes.func,
 };
 
@@ -54,7 +51,6 @@ Rating.defaultProps = {
   ratingType: 'neutral',
   sectionClass: '',
   checked: false,
-  // onClick: () => {},
   onChange: () => {},
 };
 

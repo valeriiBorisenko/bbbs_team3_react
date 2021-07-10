@@ -143,12 +143,8 @@ function Profile() {
   };
 
   const handleSubmitDiary = (data) => {
-    const diary = data;
-    if (!diary?.mark) {
-      diary.mark = 'neutral';
-    }
-    if (isEditMode) handleEditDiary(diary);
-    else handleCreateDiary(diary);
+    if (isEditMode) handleEditDiary(data);
+    else handleCreateDiary(data);
   };
 
   // удаление дневника

@@ -40,7 +40,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  
+
     &_hidden {
       opacity: 0;
       transition: .3s ease;
@@ -84,6 +84,16 @@
     }
   }
 
+  &__input-upload_error .profile-form__pseudo-button {
+    border: 1px solid $error;
+    background-image: url(../../assets/error-cross.svg);
+    background-color: rgba($error, .2);
+
+    &:hover {
+      background-color: rgba($error, .5);
+    }
+  }
+
   &__text-container {
     box-sizing: border-box;
     padding: 30px 30px 20px;
@@ -105,6 +115,9 @@
 
     &_error {
       color: $error;
+	    -webkit-text-shadow: 1px 1px 0 rgba($background, .5); 
+	    -moz-text-shadow: 1px 1px 0 rgba($background, .5);
+      text-shadow: 1px 1px 0 rgba($background, .5); 
     }
   }
 
