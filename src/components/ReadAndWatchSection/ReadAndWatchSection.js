@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { TitleH3, CardCatalog } from './index';
-import getCatalogPageDatа from '../../api/catalog-page';
+// import getCatalogPageDatа from '../../api/catalog-page';
 import { FIGURES } from '../../config/constants';
 // import './ReadAndWatchSection.scss';
 
@@ -60,10 +60,11 @@ function ReadAndWatchSection({
     if (sectionData) {
       return (
         <>
-          {sectionData.map((item, index) => (
+          {sectionData.map((item, i) => (
             <CardCatalog
               key={item?.id}
               sectionClass="cards-section__item"
+              shape={FIGURES[i % FIGURES.length]} // нужно только для 1 вида секции
               {...item}
             />
           ))}
@@ -76,12 +77,10 @@ function ReadAndWatchSection({
 
   return (
     <section>
-      <div className="readwatch__cont ainer">
+      <div className="readwatch__container">
         <Link className="readwatch__heading-link" to={path}>
           <TitleH3 title={sectionTitle} sectionClass="readwatch__heading" />
         </Link>
-        <button type="button">назад</button>
-        <button type="button">вперед</button>
       </div>
       <ul className="readwatch__item-grid">{renderCards()}</ul>
     </section>
