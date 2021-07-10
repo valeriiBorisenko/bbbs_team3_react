@@ -12,12 +12,14 @@ import {
   PopupError,
   PopupCities,
   PopupLogin,
+  PopupRecommendSuccess,
 } from './components/Popups/index';
 // логины, авторизация
 import {
   CurrentUserContext,
   CitiesContext,
   PopupsContext,
+  ErrorsContext,
 } from './contexts/index';
 // хуки
 import { useCities, useAuth } from './hooks/index';
@@ -33,15 +35,17 @@ function App() {
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
+  const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
+    useState(false);
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
-    setIsPopupErrorOpen(false);
     setIsPopupLoginOpen(false);
     setIsPopupCitiesOpen(false);
+    setIsPopupRecommendSuccessOpen(false);
   }
 
   function openPopupConfirmation() {
@@ -61,6 +65,10 @@ function App() {
     setIsPopupErrorOpen(true);
   }
 
+  function closePopupError() {
+    setIsPopupErrorOpen(false);
+  }
+
   function openPopupCities() {
     setIsPopupCitiesOpen(true);
   }
@@ -69,14 +77,23 @@ function App() {
     setIsPopupLoginOpen(true);
   }
 
+  function openPopupRecommendSuccess() {
+    setIsPopupRecommendSuccessOpen(true);
+  }
+
   // текущий юзер/контекст
   const [currentUser, setCurrentUser] = useState(null);
   const updateUser = (value) => setCurrentUser(value);
 
-  const { isCheckingToken, checkToken } = useAuth(updateUser);
-
   // список городов/контекст
   const cities = useCities();
+
+  // серверные ошибки контекст
+  const [serverError, setServerError] = useState(null);
+  const setError = (value) => setServerError(value);
+  const clearError = () => setServerError(null);
+
+  const { isCheckingToken, checkToken } = useAuth(updateUser);
 
   useEffect(() => {
     checkToken();
@@ -85,6 +102,7 @@ function App() {
   // закрытие всех попапов при смене страницы
   useEffect(() => {
     closeAllPopups();
+    closePopupError();
   }, [pathname]);
 
   // эффект закрытия модалок по Escape
@@ -100,39 +118,52 @@ function App() {
     <HelmetProvider>
       <CitiesContext.Provider value={cities}>
         <CurrentUserContext.Provider value={{ currentUser, updateUser }}>
-          <PopupsContext.Provider
-            value={{
-              closeAllPopups,
-              openPopupConfirmation,
-              openPopupSuccessfully,
-              openPopupAboutEvent,
-              openPopupError,
-              openPopupCities,
-              openPopupLogin,
-            }}
-          >
-            <div className="page">
-              {!isCheckingToken ? <Router /> : <Loader isCentered />}
-              <PopupConfirmation
-                isOpen={isPopupConfirmationOpen}
-                onClose={closeAllPopups}
-              />
-              <PopupSuccessfully
-                isOpen={isPopupSuccessfullyOpen}
-                onClose={closeAllPopups}
-              />
-              <PopupAboutEvent
-                isOpen={isPopupAboutDescriptionOpen}
-                onClose={closeAllPopups}
-              />
-              <PopupLogin isOpen={isPopupLoginOpen} onClose={closeAllPopups} />
-              <PopupCities
-                isOpen={isPopupCitiesOpen}
-                onClose={closeAllPopups}
-              />
-              <PopupError isOpen={isPopupErrorOpen} onClose={closeAllPopups} />
-            </div>
-          </PopupsContext.Provider>
+          <ErrorsContext.Provider value={{ serverError, setError, clearError }}>
+            <PopupsContext.Provider
+              value={{
+                closeAllPopups,
+                openPopupConfirmation,
+                openPopupSuccessfully,
+                openPopupAboutEvent,
+                openPopupError,
+                openPopupCities,
+                openPopupLogin,
+                openPopupRecommendSuccess,
+              }}
+            >
+              <div className="page">
+                {!isCheckingToken ? <Router /> : <Loader isCentered />}
+                <PopupConfirmation
+                  isOpen={isPopupConfirmationOpen}
+                  onClose={closeAllPopups}
+                />
+                <PopupSuccessfully
+                  isOpen={isPopupSuccessfullyOpen}
+                  onClose={closeAllPopups}
+                />
+                <PopupAboutEvent
+                  isOpen={isPopupAboutDescriptionOpen}
+                  onClose={closeAllPopups}
+                />
+                <PopupLogin
+                  isOpen={isPopupLoginOpen}
+                  onClose={closeAllPopups}
+                />
+                <PopupCities
+                  isOpen={isPopupCitiesOpen}
+                  onClose={closeAllPopups}
+                />
+                <PopupError
+                  isOpen={isPopupErrorOpen}
+                  onClose={closePopupError}
+                />
+                <PopupRecommendSuccess
+                  isOpen={isPopupRecommendSuccessOpen}
+                  onClose={closeAllPopups}
+                />
+              </div>
+            </PopupsContext.Provider>
+          </ErrorsContext.Provider>
         </CurrentUserContext.Provider>
       </CitiesContext.Provider>
     </HelmetProvider>

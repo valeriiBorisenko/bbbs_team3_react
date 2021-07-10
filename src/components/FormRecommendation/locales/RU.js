@@ -10,7 +10,6 @@ const texts = {
   descPlaceholder:
     'Комментарий* Поделитесь впечатлениями о проведенном времени',
   descPlaceholderMobile: 'Комментарий*',
-  photoPlaceholder: 'Добавить фото',
   buttonText: 'Отправить',
 };
 

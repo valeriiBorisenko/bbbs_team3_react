@@ -5,7 +5,7 @@ function getPlacesTags() {
   return axios
     .get(`${baseURL}${apiUrl}/places/tags/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 // python was here :)
@@ -18,7 +18,7 @@ function getPlaces({ chosen, tags, age_restriction, city }) {
         : { city, tags, age_restriction },
     })
     .then((response) => response.data.results)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 function postPlace(data) {
@@ -29,14 +29,14 @@ function postPlace(data) {
       },
     })
     .then((response) => response.data.results)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 function getActivityTypes() {
   return axios
     .get(`${baseURL}${apiUrl}/places/activity-types/`)
     .then((response) => response.data.results)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 export { getPlacesTags, getPlaces, postPlace, getActivityTypes };

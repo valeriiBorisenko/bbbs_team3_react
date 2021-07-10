@@ -17,7 +17,7 @@ class AuthApi {
     return axios
       .post(`${baseURL}${apiUrl}/token/`, loginData)
       .then((response) => response.data)
-      .catch((err) => Promise.reject(new Error(`${err.message}`)));
+      .catch((err) => Promise.reject(err?.response));
   }
 }
 

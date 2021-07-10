@@ -1,10 +1,22 @@
 import './PopupError.scss';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import Popup from '../Popup/Popup';
 import { Button, TitleH2 } from '../../utils/index';
 //! текст прокинуть через пропс
 
 function PopupError({ isOpen, onClose }) {
+  const closeOnEsc = (evt) => {
+    if (evt.key === 'Escape') {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keyup', closeOnEsc);
+    return () => window.removeEventListener('keyup', closeOnEsc);
+  }, []);
+
   return (
     <Popup
       type="error"

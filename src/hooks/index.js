@@ -7,6 +7,7 @@ import useDebounce from './useDebounce';
 import useActivityTypes from './useActivityTypes';
 import { useLocalStorage } from './useLocalStorage';
 import useEventBooking from './useEventBooking';
+import useFormWithValidation from './useFormWithValidation';
 
 export {
   useClickOutside,
@@ -18,4 +19,5 @@ export {
   useActivityTypes,
   useLocalStorage,
   useEventBooking,
+  useFormWithValidation,
 };
