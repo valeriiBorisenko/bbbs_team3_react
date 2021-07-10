@@ -7,7 +7,11 @@ import {
   useDebounce,
   useFormWithValidation,
 } from '../../hooks/index';
-import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
+import {
+  ALL_CATEGORIES,
+  DELAY_DEBOUNCE,
+  ERROR_CODES,
+} from '../../config/constants';
 import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
 import {
   handleCheckboxBehavior,
@@ -46,6 +50,8 @@ function Questions() {
 
   const { currentUser } = useContext(CurrentUserContext);
   const { serverError, setError, clearError } = useContext(ErrorsContext);
+  const { unauthorized, badRequest } = ERROR_CODES;
+
   const errorsString = serverError
     ? Object.values(serverError)
         .map((err) => err)
@@ -71,24 +77,31 @@ function Questions() {
   const { values, handleChange, errors, isValid, resetForm } =
     useFormWithValidation();
 
-  const setFormState = () => {
-    // успешная надпись
-    setQuestionFormState(questionForm.successSubmit);
-    // почистили форму
-    resetForm();
-    clearError();
-    // вернулись к изначальной
-    setTimeout(() => {
-      setQuestionFormState(questionForm.beforeSubmit);
-    }, 4000);
+  const setFormState = (isError) => {
+    if (isError) {
+      // форму не чистим!
+      setQuestionFormState(questionForm.errorSubmit);
+    } else {
+      setQuestionFormState(questionForm.successSubmit);
+      // вернулись к изначальной
+      setTimeout(() => {
+        resetForm();
+        clearError();
+        setQuestionFormState(questionForm.beforeSubmit);
+      }, 4000);
+    }
   };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     const { question } = values;
     postQuestion({ title: question })
-      .then(() => setFormState())
-      .catch((err) => setError(err));
+      .then(() => setFormState(false))
+      .catch((err) => {
+        if (err?.status === badRequest || err?.status === unauthorized)
+          setError(err?.data);
+        else setFormState(true);
+      });
   };
 
   // хэндлер клика по фильтру
@@ -171,7 +184,7 @@ function Questions() {
     <>
       <section className="add-question fade-in">
         <TitleH2
-          sectionClass="add-question__title"
+          sectionClass={`add-question__title ${questionFormState.titleClass}`}
           title={questionFormState.title}
         />
         <form

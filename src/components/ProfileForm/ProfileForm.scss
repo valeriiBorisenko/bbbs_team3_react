@@ -127,9 +127,6 @@
 
   &__submit-zone {
     grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
 
   &__ratings {
@@ -164,6 +161,7 @@
 
   &__buttons {
     display: flex;
+    justify-content: space-between;
     align-items: center;
   }
 

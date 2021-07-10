@@ -3,13 +3,15 @@ import { useState, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { PopupsContext, ErrorsContext } from '../../contexts/index';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
 
 function PlacesRecommend({ sectionClass, activityTypes }) {
   const { openPopupRecommendSuccess } = useContext(PopupsContext);
-  // eslint-disable-next-line no-unused-vars
   const { setError } = useContext(ErrorsContext);
+  const { generalErrorMessage } = ERROR_MESSAGES;
+  const { unauthorized, badRequest } = ERROR_CODES;
 
   const [isFormOpen, setIsFormOpen] = useState(false);
 
@@ -45,9 +47,16 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
     postPlace(createFormData(data))
       .then(() => {
         openPopupRecommendSuccess(true);
-        closeForm();
       })
-      .catch((err) => setError(err));
+      .catch((err) => {
+        if (err?.status === badRequest || err?.status === unauthorized) {
+          setError(err?.data);
+          closeForm();
+        } else
+          setError({
+            message: generalErrorMessage,
+          });
+      });
   };
 
   const classNames = [

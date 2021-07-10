@@ -61,3 +61,13 @@ export const DELAY_RENDER = 100;
 export const localStUserCity = 'userCity';
 export const localStAfishaEvent = 'afishaEvent';
 export const jwt = 'jwt';
+
+export const ERROR_MESSAGES = {
+  generalErrorMessage:
+    'При передаче данных произошла ошибка. Повторите попытку позже.',
+};
+
+export const ERROR_CODES = {
+  badRequest: 400,
+  unauthorized: 401,
+};

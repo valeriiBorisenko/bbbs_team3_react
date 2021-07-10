@@ -9,9 +9,12 @@ import {
   getLocalStorageData,
   clearLocalStorage,
 } from './useLocalStorage';
-import { jwt } from '../config/constants';
+import { jwt, ERROR_MESSAGES, ERROR_CODES } from '../config/constants';
 
 const useAuth = (setCurrentUser) => {
+  const { generalErrorMessage } = ERROR_MESSAGES;
+  const { unauthorized, badRequest } = ERROR_CODES;
+
   const [isCheckingToken, setIsCheckingToken] = useState(true);
 
   // не деструктурируется, на момент чтения undefined
@@ -19,6 +22,15 @@ const useAuth = (setCurrentUser) => {
   const errors = useContext(ErrorsContext);
 
   const history = useHistory();
+
+  const handleError = (err) => {
+    if (err?.status === badRequest || err?.status === unauthorized)
+      errors.setError(err?.data);
+    else
+      errors.setError({
+        message: generalErrorMessage,
+      });
+  };
 
   const handleLogout = () => {
     AuthApi.clearAuth();
@@ -37,10 +49,10 @@ const useAuth = (setCurrentUser) => {
           getUserData()
             .then((userData) => setCurrentUser(userData))
             .then(() => popups.closeAllPopups())
-            .catch((err) => errors.setError(err)); // при получении данных произошла ошибка
+            .catch((err) => handleError(err));
         }
       })
-      .catch((err) => errors.setError(err)); // авторизация (работа с сервером) закончилась ошибкой
+      .catch((err) => handleError(err)); // авторизация (работа с сервером) закончилась ошибкой
   };
 
   const checkToken = () => {

@@ -1,7 +1,8 @@
 import './ProfileForm.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { ErrorsContext } from '../../contexts/index';
 import { useFormWithValidation } from '../../hooks/index';
 import captions from '../../utils/rating-captions';
 import { staticImageUrl } from '../../config/config';
@@ -26,6 +27,15 @@ function ProfileForm({
   const classNames = ['card-container', 'profile-form', sectionClass]
     .join(' ')
     .trim();
+
+  const { serverError, clearError } = useContext(ErrorsContext);
+
+  const errorsString = serverError
+    ? Object.values(serverError)
+        .map((err) => err)
+        .join(' ')
+        .trim()
+    : '';
 
   const [caption, setCaption] = useState(texts.rateCaptionText);
   const [userImage, setUserImage] = useState(null);
@@ -64,6 +74,7 @@ function ProfileForm({
   const handleCloseForm = () => {
     setUserImage(null);
     resetForm();
+    clearError();
     setCaption(texts.rateCaptionText);
     onClose();
   };
@@ -184,56 +195,59 @@ function ProfileForm({
           />
 
           <div className="profile-form__submit-zone">
-            <div className="profile-form__ratings">
-              <Rating
-                type="radio"
-                name="mark"
-                ratingType="good"
-                onChange={handleChange}
-                value="good"
-                sectionClass="profile-form__rating"
-                checked={data?.mark === 'good'}
-              />
-              <Rating
-                type="radio"
-                name="mark"
-                ratingType="neutral"
-                onChange={handleChange}
-                value="neutral"
-                sectionClass="profile-form__rating"
-                checked={data?.mark === 'neutral'}
-              />
-              <Rating
-                type="radio"
-                name="mark"
-                ratingType="bad"
-                onChange={handleChange}
-                value="bad"
-                sectionClass="profile-form__rating"
-                checked={data?.mark === 'bad'}
-              />
-              <Caption
-                title={caption}
-                sectionClass={`profile-form__ratings-text profile-form__ratings-text_type_${values.mark}`}
-              />
-            </div>
+            <span className="form-error-message">{errorsString}</span>
             <div className="profile-form__buttons">
-              <Button
-                title={`${
-                  isEditMode ? texts.buttonCancelText : texts.buttonDeleteText
-                }`}
-                color="gray-borderless"
-                sectionClass="profile-form__button_el_delete"
-                onClick={handleCloseForm}
-              />
-              <Button
-                title={`${
-                  isEditMode ? texts.buttonSaveText : texts.buttonAddText
-                }`}
-                sectionClass="profile-form__button_el_add"
-                isDisabled={!isValid}
-                isSubmittable
-              />
+              <div className="profile-form__ratings">
+                <Rating
+                  type="radio"
+                  name="mark"
+                  ratingType="good"
+                  onChange={handleChange}
+                  value="good"
+                  sectionClass="profile-form__rating"
+                  checked={data?.mark === 'good'}
+                />
+                <Rating
+                  type="radio"
+                  name="mark"
+                  ratingType="neutral"
+                  onChange={handleChange}
+                  value="neutral"
+                  sectionClass="profile-form__rating"
+                  checked={data?.mark === 'neutral'}
+                />
+                <Rating
+                  type="radio"
+                  name="mark"
+                  ratingType="bad"
+                  onChange={handleChange}
+                  value="bad"
+                  sectionClass="profile-form__rating"
+                  checked={data?.mark === 'bad'}
+                />
+                <Caption
+                  title={caption}
+                  sectionClass={`profile-form__ratings-text profile-form__ratings-text_type_${values.mark}`}
+                />
+              </div>
+              <div className="profile-form__buttons">
+                <Button
+                  title={`${
+                    isEditMode ? texts.buttonCancelText : texts.buttonDeleteText
+                  }`}
+                  color="gray-borderless"
+                  sectionClass="profile-form__button_el_delete"
+                  onClick={handleCloseForm}
+                />
+                <Button
+                  title={`${
+                    isEditMode ? texts.buttonSaveText : texts.buttonAddText
+                  }`}
+                  sectionClass="profile-form__button_el_add"
+                  isDisabled={!isValid}
+                  isSubmittable
+                />
+              </div>
             </div>
           </div>
         </div>
