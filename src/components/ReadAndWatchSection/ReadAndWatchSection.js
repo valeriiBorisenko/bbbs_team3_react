@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import TitleH3 from '../utils/TitleH3/TitleH3';
+import { TitleH3, LinkableTitle } from './index';
 import { FIGURES } from '../../config/constants';
 
 function ReadAndWatchSection({
@@ -75,11 +75,7 @@ function ReadAndWatchSection({
 
   return (
     <section>
-      <div className="readwatch__container">
-        <Link className="readwatch__heading-link" to={path}>
-          <TitleH3 title={sectionTitle} sectionClass="readwatch__heading" />
-        </Link>
-      </div>
+      <div className="readwatch__container" />
       <ul className="readwatch__item-grid">{renderCards()}</ul>
     </section>
   );
@@ -87,8 +83,8 @@ function ReadAndWatchSection({
 
 ReadAndWatchSection.propTypes = {
   pageSize: PropTypes.number.isRequired,
-  getDataFromApi: PropTypes.number.isRequired,
-  CardTemplate: PropTypes.number.isRequired,
+  getDataFromApi: PropTypes.func.isRequired,
+  CardTemplate: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
   sectionTitle: PropTypes.string.isRequired,
 };
