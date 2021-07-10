@@ -18,32 +18,16 @@
   }
 
   &__input-wrap {
-
     &_textarea {
       grid-column: 1 / -1;
       min-height: 286px;
+
+      > .textarea {
+        max-height: 100%;
+        min-height: 286px;
+        resize: none;
+      }
     }
-  }
-
-  &__input {
-    width: 100%;
-    max-height: 48px;
-
-    &_el_textarea {
-      max-height: 100%;
-      min-height: 286px;
-      resize: none;
-    }
-  }
-
-  &__input-error {
-    position: relative;
-    left: 20px;
-    color: $error;
-    font-family: $protoGrotesk;
-    font-size: 11px;
-    line-height: 1;
-    letter-spacing: 1px;
   }
 
   &__input-upload {

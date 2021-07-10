@@ -69,11 +69,13 @@
 .input__error-message {
   position: relative;
   box-sizing: border-box;
+  display: block;
   left: 10px;
   color: $error;
   font-family: $protoGrotesk;
   font-size: 11px;
-  line-height: 1;
+  line-height: 1.2;
+  max-width: calc(100% - 10px);
 }
 
 @include atMobile {
@@ -84,6 +86,5 @@
 
   .input__error-message {
     font-size: 10px;
-    line-height: .9;
   }
 }

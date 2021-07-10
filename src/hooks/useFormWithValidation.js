@@ -13,6 +13,21 @@ const useFormWithValidation = () => {
     setIsValid(target.closest('form').checkValidity());
   };
 
+  const handleChangeFiles = (evt, pattern) => {
+    const file = evt.target.files[0];
+    const { name } = evt.target;
+    if (file && pattern.test(file.name)) {
+      setValues({ ...values, [name]: file });
+      setErrors({ ...errors, [name]: '' });
+    } else {
+      const copy = values;
+      delete copy[name];
+      setValues(copy);
+      setErrors({ ...errors, [name]: 'Некорректный формат файла' });
+    }
+    setIsValid(evt.target.closest('form').checkValidity());
+  };
+
   const resetForm = useCallback(
     (newValues = {}, newErrors = {}, newIsValid = false) => {
       setValues(newValues);
@@ -22,7 +37,15 @@ const useFormWithValidation = () => {
     [setValues, setErrors, setIsValid]
   );
 
-  return { values, handleChange, errors, isValid, resetForm };
+  return {
+    values,
+    handleChange,
+    handleChangeFiles,
+    errors,
+    isValid,
+    resetForm,
+    setValues,
+  };
 };
 
 export default useFormWithValidation;

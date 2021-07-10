@@ -1,9 +1,9 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-unused-vars */
 import './ProfileForm.scss';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
 import texts from './locales/RU';
+import { useFormWithValidation } from '../../hooks/index';
 import { parseDate } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { staticImageUrl } from '../../config/config';
@@ -29,74 +29,72 @@ function ProfileForm({
     .join(' ')
     .trim();
 
-  const [inputValues, setInputValues] = useState({});
   const [caption, setCaption] = useState('');
   const [userImage, setUserImage] = useState(null);
   const [fileUploaded, setFileUploaded] = useState(false);
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-  } = useForm();
+    values,
+    handleChange,
+    errors,
+    isValid,
+    resetForm,
+    setValues,
+    handleChangeFiles,
+  } = useFormWithValidation();
 
-  const onFormSubmit = (values) => {
-    let inputFields = Object.assign(values);
-    inputFields = {
-      ...inputFields,
-      mark: inputValues.mark,
-      id: inputValues.id,
-    };
-    if (fileUploaded && userImage.image) {
-      inputFields = {
-        ...inputFields,
-        image: userImage.image,
-      };
-    }
-    onSubmit(inputFields);
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    // let inputFields = Object.assign(values);
+    // if (userImage?.image) {
+    //   inputFields = {
+    //     ...inputFields,
+    //     image: userImage.image,
+    //   };
+    // }
+    // onSubmit(inputFields);
+    // console.log(values);
     setFileUploaded(false);
   };
+  console.log({ values });
+  console.log({ errors });
 
   const handleFocusDataInput = (evt) => {
     // eslint-disable-next-line no-param-reassign
     evt.currentTarget.type = 'date';
   };
 
-  const handleChangeRating = (value) => {
-    setInputValues({ ...inputValues, mark: value });
-  };
-
-  const handleChangeImage = (file) => {
-    if (file && regExpImages.test(file.name)) {
-      const imageUrl = URL.createObjectURL(file);
-      setUserImage({ ...userImage, image: file, imageUrl });
-      setFileUploaded(true);
-    }
-  };
+  // const handleChangeImage = (file) => {
+  //   if (file && regExpImages.test(file.name)) {
+  //     const imageUrl = URL.createObjectURL(file);
+  //     setUserImage({ ...userImage, image: file, imageUrl });
+  //     setFileUploaded(true);
+  //   }
+  // };
 
   const handleCloseForm = () => {
-    setInputValues({});
     setUserImage(null);
-    reset();
+    resetForm();
+    setCaption(texts.rateCaptionText);
     onClose();
   };
 
   useEffect(() => {
-    if (inputValues?.mark) setCaption(captions[inputValues.mark]);
+    if (values?.mark) setCaption(captions[values.mark]);
     else setCaption(texts.rateCaptionText);
-  }, [inputValues.mark]);
+  }, [values.mark]);
 
   useEffect(() => {
     if (isOpen) {
       if (data) {
-        setInputValues({ ...inputValues, ...data });
         setUserImage({ image: data.image });
-        setValue('place', data.place);
-        setValue('date', parseDate(data.date));
-        setValue('description', data.description);
-        setValue('mark', data.mark);
+        setValues({
+          id: data?.id,
+          date: data?.date,
+          place: data?.place,
+          description: data?.description,
+          mark: data?.mark,
+        });
       }
     }
   }, [isOpen, data]);
@@ -104,7 +102,7 @@ function ProfileForm({
   return (
     <form
       name="addStoryForm"
-      onSubmit={handleSubmit(onFormSubmit)}
+      onSubmit={(evt) => handleSubmit(evt)}
       className={classNames}
     >
       <Card sectionClass="profile-form__photo-upload">
@@ -127,10 +125,11 @@ function ProfileForm({
             <input
               id="input-upload"
               type="file"
-              accept="image/png, image/jpeg"
+              accept="image/*"
               name="image"
               className="profile-form__input-file"
-              onChange={(evt) => handleChangeImage(evt.target.files[0])}
+              pattern={regExpImages}
+              onChange={(evt) => handleChangeFiles(evt, regExpImages)}
             />
             <ButtonRound
               sectionClass={`profile-form__pseudo-button ${
@@ -151,97 +150,77 @@ function ProfileForm({
 
       <Card sectionClass="profile-form__text-container">
         <div className="profile-form__texts">
-          <div className="profile-form__input-wrap">
-            <Input
-              sectionClass="profile-form__input"
-              type="text"
-              name="place"
-              placeholder={texts.placePlaceholder}
-              register={register}
-              required
-              minLength={{ value: 5, message: 'Минимальная длина 5 символов' }}
-              maxLength={{
-                value: 128,
-                message: 'Максимальная длина 128 символов',
-              }}
-              error={errors?.place}
-              errorMessage={`${texts.placePlaceholder}*`}
-            />
-            {errors?.place && (
-              <span className="profile-form__input-error">
-                {errors?.place?.message}
-              </span>
-            )}
-          </div>
+          <Input
+            id="profileInputPlace"
+            type="text"
+            name="place"
+            placeholder={texts.placePlaceholder}
+            onChange={handleChange}
+            value={values.place}
+            required
+            minLength="5"
+            maxLength="128"
+            error={errors?.place}
+          />
 
           <Input
+            id="profileInputDate"
             type="text"
             name="date"
             placeholder={texts.datePlaceholder}
             onFocus={handleFocusDataInput}
-            sectionClass={`profile-form__input profile-form__input_el_date ${
-              errors.date ? 'profile-form__input_el_date-error' : ''
-            }`}
-            register={register}
+            onChange={handleChange}
+            value={values.date}
             required
             error={errors?.date}
-            errorMessage={texts.datePlaceholderError}
           />
-          <div className="profile-form__input-wrap profile-form__input-wrap_textarea">
-            <Input
-              type="text"
-              name="description"
-              placeholder={texts.descrPlaceholder}
-              sectionClass="profile-form__input profile-form__input_el_textarea"
-              register={register}
-              required
-              maxLength={{
-                value: 1024,
-                message: 'Максимальная длина 1024 символа',
-              }}
-              error={errors?.description}
-              errorMessage={`${texts.descrPlaceholder}*`}
-              isTextarea
-            />
-            {errors?.description && (
-              <span className="profile-form__input-error">
-                {errors?.description?.message}
-              </span>
-            )}
-          </div>
+
+          <Input
+            id="profileInputTextarea"
+            type="text"
+            name="description"
+            placeholder={texts.descrPlaceholder}
+            sectionClass="profile-form__input-wrap profile-form__input-wrap_textarea"
+            onChange={handleChange}
+            value={values.description}
+            required
+            maxLength="1024"
+            error={errors?.description}
+            isTextarea
+          />
 
           <div className="profile-form__submit-zone">
             <div className="profile-form__ratings">
               <Rating
                 type="radio"
-                name="rating"
+                name="mark"
                 ratingType="good"
-                onClick={handleChangeRating}
+                onChange={handleChange}
                 value="good"
                 sectionClass="profile-form__rating"
                 checked={data?.mark === 'good'}
               />
               <Rating
                 type="radio"
-                name="rating"
+                name="mark"
                 ratingType="neutral"
-                onClick={handleChangeRating}
+                onChange={handleChange}
                 value="neutral"
                 sectionClass="profile-form__rating"
                 checked={data?.mark === 'neutral'}
               />
               <Rating
                 type="radio"
-                name="rating"
+                name="mark"
                 ratingType="bad"
-                onClick={handleChangeRating}
+                onChange={handleChange}
                 value="bad"
                 sectionClass="profile-form__rating"
                 checked={data?.mark === 'bad'}
               />
               <Caption
                 title={caption}
-                sectionClass={`profile-form__ratings-text profile-form__ratings-text_type_${inputValues.mark}`}
+                sectionClass={`profile-form__ratings-text profile-form__ratings-text_type_${values.mark}`}
               />
             </div>
             <div className="profile-form__buttons">
@@ -258,9 +237,7 @@ function ProfileForm({
                   isEditMode ? texts.buttonSaveText : texts.buttonAddText
                 }`}
                 sectionClass="profile-form__button_el_add"
-                isDisabled={
-                  !!(errors.place || errors.date || errors.description)
-                }
+                isDisabled={!isValid}
                 isSubmittable
               />
             </div>

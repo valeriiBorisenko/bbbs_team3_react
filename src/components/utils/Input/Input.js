@@ -33,10 +33,10 @@ function Input({
 
   if (isTextarea) {
     return (
-      <label className={classNamesTextarea} htmlFor={id}>
+      <label className={classNamesWrap} htmlFor={id}>
         <textarea
           id={id}
-          className={classNamesInput}
+          className={classNamesTextarea}
           type={type}
           name={name}
           placeholder={errorMessage || placeholder}
