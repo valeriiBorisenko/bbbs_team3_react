@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { TitleH2 } from '../../utils/index';
 import CardFigure from '../CardFigure/CardFigure';
-import { staticImageUrl } from '../../../config/config';
+// import { staticImageUrl } from '../../../config/config';
 
 function CardCatalog({ title, shape, image, sectionClass, link }) {
   return (
@@ -17,7 +17,8 @@ function CardCatalog({ title, shape, image, sectionClass, link }) {
           >
             <img
               className="card-catalog__image"
-              src={`${staticImageUrl}/${image}`}
+              src={image}
+              // src={`${staticImageUrl}/${image}`}
               alt={title}
             />
           </CardFigure>

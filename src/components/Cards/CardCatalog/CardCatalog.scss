@@ -1,6 +1,8 @@
 @import './styles/utils.scss';
 
 .card-catalog {
+  border: 1px solid red;
+
   &__title {
     max-width: 370px;
     text-align: center;

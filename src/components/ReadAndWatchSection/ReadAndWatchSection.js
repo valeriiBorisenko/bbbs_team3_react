@@ -2,8 +2,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 // /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import Carousel from 'react-elastic-carousel';
 import { TitleH3, LinkableHeading } from './index';
 import { FIGURES } from '../../config/constants';
 
@@ -15,11 +16,21 @@ function ReadAndWatchSection({
   sectionTitle,
 }) {
   console.log('ReadAndWatchSection', sectionTitle);
+  const ref = useRef();
+
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(null);
   const [sectionData, setSectionData] = useState(null);
 
   console.log(`я на ${pageIndex} странице из ${totalPages} страниц`);
+
+  const slidesPadding = [0, 15, 0, 15]; // вынести в константы
+  const breakPoints = [
+    { width: 820, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: 1120, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: 1440, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: 1441, itemsToShow: pageSize, itemsToScroll: pageSize },
+  ];
 
   function addNewData() {
     const offset = pageSize * pageIndex;
@@ -53,27 +64,26 @@ function ReadAndWatchSection({
       .catch((error) => console.log(error));
   }, []);
 
-  function renderCards() {
+  function renderCardsForSlider() {
     if (sectionData) {
-      return (
-        <>
-          {sectionData.map((item, i) => (
-            <CardTemplate
-              key={item?.id}
-              sectionClass="cards-section__item"
-              shape={FIGURES[i % FIGURES.length]} // нужно только для 1 вида секции
-              {...item}
-            />
-          ))}
-        </>
-      );
+      const cardArray = sectionData.map((item, i) => (
+        <CardTemplate
+          key={item?.id}
+          sectionClass="cards-section__item"
+          shape={FIGURES[i % FIGURES.length]} // нужно только для 1 вида секции
+          {...item}
+          image={item.imageUrl}
+        />
+      ));
+
+      return cardArray;
     }
 
     return null;
   }
 
   return (
-    <section>
+    <section className="readwatch__section">
       <div className="readwatch__container">
         <LinkableHeading
           title={sectionTitle}
@@ -83,7 +93,17 @@ function ReadAndWatchSection({
           Component={TitleH3}
         />
       </div>
-      <ul className="readwatch__item-grid">{renderCards()}</ul>
+      {/* мой контейнер */}
+      <div className="readwatch__slider-container">
+        <Carousel
+          pagination={false}
+          outerSpacing={0}
+          itemPadding={slidesPadding}
+          breakPoints={breakPoints}
+        >
+          {renderCardsForSlider()}
+        </Carousel>
+      </div>
     </section>
   );
 }
@@ -134,3 +154,8 @@ export default ReadAndWatchSection;
               image={item?.imageUrl}
               shape={FIGURES[index % FIGURES.length]}
             /> */
+
+//     <ul className="readwatch__item-grid">{renderCards()}</ul>
+// <div className="readwatch__item-grid">
+//   <Carousel />
+// </div>
