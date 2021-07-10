@@ -13,6 +13,7 @@ import {
   ReadAndWatch,
   Articles,
   Books,
+  CatalogArticle,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import {
@@ -28,6 +29,7 @@ import {
   PROFILE_URL,
   ARTICLES_URL,
   BOOKS_URL,
+  CATALOG_ITEM_URL,
 } from '../config/routes';
 
 function Router() {
@@ -70,6 +72,11 @@ function Router() {
       <Route exact path={CATALOG_URL}>
         <Catalog />
       </Route>
+
+      <Route
+        path={CATALOG_ITEM_URL}
+        render={({ match }) => <CatalogArticle articleId={match.articleId} />}
+      />
 
       <Route exact path={BOOKS_URL}>
         <Books />
