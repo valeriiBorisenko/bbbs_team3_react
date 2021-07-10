@@ -1,7 +1,7 @@
 import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
 import questionsPageTexts from '../../locales/questions-page-RU';
-import { CurrentUserContext } from '../../contexts/index';
+import { CurrentUserContext, ErrorsContext } from '../../contexts/index';
 import {
   useScrollToTop,
   useDebounce,
@@ -45,6 +45,14 @@ function Questions() {
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);
+  const { serverError, setError, clearError } = useContext(ErrorsContext);
+  const errorsString = serverError
+    ? Object.values(serverError)
+        .map((err) => err)
+        .join(' ')
+        .trim()
+    : '';
+
   // крутилка-лоадер
   const [isLoading, setIsLoading] = useState(false);
   // начальная дата с API
@@ -63,15 +71,12 @@ function Questions() {
   const { values, handleChange, errors, isValid, resetForm } =
     useFormWithValidation();
 
-  const setFormState = (isError) => {
-    if (isError) {
-      setQuestionFormState(questionForm.errorSubmit);
-    }
-
+  const setFormState = () => {
     // успешная надпись
     setQuestionFormState(questionForm.successSubmit);
     // почистили форму
     resetForm();
+    clearError();
     // вернулись к изначальной
     setTimeout(() => {
       setQuestionFormState(questionForm.beforeSubmit);
@@ -82,12 +87,8 @@ function Questions() {
     evt.preventDefault();
     const { question } = values;
     postQuestion({ title: question })
-      .then(() => {
-        setFormState(false);
-      })
-      .catch(() => {
-        setFormState(true);
-      });
+      .then(() => setFormState())
+      .catch((err) => setError(err));
   };
 
   // хэндлер клика по фильтру
@@ -106,8 +107,6 @@ function Questions() {
     const activeCategories = categories
       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
       .map((filter) => filter.filter);
-    // массив вида ["children", "relationship-termination"]
-    console.log(activeCategories);
 
     // то есть активных нету и сейчас нажато "ВСЕ"
     if (activeCategories.length === 0) {
@@ -172,12 +171,13 @@ function Questions() {
     <>
       <section className="add-question fade-in">
         <TitleH2
-          sectionClass={`add-question__title ${questionFormState.titleClass}`}
+          sectionClass="add-question__title"
           title={questionFormState.title}
         />
         <form
           className={`question-form ${questionFormState.formVisibilityClass}`}
           onSubmit={(evt) => handleSubmit(evt)}
+          noValidate
         >
           <fieldset className="question-form__add-question">
             <Input
@@ -201,6 +201,7 @@ function Questions() {
               isDisabled={!isValid}
             />
           </fieldset>
+          <span className="form-error-message">{errorsString}</span>
         </form>
       </section>
     </>
@@ -239,7 +240,6 @@ function Questions() {
 
           {/* рендерим сами вопросы */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
-          {/* {renderQuestionsContainer()} */}
 
           {/* если залогинен рендерим форму */}
           {currentUser && renderQuestionForm()}

@@ -227,7 +227,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             isTextarea
           />
 
-          <span className="form-recom__error">{errorsString}</span>
+          <span className="form-error-message">{errorsString}</span>
 
           <div className="form-recom__submit-zone">
             <div className="form-recom__add-photo">

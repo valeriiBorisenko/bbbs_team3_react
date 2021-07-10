@@ -20,14 +20,6 @@
   }
 }
 
-.popup__error {
-  color: $error;
-  font-family: $protoGrotesk;
-  font-size: 14px;
-  line-height: 1.2;
-  margin-bottom: 10px;
-}
-
 .popup__forgot-password {
   margin: 0;
   margin-bottom: 30px;
@@ -56,9 +48,5 @@
     &:last-of-type {
       margin-bottom: 0;
     }
-  }
-
-  .popup__error {
-    font-size: 12px;
   }
 }

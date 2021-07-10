@@ -90,7 +90,7 @@ function PopupLogin({ isOpen, onClose }) {
         <a href="/" className="popup__forgot-password">
           {texts.forgotButtonText}
         </a>
-        <span className="popup__error">{errorsString}</span>
+        <span className="form-error-message">{errorsString}</span>
         <Button
           sectionClass="popup__button_type_sign-in"
           color="blue"

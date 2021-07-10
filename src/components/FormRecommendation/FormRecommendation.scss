@@ -118,14 +118,6 @@
     }
   }
 
-  &__error {
-    color: $error;
-    font-family: $protoGrotesk;
-    font-size: 14px;
-    line-height: 1.2;
-    margin-bottom: 10px;
-  }
-
   &__submit-zone {
     display: flex;
     justify-content: space-between;
@@ -266,10 +258,6 @@
         border: 4px solid $white;
         background-color: $black;
       }
-    }
-
-    &__error {
-      font-size: 12px;
     }
   }
 }
