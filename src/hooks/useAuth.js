@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { PopupsContext, ErrorsContext } from '../contexts/index';
 import AuthApi from '../api/auth';
 import { getUserData } from '../api/user';
 import { MAIN_PAGE_URL } from '../config/routes';
@@ -10,8 +11,12 @@ import {
 } from './useLocalStorage';
 import { jwt } from '../config/constants';
 
-const useAuth = (setCurrentUser, closeAllPopups) => {
+const useAuth = (setCurrentUser) => {
   const [isCheckingToken, setIsCheckingToken] = useState(true);
+
+  // не деструктурируется, на момент чтения undefined
+  const popups = useContext(PopupsContext);
+  const errors = useContext(ErrorsContext);
 
   const history = useHistory();
 
@@ -31,11 +36,11 @@ const useAuth = (setCurrentUser, closeAllPopups) => {
           setLocalStorageData(jwt, access);
           getUserData()
             .then((res) => setCurrentUser(res))
-            .then(() => closeAllPopups())
-            .catch(console.dir); // при получении данных произошла ошибка
+            .then(() => popups.closeAllPopups())
+            .catch((err) => errors.setError({ message: err })); // при получении данных произошла ошибка
         }
       })
-      .catch(console.dir); // авторизация (работа с сервером) закончилась ошибкой
+      .catch((err) => errors.setError({ message: err })); // авторизация (работа с сервером) закончилась ошибкой
   };
 
   const checkToken = () => {

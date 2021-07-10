@@ -3,7 +3,7 @@ import { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import texts from './locales/RU';
-import { CurrentUserContext } from '../../../contexts/index';
+import { CurrentUserContext, ErrorsContext } from '../../../contexts/index';
 import { useAuth, useFormWithValidation } from '../../../hooks/index';
 import { AFISHA_URL } from '../../../config/routes';
 import Popup from '../Popup/Popup';
@@ -11,7 +11,8 @@ import { Input, Button, TitleH2 } from '../../utils/index';
 
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
-  const { handleLogin } = useAuth(updateUser, onClose);
+  const { serverError, clearError } = useContext(ErrorsContext);
+  const { handleLogin } = useAuth(updateUser);
 
   const { values, handleChange, errors, isValid, resetForm } =
     useFormWithValidation();
@@ -33,6 +34,7 @@ function PopupLogin({ isOpen, onClose }) {
 
   useEffect(() => {
     resetForm();
+    clearError();
   }, [isOpen]);
 
   return (
@@ -80,6 +82,7 @@ function PopupLogin({ isOpen, onClose }) {
         <a href="/" className="popup__forgot-password">
           {texts.forgotButtonText}
         </a>
+        <span className="popup__error">{serverError?.message}</span>
         <Button
           sectionClass="popup__button_type_sign-in"
           color="blue"
