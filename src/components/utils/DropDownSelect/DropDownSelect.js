@@ -10,7 +10,6 @@ function DropDownSelect({
   options,
   inputName,
   error,
-  register,
   sectionClass,
   isFormOpen,
 }) {
@@ -94,7 +93,6 @@ function DropDownSelect({
                     setOptionSelected(option?.name);
                     setIsOpen(!isOpen);
                   }}
-                  {...register(inputName, { required: placeholder })}
                 />
                 <span className="select__span">{option?.name}</span>
               </label>
@@ -110,7 +108,6 @@ DropDownSelect.propTypes = {
   options: PropTypes.arrayOf(PropTypes.any),
   inputName: PropTypes.string,
   error: PropTypes.objectOf(PropTypes.any),
-  register: PropTypes.func.isRequired,
   sectionClass: PropTypes.string,
   isFormOpen: PropTypes.bool,
 };

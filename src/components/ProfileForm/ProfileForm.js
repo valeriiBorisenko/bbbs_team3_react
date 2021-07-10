@@ -97,6 +97,7 @@ function ProfileForm({
       name="addStoryForm"
       onSubmit={(evt) => handleSubmit(evt)}
       className={classNames}
+      noValidate
     >
       <Card sectionClass="profile-form__photo-upload">
         {(userImage?.imageUrl || userImage?.image) && (
@@ -122,7 +123,6 @@ function ProfileForm({
               accept="image/*"
               name="image"
               className="profile-form__input-file"
-              pattern={regExpImages}
               onChange={(evt) => handleChangeFiles(evt, regExpImages)}
             />
             <ButtonRound

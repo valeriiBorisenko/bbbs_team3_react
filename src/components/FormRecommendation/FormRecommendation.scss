@@ -12,7 +12,7 @@
   padding: 0 70px;
 
   &_opened {
-    min-height: 520px;
+    min-height: 517px;
     padding-top: 40px;
     animation: fade-in .5s ease 1s forwards;
   }
@@ -28,14 +28,13 @@
 
   &__input-wrap {
     max-width: 100%;
-    width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 
     &_indentation {
       margin-right: 30px;
     }
 
-    &_medium {
+    &__medium {
       max-width: 340px;
     }
 
@@ -45,23 +44,15 @@
   }
 
   &__input {
-    width: 100%;
+    margin-bottom: 15px;
 
     &_textarea {
-      overflow-y: visible;
-      resize: vertical;
-      min-height: 67px;
+      > .textarea {
+        overflow-y: visible;
+        resize: vertical;
+        min-height: 67px;
+      }
     }
-  }
-
-  &__input-error {
-    position: relative;
-    left: 10px;
-    color: $error;
-    font-family: $protoGrotesk;
-    font-size: 11px;
-    line-height: 1;
-    letter-spacing: 1px;
   }
 
   &__label {
@@ -176,6 +167,7 @@
 
     &_opened {
       padding-top: 40px;
+      min-height: 509px;
     }
 
     &__add-photo {
@@ -191,7 +183,7 @@
 @include atTabletL {
   .form-recom {
     &_opened {
-      min-height: 627px;
+      min-height: 606px;
     }
     
     &__input-container {
@@ -199,8 +191,7 @@
     }
 
     &__input-wrap {
-      
-      margin-bottom: 10px;
+      margin-bottom: 5px;
 
       &_indentation {
         margin-right: 0;
@@ -211,12 +202,16 @@
       }
     }
 
-    &__select {
-      margin-bottom: 10px;
-    }
-
     &__label {
       margin: 0 0 10px;
+    }
+
+    &__input {
+      &_textarea {
+        > .textarea {
+          min-height: 40px;
+        }
+      }
     }
   }
 }
@@ -224,12 +219,12 @@
 @include atMobile {
   .form-recom {
     &_opened {
-      min-height: 585px;
+      min-height: 532px;
       padding-top: 30px;
     }
 
     &__label {
-      height: 44px;
+      height: 40px;
     }
 
     &__pseudo-radio {
@@ -250,11 +245,6 @@
         border: 4px solid $white;
         background-color: $black;
       }
-    }
-
-    &__select {
-      font-size: 12px;
-      height: 44px;
     }
   }
 }

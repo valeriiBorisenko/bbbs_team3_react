@@ -1,11 +1,11 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-unused-vars */
 import './FormRecommendation.scss';
 import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
 import texts from './locales/RU';
 import { CitiesContext } from '../../contexts/index';
 import { regExpImages, regExpUrl } from '../../config/constants';
+import { useFormWithValidation } from '../../hooks/index';
 import { Input, Button, ButtonRound, DropDownSelect } from '../utils/index';
 
 function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
@@ -27,63 +27,53 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const [textAreaPlaceholder, setTextAreaPlaceholder] = useState('');
 
   useEffect(() => {
-    const mobile = window.matchMedia('(max-width: 576px)');
+    const tablet = window.matchMedia('(max-width: 900px)');
 
     const listener = () => {
-      if (mobile.matches) setTextAreaPlaceholder(descPlaceholderMobile);
+      if (tablet.matches) setTextAreaPlaceholder(descPlaceholderMobile);
       else setTextAreaPlaceholder(descPlaceholder);
     };
     listener();
 
-    mobile.addEventListener('change', listener);
+    tablet.addEventListener('change', listener);
 
     return () => {
-      mobile.removeEventListener('change', listener);
+      tablet.removeEventListener('change', listener);
     };
   }, []);
 
   const cities = useContext(CitiesContext);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    clearErrors,
-    reset,
-  } = useForm();
-
   const [isAnimated, setIsAnimated] = useState(false);
-  const [userImage, setUserImage] = useState(null);
-  const [fileUploaded, setFileUploaded] = useState(false);
 
-  const handleChangeImage = (files) => {
-    if (files[0] && regExpImages.test(files[0].name)) {
-      setUserImage(files);
-      setFileUploaded(true);
-      clearErrors('image');
-    } else if (!fileUploaded) {
-      setValue('image', null);
-    } else {
-      setValue('image', userImage);
-    }
-  };
+  const {
+    values,
+    handleChange,
+    errors,
+    isValid,
+    resetForm,
+    setValues,
+    handleChangeFiles,
+  } = useFormWithValidation();
 
-  const onFormSubmit = (values) => {
-    let inputFields = Object.assign(values);
-    if (fileUploaded && userImage) {
-      inputFields = {
-        ...inputFields,
-        image: userImage[0],
-      };
-    }
-    onSubmit(inputFields);
-    setFileUploaded(false);
+  console.log(values);
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    // let inputFields = Object.assign(values);
+    // if (fileUploaded && userImage) {
+    //   inputFields = {
+    //     ...inputFields,
+    //     image: userImage[0],
+    //   };
+    // }
+    console.log({ values });
+    // onSubmit(values);
   };
 
   useEffect(() => {
     if (isOpen) {
-      reset();
+      resetForm();
       setTimeout(() => {
         setIsAnimated(true);
       }, 600);
@@ -104,69 +94,41 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
     <form
       className={formClassNames}
       name="formRecomendation"
-      onSubmit={handleSubmit(onFormSubmit)}
+      onSubmit={handleSubmit}
       noValidate
     >
       <div className="form-recom__input-container">
-        <div className="form-recom__input-wrap form-recom__input-wrap_meduim form-recom__input-wrap_indentation">
-          <Input
-            sectionClass="form-recom__input"
-            type="text"
-            name="title"
-            placeholder={titlePlaceholder}
-            register={register}
-            required
-            minLength={{ value: 5, message: 'Минимальная длина 5 символов' }}
-            maxLength={{ value: 50, message: 'Максимальная длина 50 символов' }}
-            error={errors?.title}
-            errorMessage={titlePlaceholder}
-          />
-          {errors?.title && (
-            <span className="form-recom__input-error">
-              {errors?.title?.message}
-            </span>
-          )}
-        </div>
-
-        <div className="form-recom__input-wrap form-recom__input-wrap_meduim">
-          <Input
-            sectionClass="form-recom__input"
-            type="text"
-            name="link"
-            placeholder={linkPlaceholder}
-            register={register}
-            pattern={{
-              value: regExpUrl,
-              message: 'Введена некорректная ссылка',
-            }}
-          />
-          {errors?.link && (
-            <span className="form-recom__input-error">
-              {errors?.link?.message}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="form-recom__input-wrap">
         <Input
-          sectionClass="form-recom__input"
+          sectionClass="form-recom__input-wrap form-recom__input-wrap_medium form-recom__input-wrap_indentation"
           type="text"
-          name="address"
-          placeholder={addressPlaceholder}
-          register={register}
+          name="title"
+          placeholder={titlePlaceholder}
           required
-          minLength={{ value: 5, message: 'Минимальная длина 5 символов' }}
-          maxLength={{ value: 50, message: 'Максимальная длина 50 символов' }}
-          error={errors?.address}
-          errorMessage={addressPlaceholder}
+          minLength="5"
+          maxLength="50"
+          error={errors?.title}
         />
-        {errors?.address && (
-          <span className="form-recom__input-error">
-            {errors?.address?.message}
-          </span>
-        )}
+
+        <Input
+          sectionClass="form-recom__input-wrap form-recom__input-wrap_medium"
+          type="text"
+          name="link"
+          placeholder={linkPlaceholder}
+          pattern={regExpUrl}
+          error={errors?.link}
+        />
       </div>
+
+      <Input
+        sectionClass="form-recom__input-wrap"
+        type="text"
+        name="address"
+        placeholder={addressPlaceholder}
+        required
+        minLength="5"
+        maxLength="50"
+        error={errors?.address}
+      />
 
       <div className="form-recom__input-container">
         <label className="form-recom__label" htmlFor="formRecommendationBoy">
@@ -175,7 +137,6 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             className="form-recom__input-radio"
             type="radio"
             name="gender"
-            {...register('gender', { required: 'male' })}
             value="male"
           />
           <span
@@ -192,7 +153,6 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             className="form-recom__input-radio"
             type="radio"
             name="gender"
-            {...register('gender', { required: 'female' })}
             value="female"
           />
           <span
@@ -203,25 +163,17 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             {genderFemale}
           </span>
         </label>
-        <div className="form-recom__input-wrap form-recom__input-wrap_narrow">
-          <Input
-            sectionClass="form-recom__input"
-            type="number"
-            name="age"
-            placeholder={agePlaceholder}
-            register={register}
-            required
-            max={{ value: 25, message: 'Макс. возраст 25 лет' }}
-            min={{ value: 1, message: 'Мин. возраст 1 год' }}
-            error={errors?.age}
-            errorMessage={agePlaceholder}
-          />
-          {errors?.age && (
-            <span className="form-recom__input-error">
-              {errors?.age?.message}
-            </span>
-          )}
-        </div>
+
+        <Input
+          sectionClass="form-recom__input-wrap form-recom__input-wrap_narrow"
+          type="number"
+          name="age"
+          placeholder={agePlaceholder}
+          required
+          max={25}
+          min={1}
+          error={errors?.age}
+        />
       </div>
 
       <DropDownSelect
@@ -229,7 +181,6 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
         options={activityTypes}
         inputName="activityType"
         error={errors?.activityType}
-        register={register}
         isFormOpen={isOpen}
       />
 
@@ -238,29 +189,19 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
         options={cities}
         inputName="city"
         error={errors?.city}
-        register={register}
         isFormOpen={isOpen}
       />
 
-      <div className="form-recom__input-wrap">
-        <Input
-          sectionClass="form-recom__input form-recom__input_textarea"
-          type="text"
-          name="description"
-          placeholder={textAreaPlaceholder}
-          register={register}
-          required
-          maxLength={{ value: 200, message: 'Максимальная длина 200 символов' }}
-          error={errors?.description}
-          errorMessage={textAreaPlaceholder}
-          isTextarea
-        />
-        {errors?.description && (
-          <span className="form-recom__input-error">
-            {errors?.description?.message}
-          </span>
-        )}
-      </div>
+      <Input
+        sectionClass="form-recom__input form-recom__input_textarea"
+        type="text"
+        name="description"
+        placeholder={textAreaPlaceholder}
+        required
+        maxLength="200"
+        error={errors?.description}
+        isTextarea
+      />
 
       <div className="form-recom__submit-zone">
         <label htmlFor="formRecomInputUpload">
@@ -270,8 +211,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             name="image"
             accept="image/png, image/jpeg"
             className="form-recom__input-radio"
-            {...register('image', { required: photoPlaceholder })}
-            onChange={(evt) => handleChangeImage(evt.target.files)}
+            onChange={handleChangeFiles}
           />
           <ButtonRound
             sectionClass={`form-recom__add-photo ${
