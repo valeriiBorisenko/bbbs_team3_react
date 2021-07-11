@@ -28,6 +28,7 @@ import { getMoviesPageData } from '../../api/movies-page';
 // запрос книг
 import { getBooksPageData } from '../../api/books-page';
 
+//! ПЕРЕД ЗАЛИВОМ УБЕРИ КРАСНЫЕ РАМКИ У КАРТОЧЕК КАТАЛОГА + ИСПРАВЬ ДОСТУП К КАРТИНКЕ
 function ReadAndWatch() {
   //! для использования попапа видео - юзать контекст попапов!
   const { headTitle, headDescription } = readAndWatchPageTexts;
@@ -35,9 +36,7 @@ function ReadAndWatch() {
   // определяет сколько объектов показывать в ряду
   const [pageSize, setPageSize] = useState(null);
 
-  // const [isLoading, setIsLoading] = useState(false);
-  // const isAllData =
-  //   catalogData && moviesData && videosData && booksData && articlesData;
+  //! чтобы сделать лоадер делаем 5 стейтов и спускаем в каждую секцию сеттер типо isCatalogDataLoaded, как только все 5 станут ТРУ глобальный лоадер можно вырубать
 
   useEffect(() => {
     console.log('юзЕФФЕКТ -- определи размер экрана');

@@ -36,10 +36,8 @@ function ReadAndWatchSection({
   ];
 
   function addNewData(newPageIndex) {
-    //! перед сном: мне нужно правильно запросить новые дополнительные объекты, а то я получаю те же 12 объектов
-    // возможно дело в pageIndex;
-    //! сделал, остается тут по уму все расписать, а не просто число 3!!
-    const offset = pageSize * 3;
+    // Логика: при добавлении новых блоков нужно загрузить 3 страницы начиная с последнего имеющегося элемента
+    const offset = sectionData.length;
     const loadThreePages = pageSize * 3;
     // лучше всего limit умножать на 2 или 3, чтобы получить 2 страницы
     return getDataFromApi({ limit: loadThreePages, offset });
@@ -82,24 +80,23 @@ function ReadAndWatchSection({
     // const isScrollNext = newPageIndex > pageIndex;
     const isLastPage = pagesLoadedNow - 1 === pageIndex;
 
-    const isNoMoreDataInApi = pagesLoadedNow === totalPages;
-    // if (isNoMoreDataInApi) {
-    //   return;
-    // }
+    const isNoMoreDataToLoad = pagesLoadedNow === totalPages;
+    if (isNoMoreDataToLoad) {
+      console.log('==Больше загружать нечего!==');
+      return;
+    }
 
     // значит произошел скрол вперед + это предпоследняя страница
     if (isPenultimatePage || isLastPage) {
       console.log('ЭТО ПРЕДПОСЛЕДНЯЯ ИЛИ ПОСЛЕДНЯЯ СТРАНИЦА');
 
+      // sectionData.length
       addNewData(newPageIndex)
         .then(({ results }) => {
           console.log(
             'мы загрузили дополнительные данные и прибавили к текущим'
           );
-          setSectionData((previousData) => {
-            console.log(previousData);
-            console.log(results);
-          });
+          setSectionData((previousData) => [...previousData, ...results]);
           setPageIndex((prevIndex) => prevIndex + 1);
         })
         .catch((error) => console.log(error));
@@ -141,6 +138,7 @@ function ReadAndWatchSection({
       <div className="readwatch__slider-container">
         <Carousel
           ref={ref}
+          transitionMs={900}
           pagination={false}
           outerSpacing={0}
           itemPadding={slidesPadding}
