@@ -10,6 +10,7 @@ import Rights from './Rights/Rights';
 import Movies from './Movies/Movies';
 import Articles from './Articles/Articles';
 import ReadAndWatch from './ReadAndWatch/ReadAndWatch';
+import Video from './Video/Video';
 import Books from './Books/Books';
 
 export {
@@ -24,6 +25,7 @@ export {
   Movies,
   ReadAndWatch,
   Catalog,
+  Video,
   Articles,
   Books,
 };

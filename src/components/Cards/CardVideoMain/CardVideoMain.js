@@ -1,49 +1,106 @@
 import './CardVideoMain.scss';
+import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { formatDuration } from '../../../utils/utils';
-import { Card, TitleH2 } from '../../utils/index';
+import { PopupsContext } from '../../../contexts/index';
+import { Card, TitleH2, Caption } from '../../utils/index';
+import { formatDuration, changeCaseOfFirstLetter } from '../../../utils/utils';
+import { staticImageUrl } from '../../../config/config';
 
-function CardVideoMain({
-  data: { title, info, link, imageUrl, duration },
-  handleClick,
-}) {
-  const { hours, minutes, seconds } = formatDuration(duration);
+function CardVideoMain({ data: { title, info, link, image, duration } }) {
+  const { openPopupVideo } = useContext(PopupsContext);
+
+  // Пробрасываем данные в попап
+  const handleClick = () => {
+    openPopupVideo();
+    // записать дату в локал, ключ вынести в константы
+  };
+
+  // Стейт записывает ширину окна
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Следит за шириной экрана и записывает в стейт
+  useEffect(() => {
+    const mobile = window.matchMedia('(max-width: 640px)');
+
+    const listener = () => {
+      if (mobile.matches) setIsMobile(true);
+      else setIsMobile(false);
+    };
+    listener();
+
+    mobile.addEventListener('change', listener);
+
+    return () => {
+      mobile.removeEventListener('change', listener);
+    };
+  }, []);
+
+  // Рендерим верхную часть с фоткой и props.children из компонета выше
+  const renderPrewiew = () => {
+    let durationString = '';
+
+    if (duration) {
+      const { hours, minutes, seconds } = formatDuration(duration);
+      durationString =
+        hours > 0 ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
+    }
+
+    return (
+      <>
+        <img
+          src={`${staticImageUrl}/${image}`}
+          alt={`${texts.imageAlt}: ${title}`}
+          className="card-video-main__image"
+        />
+
+        <span className="card-video-main__duration paragraph">
+          {durationString}
+        </span>
+      </>
+    );
+  };
+
+  // Редерим либо кнопку либо ссылку в зависимости от ширины
+  // Пробрасываем елементы в функцию в завизимости от положения
+  const renderVideoPlayback = (childrenElem) =>
+    !isMobile ? (
+      <button
+        className="link card-video-main__button"
+        type="button"
+        onClick={handleClick}
+      >
+        {childrenElem}
+      </button>
+    ) : (
+      <a
+        href={link}
+        className="link card-video-main__button"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        {childrenElem}
+      </a>
+    );
 
   return (
     <div className="card-container card-container_type_main-video">
       <Card sectionClass="card-video-main" color="yellow">
         <div className="card-video-main__title-wrap">
-          <TitleH2 sectionClass="card-video-main__title" title={title} />
-          <p className="caption card-video-main__info">{info}</p>
+          <TitleH2
+            sectionClass="card-video-main__title"
+            title={changeCaseOfFirstLetter(title)}
+          />
+          <Caption
+            sectionClass="card-video-main__info"
+            title={changeCaseOfFirstLetter(info)}
+          />
         </div>
-        <button
-          href={link}
-          className="link card-video-main__button"
-          type="button"
-          onClick={handleClick}
-        >
-          {texts.linkText}
-        </button>
+        {link && renderVideoPlayback(texts.linkText)}
       </Card>
 
       <Card sectionClass="card-video-main__video">
-        <button
-          className="card-video-main__button"
-          type="button"
-          onClick={handleClick}
-        >
-          <img
-            src={imageUrl}
-            alt={texts.imageAlt}
-            className="card-video-main__image"
-          />
-          {hours > 0 ? (
-            <span className="card-video-main__duration paragraph">{`${hours}:${minutes}:${seconds}`}</span>
-          ) : (
-            <span className="card-video-main__duration paragraph">{`${minutes}:${seconds}`}</span>
-          )}
-        </button>
+        {renderVideoPlayback(renderPrewiew())}
       </Card>
     </div>
   );
@@ -51,22 +108,10 @@ function CardVideoMain({
 
 CardVideoMain.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  title: PropTypes.string,
-  info: PropTypes.string,
-  link: PropTypes.string,
-  imageUrl: PropTypes.string,
-  duration: PropTypes.number,
-  handleClick: PropTypes.func,
 };
 
 CardVideoMain.defaultProps = {
   data: {},
-  title: '',
-  info: '',
-  link: '',
-  imageUrl: '',
-  duration: 0,
-  handleClick: () => {},
 };
 
 export default CardVideoMain;

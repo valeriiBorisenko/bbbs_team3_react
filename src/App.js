@@ -13,6 +13,7 @@ import {
   PopupCities,
   PopupLogin,
   PopupRecommendSuccess,
+  PopupVideo,
 } from './components/Popups/index';
 // логины, авторизация
 import {
@@ -37,6 +38,7 @@ function App() {
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
   const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
     useState(false);
+  const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
 
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
@@ -46,6 +48,7 @@ function App() {
     setIsPopupLoginOpen(false);
     setIsPopupCitiesOpen(false);
     setIsPopupRecommendSuccessOpen(false);
+    setIsVideoPopupOpen(false);
   }
 
   function openPopupConfirmation() {
@@ -79,6 +82,10 @@ function App() {
 
   function openPopupRecommendSuccess() {
     setIsPopupRecommendSuccessOpen(true);
+  }
+
+  function openPopupVideo() {
+    setIsVideoPopupOpen(true);
   }
 
   // текущий юзер/контекст
@@ -129,6 +136,7 @@ function App() {
                 openPopupCities,
                 openPopupLogin,
                 openPopupRecommendSuccess,
+                openPopupVideo,
               }}
             >
               <div className="page">
@@ -159,6 +167,10 @@ function App() {
                 />
                 <PopupRecommendSuccess
                   isOpen={isPopupRecommendSuccessOpen}
+                  onClose={closeAllPopups}
+                />
+                <PopupVideo
+                  isOpen={isVideoPopupOpen}
                   onClose={closeAllPopups}
                 />
               </div>

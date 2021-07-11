@@ -1,5 +1,6 @@
 const texts = {
-  lintText: 'смотреть трейлер',
+  altText: 'Превью к видео:',
+  linkText: 'смотреть трейлер',
 };
 
 export default texts;

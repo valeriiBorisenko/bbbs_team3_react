@@ -1,0 +1,82 @@
+import React, { useEffect, useState } from 'react';
+import './PopupVideo.scss';
+import PropTypes from 'prop-types';
+
+import Popup from '../Popup/Popup';
+import { TitleH2, Caption } from '../../utils/index';
+import parserLinkYoutube from '../../../utils/parser-link-youtube';
+import Loader from '../../utils/Loader/Loader';
+
+const PopupVideo = ({ isOpen, onClose }) => {
+  // достать данные из локала
+  const data = {};
+  // const { id, title, info, link } = data;
+
+  const [videoSrc, setVideoSrc] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // без асинк/евейт мелькает предыдущее видео при открытии нового
+  const getSrcFrame = async () => {
+    const src = await parserLinkYoutube(data?.link);
+    setVideoSrc(src);
+
+    // Искуственная задержка что бы увидеть лоадер
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2 * 1000);
+  };
+
+  // При открытии нового попапа с видео
+  // запускаем загруку и парсер
+  useEffect(() => {
+    setIsLoading(true);
+    getSrcFrame();
+  }, [data?.id]);
+
+  return (
+    <Popup
+      type="video"
+      typeContainer="video"
+      isOpen={isOpen}
+      onClose={onClose}
+      withoutCloseButton
+    >
+      {isLoading ? (
+        <Loader isNested />
+      ) : (
+        <>
+          {isOpen && (
+            <iframe
+              title="youTubePlayer"
+              id="playeryt"
+              className="popup__video-iframe"
+              src={videoSrc}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              seamless
+            />
+          )}
+
+          <TitleH2 sectionClass="popup__video-title" title={data?.title} />
+          <Caption sectionClass="popup__video-caption" title={data?.info} />
+        </>
+      )}
+    </Popup>
+  );
+};
+
+PopupVideo.propTypes = {
+  // eslint-disable-next-line react/no-unused-prop-types
+  data: PropTypes.objectOf(PropTypes.any),
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+};
+
+PopupVideo.defaultProps = {
+  data: {},
+  isOpen: false,
+  onClose: () => {},
+};
+
+export default PopupVideo;
