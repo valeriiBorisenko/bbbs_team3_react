@@ -47,11 +47,6 @@
   outline: none;
   background-color: transparent;
 
-  &_video {
-    width: 100%;
-    height: 100%;
-  }
-
   &:hover {
     cursor: pointer;
   }
@@ -60,6 +55,11 @@
 .card-video-main__video {
   width: 100%;
   overflow: hidden;
+
+  > .card-video-main__button {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .card-video-main__image {

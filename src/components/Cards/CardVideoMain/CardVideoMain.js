@@ -1,44 +1,72 @@
 import './CardVideoMain.scss';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { PopupsContext } from '../../../contexts/index';
 import { Card, TitleH2, Caption } from '../../utils/index';
 import { formatDuration, changeCaseOfFirstLetter } from '../../../utils/utils';
 import { staticImageUrl } from '../../../config/config';
 
-function CardVideoMain({ data, onClick }) {
-  const { title, info, link, image, duration } = data;
-  const { hours, minutes, seconds } = formatDuration(duration);
-
-  // Стейт записывает ширину окна
-  const [windowWidth, setWindowWidth] = useState(0);
+function CardVideoMain({ data: { title, info, link, image, duration } }) {
+  const { openPopupVideo } = useContext(PopupsContext);
 
   // Пробрасываем данные в попап
-  const handleClick = () => onClick(data);
+  const handleClick = () => {
+    openPopupVideo();
+    // записать дату в локал, ключ вынести в константы
+  };
+
+  // Стейт записывает ширину окна
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Следит за шириной экрана и записывает в стейт
+  useEffect(() => {
+    const mobile = window.matchMedia('(max-width: 640px)');
+
+    const listener = () => {
+      if (mobile.matches) setIsMobile(true);
+      else setIsMobile(false);
+    };
+    listener();
+
+    mobile.addEventListener('change', listener);
+
+    return () => {
+      mobile.removeEventListener('change', listener);
+    };
+  }, []);
 
   // Рендерим верхную часть с фоткой и props.children из компонета выше
-  const renderPrewiew = () => (
-    <>
-      <img
-        src={`${staticImageUrl}/${image}`}
-        alt={`${texts.imageAlt}: ${title}`}
-        className="card-video-main__image"
-      />
+  const renderPrewiew = () => {
+    let durationString = '';
 
-      {hours > 0 ? (
-        <span className="card-video-main__duration paragraph">{`${hours}:${minutes}:${seconds}`}</span>
-      ) : (
-        <span className="card-video-main__duration paragraph">{`${minutes}:${seconds}`}</span>
-      )}
-    </>
-  );
+    if (duration) {
+      const { hours, minutes, seconds } = formatDuration(duration);
+      durationString =
+        hours > 0 ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
+    }
+
+    return (
+      <>
+        <img
+          src={`${staticImageUrl}/${image}`}
+          alt={`${texts.imageAlt}: ${title}`}
+          className="card-video-main__image"
+        />
+
+        <span className="card-video-main__duration paragraph">
+          {durationString}
+        </span>
+      </>
+    );
+  };
 
   // Редерим либо кнопку либо ссылку в зависимости от ширины
   // Пробрасываем елементы в функцию в завизимости от положения
   const renderVideoPlayback = (childrenElem) =>
-    windowWidth >= 767 ? (
+    !isMobile ? (
       <button
-        className="link card-video-main__button card-video-main__button_video"
+        className="link card-video-main__button"
         type="button"
         onClick={handleClick}
       >
@@ -47,21 +75,13 @@ function CardVideoMain({ data, onClick }) {
     ) : (
       <a
         href={link}
-        className="link card-video-main__button card-video-main__button_video"
+        className="link card-video-main__button"
+        rel="noopener noreferrer"
+        target="_blank"
       >
         {childrenElem}
       </a>
     );
-
-  // Следит за шириной экрана и записывает в стейт
-  // Стоит таймер для ограничения отрисовок
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-    const timer = setTimeout(() => {
-      setWindowWidth(window.innerWidth);
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [window.innerWidth]);
 
   return (
     <div className="card-container card-container_type_main-video">
@@ -88,12 +108,10 @@ function CardVideoMain({ data, onClick }) {
 
 CardVideoMain.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  onClick: PropTypes.func,
 };
 
 CardVideoMain.defaultProps = {
   data: {},
-  onClick: () => {},
 };
 
 export default CardVideoMain;

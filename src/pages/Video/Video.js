@@ -19,8 +19,7 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
-import { changeCaseOfFirstLetter, formatDuration } from '../../utils/utils';
-import { PopupVideo } from '../../components/Popups/index';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -43,8 +42,7 @@ const Video = () => {
   const [video, setVideo] = useState(null);
   const [categories, setCategories] = useState(null);
 
-  const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState({});
+  // const [selectedVideo, setSelectedVideo] = useState({});
 
   // Стейты состояний
   const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -54,18 +52,18 @@ const Video = () => {
 
   // При клике на карточку открываем попап
   // записываем ДАТУ в стейт, а стейт пробрасываем в попап
-  const handleVideoClick = (data) => {
-    setIsVideoPopupOpen(true);
+  // const handleVideoClick = (data) => {
+  //   setIsVideoPopupOpen(true);
 
-    setSelectedVideo({
-      ...data,
-    });
-  };
+  //   setSelectedVideo({
+  //     ...data,
+  //   });
+  // };
 
   // Закрытие попапа
-  const closeAllPopups = () => {
-    setIsVideoPopupOpen(false);
-  };
+  // const closeAllPopups = () => {
+  //   setIsVideoPopupOpen(false);
+  // };
 
   // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
@@ -95,23 +93,23 @@ const Video = () => {
   );
 
   // Карточки с видео страницы
-  const renderCards = () => (
-    <>
-      {video.map((item) => {
-        const { hours, minutes, seconds } = formatDuration(item.duration);
+  // const renderCards = () => (
+  //   <>
+  //     {video.map((item) => {
+  //       const { hours, minutes, seconds } = formatDuration(item.duration);
 
-        return (
-          <CardFilm key={item.id} data={item} onClick={handleVideoClick}>
-            {hours > 0 ? (
-              <p className="card-film__duration paragraph">{`${hours}:${minutes}:${seconds}`}</p>
-            ) : (
-              <p className="card-film__duration paragraph">{`${minutes}:${seconds}`}</p>
-            )}
-          </CardFilm>
-        );
-      })}
-    </>
-  );
+  //       return (
+  //         <CardFilm key={item.id} data={item} onClick={handleVideoClick}>
+  //           {hours > 0 ? (
+  //             <p className="card-film__duration paragraph">{`${hours}:${minutes}:${seconds}`}</p>
+  //           ) : (
+  //             <p className="card-film__duration paragraph">{`${minutes}:${seconds}`}</p>
+  //           )}
+  //         </CardFilm>
+  //       );
+  //     })}
+  //   </>
+  // );
 
   // Загрузка карточек при нажатии на пагинацию
   const loadingContentPagination = () =>
@@ -121,12 +119,14 @@ const Video = () => {
       <>
         {mainVideo && isShowMainCard && (
           <section className="video__main-card page__section">
-            <CardVideoMain data={mainVideo} onClick={handleVideoClick} />
+            <CardVideoMain data={mainVideo} />
           </section>
         )}
 
         <section className="video__cards cards-grid cards-grid_content_small-cards page__section">
-          {renderCards()}
+          {video.map((item) => (
+            <CardFilm key={item?.id} data={item} />
+          ))}
         </section>
       </>
     );
@@ -310,12 +310,6 @@ const Video = () => {
       </section>
 
       {renderMainContent()}
-
-      <PopupVideo
-        data={selectedVideo}
-        onClose={closeAllPopups}
-        isOpen={isVideoPopupOpen}
-      />
     </BasePage>
   );
 };

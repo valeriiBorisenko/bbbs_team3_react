@@ -7,15 +7,17 @@ import { TitleH2, Caption } from '../../utils/index';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
 import Loader from '../../utils/Loader/Loader';
 
-const PopupVideo = ({ data, isOpen, onClose }) => {
-  const { id, title, info, link } = data;
+const PopupVideo = ({ isOpen, onClose }) => {
+  // достать данные из локала
+  const data = {};
+  // const { id, title, info, link } = data;
 
   const [videoSrc, setVideoSrc] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // без асинк/евейт мелькает предыдущее видео при открытии нового
   const getSrcFrame = async () => {
-    const src = await parserLinkYoutube(link);
+    const src = await parserLinkYoutube(data?.link);
     setVideoSrc(src);
 
     // Искуственная задержка что бы увидеть лоадер
@@ -29,7 +31,7 @@ const PopupVideo = ({ data, isOpen, onClose }) => {
   useEffect(() => {
     setIsLoading(true);
     getSrcFrame();
-  }, [id]);
+  }, [data?.id]);
 
   return (
     <Popup
@@ -56,8 +58,8 @@ const PopupVideo = ({ data, isOpen, onClose }) => {
             />
           )}
 
-          <TitleH2 sectionClass="popup__video-title" title={title} />
-          <Caption sectionClass="popup__video-caption" title={info} />
+          <TitleH2 sectionClass="popup__video-title" title={data?.title} />
+          <Caption sectionClass="popup__video-caption" title={data?.info} />
         </>
       )}
     </Popup>
@@ -65,6 +67,7 @@ const PopupVideo = ({ data, isOpen, onClose }) => {
 };
 
 PopupVideo.propTypes = {
+  // eslint-disable-next-line react/no-unused-prop-types
   data: PropTypes.objectOf(PropTypes.any),
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
