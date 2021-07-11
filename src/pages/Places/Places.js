@@ -15,7 +15,6 @@ import {
   localStUserCity,
 } from '../../config/constants';
 import {
-  renderFilterTags,
   handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
@@ -29,6 +28,7 @@ import {
   PlacesRecommend,
   AnimatedPageContainer,
   Loader,
+  TagsList,
 } from './index';
 import { getPlaces, getPlacesTags } from '../../api/places-page';
 
@@ -226,7 +226,6 @@ function Places() {
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
     if (userCity) {
-      window.scrollTo({ top: 0 });
       deselectAllTags(setAges);
       setIsFirstRender(true);
       setIsCityChanging(true);
@@ -250,16 +249,6 @@ function Places() {
       }, DELAY_RENDER);
     }
   }, []);
-
-  // функции рендера
-  const renderTags = () => (
-    <div className="tags">
-      <ul className="tags__list">
-        {renderFilterTags(categories, 'category', changeCategory)}
-      </ul>
-      <ul className="tags__list">{renderFilterTags(ages, 'age', changeAge)}</ul>
-    </div>
-  );
 
   const renderPlaces = () => {
     if (places?.length > 0) {
@@ -313,10 +302,20 @@ function Places() {
     }
     return (
       <>
-        <TitleH1 title={title} />
+        <TitleH1 title={title} sectionClass="places__title" />
         {!isCityChanging ? (
           <>
-            {renderTags()}
+            <TagsList
+              filterList={categories}
+              name="categories"
+              handleClick={changeCategory}
+            />
+            <TagsList
+              filterList={ages}
+              name="ages"
+              handleClick={changeAge}
+              sectionClass="places__tags"
+            />
             {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
 
             {!isLoading ? <>{renderPlaces()}</> : <Loader isNested />}

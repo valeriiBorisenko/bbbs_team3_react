@@ -61,6 +61,11 @@ export const parseDate = (dateString) => {
 // принимает на вход количество оставшихся мест из чего формирует падеж слова
 // нужно в карточках, попапах
 export const formatWordCase = (remainSeats) => {
+  // промежуток 11 - 14
+  const lastTwoDigits = remainSeats % 100;
+  if (lastTwoDigits > 10 && lastTwoDigits < 15) {
+    return 'мест';
+  }
   // если кончается на 1 - окончание О
   // если кончается на 2 3 4 - окончание A
   // если кончается на другое - окончания нет

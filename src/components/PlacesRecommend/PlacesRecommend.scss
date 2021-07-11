@@ -2,8 +2,10 @@
 
 .recommendation {
   &_place_page {
+    position: relative;
     padding-top: 40px;
     margin: 0 auto;
+    z-index: 10;
   }
 
   &__container {

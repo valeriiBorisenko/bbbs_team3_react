@@ -1,13 +1,19 @@
 import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import questionsPageTexts from '../../locales/questions-page-RU';
-import { CurrentUserContext } from '../../contexts/index';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
-import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
+import { CurrentUserContext, ErrorsContext } from '../../contexts/index';
+import {
+  useScrollToTop,
+  useDebounce,
+  useFormWithValidation,
+} from '../../hooks/index';
+import {
+  ALL_CATEGORIES,
+  DELAY_DEBOUNCE,
+  ERROR_CODES,
+} from '../../config/constants';
 import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
 import {
-  renderFilterTags,
   handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
@@ -21,6 +27,7 @@ import {
   Button,
   Loader,
   AnimatedPageContainer,
+  TagsList,
 } from './index';
 import {
   getQuestionsPageData,
@@ -42,6 +49,16 @@ function Questions() {
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);
+  const { serverError, setError, clearError } = useContext(ErrorsContext);
+  const { unauthorized, badRequest } = ERROR_CODES;
+
+  const errorsString = serverError
+    ? Object.values(serverError)
+        .map((err) => err)
+        .join(' ')
+        .trim()
+    : '';
+
   // крутилка-лоадер
   const [isLoading, setIsLoading] = useState(false);
   // начальная дата с API
@@ -57,36 +74,33 @@ function Questions() {
     questionForm.beforeSubmit
   );
 
-  const {
-    register,
-    reset,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormWithValidation();
 
   const setFormState = (isError) => {
     if (isError) {
+      // форму не чистим!
       setQuestionFormState(questionForm.errorSubmit);
+    } else {
+      setQuestionFormState(questionForm.successSubmit);
+      // вернулись к изначальной
+      setTimeout(() => {
+        resetForm();
+        clearError();
+        setQuestionFormState(questionForm.beforeSubmit);
+      }, 4000);
     }
-
-    // успешная надпись
-    setQuestionFormState(questionForm.successSubmit);
-    // почистили форму
-    reset({ question: '' });
-    // вернулись к изначальной
-    setTimeout(() => {
-      setQuestionFormState(questionForm.beforeSubmit);
-    }, 4000);
   };
 
-  const onFormSubmit = (values) => {
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
     const { question } = values;
     postQuestion({ title: question })
-      .then(() => {
-        setFormState(false);
-      })
-      .catch(() => {
-        setFormState(true);
+      .then(() => setFormState(false))
+      .catch((err) => {
+        if (err?.status === badRequest || err?.status === unauthorized)
+          setError(err?.data);
+        else setFormState(true);
       });
   };
 
@@ -106,8 +120,6 @@ function Questions() {
     const activeCategories = categories
       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
       .map((filter) => filter.filter);
-    // массив вида ["children", "relationship-termination"]
-    console.log(activeCategories);
 
     // то есть активных нету и сейчас нажато "ВСЕ"
     if (activeCategories.length === 0) {
@@ -177,17 +189,21 @@ function Questions() {
         />
         <form
           className={`question-form ${questionFormState.formVisibilityClass}`}
-          onSubmit={handleSubmit(onFormSubmit)}
+          onSubmit={(evt) => handleSubmit(evt)}
+          noValidate
         >
           <fieldset className="question-form__add-question">
             <Input
+              id="questionsFormInput"
               type="text"
               name="question"
               placeholder={formPlaceholder}
-              register={register}
+              onChange={handleChange}
+              value={values?.question}
+              minLength="10"
+              maxLength="200"
               required
               error={errors?.question}
-              errorMessage={`${formPlaceholder}*`}
               sectionClass="input__question-form"
             />
             <Button
@@ -195,9 +211,10 @@ function Questions() {
               color="black"
               sectionClass="question-form__button"
               isSubmittable
-              isDisabled={!!errors.question}
+              isDisabled={!isValid}
             />
           </fieldset>
+          <span className="form-error-message">{errorsString}</span>
         </form>
       </section>
     </>
@@ -218,28 +235,24 @@ function Questions() {
     </ul>
   );
 
-  // контейнер фильтров
-  const renderTagsContainer = () => (
-    <div className="tags tags_content_long-list">
-      <ul className="tags__list tags__list_type_long">
-        {renderFilterTags(categories, 'tag', changeCategory)}
-      </ul>
-    </div>
-  );
-
   // главная функция рендеринга
   const renderPageContent = () => {
     if (questionsPageData.length > 0) {
       return (
         <>
-          <TitleH1 title={title} />
+          <TitleH1 title={title} sectionClass="questions__title" />
 
           {/* рендер фильтров */}
-          {categories?.length > 1 && renderTagsContainer()}
+          {categories?.length > 1 && (
+            <TagsList
+              filterList={categories}
+              name="tag"
+              handleClick={changeCategory}
+            />
+          )}
 
           {/* рендерим сами вопросы */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
-          {/* {renderQuestionsContainer()} */}
 
           {/* если залогинен рендерим форму */}
           {currentUser && renderQuestionForm()}

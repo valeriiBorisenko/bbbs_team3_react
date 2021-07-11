@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { PopupsContext, ErrorsContext } from '../contexts/index';
 import AuthApi from '../api/auth';
 import { getUserData } from '../api/user';
 import { MAIN_PAGE_URL } from '../config/routes';
@@ -8,12 +9,28 @@ import {
   getLocalStorageData,
   clearLocalStorage,
 } from './useLocalStorage';
-import { jwt } from '../config/constants';
+import { jwt, ERROR_MESSAGES, ERROR_CODES } from '../config/constants';
 
-const useAuth = (setCurrentUser, closeAllPopups) => {
+const useAuth = (setCurrentUser) => {
+  const { generalErrorMessage } = ERROR_MESSAGES;
+  const { unauthorized, badRequest } = ERROR_CODES;
+
   const [isCheckingToken, setIsCheckingToken] = useState(true);
 
+  // не деструктурируется, на момент чтения undefined
+  const popups = useContext(PopupsContext);
+  const errors = useContext(ErrorsContext);
+
   const history = useHistory();
+
+  const handleError = (err) => {
+    if (err?.status === badRequest || err?.status === unauthorized)
+      errors.setError(err?.data);
+    else
+      errors.setError({
+        message: generalErrorMessage,
+      });
+  };
 
   const handleLogout = () => {
     AuthApi.clearAuth();
@@ -30,12 +47,12 @@ const useAuth = (setCurrentUser, closeAllPopups) => {
           AuthApi.setAuth(access);
           setLocalStorageData(jwt, access);
           getUserData()
-            .then((res) => setCurrentUser(res))
-            .then(() => closeAllPopups())
-            .catch(console.log); // при получении данных произошла ошибка
+            .then((userData) => setCurrentUser(userData))
+            .then(() => popups.closeAllPopups())
+            .catch((err) => handleError(err));
         }
       })
-      .catch(console.log); // авторизация (работа с сервером) закончилась ошибкой
+      .catch((err) => handleError(err)); // авторизация (работа с сервером) закончилась ошибкой
   };
 
   const checkToken = () => {
@@ -43,7 +60,7 @@ const useAuth = (setCurrentUser, closeAllPopups) => {
     if (token) {
       AuthApi.setAuth(token);
       getUserData()
-        .then((res) => setCurrentUser(res))
+        .then((userData) => setCurrentUser(userData))
         .then(() => setIsCheckingToken(false))
         .catch((error) => console.log(error)); // при получении userData возникла проблема
     } else {

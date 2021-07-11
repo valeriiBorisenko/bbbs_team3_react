@@ -4,6 +4,7 @@ import CardBook from '../../components/Cards/CardBook/CardBook';
 import CardAnnotation from '../../components/Cards/CardAnnotation/CardAnnotation';
 import Loader from '../../components/utils/Loader/Loader';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
+import TagsList from '../../components/TagsList/TagsList';
 
 export {
   BasePage,
@@ -12,4 +13,5 @@ export {
   CardAnnotation,
   Loader,
   AnimatedPageContainer,
+  TagsList,
 };

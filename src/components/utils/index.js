@@ -5,6 +5,7 @@ import ButtonRound from './ButtonRound/ButtonRound';
 import Caption from './Caption/Caption';
 import Card from './Card/Card';
 import DropDownMenu from './DropDownMenu/DropDownMenu';
+import DropDownSelect from './DropDownSelect/DropDownSelect';
 import Input from './Input/Input';
 import Loader from './Loader/Loader';
 import LogoBlue from './LogoBlue/LogoBlue';
@@ -29,6 +30,7 @@ export {
   Caption,
   Card,
   DropDownMenu,
+  DropDownSelect,
   Input,
   Loader,
   LogoBlue,

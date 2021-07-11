@@ -4,6 +4,7 @@ import CardPlace from '../../components/Cards/CardPlace/CardPlace';
 import PlacesRecommend from '../../components/PlacesRecommend/PlacesRecommend';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import Loader from '../../components/utils/Loader/Loader';
+import TagsList from '../../components/TagsList/TagsList';
 
 export {
   BasePage,
@@ -12,4 +13,5 @@ export {
   PlacesRecommend,
   AnimatedPageContainer,
   Loader,
+  TagsList,
 };

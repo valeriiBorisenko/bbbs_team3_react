@@ -1,18 +1,32 @@
 @import './styles/utils.scss';
 
-.books__cards {
-  padding: 80px 0;
-  margin: 0;
+.books {
+  &__title {
+    margin-bottom: 25px;
+  }
+
+  &__cards {
+    padding: 80px 0;
+    margin: 0;
+  }
 }
 
 @include atDesktop1024 {
-  .books__cards {
-    padding: 50px 0 60px;
+  .books {
+    &__title {
+      margin-bottom: 10px;
+    }
+
+    &__cards {
+      padding: 50px 0 60px;
+    }
   }
 }
 
 @include atMobileL {
-  .books__cards {
-    padding: 30px 0;
+  .books {
+    &__cards {
+      padding: 30px 0;
+    }
   }
 }
