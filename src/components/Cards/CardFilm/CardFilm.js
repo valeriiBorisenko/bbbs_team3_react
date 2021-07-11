@@ -1,46 +1,77 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { TitleH2, Card, Caption } from '../../utils/index';
+import { changeCaseOfFirstLetter } from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
-import { Rubric, TitleH2, Card } from '../../utils/index';
 
-function CardFilm({ data: { image, title, info, link, tags }, handleClick }) {
+function CardFilm({ data, onClick, children }) {
+  const { image, title, info, link } = data;
+
+  // Стейт записывает ширину окна
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  // Пробрасываем данные в попап
+  const handleClick = () => onClick(data);
+
+  // Рендерим верхную часть с фоткой и props.children из компонета выше
+  const renderPrewiew = () => (
+    <>
+      <img
+        src={`${staticImageUrl}/${image}`}
+        alt={`Превью к видео: ${title}`}
+        className="card-film__preview"
+      />
+      {children}
+    </>
+  );
+
+  // Редерим либо кнопку либо ссылку в зависимости от ширины
+  // Пробрасываем елементы в функцию в завизимости от положения
+  const renderVideoPlayback = (childrenElem) =>
+    windowWidth >= 767 ? (
+      <button
+        className="link card-film__button"
+        type="button"
+        onClick={handleClick}
+      >
+        {childrenElem}
+      </button>
+    ) : (
+      <a href={link} className="link card-film__button">
+        {childrenElem}
+      </a>
+    );
+
+  // Следит за шириной экрана и записывает в стейт
+  // Стоит таймер для ограничения отрисовок
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    const timer = setTimeout(() => {
+      setWindowWidth(window.innerWidth);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [window.innerWidth]);
+
   return (
     <Card sectionClass="card-film">
       <div className="card-film__video">
-        <button
-          className="card-film__button"
-          type="button"
-          onClick={handleClick}
-        >
-          <img
-            src={`${staticImageUrl}/${image}`}
-            alt="Превью видео"
-            className="card-film__preview"
-          />
-          <ul className="card-film__rubric-list">
-            {tags.map((tag) => (
-              <li key={tag.id}>
-                <Rubric title={tag.name} sectionClass="card-film__rubric" />
-              </li>
-            ))}
-          </ul>
-        </button>
+        {renderVideoPlayback(renderPrewiew())}
       </div>
 
       <div className="card-film__video-info">
         <div className="card-film__title-wrap">
-          <TitleH2 sectionClass="card-film__title" title={title} />
-          <p className="caption card-film__info">{info}</p>
+          <TitleH2
+            sectionClass="card-film__title"
+            title={changeCaseOfFirstLetter(title)}
+          />
+          <Caption
+            sectionClass="card-film__info"
+            title={changeCaseOfFirstLetter(info)}
+          />
         </div>
-        <button
-          type="button"
-          className="link card-film__button"
-          href={link}
-          onClick={handleClick}
-        >
-          {texts.lintText}
-        </button>
+        {link && renderVideoPlayback(texts.lintText)}
       </div>
     </Card>
   );
@@ -48,22 +79,14 @@ function CardFilm({ data: { image, title, info, link, tags }, handleClick }) {
 
 CardFilm.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
-  image: PropTypes.string,
-  title: PropTypes.string,
-  info: PropTypes.string,
-  link: PropTypes.string,
-  tags: PropTypes.arrayOf(PropTypes.object),
-  handleClick: PropTypes.func,
+  onClick: PropTypes.func,
+  children: PropTypes.node,
 };
 
 CardFilm.defaultProps = {
   data: {},
-  image: '',
-  title: '',
-  info: '',
-  link: '',
-  tags: [],
-  handleClick: () => {},
+  onClick: () => {},
+  children: null,
 };
 
 export default CardFilm;

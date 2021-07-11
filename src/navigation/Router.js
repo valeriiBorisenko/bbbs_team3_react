@@ -11,6 +11,7 @@ import {
   Rights,
   Movies,
   ReadAndWatch,
+  Video,
   Articles,
   Books,
 } from '../pages/index';
@@ -26,6 +27,7 @@ import {
   READ_AND_WATCH_URL,
   CATALOG_URL,
   PROFILE_URL,
+  VIDEO_URL,
   ARTICLES_URL,
   BOOKS_URL,
 } from '../config/routes';
@@ -69,6 +71,10 @@ function Router() {
 
       <Route exact path={CATALOG_URL}>
         <Catalog />
+      </Route>
+
+      <Route exact path={VIDEO_URL}>
+        <Video />
       </Route>
 
       <Route exact path={BOOKS_URL}>
