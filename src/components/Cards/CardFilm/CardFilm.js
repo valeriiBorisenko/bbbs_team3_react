@@ -7,14 +7,14 @@ import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
-import { localStVideo } from '../../../config/constants';
+import { localStChosenVideo } from '../../../config/constants';
 
 function CardFilm({ data: { image, title, info, link, tags, duration } }) {
   const { openPopupVideo } = useContext(PopupsContext);
   // Пробрасываем данные в попап
   const handleClick = () => {
     // записать дату в локал, ключ вынести в константы
-    setLocalStorageData(localStVideo, {
+    setLocalStorageData(localStChosenVideo, {
       image,
       title,
       info,
