@@ -1,8 +1,17 @@
 @import './styles/utils.scss';
 
-.rights {
+.video {
   &__title {
     margin-bottom: 25px;
+  }
+
+  &__main-card {
+    margin-top: 80px;
+  }
+  
+  &__cards {
+    margin-top: 80px;
+    margin-bottom: 80px;
   }
 
   @include atDesktop1024 {
@@ -11,3 +20,4 @@
     }
   }
 }
+

@@ -41,18 +41,16 @@ const Rights = () => {
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
-  // Стейты с данными Статьи, Теги
+  // Стейты с данными
   const [articles, setArticles] = useState(null);
   const [categories, setCategories] = useState(null);
 
-  // Загрузка данных
+  // Стейты состояний
   const [isLoadingPage, setIsLoadingPage] = useState(true);
-  // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-  // Загрузка данных при переключении пагинации
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
-  // хэндлер клика по фильтру КАТЕГОРИЯ
+  // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
@@ -63,15 +61,21 @@ const Rights = () => {
     setIsFiltersUsed(true);
   };
 
-  // функции рендеров
-  const renderTagsContainer = () => (
-    <div className="tags">
-      <ul className="tags__list">
-        {renderFilterTags(categories, 'checkbox', changeCategory)}
-      </ul>
-    </div>
-  );
+  // Фильтры страницы
+  const renderTagsContainer = () => {
+    if (articles && !isLoadingPage) {
+      return (
+        <div className="tags">
+          <ul className="tags__list">
+            {renderFilterTags(categories, 'checkbox', changeCategory)}
+          </ul>
+        </div>
+      );
+    }
+    return null;
+  };
 
+  // Карточки с видео страницы
   const renderCards = () => (
     <>
       <CardsSectionWithLines
@@ -96,7 +100,7 @@ const Rights = () => {
     </>
   );
 
-  // отрисовка контента страницы
+  // Контент страницы
   const renderMainContent = () => {
     if (!articles && !isLoadingPage) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
@@ -105,6 +109,7 @@ const Rights = () => {
     return isFiltersUsed ? <Loader isNested /> : renderCards();
   };
 
+  // Сортировка значений Тэгов для АПИ
   const getActiveTags = () => {
     if (categories) {
       return categories
@@ -115,6 +120,7 @@ const Rights = () => {
     return null;
   };
 
+  // Функция обработки запроса АПИ с карточками
   const getArticlesData = (activeCategories) => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
     const activeTags = activeCategories || getActiveTags();
@@ -131,15 +137,24 @@ const Rights = () => {
       .then((results) => setArticles(results))
       .catch((err) => console.log(err))
       .finally(() => {
-        setIsLoadingPage(false);
         setIsLoadingPaginate(false);
         setIsFiltersUsed(false);
       });
   };
 
-  const getArticlesTags = () => {
-    getRightsTags()
-      .then((tags) => {
+  // Функция обработки запросов АПИ для первой загрузки страницы
+  // Промис олл для плавного отображения
+  const getFirstPageData = () => {
+    Promise.all([
+      getRightsTags(),
+      getRightsData({
+        limit: pageSize,
+      }),
+    ])
+      .then(([tags, { results, count }]) => {
+        setPageCount(Math.ceil(count / pageSize));
+        setArticles(results);
+
         const categoriesArr = tags.map((tag) => ({
           filter: tag?.slug.toLowerCase(),
           name: changeCaseOfFirstLetter(tag?.name),
@@ -151,10 +166,13 @@ const Rights = () => {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoadingPage(false);
+      });
   };
 
-  // функция-фильтратор с использованием АПИ
+  // Функция-фильтратор с использованием АПИ
   const handleFiltration = () => {
     if (categories && isFiltersUsed) {
       const activeCategories = getActiveTags();
@@ -166,20 +184,20 @@ const Rights = () => {
     }
   };
 
-  /// Фильтрация с делэем
+  // Дэлеи для динамических запросов
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePaginate = useDebounce(getArticlesData, DELAY_DEBOUNCE);
+  // Динамические фильтры
   useEffect(() => {
     if (isFiltersUsed) {
       debounceFiltration();
     }
   }, [isFiltersUsed]);
 
-  // Первая отрисовка страницы + переход по страницам пагинации
+  // Загрузка страницы, динамическая пагинация, динамический ресайз
   useEffect(() => {
     if (isLoadingPage && pageSize) {
-      getArticlesData();
-      getArticlesTags();
+      getFirstPageData();
     }
 
     if (!isLoadingPage && !isFiltersUsed) {
@@ -188,7 +206,7 @@ const Rights = () => {
     }
   }, [pageSize, pageNumber]);
 
-  // Юз эффект для пагинации
+  // Резайз пагинации при первой загрузке
   useEffect(() => {
     const smallQuery = window.matchMedia('(max-width: 1399px)');
     const largeQuery = window.matchMedia('(max-width: 1640px)');
@@ -213,7 +231,7 @@ const Rights = () => {
     };
   }, []);
 
-  // глобальный лоадер
+  // Лоадер при загрузке страницы
   if (isLoadingPage) {
     return <Loader isCentered />;
   }
@@ -221,7 +239,7 @@ const Rights = () => {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="rights page__section fade-in">
-        <TitleH1 title={title} />
+        <TitleH1 title={title} sectionClass="rights__title" />
         {categories?.length > 1 && renderTagsContainer()}
         {renderMainContent()}
       </section>
