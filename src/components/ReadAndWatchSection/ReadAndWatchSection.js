@@ -11,7 +11,7 @@ import { FIGURES } from '../../config/constants';
 function ReadAndWatchSection({
   pageSize,
   getDataFromApi,
-  CardTemplate,
+  CardTemplateComponent,
   path,
   sectionTitle,
 }) {
@@ -107,19 +107,21 @@ function ReadAndWatchSection({
 
   function renderCardsForSlider() {
     if (sectionData) {
-      const cardArray = sectionData.map((item, i) => (
-        <CardTemplate
-          key={item?.id}
-          sectionClass="cards-section__item"
-          shape={FIGURES[i % FIGURES.length]} // нужно только для 1 вида секции
-          {...item}
-          image={item.imageUrl}
-        />
-      ));
+      const cardArray = sectionData.map((item, i) => {
+        console.log(item);
+        return (
+          <CardTemplateComponent
+            key={item?.id}
+            sectionClass="cards-section__item"
+            shape={FIGURES[i % FIGURES.length]} // нужно только для 1 вида секции
+            {...item}
+            data={item}
+          />
+        );
+      });
 
       return cardArray;
     }
-
     return [];
   }
 
@@ -158,7 +160,7 @@ function ReadAndWatchSection({
 ReadAndWatchSection.propTypes = {
   pageSize: PropTypes.number.isRequired,
   getDataFromApi: PropTypes.func.isRequired,
-  CardTemplate: PropTypes.func.isRequired,
+  CardTemplateComponent: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
   sectionTitle: PropTypes.string.isRequired,
 };

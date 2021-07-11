@@ -14,6 +14,13 @@ import {
   CardBook,
   AnimatedPageContainer,
 } from './index';
+import {
+  CATALOG_URL,
+  ARTICLES_URL,
+  MOVIES_URL,
+  VIDEO_URL,
+  BOOKS_URL,
+} from '../../config/routes';
 import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWatchSection';
 
 //! АПИ
@@ -77,13 +84,22 @@ function ReadAndWatch() {
     if (pageSize) {
       // Справочник
       return (
-        <ReadAndWatchSection
-          pageSize={pageSize}
-          getDataFromApi={getCatalogPageDatа}
-          CardTemplate={CardCatalog}
-          path="/catalog"
-          sectionTitle="Справочник"
-        />
+        <>
+          <ReadAndWatchSection
+            pageSize={pageSize}
+            getDataFromApi={getCatalogPageDatа}
+            CardTemplateComponent={CardCatalog}
+            path={CATALOG_URL}
+            sectionTitle="Справочник"
+          />
+          <ReadAndWatchSection
+            pageSize={pageSize}
+            getDataFromApi={getVideoPageData}
+            CardTemplateComponent={CardFilm}
+            path={VIDEO_URL}
+            sectionTitle="Видео"
+          />
+        </>
       );
     }
 
@@ -93,8 +109,8 @@ function ReadAndWatch() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="readwatch-page page__section fade-in">
-        {renderPageContent()}
         {/* Справочник */}
+        {renderPageContent()}
         {/* Видео */}
         {/* Статьи */}
         {/* Фильмы */}
