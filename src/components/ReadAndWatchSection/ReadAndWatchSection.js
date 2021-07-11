@@ -35,7 +35,7 @@ function ReadAndWatchSection({
     { width: 1441, itemsToShow: pageSize, itemsToScroll: pageSize },
   ];
 
-  function addNewData(newPageIndex) {
+  function addNewData() {
     // Логика: при добавлении новых блоков нужно загрузить 3 страницы начиная с последнего имеющегося элемента
     const offset = sectionData.length;
     const loadThreePages = pageSize * 3;
@@ -63,7 +63,7 @@ function ReadAndWatchSection({
       .catch((error) => console.log(error));
   }, [pageSize]);
 
-  function slideBackHandler(currentItem, newPageIndex) {
+  function slideBackHandler() {
     console.log('=== slideBackHandler FUNC');
     setPageIndex((prevIndex) => prevIndex - 1);
   }
@@ -77,8 +77,9 @@ function ReadAndWatchSection({
     const pagesLoadedNow = ref.current.getNumOfPages();
     console.log('pagesLoadedNow', pagesLoadedNow);
     const isPenultimatePage = pagesLoadedNow - 2 === newPageIndex;
-    // const isScrollNext = newPageIndex > pageIndex;
-    const isLastPage = pagesLoadedNow - 1 === pageIndex;
+    const isLastPage = pagesLoadedNow - 1 === newPageIndex;
+    console.log('pageIndex', pageIndex);
+    console.log('isLastPage', isLastPage);
 
     const isNoMoreDataToLoad = pagesLoadedNow === totalPages;
     if (isNoMoreDataToLoad) {
@@ -91,7 +92,7 @@ function ReadAndWatchSection({
       console.log('ЭТО ПРЕДПОСЛЕДНЯЯ ИЛИ ПОСЛЕДНЯЯ СТРАНИЦА');
 
       // sectionData.length
-      addNewData(newPageIndex)
+      addNewData()
         .then(({ results }) => {
           console.log(
             'мы загрузили дополнительные данные и прибавили к текущим'
