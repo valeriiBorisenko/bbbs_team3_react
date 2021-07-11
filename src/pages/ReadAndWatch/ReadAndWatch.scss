@@ -21,7 +21,6 @@
   }
 }
 
-
 // настройки слайдера
 .readwatch__section {
   position: relative;
@@ -42,10 +41,8 @@
 
 .rec.rec-arrow {
   position: absolute;
-  /* visibility: hidden; */
   font-size: 0;
   box-shadow: none;
-  /* border: 1px solid black; */
   border: none; 
   width: 30px;
   min-width: 30px;
@@ -99,25 +96,29 @@
   color: none;
   background-color: transparent;
   box-shadow: none;
+
 }
 
-/* свои фокус-стили приятные */
+.rec.rec-arrow.rec-arrow-right:hover {
+  transform: translateX(4px);
+}
+
+.rec.rec-arrow.rec-arrow-left:hover {
+  transform: translateX(-4px);
+}
+
+.rec.rec-arrow.rec-arrow-left:disabled:hover,
+.rec.rec-arrow.rec-arrow-right:disabled:hover {
+  transform: none;
+}
+
+/* выделение квадратиком при фокусе */
 .rec.rec-arrow.rec-arrow-right:focus,
 .rec.rec-arrow.rec-arrow-left:focus {
-  outline: 1px solid #224CFF;
+  // outline: 1px solid #224CFF;
 }
 
-// @media (max-width: 820px) {
-//   .rec.rec-arrow.rec-arrow-left {
-//     right: 45px;
-//   }
-// }
-
 @media (max-width: 639px) {
-  // .readwatch__container {
-  //   padding-bottom: 10px;
-  // }
-
   .rec.rec-arrow.rec-arrow-right,
   .rec.rec-arrow.rec-arrow-left {
     top: 5px;
@@ -137,9 +138,7 @@
   }
 }
 
-
 //////////////////////
-
 .readwatch__container {
   display: flex;
   justify-content: center;
@@ -160,6 +159,8 @@
   line-height: 50px;
   text-align: center;
   color: #224cff;
+
+  transition: all 0.3s linear;
 }
 
 .readwatch__heading:hover {
@@ -195,17 +196,6 @@
     font-size: 23px;
     line-height: 30px;
   }
-
-  // .readwatch__back {
-  //   margin-right: 15px;
-  //   width: 20px;
-  //   height: 20px;
-  // }
-
-  // .readwatch__forward {
-  //   width: 20px;
-  //   height: 20px;
-  // }
 }
 
 @media (max-width: 1440px) {
