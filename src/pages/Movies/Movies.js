@@ -178,25 +178,37 @@ function Movies() {
     if (!moviesPageData && !isLoading) {
       return renderAnimatedContainer();
     }
-    return isFiltersUsed ? (
-      <Loader isNested />
-    ) : (
-      <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
-        {moviesPageData.map((movie) => (
-          <li className="card-container" key={movie.id}>
-            <CardFilm
-              data={movie}
-              pageCount={pageCount}
-              pageNumber={pageNumber}
-              setPageNumber={setPageNumber}
-            />
-            <CardAnnotation description={movie.annotation} />
-          </li>
-        ))}
-      </ul>
+    return (
+      <>
+        {isLoadingPaginate ? (
+          <Loader isNested />
+        ) : (
+          <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
+            {moviesPageData.map((movie) => (
+              <li className="card-container" key={movie.id}>
+                <CardFilm
+                  data={movie}
+                  pageCount={pageCount}
+                  pageNumber={pageNumber}
+                  setPageNumber={setPageNumber}
+                />
+                <CardAnnotation description={movie.annotation} />
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {pageCount > 1 && (
+          <Paginate
+            sectionClass="cards-section__pagination"
+            pageCount={pageCount}
+            value={pageNumber}
+            onChange={setPageNumber}
+          />
+        )}
+      </>
     );
   };
-
   // главная функция рендеринга
   const renderPageContent = () => (
     <>
@@ -212,16 +224,7 @@ function Movies() {
       )}
 
       {/* рендерим фильмы */}
-      {isLoadingPaginate ? <Loader isNested /> : renderMoviesContainer()}
-
-      {pageCount > 1 && (
-        <Paginate
-          sectionClass="cards-section__pagination"
-          pageCount={pageCount}
-          value={pageNumber}
-          onChange={setPageNumber}
-        />
-      )}
+      {isFiltersUsed ? <Loader isNested /> : renderMoviesContainer()}
     </>
   );
 
