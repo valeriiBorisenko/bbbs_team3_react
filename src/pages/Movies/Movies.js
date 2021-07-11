@@ -23,7 +23,7 @@ import {
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 2,
-  small: 4,
+  tablet: 4,
   medium: 12,
   big: 16,
 };
@@ -140,6 +140,34 @@ function Movies() {
     }
   }, [pageSize, pageNumber]);
 
+  useEffect(() => {
+    const mobileQuery = window.matchMedia('(max-width: 767px)');
+    const smallQuery = window.matchMedia('(max-width: 1399px)');
+    const largeQuery = window.matchMedia('(max-width: 1640px)');
+
+    const listener = () => {
+      if (mobileQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.mobile);
+      } else if (smallQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.tablet);
+      } else if (largeQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
+      } else {
+        setPageSize(PAGE_SIZE_PAGINATE.big);
+      }
+    };
+    listener();
+    mobileQuery.addEventListener('change', listener);
+    smallQuery.addEventListener('change', listener);
+    largeQuery.addEventListener('change', listener);
+
+    return () => {
+      mobileQuery.removeEventListener('change', listener);
+      smallQuery.removeEventListener('change', listener);
+      largeQuery.removeEventListener('change', listener);
+    };
+  }, []);
+
   // контейнер заглушки
   function renderAnimatedContainer() {
     return <AnimatedPageContainer titleText={textStubNoData} />;
@@ -196,34 +224,6 @@ function Movies() {
       )}
     </>
   );
-
-  useEffect(() => {
-    const mobileQuery = window.matchMedia('(max-width: 767px)');
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
-
-    const listener = () => {
-      if (mobileQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.mobile);
-      } else if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else if (largeQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.medium);
-      } else {
-        setPageSize(PAGE_SIZE_PAGINATE.big);
-      }
-    };
-    listener();
-    mobileQuery.addEventListener('change', listener);
-    smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
-
-    return () => {
-      mobileQuery.removeEventListener('change', listener);
-      smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
-    };
-  }, []);
 
   // глобальный лоадер
   if (isLoading) {
