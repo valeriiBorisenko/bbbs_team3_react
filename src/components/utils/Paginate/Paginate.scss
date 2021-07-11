@@ -55,16 +55,17 @@
     }
   }
   &__arrow-element {
-    background-image: url('../../../assets/arrow.svg');
+    background-image: url('../../../assets/pagination-arrow-next_black.svg');
     width: 30px;
     height: 30px;
     color: transparent;
     background-size: contain;
     background-repeat: no-repeat;
     margin: 0 0 0 40px;
+    transition: all 0.3s linear;
 
     &_type_previous {
-      transform: rotate(180deg);
+      background-image: url('../../../assets/pagination-arrow-prev_black.svg');
       margin: 0 40px 0 0;
     }
 
@@ -72,8 +73,19 @@
       visibility: hidden;
       opacity: 0;
       pointer-events: none;
+      transform: none;
     }
   }
+}
+
+.pagination__arrow-element.pagination__arrow-element_type_next:hover {
+  transform: translateX(5px);
+  // transform: scale(1.1);
+}
+
+.pagination__arrow-element.pagination__arrow-element_type_previous:hover {
+  transform: translateX(-5px);
+  // transform: scale(1.1);
 }
 
 @include atDesktop1024 {

@@ -13,7 +13,7 @@ const Paginate = ({ pageCount, sectionClass, value, onChange }) => {
       activeLinkClassName="pagination__element-link_type_active"
       previousClassName="pagination__element pagination__arrow-element pagination__arrow-element_type_previous"
       breakClassName="pagination__element"
-      nextClassName="pagination__element pagination__arrow-element"
+      nextClassName="pagination__element pagination__arrow-element pagination__arrow-element_type_next"
       disabledClassName="pagination__arrow-element_type_disabled"
       pageCount={pageCount}
       pageRangeDisplayed={3}
