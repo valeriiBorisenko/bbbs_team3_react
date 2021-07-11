@@ -78,6 +78,26 @@
   }
 }
 
+.pagination__element.selected {
+  pointer-events: none;
+}
+
+a[aria-label^="Page"] {
+  user-select: none;
+}
+
+a[aria-label="Next page"] {
+  user-select: none;
+  display: inline-block;
+  height: 100%;
+}
+
+a[aria-label="Previous page"] {
+  user-select: none;
+  display: inline-block;
+  height: 100%;
+}
+
 .pagination__arrow-element.pagination__arrow-element_type_next:hover {
   transform: translateX(5px);
   // transform: scale(1.1);
