@@ -17,6 +17,7 @@ const PopupVideo = ({ isOpen, onClose }) => {
   //! если убирать лоадер вообще, то можно оставить embedSrc и загрузку даты из стораджа
   // даже не понадобится еффекты и стейты
   const data = getLocalStorageData(localStChosenVideo);
+
   // const embedSrc = parserLinkYoutube(data?.link);
 
   // const [data, setData] = useState(null);
@@ -58,21 +59,12 @@ const PopupVideo = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    console.log('USE EFFECT 2');
-    setIsLoading(false);
-  }, []);
-
   function renderPopup() {
     console.log('renderPopup FUNC');
     if (isLoading) {
       console.log('isLoading IF');
       return <Loader isNested />;
     }
-
-    // console.log(isLoading);
-    console.log(data);
-    // console.log(videoSrc);
 
     if (data) {
       console.log('data && videoSrc IF ');
