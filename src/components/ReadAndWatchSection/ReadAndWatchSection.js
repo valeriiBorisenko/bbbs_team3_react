@@ -29,7 +29,7 @@ function ReadAndWatchSection({
 
   const slidesPadding = [0, 15, 0, 15]; // вынести в константы
   const breakPoints = [
-    { width: 820, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: 700, itemsToShow: pageSize, itemsToScroll: pageSize },
     { width: 1120, itemsToShow: pageSize, itemsToScroll: pageSize },
     { width: 1440, itemsToShow: pageSize, itemsToScroll: pageSize },
     { width: 1441, itemsToShow: pageSize, itemsToScroll: pageSize },
@@ -148,7 +148,7 @@ function ReadAndWatchSection({
       <div className="readwatch__slider-container">
         <Carousel
           ref={ref}
-          transitionMs={900}
+          transitionMs={1250}
           pagination={false}
           outerSpacing={0}
           itemPadding={slidesPadding}
