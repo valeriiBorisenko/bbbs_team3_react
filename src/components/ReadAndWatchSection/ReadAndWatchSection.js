@@ -2,6 +2,11 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
+import {
+  PAGES_TO_LOAD,
+  INDEX_ERROR_FOR_PENULTIMATE_PAGE,
+  INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX,
+} from './constants';
 import { TitleH3, LinkableHeading } from './index';
 import { FIGURES, COLORS } from '../../config/constants';
 
@@ -38,7 +43,7 @@ function ReadAndWatchSection({
   function addNewData() {
     // Логика: при добавлении новых блоков нужно загрузить 3 страницы начиная с последнего имеющегося элемента
     const offset = sectionData.length;
-    const loadThreePages = pageSize * 3;
+    const loadThreePages = pageSize * PAGES_TO_LOAD;
     return getDataFromApi({ limit: loadThreePages, offset });
   }
 
@@ -76,8 +81,10 @@ function ReadAndWatchSection({
 
     const pagesLoadedNow = ref.current.getNumOfPages();
     console.log('pagesLoadedNow', pagesLoadedNow);
-    const isPenultimatePage = pagesLoadedNow - 2 === newPageIndex;
-    const isLastPage = pagesLoadedNow - 1 === newPageIndex;
+    const isPenultimatePage =
+      pagesLoadedNow - INDEX_ERROR_FOR_PENULTIMATE_PAGE === newPageIndex;
+    const isLastPage =
+      pagesLoadedNow - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX === newPageIndex;
     console.log('pageIndex', pageIndex);
     console.log('isLastPage', isLastPage);
 
@@ -165,7 +172,7 @@ ReadAndWatchSection.propTypes = {
   path: PropTypes.string.isRequired,
   sectionTitle: PropTypes.string.isRequired,
   breakpoints: PropTypes.objectOf(PropTypes.number).isRequired,
-  elemPaddings: PropTypes.number.isRequired,
+  elemPaddings: PropTypes.arrayOf(PropTypes.number).isRequired,
   transitionDelay: PropTypes.number.isRequired,
 };
 
