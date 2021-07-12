@@ -24,6 +24,7 @@ function CardFilm({ data: { image, title, info, link, tags, duration } }) {
     });
     openPopupVideo();
   };
+  console.log(title, duration);
 
   // Стейт записывает ширину окна
   const [isMobile, setIsMobile] = useState(false);
@@ -131,7 +132,7 @@ CardFilm.propTypes = {
   info: PropTypes.string,
   link: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.object),
-  duration: PropTypes.number,
+  duration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 CardFilm.defaultProps = {
@@ -141,7 +142,7 @@ CardFilm.defaultProps = {
   info: '',
   link: '',
   tags: [],
-  duration: false,
+  duration: '',
 };
 
 export default CardFilm;

@@ -42,7 +42,7 @@ CardBook.propTypes = {
   type: PropTypes.objectOf(PropTypes.any),
   title: PropTypes.string,
   author: PropTypes.string,
-  year: PropTypes.string,
+  year: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   url: PropTypes.string,
   annotation: PropTypes.string,
 };
