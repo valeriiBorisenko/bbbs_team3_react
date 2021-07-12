@@ -1,6 +1,7 @@
 import './CardBook.scss';
 import PropTypes from 'prop-types';
 import { Card, TitleH2 } from '../../utils/index';
+import CardAnnotation from '../CardAnnotation/CardAnnotation';
 
 function CardBook({
   data: {
@@ -9,27 +10,31 @@ function CardBook({
     year,
     type: { color },
     url,
+    annotation,
   },
 }) {
   const backgroundColor = { backgroundColor: color };
 
   return (
-    <Card sectionClass="card-book">
-      <a
-        className="card-book__cover"
-        style={backgroundColor}
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <TitleH2 sectionClass="card-book__title" title={title} />
-        <div className="card-book__info">
-          <div className="card-book__border" />
-          <p className="caption card-book__text">{author}</p>
-          <p className="caption card-book__text">{year}</p>
-        </div>
-      </a>
-    </Card>
+    <article className="card-container">
+      <Card sectionClass="card-book">
+        <a
+          className="card-book__cover"
+          style={backgroundColor}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <TitleH2 sectionClass="card-book__title" title={title} />
+          <div className="card-book__info">
+            <div className="card-book__border" />
+            <p className="caption card-book__text">{author}</p>
+            <p className="caption card-book__text">{year}</p>
+          </div>
+        </a>
+      </Card>
+      <CardAnnotation description={annotation} />
+    </article>
   );
 }
 CardBook.propTypes = {
@@ -39,6 +44,7 @@ CardBook.propTypes = {
   author: PropTypes.string,
   year: PropTypes.string,
   url: PropTypes.string,
+  annotation: PropTypes.string,
 };
 
 CardBook.defaultProps = {
@@ -48,6 +54,7 @@ CardBook.defaultProps = {
   author: '',
   year: '',
   url: '',
+  annotation: '',
 };
 
 export default CardBook;
