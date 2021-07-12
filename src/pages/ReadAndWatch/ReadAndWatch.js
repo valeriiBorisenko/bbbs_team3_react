@@ -35,10 +35,11 @@ import { getBooksPageData } from '../../api/books-page';
 
 function ReadAndWatch() {
   // константы
-  const { headTitle, headDescription } = readAndWatchPageTexts;
+  const { headTitle, headDescription, pageTitles } = readAndWatchPageTexts;
+  const { catalogTitle, articlesTitle, moviesTitle, videosTitle, booksTitle } =
+    pageTitles;
   const { S, M, L } = RAW_SLIDER_BREAKPOINTS;
   const { one, two, three, four } = ELEMS_PER_SLIDE;
-  console.log(one);
 
   // определяет сколько объектов показывать в ряду
   const [pageSize, setPageSize] = useState(null);
@@ -53,7 +54,6 @@ function ReadAndWatch() {
     // 3 элемента в ряду
     const querySizeL = window.matchMedia(`(max-width: ${L}px)`);
     // больше 1440px будет 4 элемента в ряду
-    // const querySizeXL = window.matchMedia(`(max-width: ${XL}px)`);
 
     const listener = () => {
       if (querySizeS.matches) {
@@ -90,7 +90,7 @@ function ReadAndWatch() {
             getDataFromApi={getCatalogPageDatа}
             CardTemplateComponent={CardCatalog}
             path={CATALOG_URL}
-            sectionTitle="Справочник"
+            sectionTitle={catalogTitle}
           />
           <ReadAndWatchSection
             breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -100,7 +100,7 @@ function ReadAndWatch() {
             getDataFromApi={getVideoPageData}
             CardTemplateComponent={CardFilm}
             path={VIDEO_URL}
-            sectionTitle="Видео"
+            sectionTitle={videosTitle}
           />
           <ReadAndWatchSection
             breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -110,7 +110,7 @@ function ReadAndWatch() {
             getDataFromApi={getArticlesPageData}
             CardTemplateComponent={CardArticle}
             path={ARTICLES_URL}
-            sectionTitle="Статьи"
+            sectionTitle={articlesTitle}
           />
           <ReadAndWatchSection
             breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -120,7 +120,7 @@ function ReadAndWatch() {
             getDataFromApi={getMoviesPageData}
             CardTemplateComponent={CardFilm}
             path={MOVIES_URL}
-            sectionTitle="Фильмы"
+            sectionTitle={moviesTitle}
           />
           <ReadAndWatchSection
             breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -130,7 +130,7 @@ function ReadAndWatch() {
             getDataFromApi={getBooksPageData}
             CardTemplateComponent={CardBook}
             path={BOOKS_URL}
-            sectionTitle="Книги"
+            sectionTitle={booksTitle}
           />
         </>
       );
