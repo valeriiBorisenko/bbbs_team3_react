@@ -8,6 +8,7 @@ const readAndWatchPageTexts = {
     videosTitle: 'Видео',
     booksTitle: 'Книги',
   },
+  paragraphNoContent: 'В данной категории пока ничего нет.',
 };
 
 export default readAndWatchPageTexts;

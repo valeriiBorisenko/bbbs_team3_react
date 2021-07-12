@@ -33,14 +33,15 @@ import getArticlesPageData from '../../api/articles-page';
 import { getMoviesPageData } from '../../api/movies-page';
 import { getBooksPageData } from '../../api/books-page';
 
-function ReadAndWatch() {
-  // константы
-  const { headTitle, headDescription, pageTitles } = readAndWatchPageTexts;
-  const { catalogTitle, articlesTitle, moviesTitle, videosTitle, booksTitle } =
-    pageTitles;
-  const { S, M, L } = RAW_SLIDER_BREAKPOINTS;
-  const { one, two, three, four } = ELEMS_PER_SLIDE;
+// константы страницы
+const { headTitle, headDescription, pageTitles, paragraphNoContent } =
+  readAndWatchPageTexts;
+const { catalogTitle, articlesTitle, moviesTitle, videosTitle, booksTitle } =
+  pageTitles;
+const { S, M, L } = RAW_SLIDER_BREAKPOINTS;
+const { one, two, three, four } = ELEMS_PER_SLIDE;
 
+function ReadAndWatch() {
   // определяет сколько объектов показывать в ряду
   const [pageSize, setPageSize] = useState(null);
 
@@ -78,7 +79,7 @@ function ReadAndWatch() {
     };
   }, []);
 
-  function renderPageContent() {
+  function renderUniqueSliderSections() {
     if (pageSize) {
       return (
         <>
@@ -86,6 +87,7 @@ function ReadAndWatch() {
             breakpoints={RAW_SLIDER_BREAKPOINTS}
             elemPaddings={RAW_SLIDER_PADDINGS}
             transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+            paragraphNoContentText={paragraphNoContent}
             pageSize={pageSize}
             getDataFromApi={getCatalogPageDatа}
             CardTemplateComponent={CardCatalog}
@@ -96,6 +98,7 @@ function ReadAndWatch() {
             breakpoints={RAW_SLIDER_BREAKPOINTS}
             elemPaddings={RAW_SLIDER_PADDINGS}
             transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+            paragraphNoContentText={paragraphNoContent}
             pageSize={pageSize}
             getDataFromApi={getVideoPageData}
             CardTemplateComponent={CardFilm}
@@ -106,6 +109,7 @@ function ReadAndWatch() {
             breakpoints={RAW_SLIDER_BREAKPOINTS}
             elemPaddings={RAW_SLIDER_PADDINGS}
             transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+            paragraphNoContentText={paragraphNoContent}
             pageSize={pageSize}
             getDataFromApi={getArticlesPageData}
             CardTemplateComponent={CardArticle}
@@ -114,8 +118,9 @@ function ReadAndWatch() {
           />
           <ReadAndWatchSection
             breakpoints={RAW_SLIDER_BREAKPOINTS}
-            elemPaddings={RAW_SLIDER_PADDINGS}
+            elemaddings={RAW_SLIDER_PADDINGS}
             transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+            paragraphNoContentText={paragraphNoContent}
             pageSize={pageSize}
             getDataFromApi={getMoviesPageData}
             CardTemplateComponent={CardFilm}
@@ -126,6 +131,7 @@ function ReadAndWatch() {
             breakpoints={RAW_SLIDER_BREAKPOINTS}
             elemPaddings={RAW_SLIDER_PADDINGS}
             transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+            paragraphNoContentText={paragraphNoContent}
             pageSize={pageSize}
             getDataFromApi={getBooksPageData}
             CardTemplateComponent={CardBook}
@@ -142,7 +148,7 @@ function ReadAndWatch() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="readwatch-page page__section fade-in">
-        {renderPageContent()}
+        {renderUniqueSliderSections()}
       </section>
     </BasePage>
   );

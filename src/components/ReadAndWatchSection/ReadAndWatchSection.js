@@ -7,7 +7,7 @@ import {
   INDEX_ERROR_FOR_PENULTIMATE_PAGE,
   INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX,
 } from './constants';
-import { TitleH3, LinkableHeading } from './index';
+import { TitleH3, LinkableHeading, NoDataNotificationBox } from './index';
 import { FIGURES, COLORS } from '../../config/constants';
 
 function ReadAndWatchSection({
@@ -19,6 +19,7 @@ function ReadAndWatchSection({
   breakpoints,
   elemPaddings,
   transitionDelay,
+  paragraphNoContentText,
 }) {
   console.log('ReadAndWatchSection', sectionTitle);
   const { S, M, L, XL } = breakpoints;
@@ -32,6 +33,7 @@ function ReadAndWatchSection({
 
   console.log(`размер страницы сейчас: ${pageSize}`);
   console.log(`я на ${pageIndex} странице из ${totalPages} страниц`);
+  console.log('paragraphNoContentText', paragraphNoContentText);
 
   const breakPoints = [
     { width: S, itemsToShow: pageSize, itemsToScroll: pageSize },
@@ -58,9 +60,6 @@ function ReadAndWatchSection({
 
     getDataFromApi({ limit: loadThreePages, offset })
       .then(({ results, count }) => {
-        // console.log(count);
-        // console.log(pageSize);
-        // console.log(count / pageSize);
         setTotalPages(Math.ceil(count / pageSize));
         setSectionData(results);
       })
@@ -134,6 +133,35 @@ function ReadAndWatchSection({
     return [];
   }
 
+  // <NoDataNotificationBox text={paragraphNoContentText} sectionClass="no-data-text_padding-both" />
+  function renderSliderSection() {
+    if (sectionData && sectionData?.length === 0) {
+      return (
+        <NoDataNotificationBox
+          text={paragraphNoContentText}
+          sectionClass="no-data-text_padding-both"
+        />
+      );
+    }
+
+    return (
+      <Carousel
+        ref={ref}
+        transitionMs={transitionDelay}
+        pagination={false}
+        outerSpacing={0}
+        itemPadding={elemPaddings}
+        breakPoints={breakPoints}
+        disableArrowsOnEnd
+        showEmptySlots
+        onNextEnd={slideNextHandler}
+        onPrevEnd={slideBackHandler}
+      >
+        {renderCardsForSlider()}
+      </Carousel>
+    );
+  }
+
   return (
     <section className="readwatch__section">
       <div className="readwatch__container">
@@ -145,22 +173,7 @@ function ReadAndWatchSection({
           Component={TitleH3}
         />
       </div>
-      <div className="readwatch__slider-container">
-        <Carousel
-          ref={ref}
-          transitionMs={transitionDelay}
-          pagination={false}
-          outerSpacing={0}
-          itemPadding={elemPaddings}
-          breakPoints={breakPoints}
-          disableArrowsOnEnd
-          showEmptySlots
-          onNextEnd={slideNextHandler}
-          onPrevEnd={slideBackHandler}
-        >
-          {renderCardsForSlider()}
-        </Carousel>
-      </div>
+      <div className="readwatch__slider-container">{renderSliderSection()}</div>
     </section>
   );
 }
@@ -174,6 +187,11 @@ ReadAndWatchSection.propTypes = {
   breakpoints: PropTypes.objectOf(PropTypes.number).isRequired,
   elemPaddings: PropTypes.arrayOf(PropTypes.number).isRequired,
   transitionDelay: PropTypes.number.isRequired,
+  paragraphNoContentText: PropTypes.string,
+};
+
+ReadAndWatchSection.defaultProps = {
+  paragraphNoContentText: 'Данных нет',
 };
 
 export default ReadAndWatchSection;
