@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
 import { TitleH3, LinkableHeading } from './index';
-import { FIGURES } from '../../config/constants';
+import { FIGURES, COLORS } from '../../config/constants';
 
 function ReadAndWatchSection({
   pageSize,
@@ -112,11 +112,15 @@ function ReadAndWatchSection({
         console.log(item);
         return (
           <CardTemplateComponent
-            key={item?.id}
+            key={`${sectionTitle}-${item?.id}`}
             sectionClass="cards-section__item"
-            shape={FIGURES[i % FIGURES.length]} // нужно только для 1 вида секции
-            {...item}
+            // для секции Фильмы, Книги, Видео, Статьи
             data={item}
+            // для секции Справочник
+            shape={FIGURES[i % FIGURES.length]}
+            // для секции Статьи
+            color={COLORS[(i + 1) % COLORS.length]}
+            {...item}
           />
         );
       });
@@ -175,9 +179,9 @@ export default ReadAndWatchSection;
 * статья
 <CardArticle data="" color="" sectionClass="" />
 * фильмы
-<CardFilm data="" handleClick="" children="" />
+<CardFilm data="" />
 * видео
-<CardFilm data="" handleClick="" children="" />
+<CardFilm data="" />
 * книги
 <CardBook data="" />
 */
