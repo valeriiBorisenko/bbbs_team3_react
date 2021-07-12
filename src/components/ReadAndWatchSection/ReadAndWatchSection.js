@@ -1,7 +1,4 @@
-/* eslint-disable no-undef */
 /* eslint-disable react/jsx-props-no-spreading */
-// /* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
@@ -14,8 +11,12 @@ function ReadAndWatchSection({
   CardTemplateComponent,
   path,
   sectionTitle,
+  breakpoints,
+  elemPaddings,
+  transitionDelay,
 }) {
   console.log('ReadAndWatchSection', sectionTitle);
+  const { S, M, L, XL } = breakpoints;
   const ref = useRef();
 
   // индекс страницы
@@ -27,19 +28,17 @@ function ReadAndWatchSection({
   console.log(`размер страницы сейчас: ${pageSize}`);
   console.log(`я на ${pageIndex} странице из ${totalPages} страниц`);
 
-  const slidesPadding = [0, 15, 0, 15]; // вынести в константы
   const breakPoints = [
-    { width: 700, itemsToShow: pageSize, itemsToScroll: pageSize },
-    { width: 1120, itemsToShow: pageSize, itemsToScroll: pageSize },
-    { width: 1440, itemsToShow: pageSize, itemsToScroll: pageSize },
-    { width: 1441, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: S, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: M, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: L, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: XL, itemsToShow: pageSize, itemsToScroll: pageSize },
   ];
 
   function addNewData() {
     // Логика: при добавлении новых блоков нужно загрузить 3 страницы начиная с последнего имеющегося элемента
     const offset = sectionData.length;
     const loadThreePages = pageSize * 3;
-    // лучше всего limit умножать на 2 или 3, чтобы получить 2 страницы
     return getDataFromApi({ limit: loadThreePages, offset });
   }
 
@@ -71,7 +70,6 @@ function ReadAndWatchSection({
   // если хочешь вставить дебаунс, то придется на событие onchange ориентироваться и добавлять одинаковое поведение везде
   // либо надо в slideBackHandler и slideNextHandler прогонять через дебаунс
   function slideNextHandler(currentItem, newPageIndex) {
-    // console.log(currentItem);
     console.log('=== slideToNextHandler FUNC');
     console.log('newPageIndex', newPageIndex);
     console.log('totalPages', totalPages);
@@ -93,7 +91,6 @@ function ReadAndWatchSection({
     if (isPenultimatePage || isLastPage) {
       console.log('ЭТО ПРЕДПОСЛЕДНЯЯ ИЛИ ПОСЛЕДНЯЯ СТРАНИЦА');
 
-      // sectionData.length
       addNewData()
         .then(({ results }) => {
           console.log(
@@ -110,23 +107,20 @@ function ReadAndWatchSection({
 
   function renderCardsForSlider() {
     if (sectionData) {
-      const cardArray = sectionData.map((item, i) => {
-        console.log(item);
-        return (
-          <CardTemplateComponent
-            key={`${sectionTitle}-${item?.id}`}
-            sectionClass="cards-section__item"
-            // для "статей" надо добавлять card-container_type_article
-            // для секции Фильмы, Книги, Видео, Статьи
-            data={item}
-            // для секции Справочник
-            shape={FIGURES[i % FIGURES.length]}
-            // для секции Статьи
-            color={COLORS[(i + 1) % COLORS.length]}
-            {...item}
-          />
-        );
-      });
+      const cardArray = sectionData.map((item, i) => (
+        <CardTemplateComponent
+          key={`${sectionTitle}-${item?.id}`}
+          sectionClass="cards-section__item"
+          // для "статей" надо добавлять card-container_type_article
+          // для секции Фильмы, Книги, Видео, Статьи
+          data={item}
+          // для секции Справочник
+          shape={FIGURES[i % FIGURES.length]}
+          // для секции Статьи
+          color={COLORS[(i + 1) % COLORS.length]}
+          {...item}
+        />
+      ));
 
       return cardArray;
     }
@@ -144,14 +138,13 @@ function ReadAndWatchSection({
           Component={TitleH3}
         />
       </div>
-      {/* мой контейнер */}
       <div className="readwatch__slider-container">
         <Carousel
           ref={ref}
-          transitionMs={1250}
+          transitionMs={transitionDelay}
           pagination={false}
           outerSpacing={0}
-          itemPadding={slidesPadding}
+          itemPadding={elemPaddings}
           breakPoints={breakPoints}
           disableArrowsOnEnd
           showEmptySlots
@@ -171,48 +164,9 @@ ReadAndWatchSection.propTypes = {
   CardTemplateComponent: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
   sectionTitle: PropTypes.string.isRequired,
+  breakpoints: PropTypes.objectOf(PropTypes.number).isRequired,
+  elemPaddings: PropTypes.number.isRequired,
+  transitionDelay: PropTypes.number.isRequired,
 };
 
 export default ReadAndWatchSection;
-
-// как заполнять компоненты карточек
-/*
-* каталог
-<CardCatalog title="" shape="" image="" sectionClass="" />
-* статья
-<CardArticle data="" color="" sectionClass="" />
-* фильмы
-<CardFilm data="" />
-* видео
-<CardFilm data="" />
-* книги
-<CardBook data="" />
-*/
-
-/* <ReactPaginate
-  pageCount={pageCount}
-  marginPagesDisplayed={0}
-  pageRangeDisplayed={perPage}
-  containerClassName="readwatch__pagination"
-  previousClassName="readwatch__back"
-  nextClassName="readwatch__forward"
-  previousLinkClassName="readwatch__back-link"
-  nextLinkClassName="readwatch__forward-link"
-  nextLabel=""
-  previousLabel=""
-  onPageChange={handlePageClick}
-/> */
-
-/* <CardCatalog {...{}}
-              sectionClass="cards-section__item"
-              key={item?.id}
-              props={...item}
-              title={item?.title}
-              image={item?.imageUrl}
-              shape={FIGURES[index % FIGURES.length]}
-            /> */
-
-//     <ul className="readwatch__item-grid">{renderCards()}</ul>
-// <div className="readwatch__item-grid">
-//   <Carousel />
-// </div>

@@ -19,6 +19,12 @@ import {
   VIDEO_URL,
   BOOKS_URL,
 } from '../../config/routes';
+import {
+  RAW_DELAY_SLIDER_TRANSITION,
+  RAW_SLIDER_PADDINGS,
+  RAW_SLIDER_BREAKPOINTS,
+  ELEMS_PER_SLIDE,
+} from './constants';
 import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWatchSection';
 // АПИ
 import getCatalogPageDatа from '../../api/catalog-page';
@@ -28,7 +34,11 @@ import { getMoviesPageData } from '../../api/movies-page';
 import { getBooksPageData } from '../../api/books-page';
 
 function ReadAndWatch() {
+  // константы
   const { headTitle, headDescription } = readAndWatchPageTexts;
+  const { S, M, L } = RAW_SLIDER_BREAKPOINTS;
+  const { one, two, three, four } = ELEMS_PER_SLIDE;
+  console.log(one);
 
   // определяет сколько объектов показывать в ряду
   const [pageSize, setPageSize] = useState(null);
@@ -36,29 +46,27 @@ function ReadAndWatch() {
   //! чтобы сделать лоадер делаем 5 стейтов и спускаем в каждую секцию сеттер типо isCatalogDataLoaded, как только все 5 станут ТРУ глобальный лоадер можно вырубать
 
   useEffect(() => {
-    console.log('юзЕФФЕКТ -- определи размер экрана');
     // 1 элемент в ряду
-    const querySizeS = window.matchMedia('(max-width: 700px)');
+    const querySizeS = window.matchMedia(`(max-width: ${S}px)`);
     // 2 элемента в ряду
-    const querySizeM = window.matchMedia('(max-width: 1120px)');
+    const querySizeM = window.matchMedia(`(max-width: ${M}px)`);
     // 3 элемента в ряду
-    const querySizeL = window.matchMedia('(max-width: 1440px)');
+    const querySizeL = window.matchMedia(`(max-width: ${L}px)`);
     // больше 1440px будет 4 элемента в ряду
+    // const querySizeXL = window.matchMedia(`(max-width: ${XL}px)`);
 
     const listener = () => {
       if (querySizeS.matches) {
-        setPageSize(1);
+        setPageSize(one);
       } else if (querySizeM.matches) {
-        setPageSize(2);
+        setPageSize(two);
       } else if (querySizeL.matches) {
-        setPageSize(3);
+        setPageSize(three);
       } else {
-        setPageSize(4);
+        setPageSize(four);
       }
     };
     listener();
-
-    // console.log(pageSize);
 
     querySizeS.addEventListener('change', listener);
     querySizeM.addEventListener('change', listener);
@@ -75,6 +83,9 @@ function ReadAndWatch() {
       return (
         <>
           <ReadAndWatchSection
+            breakpoints={RAW_SLIDER_BREAKPOINTS}
+            elemPaddings={RAW_SLIDER_PADDINGS}
+            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
             pageSize={pageSize}
             getDataFromApi={getCatalogPageDatа}
             CardTemplateComponent={CardCatalog}
@@ -82,6 +93,9 @@ function ReadAndWatch() {
             sectionTitle="Справочник"
           />
           <ReadAndWatchSection
+            breakpoints={RAW_SLIDER_BREAKPOINTS}
+            elemPaddings={RAW_SLIDER_PADDINGS}
+            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
             pageSize={pageSize}
             getDataFromApi={getVideoPageData}
             CardTemplateComponent={CardFilm}
@@ -89,6 +103,9 @@ function ReadAndWatch() {
             sectionTitle="Видео"
           />
           <ReadAndWatchSection
+            breakpoints={RAW_SLIDER_BREAKPOINTS}
+            elemPaddings={RAW_SLIDER_PADDINGS}
+            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
             pageSize={pageSize}
             getDataFromApi={getArticlesPageData}
             CardTemplateComponent={CardArticle}
@@ -96,6 +113,9 @@ function ReadAndWatch() {
             sectionTitle="Статьи"
           />
           <ReadAndWatchSection
+            breakpoints={RAW_SLIDER_BREAKPOINTS}
+            elemPaddings={RAW_SLIDER_PADDINGS}
+            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
             pageSize={pageSize}
             getDataFromApi={getMoviesPageData}
             CardTemplateComponent={CardFilm}
@@ -103,6 +123,9 @@ function ReadAndWatch() {
             sectionTitle="Фильмы"
           />
           <ReadAndWatchSection
+            breakpoints={RAW_SLIDER_BREAKPOINTS}
+            elemPaddings={RAW_SLIDER_PADDINGS}
+            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
             pageSize={pageSize}
             getDataFromApi={getBooksPageData}
             CardTemplateComponent={CardBook}
