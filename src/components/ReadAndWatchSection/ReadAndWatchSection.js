@@ -68,6 +68,8 @@ function ReadAndWatchSection({
     setPageIndex((prevIndex) => prevIndex - 1);
   }
 
+  // если хочешь вставить дебаунс, то придется на событие onchange ориентироваться и добавлять одинаковое поведение везде
+  // либо надо в slideBackHandler и slideNextHandler прогонять через дебаунс
   function slideNextHandler(currentItem, newPageIndex) {
     // console.log(currentItem);
     console.log('=== slideToNextHandler FUNC');
@@ -114,6 +116,7 @@ function ReadAndWatchSection({
           <CardTemplateComponent
             key={`${sectionTitle}-${item?.id}`}
             sectionClass="cards-section__item"
+            // для "статей" надо добавлять card-container_type_article
             // для секции Фильмы, Книги, Видео, Статьи
             data={item}
             // для секции Справочник

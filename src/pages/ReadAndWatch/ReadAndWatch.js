@@ -82,7 +82,6 @@ function ReadAndWatch() {
 
   function renderPageContent() {
     if (pageSize) {
-      // Справочник
       return (
         <>
           <ReadAndWatchSection
@@ -99,6 +98,13 @@ function ReadAndWatch() {
             path={VIDEO_URL}
             sectionTitle="Видео"
           />
+          <ReadAndWatchSection
+            pageSize={pageSize}
+            getDataFromApi={getArticlesPageData}
+            CardTemplateComponent={CardArticle}
+            path={ARTICLES_URL}
+            sectionTitle="Статьи"
+          />
         </>
       );
     }
@@ -110,9 +116,9 @@ function ReadAndWatch() {
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="readwatch-page page__section fade-in">
         {/* Справочник */}
-        {renderPageContent()}
         {/* Видео */}
         {/* Статьи */}
+        {renderPageContent()}
         {/* Фильмы */}
         {/* Книги */}
       </section>
