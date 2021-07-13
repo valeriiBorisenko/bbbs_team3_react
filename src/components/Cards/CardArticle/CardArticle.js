@@ -10,12 +10,17 @@ function CardArticle({
   data: { title, info, annotation, image, articleUrl },
   isMain,
   color,
-  sectionClass,
 }) {
   const cardColor = isMain ? 'yellow' : color;
 
   return (
-    <article className={`card-container ${sectionClass}`}>
+    <article
+      className={`card-container ${
+        isMain
+          ? 'card-container_type_main-article'
+          : 'card-container_type_article fade-in'
+      }`}
+    >
       <Card
         sectionClass={`article-card ${isMain ? 'article-card_main' : ''}`}
         color={cardColor}
@@ -62,7 +67,6 @@ CardArticle.propTypes = {
   articleUrl: PropTypes.string,
   annotation: PropTypes.string,
   color: PropTypes.string,
-  sectionClass: PropTypes.string,
   isMain: PropTypes.bool,
 };
 
@@ -75,7 +79,6 @@ CardArticle.defaultProps = {
   annotation: '',
   color: 'white',
   isMain: false,
-  sectionClass: '',
 };
 
 export default CardArticle;

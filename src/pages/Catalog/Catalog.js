@@ -95,7 +95,7 @@ function Catalog() {
             sectionClass="cards-section__item"
             key={item?.id}
             title={item?.title}
-            image={item?.imageUrl}
+            image={item?.image}
             shape={FIGURES[i % FIGURES.length]}
           />
         ))}

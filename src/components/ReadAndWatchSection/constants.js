@@ -1,0 +1,3 @@
+export const PAGES_TO_LOAD = 3;
+export const INDEX_ERROR_FOR_PENULTIMATE_PAGE = 2;
+export const INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX = 1;
