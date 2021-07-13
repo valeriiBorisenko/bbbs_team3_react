@@ -7,8 +7,12 @@ import {
   INDEX_ERROR_FOR_PENULTIMATE_PAGE,
   INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX,
 } from './constants';
-import { TitleH3, LinkableHeading, NoDataNotificationBox } from './index';
-import { Loader } from '../utils';
+import {
+  TitleH3,
+  LinkableHeading,
+  NoDataNotificationBox,
+  Loader,
+} from '../utils/index';
 import { FIGURES, COLORS } from '../../config/constants';
 
 function ReadAndWatchSection({
@@ -200,12 +204,11 @@ ReadAndWatchSection.propTypes = {
   breakpoints: PropTypes.objectOf(PropTypes.number).isRequired,
   elemPaddings: PropTypes.arrayOf(PropTypes.number).isRequired,
   transitionDelay: PropTypes.number.isRequired,
-  paragraphNoContentText: PropTypes.string,
+  paragraphNoContentText: PropTypes.string.isRequired,
   sectionClass: PropTypes.string,
 };
 
 ReadAndWatchSection.defaultProps = {
-  paragraphNoContentText: 'Данных нет',
   sectionClass: '',
 };
 
