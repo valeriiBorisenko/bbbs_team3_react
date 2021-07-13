@@ -6,13 +6,23 @@ import { TitleH2, Card, Caption, Rubric } from '../../utils/index';
 import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
+import { setLocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStChosenVideo } from '../../../config/constants';
 
 function CardFilm({ data: { image, title, info, link, tags, duration } }) {
   const { openPopupVideo } = useContext(PopupsContext);
   // Пробрасываем данные в попап
   const handleClick = () => {
-    openPopupVideo();
     // записать дату в локал, ключ вынести в константы
+    setLocalStorageData(localStChosenVideo, {
+      image,
+      title,
+      info,
+      link,
+      tags,
+      duration,
+    });
+    openPopupVideo();
   };
 
   // Стейт записывает ширину окна
@@ -121,7 +131,7 @@ CardFilm.propTypes = {
   info: PropTypes.string,
   link: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.object),
-  duration: PropTypes.number,
+  duration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 CardFilm.defaultProps = {
@@ -131,7 +141,7 @@ CardFilm.defaultProps = {
   info: '',
   link: '',
   tags: [],
-  duration: false,
+  duration: '',
 };
 
 export default CardFilm;

@@ -61,6 +61,7 @@ export const DELAY_RENDER = 100;
 export const localStUserCity = 'userCity';
 export const localStAfishaEvent = 'afishaEvent';
 export const jwt = 'jwt';
+export const localStChosenVideo = 'chosenVideo';
 
 export const ERROR_MESSAGES = {
   generalErrorMessage:

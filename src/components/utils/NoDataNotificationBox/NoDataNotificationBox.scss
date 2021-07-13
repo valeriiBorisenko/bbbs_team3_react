@@ -1,0 +1,22 @@
+@import './styles/utils.scss';
+
+.no-data-text {
+  width: fit-content;
+  font-family: $protoGrotesk;
+  font-weight: 300;
+  font-size: 23px;
+  line-height: 1.3;
+  color: $black;
+  text-align: center;
+}
+
+.no-data-text_padding-top {
+  margin: 0 auto;
+  padding-top: 80px;
+}
+
+.no-data-text_padding-both {
+  margin: 0 auto;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}

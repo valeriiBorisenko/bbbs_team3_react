@@ -7,7 +7,6 @@ import {
   BasePage,
   TitleH1,
   CardBook,
-  CardAnnotation,
   Loader,
   AnimatedPageContainer,
   TagsList,
