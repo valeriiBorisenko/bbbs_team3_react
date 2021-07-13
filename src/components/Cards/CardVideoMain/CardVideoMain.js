@@ -6,12 +6,21 @@ import { PopupsContext } from '../../../contexts/index';
 import { Card, TitleH2, Caption } from '../../utils/index';
 import { formatDuration, changeCaseOfFirstLetter } from '../../../utils/utils';
 import { staticImageUrl } from '../../../config/config';
+import { setLocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStChosenVideo } from '../../../config/constants';
 
 function CardVideoMain({ data: { title, info, link, image, duration } }) {
   const { openPopupVideo } = useContext(PopupsContext);
 
   // Пробрасываем данные в попап
   const handleClick = () => {
+    setLocalStorageData(localStChosenVideo, {
+      title,
+      info,
+      link,
+      image,
+      duration,
+    });
     openPopupVideo();
     // записать дату в локал, ключ вынести в константы
   };

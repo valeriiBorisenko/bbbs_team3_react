@@ -29,6 +29,7 @@ import {
   AnimatedPageContainer,
   Loader,
   TagsList,
+  NoDataNotificationBox,
 } from './index';
 import { getPlaces, getPlacesTags } from '../../api/places-page';
 
@@ -280,7 +281,12 @@ function Places() {
         </>
       );
     }
-    return <p className="places__paragraph">{paragraphNoContent}</p>;
+    return (
+      <NoDataNotificationBox
+        text={paragraphNoContent}
+        sectionClass="no-data-text_padding-top"
+      />
+    );
   };
 
   const renderAnimatedContainer = () => (
