@@ -3,25 +3,12 @@
   justify-content: center;
   position: relative;
   padding-bottom: 20px;
-  border-bottom: 1px solid #224cff;
+  border-bottom: 1px solid $blue;
   margin-bottom: 50px;
 }
 
 .readwatch__heading-link {
   text-decoration: none;
-}
-
-.readwatch__heading {
-  font-family: 'Proto', Arial, sans-serif;
-  font-weight: 300;
-  font-size: 44px;
-  line-height: 50px;
-  text-align: center;
-  color: #224cff;
-}
-
-.readwatch__heading:hover {
-  color: #2e2468;
 }
 
 .readwatch__pagination {
@@ -89,22 +76,12 @@
 }
 
 @media (max-width: 1024px) {
-  .readwatch__heading {
-    text-align: left;
-  }
-
   .readwatch__container {
     justify-content: flex-start;
   }
 }
 
 @media (max-width: 640px) {
-  .readwatch__heading {
-    text-align: left;
-    font-size: 23px;
-    line-height: 30px;
-  }
-
   .readwatch__back {
     margin-right: 15px;
     width: 20px;

@@ -1,12 +1,8 @@
-/* eslint-disable react/jsx-no-undef */
-/* eslint-disable no-unused-vars */
-
 import { useState, useEffect } from 'react';
 import './ReadAndWatch.scss';
 import readAndWatchPageTexts from '../../locales/read-and-watch-page-RU';
 import {
   BasePage,
-  Loader,
   CardCatalog,
   CardArticle,
   CardFilm,
@@ -44,23 +40,7 @@ const { one, two, three, four } = ELEMS_PER_SLIDE;
 function ReadAndWatch() {
   // определяет сколько объектов показывать в ряду
   const [pageSize, setPageSize] = useState(null);
-  console.log('ReadAndWatch');
-
-  // общая загрузка
-  // const [catalogDataLoading, setCatalogDataLoaded] = useState(true);
-  // const [articlesDataLoading, setArticlesDataLoaded] = useState(true);
-  // const [moviesDataLoading, setMoviesDataLoaded] = useState(true);
-  // const [booksDataLoading, setBooksDataLoaded] = useState(true);
-  // const [videosDataLoading, setVideosDataLoaded] = useState(true);
-  // const isDataFinished =
-  //   catalogDataLoaded &&
-  //   articlesDataLoaded &&
-  //   moviesDataLoaded &&
-  //   booksDataLoaded &&
-  //   videosDataLoaded;
-  // console.log('isAllDataLoaded', isAllDataLoaded);
-
-  //! чтобы сделать лоадер делаем 5 стейтов и спускаем в каждую секцию сеттер типо isCatalogDataLoaded, как только все 5 станут ТРУ глобальный лоадер можно вырубать
+  // console.log('ReadAndWatch');
 
   useEffect(() => {
     // 1 элемент в ряду
@@ -107,7 +87,7 @@ function ReadAndWatch() {
           CardTemplateComponent={CardCatalog}
           path={CATALOG_URL}
           sectionTitle={catalogTitle}
-          // setDataLoaded={setCatalogDataLoaded}
+          sectionClass="readwatch__slider-container_el_catalog"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -119,7 +99,7 @@ function ReadAndWatch() {
           CardTemplateComponent={CardFilm}
           path={VIDEO_URL}
           sectionTitle={videosTitle}
-          // setDataLoaded={setVideosDataLoaded}
+          sectionClass="readwatch__slider-container_el_video"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -131,11 +111,11 @@ function ReadAndWatch() {
           CardTemplateComponent={CardArticle}
           path={ARTICLES_URL}
           sectionTitle={articlesTitle}
-          // setDataLoaded={setArticlesDataLoaded}
+          sectionClass="readwatch__slider-container_el_articles"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
-          elemaddings={RAW_SLIDER_PADDINGS}
+          elemPaddings={RAW_SLIDER_PADDINGS}
           transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
           paragraphNoContentText={paragraphNoContent}
           pageSize={pageSize}
@@ -143,7 +123,7 @@ function ReadAndWatch() {
           CardTemplateComponent={CardFilm}
           path={MOVIES_URL}
           sectionTitle={moviesTitle}
-          // setDataLoaded={setMoviesDataLoaded}
+          sectionClass="readwatch__slider-container_el_movies"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -155,15 +135,11 @@ function ReadAndWatch() {
           CardTemplateComponent={CardBook}
           path={BOOKS_URL}
           sectionTitle={booksTitle}
-          // setDataLoaded={setBooksDataLoaded}
+          sectionClass="readwatch__slider-container_el_books"
         />
       </>
     );
   }
-
-  // if (!isAllDataLoaded) {
-  //   return <Loader isCentered />;
-  // }
 
   // useEffect(() => {
   //   renderUniqueSliderSections();

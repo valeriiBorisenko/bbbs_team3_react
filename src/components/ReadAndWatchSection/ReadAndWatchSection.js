@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
@@ -9,6 +8,7 @@ import {
   INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX,
 } from './constants';
 import { TitleH3, LinkableHeading, NoDataNotificationBox } from './index';
+import { Loader } from '../utils';
 import { FIGURES, COLORS } from '../../config/constants';
 
 function ReadAndWatchSection({
@@ -21,9 +21,9 @@ function ReadAndWatchSection({
   elemPaddings,
   transitionDelay,
   paragraphNoContentText,
-  setDataLoaded,
+  sectionClass,
 }) {
-  console.log('ReadAndWatchSection', sectionTitle);
+  // console.log('ReadAndWatchSection', sectionTitle);
   const { S, M, L, XL } = breakpoints;
   const ref = useRef();
 
@@ -33,8 +33,10 @@ function ReadAndWatchSection({
   const [totalPages, setTotalPages] = useState(null);
   const [sectionData, setSectionData] = useState(null);
 
-  console.log(`размер страницы сейчас: ${pageSize}`);
-  console.log(`я на ${pageIndex} странице из ${totalPages} страниц`);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // console.log(`размер страницы сейчас: ${pageSize}`);
+  // console.log(`я на ${pageIndex} странице из ${totalPages} страниц`);
 
   const breakPoints = [
     { width: S, itemsToShow: pageSize, itemsToScroll: pageSize },
@@ -53,55 +55,55 @@ function ReadAndWatchSection({
   useEffect(() => {
     const offset = pageSize * pageIndex;
     const loadThreePages = pageSize * 3;
-    console.log(`загрузим данные на ${loadThreePages} элементов`);
-    console.log('offset', offset);
-    console.log('pageSize', pageSize);
+    // console.log(`загрузим данные на ${loadThreePages} элементов`);
+    // console.log('offset', offset);
+    // console.log('pageSize', pageSize);
 
     getDataFromApi({ limit: loadThreePages, offset })
       .then(({ results, count }) => {
         setTotalPages(Math.ceil(count / pageSize));
         setSectionData(results);
-        // setDataLoaded(false);
+        setIsLoading(false);
       })
       .catch((error) => console.log(error));
   }, [pageSize]);
 
   function slideBackHandler() {
-    console.log('=== slideBackHandler FUNC');
+    // console.log('=== slideBackHandler FUNC');
     setPageIndex((prevIndex) => prevIndex - 1);
   }
 
   // если хочешь вставить дебаунс, то придется на событие onchange ориентироваться и добавлять одинаковое поведение везде
   // либо надо в slideBackHandler и slideNextHandler прогонять через дебаунс
   function slideNextHandler(currentItem, newPageIndex) {
-    console.log('=== slideToNextHandler FUNC');
-    console.log('newPageIndex', newPageIndex);
-    console.log('totalPages', totalPages);
+    // console.log('=== slideToNextHandler FUNC');
+    // console.log('newPageIndex', newPageIndex);
+    // console.log('totalPages', totalPages);
 
     const pagesLoadedNow = ref.current.getNumOfPages();
-    console.log('pagesLoadedNow', pagesLoadedNow);
+    // console.log('pagesLoadedNow', pagesLoadedNow);
     const isPenultimatePage =
       pagesLoadedNow - INDEX_ERROR_FOR_PENULTIMATE_PAGE === newPageIndex;
     const isLastPage =
       pagesLoadedNow - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX === newPageIndex;
-    console.log('pageIndex', pageIndex);
-    console.log('isLastPage', isLastPage);
+    // console.log('pageIndex', pageIndex);
+    // console.log('isLastPage', isLastPage);
 
     const isNoMoreDataToLoad = pagesLoadedNow === totalPages;
     if (isNoMoreDataToLoad) {
-      console.log('==Больше загружать нечего!==');
+      // console.log('==Больше загружать нечего!==');
       return;
     }
 
     // значит произошел скрол вперед + это предпоследняя страница
     if (isPenultimatePage || isLastPage) {
-      console.log('ЭТО ПРЕДПОСЛЕДНЯЯ ИЛИ ПОСЛЕДНЯЯ СТРАНИЦА');
+      // console.log('ЭТО ПРЕДПОСЛЕДНЯЯ ИЛИ ПОСЛЕДНЯЯ СТРАНИЦА');
 
       addNewData()
         .then(({ results }) => {
-          console.log(
-            'мы загрузили дополнительные данные и прибавили к текущим'
-          );
+          // console.log(
+          //   'мы загрузили дополнительные данные и прибавили к текущим'
+          // );
           setSectionData((previousData) => [...previousData, ...results]);
           setPageIndex((prevIndex) => prevIndex + 1);
         })
@@ -135,9 +137,9 @@ function ReadAndWatchSection({
 
   // <NoDataNotificationBox text={paragraphNoContentText} sectionClass="no-data-text_padding-both" />
   function renderSliderSection() {
-    console.log('renderSliderSection');
-    if (sectionData && sectionData?.length === 0) {
-      console.log('renderSliderSection === NoDataNotificationBox');
+    // console.log('renderSliderSection');
+    if (!isLoading && sectionData && sectionData?.length === 0) {
+      // console.log('renderSliderSection === NoDataNotificationBox');
       return (
         <NoDataNotificationBox
           text={paragraphNoContentText}
@@ -146,9 +148,9 @@ function ReadAndWatchSection({
       );
     }
 
-    console.log(pageIndex, totalPages, sectionData);
-    if (totalPages && sectionData) {
-      console.log('renderSliderSection === Carousel');
+    // console.log(pageIndex, totalPages, sectionData);
+    if (!isLoading && totalPages && sectionData) {
+      // console.log('renderSliderSection === Carousel');
       return (
         <Carousel
           ref={ref}
@@ -167,8 +169,8 @@ function ReadAndWatchSection({
       );
     }
 
-    console.log('NUL-L');
-    return null;
+    // console.log('NUL-L');
+    return <Loader isNested />;
   }
 
   return (
@@ -182,7 +184,9 @@ function ReadAndWatchSection({
           Component={TitleH3}
         />
       </div>
-      <div className="readwatch__slider-container">{renderSliderSection()}</div>
+      <div className={`readwatch__slider-container ${sectionClass}`}>
+        {renderSliderSection()}
+      </div>
     </section>
   );
 }
@@ -197,12 +201,12 @@ ReadAndWatchSection.propTypes = {
   elemPaddings: PropTypes.arrayOf(PropTypes.number).isRequired,
   transitionDelay: PropTypes.number.isRequired,
   paragraphNoContentText: PropTypes.string,
-  setDataLoaded: PropTypes.func,
+  sectionClass: PropTypes.string,
 };
 
 ReadAndWatchSection.defaultProps = {
   paragraphNoContentText: 'Данных нет',
-  setDataLoaded: () => {},
+  sectionClass: '',
 };
 
 export default ReadAndWatchSection;
