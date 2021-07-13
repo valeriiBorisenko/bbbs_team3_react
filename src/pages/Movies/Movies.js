@@ -28,9 +28,9 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-function Movies() {
-  const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
+const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 
+function Movies() {
   useScrollToTop();
 
   // Загрузка данных

@@ -31,8 +31,9 @@ import {
 const MOVIES_COUNT = 4;
 const QUESTIONS_COUNT = 3;
 
+const { headTitle, headDescription } = mainPageTexts;
+
 function MainPage() {
-  const { headTitle, headDescription } = mainPageTexts;
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);

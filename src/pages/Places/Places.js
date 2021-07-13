@@ -33,40 +33,40 @@ import {
 } from './index';
 import { getPlaces, getPlacesTags } from '../../api/places-page';
 
+const {
+  headTitle,
+  headDescription,
+  title,
+  textStubNoData,
+  paragraphNoContent,
+  mentorTag,
+  ageFilterNames,
+} = placesPageTexts;
+
+const ageFilters = [
+  {
+    filter: ageFilterNames[0].filter,
+    name: ageFilterNames[0].name,
+    isActive: false,
+  },
+  {
+    filter: ageFilterNames[1].filter,
+    name: ageFilterNames[1].name,
+    isActive: false,
+  },
+  {
+    filter: ageFilterNames[2].filter,
+    name: ageFilterNames[2].name,
+    isActive: false,
+  },
+  {
+    filter: ageFilterNames[3].filter,
+    name: ageFilterNames[3].name,
+    isActive: false,
+  },
+];
+
 function Places() {
-  const {
-    headTitle,
-    headDescription,
-    title,
-    textStubNoData,
-    paragraphNoContent,
-    mentorTag,
-    ageFilterNames,
-  } = placesPageTexts;
-
-  const ageFilters = [
-    {
-      filter: ageFilterNames[0].filter,
-      name: ageFilterNames[0].name,
-      isActive: false,
-    },
-    {
-      filter: ageFilterNames[1].filter,
-      name: ageFilterNames[1].name,
-      isActive: false,
-    },
-    {
-      filter: ageFilterNames[2].filter,
-      name: ageFilterNames[2].name,
-      isActive: false,
-    },
-    {
-      filter: ageFilterNames[3].filter,
-      name: ageFilterNames[3].name,
-      isActive: false,
-    },
-  ];
-
   const activityTypes = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);

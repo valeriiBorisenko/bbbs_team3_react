@@ -26,15 +26,15 @@ import {
   Loader,
 } from './index';
 
-function Profile() {
-  const {
-    headTitle,
-    headDescription,
-    eventsTitle,
-    eventsTitleNoResults,
-    formTitle,
-  } = profilePageTexts;
+const {
+  headTitle,
+  headDescription,
+  eventsTitle,
+  eventsTitleNoResults,
+  formTitle,
+} = profilePageTexts;
 
+function Profile() {
   useScrollToTop();
 
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);

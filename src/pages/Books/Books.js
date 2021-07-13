@@ -26,9 +26,9 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-function Books() {
-  const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
+const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
+function Books() {
   useScrollToTop();
 
   // Загрузка данных

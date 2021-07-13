@@ -36,16 +36,16 @@ import {
   postQuestion,
 } from '../../api/questions-page';
 
-function Questions() {
-  const {
-    headTitle,
-    headDescription,
-    title,
-    textStubNoData,
-    formPlaceholder,
-    formSubmitButton,
-  } = questionsPageTexts;
+const {
+  headTitle,
+  headDescription,
+  title,
+  textStubNoData,
+  formPlaceholder,
+  formSubmitButton,
+} = questionsPageTexts;
 
+function Questions() {
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);

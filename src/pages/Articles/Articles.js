@@ -18,9 +18,9 @@ const PAGE_SIZE_PAGINATE = {
   big: 12,
 };
 
+const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
+
 function Articles() {
-  const { headTitle, headDescription, title, textStubNoData } =
-    articlesPageTexts;
   useScrollToTop();
 
   const [pageSize, setPageSize] = useState(null);

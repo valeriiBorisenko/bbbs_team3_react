@@ -19,10 +19,10 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-function Catalog() {
-  const { headTitle, headDescription, title, subtitle, textStubNoData } =
-    catalogPageTexts;
+const { headTitle, headDescription, title, subtitle, textStubNoData } =
+  catalogPageTexts;
 
+function Catalog() {
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
