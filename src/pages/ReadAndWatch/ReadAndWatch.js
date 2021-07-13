@@ -135,7 +135,7 @@ function ReadAndWatch() {
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
-          elemaddings={RAW_SLIDER_PADDINGS}
+          elemPaddings={RAW_SLIDER_PADDINGS}
           transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
           paragraphNoContentText={paragraphNoContent}
           pageSize={pageSize}
