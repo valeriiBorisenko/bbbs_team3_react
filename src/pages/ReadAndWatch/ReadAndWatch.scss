@@ -30,7 +30,7 @@
   width: 100%;
   
   &_el_catalog {
-    min-height: 442px;
+    min-height: 470px;
   }
 
   &_el_video {
@@ -138,7 +138,7 @@
   // outline: 1px solid #224CFF;
 }
 
-@media (max-width: 639px) {
+@media (max-width: 1100px) {
   .rec.rec-arrow.rec-arrow-right,
   .rec.rec-arrow.rec-arrow-left {
     top: 5px;
@@ -189,10 +189,6 @@
 }
 
 .readwatch__heading {
-  font-family: 'Proto', Arial, sans-serif;
-  font-weight: 300;
-  font-size: 44px;
-  line-height: 50px;
   text-align: center;
   color: $blue;
 
@@ -226,18 +222,12 @@
   .readwatch__container {
     padding-bottom: 10px;
   }
-
-  .readwatch__heading {
-    text-align: left;
-    font-size: 23px;
-    line-height: 30px;
-  }
 }
 
 @media (max-width: 1920px) {
   .readwatch__slider-container {
     &_el_catalog {
-      min-height: calc(308px + (432 - 308) * ((100vw - 1440px) / (1920 - 1440)));
+      min-height: calc(308px + (470 - 308) * ((100vw - 1440px) / (1920 - 1440)));
     }
   }
 }
