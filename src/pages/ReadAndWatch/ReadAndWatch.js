@@ -44,6 +44,21 @@ const { one, two, three, four } = ELEMS_PER_SLIDE;
 function ReadAndWatch() {
   // определяет сколько объектов показывать в ряду
   const [pageSize, setPageSize] = useState(null);
+  console.log('ReadAndWatch');
+
+  // общая загрузка
+  // const [catalogDataLoading, setCatalogDataLoaded] = useState(true);
+  // const [articlesDataLoading, setArticlesDataLoaded] = useState(true);
+  // const [moviesDataLoading, setMoviesDataLoaded] = useState(true);
+  // const [booksDataLoading, setBooksDataLoaded] = useState(true);
+  // const [videosDataLoading, setVideosDataLoaded] = useState(true);
+  // const isDataFinished =
+  //   catalogDataLoaded &&
+  //   articlesDataLoaded &&
+  //   moviesDataLoaded &&
+  //   booksDataLoaded &&
+  //   videosDataLoaded;
+  // console.log('isAllDataLoaded', isAllDataLoaded);
 
   //! чтобы сделать лоадер делаем 5 стейтов и спускаем в каждую секцию сеттер типо isCatalogDataLoaded, как только все 5 станут ТРУ глобальный лоадер можно вырубать
 
@@ -80,75 +95,84 @@ function ReadAndWatch() {
   }, []);
 
   function renderUniqueSliderSections() {
-    if (pageSize) {
-      return (
-        <>
-          <ReadAndWatchSection
-            breakpoints={RAW_SLIDER_BREAKPOINTS}
-            elemPaddings={RAW_SLIDER_PADDINGS}
-            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
-            paragraphNoContentText={paragraphNoContent}
-            pageSize={pageSize}
-            getDataFromApi={getCatalogPageDatа}
-            CardTemplateComponent={CardCatalog}
-            path={CATALOG_URL}
-            sectionTitle={catalogTitle}
-          />
-          <ReadAndWatchSection
-            breakpoints={RAW_SLIDER_BREAKPOINTS}
-            elemPaddings={RAW_SLIDER_PADDINGS}
-            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
-            paragraphNoContentText={paragraphNoContent}
-            pageSize={pageSize}
-            getDataFromApi={getVideoPageData}
-            CardTemplateComponent={CardFilm}
-            path={VIDEO_URL}
-            sectionTitle={videosTitle}
-          />
-          <ReadAndWatchSection
-            breakpoints={RAW_SLIDER_BREAKPOINTS}
-            elemPaddings={RAW_SLIDER_PADDINGS}
-            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
-            paragraphNoContentText={paragraphNoContent}
-            pageSize={pageSize}
-            getDataFromApi={getArticlesPageData}
-            CardTemplateComponent={CardArticle}
-            path={ARTICLES_URL}
-            sectionTitle={articlesTitle}
-          />
-          <ReadAndWatchSection
-            breakpoints={RAW_SLIDER_BREAKPOINTS}
-            elemaddings={RAW_SLIDER_PADDINGS}
-            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
-            paragraphNoContentText={paragraphNoContent}
-            pageSize={pageSize}
-            getDataFromApi={getMoviesPageData}
-            CardTemplateComponent={CardFilm}
-            path={MOVIES_URL}
-            sectionTitle={moviesTitle}
-          />
-          <ReadAndWatchSection
-            breakpoints={RAW_SLIDER_BREAKPOINTS}
-            elemPaddings={RAW_SLIDER_PADDINGS}
-            transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
-            paragraphNoContentText={paragraphNoContent}
-            pageSize={pageSize}
-            getDataFromApi={getBooksPageData}
-            CardTemplateComponent={CardBook}
-            path={BOOKS_URL}
-            sectionTitle={booksTitle}
-          />
-        </>
-      );
-    }
-
-    return null;
+    return (
+      <>
+        <ReadAndWatchSection
+          breakpoints={RAW_SLIDER_BREAKPOINTS}
+          elemPaddings={RAW_SLIDER_PADDINGS}
+          transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+          paragraphNoContentText={paragraphNoContent}
+          pageSize={pageSize}
+          getDataFromApi={getCatalogPageDatа}
+          CardTemplateComponent={CardCatalog}
+          path={CATALOG_URL}
+          sectionTitle={catalogTitle}
+          // setDataLoaded={setCatalogDataLoaded}
+        />
+        <ReadAndWatchSection
+          breakpoints={RAW_SLIDER_BREAKPOINTS}
+          elemPaddings={RAW_SLIDER_PADDINGS}
+          transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+          paragraphNoContentText={paragraphNoContent}
+          pageSize={pageSize}
+          getDataFromApi={getVideoPageData}
+          CardTemplateComponent={CardFilm}
+          path={VIDEO_URL}
+          sectionTitle={videosTitle}
+          // setDataLoaded={setVideosDataLoaded}
+        />
+        <ReadAndWatchSection
+          breakpoints={RAW_SLIDER_BREAKPOINTS}
+          elemPaddings={RAW_SLIDER_PADDINGS}
+          transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+          paragraphNoContentText={paragraphNoContent}
+          pageSize={pageSize}
+          getDataFromApi={getArticlesPageData}
+          CardTemplateComponent={CardArticle}
+          path={ARTICLES_URL}
+          sectionTitle={articlesTitle}
+          // setDataLoaded={setArticlesDataLoaded}
+        />
+        <ReadAndWatchSection
+          breakpoints={RAW_SLIDER_BREAKPOINTS}
+          elemaddings={RAW_SLIDER_PADDINGS}
+          transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+          paragraphNoContentText={paragraphNoContent}
+          pageSize={pageSize}
+          getDataFromApi={getMoviesPageData}
+          CardTemplateComponent={CardFilm}
+          path={MOVIES_URL}
+          sectionTitle={moviesTitle}
+          // setDataLoaded={setMoviesDataLoaded}
+        />
+        <ReadAndWatchSection
+          breakpoints={RAW_SLIDER_BREAKPOINTS}
+          elemPaddings={RAW_SLIDER_PADDINGS}
+          transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
+          paragraphNoContentText={paragraphNoContent}
+          pageSize={pageSize}
+          getDataFromApi={getBooksPageData}
+          CardTemplateComponent={CardBook}
+          path={BOOKS_URL}
+          sectionTitle={booksTitle}
+          // setDataLoaded={setBooksDataLoaded}
+        />
+      </>
+    );
   }
+
+  // if (!isAllDataLoaded) {
+  //   return <Loader isCentered />;
+  // }
+
+  // useEffect(() => {
+  //   renderUniqueSliderSections();
+  // }, []);
 
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="readwatch-page page__section fade-in">
-        {renderUniqueSliderSections()}
+        {pageSize && renderUniqueSliderSections()}
       </section>
     </BasePage>
   );

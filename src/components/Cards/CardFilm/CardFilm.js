@@ -24,7 +24,6 @@ function CardFilm({ data: { image, title, info, link, tags, duration } }) {
     });
     openPopupVideo();
   };
-  console.log(title, duration);
 
   // Стейт записывает ширину окна
   const [isMobile, setIsMobile] = useState(false);

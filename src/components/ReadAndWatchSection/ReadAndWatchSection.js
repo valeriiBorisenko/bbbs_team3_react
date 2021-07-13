@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
@@ -20,6 +21,7 @@ function ReadAndWatchSection({
   elemPaddings,
   transitionDelay,
   paragraphNoContentText,
+  setDataLoaded,
 }) {
   console.log('ReadAndWatchSection', sectionTitle);
   const { S, M, L, XL } = breakpoints;
@@ -33,7 +35,6 @@ function ReadAndWatchSection({
 
   console.log(`размер страницы сейчас: ${pageSize}`);
   console.log(`я на ${pageIndex} странице из ${totalPages} страниц`);
-  console.log('paragraphNoContentText', paragraphNoContentText);
 
   const breakPoints = [
     { width: S, itemsToShow: pageSize, itemsToScroll: pageSize },
@@ -49,19 +50,18 @@ function ReadAndWatchSection({
     return getDataFromApi({ limit: loadThreePages, offset });
   }
 
-  // с лоадером: isLoading=true, finally=false
   useEffect(() => {
     const offset = pageSize * pageIndex;
     const loadThreePages = pageSize * 3;
     console.log(`загрузим данные на ${loadThreePages} элементов`);
     console.log('offset', offset);
     console.log('pageSize', pageSize);
-    // надо сделать так, чтобы запрашивалось 3 страницы хотя бы
 
     getDataFromApi({ limit: loadThreePages, offset })
       .then(({ results, count }) => {
         setTotalPages(Math.ceil(count / pageSize));
         setSectionData(results);
+        // setDataLoaded(false);
       })
       .catch((error) => console.log(error));
   }, [pageSize]);
@@ -135,7 +135,9 @@ function ReadAndWatchSection({
 
   // <NoDataNotificationBox text={paragraphNoContentText} sectionClass="no-data-text_padding-both" />
   function renderSliderSection() {
+    console.log('renderSliderSection');
     if (sectionData && sectionData?.length === 0) {
+      console.log('renderSliderSection === NoDataNotificationBox');
       return (
         <NoDataNotificationBox
           text={paragraphNoContentText}
@@ -144,22 +146,29 @@ function ReadAndWatchSection({
       );
     }
 
-    return (
-      <Carousel
-        ref={ref}
-        transitionMs={transitionDelay}
-        pagination={false}
-        outerSpacing={0}
-        itemPadding={elemPaddings}
-        breakPoints={breakPoints}
-        disableArrowsOnEnd
-        showEmptySlots
-        onNextEnd={slideNextHandler}
-        onPrevEnd={slideBackHandler}
-      >
-        {renderCardsForSlider()}
-      </Carousel>
-    );
+    console.log(pageIndex, totalPages, sectionData);
+    if (totalPages && sectionData) {
+      console.log('renderSliderSection === Carousel');
+      return (
+        <Carousel
+          ref={ref}
+          transitionMs={transitionDelay}
+          pagination={false}
+          outerSpacing={0}
+          itemPadding={elemPaddings}
+          breakPoints={breakPoints}
+          disableArrowsOnEnd
+          showEmptySlots
+          onNextEnd={slideNextHandler}
+          onPrevEnd={slideBackHandler}
+        >
+          {renderCardsForSlider()}
+        </Carousel>
+      );
+    }
+
+    console.log('NUL-L');
+    return null;
   }
 
   return (
@@ -188,10 +197,12 @@ ReadAndWatchSection.propTypes = {
   elemPaddings: PropTypes.arrayOf(PropTypes.number).isRequired,
   transitionDelay: PropTypes.number.isRequired,
   paragraphNoContentText: PropTypes.string,
+  setDataLoaded: PropTypes.func,
 };
 
 ReadAndWatchSection.defaultProps = {
   paragraphNoContentText: 'Данных нет',
+  setDataLoaded: () => {},
 };
 
 export default ReadAndWatchSection;
