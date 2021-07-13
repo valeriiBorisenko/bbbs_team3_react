@@ -178,19 +178,17 @@ function Books() {
         ) : (
           <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
             {booksPageData.map((books) => (
-              <li className="card-container" key={books.id}>
-                <CardBook
-                  data={books}
-                  pageCount={pageCount}
-                  pageNumber={pageNumber}
-                  setPageNumber={setPageNumber}
-                />
-                <CardAnnotation description={books.annotation} />
-              </li>
+              <CardBook
+                key={books.id}
+                data={books}
+                pageCount={pageCount}
+                pageNumber={pageNumber}
+                setPageNumber={setPageNumber}
+              />
             ))}
           </ul>
         )}
-
+        );
         {pageCount > 1 && (
           <Paginate
             sectionClass="cards-section__pagination"
