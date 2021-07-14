@@ -40,7 +40,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
     };
   }, []);
 
-  const cities = useContext(CitiesContext);
+  const { cities } = useContext(CitiesContext);
   const { serverError, clearError } = useContext(ErrorsContext);
 
   const errorsString = serverError

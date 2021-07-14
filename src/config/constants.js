@@ -52,6 +52,7 @@ export const FIGURES = [
 ];
 
 export const ALL_CATEGORIES = 'Все';
+export const DEFAULT_CITY = 'Москва';
 
 export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif|bmp)$/i;
 

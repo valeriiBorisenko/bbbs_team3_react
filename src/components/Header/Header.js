@@ -21,7 +21,7 @@ function Header() {
   const { currentUser, updateUser } = useContext(CurrentUserContext);
   const { openPopupCities, openPopupLogin, closeAllPopups } =
     useContext(PopupsContext);
-  const cities = useContext(CitiesContext);
+  const { cities } = useContext(CitiesContext);
 
   const { handleLogout } = useAuth(updateUser, closeAllPopups);
 
