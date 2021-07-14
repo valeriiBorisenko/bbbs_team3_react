@@ -102,7 +102,7 @@ const Rights = () => {
 
   // Контент страницы
   const renderMainContent = () => {
-    if (!articles && !isLoadingPage) {
+    if ((!articles && !isLoadingPage) || (!categories && !isLoadingPage)) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
