@@ -14,7 +14,7 @@ import {
   Video,
   Articles,
   Books,
-  FriendshipStories,
+  Stories,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import {
@@ -31,7 +31,7 @@ import {
   VIDEO_URL,
   ARTICLES_URL,
   BOOKS_URL,
-  FRIENDSHIP_URL,
+  STORIES_URL,
 } from '../config/routes';
 
 function Router() {
@@ -87,8 +87,8 @@ function Router() {
         <Articles />
       </Route>
 
-      <Route exact path={FRIENDSHIP_URL}>
-        <FriendshipStories />
+      <Route exact path={STORIES_URL}>
+        <Stories />
       </Route>
 
       <Route path="*">

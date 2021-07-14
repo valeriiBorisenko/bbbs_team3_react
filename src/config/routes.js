@@ -12,7 +12,7 @@ export const ARTICLES_URL = '/articles';
 export const MOVIES_URL = '/movies';
 export const BOOKS_URL = '/books';
 export const HISTORY_URL = '/history';
-export const FRIENDSHIP_URL = '/friendship-stories';
+export const STORIES_URL = '/stories';
 
 export const MAIN_PAGE_TITLE = 'наставники.про';
 export const AFISHA_TITLE = 'Календарь';

@@ -1,6 +1,6 @@
 import AnimatedPageContainer from './index';
 
-function FriendshipStories() {
+function Stories() {
   return (
     <AnimatedPageContainer
       titleText="Данная страница пока находится в разработке. Приносим свои извинения!"
@@ -9,4 +9,4 @@ function FriendshipStories() {
   );
 }
 
-export default FriendshipStories;
+export default Stories;
