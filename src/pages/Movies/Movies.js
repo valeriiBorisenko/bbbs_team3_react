@@ -141,9 +141,9 @@ function Movies() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const mobileQuery = window.matchMedia('(max-width: 767px)');
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const mobileQuery = window.matchMedia('(max-width: 900px)');
+    const smallQuery = window.matchMedia('(max-width: 1216px)');
+    const largeQuery = window.matchMedia('(max-width: 1451px)');
 
     const listener = () => {
       if (mobileQuery.matches) {
