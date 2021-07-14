@@ -1,0 +1,25 @@
+@import './styles/utils.scss';
+
+.card-animatedbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -20px;
+  margin-left: 30px;
+}
+
+.card-animatedbox__animation {
+  width: 290px;
+  height: 290px;
+}
+
+.card-animatedbox__text {
+  margin-left: -25px;
+}
+
+@media screen and (max-width: 980px) {
+  .card-animatedbox__animation {
+    width: 240px;
+    height: 240px;
+  }
+}
