@@ -94,6 +94,7 @@ const Rights = () => {
             tags={item?.tags}
             shape={FIGURES[i % FIGURES.length]}
             color={COLORS[i % COLORS.length]}
+            id={item?.id}
           />
         ))}
       </CardsSectionWithLines>
