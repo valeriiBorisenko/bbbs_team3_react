@@ -194,7 +194,6 @@ function Places() {
       isMentorFlag,
     };
   };
-  console.log(chosenPlace);
 
   // запрос отфильтрованного массива карточек
   const getFilteredPlaces = (params, isFiltered) => {
@@ -206,11 +205,18 @@ function Places() {
 
     getPlaces({ limit: fixedPageSize, offset: fixedOffset, ...params })
       .then(({ results, count }) => {
-        setPageCount(Math.ceil(count / pageSize));
+        if (chosenPlace && !isFiltered) {
+          setPageCount(Math.ceil((count - 1) / pageSize));
+        } else {
+          setPageCount(Math.ceil(count / pageSize));
+        }
+
         const { restOfPlaces } = definePlaces(results, isFiltered);
+
         if (pageNumber > 0 || isFiltered) {
           setIsChosenCardHidden(true);
         }
+
         setPlaces(restOfPlaces);
       })
       .catch(console.log)
@@ -261,17 +267,19 @@ function Places() {
       );
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
+    setIsFiltersUsed(false);
   };
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   // запуск фильтрации/пагинации
+  //! починить пагинацию без фильтров (на 1 страницу)
+  //! ещё проблема с обнулением страницы при нажатии фильтра
   useEffect(() => {
-    if (!isFirstRender && (isFiltersUsed || pageNumber >= 0)) {
+    if (!isFirstRender && (isFiltersUsed || pageNumber > 0)) {
       setIsLoading(true);
       debounceFiltration();
     }
     setIsFirstRender(false);
-    setIsFiltersUsed(false);
   }, [isFiltersUsed, pageSize, pageNumber]);
 
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
@@ -289,10 +297,14 @@ function Places() {
         getPlacesTags(),
       ])
         .then(([{ results, count }, tagsData]) => {
-          setPageCount(Math.ceil(count / pageSize));
           const { chosenPlaceLast, restOfPlaces } = definePlaces(results);
           setChosenPlace(chosenPlaceLast);
           setPlaces(restOfPlaces);
+          if (chosenPlaceLast) {
+            setPageCount(Math.ceil((count - 1) / pageSize));
+          } else {
+            setPageCount(Math.ceil(count / pageSize));
+          }
           setCategories(defineCategories(tagsData, chosenPlaceLast));
           setIsChosenCardHidden(false);
         })
