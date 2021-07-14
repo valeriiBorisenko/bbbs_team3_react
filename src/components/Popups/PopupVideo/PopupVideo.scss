@@ -8,7 +8,7 @@
     justify-content: center;
     padding: 30px;
     width: 80vw;
-    height: 80vh;
+    height: 800px;
 
   }
 
@@ -39,5 +39,28 @@
       display: none;
     }
   }
+}
 
+@media screen and (max-width: 1440px) {
+  .popup {
+    &__container_type_video {
+      height: 730px;
+    }
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .popup {
+    &__container_type_video {
+      height: 550px;
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .popup {
+    &__container_type_video {
+      height: 450px;
+    }
+  }
 }
