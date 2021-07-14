@@ -109,7 +109,7 @@ const Video = () => {
 
   // Контент страницы
   const renderMainContent = () => {
-    if (!video && !mainVideo && !isLoadingPage) {
+    if ((!video && !isLoadingPage) || (!categories && !isLoadingPage)) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
