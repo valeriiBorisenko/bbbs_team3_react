@@ -239,7 +239,6 @@ function MainPage() {
       <section className="main-questions main-section page__section fade-in">
         <div className="card-container card-container_type_iframe">
           {/* виджету нужна заглушка на случай если не загрузится или его обрезал ADblock */}
-          {/* //! Виджет опять полетел! */}
           <Widget
             title="Facebook"
             link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
