@@ -142,7 +142,7 @@ function MainPage() {
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
         {randomMovies.map((item) => (
           <Link
-            to="/films"
+            to="/movies"
             className={`main-section__link ${
               randomMovies.length > 1
                 ? `movies_pagination movies_pagination_${randomMovies.length}`
