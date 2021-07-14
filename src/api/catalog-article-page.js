@@ -7,7 +7,7 @@ function getCatalogArticlePageData({ articleId } = {}) {
     return Promise.resolve({ result: mockArticleData });
   }
   return axios
-    .get(`${baseURL}${apiUrl}/catalog-article/`, { params: { articleId } })
+    .get(`${baseURL}${apiUrl}/catalog/${articleId}`)
     .then((response) => response.data)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }

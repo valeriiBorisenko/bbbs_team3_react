@@ -7,13 +7,13 @@ import catalogArticlePageTexts from '../../locales/catalog-article-page-RU';
 
 function CatalogArticle({ articleId }) {
   const { headTitle, headDescription } = catalogArticlePageTexts;
-  const [catalogArticlePageData, setCatalogArticlePageData] = useState([]);
+  const [catalogArticlePageData, setCatalogArticlePageData] = useState();
   const [isLoadingPage, setIsLoadingPage] = useState(true);
 
   useEffect(() => {
     getCatalogArticlePageData({ articleId })
-      .then(({ result }) => {
-        setCatalogArticlePageData(result);
+      .then((data) => {
+        setCatalogArticlePageData(data);
       })
       .catch((err) => console.log(err))
       .finally(() => {
@@ -28,7 +28,7 @@ function CatalogArticle({ articleId }) {
       ) : (
         <div
           dangerouslySetInnerHTML={{
-            __html: catalogArticlePageData?.articleContent,
+            __html: catalogArticlePageData?.content,
           }}
         />
       )}

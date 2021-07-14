@@ -97,6 +97,7 @@ function Catalog() {
             title={item?.title}
             image={item?.image}
             shape={FIGURES[i % FIGURES.length]}
+            link={`/catalog/${item.id}`}
           />
         ))}
       </CardsSectionWithLines>
