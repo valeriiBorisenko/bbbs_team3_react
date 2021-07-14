@@ -8,7 +8,7 @@ import {
   useEventBooking,
   useActivityTypes,
 } from '../../hooks/index';
-import { QUESTIONS_URL } from '../../config/routes';
+import { QUESTIONS_URL, STORIES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
 import getMainPageData from '../../api/main-page';
@@ -88,8 +88,8 @@ function MainPage() {
     if (currentUser && mainPageData?.event) {
       return (
         <CardCalendar
-          key={mainPageData?.event?.id}
-          cardData={mainPageData?.event}
+          key={mainPageData.event.id}
+          cardData={mainPageData.event}
           onEventSignUpClick={handleEventBooking}
           onEventDescriptionClick={openPopupAboutEvent}
         />
@@ -103,14 +103,14 @@ function MainPage() {
   function renderHistoryBlock() {
     if (mainPageData?.history) {
       return (
-        <Card sectionClass="lead__media" key={mainPageData?.history?.id}>
+        <Card sectionClass="lead__media" key={mainPageData.history.id}>
           <img
-            src={`${staticImageUrl}/${mainPageData?.history?.image}`}
-            alt={mainPageData?.history?.title}
+            src={`${staticImageUrl}/${mainPageData.history.image}`}
+            alt={mainPageData.history.title}
             className="card__media-img"
           />
-          <Link to="/stories" className="lead__link">
-            {mainPageData?.history?.title}
+          <Link to={STORIES_URL} className="lead__link">
+            {mainPageData.history.title}
           </Link>
         </Card>
       );
@@ -124,8 +124,8 @@ function MainPage() {
     return (
       <section className="place main-section page__section fade-in">
         <CardPlace
-          key={mainPageData?.place?.id}
-          data={mainPageData?.place}
+          key={mainPageData.place.id}
+          data={mainPageData.place}
           sectionClass="card-container_type_main-article"
           activityTypes={activityTypes}
           isBig
@@ -179,8 +179,8 @@ function MainPage() {
       <section className="video main-section page__section fade-in">
         <Link to="/video" className="main-section__link">
           <CardVideoMain
-            key={mainPageData?.video?.id}
-            data={mainPageData?.video}
+            key={mainPageData.video.id}
+            data={mainPageData.video}
           />
         </Link>
       </section>
@@ -189,7 +189,7 @@ function MainPage() {
 
   function renderQuestionBlock() {
     const randomQuestions = randomizeArray(
-      mainPageData?.questions,
+      mainPageData.questions,
       QUESTIONS_COUNT
     );
 
@@ -201,7 +201,7 @@ function MainPage() {
             className={`main-section__link main-section__link_el_question ${
               randomQuestions.length > 2 ? ' main-questions_pagination' : ''
             }`}
-            key={item?.id}
+            key={item.id}
           >
             <CardQuestion data={item} />
           </Link>
@@ -228,7 +228,7 @@ function MainPage() {
       {mainPageData?.place ? renderPlaceSection() : null}
 
       {/* секция Статья */}
-      {mainPageData?.articles.length > 0
+      {mainPageData?.articles?.length > 0
         ? renderArticleSection(mainPageData?.articles[0])
         : null}
 
@@ -249,12 +249,12 @@ function MainPage() {
           />
 
           {/* секция Вопросов */}
-          {mainPageData?.questions.length > 0 ? renderQuestionBlock() : null}
+          {mainPageData?.questions?.length > 0 ? renderQuestionBlock() : null}
         </div>
       </section>
 
       {/* секция Статья */}
-      {mainPageData?.articles.length > 1
+      {mainPageData?.articles?.length > 1
         ? renderArticleSection(mainPageData?.articles[1])
         : null}
     </BasePage>

@@ -1,11 +1,13 @@
-import AnimatedPageContainer from './index';
+import { BasePage, AnimatedPageContainer } from './index';
+import storiesPageTexts from '../../locales/stories-page-RU';
 
+const { headTitle, headDescription } = storiesPageTexts;
+console.log(AnimatedPageContainer);
 function Stories() {
   return (
-    <AnimatedPageContainer
-      titleText="Данная страница пока находится в разработке. Приносим свои извинения!"
-      buttonText="Вернуться на главную"
-    />
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <AnimatedPageContainer titleText="Данная страница пока находится в разработке. Приносим свои извинения!" />
+    </BasePage>
   );
 }
 

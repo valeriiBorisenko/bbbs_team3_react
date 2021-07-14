@@ -1,3 +1,4 @@
+import BasePage from '../../layout/BasePage';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 
-export default AnimatedPageContainer;
+export { BasePage, AnimatedPageContainer };
