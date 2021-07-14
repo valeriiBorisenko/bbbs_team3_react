@@ -11,6 +11,7 @@ import {
   Rights,
   Movies,
   ReadAndWatch,
+  Video,
   Articles,
   Books,
   CatalogArticle,
@@ -27,6 +28,7 @@ import {
   READ_AND_WATCH_URL,
   CATALOG_URL,
   PROFILE_URL,
+  VIDEO_URL,
   ARTICLES_URL,
   BOOKS_URL,
   CATALOG_ITEM_URL,
@@ -79,6 +81,9 @@ function Router() {
           <CatalogArticle articleId={match.params.articleId} />
         )}
       />
+      <Route exact path={VIDEO_URL}>
+        <Video />
+      </Route>
 
       <Route exact path={BOOKS_URL}>
         <Books />

@@ -3,8 +3,11 @@ import ReactPaginate from 'react-paginate';
 import PropTypes from 'prop-types';
 import { useScrollToTop } from '../../../hooks/index';
 
-const Paginate = ({ pageCount, sectionClass, value, onChange }) => {
+const Paginate = (props) => {
+  const { pageCount, sectionClass, value, onChange } = props;
+
   useScrollToTop(value);
+
   return (
     <ReactPaginate
       containerClassName={`pagination ${sectionClass}`}
@@ -13,7 +16,7 @@ const Paginate = ({ pageCount, sectionClass, value, onChange }) => {
       activeLinkClassName="pagination__element-link_type_active"
       previousClassName="pagination__element pagination__arrow-element pagination__arrow-element_type_previous"
       breakClassName="pagination__element"
-      nextClassName="pagination__element pagination__arrow-element"
+      nextClassName="pagination__element pagination__arrow-element pagination__arrow-element_type_next"
       disabledClassName="pagination__arrow-element_type_disabled"
       pageCount={pageCount}
       pageRangeDisplayed={3}

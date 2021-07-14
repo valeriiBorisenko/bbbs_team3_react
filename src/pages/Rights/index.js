@@ -4,6 +4,7 @@ import TitleH1 from '../../components/utils/TitleH1/TitleH1';
 import CardRights from '../../components/Cards/CardRights/CardRights';
 import CardsSectionWithLines from '../../components/Cards/CardsSectionWithLines/CardsSectionWithLines';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
+import TagsList from '../../components/TagsList/TagsList';
 
 export {
   BasePage,
@@ -12,4 +13,5 @@ export {
   CardRights,
   CardsSectionWithLines,
   AnimatedPageContainer,
+  TagsList,
 };

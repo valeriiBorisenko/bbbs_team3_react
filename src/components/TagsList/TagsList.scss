@@ -27,9 +27,8 @@
   }
 }
 
-@include atTablet {
+@include atMobileL {
   .tags {
-
     &::after {
       content: '';
       position: absolute;
@@ -55,19 +54,12 @@
     }
 
     &__list {
+      flex-wrap: nowrap;
       overflow-x: scroll;
       scrollbar-width: none;
       &::-webkit-scrollbar {
         display: none;
       }
-    }
-  }
-}
-
-@include atMobileL {
-  .tags {
-    &__list {
-      flex-wrap: nowrap;
 
       &_mobile {
         justify-content: flex-start;

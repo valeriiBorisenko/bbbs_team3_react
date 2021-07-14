@@ -2,10 +2,10 @@ import axios from 'axios';
 import { apiUrl, baseURL } from '../config/config';
 
 // работа со страницей фильмы
-function getMoviesPageData({ limit, offset }) {
+function getMoviesPageData({ limit, offset, tags }) {
   return axios
     .get(`${baseURL}${apiUrl}/movies/`, {
-      params: { limit, offset },
+      params: { tags, limit, offset },
     })
     .then((response) => response.data)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
@@ -19,12 +19,4 @@ function getMoviesPageFilter() {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-// фильмы по конкретному тегу
-function getActualMoviesPageFilter(movies) {
-  return axios
-    .get(`${baseURL}${apiUrl}/movies/?tags=${movies}`)
-    .then((response) => response.data.results)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
-}
-
-export { getMoviesPageData, getMoviesPageFilter, getActualMoviesPageFilter };
+export { getMoviesPageData, getMoviesPageFilter };

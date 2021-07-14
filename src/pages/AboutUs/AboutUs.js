@@ -11,18 +11,18 @@ import {
   Card,
 } from './index';
 
-function AboutUs() {
-  const {
-    headTitle,
-    headDescription,
-    title,
-    logoLink,
-    aboutTitle,
-    aboutParagraphs,
-    blockquote,
-    cards,
-  } = aboutUsTexts;
+const {
+  headTitle,
+  headDescription,
+  title,
+  logoLink,
+  aboutTitle,
+  aboutParagraphs,
+  blockquote,
+  cards,
+} = aboutUsTexts;
 
+function AboutUs() {
   useScrollToTop();
 
   return (

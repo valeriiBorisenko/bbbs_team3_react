@@ -18,32 +18,16 @@
   }
 
   &__input-wrap {
-
     &_textarea {
       grid-column: 1 / -1;
       min-height: 286px;
+
+      > .textarea {
+        max-height: 100%;
+        min-height: 286px;
+        resize: none;
+      }
     }
-  }
-
-  &__input {
-    width: 100%;
-    max-height: 48px;
-
-    &_el_textarea {
-      max-height: 100%;
-      min-height: 286px;
-      resize: none;
-    }
-  }
-
-  &__input-error {
-    position: relative;
-    left: 20px;
-    color: $error;
-    font-family: $protoGrotesk;
-    font-size: 11px;
-    line-height: 1;
-    letter-spacing: 1px;
   }
 
   &__input-upload {
@@ -56,7 +40,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  
+
     &_hidden {
       opacity: 0;
       transition: .3s ease;
@@ -100,6 +84,16 @@
     }
   }
 
+  &__input-upload_error .profile-form__pseudo-button {
+    border: 1px solid $error;
+    background-image: url(../../assets/error-cross.svg);
+    background-color: rgba($error, .2);
+
+    &:hover {
+      background-color: rgba($error, .5);
+    }
+  }
+
   &__text-container {
     box-sizing: border-box;
     padding: 30px 30px 20px;
@@ -121,6 +115,9 @@
 
     &_error {
       color: $error;
+	    -webkit-text-shadow: 1px 1px 0 rgba($background, .5); 
+	    -moz-text-shadow: 1px 1px 0 rgba($background, .5);
+      text-shadow: 1px 1px 0 rgba($background, .5); 
     }
   }
 
@@ -130,9 +127,6 @@
 
   &__submit-zone {
     grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
 
   &__ratings {
@@ -167,6 +161,7 @@
 
   &__buttons {
     display: flex;
+    justify-content: space-between;
     align-items: center;
   }
 

@@ -29,43 +29,44 @@ import {
   AnimatedPageContainer,
   Loader,
   TagsList,
+  NoDataNotificationBox,
 } from './index';
 import { getPlaces, getPlacesTags } from '../../api/places-page';
 
+const {
+  headTitle,
+  headDescription,
+  title,
+  textStubNoData,
+  paragraphNoContent,
+  mentorTag,
+  ageFilterNames,
+} = placesPageTexts;
+
+const ageFilters = [
+  {
+    filter: ageFilterNames[0].filter,
+    name: ageFilterNames[0].name,
+    isActive: false,
+  },
+  {
+    filter: ageFilterNames[1].filter,
+    name: ageFilterNames[1].name,
+    isActive: false,
+  },
+  {
+    filter: ageFilterNames[2].filter,
+    name: ageFilterNames[2].name,
+    isActive: false,
+  },
+  {
+    filter: ageFilterNames[3].filter,
+    name: ageFilterNames[3].name,
+    isActive: false,
+  },
+];
+
 function Places() {
-  const {
-    headTitle,
-    headDescription,
-    title,
-    textStubNoData,
-    paragraphNoContent,
-    mentorTag,
-    ageFilterNames,
-  } = placesPageTexts;
-
-  const ageFilters = [
-    {
-      filter: ageFilterNames[0].filter,
-      name: ageFilterNames[0].name,
-      isActive: false,
-    },
-    {
-      filter: ageFilterNames[1].filter,
-      name: ageFilterNames[1].name,
-      isActive: false,
-    },
-    {
-      filter: ageFilterNames[2].filter,
-      name: ageFilterNames[2].name,
-      isActive: false,
-    },
-    {
-      filter: ageFilterNames[3].filter,
-      name: ageFilterNames[3].name,
-      isActive: false,
-    },
-  ];
-
   const activityTypes = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
@@ -250,16 +251,6 @@ function Places() {
     }
   }, []);
 
-  // функции рендера
-  // const renderTags = () => (
-  //   <div className="tags">
-  //     <ul className="tags__list">
-  //       {renderFilterTags(categories, 'category', changeCategory)}
-  //     </ul>
-  //     <ul className="tags__list">{renderFilterTags(ages, 'age', changeAge)}</ul>
-  //   </div>
-  // );
-
   const renderPlaces = () => {
     if (places?.length > 0) {
       return (
@@ -290,7 +281,12 @@ function Places() {
         </>
       );
     }
-    return <p className="places__paragraph">{paragraphNoContent}</p>;
+    return (
+      <NoDataNotificationBox
+        text={paragraphNoContent}
+        sectionClass="no-data-text_padding-top"
+      />
+    );
   };
 
   const renderAnimatedContainer = () => (

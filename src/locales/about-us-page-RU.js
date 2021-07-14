@@ -1,9 +1,11 @@
+import { bbbsLinks } from '../utils/external-links';
+
 const aboutUsTexts = {
   headTitle: 'О проекте',
   headDescription: 'Информация об организации Старшие Братья Старшие Сёстры.',
   title:
     'Наставники.про – цифровая информационная платформа организации «Старшие Братья Старшие Сестры». Созданная для поддержки наставников программы.',
-  logoLink: 'https://www.nastavniki.org/o-nas/ob-organizaczii/',
+  logoLink: bbbsLinks.about,
   aboutTitle: 'Об организации',
   aboutParagraphs: [
     {
@@ -27,7 +29,7 @@ const aboutUsTexts = {
       title: 'Пожертвования',
       text: 'Деньги пойдут на оплату работы кураторов (профессиональные психологи/социальные работники), которые поддерживают дружбу между ребенком и наставником.',
       linkText: 'сделать пожертвование',
-      href: 'https://www.nastavniki.org/campaign/pomoch-dengami/',
+      href: bbbsLinks.donations,
       color: 'blue',
     },
     {
@@ -35,7 +37,7 @@ const aboutUsTexts = {
       title: 'Наставничество',
       text: 'Наставник «Старшие Братья Старшие Сестры» — значимый взрослый, который становится для ребенка старшим другом, ролевой моделью, принимает своего «Младшего» таким, какой он есть. «Старший» открывает для ребенка дверь в большой мир и дарит ему надежду на более счастливое и успешное будущее.',
       linkText: 'подробнее',
-      href: 'https://www.nastavniki.org/volontyorstvo/kak-stat-volonterom/',
+      href: bbbsLinks.volunteering,
       color: 'pink',
     },
     {
@@ -43,7 +45,7 @@ const aboutUsTexts = {
       title: 'Партнерство',
       text: 'Компании поддерживают нас не только деньгами, но и делами. Мы собрали все возможные способы поддержки и сотрудничества: профессиональная помощь Pro Bono, организационная помощь, корпоративное волонтерство, мастер-классы, лекции, учебные программы.',
       linkText: 'подробнее',
-      href: 'https://www.nastavniki.org/oficzialno/nashi-partneryi/',
+      href: bbbsLinks.partners,
       color: 'green',
     },
   ],

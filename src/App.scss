@@ -27,6 +27,14 @@
   margin: 0 75px;
 }
 
+.form-error-message {
+  color: $error;
+  font-family: $protoGrotesk;
+  font-size: 14px;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
 @include atDesktop1440 {
   .page__section {
     margin: 0 135px;
@@ -61,5 +69,9 @@
 @include atMobile {
   .page__section {
     margin: 0 15px;
+  }
+
+  .form-error-message {
+    font-size: 12px;
   }
 }

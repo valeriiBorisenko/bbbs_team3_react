@@ -23,22 +23,6 @@
   margin-right: 100px;
 }
 
-.question__answer {
-  visibility: hidden;
-  height: 0;
-  opacity: 0;
-  margin: 0;
-  transition: margin-top 0.3s ease;
-
-  &_visible {
-    margin-top: 30px;
-    visibility: visible;
-    height: auto;
-    opacity: 1;
-    transition: margin-top 0.5s ease;
-  }
-}
-
 .question__paragraph {
   &:first-of-type {
     margin-top: 0;
@@ -66,7 +50,7 @@
   }
 
   &_success {
-    color: $green;
+    // color: $green;
   }
 }
 
@@ -79,11 +63,12 @@
 }
 
 .input__question-form {
-  width: 100%;
-  padding: 11px 30px;
-  background-color: $white;
-  font-family: $ptRootUI;
-  line-height: 1.4;
+  > .input {
+    padding: 11px 30px;
+    background-color: $white;
+    font-family: $ptRootUI;
+    line-height: 1.4;
+  }
 }
 
 .question-form {
@@ -123,8 +108,11 @@
   }
 
   .input__question-form {
-    padding-top: 10px;
-    padding-bottom: 9px;
+    > .input {
+      padding-top: 10px;
+      padding-bottom: 9px;
+      height: 40px;
+    }
   }
 
   .add-question {

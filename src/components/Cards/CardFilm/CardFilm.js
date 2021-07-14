@@ -1,23 +1,75 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
+import { useContext, useEffect, useState } from 'react';
+import { PopupsContext } from '../../../contexts/index';
+import { TitleH2, Card, Caption, Rubric } from '../../utils/index';
+import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
-import { Rubric, TitleH2, Card } from '../../utils/index';
+import { setLocalStorageData } from '../../../hooks/useLocalStorage';
+import { localStChosenVideo } from '../../../config/constants';
+import parserLinkYoutube from '../../../utils/parser-link-youtube';
 
-function CardFilm({ data: { image, title, info, link, tags }, handleClick }) {
-  return (
-    <Card sectionClass="card-film">
-      <div className="card-film__video">
-        <button
-          className="card-film__button"
-          type="button"
-          onClick={handleClick}
-        >
-          <img
-            src={`${staticImageUrl}/${image}`}
-            alt="Превью видео"
-            className="card-film__preview"
-          />
+function CardFilm({ data: { image, title, info, link, tags, duration } }) {
+  const { openPopupVideo } = useContext(PopupsContext);
+  // Пробрасываем данные в попап
+  const handleClick = () => {
+    // записать дату в локал, ключ вынести в константы
+    setLocalStorageData(localStChosenVideo, {
+      image,
+      title,
+      info,
+      link,
+      tags,
+      duration,
+    });
+    openPopupVideo();
+  };
+
+  // Стейт записывает ширину окна
+  const [isMobile, setIsMobile] = useState(false);
+
+  const { imagePreview } = parserLinkYoutube(link);
+
+  // Следит за шириной экрана и записывает в стейт
+  useEffect(() => {
+    const mobile = window.matchMedia('(max-width: 640px)');
+
+    const listener = () => {
+      if (mobile.matches) setIsMobile(true);
+      else setIsMobile(false);
+    };
+    listener();
+
+    mobile.addEventListener('change', listener);
+
+    return () => {
+      mobile.removeEventListener('change', listener);
+    };
+  }, []);
+
+  // Рендерим верхную часть с фоткой
+  const renderPrewiew = () => {
+    let durationString = '';
+
+    if (duration) {
+      const { hours, minutes, seconds } = formatDuration(duration);
+      durationString =
+        hours > 0 ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
+    }
+
+    return (
+      <>
+        <img
+          src={`${staticImageUrl}/${image}` || imagePreview}
+          alt={`${texts.altText} ${title}`}
+          className="card-film__preview"
+        />
+        {duration ? (
+          <span className="card-film__duration paragraph">
+            {durationString}
+          </span>
+        ) : (
           <ul className="card-film__rubric-list">
             {tags.map((tag) => (
               <li key={tag.id}>
@@ -25,22 +77,51 @@ function CardFilm({ data: { image, title, info, link, tags }, handleClick }) {
               </li>
             ))}
           </ul>
-        </button>
+        )}
+      </>
+    );
+  };
+
+  // Редерим либо кнопку либо ссылку в зависимости от ширины
+  // Пробрасываем елементы в функцию в завизимости от положения
+  const renderVideoPlayback = (childrenElem) =>
+    !isMobile ? (
+      <button
+        className="link card-film__button"
+        type="button"
+        onClick={handleClick}
+      >
+        {childrenElem}
+      </button>
+    ) : (
+      <a
+        href={link}
+        className="link card-film__button"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        {childrenElem}
+      </a>
+    );
+
+  return (
+    <Card sectionClass="card-film">
+      <div className="card-film__video">
+        {renderVideoPlayback(renderPrewiew())}
       </div>
 
       <div className="card-film__video-info">
         <div className="card-film__title-wrap">
-          <TitleH2 sectionClass="card-film__title" title={title} />
-          <p className="caption card-film__info">{info}</p>
+          <TitleH2
+            sectionClass="card-film__title"
+            title={changeCaseOfFirstLetter(title)}
+          />
+          <Caption
+            sectionClass="card-film__info"
+            title={changeCaseOfFirstLetter(info)}
+          />
         </div>
-        <button
-          type="button"
-          className="link card-film__button"
-          href={link}
-          onClick={handleClick}
-        >
-          {texts.lintText}
-        </button>
+        {link && renderVideoPlayback(texts.linkText)}
       </div>
     </Card>
   );
@@ -53,7 +134,7 @@ CardFilm.propTypes = {
   info: PropTypes.string,
   link: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.object),
-  handleClick: PropTypes.func,
+  duration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 CardFilm.defaultProps = {
@@ -63,7 +144,7 @@ CardFilm.defaultProps = {
   info: '',
   link: '',
   tags: [],
-  handleClick: () => {},
+  duration: '',
 };
 
 export default CardFilm;

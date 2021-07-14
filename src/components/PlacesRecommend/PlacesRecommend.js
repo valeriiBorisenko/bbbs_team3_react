@@ -1,14 +1,19 @@
 import './PlacesRecommend.scss';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { PopupRecommendSuccess } from '../Popups/index';
+import { PopupsContext, ErrorsContext } from '../../contexts/index';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
 
 function PlacesRecommend({ sectionClass, activityTypes }) {
+  const { openPopupRecommendSuccess } = useContext(PopupsContext);
+  const { setError } = useContext(ErrorsContext);
+  const { generalErrorMessage } = ERROR_MESSAGES;
+  const { unauthorized, badRequest } = ERROR_CODES;
+
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
 
   const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
@@ -22,16 +27,6 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   const openForm = () => {
     setIsFormOpen(true);
     scrollToForm();
-  };
-
-  const closeSuccessPopup = () => {
-    setIsSuccessPopupOpen(false);
-  };
-
-  const closeSuccessPopupOnEsc = (evt) => {
-    if (evt.key === 'Escape') {
-      closeSuccessPopup();
-    }
   };
 
   const createFormData = (data) => {
@@ -51,10 +46,17 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   const handleFormSubmit = (data) => {
     postPlace(createFormData(data))
       .then(() => {
-        setIsSuccessPopupOpen(true);
-        closeForm();
+        openPopupRecommendSuccess(true);
       })
-      .catch(console.log);
+      .catch((err) => {
+        if (err?.status === badRequest || err?.status === unauthorized) {
+          setError(err?.data);
+          closeForm();
+        } else
+          setError({
+            message: generalErrorMessage,
+          });
+      });
   };
 
   const classNames = [
@@ -65,11 +67,6 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   ]
     .join(' ')
     .trim();
-
-  useEffect(() => {
-    window.addEventListener('keyup', closeSuccessPopupOnEsc);
-    return () => window.removeEventListener('keyup', closeSuccessPopupOnEsc);
-  }, []);
 
   return (
     <>
@@ -94,7 +91,6 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
             </button>
             {texts.recommendadionTextPart2}
           </p>
-          {/* вызов формы */}
           <FormRecommendation
             isOpen={isFormOpen}
             onSubmit={handleFormSubmit}
@@ -102,10 +98,6 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
           />
         </div>
       </section>
-      <PopupRecommendSuccess
-        isOpen={isSuccessPopupOpen}
-        onClose={closeSuccessPopup}
-      />
     </>
   );
 }

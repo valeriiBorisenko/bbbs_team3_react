@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import mainPageTexts from '../../locales/main-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
-import { useScrollToTop, useEventBooking } from '../../hooks/index';
+import {
+  useScrollToTop,
+  useEventBooking,
+  useActivityTypes,
+} from '../../hooks/index';
 import { QUESTIONS_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
@@ -20,14 +24,16 @@ import {
   CardVideoMain,
   Widget,
   CardQuestion,
+  Rubric,
 } from './index';
 
 // количество отображаемых карточек с фильмами и вопросами
 const MOVIES_COUNT = 4;
 const QUESTIONS_COUNT = 3;
 
+const { headTitle, headDescription } = mainPageTexts;
+
 function MainPage() {
-  const { headTitle, headDescription } = mainPageTexts;
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);
@@ -40,6 +46,8 @@ function MainPage() {
     mainPageData?.questions,
     QUESTIONS_COUNT
   );
+
+  const activityTypes = useActivityTypes();
 
   // запись/отписка на мероприятия
   const { handleEventBooking, selectedEvent } = useEventBooking();
@@ -113,6 +121,7 @@ function MainPage() {
           key={mainPageData?.place?.id}
           data={mainPageData?.place}
           sectionClass="card-container_type_main-article"
+          activityTypes={activityTypes}
           isBig
           isMainPage
         />
@@ -141,7 +150,15 @@ function MainPage() {
             }`}
             key={item?.id}
           >
-            <CardFilm data={item} />
+            <CardFilm data={item}>
+              <ul className="card-film__rubric-list">
+                {item?.tags.map((tag) => (
+                  <li key={tag.id}>
+                    <Rubric title={tag.name} sectionClass="card-film__rubric" />
+                  </li>
+                ))}
+              </ul>
+            </CardFilm>
           </Link>
         ))}
       </section>

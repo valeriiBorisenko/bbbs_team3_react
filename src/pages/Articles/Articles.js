@@ -18,9 +18,9 @@ const PAGE_SIZE_PAGINATE = {
   big: 12,
 };
 
+const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
+
 function Articles() {
-  const { headTitle, headDescription, title, textStubNoData } =
-    articlesPageTexts;
   useScrollToTop();
 
   const [pageSize, setPageSize] = useState(null);
@@ -108,7 +108,8 @@ function Articles() {
           <section className="articles__main fade-in">
             <CardArticle
               data={mainCard}
-              sectionClass="card-container_type_main-article"
+              // никита, 12.07
+              // sectionClass="card-container_type_main-article"
               isMain
             />
           </section>
@@ -120,7 +121,8 @@ function Articles() {
               key={item.id}
               color={COLORS[(i + 1) % COLORS.length]}
               data={item}
-              sectionClass="card-container_type_article fade-in"
+              // никита, 12.07
+              // sectionClass="card-container_type_article fade-in"
             />
           ))}
         </section>

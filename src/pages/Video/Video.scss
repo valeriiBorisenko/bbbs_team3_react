@@ -1,0 +1,23 @@
+@import './styles/utils.scss';
+
+.video {
+  &__title {
+    margin-bottom: 25px;
+  }
+
+  &__main-card {
+    margin-top: 80px;
+  }
+  
+  &__cards {
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
+
+  @include atDesktop1024 {
+    &__title {
+      margin-bottom: 10px;
+    }
+  }
+}
+

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.scss';
 import profilePageTexts from '../../locales/profile-page-RU';
-import { PopupsContext } from '../../contexts/index';
+import { PopupsContext, ErrorsContext } from '../../contexts/index';
 import {
   useSmoothHorizontalScroll,
   useScrollToTop,
@@ -14,7 +14,7 @@ import {
   deleteDiary,
 } from '../../api/profile-page';
 import { getBookedEvents } from '../../api/event-participants';
-import { DELAY_RENDER } from '../../config/constants';
+import { DELAY_RENDER, ERROR_CODES } from '../../config/constants';
 import {
   BasePage,
   ProfileEventCard,
@@ -26,18 +26,20 @@ import {
   Loader,
 } from './index';
 
-function Profile() {
-  const {
-    headTitle,
-    headDescription,
-    eventsTitle,
-    eventsTitleNoResults,
-    formTitle,
-  } = profilePageTexts;
+const {
+  headTitle,
+  headDescription,
+  eventsTitle,
+  eventsTitleNoResults,
+  formTitle,
+} = profilePageTexts;
 
+function Profile() {
   useScrollToTop();
 
-  const { openPopupAboutEvent } = useContext(PopupsContext);
+  const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
+  const { setError } = useContext(ErrorsContext);
+  const { unauthorized, badRequest } = ERROR_CODES;
 
   const [events, setEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
@@ -57,11 +59,13 @@ function Profile() {
           })
         )
       )
-      .catch(console.log);
+      .catch(() => openPopupError());
   }, []);
 
   useEffect(() => {
-    getProfileDiariesData().then(setDiaries).catch(console.log);
+    getProfileDiariesData()
+      .then(setDiaries)
+      .catch(() => openPopupError());
   }, []);
 
   // отписка от ивентов
@@ -122,33 +126,37 @@ function Profile() {
     return formData;
   };
 
+  const handleErrorOnFormSubmit = (err) => {
+    if (err?.status === badRequest || err?.status === unauthorized) {
+      setError(err?.data);
+    } else openPopupError();
+  };
+
   const handleCreateDiary = (data) => {
     createDiary(createFormData(data))
-      .then((newDiary) => setDiaries([newDiary, ...diaries]))
-      .catch(console.log)
-      .finally(() => closeForm());
+      .then((newDiary) => {
+        setDiaries([newDiary, ...diaries]);
+        closeForm();
+      })
+      .catch((err) => handleErrorOnFormSubmit(err));
   };
 
   const handleEditDiary = (data) => {
     editDiary(data?.id, createFormData(data))
-      .then((newDiary) =>
+      .then((newDiary) => {
         setDiaries(() =>
           diaries.map((diary) =>
             diary?.id === newDiary?.id ? newDiary : diary
           )
-        )
-      )
-      .catch(console.log)
-      .finally(() => closeForm());
+        );
+        closeForm();
+      })
+      .catch((err) => handleErrorOnFormSubmit(err));
   };
 
   const handleSubmitDiary = (data) => {
-    const diary = data;
-    if (!diary?.mark) {
-      diary.mark = 'neutral';
-    }
-    if (isEditMode) handleEditDiary(diary);
-    else handleCreateDiary(diary);
+    if (isEditMode) handleEditDiary(data);
+    else handleCreateDiary(data);
   };
 
   // удаление дневника
@@ -165,15 +173,15 @@ function Profile() {
 
   const handleDeleteDiary = (diary) => {
     deleteDiary(diary?.id, diary)
-      .then(() =>
+      .then(() => {
         setDiaries(() =>
           diaries.filter((prevDiary) =>
             prevDiary?.id === diary?.id ? null : prevDiary
           )
-        )
-      )
-      .catch(console.log)
-      .finally(() => closeDeleteDiaryPopup());
+        );
+        closeDeleteDiaryPopup();
+      })
+      .catch(() => openPopupError());
   };
 
   // функции рендера
