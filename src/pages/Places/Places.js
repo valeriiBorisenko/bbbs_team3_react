@@ -67,8 +67,8 @@ function Places() {
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // видна ли главная карточка
   const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
-  // стейт для определения первой отрисовки страницы
-  const [isFirstRender, setIsFirstRender] = useState(false);
+  // стейт для определения первой отрисовки страницы (нужен при фильтрации)
+  const [isFirstRender, setIsFirstRender] = useState(true);
   // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
@@ -122,6 +122,17 @@ function Places() {
     return { chosenPlaceLast, restOfPlaces };
   };
 
+  // запрос отфильтрованного массива карточек
+  const getFilteredPlaces = (params) => {
+    getPlaces(params)
+      .then((placesData) => {
+        setPlaces(placesData);
+        setIsChosenCardHidden(true);
+      })
+      .catch(console.log)
+      .finally(() => setIsLoading(false));
+  };
+
   // функция-фильтратор
   const handleFiltration = () => {
     const activeCategories = categories.filter(
@@ -157,16 +168,10 @@ function Places() {
           .finally(() => setIsLoading(false));
       } else {
         // + ВОЗРАСТ
-        getPlaces({
+        getFilteredPlaces({
           age_restriction: activeAges,
           city: userCity,
-        })
-          .then((placesData) => {
-            setPlaces(placesData);
-            setIsChosenCardHidden(true);
-          })
-          .catch(console.log)
-          .finally(() => setIsLoading(false));
+        });
       }
 
       selectOneTag(setCategories, ALL_CATEGORIES);
@@ -175,18 +180,12 @@ function Places() {
 
     // КАТЕГОРИИ + ВОЗРАСТ (или без него)
     if (activeCategories.length > 0) {
-      getPlaces({
+      getFilteredPlaces({
         chosen: isMentorFlag,
         tags: activeTags,
         age_restriction: activeAges,
         city: userCity,
-      })
-        .then((placesData) => {
-          setPlaces(placesData);
-          setIsChosenCardHidden(true);
-        })
-        .catch(console.log)
-        .finally(() => setIsLoading(false));
+      });
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
   };
@@ -206,8 +205,9 @@ function Places() {
   useEffect(() => {
     if (userCity) {
       deselectAllTags(setAges);
-      setIsFirstRender(true);
+
       setIsCityChanging(true);
+
       Promise.all([getPlaces({ city: userCity }), getPlacesTags()])
         .then(([placesData, tagsData]) => {
           const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
@@ -234,12 +234,12 @@ function Places() {
       return (
         <>
           {chosenPlace && !isChosenCardHidden && (
-            <section className="places__main fade-in">
+            <section className="places__main">
               <CardPlace
                 key={chosenPlace?.id}
                 data={chosenPlace}
                 activityTypes={activityTypes}
-                sectionClass="card-container_type_main-article"
+                sectionClass="card-container_type_main-article scale-in"
                 isBig
               />
             </section>
@@ -252,7 +252,7 @@ function Places() {
                 data={place}
                 activityTypes={activityTypes}
                 color={COLORS[i % COLORS.length]}
-                sectionClass="card-container_type_article fade-in"
+                sectionClass="card-container_type_article scale-in"
               />
             ))}
           </section>
@@ -302,7 +302,7 @@ function Places() {
             />
             {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
 
-            {!isLoading ? <>{renderPlaces()}</> : <Loader isNested />}
+            {!isLoading ? renderPlaces() : <Loader isNested />}
           </>
         ) : (
           <Loader isNested />

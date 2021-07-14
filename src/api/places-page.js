@@ -11,11 +11,12 @@ function getPlacesTags() {
 // python was here :)
 // eslint-disable-next-line camelcase
 function getPlaces({ chosen, tags, age_restriction, city }) {
+  const query = chosen
+    ? { city, chosen, tags, age_restriction }
+    : { city, tags, age_restriction };
   return axios
     .get(`${baseURL}${apiUrl}/places/`, {
-      params: chosen
-        ? { city, chosen, tags, age_restriction }
-        : { city, tags, age_restriction },
+      params: query,
     })
     .then((response) => response.data.results)
     .catch((err) => Promise.reject(err?.response));
