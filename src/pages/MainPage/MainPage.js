@@ -41,11 +41,11 @@ function MainPage() {
 
   const [mainPageData, setMainPageData] = useState(null);
 
-  const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
-  const randomQuestions = randomizeArray(
-    mainPageData?.questions,
-    QUESTIONS_COUNT
-  );
+  // const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
+  // const randomQuestions = randomizeArray(
+  //   mainPageData?.questions,
+  //   QUESTIONS_COUNT
+  // );
 
   const activityTypes = useActivityTypes();
 
@@ -61,6 +61,7 @@ function MainPage() {
   const [isCityChanging, setIsCityChanging] = useState(false);
 
   // запрос даты главной страницы при загрузке и при смене города
+  //! из-за этого главная 2 раза запрашивается для юзера!!
   useEffect(() => {
     if (currentUser) {
       setIsCityChanging(true);
@@ -82,7 +83,8 @@ function MainPage() {
     return <Loader isCentered />;
   }
 
-  function renderEventsSection() {
+  function renderEventsBlock() {
+    // карточка ивента
     if (currentUser && mainPageData?.event) {
       return (
         <CardCalendar
@@ -94,28 +96,32 @@ function MainPage() {
       );
     }
 
+    // красно-зеленая заглушка
     return <CardStub />;
   }
 
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="lead page__section fade-in">
-        <div className="card-container card-container_type_identical">
-          {isCityChanging ? <Loader isNested /> : renderEventsSection()}
+  function renderHistoryBlock() {
+    if (mainPageData?.history) {
+      return (
+        <Card sectionClass="lead__media" key={mainPageData?.history?.id}>
+          <img
+            src={`${staticImageUrl}/${mainPageData?.history?.image}`}
+            alt={mainPageData?.history?.title}
+            className="card__media-img"
+          />
+          <Link to="/stories" className="lead__link">
+            {mainPageData?.history?.title}
+          </Link>
+        </Card>
+      );
+    }
 
-          <Card sectionClass="lead__media" key={mainPageData?.history?.id}>
-            <img
-              src={`${staticImageUrl}/${mainPageData?.history?.image}`}
-              alt={mainPageData?.history?.title}
-              className="card__media-img"
-            />
-            <Link to="/stories" className="lead__link">
-              {mainPageData?.history?.title}
-            </Link>
-          </Card>
-        </div>
-      </section>
+    // return <Card sectionClass="lead__media" />
+    return null;
+  }
 
+  function renderPlaceSection() {
+    return (
       <section className="place main-section page__section fade-in">
         <CardPlace
           key={mainPageData?.place?.id}
@@ -126,33 +132,36 @@ function MainPage() {
           isMainPage
         />
       </section>
+    );
+  }
 
-      {mainPageData?.articles.length > 0 && (
-        <section className="articles main-section page__section fade-in">
-          <Link to="/articles" className="main-section__link">
-            <CardArticleBig
-              key={mainPageData?.articles[0]?.id}
-              title={mainPageData?.articles[0]?.title}
-              color="blue"
-            />
-          </Link>
-        </section>
-      )}
+  function renderArticleSection(article) {
+    return (
+      <section className="articles main-section page__section fade-in">
+        <Link to="/articles" className="main-section__link">
+          <CardArticleBig key={article.id} title={article.title} color="blue" />
+        </Link>
+      </section>
+    );
+  }
 
+  function renderMoviesSection() {
+    // рандомизируем массив
+    const randomMovies = randomizeArray(mainPageData.movies, MOVIES_COUNT);
+
+    const additionalMoviesClasses =
+      randomMovies.length > 1
+        ? `movies_pagination movies_pagination_${randomMovies.length}`
+        : '';
+    const className = `main-section__link ${additionalMoviesClasses}`;
+    // возвращаем
+    return (
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
-        {randomMovies.map((item) => (
-          <Link
-            to="/films"
-            className={`main-section__link ${
-              randomMovies.length > 1
-                ? `movies_pagination movies_pagination_${randomMovies.length}`
-                : ''
-            }`}
-            key={item?.id}
-          >
-            <CardFilm data={item}>
+        {randomMovies.map((movie) => (
+          <Link to="/films" className={className} key={movie.id}>
+            <CardFilm data={movie}>
               <ul className="card-film__rubric-list">
-                {item?.tags.map((tag) => (
+                {movie.tags.map((tag) => (
                   <li key={tag.id}>
                     <Rubric title={tag.name} sectionClass="card-film__rubric" />
                   </li>
@@ -162,7 +171,11 @@ function MainPage() {
           </Link>
         ))}
       </section>
+    );
+  }
 
+  function renderVideoSection() {
+    return (
       <section className="video main-section page__section fade-in">
         <Link to="/video" className="main-section__link">
           <CardVideoMain
@@ -171,40 +184,79 @@ function MainPage() {
           />
         </Link>
       </section>
+    );
+  }
 
+  function renderQuestionBlock() {
+    const randomQuestions = randomizeArray(
+      mainPageData?.questions,
+      QUESTIONS_COUNT
+    );
+
+    return (
+      <div className="main-questions__container">
+        {randomQuestions.map((item) => (
+          <Link
+            to={QUESTIONS_URL}
+            className={`main-section__link main-section__link_el_question ${
+              randomQuestions.length > 2 ? ' main-questions_pagination' : ''
+            }`}
+            key={item?.id}
+          >
+            <CardQuestion data={item} />
+          </Link>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      {/* секция из ивента + истории */}
+      <section className="lead page__section fade-in">
+        <div className="card-container card-container_type_identical">
+          {/* ивент */}
+          {isCityChanging ? <Loader isNested /> : renderEventsBlock()}
+
+          {/* история дружбы */}
+          {renderHistoryBlock()}
+          {/* //! вернуть АНИМАЦИЮ если истории нет! */}
+        </div>
+      </section>
+
+      {/* секция Место */}
+      {mainPageData?.place ? renderPlaceSection() : null}
+
+      {/* секция Статья */}
+      {mainPageData?.articles.length > 0
+        ? renderArticleSection(mainPageData?.articles[0])
+        : null}
+
+      {/* секция Фильмы */}
+      {mainPageData?.movies ? renderMoviesSection() : null}
+
+      {/* секция Видео */}
+      {mainPageData?.video ? renderVideoSection() : null}
+
+      {/* секция Виджет + Вопросы */}
       <section className="main-questions main-section page__section fade-in">
         <div className="card-container card-container_type_iframe">
+          {/* виджету нужна заглушка на случай если не загрузится или его обрезал ADblock */}
+          {/* //! Виджет опять полетел! */}
           <Widget
             title="Facebook"
             link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
           />
-          <div className="main-questions__container">
-            {randomQuestions.map((item) => (
-              <Link
-                to={QUESTIONS_URL}
-                className={`main-section__link main-section__link_el_question ${
-                  randomQuestions.length > 2 ? ' main-questions_pagination' : ''
-                }`}
-                key={item?.id}
-              >
-                <CardQuestion data={item} />
-              </Link>
-            ))}
-          </div>
+
+          {/* секция Вопросов */}
+          {mainPageData?.questions.length > 0 ? renderQuestionBlock() : null}
         </div>
       </section>
 
-      {mainPageData?.articles.length > 1 && (
-        <section className="articles main-section page__section fade-in">
-          <Link to="/articles" className="main-section__link">
-            <CardArticleBig
-              key={mainPageData?.articles[1]?.id}
-              title={mainPageData?.articles[1]?.title}
-              color="green"
-            />
-          </Link>
-        </section>
-      )}
+      {/* секция Статья */}
+      {mainPageData?.articles.length > 1
+        ? renderArticleSection(mainPageData?.articles[1])
+        : null}
     </BasePage>
   );
 }
