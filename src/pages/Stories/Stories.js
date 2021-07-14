@@ -6,7 +6,7 @@ console.log(AnimatedPageContainer);
 function Stories() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <AnimatedPageContainer titleText="Данная страница пока находится в разработке. Приносим свои извинения!" />
+      <AnimatedPageContainer titleText="Данная страница пока находится в разработке.\n Приносим свои извинения!" />
     </BasePage>
   );
 }

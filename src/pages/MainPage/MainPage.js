@@ -8,7 +8,12 @@ import {
   useEventBooking,
   useActivityTypes,
 } from '../../hooks/index';
-import { QUESTIONS_URL, STORIES_URL } from '../../config/routes';
+import {
+  QUESTIONS_URL,
+  STORIES_URL,
+  VIDEO_URL,
+  MOVIES_URL,
+} from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
 import getMainPageData from '../../api/main-page';
@@ -40,13 +45,7 @@ function MainPage() {
   const { openPopupAboutEvent } = useContext(PopupsContext);
 
   const [mainPageData, setMainPageData] = useState(null);
-
-  // const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
-  // const randomQuestions = randomizeArray(
-  //   mainPageData?.questions,
-  //   QUESTIONS_COUNT
-  // );
-
+  const [isCityChanging, setIsCityChanging] = useState(false);
   const activityTypes = useActivityTypes();
 
   // запись/отписка на мероприятия
@@ -57,8 +56,6 @@ function MainPage() {
       setMainPageData({ ...mainPageData, event: selectedEvent });
     }
   }, [selectedEvent]);
-
-  const [isCityChanging, setIsCityChanging] = useState(false);
 
   // запрос даты главной страницы при загрузке и при смене города
   //! из-за этого главная 2 раза запрашивается для юзера!!
@@ -158,7 +155,7 @@ function MainPage() {
     return (
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
         {randomMovies.map((movie) => (
-          <Link to="/films" className={className} key={movie.id}>
+          <Link to={MOVIES_URL} className={className} key={movie.id}>
             <CardFilm data={movie}>
               <ul className="card-film__rubric-list">
                 {movie.tags.map((tag) => (
@@ -177,7 +174,7 @@ function MainPage() {
   function renderVideoSection() {
     return (
       <section className="video main-section page__section fade-in">
-        <Link to="/video" className="main-section__link">
+        <Link to={VIDEO_URL} className="main-section__link">
           <CardVideoMain
             key={mainPageData.video.id}
             data={mainPageData.video}
