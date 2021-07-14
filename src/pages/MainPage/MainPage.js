@@ -30,13 +30,14 @@ import {
   Widget,
   CardQuestion,
   Rubric,
+  CardAnimatedPlug,
 } from './index';
 
 // количество отображаемых карточек с фильмами и вопросами
 const MOVIES_COUNT = 4;
 const QUESTIONS_COUNT = 3;
 
-const { headTitle, headDescription } = mainPageTexts;
+const { headTitle, headDescription, CardAnimatedPlugText } = mainPageTexts;
 
 function MainPage() {
   useScrollToTop();
@@ -114,7 +115,12 @@ function MainPage() {
     }
 
     // return <Card sectionClass="lead__media" />
-    return null;
+    return (
+      <CardAnimatedPlug
+        text={CardAnimatedPlugText}
+        sectionClass="lead__media"
+      />
+    );
   }
 
   function renderPlaceSection() {
@@ -217,7 +223,6 @@ function MainPage() {
 
           {/* история дружбы */}
           {renderHistoryBlock()}
-          {/* //! вернуть АНИМАЦИЮ если истории нет! */}
         </div>
       </section>
 
