@@ -14,7 +14,7 @@ import { localStChosenVideo } from '../../../config/constants';
 const PopupVideo = ({ isOpen, onClose }) => {
   console.log('PopupVideo COMPONENT');
   const data = getLocalStorageData(localStChosenVideo);
-  const embedSrc = parserLinkYoutube(data?.link);
+  const { frameSrc } = parserLinkYoutube(data?.link);
 
   console.log('data', data);
 
@@ -40,7 +40,7 @@ const PopupVideo = ({ isOpen, onClose }) => {
           id="playeryt"
           onLoad={() => setIframeIsLoading(false)}
           className="popup__video-iframe"
-          src={embedSrc}
+          src={frameSrc}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

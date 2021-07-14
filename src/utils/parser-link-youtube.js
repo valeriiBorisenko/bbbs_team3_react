@@ -1,19 +1,11 @@
-const parserLinkYoutube = (link) => {
-  const regExp =
-    /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+import getYouTubeID from 'get-youtube-id';
 
-  if (link) {
-    const match = link.match(regExp);
-    const idVideo = match && match[7].length === 11 ? match[7] : '';
-    const frameSrc = `https://www.youtube.com/embed/${idVideo}`;
+const parserLinkYoutube = (link = '') => {
+  const idVideo = getYouTubeID(link);
+  const frameSrc = `https://www.youtube.com/embed/${idVideo}`;
+  const imagePreview = `http://img.youtube.com/vi/${idVideo}/maxresdefault.jpg`;
 
-    // Нужно ли нам превью к видео?
-    // const imagePreview = `http://img.youtube.com/vi/${idVideo}/maxresdefault.jpg`;
-
-    return frameSrc;
-  }
-  // По хорошому ставить заглушку когда нету ссылки или ссылка не подходит
-  return null;
+  return { frameSrc, imagePreview };
 };
 
 export default parserLinkYoutube;
