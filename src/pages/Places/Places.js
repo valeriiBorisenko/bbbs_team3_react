@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import './Places.scss';
 import { useEffect, useState, useContext } from 'react';
 import placesPageTexts from '../../locales/places-page-RU';
-import ageFilters from './constants';
+import { ageFilters, PAGE_SIZE_PAGINATE } from './constants';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useDebounce,
@@ -31,6 +32,7 @@ import {
   Loader,
   TagsList,
   NoDataNotificationBox,
+  Paginate,
 } from './index';
 import { getPlaces, getPlacesTags } from '../../api/places-page';
 
@@ -73,6 +75,36 @@ function Places() {
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
 
+  // Стейты для пагинации
+  const [pageSize, setPageSize] = useState(null);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0);
+
+  // Резайз пагинации при первой загрузке
+  useEffect(() => {
+    const smallQuery = window.matchMedia('(max-width: 1024px)');
+    const largeQuery = window.matchMedia('(max-width: 1279px)');
+
+    const listener = () => {
+      if (smallQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.small);
+      } else if (largeQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
+      } else {
+        setPageSize(PAGE_SIZE_PAGINATE.big);
+      }
+    };
+    listener();
+
+    smallQuery.addEventListener('change', listener);
+    largeQuery.addEventListener('change', listener);
+
+    return () => {
+      smallQuery.removeEventListener('change', listener);
+      largeQuery.removeEventListener('change', listener);
+    };
+  }, []);
+
   // хэндлер клика по фильтру КАТЕГОРИИ
   const changeCategory = (inputValue, isChecked) => {
     if (inputValue === ALL_CATEGORIES) {
@@ -113,28 +145,30 @@ function Places() {
   // функция, определяющая карточки по флагу "Выбор наставника"
   // chosenPlaceLast - самая "свежая" карточка "Выбор наставника"
   // restOfPlaces - массив без этой карточки
-  const definePlaces = (placesData) => {
-    const chosenPlaces = placesData.filter((place) => place?.chosen);
-    const chosenPlaceLast = chosenPlaces[chosenPlaces.length - 1];
-    const restOfPlaces = chosenPlaceLast
-      ? placesData.filter((place) => place?.id !== chosenPlaceLast?.id)
-      : placesData;
+  const definePlaces = (placesData, isFiltered) => {
+    const allPlaces = placesData;
+    let chosenPlaces;
+    let restOfPlaces;
+    let chosenPlaceLast;
+
+    if (pageNumber === 0 && !isFiltered) {
+      chosenPlaces = allPlaces.filter((place) => place?.chosen);
+      chosenPlaceLast = chosenPlaces[chosenPlaces.length - 1];
+    }
+
+    if (!chosenPlaceLast && pageNumber === 0 && !isFiltered) {
+      allPlaces.pop();
+      restOfPlaces = allPlaces;
+    } else {
+      restOfPlaces = allPlaces.filter(
+        (place) => place?.id !== chosenPlaceLast?.id
+      );
+    }
+
     return { chosenPlaceLast, restOfPlaces };
   };
 
-  // запрос отфильтрованного массива карточек
-  const getFilteredPlaces = (params) => {
-    getPlaces(params)
-      .then((placesData) => {
-        setPlaces(placesData);
-        setIsChosenCardHidden(true);
-      })
-      .catch(console.log)
-      .finally(() => setIsLoading(false));
-  };
-
-  // функция-фильтратор
-  const handleFiltration = () => {
+  const defineActiveTags = () => {
     const activeCategories = categories.filter(
       (category) => category.isActive && category.filter !== ALL_CATEGORIES
     );
@@ -153,25 +187,61 @@ function Places() {
       (tag) => tag.filter === mentorTag
     );
 
+    return {
+      activeCategories,
+      activeTags,
+      activeAges,
+      isMentorFlag,
+    };
+  };
+  console.log(chosenPlace);
+
+  // запрос отфильтрованного массива карточек
+  const getFilteredPlaces = (params, isFiltered) => {
+    const offset = pageSize * pageNumber;
+    const fixedPageSize =
+      pageNumber === 0 && !isFiltered ? pageSize + 1 : pageSize;
+    const fixedOffset =
+      pageNumber > 0 && chosenPlace && !isFiltered ? offset + 1 : offset;
+
+    getPlaces({ limit: fixedPageSize, offset: fixedOffset, ...params })
+      .then(({ results, count }) => {
+        setPageCount(Math.ceil(count / pageSize));
+        const { restOfPlaces } = definePlaces(results, isFiltered);
+        if (pageNumber > 0 || isFiltered) {
+          setIsChosenCardHidden(true);
+        }
+        setPlaces(restOfPlaces);
+      })
+      .catch(console.log)
+      .finally(() => setIsLoading(false));
+  };
+
+  // функция-фильтратор
+  const handleFiltration = () => {
+    const { activeCategories, activeTags, activeAges, isMentorFlag } =
+      defineActiveTags();
+
     // ВСЕ
     if (activeCategories.length === 0) {
       if (activeAges.length === 0) {
         // + БЕЗ ВОЗРАСТА (по умолчанию)
-        getPlaces({ city: userCity })
-          .then((placesData) => {
-            const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
-            setChosenPlace(chosenPlaceLast);
-            setPlaces(restOfPlaces);
-            setIsChosenCardHidden(false);
-          })
-          .catch(console.log)
-          .finally(() => setIsLoading(false));
+        getFilteredPlaces(
+          {
+            city: userCity,
+          },
+          false
+        );
+        setIsChosenCardHidden(false);
       } else {
         // + ВОЗРАСТ
-        getFilteredPlaces({
-          age_restriction: activeAges,
-          city: userCity,
-        });
+        getFilteredPlaces(
+          {
+            age_restriction: activeAges,
+            city: userCity,
+          },
+          true
+        );
       }
 
       selectOneTag(setCategories, ALL_CATEGORIES);
@@ -180,37 +250,47 @@ function Places() {
 
     // КАТЕГОРИИ + ВОЗРАСТ (или без него)
     if (activeCategories.length > 0) {
-      getFilteredPlaces({
-        chosen: isMentorFlag,
-        tags: activeTags,
-        age_restriction: activeAges,
-        city: userCity,
-      });
+      getFilteredPlaces(
+        {
+          chosen: isMentorFlag,
+          tags: activeTags,
+          age_restriction: activeAges,
+          city: userCity,
+        },
+        true
+      );
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
   };
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
-  // запуск фильтрации
+  // запуск фильтрации/пагинации
   useEffect(() => {
-    if (isFiltersUsed) {
+    if (!isFirstRender && (isFiltersUsed || pageNumber >= 0)) {
       setIsLoading(true);
       debounceFiltration();
     }
-    setIsFiltersUsed(false);
     setIsFirstRender(false);
-  }, [isFiltersUsed]);
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed, pageSize, pageNumber]);
 
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
-    if (userCity) {
+    if (userCity && pageSize) {
       deselectAllTags(setAges);
 
       setIsCityChanging(true);
 
-      Promise.all([getPlaces({ city: userCity }), getPlacesTags()])
-        .then(([placesData, tagsData]) => {
-          const { chosenPlaceLast, restOfPlaces } = definePlaces(placesData);
+      Promise.all([
+        getPlaces({
+          city: userCity,
+          limit: pageSize + 1,
+        }),
+        getPlacesTags(),
+      ])
+        .then(([{ results, count }, tagsData]) => {
+          setPageCount(Math.ceil(count / pageSize));
+          const { chosenPlaceLast, restOfPlaces } = definePlaces(results);
           setChosenPlace(chosenPlaceLast);
           setPlaces(restOfPlaces);
           setCategories(defineCategories(tagsData, chosenPlaceLast));
@@ -219,7 +299,7 @@ function Places() {
         .catch(console.log)
         .finally(() => setIsCityChanging(false));
     }
-  }, [userCity]);
+  }, [userCity, pageSize]);
 
   useEffect(() => {
     if (!userCity) {
@@ -229,6 +309,7 @@ function Places() {
     }
   }, []);
 
+  // функции рендера
   const renderPlaces = () => {
     if (places?.length > 0) {
       return (
@@ -280,6 +361,20 @@ function Places() {
     </>
   );
 
+  function renderPagination() {
+    if (pageCount > 1) {
+      return (
+        <Paginate
+          sectionClass="cards-section__pagination"
+          pageCount={pageCount}
+          value={pageNumber}
+          onChange={setPageNumber}
+        />
+      );
+    }
+    return null;
+  }
+
   const renderPageContent = () => {
     if (isFirstRender && places?.length === 0) {
       return renderAnimatedContainer();
@@ -303,6 +398,7 @@ function Places() {
             {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
 
             {!isLoading ? renderPlaces() : <Loader isNested />}
+            {renderPagination()}
           </>
         ) : (
           <Loader isNested />

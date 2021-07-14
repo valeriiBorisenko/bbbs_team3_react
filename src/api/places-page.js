@@ -10,15 +10,15 @@ function getPlacesTags() {
 
 // python was here :)
 // eslint-disable-next-line camelcase
-function getPlaces({ chosen, tags, age_restriction, city }) {
+function getPlaces({ chosen, tags, age_restriction, city, limit, offset }) {
   const query = chosen
-    ? { city, chosen, tags, age_restriction }
-    : { city, tags, age_restriction };
+    ? { city, chosen, tags, age_restriction, limit, offset }
+    : { city, tags, age_restriction, limit, offset };
   return axios
     .get(`${baseURL}${apiUrl}/places/`, {
       params: query,
     })
-    .then((response) => response.data.results)
+    .then((response) => response.data)
     .catch((err) => Promise.reject(err?.response));
 }
 
