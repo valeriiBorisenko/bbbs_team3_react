@@ -1,6 +1,7 @@
 import './Places.scss';
 import { useEffect, useState, useContext } from 'react';
 import placesPageTexts from '../../locales/places-page-RU';
+import ageFilters from './constants';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import {
   useDebounce,
@@ -40,31 +41,7 @@ const {
   textStubNoData,
   paragraphNoContent,
   mentorTag,
-  ageFilterNames,
 } = placesPageTexts;
-
-const ageFilters = [
-  {
-    filter: ageFilterNames[0].filter,
-    name: ageFilterNames[0].name,
-    isActive: false,
-  },
-  {
-    filter: ageFilterNames[1].filter,
-    name: ageFilterNames[1].name,
-    isActive: false,
-  },
-  {
-    filter: ageFilterNames[2].filter,
-    name: ageFilterNames[2].name,
-    isActive: false,
-  },
-  {
-    filter: ageFilterNames[3].filter,
-    name: ageFilterNames[3].name,
-    isActive: false,
-  },
-];
 
 function Places() {
   const activityTypes = useActivityTypes();
@@ -100,6 +77,7 @@ function Places() {
   const changeCategory = (inputValue, isChecked) => {
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
+      deselectAllTags(setAges);
     } else {
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
