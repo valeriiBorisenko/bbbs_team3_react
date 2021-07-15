@@ -2,7 +2,6 @@ import { BasePage, AnimatedPageContainer } from './index';
 import storiesPageTexts from '../../locales/stories-page-RU';
 
 const { headTitle, headDescription } = storiesPageTexts;
-console.log(AnimatedPageContainer);
 function Stories() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>

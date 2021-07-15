@@ -84,13 +84,8 @@ function ReadAndWatchSection({
 
     // значит произошел скрол вперед + это предпоследняя страница
     if (isPenultimatePage || isLastPage) {
-      // console.log('ЭТО ПРЕДПОСЛЕДНЯЯ ИЛИ ПОСЛЕДНЯЯ СТРАНИЦА');
-
       addNewData()
         .then(({ results }) => {
-          // console.log(
-          //   'мы загрузили дополнительные данные и прибавили к текущим'
-          // );
           setSectionData((previousData) => [...previousData, ...results]);
           setPageIndex((prevIndex) => prevIndex + 1);
         })

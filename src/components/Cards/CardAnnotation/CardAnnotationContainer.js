@@ -22,7 +22,7 @@ function CardAnnotationContainer({ caption, children }) {
       onMouseLeave={onMouseLeave}
       autoHideTimeout={700}
       autoHideDuration={400}
-      renderTrackHorizontal={() => <div style={{ display: 'none' }} />}
+      renderTrackHorizontal={() => <div style={{ opacity: 'none' }} />}
       renderThumbVertical={() => <div className="card-annotation__thumb" />}
     >
       {caption && (
