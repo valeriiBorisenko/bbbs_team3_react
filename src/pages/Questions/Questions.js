@@ -32,7 +32,6 @@ import {
 import {
   getQuestionsPageData,
   getQuestionsPageTags,
-  getQuestionsByFilters,
   postQuestion,
 } from '../../api/questions-page';
 
@@ -62,8 +61,15 @@ function Questions() {
 
   // крутилка-лоадер
   const [isLoading, setIsLoading] = useState(false);
+  //! крутилка на дозагрузку даты
+  //! const [isMoreDataLoading, setIsMoreDataLoading] = useState(false);
   // начальная дата с API
   const [questionsPageData, setQuestionsPageData] = useState(null);
+  // кол-во вопросов сразу и в до-загрузке
+  const pageSize = 10;
+  const [pageIndex, setPageIndex] = useState(0);
+  const [totalPages, setTotalPages] = useState(null);
+  console.log(totalPages);
 
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
@@ -74,10 +80,11 @@ function Questions() {
   const [questionFormState, setQuestionFormState] = useState(
     questionForm.beforeSubmit
   );
-
+  // валидация
   const { values, handleChange, errors, isValid, resetForm } =
     useFormWithValidation();
 
+  // форма вопросов
   const setFormState = (isError) => {
     if (isError) {
       // форму не чистим!
@@ -124,9 +131,10 @@ function Questions() {
 
     // то есть активных нету и сейчас нажато "ВСЕ"
     if (activeCategories.length === 0) {
-      getQuestionsPageData()
+      const offset = pageSize * pageIndex;
+      getQuestionsPageData({ limit: pageSize, offset })
         .then((allQuestions) => {
-          setQuestionsPageData(allQuestions);
+          setQuestionsPageData(allQuestions.results);
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
@@ -134,8 +142,10 @@ function Questions() {
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       const query = activeCategories.join();
-      getQuestionsByFilters(query)
-        .then((filteredQuestions) => setQuestionsPageData(filteredQuestions))
+      getQuestionsPageData({ tags: query })
+        .then((filteredQuestions) =>
+          setQuestionsPageData(filteredQuestions.results)
+        )
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
 
@@ -152,11 +162,18 @@ function Questions() {
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  // API
+  // API, первая загрузка
   useEffect(() => {
-    Promise.all([getQuestionsPageData(), getQuestionsPageTags()])
+    const offset = pageSize * pageIndex;
+    Promise.all([
+      getQuestionsPageData({ limit: pageSize, offset }),
+      getQuestionsPageTags(),
+    ])
       .then(([questionsData, tagsFilters]) => {
-        setQuestionsPageData(questionsData);
+        const { results, count } = questionsData;
+
+        setTotalPages(Math.ceil(count / pageSize));
+        setQuestionsPageData(results);
 
         const customFilters = tagsFilters.map((tag) => {
           const filterName = changeCaseOfFirstLetter(tag.name);
@@ -221,18 +238,32 @@ function Questions() {
     </>
   );
 
-  const fetchMoreQuestions = () => {};
-  //! загрузить еще
-  // 1. пропс isDisabled будет смотреть на стейт "осталось ли еще даты?"
-  // 2. дебаунс на кнопку
-  const renderLoadMoreButton = () => (
-    <Button
-      title={loadMoreButton}
-      onClick={fetchMoreQuestions}
-      sectionClass="load-more-button"
-      // isDisabled
-    />
-  );
+  // эффект подгрузки доп данных
+  useEffect(() => {
+    if (pageIndex !== 0) {
+      const offset = pageSize * pageIndex;
+      getQuestionsPageData({ limit: pageSize, offset })
+        .then((questionsData) => {
+          const { results } = questionsData;
+          setQuestionsPageData((prevData) => [...prevData, ...results]);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [pageIndex]);
+
+  const renderLoadMoreButton = () => {
+    if (questionsPageData.length >= 10) {
+      return (
+        <Button
+          title={loadMoreButton}
+          onClick={() => setPageIndex((prevIndex) => prevIndex + 1)}
+          sectionClass="load-more-button"
+        />
+      );
+    }
+
+    return null;
+  };
 
   // контейнер с вопросами
   const renderQuestionsContainer = () => (
@@ -268,7 +299,7 @@ function Questions() {
           {/* рендерим сами вопросы */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
 
-          {renderLoadMoreButton()}
+          {questionsPageData.length >= 10 ? renderLoadMoreButton() : null}
           {/* если залогинен рендерим форму */}
           {currentUser && renderQuestionForm()}
         </>
@@ -299,3 +330,9 @@ function Questions() {
 }
 
 export default Questions;
+
+//! загрузить еще
+// 1. пропс isDisabled будет смотреть на стейт "осталось ли еще даты?"
+// 2. дебаунс на кнопку
+// 3. если у тебя офсет =8, а элементов всего сейчас 7, то кнопку надо или удалять или закрашивать серым
+//* 4. показывать кнопку ОТ определенного количества элементов на странице (от 10 штук)
