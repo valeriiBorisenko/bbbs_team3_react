@@ -66,6 +66,7 @@ function Places() {
   const [chosenPlace, setChosenPlace] = useState(null);
   const [isChosenOnPageOne, setIsChosenOnPageOne] = useState(false);
 
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
   // переход между фильтрами, лоадер
   const [isLoadingFilters, setIsLoadingFilters] = useState(false);
   // переход пагинаций без фильтров, лоадер
@@ -76,8 +77,8 @@ function Places() {
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // видна ли главная карточка
   const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
-  // стейт для определения первой отрисовки страницы (нужен при фильтрации)
-  const [isFirstRender, setIsFirstRender] = useState(true);
+  // стейт для определения первой отрисовки страницы (нужен при отсутствии данных)
+  const [isFirstRender, setIsFirstRender] = useState(false);
   // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
@@ -225,17 +226,19 @@ function Places() {
         }
 
         setPlaces(restOfPlaces);
-        setIsFiltersUsed(false);
       })
       .catch(console.log)
       .finally(() => {
         setIsLoadingFilters(false);
         setIsLoadingPaginate(false);
+        setIsFiltersUsed(false);
       });
   };
 
   // функция-фильтратор
   const handleFiltration = () => {
+    setIsFirstRender(false);
+
     const { activeCategories, activeTags, activeAges, isMentorFlag } =
       defineActiveTags();
 
@@ -283,16 +286,15 @@ function Places() {
   const debouncePagination = useDebounce(getFilteredPlaces, DELAY_DEBOUNCE);
   // запуск фильтрации
   useEffect(() => {
-    if (!isFirstRender && isFiltersUsed) {
+    if (!isLoadingPage && isFiltersUsed) {
       setIsLoadingFilters(true);
       debounceFiltration();
     }
-    setIsFirstRender(false);
+    setIsLoadingPage(false);
   }, [isFiltersUsed, pageNumber]);
   // запуск пагинации
   useEffect(() => {
-    if (!isFirstRender && !isFiltersUsed) {
-      console.log('pagination activated');
+    if (!isLoadingPage && !isFiltersUsed) {
       const { activeTags, activeAges, isMentorFlag } = defineActiveTags();
       // для пагинации, чтобы сохранить настройки фильтров
       const predefinedParams = {
@@ -314,9 +316,9 @@ function Places() {
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
     if (userCity && pageSize) {
-      deselectAllTags(setAges);
-
+      setIsFirstRender(true);
       setIsCityChanging(true);
+      deselectAllTags(setAges);
 
       Promise.all([
         getChosenPlace({ city: userCity }),
@@ -385,7 +387,7 @@ function Places() {
   }
 
   const renderPlaces = () => {
-    if (places?.length > 0) {
+    if (chosenPlace || places?.length > 0) {
       return (
         <>
           {chosenPlace && !isChosenCardHidden && !isLoadingPaginate && (
@@ -407,7 +409,7 @@ function Places() {
                   key={place?.id}
                   data={place}
                   activityTypes={activityTypes}
-                  color={COLORS[i % COLORS.length]}
+                  color={COLORS[(i + 1) % COLORS.length]}
                   sectionClass="card-container_type_article scale-in"
                 />
               ))}
@@ -419,6 +421,7 @@ function Places() {
         </>
       );
     }
+
     return (
       <NoDataNotificationBox
         text={paragraphNoContent}
@@ -428,7 +431,7 @@ function Places() {
   };
 
   const renderPageContent = () => {
-    if (isFirstRender && places?.length === 0) {
+    if (isFirstRender && !chosenPlace && places?.length === 0) {
       return renderAnimatedContainer();
     }
     return (
