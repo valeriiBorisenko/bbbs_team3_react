@@ -188,7 +188,6 @@ function Books() {
             ))}
           </ul>
         )}
-        );
         {pageCount > 1 && (
           <Paginate
             sectionClass="cards-section__pagination"
