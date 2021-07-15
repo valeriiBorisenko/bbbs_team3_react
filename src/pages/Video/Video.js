@@ -33,7 +33,8 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-const { headTitle, headDescription, title, textStubNoData } = videoPageTexts;
+const { headTitle, headDescription, title, resourceGroupTag, textStubNoData } =
+  videoPageTexts;
 
 const Video = () => {
   useScrollToTop();
@@ -52,8 +53,6 @@ const Video = () => {
   const [mainVideo, setMainVideo] = useState({});
   const [video, setVideo] = useState(null);
   const [categories, setCategories] = useState(null);
-
-  // const [selectedVideo, setSelectedVideo] = useState({});
 
   // Стейты состояний
   const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -74,12 +73,185 @@ const Video = () => {
     setIsFiltersUsed(true);
   };
 
-  // ---!!!! Наверное стоит вынести это куда то раз повторяется на разных страницах?
-  const getMainCard = (arr) => arr.find((item) => item?.pinnedFullSize);
-  const getCardsWithoutMain = (arr) =>
-    arr.filter((item) => !item?.pinnedFullSize);
+  // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Ресурсная группа"
+  const defineCategories = (tags, resourceGroup) => {
+    const categoriesArray = tags.map((tag) => ({
+      filter: tag?.slug.toLowerCase(),
+      name: changeCaseOfFirstLetter(tag?.name),
+      isActive: false,
+    }));
+    if (resourceGroup) {
+      return [
+        { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+        { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
+        ...categoriesArray,
+      ];
+    }
+    return [
+      { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+      ...categoriesArray,
+    ];
+  };
 
-  // Фильтры страницы
+  // Сортировка значений Тэгов для АПИ
+  const getActiveTags = () => {
+    const activeCategories = categories.filter(
+      (filter) => filter.isActive && filter.filter !== ALL_CATEGORIES
+    );
+    const activeTags = activeCategories
+      .filter((tag) => tag.filter !== resourceGroupTag)
+      .map((filter) => filter.filter)
+      .join(',');
+
+    const isResourceGroup = activeCategories.some(
+      (tag) => tag.filter === resourceGroupTag
+    );
+    return { activeTags, isResourceGroup };
+  };
+
+  // Функция обработки запроса АПИ с карточками
+  const getVideoData = (params, isFiltersActive) => {
+    const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
+
+    const fixedPageSize =
+      pageNumber === 0 && mainVideo && !isFiltersActive
+        ? pageSize + 1
+        : pageSize;
+
+    const fixedOffset =
+      pageNumber > 0 && mainVideo && !isFiltersActive ? offset + 1 : offset;
+
+    getVideoPageData({
+      limit: fixedPageSize,
+      offset: fixedOffset,
+      ...params,
+    })
+      .then(({ results, count }) => {
+        if (mainVideo && !isFiltersActive) {
+          setPageCount(Math.ceil((count - 1) / pageSize));
+        } else {
+          setPageCount(Math.ceil(count / pageSize));
+        }
+
+        if (pageNumber === 0 && mainVideo && !isFiltersActive) {
+          setVideo(() => results.filter((item) => !item?.pinnedFullSize));
+          setIsShowMainCard(true);
+        } else setVideo(results);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsFiltersUsed(false);
+        setIsLoadingPaginate(false);
+      });
+  };
+
+  // Функция обработки запросов АПИ для первой загрузки страницы
+  const getFirstPageData = () => {
+    Promise.all([
+      getVideoPageTags(),
+      getVideoPageData({
+        limit: pageSize + 1,
+      }),
+    ])
+      .then(([tags, { results, count }]) => {
+        const videoData = results;
+        const mainCard = videoData.find((item) => item?.pinnedFullSize);
+        setMainVideo(mainCard);
+        if (mainCard) {
+          setVideo(() => videoData.filter((item) => !item?.pinnedFullSize));
+          setPageCount(Math.ceil((count - 1) / pageSize));
+        } else {
+          videoData.pop();
+          setVideo(videoData);
+          setPageCount(Math.ceil(count / pageSize));
+        }
+
+        const isResourceGroup = videoData.some((item) => item?.resourceGroup);
+        setCategories(defineCategories(tags, isResourceGroup));
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoadingPage(false);
+      });
+  };
+
+  // Функция-фильтратор с использованием АПИ
+  const handleFiltration = () => {
+    if (categories && isFiltersUsed) {
+      const { activeTags, isResourceGroup } = getActiveTags();
+
+      if (!activeTags && !isResourceGroup) {
+        selectOneTag(setCategories, ALL_CATEGORIES);
+        getVideoData(
+          { tags: activeTags, resource_group: isResourceGroup },
+          false
+        );
+      } else
+        getVideoData(
+          { tags: activeTags, resource_group: isResourceGroup },
+          true
+        );
+    }
+  };
+
+  // Дэлеи для динамических запросов
+  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
+  const debouncePaginate = useDebounce(getVideoData, DELAY_DEBOUNCE);
+  // Динамические фильтры
+  useEffect(() => {
+    if (isFiltersUsed) {
+      debounceFiltration();
+    }
+  }, [isFiltersUsed]);
+
+  // Загрузка страницы, динамическая пагинация, динамический ресайз
+  useEffect(() => {
+    if (pageSize) {
+      getFirstPageData();
+    }
+  }, [pageSize]);
+
+  useEffect(() => {
+    if (!isLoadingPage && !isFiltersUsed) {
+      setIsLoadingPaginate(true);
+      const { activeCategories, isResourceGroup } = getActiveTags();
+      const predefinedParams = {
+        tags: activeCategories,
+        resource_group: isResourceGroup,
+      };
+
+      if (activeCategories || isResourceGroup) {
+        debouncePaginate(predefinedParams, true);
+      } else debouncePaginate(predefinedParams, false);
+    }
+  }, [pageNumber]);
+
+  // Резайз пагинации
+  useEffect(() => {
+    const smallQuery = window.matchMedia('(max-width: 1023px)');
+    const largeQuery = window.matchMedia('(max-width: 1439px)');
+
+    const listener = () => {
+      if (smallQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.small);
+      } else if (largeQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
+      } else {
+        setPageSize(PAGE_SIZE_PAGINATE.big);
+      }
+    };
+    listener();
+
+    smallQuery.addEventListener('change', listener);
+    largeQuery.addEventListener('change', listener);
+
+    return () => {
+      smallQuery.removeEventListener('change', listener);
+      largeQuery.removeEventListener('change', listener);
+    };
+  }, []);
+
+  // рендеры
   const renderTagsContainer = () => (
     <TagsList
       filterList={categories}
@@ -94,22 +266,24 @@ const Video = () => {
       <Loader isNested />
     ) : (
       <>
-        {mainVideo && isShowMainCard && (
-          <section className="video__main-card page__section">
+        {mainVideo && isShowMainCard && !pageNumber && (
+          <section className="video__main-card page__section scale-in">
             <CardVideoMain data={mainVideo} />
           </section>
         )}
 
-        <section className="video__cards cards-grid cards-grid_content_small-cards page__section">
+        <section className="video__cards-grid page__section">
           {video &&
-            video.map((item) => <CardFilm key={item?.id} data={item} />)}
+            video.map((item) => (
+              <CardFilm key={item?.id} data={item} sectionClass="scale-in" />
+            ))}
         </section>
       </>
     );
 
   // Контент страницы
   const renderMainContent = () => {
-    if ((!video && !isLoadingPage) || (!categories && !isLoadingPage)) {
+    if (!video && !categories) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
@@ -136,142 +310,6 @@ const Video = () => {
       </>
     );
   };
-
-  // Сортировка значений Тэгов для АПИ
-  const getActiveTags = () => {
-    if (categories) {
-      return categories
-        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter)
-        .join(',');
-    }
-    return null;
-  };
-
-  // Функция обработки запроса АПИ с карточками
-  const getVideoData = (activeCategories) => {
-    const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
-    const fixedPageSize =
-      pageNumber === 0 && isShowMainCard ? pageSize + 1 : pageSize;
-    const fixedOffset = pageNumber && isShowMainCard > 0 ? offset + 1 : offset;
-    const activeTags = activeCategories || getActiveTags();
-
-    getVideoPageData({
-      limit: fixedPageSize,
-      offset: fixedOffset,
-      tags: activeTags,
-    })
-      .then(({ results, count }) => {
-        setPageCount(Math.ceil(count / pageSize));
-        return results;
-      })
-      .then((results) => {
-        setMainVideo(getMainCard(results));
-
-        if (isShowMainCard) {
-          setVideo(getCardsWithoutMain(results));
-        } else {
-          setVideo(results);
-        }
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setIsFiltersUsed(false);
-        setIsLoadingPaginate(false);
-      });
-  };
-
-  // Функция обработки запросов АПИ для первой загрузки страницы
-  const getFirstPageData = () => {
-    Promise.all([
-      getVideoPageTags(),
-      getVideoPageData({
-        limit: pageSize + 1,
-      }),
-    ])
-      .then(([tags, { results, count }]) => {
-        setPageCount(Math.ceil(count / pageSize));
-
-        setMainVideo(getMainCard(results));
-        setVideo(getCardsWithoutMain(results));
-
-        const categoriesArr = tags.map((tag) => ({
-          filter: tag?.slug.toLowerCase(),
-          name: changeCaseOfFirstLetter(tag?.name),
-          isActive: false,
-        }));
-
-        setCategories([
-          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-          ...categoriesArr,
-        ]);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setIsLoadingPage(false);
-      });
-  };
-
-  // Функция-фильтратор с использованием АПИ
-  const handleFiltration = () => {
-    if (categories && isFiltersUsed) {
-      const activeCategories = getActiveTags();
-
-      if (activeCategories.length === 0) {
-        selectOneTag(setCategories, ALL_CATEGORIES);
-        getVideoData(activeCategories);
-      }
-
-      getVideoData(activeCategories);
-    }
-  };
-
-  // Дэлеи для динамических запросов
-  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
-  const debouncePaginate = useDebounce(getVideoData, DELAY_DEBOUNCE);
-  // Динамические фильтры
-  useEffect(() => {
-    if (isFiltersUsed) {
-      debounceFiltration();
-    }
-  }, [isFiltersUsed]);
-
-  // Загрузка страницы, динамическая пагинация, динамический ресайз
-  useEffect(() => {
-    if (isLoadingPage && pageSize) {
-      getFirstPageData();
-    }
-
-    if (!isLoadingPage && !isFiltersUsed) {
-      setIsLoadingPaginate(true);
-      debouncePaginate();
-    }
-  }, [pageSize, pageNumber]);
-
-  // Резайз пагинации
-  useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1023px)');
-    const largeQuery = window.matchMedia('(max-width: 1439px)');
-
-    const listener = () => {
-      if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else if (largeQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.medium);
-      } else {
-        setPageSize(PAGE_SIZE_PAGINATE.big);
-      }
-    };
-    listener();
-
-    smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
-
-    return () => {
-      smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
-    };
-  }, []);
 
   // Лоадер при загрузке страницы
   if (isLoadingPage) {
