@@ -139,7 +139,7 @@ function Books() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
+    const smallQuery = window.matchMedia('(max-width: 1216px)');
     const largeQuery = window.matchMedia('(max-width: 1640px)');
 
     const listener = () => {

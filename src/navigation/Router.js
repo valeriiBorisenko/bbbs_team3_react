@@ -15,6 +15,7 @@ import {
   Articles,
   Books,
   CatalogArticle,
+  Stories,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import {
@@ -32,6 +33,7 @@ import {
   ARTICLES_URL,
   BOOKS_URL,
   CATALOG_ITEM_URL,
+  STORIES_URL,
 } from '../config/routes';
 
 function Router() {
@@ -88,8 +90,13 @@ function Router() {
       <Route exact path={BOOKS_URL}>
         <Books />
       </Route>
+
       <Route exact path={ARTICLES_URL}>
         <Articles />
+      </Route>
+
+      <Route exact path={STORIES_URL}>
+        <Stories />
       </Route>
 
       <Route path="*">
