@@ -15,6 +15,7 @@ import {
   Articles,
   Books,
   CatalogArticle,
+  RightsArticle,
   Stories,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
@@ -33,6 +34,7 @@ import {
   ARTICLES_URL,
   BOOKS_URL,
   CATALOG_ITEM_URL,
+  PLACES_ARTICLE_URL,
   STORIES_URL,
 } from '../config/routes';
 
@@ -64,6 +66,11 @@ function Router() {
       <Route exact path={RIGHTS_URL}>
         <Rights />
       </Route>
+
+      <Route
+        path={PLACES_ARTICLE_URL}
+        render={({ match }) => <RightsArticle id={match.params.id} />}
+      />
 
       <Route exact path={MOVIES_URL}>
         <Movies />
