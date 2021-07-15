@@ -323,6 +323,7 @@ function Places() {
       setIsCityChanging(true);
       setIsChosenCardHidden(false);
       setChosenPlace(null);
+      setPlaces(null);
       deselectAllTags(setAges);
 
       Promise.all([
