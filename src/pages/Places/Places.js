@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import './Places.scss';
 import { useEffect, useState, useContext } from 'react';
 import placesPageTexts from '../../locales/places-page-RU';
@@ -8,7 +7,6 @@ import {
   useDebounce,
   useActivityTypes,
   useLocalStorage,
-  useScrollToTop,
 } from '../../hooks/index';
 import {
   COLORS,
@@ -293,6 +291,7 @@ function Places() {
     }
     setIsLoadingPage(false);
   }, [isFiltersUsed, pageNumber]);
+
   // запуск пагинации
   useEffect(() => {
     if (!isLoadingPage && !isFiltersUsed) {
@@ -304,12 +303,14 @@ function Places() {
         age_restriction: activeAges,
         city: userCity,
       };
+
       if (!activeTags && !activeAges) {
         if (pageNumber === 0) setIsChosenCardHidden(false);
         debouncePagination(predefinedParams, false);
       } else {
         debouncePagination(predefinedParams, true);
       }
+
       setIsLoadingPaginate(true);
     }
   }, [pageNumber]);
