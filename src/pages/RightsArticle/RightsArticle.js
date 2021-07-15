@@ -15,7 +15,7 @@ function RightsArticle({ id }) {
   const [isLoadingPage, setIsLoadingPage] = useState(true);
 
   // ХардКод пока не понятно как узнавать ID следующей статьи
-  const [nextId, setNextId] = useState(Number(id));
+  const [nextId, setNextId] = useState(Number(id) + 1);
 
   const changeClick = () => {
     setIsLoadingPage(true);
@@ -73,12 +73,18 @@ function RightsArticle({ id }) {
   };
 
   useEffect(() => {
-    if (id) {
+    if (isLoadingPage && id) {
+      getRightsArticle(id)
+        .then((res) => setArticleData(res))
+        .catch((err) => console.log(err))
+        .finally(() => {
+          setIsLoadingPage(false);
+        });
+    }
+
+    if (!isLoadingPage && id) {
       getRightsArticle(nextId)
-        .then((res) => {
-          setArticleData(res);
-          console.log(res);
-        })
+        .then((res) => setArticleData(res))
         .catch((err) => console.log(err))
         .finally(() => {
           setIsLoadingPage(false);
