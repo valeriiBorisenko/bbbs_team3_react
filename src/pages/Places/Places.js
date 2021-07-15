@@ -8,6 +8,7 @@ import {
   useDebounce,
   useActivityTypes,
   useLocalStorage,
+  useScrollToTop,
 } from '../../hooks/index';
 import {
   COLORS,
@@ -316,8 +317,11 @@ function Places() {
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
     if (userCity && pageSize) {
+      window.scroll({ top: 0 });
       setIsFirstRender(true);
       setIsCityChanging(true);
+      setIsChosenCardHidden(false);
+      setChosenPlace(null);
       deselectAllTags(setAges);
 
       Promise.all([
@@ -387,6 +391,15 @@ function Places() {
   }
 
   const renderPlaces = () => {
+    if (isChosenCardHidden && places?.length === 0) {
+      return (
+        <NoDataNotificationBox
+          text={paragraphNoContent}
+          sectionClass="no-data-text_padding-top"
+        />
+      );
+    }
+
     if (chosenPlace || places?.length > 0) {
       return (
         <>
@@ -421,13 +434,7 @@ function Places() {
         </>
       );
     }
-
-    return (
-      <NoDataNotificationBox
-        text={paragraphNoContent}
-        sectionClass="no-data-text_padding-top"
-      />
-    );
+    return null;
   };
 
   const renderPageContent = () => {
