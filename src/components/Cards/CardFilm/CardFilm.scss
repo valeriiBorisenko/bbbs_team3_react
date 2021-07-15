@@ -19,11 +19,12 @@
   height: 236px;
   object-fit: cover;
   cursor: pointer;
+  transform: scale(1.1);
   transform-origin: bottom;
   transition: 1s ease-out;
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1);
   }
 }
 
