@@ -118,6 +118,7 @@ function Places() {
       deselectAllTags(setAges);
     } else {
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
+      deselectOneTag(setCategories, ALL_CATEGORIES);
     }
     setIsFiltersUsed(true);
   };
@@ -195,7 +196,8 @@ function Places() {
 
   // запрос отфильтрованного массива карточек
   const getFilteredPlaces = (params, isFiltered) => {
-    const offset = pageSize * pageNumber;
+    console.log({ isFiltersUsed });
+    const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
 
     const fixedPageSize =
       pageNumber === 0 && !isFiltered ? pageSize + 1 : pageSize;
@@ -220,7 +222,10 @@ function Places() {
         setIsFiltersUsed(false);
       })
       .catch(console.log)
-      .finally(() => setIsLoadingFilters(false));
+      .finally(() => {
+        setIsLoadingFilters(false);
+        setIsLoadingPaginate(false);
+      });
   };
 
   // функция-фильтратор
@@ -265,24 +270,20 @@ function Places() {
         },
         true
       );
-      deselectOneTag(setCategories, ALL_CATEGORIES);
     }
   };
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePagination = useDebounce(getFilteredPlaces, DELAY_DEBOUNCE);
-  // запуск фильтрации/пагинации
-  //! починить пагинацию без фильтров (на 1 страницу)
-  //! ещё проблема с обнулением страницы при нажатии фильтра
+  // запуск фильтрации
   useEffect(() => {
     if (!isFirstRender && isFiltersUsed) {
-      console.log('filtration activated');
       setIsLoadingFilters(true);
       debounceFiltration();
     }
     setIsFirstRender(false);
   }, [isFiltersUsed, pageNumber]);
-
+  // запуск пагинации
   useEffect(() => {
     if (!isFirstRender && !isFiltersUsed) {
       console.log('pagination activated');
@@ -300,6 +301,7 @@ function Places() {
       } else {
         debouncePagination(predefinedParams, true);
       }
+      setIsLoadingPaginate(true);
     }
   }, [pageNumber]);
 
@@ -349,44 +351,6 @@ function Places() {
   }, []);
 
   // функции рендера
-  const renderPlaces = () => {
-    if (places?.length > 0) {
-      return (
-        <>
-          {chosenPlace && !isChosenCardHidden && (
-            <section className="places__main">
-              <CardPlace
-                key={chosenPlace?.id}
-                data={chosenPlace}
-                activityTypes={activityTypes}
-                sectionClass="card-container_type_main-article scale-in"
-                isBig
-              />
-            </section>
-          )}
-
-          <section className="places__cards-grid">
-            {places.map((place, i) => (
-              <CardPlace
-                key={place?.id}
-                data={place}
-                activityTypes={activityTypes}
-                color={COLORS[i % COLORS.length]}
-                sectionClass="card-container_type_article scale-in"
-              />
-            ))}
-          </section>
-        </>
-      );
-    }
-    return (
-      <NoDataNotificationBox
-        text={paragraphNoContent}
-        sectionClass="no-data-text_padding-top"
-      />
-    );
-  };
-
   const renderAnimatedContainer = () => (
     <>
       {!isCityChanging ? (
@@ -414,6 +378,49 @@ function Places() {
     return null;
   }
 
+  const renderPlaces = () => {
+    if (places?.length > 0) {
+      return (
+        <>
+          {chosenPlace && !isChosenCardHidden && !isLoadingPaginate && (
+            <section className="places__main">
+              <CardPlace
+                key={chosenPlace?.id}
+                data={chosenPlace}
+                activityTypes={activityTypes}
+                sectionClass="card-container_type_main-article scale-in"
+                isBig
+              />
+            </section>
+          )}
+
+          {!isLoadingPaginate ? (
+            <section className="places__cards-grid">
+              {places.map((place, i) => (
+                <CardPlace
+                  key={place?.id}
+                  data={place}
+                  activityTypes={activityTypes}
+                  color={COLORS[i % COLORS.length]}
+                  sectionClass="card-container_type_article scale-in"
+                />
+              ))}
+            </section>
+          ) : (
+            <Loader isNested />
+          )}
+          {renderPagination()}
+        </>
+      );
+    }
+    return (
+      <NoDataNotificationBox
+        text={paragraphNoContent}
+        sectionClass="no-data-text_padding-top"
+      />
+    );
+  };
+
   const renderPageContent = () => {
     if (isFirstRender && places?.length === 0) {
       return renderAnimatedContainer();
@@ -437,7 +444,6 @@ function Places() {
             {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
 
             {!isLoadingFilters ? renderPlaces() : <Loader isNested />}
-            {renderPagination()}
           </>
         ) : (
           <Loader isNested />
