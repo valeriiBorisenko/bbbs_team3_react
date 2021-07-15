@@ -24,10 +24,9 @@ import {
   TagsList,
 } from './index';
 
-function Calendar() {
-  const { headTitle, headDescription, title, textStubNoData } =
-    calendarPageTexts;
+const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
 
+function Calendar() {
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);

@@ -8,6 +8,7 @@ import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
+import parserLinkYoutube from '../../../utils/parser-link-youtube';
 
 function CardFilm({ data: { image, title, info, link, tags, duration } }) {
   const { openPopupVideo } = useContext(PopupsContext);
@@ -27,6 +28,8 @@ function CardFilm({ data: { image, title, info, link, tags, duration } }) {
 
   // Стейт записывает ширину окна
   const [isMobile, setIsMobile] = useState(false);
+
+  const { imagePreview } = parserLinkYoutube(link);
 
   // Следит за шириной экрана и записывает в стейт
   useEffect(() => {
@@ -58,7 +61,7 @@ function CardFilm({ data: { image, title, info, link, tags, duration } }) {
     return (
       <>
         <img
-          src={`${staticImageUrl}/${image}`}
+          src={`${staticImageUrl}/${image}` || imagePreview}
           alt={`${texts.altText} ${title}`}
           className="card-film__preview"
         />

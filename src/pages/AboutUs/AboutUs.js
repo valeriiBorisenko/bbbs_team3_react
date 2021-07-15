@@ -1,5 +1,5 @@
 import './AboutUs.scss';
-import aboutUsTexts from '../../locales/about-us-page-RU.js';
+import aboutUsTexts from '../../locales/about-us-page-RU';
 import { useScrollToTop } from '../../hooks/index';
 import {
   BasePage,
@@ -11,18 +11,18 @@ import {
   Card,
 } from './index';
 
-function AboutUs() {
-  const {
-    headTitle,
-    headDescription,
-    title,
-    logoLink,
-    aboutTitle,
-    aboutParagraphs,
-    blockquote,
-    cards,
-  } = aboutUsTexts;
+const {
+  headTitle,
+  headDescription,
+  title,
+  logoLink,
+  aboutTitle,
+  aboutParagraphs,
+  blockquote,
+  cards,
+} = aboutUsTexts;
 
+function AboutUs() {
   useScrollToTop();
 
   return (

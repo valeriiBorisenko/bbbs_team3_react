@@ -19,10 +19,10 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-function Catalog() {
-  const { headTitle, headDescription, title, subtitle, textStubNoData } =
-    catalogPageTexts;
+const { headTitle, headDescription, title, subtitle, textStubNoData } =
+  catalogPageTexts;
 
+function Catalog() {
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
@@ -97,6 +97,7 @@ function Catalog() {
             title={item?.title}
             image={item?.image}
             shape={FIGURES[i % FIGURES.length]}
+            link={`/catalog/${item.id}`}
           />
         ))}
       </CardsSectionWithLines>

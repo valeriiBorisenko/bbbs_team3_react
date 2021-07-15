@@ -8,7 +8,6 @@ import {
   DELAY_DEBOUNCE,
 } from '../../config/constants';
 import {
-  renderFilterTags,
   handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
@@ -23,6 +22,7 @@ import {
   CardRights,
   CardsSectionWithLines,
   AnimatedPageContainer,
+  TagsList,
 } from './index';
 
 const PAGE_SIZE_PAGINATE = {
@@ -31,9 +31,9 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-const Rights = () => {
-  const { headTitle, headDescription, title, textStubNoData } = rightsPageTexts;
+const { headTitle, headDescription, title, textStubNoData } = rightsPageTexts;
 
+const Rights = () => {
   useScrollToTop();
 
   // Стейты для пагинации
@@ -65,11 +65,11 @@ const Rights = () => {
   const renderTagsContainer = () => {
     if (articles && !isLoadingPage) {
       return (
-        <div className="tags">
-          <ul className="tags__list">
-            {renderFilterTags(categories, 'checkbox', changeCategory)}
-          </ul>
-        </div>
+        <TagsList
+          filterList={categories}
+          name="rights"
+          handleClick={changeCategory}
+        />
       );
     }
     return null;
@@ -94,6 +94,7 @@ const Rights = () => {
             tags={item?.tags}
             shape={FIGURES[i % FIGURES.length]}
             color={COLORS[i % COLORS.length]}
+            id={item?.id}
           />
         ))}
       </CardsSectionWithLines>
@@ -102,7 +103,7 @@ const Rights = () => {
 
   // Контент страницы
   const renderMainContent = () => {
-    if (!articles && !isLoadingPage) {
+    if ((!articles && !isLoadingPage) || (!categories && !isLoadingPage)) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 

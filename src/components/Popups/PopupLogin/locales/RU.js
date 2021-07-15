@@ -8,6 +8,12 @@ const texts = {
   passwordPlaceholder: 'Пароль',
   forgotButtonText: 'Забыли пароль?',
   submitButtonText: 'Войти',
+  titleForgotForm: 'Восстановление пароля',
+  paragraphForgotForm:
+    'Пожалуйста, для восстановления пароля введите email, который вы указывали при регистрации',
+  emailPlaceholder: 'Email',
+  backButtonText: 'Я вспомнил пароль',
+  submitButtonTextForgot: 'Отправить',
 };
 
 export default texts;

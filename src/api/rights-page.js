@@ -19,4 +19,12 @@ function getRightsTags() {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-export { getRightsData, getRightsTags };
+// получение Статьи для страницы Права Детей
+function getRightsArticle(id) {
+  return axios
+    .get(`${baseURL}${apiUrl}/rights/${id}`)
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+}
+
+export { getRightsData, getRightsTags, getRightsArticle };

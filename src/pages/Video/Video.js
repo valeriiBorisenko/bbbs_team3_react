@@ -33,13 +33,15 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
+const { headTitle, headDescription, title, textStubNoData } = videoPageTexts;
+
 const Video = () => {
   useScrollToTop();
+
   const { openPopupVideo } = useContext(PopupsContext);
+
   const chosenVideoOnRedirectFromMainPage =
     getLocalStorageData(localStChosenVideo);
-
-  const { headTitle, headDescription, title, textStubNoData } = videoPageTexts;
 
   // Стейты для пагинации
   const [pageSize, setPageSize] = useState(null);
@@ -58,21 +60,6 @@ const Video = () => {
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
   const [isShowMainCard, setIsShowMainCard] = useState(true);
-
-  // При клике на карточку открываем попап
-  // записываем ДАТУ в стейт, а стейт пробрасываем в попап
-  // const handleVideoClick = (data) => {
-  //   setIsVideoPopupOpen(true);
-
-  //   setSelectedVideo({
-  //     ...data,
-  //   });
-  // };
-
-  // Закрытие попапа
-  // const closeAllPopups = () => {
-  //   setIsVideoPopupOpen(false);
-  // };
 
   // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
@@ -101,25 +88,6 @@ const Video = () => {
     />
   );
 
-  // Карточки с видео страницы
-  // const renderCards = () => (
-  //   <>
-  //     {video.map((item) => {
-  //       const { hours, minutes, seconds } = formatDuration(item.duration);
-
-  //       return (
-  //         <CardFilm key={item.id} data={item} onClick={handleVideoClick}>
-  //           {hours > 0 ? (
-  //             <p className="card-film__duration paragraph">{`${hours}:${minutes}:${seconds}`}</p>
-  //           ) : (
-  //             <p className="card-film__duration paragraph">{`${minutes}:${seconds}`}</p>
-  //           )}
-  //         </CardFilm>
-  //       );
-  //     })}
-  //   </>
-  // );
-
   // Загрузка карточек при нажатии на пагинацию
   const loadingContentPagination = () =>
     isLoadingPaginate ? (
@@ -133,16 +101,15 @@ const Video = () => {
         )}
 
         <section className="video__cards cards-grid cards-grid_content_small-cards page__section">
-          {video.map((item) => (
-            <CardFilm key={item?.id} data={item} />
-          ))}
+          {video &&
+            video.map((item) => <CardFilm key={item?.id} data={item} />)}
         </section>
       </>
     );
 
   // Контент страницы
   const renderMainContent = () => {
-    if (!video && !mainVideo && !isLoadingPage) {
+    if ((!video && !isLoadingPage) || (!categories && !isLoadingPage)) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 

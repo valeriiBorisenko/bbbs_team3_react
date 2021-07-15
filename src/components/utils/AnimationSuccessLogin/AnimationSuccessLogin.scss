@@ -1,0 +1,41 @@
+@import './styles/utils.scss';
+
+.container-success {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 100%;
+  
+
+  &_hide {
+    visibility: hidden;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+    -webkit-transition: all 0.7s ease-in-out;
+    transition: all 0.7s ease-in-out;
+  }
+}
+  
+  .container-success__animation {
+    max-width: 450px;
+    max-height: 190px;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto 30px;
+  
+    & > svg {
+      max-height: 190px;
+    }
+  }
+  
+  @include atDesktop1024 {
+    .container-success__animation {
+      max-height: 170px;
+  
+      & > svg {
+        max-height: 170px;
+      }
+    }
+  }
