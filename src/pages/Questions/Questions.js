@@ -117,11 +117,12 @@ function Questions() {
     // выбираем кнопку все
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
-      setPageIndex(INITIAL_PAGE_INDEX);
+      // setPageIndex(INITIAL_PAGE_INDEX);
     } else {
       // выбираем другие фильтры
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
+    setPageIndex(INITIAL_PAGE_INDEX);
     setIsLoading(true);
     setIsFiltersUsed(true);
   };
@@ -129,6 +130,7 @@ function Questions() {
   // фильтрация
   const getActiveCategories = () => {
     if (!categories) {
+      // обязательно возвращаем пустой массив, т.к смотрим на длину либо делаем join()
       return [];
     }
 
@@ -144,10 +146,20 @@ function Questions() {
 
         setTotalPages(Math.ceil(count / pageSize));
         setQuestionsPageData(results);
-        setPageIndex(INITIAL_PAGE_INDEX);
       })
       .catch((error) => console.log(error))
       .finally(() => setIsLoading(false));
+  };
+
+  const loadMoreEventsForChosenCategories = (activeCategories) => {
+    const query = activeCategories.join();
+    const offset = pageSize * pageIndex;
+    getQuestionsPageData({ limit: pageSize, offset, tags: query })
+      .then((questionsData) => {
+        const { results } = questionsData;
+        setQuestionsPageData((prevData) => [...prevData, ...results]);
+      })
+      .catch((error) => console.log(error));
   };
 
   const handleFiltration = (activeCategories) => {
@@ -169,8 +181,31 @@ function Questions() {
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
     const activeCategories = getActiveCategories();
+    if (isFiltersUsed) {
+      debounceFiltration(activeCategories);
+    }
+
+    // провели фильтрацию, флажок фильтров меняем
+    setIsFiltersUsed(false);
+  }, [isFiltersUsed]);
+
+  useEffect(() => {
+    const activeCategories = getActiveCategories();
     // при нажатых фильтрах нажимаем ЕЩЕ
     if (pageIndex > 0 && activeCategories.length > 0) {
+      loadMoreEventsForChosenCategories();
+      const query = activeCategories.join();
+      const offset = pageSize * pageIndex;
+      getQuestionsPageData({ limit: pageSize, offset, tags: query })
+        .then((questionsData) => {
+          const { results } = questionsData;
+          setQuestionsPageData((prevData) => [...prevData, ...results]);
+        })
+        .catch((error) => console.log(error));
+    }
+
+    if (pageIndex > 0 && activeCategories.length === 0) {
+      loadMoreEventsForChosenCategories();
       const query = activeCategories.join();
       const offset = pageSize * pageIndex;
       getQuestionsPageData({ limit: pageSize, offset, tags: query })
@@ -183,12 +218,10 @@ function Questions() {
 
     // просто используем фильтры (2 варианта внутри)
     if (isFiltersUsed) {
+      console.log('просто фильтруем');
       debounceFiltration(activeCategories);
     }
-
-    // провели фильтрацию, флажок фильтров меняем
-    setIsFiltersUsed(false);
-  }, [pageIndex, isFiltersUsed]);
+  }, [pageIndex]);
 
   // API, первая загрузка
   useEffect(() => {
