@@ -133,53 +133,37 @@ function Questions() {
       .map((filter) => filter.filter);
   };
 
+  const getFiltratedQuestions = ({ limit, offset, tags }) => {
+    getQuestionsPageData({ limit, offset, tags })
+      .then((questionsData) => {
+        const { results, count } = questionsData;
+
+        setTotalPages(Math.ceil(count / pageSize));
+        setQuestionsPageData(results);
+        setPageIndex(0);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => setIsLoading(false));
+  };
+
   // фильтрация
   const handleFiltration = (activeCategories) => {
     // активных фильтров нету и сейчас нажато "ВСЕ"
     if (activeCategories.length === 0) {
       const offset = pageSize * pageIndex;
-      getQuestionsPageData({ limit: pageSize, offset })
-        .then((allQuestions) => {
-          const { results, count } = allQuestions;
-
-          setTotalPages(Math.ceil(count / pageSize));
-          setQuestionsPageData(results);
-          setPageIndex(0);
-        })
-        .catch((error) => console.log(error))
-        .finally(() => setIsLoading(false));
-
+      getFiltratedQuestions({ limit: pageSize, offset });
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       // выбрана какая то категория
       const offset = pageSize * pageIndex;
       const query = activeCategories.join();
-      getQuestionsPageData({ limit: pageSize, offset, tags: query })
-        .then((filteredQuestions) => {
-          const { results, count } = filteredQuestions;
-
-          setTotalPages(Math.ceil(count / pageSize));
-          setQuestionsPageData(results);
-          setPageIndex(0);
-        })
-        .catch((error) => console.log(error))
-        .finally(() => setIsLoading(false));
-
+      getFiltratedQuestions({ limit: pageSize, offset, tags: query });
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
   };
 
   // запуск фильтрации
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
-  useEffect(() => {
-    if (isFiltersUsed) {
-      debounceFiltration();
-    }
-
-    // провели фильтрацию, флажок фильтров меняем
-    setIsFiltersUsed(false);
-  }, [isFiltersUsed]);
-
   useEffect(() => {
     const activeCategories = getActiveCategories();
     // при нажатых фильтрах нажимаем ЕЩЕ
@@ -321,7 +305,8 @@ function Questions() {
           {/* рендерим сами вопросы */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
 
-          {totalPages > 1 && totalPages - 1 > pageIndex
+          {totalPages > 1 &&
+          totalPages - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX > pageIndex
             ? renderLoadMoreButton()
             : null}
           {/* если залогинен рендерим форму */}
