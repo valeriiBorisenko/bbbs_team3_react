@@ -1,10 +1,27 @@
 import PropTypes from 'prop-types';
+import { useRef } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Caption } from '../../utils/index';
 
 function CardAnnotationContainer({ caption, children }) {
+  const ref = useRef();
+
+  function showScrollOnMouseOver() {
+    ref.current.thumbVertical.parentElement.style.opacity = '1';
+  }
+
+  function onMouseLeave() {
+    ref.current.thumbVertical.parentElement.style.opacity = '0';
+  }
+
   return (
     <Scrollbars
+      ref={ref}
+      autoHide
+      onMouseOver={showScrollOnMouseOver}
+      onMouseLeave={onMouseLeave}
+      autoHideTimeout={700}
+      autoHideDuration={400}
       renderTrackHorizontal={() => <div style={{ display: 'none' }} />}
       renderThumbVertical={() => <div className="card-annotation__thumb" />}
     >
