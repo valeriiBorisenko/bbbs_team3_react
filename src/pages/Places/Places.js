@@ -155,6 +155,7 @@ function Places() {
     const chosenCard = mainCard || chosenPlace;
     let restOfPlaces = placesData;
 
+    // главная
     if (pageNumber === 0 && !isFiltered) {
       if (chosenCard?.chosen && !isFiltered) {
         restOfPlaces = restOfPlaces.filter(
@@ -162,8 +163,9 @@ function Places() {
         );
         if (restOfPlaces.length !== placesData.length) {
           setIsChosenOnPageOne(true);
-        }
-      } else if (restOfPlaces.length === placesData.length) {
+        } else restOfPlaces.pop();
+      }
+      if (restOfPlaces.length === placesData.length) {
         restOfPlaces.pop();
       }
     }
@@ -204,9 +206,7 @@ function Places() {
     const fixedPageSize =
       pageNumber === 0 && !isFiltersActive ? pageSize + 1 : pageSize;
     const fixedOffset =
-      pageNumber > 0 &&
-      ((chosenPlace && !isFiltersActive) ||
-        (isChosenOnPageOne && !isFiltersActive))
+      pageNumber > 0 && chosenPlace && isChosenOnPageOne && !isFiltersActive
         ? offset + 1
         : offset;
 
