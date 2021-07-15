@@ -30,6 +30,7 @@ function Articles() {
   const [articlesPageData, setArticlesPageData] = useState(null);
   const [mainArticle, setMainCard] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   function getPageData() {
     const offset = pageSize * pageNumber;
@@ -43,12 +44,16 @@ function Articles() {
           results.filter((item) => !item?.pinnedFullSize)
         );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoadingPaginate(false);
+      });
   }
 
   // пагинация
   useEffect(() => {
     if (!isLoadingPage) {
+      setIsLoadingPaginate(true);
       getPageData();
     }
   }, [pageSize, pageNumber]);
@@ -126,7 +131,7 @@ function Articles() {
         <section className="articles__cards-grid">
           {articlesPageData.map((item, i) => (
             <CardArticle
-              key={item.id}
+              key={item?.id}
               color={COLORS[(i + 1) % COLORS.length]}
               data={item}
               sectionClass="scale-in"
@@ -139,10 +144,10 @@ function Articles() {
 
   function renderPageContent() {
     return (
-      <section className="articles page__section fade-in">
-        <TitleH1 title={title} />
+      <section className="articles page__section">
+        <TitleH1 title={title} sectionClass="fade-in" />
 
-        {renderCards()}
+        {isLoadingPaginate ? <Loader isNested /> : renderCards()}
 
         {renderPagination()}
       </section>

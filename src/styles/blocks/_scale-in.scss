@@ -11,5 +11,9 @@
 }
 
 .scale-in {
+  transform: scale(.9);
+  transform-origin: bottom;
+  opacity: 0;
+  transition: .3s ease;
   animation: scale-in .7s ease-out forwards;
 }
