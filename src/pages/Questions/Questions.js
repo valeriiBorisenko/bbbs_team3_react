@@ -61,15 +61,12 @@ function Questions() {
 
   // крутилка-лоадер
   const [isLoading, setIsLoading] = useState(false);
-  //! крутилка на дозагрузку даты
-  //! const [isMoreDataLoading, setIsMoreDataLoading] = useState(false);
   // начальная дата с API
   const [questionsPageData, setQuestionsPageData] = useState(null);
   // кол-во вопросов сразу и в до-загрузке
   const pageSize = 10;
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(null);
-  console.log(totalPages);
 
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
@@ -114,38 +111,57 @@ function Questions() {
 
   // хэндлер клика по фильтру
   const changeCategory = (inputValue, isChecked) => {
+    // выбираем кнопку все
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
+      setPageIndex(0);
     } else {
+      // выбираем другие фильтры
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
     setIsLoading(true);
     setIsFiltersUsed(true);
   };
 
-  // фильтрация
-  const handleFiltration = () => {
-    const activeCategories = categories
+  const getActiveCategories = () => {
+    if (!categories) {
+      return [];
+    }
+
+    return categories
       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
       .map((filter) => filter.filter);
+  };
 
-    // то есть активных нету и сейчас нажато "ВСЕ"
+  // фильтрация
+  const handleFiltration = (activeCategories) => {
+    // активных фильтров нету и сейчас нажато "ВСЕ"
     if (activeCategories.length === 0) {
       const offset = pageSize * pageIndex;
       getQuestionsPageData({ limit: pageSize, offset })
         .then((allQuestions) => {
-          setQuestionsPageData(allQuestions.results);
+          const { results, count } = allQuestions;
+
+          setTotalPages(Math.ceil(count / pageSize));
+          setQuestionsPageData(results);
+          setPageIndex(0);
         })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
 
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
+      // выбрана какая то категория
+      const offset = pageSize * pageIndex;
       const query = activeCategories.join();
-      getQuestionsPageData({ tags: query })
-        .then((filteredQuestions) =>
-          setQuestionsPageData(filteredQuestions.results)
-        )
+      getQuestionsPageData({ limit: pageSize, offset, tags: query })
+        .then((filteredQuestions) => {
+          const { results, count } = filteredQuestions;
+
+          setTotalPages(Math.ceil(count / pageSize));
+          setQuestionsPageData(results);
+          setPageIndex(0);
+        })
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
 
@@ -159,8 +175,33 @@ function Questions() {
     if (isFiltersUsed) {
       debounceFiltration();
     }
+
+    // провели фильтрацию, флажок фильтров меняем
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
+
+  useEffect(() => {
+    const activeCategories = getActiveCategories();
+    // при нажатых фильтрах нажимаем ЕЩЕ
+    if (pageIndex > 0 && activeCategories.length > 0) {
+      const query = activeCategories.join();
+      const offset = pageSize * pageIndex;
+      getQuestionsPageData({ limit: pageSize, offset, tags: query })
+        .then((questionsData) => {
+          const { results } = questionsData;
+          setQuestionsPageData((prevData) => [...prevData, ...results]);
+        })
+        .catch((error) => console.log(error));
+    }
+
+    // просто используем фильтры (2 варианта внутри)
+    if (isFiltersUsed) {
+      debounceFiltration(activeCategories);
+    }
+
+    // провели фильтрацию, флажок фильтров меняем
+    setIsFiltersUsed(false);
+  }, [pageIndex, isFiltersUsed]);
 
   // API, первая загрузка
   useEffect(() => {
@@ -190,6 +231,14 @@ function Questions() {
       })
       .catch((error) => console.log(error));
   }, []);
+
+  const renderLoadMoreButton = () => (
+    <Button
+      title={loadMoreButton}
+      onClick={() => setPageIndex((prevIndex) => prevIndex + 1)}
+      sectionClass="load-more-button"
+    />
+  );
 
   // рендеринг
   // заглушка, если нет даты
@@ -238,33 +287,6 @@ function Questions() {
     </>
   );
 
-  // эффект подгрузки доп данных
-  useEffect(() => {
-    if (pageIndex !== 0) {
-      const offset = pageSize * pageIndex;
-      getQuestionsPageData({ limit: pageSize, offset })
-        .then((questionsData) => {
-          const { results } = questionsData;
-          setQuestionsPageData((prevData) => [...prevData, ...results]);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [pageIndex]);
-
-  const renderLoadMoreButton = () => {
-    if (questionsPageData.length >= 10) {
-      return (
-        <Button
-          title={loadMoreButton}
-          onClick={() => setPageIndex((prevIndex) => prevIndex + 1)}
-          sectionClass="load-more-button"
-        />
-      );
-    }
-
-    return null;
-  };
-
   // контейнер с вопросами
   const renderQuestionsContainer = () => (
     <ul className="questions">
@@ -299,7 +321,9 @@ function Questions() {
           {/* рендерим сами вопросы */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
 
-          {questionsPageData.length >= 10 ? renderLoadMoreButton() : null}
+          {totalPages > 1 && totalPages - 1 > pageIndex
+            ? renderLoadMoreButton()
+            : null}
           {/* если залогинен рендерим форму */}
           {currentUser && renderQuestionForm()}
         </>
@@ -336,3 +360,5 @@ export default Questions;
 // 2. дебаунс на кнопку
 // 3. если у тебя офсет =8, а элементов всего сейчас 7, то кнопку надо или удалять или закрашивать серым
 //* 4. показывать кнопку ОТ определенного количества элементов на странице (от 10 штук)
+//! крутилка на дозагрузку даты на пноку "еще"
+//! const [isMoreDataLoading, setIsMoreDataLoading] = useState(false);
