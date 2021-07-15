@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 
 function Widget({ link, title }) {
   return (
-    <iframe
-      className="widget-facebook"
-      title={title}
-      src={link}
-      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-    />
+    <div>
+      <iframe
+        className="widget-facebook"
+        title={title}
+        src={link}
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+      >
+        Если вы видите этот текст - ваш браузер случайно обрезал наш виджет
+        Facebook.
+      </iframe>
+    </div>
   );
 }
 

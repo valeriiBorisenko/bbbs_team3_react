@@ -7,11 +7,14 @@ export const PLACES_URL = '/places';
 export const RIGHTS_URL = '/rights';
 export const READ_AND_WATCH_URL = '/read-and-watch';
 export const CATALOG_URL = '/catalog';
+export const CATALOG_ITEM_URL = '/catalog/:articleId';
 export const VIDEO_URL = '/video';
 export const ARTICLES_URL = '/articles';
 export const MOVIES_URL = '/movies';
 export const BOOKS_URL = '/books';
 export const HISTORY_URL = '/history';
+export const PLACES_ARTICLE_URL = '/rights/:id';
+export const STORIES_URL = '/stories';
 
 export const MAIN_PAGE_TITLE = 'наставники.про';
 export const AFISHA_TITLE = 'Календарь';
