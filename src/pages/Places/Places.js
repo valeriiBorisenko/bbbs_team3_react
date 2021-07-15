@@ -64,6 +64,7 @@ function Places() {
   // места из API
   const [places, setPlaces] = useState(null);
   const [chosenPlace, setChosenPlace] = useState(null);
+  const [isChosenOnPageOne, setIsChosenOnPageOne] = useState(false);
 
   // переход между фильтрами, лоадер
   const [isLoadingFilters, setIsLoadingFilters] = useState(false);
@@ -159,9 +160,11 @@ function Places() {
         restOfPlaces = restOfPlaces.filter(
           (place) => place?.id !== chosenCard?.id
         );
-        if (restOfPlaces.length === placesData.length) {
-          restOfPlaces.pop();
+        if (restOfPlaces.length !== placesData.length) {
+          setIsChosenOnPageOne(true);
         }
+      } else if (restOfPlaces.length === placesData.length) {
+        restOfPlaces.pop();
       }
     }
     return { restOfPlaces };
@@ -195,26 +198,29 @@ function Places() {
   };
 
   // запрос отфильтрованного массива карточек
-  const getFilteredPlaces = (params, isFiltered) => {
-    console.log({ isFiltersUsed });
+  const getFilteredPlaces = (params, isFiltersActive) => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
 
     const fixedPageSize =
-      pageNumber === 0 && !isFiltered ? pageSize + 1 : pageSize;
+      pageNumber === 0 && !isFiltersActive ? pageSize + 1 : pageSize;
     const fixedOffset =
-      pageNumber > 0 && chosenPlace && !isFiltered ? offset + 1 : offset;
+      pageNumber > 0 &&
+      ((chosenPlace && !isFiltersActive) ||
+        (isChosenOnPageOne && !isFiltersActive))
+        ? offset + 1
+        : offset;
 
     getPlaces({ limit: fixedPageSize, offset: fixedOffset, ...params })
       .then(({ results, count }) => {
-        if (chosenPlace && !isFiltered) {
+        if (chosenPlace && !isFiltersActive) {
           setPageCount(Math.ceil((count - 1) / pageSize));
         } else {
           setPageCount(Math.ceil(count / pageSize));
         }
 
-        const { restOfPlaces } = definePlaces(results, isFiltered);
+        const { restOfPlaces } = definePlaces(results, isFiltersActive);
 
-        if (pageNumber > 0 || isFiltered) {
+        if (pageNumber > 0 || isFiltersActive) {
           setIsChosenCardHidden(true);
         }
 
@@ -295,9 +301,9 @@ function Places() {
         age_restriction: activeAges,
         city: userCity,
       };
-      if (pageNumber === 0 && !activeTags && !activeAges) {
+      if (!activeTags && !activeAges) {
+        if (pageNumber === 0) setIsChosenCardHidden(false);
         debouncePagination(predefinedParams, false);
-        setIsChosenCardHidden(false);
       } else {
         debouncePagination(predefinedParams, true);
       }
