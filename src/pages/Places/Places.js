@@ -34,7 +34,11 @@ import {
   NoDataNotificationBox,
   Paginate,
 } from './index';
-import { getPlaces, getPlacesTags } from '../../api/places-page';
+import {
+  getPlaces,
+  getPlacesTags,
+  getChosenPlace,
+} from '../../api/places-page';
 
 const {
   headTitle,
@@ -62,7 +66,9 @@ function Places() {
   const [chosenPlace, setChosenPlace] = useState(null);
 
   // переход между фильтрами, лоадер
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingFilters, setIsLoadingFilters] = useState(false);
+  // переход пагинаций без фильтров, лоадер
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
   // переход между городами, лоадер
   const [isCityChanging, setIsCityChanging] = useState(false);
   // триггер фильтра для useEffect
@@ -123,13 +129,13 @@ function Places() {
   };
 
   // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Выбор наставника"
-  const defineCategories = (tags, chosenPlaceLast) => {
+  const defineCategories = (tags, chosenPlaceData) => {
     const categoriesArray = tags.map((tag) => ({
       filter: tag?.slug.toLowerCase(),
       name: changeCaseOfFirstLetter(tag?.name),
       isActive: false,
     }));
-    if (chosenPlaceLast) {
+    if (chosenPlaceData) {
       return [
         { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
         { filter: mentorTag, name: mentorTag, isActive: false },
@@ -142,30 +148,22 @@ function Places() {
     ];
   };
 
-  // функция, определяющая карточки по флагу "Выбор наставника"
-  // chosenPlaceLast - самая "свежая" карточка "Выбор наставника"
-  // restOfPlaces - массив без этой карточки
-  const definePlaces = (placesData, isFiltered) => {
-    const allPlaces = placesData;
-    let chosenPlaces;
-    let restOfPlaces;
-    let chosenPlaceLast;
+  // restOfPlaces - массив без главной карточки
+  const definePlaces = (placesData, isFiltered, mainCard) => {
+    const chosenCard = mainCard || chosenPlace;
+    let restOfPlaces = placesData;
 
     if (pageNumber === 0 && !isFiltered) {
-      chosenPlaces = allPlaces.filter((place) => place?.chosen);
-      chosenPlaceLast = chosenPlaces[chosenPlaces.length - 1];
+      if (chosenCard?.chosen && !isFiltered) {
+        restOfPlaces = restOfPlaces.filter(
+          (place) => place?.id !== chosenCard?.id
+        );
+        if (restOfPlaces.length === placesData.length) {
+          restOfPlaces.pop();
+        }
+      }
     }
-
-    if (!chosenPlaceLast && pageNumber === 0 && !isFiltered) {
-      allPlaces.pop();
-      restOfPlaces = allPlaces;
-    } else {
-      restOfPlaces = allPlaces.filter(
-        (place) => place?.id !== chosenPlaceLast?.id
-      );
-    }
-
-    return { chosenPlaceLast, restOfPlaces };
+    return { restOfPlaces };
   };
 
   const defineActiveTags = () => {
@@ -198,6 +196,7 @@ function Places() {
   // запрос отфильтрованного массива карточек
   const getFilteredPlaces = (params, isFiltered) => {
     const offset = pageSize * pageNumber;
+
     const fixedPageSize =
       pageNumber === 0 && !isFiltered ? pageSize + 1 : pageSize;
     const fixedOffset =
@@ -218,9 +217,10 @@ function Places() {
         }
 
         setPlaces(restOfPlaces);
+        setIsFiltersUsed(false);
       })
       .catch(console.log)
-      .finally(() => setIsLoading(false));
+      .finally(() => setIsLoadingFilters(false));
   };
 
   // функция-фильтратор
@@ -267,20 +267,41 @@ function Places() {
       );
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
-    setIsFiltersUsed(false);
   };
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
+  const debouncePagination = useDebounce(getFilteredPlaces, DELAY_DEBOUNCE);
   // запуск фильтрации/пагинации
   //! починить пагинацию без фильтров (на 1 страницу)
   //! ещё проблема с обнулением страницы при нажатии фильтра
   useEffect(() => {
-    if (!isFirstRender && (isFiltersUsed || pageNumber > 0)) {
-      setIsLoading(true);
+    if (!isFirstRender && isFiltersUsed) {
+      console.log('filtration activated');
+      setIsLoadingFilters(true);
       debounceFiltration();
     }
     setIsFirstRender(false);
-  }, [isFiltersUsed, pageSize, pageNumber]);
+  }, [isFiltersUsed, pageNumber]);
+
+  useEffect(() => {
+    if (!isFirstRender && !isFiltersUsed) {
+      console.log('pagination activated');
+      const { activeTags, activeAges, isMentorFlag } = defineActiveTags();
+      // для пагинации, чтобы сохранить настройки фильтров
+      const predefinedParams = {
+        chosen: isMentorFlag,
+        tags: activeTags,
+        age_restriction: activeAges,
+        city: userCity,
+      };
+      if (pageNumber === 0 && !activeTags && !activeAges) {
+        debouncePagination(predefinedParams, false);
+        setIsChosenCardHidden(false);
+      } else {
+        debouncePagination(predefinedParams, true);
+      }
+    }
+  }, [pageNumber]);
 
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
   useEffect(() => {
@@ -290,23 +311,29 @@ function Places() {
       setIsCityChanging(true);
 
       Promise.all([
+        getChosenPlace({ city: userCity }),
         getPlaces({
           city: userCity,
           limit: pageSize + 1,
         }),
         getPlacesTags(),
       ])
-        .then(([{ results, count }, tagsData]) => {
-          const { chosenPlaceLast, restOfPlaces } = definePlaces(results);
-          setChosenPlace(chosenPlaceLast);
+        .then(([mainCard, { results, count }, tagsData]) => {
+          if (mainCard?.chosen) {
+            setChosenPlace(mainCard);
+          }
+          // стейт главной карточки не успевает обновиться, поэтому передаем аргументом
+          // второй агрумент - это используется ли фильтр или пагинация
+          const { restOfPlaces } = definePlaces(results, false, mainCard);
           setPlaces(restOfPlaces);
-          if (chosenPlaceLast) {
+
+          if (mainCard?.chosen) {
             setPageCount(Math.ceil((count - 1) / pageSize));
           } else {
             setPageCount(Math.ceil(count / pageSize));
           }
-          setCategories(defineCategories(tagsData, chosenPlaceLast));
-          setIsChosenCardHidden(false);
+
+          setCategories(defineCategories(tagsData, mainCard?.chosen));
         })
         .catch(console.log)
         .finally(() => setIsCityChanging(false));
@@ -409,7 +436,7 @@ function Places() {
             />
             {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
 
-            {!isLoading ? renderPlaces() : <Loader isNested />}
+            {!isLoadingFilters ? renderPlaces() : <Loader isNested />}
             {renderPagination()}
           </>
         ) : (

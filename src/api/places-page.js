@@ -22,6 +22,15 @@ function getPlaces({ chosen, tags, age_restriction, city, limit, offset }) {
     .catch((err) => Promise.reject(err?.response));
 }
 
+function getChosenPlace({ city }) {
+  return axios
+    .get(`${baseURL}${apiUrl}/places/first/`, {
+      params: { city },
+    })
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(err?.response));
+}
+
 function postPlace(data) {
   return axios
     .post(`${baseURL}${apiUrl}/places/`, data, {
@@ -40,4 +49,10 @@ function getActivityTypes() {
     .catch((err) => Promise.reject(err?.response));
 }
 
-export { getPlacesTags, getPlaces, postPlace, getActivityTypes };
+export {
+  getPlacesTags,
+  getPlaces,
+  postPlace,
+  getActivityTypes,
+  getChosenPlace,
+};
