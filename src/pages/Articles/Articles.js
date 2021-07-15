@@ -56,10 +56,10 @@ function Articles() {
       setIsLoadingPaginate(true);
       getPageData();
     }
-  }, [pageSize, pageNumber]);
+  }, [pageNumber]);
 
   useEffect(() => {
-    if (pageSize && isLoadingPage) {
+    if (pageSize) {
       getArticlesPageData({ limit: pageSize + 1 })
         .then(({ results, count }) => {
           const mainCard = results.find((item) => item?.pinnedFullSize);
