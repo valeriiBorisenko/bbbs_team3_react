@@ -305,7 +305,7 @@ function Places() {
         city: userCity,
       };
 
-      if (!activeTags && !activeAges) {
+      if (!activeTags && !activeAges && !isMentorFlag) {
         if (pageNumber === 0) setIsChosenCardHidden(false);
         debouncePagination(predefinedParams, false);
       } else {
