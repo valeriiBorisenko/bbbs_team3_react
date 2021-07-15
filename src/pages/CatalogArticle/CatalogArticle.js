@@ -27,7 +27,7 @@ function CatalogArticle({ articleId }) {
         <Loader />
       ) : (
         <div
-          // className="article"
+          className="page__section"
           dangerouslySetInnerHTML={{
             __html: catalogArticlePageData?.rawHtml,
           }}
