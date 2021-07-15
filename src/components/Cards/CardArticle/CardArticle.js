@@ -26,9 +26,10 @@ function CardArticle({
         color={cardColor}
       >
         <div className="article-card__title-wrap">
-          <Link to={articleUrl} className="article-card__link-wrap">
+          {/* если будет редирект на внутреннюю страницу, лучше делать через Link */}
+          <a href={articleUrl} className="article-card__link-wrap">
             <TitleH2 sectionClass="article-card__title" title={title} />
-          </Link>
+          </a>
           <Caption sectionClass="article-card__info" title={info} />
         </div>
 
