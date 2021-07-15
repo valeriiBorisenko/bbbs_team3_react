@@ -11,7 +11,7 @@ import {
   PLACES_URL,
   RIGHTS_URL,
   READ_AND_WATCH_URL,
-  HISTORY_URL,
+  STORIES_URL,
   MAIN_PAGE_TITLE,
   ABOUT_US_TITLE,
   AFISHA_TITLE,
@@ -19,7 +19,7 @@ import {
   QUESTIONS_TITLE,
   READ_AND_WATCH_TITLE,
   RIGHTS_TITLE,
-  HISTORY_TITLE,
+  STORIES_TITLE,
 } from '../../config/routes';
 import { socialLinks } from '../../utils/external-links';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
@@ -99,8 +99,8 @@ function NavBar({
           <NavItem
             sectionWrapperClass="menu__list-item"
             sectionLinkClass="menu__link mobile-link"
-            href={HISTORY_URL}
-            linkText={HISTORY_TITLE}
+            href={STORIES_URL}
+            linkText={STORIES_TITLE}
           />
         </ul>
 

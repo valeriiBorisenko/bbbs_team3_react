@@ -11,7 +11,6 @@ export const VIDEO_URL = '/video';
 export const ARTICLES_URL = '/articles';
 export const MOVIES_URL = '/movies';
 export const BOOKS_URL = '/books';
-export const HISTORY_URL = '/history';
 export const STORIES_URL = '/stories';
 
 export const MAIN_PAGE_TITLE = 'наставники.про';
@@ -27,4 +26,4 @@ export const VIDEO_TITLE = 'Видео';
 export const ARTICLES_TITLE = 'Статьи';
 export const MOVIES_TITLE = 'Фильмы';
 export const BOOKS_TITLE = 'Книги';
-export const HISTORY_TITLE = 'Истории';
+export const STORIES_TITLE = 'Истории';

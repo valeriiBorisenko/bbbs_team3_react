@@ -2,10 +2,12 @@ import axios from 'axios';
 import { apiUrl, baseURL } from '../config/config';
 
 // получить данные страницы
-function getQuestionsPageData() {
+function getQuestionsPageData({ limit, offset }) {
   return axios
-    .get(`${baseURL}${apiUrl}/questions/`)
-    .then((response) => response.data.results)
+    .get(`${baseURL}${apiUrl}/questions/`, {
+      params: { limit, offset },
+    })
+    .then((response) => response.data)
     .catch((err) => Promise.reject(err?.response));
 }
 
