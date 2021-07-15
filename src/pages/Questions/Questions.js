@@ -151,7 +151,7 @@ function Questions() {
       .finally(() => setIsLoading(false));
   };
 
-  const loadMoreEventsForChosenCategories = (activeCategories) => {
+  const loadMoreEventsForCurrentFilterState = (activeCategories) => {
     const query = activeCategories.join();
     const offset = pageSize * pageIndex;
     getQuestionsPageData({ limit: pageSize, offset, tags: query })
@@ -180,6 +180,7 @@ function Questions() {
   // запуск фильтрации
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
+    // используем фильтры (2 варианта развития внутри)
     const activeCategories = getActiveCategories();
     if (isFiltersUsed) {
       debounceFiltration(activeCategories);
@@ -193,33 +194,12 @@ function Questions() {
     const activeCategories = getActiveCategories();
     // при нажатых фильтрах нажимаем ЕЩЕ
     if (pageIndex > 0 && activeCategories.length > 0) {
-      loadMoreEventsForChosenCategories();
-      const query = activeCategories.join();
-      const offset = pageSize * pageIndex;
-      getQuestionsPageData({ limit: pageSize, offset, tags: query })
-        .then((questionsData) => {
-          const { results } = questionsData;
-          setQuestionsPageData((prevData) => [...prevData, ...results]);
-        })
-        .catch((error) => console.log(error));
+      loadMoreEventsForCurrentFilterState(activeCategories);
     }
 
+    // просто нажимаем еще + фильтр ВСЕ
     if (pageIndex > 0 && activeCategories.length === 0) {
-      loadMoreEventsForChosenCategories();
-      const query = activeCategories.join();
-      const offset = pageSize * pageIndex;
-      getQuestionsPageData({ limit: pageSize, offset, tags: query })
-        .then((questionsData) => {
-          const { results } = questionsData;
-          setQuestionsPageData((prevData) => [...prevData, ...results]);
-        })
-        .catch((error) => console.log(error));
-    }
-
-    // просто используем фильтры (2 варианта внутри)
-    if (isFiltersUsed) {
-      console.log('просто фильтруем');
-      debounceFiltration(activeCategories);
+      loadMoreEventsForCurrentFilterState(activeCategories);
     }
   }, [pageIndex]);
 
