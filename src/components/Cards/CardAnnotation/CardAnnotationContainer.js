@@ -5,6 +5,7 @@ import { Caption } from '../../utils/index';
 function CardAnnotationContainer({ caption, children }) {
   return (
     <Scrollbars
+      renderTrackHorizontal={() => <div style={{ display: 'none' }} />}
       renderThumbVertical={() => <div className="card-annotation__thumb" />}
     >
       {caption && (
