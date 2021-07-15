@@ -12,6 +12,7 @@ import Articles from './Articles/Articles';
 import ReadAndWatch from './ReadAndWatch/ReadAndWatch';
 import Video from './Video/Video';
 import Books from './Books/Books';
+import Stories from './Stories/Stories';
 
 export {
   AboutUs,
@@ -28,4 +29,5 @@ export {
   Video,
   Articles,
   Books,
+  Stories,
 };

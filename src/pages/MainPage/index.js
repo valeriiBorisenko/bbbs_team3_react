@@ -10,6 +10,7 @@ import CardVideoMain from '../../components/Cards/CardVideoMain/CardVideoMain';
 import Widget from '../../components/utils/Widget/Widget';
 import CardQuestion from '../../components/Cards/CardQuestion/CardQuestion';
 import Rubric from '../../components/utils/Rubric/Rubric';
+import CardAnimatedPlug from '../../components/Cards/CardAnimatedPlug/CardAnimatedPlug';
 
 export {
   BasePage,
@@ -24,4 +25,5 @@ export {
   Widget,
   CardQuestion,
   Rubric,
+  CardAnimatedPlug,
 };
