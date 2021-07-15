@@ -45,6 +45,9 @@ const {
   loadMoreButton,
 } = questionsPageTexts;
 
+const INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX = 1;
+const INITIAL_PAGE_INDEX = 0;
+
 function Questions() {
   useScrollToTop();
 
@@ -65,7 +68,7 @@ function Questions() {
   const [questionsPageData, setQuestionsPageData] = useState(null);
   // кол-во вопросов сразу и в до-загрузке
   const pageSize = 10;
-  const [pageIndex, setPageIndex] = useState(0);
+  const [pageIndex, setPageIndex] = useState(INITIAL_PAGE_INDEX);
   const [totalPages, setTotalPages] = useState(null);
 
   // флаг применения фильтров
@@ -114,7 +117,7 @@ function Questions() {
     // выбираем кнопку все
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
-      setPageIndex(0);
+      setPageIndex(INITIAL_PAGE_INDEX);
     } else {
       // выбираем другие фильтры
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
@@ -123,6 +126,7 @@ function Questions() {
     setIsFiltersUsed(true);
   };
 
+  // фильтрация
   const getActiveCategories = () => {
     if (!categories) {
       return [];
@@ -140,13 +144,12 @@ function Questions() {
 
         setTotalPages(Math.ceil(count / pageSize));
         setQuestionsPageData(results);
-        setPageIndex(0);
+        setPageIndex(INITIAL_PAGE_INDEX);
       })
       .catch((error) => console.log(error))
       .finally(() => setIsLoading(false));
   };
 
-  // фильтрация
   const handleFiltration = (activeCategories) => {
     // активных фильтров нету и сейчас нажато "ВСЕ"
     if (activeCategories.length === 0) {
@@ -216,14 +219,6 @@ function Questions() {
       .catch((error) => console.log(error));
   }, []);
 
-  const renderLoadMoreButton = () => (
-    <Button
-      title={loadMoreButton}
-      onClick={() => setPageIndex((prevIndex) => prevIndex + 1)}
-      sectionClass="load-more-button"
-    />
-  );
-
   // рендеринг
   // заглушка, если нет даты
   function returnAnimatedContainer() {
@@ -286,6 +281,15 @@ function Questions() {
     </ul>
   );
 
+  // кнопка "еще"
+  const renderLoadMoreButton = () => (
+    <Button
+      title={loadMoreButton}
+      onClick={() => setPageIndex((prevIndex) => prevIndex + 1)}
+      sectionClass="load-more-button"
+    />
+  );
+
   // главная функция рендеринга
   const renderPageContent = () => {
     if (questionsPageData.length > 0) {
@@ -339,11 +343,3 @@ function Questions() {
 }
 
 export default Questions;
-
-//! загрузить еще
-// 1. пропс isDisabled будет смотреть на стейт "осталось ли еще даты?"
-// 2. дебаунс на кнопку
-// 3. если у тебя офсет =8, а элементов всего сейчас 7, то кнопку надо или удалять или закрашивать серым
-//* 4. показывать кнопку ОТ определенного количества элементов на странице (от 10 штук)
-//! крутилка на дозагрузку даты на пноку "еще"
-//! const [isMoreDataLoading, setIsMoreDataLoading] = useState(false);
