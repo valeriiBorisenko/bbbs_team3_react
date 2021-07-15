@@ -28,6 +28,11 @@
   line-height: 1.5;
   color: $darkGray;
   text-decoration: none;
+  background: unset;
+  border: none;
+  align-self: flex-start;
+  padding: 0;
+  cursor: pointer;
 
   &:hover {
     text-decoration: underline;
