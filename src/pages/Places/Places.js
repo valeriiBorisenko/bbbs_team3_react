@@ -205,6 +205,7 @@ function Places() {
 
     const fixedPageSize =
       pageNumber === 0 && !isFiltersActive ? pageSize + 1 : pageSize;
+
     const fixedOffset =
       pageNumber > 0 && chosenPlace && isChosenOnPageOne && !isFiltersActive
         ? offset + 1

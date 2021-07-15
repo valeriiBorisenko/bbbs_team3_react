@@ -10,7 +10,10 @@ import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
 
-function CardFilm({ data: { image, title, info, link, tags, duration } }) {
+function CardFilm({
+  data: { image, title, info, link, tags, duration },
+  sectionClass,
+}) {
   const { openPopupVideo } = useContext(PopupsContext);
   // Пробрасываем данные в попап
   const handleClick = () => {
@@ -105,7 +108,7 @@ function CardFilm({ data: { image, title, info, link, tags, duration } }) {
     );
 
   return (
-    <Card sectionClass="card-film">
+    <Card sectionClass={`card-film ${sectionClass}`}>
       <div className="card-film__video">
         {renderVideoPlayback(renderPrewiew())}
       </div>
@@ -135,6 +138,7 @@ CardFilm.propTypes = {
   link: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.object),
   duration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  sectionClass: PropTypes.string,
 };
 
 CardFilm.defaultProps = {
@@ -145,6 +149,7 @@ CardFilm.defaultProps = {
   link: '',
   tags: [],
   duration: '',
+  sectionClass: '',
 };
 
 export default CardFilm;

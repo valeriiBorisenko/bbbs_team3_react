@@ -40,9 +40,11 @@ function Articles() {
 
     getArticlesPageData({ limit: fixedPageSize, offset: fixedOffset })
       .then(({ results }) => {
-        setArticlesPageData(() =>
-          results.filter((item) => !item?.pinnedFullSize)
-        );
+        if (pageNumber === 0 && mainArticle) {
+          setArticlesPageData(() =>
+            results.filter((item) => !item?.pinnedFullSize)
+          );
+        } else setArticlesPageData(results);
       })
       .catch((err) => console.log(err))
       .finally(() => {
@@ -62,15 +64,17 @@ function Articles() {
     if (pageSize) {
       getArticlesPageData({ limit: pageSize + 1 })
         .then(({ results, count }) => {
-          const mainCard = results.find((item) => item?.pinnedFullSize);
+          const articlesData = results;
+          const mainCard = articlesData.find((item) => item?.pinnedFullSize);
           setMainCard(mainCard);
           if (mainCard) {
             setArticlesPageData(() =>
-              results.filter((item) => !item?.pinnedFullSize)
+              articlesData.filter((item) => !item?.pinnedFullSize)
             );
             setPageCount(Math.ceil((count - 1) / pageSize));
           } else {
-            setArticlesPageData(results);
+            articlesData.pop();
+            setArticlesPageData(articlesData);
             setPageCount(Math.ceil(count / pageSize));
           }
         })
