@@ -8,11 +8,13 @@ import { useAuth, useFormWithValidation } from '../../../hooks/index';
 import { AFISHA_URL } from '../../../config/routes';
 import Popup from '../Popup/Popup';
 import { Input, Button, TitleH2 } from '../../utils/index';
+import AnimationSuccessLogin from '../../utils/AnimationSuccessLogin/AnimationSuccessLogin';
 
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
   const { serverError, clearError } = useContext(ErrorsContext);
-  const [forgotPassword, setForgotPassword] = useState(false);
+  const [isForgotPassword, isSetForgotPassword] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const errorsString = serverError
     ? Object.values(serverError)
@@ -23,7 +25,12 @@ function PopupLogin({ isOpen, onClose }) {
 
   const { handleLogin } = useAuth(updateUser);
   function handleClickForgotPassword() {
-    setForgotPassword(!forgotPassword);
+    isSetForgotPassword(!isForgotPassword);
+  }
+
+  function successForgotPassword() {
+    setIsSuccess(false);
+    isSetForgotPassword(false);
   }
 
   const { values, handleChange, errors, isValid, resetForm } =
@@ -37,10 +44,10 @@ function PopupLogin({ isOpen, onClose }) {
   function handleSubmitForgotPassword(evt) {
     evt.preventDefault();
     // временное решение имитации отправки
-    onClose();
     resetForm();
     clearError();
-    setForgotPassword(false);
+    setIsSuccess(true);
+    setTimeout(successForgotPassword, 5000);
   }
 
   //! аварийный перевод на главную, если не хочешь логиниться
@@ -56,6 +63,7 @@ function PopupLogin({ isOpen, onClose }) {
   useEffect(() => {
     resetForm();
     clearError();
+    isSetForgotPassword(false);
   }, [isOpen]);
 
   const formAuth = () => (
@@ -112,46 +120,51 @@ function PopupLogin({ isOpen, onClose }) {
     </form>
   );
 
-  const formForgotPassword = () => (
-    <form
-      className="popup__form"
-      onSubmit={(evt) => handleSubmitForgotPassword(evt)}
-      noValidate
-    >
-      <TitleH2
-        sectionClass="popup__title_type_sign-in"
-        title={texts.titleForgotForm}
-      />
-      <p className="paragraph popup__sign-in">{texts.paragraphForgotForm}</p>
-
-      <Input
-        id="loginUseremailInput"
-        sectionClass="popup__input"
-        type="email"
-        name="usermail"
-        placeholder={texts.emailPlaceholder}
-        onChange={handleChange}
-        value={values?.usermail}
-        error={errors?.usermail}
-        required
-      />
-      <button
-        className="popup__forgot-password"
-        type="button"
-        onClick={handleClickForgotPassword}
+  const formForgotPassword = () => {
+    if (isSuccess) {
+      return <AnimationSuccessLogin isSuccess={isSuccess} />;
+    }
+    return (
+      <form
+        className="popup__form"
+        onSubmit={(evt) => handleSubmitForgotPassword(evt)}
+        noValidate
       >
-        {texts.backButtonText}
-      </button>
-      <span className="form-error-message">{errorsString}</span>
-      <Button
-        sectionClass="popup__button_type_sign-in"
-        color="blue"
-        title={texts.submitButtonTextForgot}
-        isDisabled={!isValid}
-        isSubmittable
-      />
-    </form>
-  );
+        <TitleH2
+          sectionClass="popup__title_type_sign-in"
+          title={texts.titleForgotForm}
+        />
+        <p className="paragraph popup__sign-in">{texts.paragraphForgotForm}</p>
+
+        <Input
+          id="loginUseremailInput"
+          sectionClass="popup__input"
+          type="email"
+          name="usermail"
+          placeholder={texts.emailPlaceholder}
+          onChange={handleChange}
+          value={values?.usermail}
+          error={errors?.usermail}
+          required
+        />
+        <button
+          className="popup__forgot-password"
+          type="button"
+          onClick={handleClickForgotPassword}
+        >
+          {texts.backButtonText}
+        </button>
+        <span className="form-error-message">{errorsString}</span>
+        <Button
+          sectionClass="popup__button_type_sign-in"
+          color="blue"
+          title={texts.submitButtonTextForgot}
+          isDisabled={!isValid}
+          isSubmittable
+        />
+      </form>
+    );
+  };
 
   return (
     <Popup
@@ -160,7 +173,7 @@ function PopupLogin({ isOpen, onClose }) {
       isOpen={isOpen}
       onClose={closePopup}
     >
-      {forgotPassword ? formForgotPassword() : formAuth()}
+      {isForgotPassword ? formForgotPassword() : formAuth()}
     </Popup>
   );
 }
