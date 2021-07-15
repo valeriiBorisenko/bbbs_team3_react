@@ -14,6 +14,7 @@ import {
   Video,
   Articles,
   Books,
+  CatalogArticle,
   RightsArticle,
   Stories,
 } from '../pages/index';
@@ -32,6 +33,7 @@ import {
   VIDEO_URL,
   ARTICLES_URL,
   BOOKS_URL,
+  CATALOG_ITEM_URL,
   PLACES_ARTICLE_URL,
   STORIES_URL,
 } from '../config/routes';
@@ -82,6 +84,12 @@ function Router() {
         <Catalog />
       </Route>
 
+      <Route
+        path={CATALOG_ITEM_URL}
+        render={({ match }) => (
+          <CatalogArticle articleId={match.params.articleId} />
+        )}
+      />
       <Route exact path={VIDEO_URL}>
         <Video />
       </Route>

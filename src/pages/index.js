@@ -12,6 +12,7 @@ import Articles from './Articles/Articles';
 import ReadAndWatch from './ReadAndWatch/ReadAndWatch';
 import Video from './Video/Video';
 import Books from './Books/Books';
+import CatalogArticle from './CatalogArticle/CatalogArticle';
 import RightsArticle from './RightsArticle/RightsArticle';
 import Stories from './Stories/Stories';
 
@@ -30,6 +31,7 @@ export {
   Video,
   Articles,
   Books,
+  CatalogArticle,
   RightsArticle,
   Stories,
 };
