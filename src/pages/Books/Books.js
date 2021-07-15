@@ -178,13 +178,7 @@ function Books() {
         ) : (
           <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
             {booksPageData.map((books) => (
-              <CardBook
-                key={books.id}
-                data={books}
-                pageCount={pageCount}
-                pageNumber={pageNumber}
-                setPageNumber={setPageNumber}
-              />
+              <CardBook key={books.id} data={books} sectionClass="scale-in" />
             ))}
           </ul>
         )}

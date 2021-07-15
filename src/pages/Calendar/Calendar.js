@@ -155,7 +155,7 @@ function Calendar() {
         cardData={cardData}
         onEventSignUpClick={handleEventBooking}
         onEventDescriptionClick={openPopupAboutEvent}
-        sectionClass="fade-in"
+        sectionClass="scale-in"
       />
     ));
     return cards;
