@@ -90,6 +90,9 @@ function RightsArticle({ id }) {
           setIsLoadingPage(false);
         });
     }
+
+    // Хард Код для демо
+    window.scrollTo({ top: 0 });
   }, [id, nextId]);
 
   return (
