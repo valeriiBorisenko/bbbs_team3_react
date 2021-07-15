@@ -43,6 +43,7 @@ const {
   textStubNoData,
   formPlaceholder,
   formSubmitButton,
+  loadMoreButton,
 } = questionsPageTexts;
 
 function Questions() {
@@ -220,6 +221,19 @@ function Questions() {
     </>
   );
 
+  const fetchMoreQuestions = () => {};
+  //! загрузить еще
+  // 1. пропс isDisabled будет смотреть на стейт "осталось ли еще даты?"
+  // 2. дебаунс на кнопку
+  const renderLoadMoreButton = () => (
+    <Button
+      title={loadMoreButton}
+      onClick={fetchMoreQuestions}
+      sectionClass="load-more-button"
+      // isDisabled
+    />
+  );
+
   // контейнер с вопросами
   const renderQuestionsContainer = () => (
     <ul className="questions">
@@ -254,13 +268,14 @@ function Questions() {
           {/* рендерим сами вопросы */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
 
+          {renderLoadMoreButton()}
           {/* если залогинен рендерим форму */}
           {currentUser && renderQuestionForm()}
         </>
       );
     }
 
-    // залогинен и нет ивентов
+    // залогинен и нет вопросов, покажем заглушку
     const isDataForPage = questionsPageData.length > 1;
     if (!isDataForPage) {
       return returnAnimatedContainer();
