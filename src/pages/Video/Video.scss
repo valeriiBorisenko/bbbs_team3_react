@@ -6,17 +6,44 @@
   }
 
   &__main-card {
-    margin-top: 80px;
+    padding-top: 80px;
+  }
+
+  &__cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(290px, 1fr));
+    gap: 80px 30px;
+    padding: 80px 0;
   }
   
-  &__cards {
-    margin-top: 80px;
-    margin-bottom: 80px;
+  @include atDesktop1440 {
+    &__cards-grid {
+      grid-template-columns: repeat(3, minmax(290px, 1fr));
+    }
+  }
+  
+  @include atDesktop1217 {
+    &__cards-grid {
+      grid-template-columns: repeat(2, minmax(290px, 1fr));
+      padding: 30px 0 60px;
+      row-gap: 30px;
+    }
+
+    &__main-card {
+      padding-top: 30px;
+    }
   }
 
   @include atDesktop1024 {
     &__title {
       margin-bottom: 10px;
+    }
+  }
+  
+  @include atTabletL {
+    &__cards-grid {
+      grid-template-columns: 1fr;
+      padding: 30px 0;
     }
   }
 }

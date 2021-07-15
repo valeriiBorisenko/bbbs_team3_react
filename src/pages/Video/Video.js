@@ -272,7 +272,7 @@ const Video = () => {
           </section>
         )}
 
-        <section className="video__cards cards-grid cards-grid_content_small-cards page__section">
+        <section className="video__cards-grid page__section">
           {video &&
             video.map((item) => (
               <CardFilm key={item?.id} data={item} sectionClass="scale-in" />
