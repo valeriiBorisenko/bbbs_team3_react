@@ -13,6 +13,7 @@ import ReadAndWatch from './ReadAndWatch/ReadAndWatch';
 import Video from './Video/Video';
 import Books from './Books/Books';
 import RightsArticle from './RightsArticle/RightsArticle';
+import Stories from './Stories/Stories';
 
 export {
   AboutUs,
@@ -30,4 +31,5 @@ export {
   Articles,
   Books,
   RightsArticle,
+  Stories,
 };

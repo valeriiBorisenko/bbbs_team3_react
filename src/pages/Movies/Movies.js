@@ -1,5 +1,5 @@
 import './Movies.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import moviesPageTexts from '../../locales/movies-page-RU';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import { getMoviesPageData, getMoviesPageFilter } from '../../api/movies-page';
@@ -14,12 +14,18 @@ import {
 } from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
+import {
+  ALL_CATEGORIES,
+  DELAY_DEBOUNCE,
+  localStChosenVideo,
+} from '../../config/constants';
 import {
   handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
+import { getLocalStorageData } from '../../hooks/useLocalStorage';
+import { PopupsContext } from '../../contexts/index';
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 2,
@@ -45,6 +51,10 @@ function Movies() {
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
+
+  const { openPopupVideo } = useContext(PopupsContext);
+  const chosenVideoOnRedirectFromMainPage =
+    getLocalStorageData(localStChosenVideo);
 
   const getActiveTags = () => {
     if (categories) {
@@ -141,9 +151,9 @@ function Movies() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const mobileQuery = window.matchMedia('(max-width: 767px)');
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const mobileQuery = window.matchMedia('(max-width: 900px)');
+    const smallQuery = window.matchMedia('(max-width: 1216px)');
+    const largeQuery = window.matchMedia('(max-width: 1451px)');
 
     const listener = () => {
       if (mobileQuery.matches) {
@@ -236,6 +246,9 @@ function Movies() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="movies page__section fade-in">
+        {/* Открытие попапа Трейлера при переходе с Главной страницы */}
+        {chosenVideoOnRedirectFromMainPage && openPopupVideo()}
+
         {renderPageContent()}
       </section>
     </BasePage>

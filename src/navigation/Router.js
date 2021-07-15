@@ -15,6 +15,7 @@ import {
   Articles,
   Books,
   RightsArticle,
+  Stories,
 } from '../pages/index';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import {
@@ -32,6 +33,7 @@ import {
   ARTICLES_URL,
   BOOKS_URL,
   PLACES_ARTICLE_URL,
+  STORIES_URL,
 } from '../config/routes';
 
 function Router() {
@@ -90,6 +92,10 @@ function Router() {
 
       <Route exact path={ARTICLES_URL}>
         <Articles />
+      </Route>
+
+      <Route exact path={STORIES_URL}>
+        <Stories />
       </Route>
 
       <Route path="*">

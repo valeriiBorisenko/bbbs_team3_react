@@ -13,6 +13,7 @@ export const MOVIES_URL = '/movies';
 export const BOOKS_URL = '/books';
 export const HISTORY_URL = '/history';
 export const PLACES_ARTICLE_URL = '/rights/:id';
+export const STORIES_URL = '/stories';
 
 export const MAIN_PAGE_TITLE = 'наставники.про';
 export const AFISHA_TITLE = 'Календарь';
