@@ -1,9 +1,5 @@
 @import './styles/utils.scss';
 
-.article-container {
-  width: 100%;
-}
-
 .article-lead {
   background-color: $yellow;
   border-top-right-radius: 400px;
@@ -55,9 +51,11 @@
 
 .article-lead__text {
   margin-top: 30px;
+  word-wrap: break-word;
 }
 
 .article {
+  padding-top: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -106,6 +104,7 @@
 .article__card {
   margin: 0;
   padding: 50px;
+  background-color: $white;
 }
 
 .article__card-list-item {
@@ -125,11 +124,9 @@
 }
 
 .next-page {
-  margin-right: auto;
-  padding-top: 80px;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  margin: 80px auto 0;
 }
 
 .next-page__img-wrap {
@@ -163,6 +160,8 @@
 
 .next-page__arrow-icon {
   width: 30px;
+  height: 30px;
+  background-image: url('../../assets/arrow-right-blue.svg');
 }
 
 @include atDesktop1440 {
