@@ -27,7 +27,7 @@ import {
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
-  medium: 9,
+  medium: 12,
   big: 16,
 };
 
