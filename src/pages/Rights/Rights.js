@@ -89,11 +89,12 @@ const Rights = () => {
         {articles.map((item, i) => (
           <CardRights
             key={item?.id}
-            sectionClass="cards-section__item"
+            sectionClass="cards-section__item scale-in"
             title={item?.title}
             tags={item?.tags}
             shape={FIGURES[i % FIGURES.length]}
             color={COLORS[i % COLORS.length]}
+            id={item?.id}
           />
         ))}
       </CardsSectionWithLines>

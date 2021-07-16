@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 // вспомогательные функции
 export const setLocalStorageData = (key, value) =>
@@ -20,7 +20,11 @@ export const dispatchLocalStorageEvent = (key, value) => {
 // хук слушает изменение определённого ключа в localStorage и возвращает его значение при любом изменении
 // работает в связке с dispatchLocalStorageEvent
 export const useLocalStorage = (key) => {
-  const getLocalStorageItem = () => getLocalStorageData(key);
+  const getLocalStorageItem = useCallback(
+    () => getLocalStorageData(key),
+    [key]
+  );
+
   useEffect(() => {
     window.addEventListener('changeLocalStorage', getLocalStorageItem);
     return () =>

@@ -11,8 +11,8 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
-    transform: scale(1.15);
-    transition: .6s linear;
+    transform: scale(1.1);
+    transition: 1s ease-out;
   }
 
   &_type_shaped {

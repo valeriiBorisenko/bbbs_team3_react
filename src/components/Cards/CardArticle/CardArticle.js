@@ -1,5 +1,4 @@
 import './CardArticle.scss';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
@@ -10,17 +9,21 @@ function CardArticle({
   data: { title, info, annotation, image, articleUrl },
   isMain,
   color,
+  sectionClass,
 }) {
+  const classNames = [
+    'card-container',
+    isMain
+      ? 'card-container_type_main-article'
+      : 'card-container_type_article fade-in',
+    sectionClass,
+  ]
+    .join(' ')
+    .trim();
   const cardColor = isMain ? 'yellow' : color;
 
   return (
-    <article
-      className={`card-container ${
-        isMain
-          ? 'card-container_type_main-article'
-          : 'card-container_type_article fade-in'
-      }`}
-    >
+    <article className={classNames}>
       <Card
         sectionClass={`article-card ${isMain ? 'article-card_main' : ''}`}
         color={cardColor}
@@ -69,6 +72,7 @@ CardArticle.propTypes = {
   annotation: PropTypes.string,
   color: PropTypes.string,
   isMain: PropTypes.bool,
+  sectionClass: PropTypes.string,
 };
 
 CardArticle.defaultProps = {
@@ -80,6 +84,7 @@ CardArticle.defaultProps = {
   annotation: '',
   color: 'white',
   isMain: false,
+  sectionClass: '',
 };
 
 export default CardArticle;

@@ -29,7 +29,6 @@ import {
   CardVideoMain,
   Widget,
   CardQuestion,
-  Rubric,
   CardAnimatedPlug,
 } from './index';
 
@@ -86,6 +85,7 @@ function MainPage() {
     if (currentUser && mainPageData?.event) {
       return (
         <CardCalendar
+          sectionClass="scale-in"
           key={mainPageData.event.id}
           cardData={mainPageData.event}
           onEventSignUpClick={handleEventBooking}
@@ -95,13 +95,13 @@ function MainPage() {
     }
 
     // красно-зеленая заглушка
-    return <CardStub />;
+    return <CardStub sectionClass="scale-in" />;
   }
 
   function renderHistoryBlock() {
     if (mainPageData?.history) {
       return (
-        <Card sectionClass="lead__media" key={mainPageData.history.id}>
+        <Card sectionClass="lead__media scale-in" key={mainPageData.history.id}>
           <img
             src={`${staticImageUrl}/${mainPageData.history.image}`}
             alt={mainPageData.history.title}
@@ -117,18 +117,18 @@ function MainPage() {
     return (
       <CardAnimatedPlug
         text={CardAnimatedPlugText}
-        sectionClass="lead__media"
+        sectionClass="lead__media scale-in"
       />
     );
   }
 
   function renderPlaceSection() {
     return (
-      <section className="place main-section page__section fade-in">
+      <section className="place main-section page__section">
         <CardPlace
           key={mainPageData.place.id}
           data={mainPageData.place}
-          sectionClass="card-container_type_main-article"
+          sectionClass="card-container_type_main-article scale-in"
           activityTypes={activityTypes}
           isBig
           isMainPage
@@ -139,7 +139,7 @@ function MainPage() {
 
   function renderArticleSection(article) {
     return (
-      <section className="articles main-section page__section fade-in">
+      <section className="articles main-section page__section scale-in">
         <Link to="/articles" className="main-section__link">
           <CardArticleBig key={article.id} title={article.title} color="blue" />
         </Link>
@@ -155,21 +155,13 @@ function MainPage() {
       randomMovies.length > 1
         ? `movies_pagination movies_pagination_${randomMovies.length}`
         : '';
-    const className = `main-section__link ${additionalMoviesClasses}`;
+    const className = `main-section__link scale-in ${additionalMoviesClasses}`;
     // возвращаем
     return (
-      <section className="movies main-section page__section cards-grid cards-grid_content_small-cards fade-in">
+      <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {randomMovies.map((movie) => (
           <Link to={MOVIES_URL} className={className} key={movie.id}>
-            <CardFilm data={movie}>
-              <ul className="card-film__rubric-list">
-                {movie.tags.map((tag) => (
-                  <li key={tag.id}>
-                    <Rubric title={tag.name} sectionClass="card-film__rubric" />
-                  </li>
-                ))}
-              </ul>
-            </CardFilm>
+            <CardFilm data={movie} />
           </Link>
         ))}
       </section>
@@ -178,8 +170,8 @@ function MainPage() {
 
   function renderVideoSection() {
     return (
-      <section className="video main-section page__section fade-in">
-        <Link to={VIDEO_URL} className="main-section__link">
+      <section className="video main-section page__section">
+        <Link to={VIDEO_URL} className="main-section__link scale-in">
           <CardVideoMain
             key={mainPageData.video.id}
             data={mainPageData.video}
@@ -200,7 +192,7 @@ function MainPage() {
         {randomQuestions.map((item) => (
           <Link
             to={QUESTIONS_URL}
-            className={`main-section__link main-section__link_el_question ${
+            className={`main-section__link scale-in main-section__link_el_question ${
               randomQuestions.length > 2 ? ' main-questions_pagination' : ''
             }`}
             key={item.id}
@@ -215,7 +207,7 @@ function MainPage() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       {/* секция из ивента + истории */}
-      <section className="lead page__section fade-in">
+      <section className="lead page__section">
         <div className="card-container card-container_type_identical">
           {/* ивент */}
           {isCityChanging ? <Loader isNested /> : renderEventsBlock()}
@@ -226,18 +218,17 @@ function MainPage() {
       </section>
 
       {/* секция Место */}
-      {mainPageData?.place ? renderPlaceSection() : null}
+      {mainPageData?.place && renderPlaceSection()}
 
       {/* секция Статья */}
-      {mainPageData?.articles?.length > 0
-        ? renderArticleSection(mainPageData?.articles[0])
-        : null}
+      {mainPageData?.articles?.length > 0 &&
+        renderArticleSection(mainPageData?.articles[0])}
 
       {/* секция Фильмы */}
-      {mainPageData?.movies ? renderMoviesSection() : null}
+      {mainPageData?.movies && renderMoviesSection()}
 
       {/* секция Видео */}
-      {mainPageData?.video ? renderVideoSection() : null}
+      {mainPageData?.video && renderVideoSection()}
 
       {/* секция Виджет + Вопросы */}
       <section className="main-questions main-section page__section fade-in">
@@ -248,14 +239,13 @@ function MainPage() {
           />
 
           {/* секция Вопросов */}
-          {mainPageData?.questions?.length > 0 ? renderQuestionBlock() : null}
+          {mainPageData?.questions?.length > 0 && renderQuestionBlock()}
         </div>
       </section>
 
       {/* секция Статья */}
-      {mainPageData?.articles?.length > 1
-        ? renderArticleSection(mainPageData?.articles[1])
-        : null}
+      {mainPageData?.articles?.length > 1 &&
+        renderArticleSection(mainPageData?.articles[1])}
     </BasePage>
   );
 }

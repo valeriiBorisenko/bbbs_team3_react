@@ -92,11 +92,12 @@ function Catalog() {
       >
         {catalogPageData.map((item, i) => (
           <CardCatalog
-            sectionClass="cards-section__item"
+            sectionClass="cards-section__item scale-in"
             key={item?.id}
             title={item?.title}
             image={item?.image}
             shape={FIGURES[i % FIGURES.length]}
+            link={`/catalog/${item.id}`}
           />
         ))}
       </CardsSectionWithLines>

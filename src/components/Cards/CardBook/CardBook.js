@@ -12,11 +12,12 @@ function CardBook({
     url,
     annotation,
   },
+  sectionClass,
 }) {
   const backgroundColor = { backgroundColor: color };
 
   return (
-    <article className="card-container">
+    <article className={`card-container ${sectionClass}`}>
       <Card sectionClass="card-book">
         <a
           className="card-book__cover"
@@ -45,6 +46,7 @@ CardBook.propTypes = {
   year: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   url: PropTypes.string,
   annotation: PropTypes.string,
+  sectionClass: PropTypes.string,
 };
 
 CardBook.defaultProps = {
@@ -55,6 +57,7 @@ CardBook.defaultProps = {
   year: '',
   url: '',
   annotation: '',
+  sectionClass: '',
 };
 
 export default CardBook;

@@ -1,5 +1,5 @@
 import './AboutUs.scss';
-import aboutUsTexts from '../../locales/about-us-page-RU.js';
+import aboutUsTexts from '../../locales/about-us-page-RU';
 import { useScrollToTop } from '../../hooks/index';
 import {
   BasePage,

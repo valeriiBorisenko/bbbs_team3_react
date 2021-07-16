@@ -27,36 +27,63 @@ function Articles() {
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
-  const [articlesPageData, setArticlesPageData] = useState([]);
+  const [articlesPageData, setArticlesPageData] = useState(null);
+  const [mainArticle, setMainCard] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   function getPageData() {
     const offset = pageSize * pageNumber;
-    const fixedPageSize = pageNumber === 0 ? pageSize + 1 : pageSize;
-    const fixedOffset = pageNumber > 0 ? offset + 1 : offset;
+    const fixedPageSize =
+      pageNumber === 0 && mainArticle ? pageSize + 1 : pageSize;
+    const fixedOffset = pageNumber > 0 && mainArticle ? offset + 1 : offset;
 
     getArticlesPageData({ limit: fixedPageSize, offset: fixedOffset })
-      .then(({ results, count }) => {
-        setArticlesPageData(results);
-        setPageCount(Math.ceil(count / pageSize));
+      .then(({ results }) => {
+        if (pageNumber === 0 && mainArticle) {
+          setArticlesPageData(() =>
+            results.filter((item) => !item?.pinnedFullSize)
+          );
+        } else setArticlesPageData(results);
       })
       .catch((err) => console.log(err))
       .finally(() => {
         setIsLoadingPaginate(false);
-        setIsLoadingPage(false);
       });
   }
 
+  // пагинация
   useEffect(() => {
-    if (pageSize) {
-      getPageData();
-    }
-
     if (!isLoadingPage) {
       setIsLoadingPaginate(true);
+      getPageData();
     }
-  }, [pageSize, pageNumber]);
+  }, [pageNumber]);
+
+  useEffect(() => {
+    if (pageSize) {
+      getArticlesPageData({ limit: pageSize + 1 })
+        .then(({ results, count }) => {
+          const articlesData = results;
+          const mainCard = articlesData.find((item) => item?.pinnedFullSize);
+          setMainCard(mainCard);
+          if (mainCard) {
+            setArticlesPageData(() =>
+              articlesData.filter((item) => !item?.pinnedFullSize)
+            );
+            setPageCount(Math.ceil((count - 1) / pageSize));
+          } else {
+            articlesData.pop();
+            setArticlesPageData(articlesData);
+            setPageCount(Math.ceil(count / pageSize));
+          }
+        })
+        .catch((err) => console.log(err))
+        .finally(() => {
+          setIsLoadingPage(false);
+        });
+    }
+  }, [pageSize]);
 
   useEffect(() => {
     const smallQuery = window.matchMedia('(max-width: 1024px)');
@@ -76,11 +103,6 @@ function Articles() {
       smallQuery.removeEventListener('change', listener);
     };
   }, []);
-
-  const mainCard = articlesPageData.find((item) => item?.pinnedFullSize);
-  const cardsWithoutMain = articlesPageData.filter(
-    (item) => !item?.pinnedFullSize
-  );
 
   // отрисовка заглушки
   function renderAnimatedContainer() {
@@ -104,25 +126,19 @@ function Articles() {
   function renderCards() {
     return (
       <>
-        {mainCard && (
-          <section className="articles__main fade-in">
-            <CardArticle
-              data={mainCard}
-              // никита, 12.07
-              // sectionClass="card-container_type_main-article"
-              isMain
-            />
+        {mainArticle && !pageNumber && (
+          <section className="articles__main scale-in">
+            <CardArticle data={mainArticle} isMain />
           </section>
         )}
 
         <section className="articles__cards-grid">
-          {cardsWithoutMain.map((item, i) => (
+          {articlesPageData.map((item, i) => (
             <CardArticle
-              key={item.id}
+              key={item?.id}
               color={COLORS[(i + 1) % COLORS.length]}
               data={item}
-              // никита, 12.07
-              // sectionClass="card-container_type_article fade-in"
+              sectionClass="scale-in"
             />
           ))}
         </section>
@@ -132,8 +148,8 @@ function Articles() {
 
   function renderPageContent() {
     return (
-      <section className="articles page__section fade-in">
-        <TitleH1 title={title} />
+      <section className="articles page__section">
+        <TitleH1 title={title} sectionClass="fade-in" />
 
         {isLoadingPaginate ? <Loader isNested /> : renderCards()}
 

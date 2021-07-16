@@ -21,6 +21,5 @@ export {
   CardVideoMain,
   Widget,
   CardQuestion,
-  Rubric,
   CardAnimatedPlug,
 };

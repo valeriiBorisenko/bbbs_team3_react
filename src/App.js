@@ -93,7 +93,7 @@ function App() {
   const updateUser = (value) => setCurrentUser(value);
 
   // список городов/контекст
-  const cities = useCities();
+  const { cities, defaultCity } = useCities();
 
   // серверные ошибки контекст
   const [serverError, setServerError] = useState(null);
@@ -123,7 +123,7 @@ function App() {
 
   return (
     <HelmetProvider>
-      <CitiesContext.Provider value={cities}>
+      <CitiesContext.Provider value={{ cities, defaultCity }}>
         <CurrentUserContext.Provider value={{ currentUser, updateUser }}>
           <ErrorsContext.Provider value={{ serverError, setError, clearError }}>
             <PopupsContext.Provider
