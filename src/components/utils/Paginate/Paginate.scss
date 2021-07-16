@@ -100,12 +100,10 @@ a[aria-label="Previous page"] {
 
 .pagination__arrow-element.pagination__arrow-element_type_next:hover {
   transform: translateX(5px);
-  // transform: scale(1.1);
 }
 
 .pagination__arrow-element.pagination__arrow-element_type_previous:hover {
   transform: translateX(-5px);
-  // transform: scale(1.1);
 }
 
 @include atDesktop1024 {

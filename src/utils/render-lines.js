@@ -42,6 +42,17 @@ function renderThoseDamnedLines(dataLength, pageSize, isTablet) {
 
       return renderThreeLines();
     }
+
+    case 12: {
+      if (dataLength < 4) return null;
+
+      if (dataLength < 7) return renderOneLine();
+
+      if (dataLength < 10) return renderTwoLines();
+
+      return renderThreeLines();
+    }
+
     case 9: {
       if (dataLength < 4) return null;
 
@@ -49,6 +60,7 @@ function renderThoseDamnedLines(dataLength, pageSize, isTablet) {
 
       return renderTwoLines();
     }
+
     default: {
       if (dataLength < 3) return null;
 
