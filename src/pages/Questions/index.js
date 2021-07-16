@@ -1,12 +1,14 @@
 import BasePage from '../../layout/BasePage';
-import TitleH1 from '../../components/utils/TitleH1/TitleH1';
-import TitleH2 from '../../components/utils/TitleH2/TitleH2';
 import CardQuestion from '../../components/Cards/CardQuestion/CardQuestion';
-import Input from '../../components/utils/Input/Input';
-import Button from '../../components/utils/Button/Button';
-import Loader from '../../components/utils/Loader/Loader';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import TagsList from '../../components/TagsList/TagsList';
+import {
+  TitleH2,
+  TitleH1,
+  Loader,
+  Input,
+  Button,
+} from '../../components/utils/index';
 
 export {
   BasePage,

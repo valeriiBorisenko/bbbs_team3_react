@@ -1,10 +1,12 @@
 import BasePage from '../../layout/BasePage';
-import TitleH1 from '../../components/utils/TitleH1/TitleH1';
 import CardPlace from '../../components/Cards/CardPlace/CardPlace';
 import PlacesRecommend from '../../components/PlacesRecommend/PlacesRecommend';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
-import NoDataNotificationBox from '../../components/utils/NoDataNotificationBox/NoDataNotificationBox';
-import Loader from '../../components/utils/Loader/Loader';
+import {
+  TitleH1,
+  NoDataNotificationBox,
+  Loader,
+} from '../../components/utils/index';
 import TagsList from '../../components/TagsList/TagsList';
 
 export {
