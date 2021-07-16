@@ -71,7 +71,6 @@ function ReadAndWatchSection({
 
   function slideNextHandler(currentItem, newPageIndex) {
     const pagesLoadedNow = ref.current.getNumOfPages();
-    // console.log('pagesLoadedNow', pagesLoadedNow);
     const isPenultimatePage =
       pagesLoadedNow - INDEX_ERROR_FOR_PENULTIMATE_PAGE === newPageIndex;
     const isLastPage =
@@ -134,6 +133,7 @@ function ReadAndWatchSection({
           transitionMs={transitionDelay}
           pagination={false}
           outerSpacing={0}
+          preventDefaultTouchmoveEvent
           itemPadding={elemPaddings}
           breakPoints={breakPoints}
           disableArrowsOnEnd
