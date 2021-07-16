@@ -2,6 +2,7 @@
 import './Header.scss';
 import { useState, useEffect, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   CurrentUserContext,
   CitiesContext,
@@ -14,7 +15,9 @@ import { localStUserCity } from '../../config/constants';
 import NavBar from '../NavBar/NavBar';
 import { UserMenuButton } from '../utils/index';
 
-function Header() {
+const headerWindowOffsetY = 200;
+
+function Header({ isTransparent }) {
   const history = useHistory();
   const { pathname } = useLocation();
 
@@ -94,6 +97,9 @@ function Header() {
 
   const classNamesHeader = [
     'header',
+    isTransparent && !(window.pageYOffset > headerWindowOffsetY)
+      ? 'header_transparent'
+      : '',
     isMobileMenuOpen ? 'header_displayed' : '',
     !isHeaderActive ? 'header__on-scroll-up' : '',
   ]
@@ -153,5 +159,13 @@ function Header() {
     </header>
   );
 }
+
+Header.propTypes = {
+  isTransparent: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  isTransparent: false,
+};
 
 export default Header;

@@ -1,10 +1,11 @@
 import './CardStub.scss';
+import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { Card, LogoBlue, TitleH2 } from '../../utils/index';
 
-function CardStub() {
+function CardStub({ sectionClass }) {
   return (
-    <Card sectionClass="stub" color="green">
+    <Card sectionClass={`stub ${sectionClass}`} color="green">
       <div className="stub__upper-element">
         <a
           className="stub__logo"
@@ -21,5 +22,13 @@ function CardStub() {
     </Card>
   );
 }
+
+CardStub.propTypes = {
+  sectionClass: PropTypes.string,
+};
+
+CardStub.defaultProps = {
+  sectionClass: '',
+};
 
 export default CardStub;
