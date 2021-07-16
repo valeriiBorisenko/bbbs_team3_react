@@ -82,7 +82,7 @@ function PopupLogin({ isOpen, onClose }) {
   const classNameAuth = [
     'popup__form',
     'popup__form_type_sign-in',
-    `${!isForgotPassword ? 'popup__form_type_sign-in_opened' : ''}`,
+    `${isOpen && !isForgotPassword ? 'popup__form_type_sign-in_opened' : ''}`,
   ]
     .join(' ')
     .trim();
