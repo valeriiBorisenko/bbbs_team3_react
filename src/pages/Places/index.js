@@ -6,6 +6,7 @@ import {
   TitleH1,
   NoDataNotificationBox,
   Loader,
+  Paginate,
 } from '../../components/utils/index';
 import TagsList from '../../components/TagsList/TagsList';
 
@@ -18,4 +19,5 @@ export {
   Loader,
   TagsList,
   NoDataNotificationBox,
+  Paginate,
 };

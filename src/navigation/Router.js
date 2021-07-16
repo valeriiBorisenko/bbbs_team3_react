@@ -34,7 +34,7 @@ import {
   ARTICLES_URL,
   BOOKS_URL,
   CATALOG_ITEM_URL,
-  PLACES_ARTICLE_URL,
+  RIGHTS_ARTICLE_URL,
   STORIES_URL,
 } from '../config/routes';
 
@@ -68,7 +68,7 @@ function Router() {
       </Route>
 
       <Route
-        path={PLACES_ARTICLE_URL}
+        path={RIGHTS_ARTICLE_URL}
         render={({ match }) => <RightsArticle id={match.params.id} />}
       />
 

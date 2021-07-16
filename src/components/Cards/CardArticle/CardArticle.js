@@ -1,5 +1,6 @@
 import './CardArticle.scss';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';

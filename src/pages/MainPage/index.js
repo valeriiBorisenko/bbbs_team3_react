@@ -7,7 +7,7 @@ import CardFilm from '../../components/Cards/CardFilm/CardFilm';
 import CardVideoMain from '../../components/Cards/CardVideoMain/CardVideoMain';
 import CardQuestion from '../../components/Cards/CardQuestion/CardQuestion';
 import CardAnimatedPlug from '../../components/Cards/CardAnimatedPlug/CardAnimatedPlug';
-import { Widget, Card, Loader, Rubric } from '../../components/utils/index';
+import { Widget, Card, Loader } from '../../components/utils/index';
 
 export {
   BasePage,
