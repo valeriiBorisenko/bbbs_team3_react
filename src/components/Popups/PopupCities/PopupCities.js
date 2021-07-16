@@ -1,5 +1,5 @@
 import './PopupCities.scss';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { CurrentUserContext, CitiesContext } from '../../../contexts/index';
@@ -24,6 +24,12 @@ function PopupCities({ isOpen, onClose }) {
     onClose();
   }
 
+  function closePopupOnEsc(evt) {
+    if (evt.key === 'Escape') {
+      closePopup();
+    }
+  }
+
   function submitCity(evt) {
     const cityId = parseInt(evt.target.value, 10);
     if (currentUser) {
@@ -40,6 +46,14 @@ function PopupCities({ isOpen, onClose }) {
   }
 
   const debounceSubmitCity = useDebounce(submitCity, DELAY_DEBOUNCE);
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (defaultCity) {
+      window.addEventListener('keyup', closePopupOnEsc);
+      return () => window.removeEventListener('keyup', closePopupOnEsc);
+    }
+  }, [defaultCity]);
 
   return (
     <Popup

@@ -46,7 +46,6 @@ function App() {
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupLoginOpen(false);
-    setIsPopupCitiesOpen(false);
     setIsPopupRecommendSuccessOpen(false);
     setIsVideoPopupOpen(false);
   }
@@ -74,6 +73,10 @@ function App() {
 
   function openPopupCities() {
     setIsPopupCitiesOpen(true);
+  }
+
+  function closePopupCities() {
+    setIsPopupCitiesOpen(false);
   }
 
   function openPopupLogin() {
@@ -110,6 +113,7 @@ function App() {
   useEffect(() => {
     closeAllPopups();
     closePopupError();
+    closePopupCities();
   }, [pathname]);
 
   // эффект закрытия модалок по Escape
@@ -159,7 +163,7 @@ function App() {
                 />
                 <PopupCities
                   isOpen={isPopupCitiesOpen}
-                  onClose={closeAllPopups}
+                  onClose={closePopupCities}
                 />
                 <PopupError
                   isOpen={isPopupErrorOpen}
