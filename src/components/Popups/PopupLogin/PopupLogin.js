@@ -14,7 +14,7 @@ import animationSuccess from '../../../assets/animation/ill_popup_success.json';
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
   const { serverError, clearError } = useContext(ErrorsContext);
-  const [isForgotPassword, isSetForgotPassword] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const animationContainer = useRef(null);
@@ -38,12 +38,12 @@ function PopupLogin({ isOpen, onClose }) {
 
   const { handleLogin } = useAuth(updateUser);
   function handleClickForgotPassword() {
-    isSetForgotPassword(!isForgotPassword);
+    setIsForgotPassword(!isForgotPassword);
   }
 
   function successForgotPassword() {
     setIsSuccess(false);
-    isSetForgotPassword(false);
+    setIsForgotPassword(false);
   }
 
   const { values, handleChange, errors, isValid, resetForm } =
@@ -76,7 +76,10 @@ function PopupLogin({ isOpen, onClose }) {
   useEffect(() => {
     resetForm();
     clearError();
-    isSetForgotPassword(false);
+  }, [isOpen, isForgotPassword]);
+
+  useEffect(() => {
+    setIsForgotPassword(false);
   }, [isOpen]);
 
   const classNameAuth = [

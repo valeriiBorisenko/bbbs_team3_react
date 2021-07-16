@@ -67,6 +67,18 @@ export const localStChosenVideo = 'chosenVideo';
 export const ERROR_MESSAGES = {
   generalErrorMessage:
     'При передаче данных произошла ошибка. Повторите попытку позже.',
+  eventAddErrorMessage: {
+    title: 'Что-то пошло не так, попробуйте записаться снова',
+    button: 'Вернуться к мероприятию',
+  },
+  eventCancelErrorMessage: {
+    title: 'Что-то пошло не так, попробуйте отписаться снова',
+    button: 'Вернуться к мероприятию',
+  },
+  citiesErrorMessage: {
+    title: 'Что-то пошло не так, попробуйте выбрать город снова',
+    button: 'Вернуться',
+  },
 };
 
 export const ERROR_CODES = {

@@ -2,9 +2,18 @@ import './PopupCities.scss';
 import { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { CurrentUserContext, CitiesContext } from '../../../contexts/index';
+import {
+  CurrentUserContext,
+  CitiesContext,
+  ErrorsContext,
+  PopupsContext,
+} from '../../../contexts/index';
 import { updateUserProfile } from '../../../api/user';
-import { localStUserCity, DELAY_DEBOUNCE } from '../../../config/constants';
+import {
+  localStUserCity,
+  DELAY_DEBOUNCE,
+  ERROR_MESSAGES,
+} from '../../../config/constants';
 import {
   dispatchLocalStorageEvent,
   getLocalStorageData,
@@ -16,6 +25,8 @@ import { TitleH2 } from '../../utils/index';
 function PopupCities({ isOpen, onClose }) {
   const { currentUser, updateUser } = useContext(CurrentUserContext);
   const { cities, defaultCity } = useContext(CitiesContext);
+  const { setError } = useContext(ErrorsContext);
+  const { openPopupError } = useContext(PopupsContext);
 
   function closePopup() {
     if (!currentUser && !getLocalStorageData(localStUserCity)) {
@@ -38,7 +49,14 @@ function PopupCities({ isOpen, onClose }) {
           updateUser(res);
           onClose();
         })
-        .catch(console.log);
+        .catch((error) => {
+          setError({
+            title: ERROR_MESSAGES.citiesErrorMessage.title,
+            button: ERROR_MESSAGES.citiesErrorMessage.button,
+          });
+          openPopupError();
+          console.log(error);
+        });
     } else {
       dispatchLocalStorageEvent(localStUserCity, cityId);
       onClose();
