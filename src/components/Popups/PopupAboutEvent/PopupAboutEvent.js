@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { Scrollbars } from 'react-custom-scrollbars';
 import texts from './locales/RU';
 import {
   formatDate,
@@ -7,7 +6,7 @@ import {
   changeCaseOfFirstLetter,
 } from '../../../utils/utils';
 import Popup from '../Popup/Popup';
-import { Button, TitleH2 } from '../../utils/index';
+import { Button, TitleH2, ModificatedScrollbars } from '../../utils/index';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks/index';
 import { localStAfishaEvent } from '../../../config/constants';
@@ -73,13 +72,11 @@ function PopupAboutEvent({ isOpen, onClose }) {
               </li>
             </ul>
             <div className="calendar__description">
-              <Scrollbars
-                renderThumbVertical={() => <div className="calendar__thumb" />}
-              >
+              <ModificatedScrollbars horizontalScrollClass="calendar__thumb">
                 <p className="paragraph calendar__desc-paragraph">
                   {card?.description}
                 </p>
-              </Scrollbars>
+              </ModificatedScrollbars>
             </div>
 
             <div className="calendar__submit">
@@ -93,7 +90,6 @@ function PopupAboutEvent({ isOpen, onClose }) {
                 isDisabled={isDisabled}
               />
               <p className="calendar__place-left">
-                {/* если запись закрыта, то карточка не должна быть выделенной */}
                 {(isDisabled && buttonTitleDisabled) ||
                   (!card?.booked &&
                     `${remainSeatsText} ${card?.remainSeats} ${formatWordCase(
