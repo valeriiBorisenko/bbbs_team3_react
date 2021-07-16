@@ -27,7 +27,6 @@ function ReadAndWatchSection({
   paragraphNoContentText,
   sectionClass,
 }) {
-  // console.log('ReadAndWatchSection', sectionTitle);
   const { S, M, L, XL } = breakpoints;
   const ref = useRef();
 
@@ -38,9 +37,6 @@ function ReadAndWatchSection({
   const [sectionData, setSectionData] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
-
-  // console.log(`размер страницы сейчас: ${pageSize}`);
-  // console.log(`я на ${pageIndex} странице из ${totalPages} страниц`);
 
   const breakPoints = [
     { width: S, itemsToShow: pageSize, itemsToScroll: pageSize },
@@ -59,9 +55,6 @@ function ReadAndWatchSection({
   useEffect(() => {
     const offset = pageSize * pageIndex;
     const loadThreePages = pageSize * 3;
-    // console.log(`загрузим данные на ${loadThreePages} элементов`);
-    // console.log('offset', offset);
-    // console.log('pageSize', pageSize);
 
     getDataFromApi({ limit: loadThreePages, offset })
       .then(({ results, count }) => {
@@ -73,41 +66,25 @@ function ReadAndWatchSection({
   }, [pageSize]);
 
   function slideBackHandler() {
-    // console.log('=== slideBackHandler FUNC');
     setPageIndex((prevIndex) => prevIndex - 1);
   }
 
-  // если хочешь вставить дебаунс, то придется на событие onchange ориентироваться и добавлять одинаковое поведение везде
-  // либо надо в slideBackHandler и slideNextHandler прогонять через дебаунс
   function slideNextHandler(currentItem, newPageIndex) {
-    // console.log('=== slideToNextHandler FUNC');
-    // console.log('newPageIndex', newPageIndex);
-    // console.log('totalPages', totalPages);
-
     const pagesLoadedNow = ref.current.getNumOfPages();
-    // console.log('pagesLoadedNow', pagesLoadedNow);
     const isPenultimatePage =
       pagesLoadedNow - INDEX_ERROR_FOR_PENULTIMATE_PAGE === newPageIndex;
     const isLastPage =
       pagesLoadedNow - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX === newPageIndex;
-    // console.log('pageIndex', pageIndex);
-    // console.log('isLastPage', isLastPage);
 
     const isNoMoreDataToLoad = pagesLoadedNow === totalPages;
     if (isNoMoreDataToLoad) {
-      // console.log('==Больше загружать нечего!==');
       return;
     }
 
     // значит произошел скрол вперед + это предпоследняя страница
     if (isPenultimatePage || isLastPage) {
-      // console.log('ЭТО ПРЕДПОСЛЕДНЯЯ ИЛИ ПОСЛЕДНЯЯ СТРАНИЦА');
-
       addNewData()
         .then(({ results }) => {
-          // console.log(
-          //   'мы загрузили дополнительные данные и прибавили к текущим'
-          // );
           setSectionData((previousData) => [...previousData, ...results]);
           setPageIndex((prevIndex) => prevIndex + 1);
         })
@@ -139,11 +116,8 @@ function ReadAndWatchSection({
     return [];
   }
 
-  // <NoDataNotificationBox text={paragraphNoContentText} sectionClass="no-data-text_padding-both" />
   function renderSliderSection() {
-    // console.log('renderSliderSection');
     if (!isLoading && sectionData && sectionData?.length === 0) {
-      // console.log('renderSliderSection === NoDataNotificationBox');
       return (
         <NoDataNotificationBox
           text={paragraphNoContentText}
@@ -152,15 +126,14 @@ function ReadAndWatchSection({
       );
     }
 
-    // console.log(pageIndex, totalPages, sectionData);
     if (!isLoading && totalPages && sectionData) {
-      // console.log('renderSliderSection === Carousel');
       return (
         <Carousel
           ref={ref}
           transitionMs={transitionDelay}
           pagination={false}
           outerSpacing={0}
+          preventDefaultTouchmoveEvent
           itemPadding={elemPaddings}
           breakPoints={breakPoints}
           disableArrowsOnEnd
@@ -173,7 +146,6 @@ function ReadAndWatchSection({
       );
     }
 
-    // console.log('NUL-L');
     return <Loader isNested />;
   }
 

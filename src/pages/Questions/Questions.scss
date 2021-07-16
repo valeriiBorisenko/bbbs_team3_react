@@ -48,10 +48,6 @@
   &_error {
     color: $error;
   }
-
-  &_success {
-    // color: $green;
-  }
 }
 
 .question-form__add-question {
@@ -75,6 +71,12 @@
   &_invisible {
     display: none;
   }
+}
+
+.load-more-button {
+  width: 250px;
+  margin: 0 auto;
+  margin-top: 70px;
 }
 
 @include atDesktop1024 {

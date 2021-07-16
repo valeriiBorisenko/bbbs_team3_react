@@ -12,11 +12,11 @@ import {
 import { localStChosenVideo } from '../../../config/constants';
 
 const PopupVideo = ({ isOpen, onClose }) => {
-  console.log('PopupVideo COMPONENT');
+  // console.log('PopupVideo COMPONENT');
   const data = getLocalStorageData(localStChosenVideo);
   const { frameSrc } = parserLinkYoutube(data?.link);
 
-  console.log('data', data);
+  // console.log('data', data);
 
   const [iframeIsLoading, setIframeIsLoading] = useState(true);
 

@@ -11,6 +11,7 @@ import LinkableHeading from './LinkableHeading/LinkableHeading';
 import Loader from './Loader/Loader';
 import LogoBlue from './LogoBlue/LogoBlue';
 import NavItem from './NavItem/NavItem';
+import ModificatedScrollbars from './ModificatedScrollbars/ModificatedScrollbars';
 import NoDataNotificationBox from './NoDataNotificationBox/NoDataNotificationBox';
 import Paginate from './Paginate/Paginate';
 import PseudoButtonTag from './PseudoButtonTag/PseudoButtonTag';
@@ -38,6 +39,7 @@ export {
   Loader,
   LogoBlue,
   NavItem,
+  ModificatedScrollbars,
   NoDataNotificationBox,
   Paginate,
   PseudoButtonTag,

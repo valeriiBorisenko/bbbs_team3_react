@@ -32,7 +32,6 @@ import {
 import {
   getQuestionsPageData,
   getQuestionsPageTags,
-  getQuestionsByFilters,
   postQuestion,
 } from '../../api/questions-page';
 
@@ -43,7 +42,11 @@ const {
   textStubNoData,
   formPlaceholder,
   formSubmitButton,
+  loadMoreButton,
 } = questionsPageTexts;
+
+const INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX = 1;
+const INITIAL_PAGE_INDEX = 0;
 
 function Questions() {
   useScrollToTop();
@@ -63,6 +66,10 @@ function Questions() {
   const [isLoading, setIsLoading] = useState(false);
   // начальная дата с API
   const [questionsPageData, setQuestionsPageData] = useState(null);
+  // кол-во вопросов сразу и в до-загрузке
+  const pageSize = 10;
+  const [pageIndex, setPageIndex] = useState(INITIAL_PAGE_INDEX);
+  const [totalPages, setTotalPages] = useState(null);
 
   // флаг применения фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
@@ -73,10 +80,11 @@ function Questions() {
   const [questionFormState, setQuestionFormState] = useState(
     questionForm.beforeSubmit
   );
-
+  // валидация
   const { values, handleChange, errors, isValid, resetForm } =
     useFormWithValidation();
 
+  // форма вопросов
   const setFormState = (isError) => {
     if (isError) {
       // форму не чистим!
@@ -106,38 +114,65 @@ function Questions() {
 
   // хэндлер клика по фильтру
   const changeCategory = (inputValue, isChecked) => {
+    // выбираем кнопку все
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
+      // setPageIndex(INITIAL_PAGE_INDEX);
     } else {
+      // выбираем другие фильтры
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
     }
+    setPageIndex(INITIAL_PAGE_INDEX);
     setIsLoading(true);
     setIsFiltersUsed(true);
   };
 
   // фильтрация
-  const handleFiltration = () => {
-    const activeCategories = categories
+  const getActiveCategories = () => {
+    if (!categories) {
+      // обязательно возвращаем пустой массив, т.к смотрим на длину либо делаем join()
+      return [];
+    }
+
+    return categories
       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
       .map((filter) => filter.filter);
+  };
 
-    // то есть активных нету и сейчас нажато "ВСЕ"
+  const getFiltratedQuestions = ({ limit, offset, tags }) => {
+    getQuestionsPageData({ limit, offset, tags })
+      .then((questionsData) => {
+        const { results, count } = questionsData;
+
+        setTotalPages(Math.ceil(count / pageSize));
+        setQuestionsPageData(results);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => setIsLoading(false));
+  };
+
+  const loadMoreEventsForCurrentFilterState = (activeCategories) => {
+    const query = activeCategories.join();
+    const offset = pageSize * pageIndex;
+    getQuestionsPageData({ limit: pageSize, offset, tags: query })
+      .then((questionsData) => {
+        const { results } = questionsData;
+        setQuestionsPageData((prevData) => [...prevData, ...results]);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleFiltration = (activeCategories) => {
+    // активных фильтров нету и сейчас нажато "ВСЕ"
     if (activeCategories.length === 0) {
-      getQuestionsPageData()
-        .then((allQuestions) => {
-          setQuestionsPageData(allQuestions);
-        })
-        .catch((error) => console.log(error))
-        .finally(() => setIsLoading(false));
-
+      const offset = pageSize * pageIndex;
+      getFiltratedQuestions({ limit: pageSize, offset });
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
+      // выбрана какая то категория
+      const offset = pageSize * pageIndex;
       const query = activeCategories.join();
-      getQuestionsByFilters(query)
-        .then((filteredQuestions) => setQuestionsPageData(filteredQuestions))
-        .catch((error) => console.log(error))
-        .finally(() => setIsLoading(false));
-
+      getFiltratedQuestions({ limit: pageSize, offset, tags: query });
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
   };
@@ -145,17 +180,41 @@ function Questions() {
   // запуск фильтрации
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
+    // используем фильтры (2 варианта развития внутри)
+    const activeCategories = getActiveCategories();
     if (isFiltersUsed) {
-      debounceFiltration();
+      debounceFiltration(activeCategories);
     }
+
+    // провели фильтрацию, флажок фильтров меняем
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
-  // API
   useEffect(() => {
-    Promise.all([getQuestionsPageData(), getQuestionsPageTags()])
+    const activeCategories = getActiveCategories();
+    // при нажатых фильтрах нажимаем ЕЩЕ
+    if (pageIndex > 0 && activeCategories.length > 0) {
+      loadMoreEventsForCurrentFilterState(activeCategories);
+    }
+
+    // просто нажимаем еще + фильтр ВСЕ
+    if (pageIndex > 0 && activeCategories.length === 0) {
+      loadMoreEventsForCurrentFilterState(activeCategories);
+    }
+  }, [pageIndex]);
+
+  // API, первая загрузка
+  useEffect(() => {
+    const offset = pageSize * pageIndex;
+    Promise.all([
+      getQuestionsPageData({ limit: pageSize, offset }),
+      getQuestionsPageTags(),
+    ])
       .then(([questionsData, tagsFilters]) => {
-        setQuestionsPageData(questionsData);
+        const { results, count } = questionsData;
+
+        setTotalPages(Math.ceil(count / pageSize));
+        setQuestionsPageData(results);
 
         const customFilters = tagsFilters.map((tag) => {
           const filterName = changeCaseOfFirstLetter(tag.name);
@@ -235,6 +294,15 @@ function Questions() {
     </ul>
   );
 
+  // кнопка "еще"
+  const renderLoadMoreButton = () => (
+    <Button
+      title={loadMoreButton}
+      onClick={() => setPageIndex((prevIndex) => prevIndex + 1)}
+      sectionClass="load-more-button"
+    />
+  );
+
   // главная функция рендеринга
   const renderPageContent = () => {
     if (questionsPageData.length > 0) {
@@ -254,13 +322,17 @@ function Questions() {
           {/* рендерим сами вопросы */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
 
+          {totalPages > 1 &&
+          totalPages - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX > pageIndex
+            ? renderLoadMoreButton()
+            : null}
           {/* если залогинен рендерим форму */}
           {currentUser && renderQuestionForm()}
         </>
       );
     }
 
-    // залогинен и нет ивентов
+    // залогинен и нет вопросов, покажем заглушку
     const isDataForPage = questionsPageData.length > 1;
     if (!isDataForPage) {
       return returnAnimatedContainer();
