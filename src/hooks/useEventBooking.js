@@ -58,10 +58,13 @@ const useEventBooking = () => {
       .catch(console.log);
   };
 
-  const handleEventBooking = (card) => {
+  const handleEventBooking = (card, noConfirm) => {
     if (card.booked) {
       // мы записаны на ивент, надо отписаться
       cancelRegistration(card);
+    } else if (noConfirm) {
+      closeAllPopups();
+      registerOnEvent(card);
     } else {
       // мы НЕ записаны на ивент
       closeAllPopups(); // закрываем попап подробно
