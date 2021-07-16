@@ -79,6 +79,10 @@ export const ERROR_MESSAGES = {
     title: 'Что-то пошло не так, попробуйте выбрать город снова',
     button: 'Вернуться',
   },
+  filterErrorMessage: {
+    title: 'Что-то пошло не так, попробуйте выбрать фильтр снова',
+    button: 'Вернуться',
+  },
 };
 
 export const ERROR_CODES = {

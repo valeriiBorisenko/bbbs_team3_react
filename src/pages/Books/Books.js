@@ -1,5 +1,5 @@
 import './Books.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import booksPageTexts from '../../locales/books-page-RU';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import { getBooksPageData, getBooksPageFilter } from '../../api/books-page';
@@ -13,12 +13,17 @@ import {
 } from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
+import {
+  ALL_CATEGORIES,
+  DELAY_DEBOUNCE,
+  ERROR_MESSAGES,
+} from '../../config/constants';
 import {
   handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
+import { ErrorsContext, PopupsContext } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 2,
@@ -30,6 +35,9 @@ const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
 function Books() {
   useScrollToTop();
+
+  const { serverError, setError } = useContext(ErrorsContext);
+  const { openPopupError } = useContext(PopupsContext);
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +76,10 @@ function Books() {
         return results;
       })
       .then((results) => setBooksPageData(results))
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        setError(true);
+        console.log(err);
+      })
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -90,7 +101,19 @@ function Books() {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+          console.log(err);
+        } else {
+          setError(true);
+          console.log(err);
+        }
+      });
   };
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
@@ -195,23 +218,30 @@ function Books() {
   };
 
   // главная функция рендеринга
-  const renderPageContent = () => (
-    <>
-      <TitleH1 title={title} sectionClass="books__title" />
+  const renderPageContent = () => {
+    if (serverError) {
+      return (
+        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+      );
+    }
+    return (
+      <>
+        <TitleH1 title={title} sectionClass="books__title" />
 
-      {/* рендер фильтров */}
-      {categories?.length > 1 && (
-        <TagsList
-          filterList={categories}
-          name="tag"
-          handleClick={changeCategory}
-        />
-      )}
+        {/* рендер фильтров */}
+        {categories?.length > 1 && (
+          <TagsList
+            filterList={categories}
+            name="tag"
+            handleClick={changeCategory}
+          />
+        )}
 
-      {/* рендерим книги */}
-      {isFiltersUsed ? <Loader isNested /> : renderBooksContainer()}
-    </>
-  );
+        {/* рендерим книги */}
+        {isFiltersUsed ? <Loader isNested /> : renderBooksContainer()}
+      </>
+    );
+  };
 
   // глобальный лоадер
   if (isLoading) {
