@@ -28,7 +28,7 @@ function PopupAboutEvent({ isOpen, onClose }) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    // передаем карточку и сообщаем функции, что подтверждать запись не надо
+    // передаем карточку и сообщаем функции, что запись без подтверждения
     handleEventBooking(card, true);
   }
 
