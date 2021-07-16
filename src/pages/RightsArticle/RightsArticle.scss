@@ -11,7 +11,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  margin-top: 178px;
+  margin-top: 100px;
   &::before {
     content: '';
     position: absolute;
@@ -45,22 +45,13 @@
 
 .article-lead__content {
   margin: auto;
-  max-width: 868px;
+  max-width: 870px;
   text-align: center;
 }
 
 .article-lead__text {
   margin-top: 30px;
   word-wrap: break-word;
-}
-
-.article {
-  padding-top: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 1170px;
-  margin: 0 auto;
 }
 
 .article__main-title {
@@ -84,27 +75,6 @@
 
 .article__figcaption {
   margin-top: 10px;
-}
-
-.article__container {
-  margin-top: 50px;
-  max-width: 770px;
-}
-
-.article__subtitle {
-  margin-top: 80px;
-  margin-bottom: 30px;
-  text-align: center;
-
-  &:first-of-type {
-    margin-top: 0;
-  }
-}
-
-.article__card {
-  margin: 0;
-  padding: 50px;
-  background-color: $white;
 }
 
 .article__card-list-item {
@@ -162,13 +132,21 @@
   width: 30px;
   height: 30px;
   background-image: url('../../assets/arrow-right-blue.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  transition: .3s ease;
+
+  &:hover {
+    transform: translateX(4px);
+  }
 }
 
 @include atDesktop1440 {
   .article-lead {
     padding-top: 135px;
     padding-bottom: 135px;
-    margin-top: 250px;
+    margin-top: 170px;
     &::before {
       height: 320px;
       top: -320px;
@@ -195,14 +173,14 @@
     }
   }
 
-  .article {
-    max-width: 970px;
+  .article-lead__content {
+    max-width: 761px;
   }
 }
 
 @include atDesktop1024 {
   .article-lead {
-    margin-top: 187px;
+    margin-top: 160px;
     padding-top: 70px;
     padding-bottom: 70px;
     &::before {
@@ -231,8 +209,8 @@
     }
   }
 
-  .article {
-    max-width: 770px;
+  .article-lead__content {
+    max-width: 570px;
   }
 
   .article__main-title {
@@ -248,26 +226,13 @@
     margin-top: 40px;
   }
 
-  .article__container {
-    margin-top: 30px;
-    max-width: 570px;
-  }
-
-  .article__subtitle {
-    margin-top: 30px;
-    margin-bottom: 20px;
-  }
-
-  .article__card {
-    padding: 30px;
-  }
-
   .next-page {
     padding-top: 30px;
   }
 
   .next-page__arrow-icon {
     width: 20px;
+    height: 20px;
     padding-right: 25px;
   }
 }
@@ -288,10 +253,6 @@
 
 
 @include atMobile {
-  .article {
-    padding-top: 20px;
-  }
-
   .article__main-title {
     font-size: 23px;
   }
@@ -304,8 +265,8 @@
     margin-top: 20px;
   }
 
-  .article__card {
-    padding: 30px 15px;
+  .next-page {
+    max-width: 290px;
   }
 
   .next-page__title {

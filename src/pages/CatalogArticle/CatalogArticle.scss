@@ -34,6 +34,10 @@
 .article__container {
   margin: 50px auto 0;
   max-width: 770px;
+
+  & > .paragraph {
+    text-align: justify;
+  }
 }
 
 .article__subtitle {
@@ -49,6 +53,11 @@
 .article__card {
   margin: 0;
   padding: 50px;
+  background-color: $white;
+}
+
+.card_color_yellow {
+  background-color: $yellow;
 }
 
 .article__card-list-item {
