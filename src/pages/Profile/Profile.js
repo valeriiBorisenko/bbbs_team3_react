@@ -239,7 +239,7 @@ function Profile() {
               key={item?.id}
               data={item}
               onOpen={openEventCard}
-              sectionClass="scrollable-container__child"
+              sectionClass="scrollable-container__child slide-in"
             />
           ))}
         </>
@@ -253,7 +253,7 @@ function Profile() {
               key={item?.id}
               data={item}
               onOpen={openEventCard}
-              sectionClass="scrollable-container__child"
+              sectionClass="scrollable-container__child slide-in"
             />
           ))}
         </>

@@ -25,7 +25,7 @@
   }
 
   &__events {
-    margin-bottom: 50px;
+    margin-bottom: 45px;
     margin-right: -75px;
     margin-left: -75px;
   }
@@ -87,8 +87,16 @@
 }
 
 .profile-event-card {
+  opacity: 0;
   margin-right: 30px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   user-select: none;
+  transition: box-shadow .3s ease;
+
+  &:hover {
+    box-shadow: -12px 0 20px -12px rgba($black, 0.15), 12px 0 20px -12px rgba($black, 0.15);
+  }
 
   &:first-of-type {
     margin-left: 75px;
@@ -177,7 +185,7 @@
     &__events {
       margin-right: -60px;
       margin-left: -60px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     &__events-heading {
