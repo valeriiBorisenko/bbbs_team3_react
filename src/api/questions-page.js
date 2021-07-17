@@ -2,10 +2,12 @@ import axios from 'axios';
 import { apiUrl, baseURL } from '../config/config';
 
 // получить данные страницы
-function getQuestionsPageData() {
+function getQuestionsPageData({ limit, offset, tags }) {
   return axios
-    .get(`${baseURL}${apiUrl}/questions/`)
-    .then((response) => response.data.results)
+    .get(`${baseURL}${apiUrl}/questions/`, {
+      params: { limit, offset, tags },
+    })
+    .then((response) => response.data)
     .catch((err) => Promise.reject(err?.response));
 }
 
@@ -17,14 +19,6 @@ function getQuestionsPageTags() {
     .catch((err) => Promise.reject(err?.response));
 }
 
-// получить вопросы по фильтрам
-function getQuestionsByFilters(query) {
-  return axios
-    .get(`${baseURL}${apiUrl}/questions/?tags=${query}`)
-    .then((response) => response.data.results)
-    .catch((err) => Promise.reject(err?.response));
-}
-
 // постинг вопроса
 function postQuestion(question) {
   return axios
@@ -33,9 +27,4 @@ function postQuestion(question) {
     .catch((err) => Promise.reject(err?.response));
 }
 
-export {
-  getQuestionsPageData,
-  getQuestionsPageTags,
-  getQuestionsByFilters,
-  postQuestion,
-};
+export { getQuestionsPageData, getQuestionsPageTags, postQuestion };

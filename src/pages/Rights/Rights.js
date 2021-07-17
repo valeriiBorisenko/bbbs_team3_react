@@ -27,7 +27,7 @@ import {
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
-  medium: 9,
+  medium: 12,
   big: 16,
 };
 
@@ -89,7 +89,7 @@ const Rights = () => {
         {articles.map((item, i) => (
           <CardRights
             key={item?.id}
-            sectionClass="cards-section__item"
+            sectionClass="cards-section__item scale-in"
             title={item?.title}
             tags={item?.tags}
             shape={FIGURES[i % FIGURES.length]}

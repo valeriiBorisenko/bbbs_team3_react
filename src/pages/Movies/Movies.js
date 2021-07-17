@@ -17,6 +17,7 @@ import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
+  ERROR_MESSAGES,
   localStChosenVideo,
 } from '../../config/constants';
 import {
@@ -25,7 +26,7 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 import { getLocalStorageData } from '../../hooks/useLocalStorage';
-import { PopupsContext } from '../../contexts/index';
+import { ErrorsContext, PopupsContext } from '../../contexts/index';
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 2,
@@ -38,6 +39,9 @@ const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 
 function Movies() {
   useScrollToTop();
+
+  const { serverError, setError } = useContext(ErrorsContext);
+  const { openPopupError } = useContext(PopupsContext);
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(true);
@@ -80,7 +84,10 @@ function Movies() {
         return results;
       })
       .then((results) => setMoviesPageData(results))
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        setError(true);
+        console.log(err);
+      })
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -102,7 +109,19 @@ function Movies() {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+          console.log(err);
+        } else {
+          setError(true);
+          console.log(err);
+        }
+      });
   };
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
@@ -195,7 +214,7 @@ function Movies() {
         ) : (
           <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
             {moviesPageData.map((movie) => (
-              <li className="card-container" key={movie.id}>
+              <li className="card-container scale-in" key={movie.id}>
                 <CardFilm
                   data={movie}
                   pageCount={pageCount}
@@ -220,23 +239,30 @@ function Movies() {
     );
   };
   // главная функция рендеринга
-  const renderPageContent = () => (
-    <>
-      <TitleH1 title={title} sectionClass="movies__title" />
+  const renderPageContent = () => {
+    if (serverError) {
+      return (
+        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+      );
+    }
+    return (
+      <>
+        <TitleH1 title={title} sectionClass="movies__title" />
 
-      {/* рендер фильтров */}
-      {categories?.length > 1 && (
-        <TagsList
-          filterList={categories}
-          name="tag"
-          handleClick={changeCategory}
-        />
-      )}
+        {/* рендер фильтров */}
+        {categories?.length > 1 && (
+          <TagsList
+            filterList={categories}
+            name="tag"
+            handleClick={changeCategory}
+          />
+        )}
 
-      {/* рендерим фильмы */}
-      {isFiltersUsed ? <Loader isNested /> : renderMoviesContainer()}
-    </>
-  );
+        {/* рендерим фильмы */}
+        {isFiltersUsed ? <Loader isNested /> : renderMoviesContainer()}
+      </>
+    );
+  };
 
   // глобальный лоадер
   if (isLoading) {

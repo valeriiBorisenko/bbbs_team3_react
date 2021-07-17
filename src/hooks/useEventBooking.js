@@ -3,15 +3,20 @@ import {
   makeEventRegistration,
   cancelEventRegistration,
 } from '../api/event-participants';
-import { PopupsContext } from '../contexts/index';
+import { ErrorsContext, PopupsContext } from '../contexts/index';
 import { getLocalStorageData } from './useLocalStorage';
-import { localStAfishaEvent } from '../config/constants';
+import { localStAfishaEvent, ERROR_MESSAGES } from '../config/constants';
 
 const useEventBooking = () => {
-  const { openPopupSuccessfully, openPopupConfirmation, closeAllPopups } =
-    useContext(PopupsContext);
+  const {
+    openPopupSuccessfully,
+    openPopupConfirmation,
+    closeAllPopups,
+    openPopupError,
+  } = useContext(PopupsContext);
 
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const { setError } = useContext(ErrorsContext);
 
   const setRegisterEvent = () => {
     const register = new Event('registerEvent');
@@ -48,20 +53,37 @@ const useEventBooking = () => {
     makeEventRegistration({ event: card.id })
       .then(() => setRegisterEvent())
       .then(() => openPopupSuccessfully())
-      .catch(console.log);
+      .catch((error) => {
+        setError({
+          title: ERROR_MESSAGES.eventAddErrorMessage.title,
+          button: ERROR_MESSAGES.eventAddErrorMessage.button,
+        });
+        openPopupError();
+        console.log(error);
+      });
   };
 
   const cancelRegistration = (card) => {
     cancelEventRegistration(card.id)
       .then(() => setCancelRegisterEvent())
       .then(() => closeAllPopups())
-      .catch(console.log);
+      .catch((error) => {
+        setError({
+          title: ERROR_MESSAGES.eventCancelErrorMessage.title,
+          button: ERROR_MESSAGES.eventCancelErrorMessage.button,
+        });
+        openPopupError();
+        console.log(error);
+      });
   };
 
-  const handleEventBooking = (card) => {
+  const handleEventBooking = (card, noConfirm) => {
     if (card.booked) {
       // мы записаны на ивент, надо отписаться
       cancelRegistration(card);
+    } else if (noConfirm) {
+      closeAllPopups();
+      registerOnEvent(card);
     } else {
       // мы НЕ записаны на ивент
       closeAllPopups(); // закрываем попап подробно

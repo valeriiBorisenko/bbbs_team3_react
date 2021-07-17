@@ -46,7 +46,6 @@ function App() {
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupLoginOpen(false);
-    setIsPopupCitiesOpen(false);
     setIsPopupRecommendSuccessOpen(false);
     setIsVideoPopupOpen(false);
   }
@@ -76,6 +75,10 @@ function App() {
     setIsPopupCitiesOpen(true);
   }
 
+  function closePopupCities() {
+    setIsPopupCitiesOpen(false);
+  }
+
   function openPopupLogin() {
     setIsPopupLoginOpen(true);
   }
@@ -93,7 +96,7 @@ function App() {
   const updateUser = (value) => setCurrentUser(value);
 
   // список городов/контекст
-  const cities = useCities();
+  const { cities, defaultCity } = useCities();
 
   // серверные ошибки контекст
   const [serverError, setServerError] = useState(null);
@@ -110,6 +113,7 @@ function App() {
   useEffect(() => {
     closeAllPopups();
     closePopupError();
+    closePopupCities();
   }, [pathname]);
 
   // эффект закрытия модалок по Escape
@@ -123,7 +127,7 @@ function App() {
 
   return (
     <HelmetProvider>
-      <CitiesContext.Provider value={cities}>
+      <CitiesContext.Provider value={{ cities, defaultCity }}>
         <CurrentUserContext.Provider value={{ currentUser, updateUser }}>
           <ErrorsContext.Provider value={{ serverError, setError, clearError }}>
             <PopupsContext.Provider
@@ -159,7 +163,7 @@ function App() {
                 />
                 <PopupCities
                   isOpen={isPopupCitiesOpen}
-                  onClose={closeAllPopups}
+                  onClose={closePopupCities}
                 />
                 <PopupError
                   isOpen={isPopupErrorOpen}

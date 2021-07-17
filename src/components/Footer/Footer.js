@@ -6,14 +6,14 @@ import {
   PLACES_URL,
   RIGHTS_URL,
   READ_AND_WATCH_URL,
-  HISTORY_URL,
+  STORIES_URL,
   AFISHA_TITLE,
   ABOUT_US_TITLE,
   PLACES_TITLE,
   QUESTIONS_TITLE,
   READ_AND_WATCH_TITLE,
   RIGHTS_TITLE,
-  HISTORY_TITLE,
+  STORIES_TITLE,
 } from '../../config/routes';
 import texts from './locales/RU';
 import { socialLinks } from '../../utils/external-links';
@@ -118,8 +118,8 @@ function Footer() {
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
-            href={HISTORY_URL}
-            linkText={HISTORY_TITLE}
+            href={STORIES_URL}
+            linkText={STORIES_TITLE}
           />
         </ul>
       </div>

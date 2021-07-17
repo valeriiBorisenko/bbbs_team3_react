@@ -10,10 +10,12 @@ const texts = {
   submitButtonText: 'Войти',
   titleForgotForm: 'Восстановление пароля',
   paragraphForgotForm:
-    'Пожалуйста, для восстановления пароля введите email, который вы указывали при регистрации',
+    'Пожалуйста, для восстановления пароля введите email, который вы указывали при регистрации.',
   emailPlaceholder: 'Email',
   backButtonText: 'Я вспомнил пароль',
   submitButtonTextForgot: 'Отправить',
+  successTitle:
+    'Данная функция пока находится в разработке. Пожалуйста, обратитесь к куратору для восстановления пароля',
 };
 
 export default texts;

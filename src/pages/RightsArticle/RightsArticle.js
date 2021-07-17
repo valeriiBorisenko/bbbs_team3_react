@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import rightsPageTexts from '../../locales/rights-page-RU';
-import { BasePage, Loader, TitleH2, AnimatedPageContainer } from './index';
+import {
+  PageWithTransparentHeader,
+  Loader,
+  TitleH2,
+  AnimatedPageContainer,
+} from './index';
 import { getRightsArticle } from '../../api/rights-page';
 import { useScrollToTop } from '../../hooks/index';
 
@@ -35,6 +40,7 @@ function RightsArticle({ id }) {
 
   const renderHtmlBlock = () => (
     <div
+      className="page__section"
       dangerouslySetInnerHTML={{
         __html: articleData?.rawHtml,
       }}
@@ -96,12 +102,12 @@ function RightsArticle({ id }) {
   }, [id, nextId]);
 
   return (
-    <BasePage
+    <PageWithTransparentHeader
       headTitle={articleData?.title}
       headDescription={articleData?.description}
     >
       {isLoadingPage ? <Loader isNested /> : renderMainContent()}
-    </BasePage>
+    </PageWithTransparentHeader>
   );
 }
 

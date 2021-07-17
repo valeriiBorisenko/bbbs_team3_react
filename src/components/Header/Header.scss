@@ -10,7 +10,11 @@
   background-color: $background;
   transition: 0.4s linear;
   z-index: 10;
-  
+
+  &_transparent {
+    background-color: transparent;
+  }
+
   @include atDesktop1380 {
     &_displayed {
       background-color: $white;
