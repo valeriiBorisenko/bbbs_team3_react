@@ -9,6 +9,38 @@
   }
 }
 
+.popup__form_type_sign-in {
+  position: relative;
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0);
+  transition: .5s ease;
+
+  &_opened {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+    transition: .5s ease;
+  }
+}
+
+.popup__form_type_email {
+  position: absolute;
+  visibility: hidden;
+  padding: inherit;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: .5s ease;
+
+  &_opened {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+    transition: .5s ease;
+  }
+}
+
 .popup__button_type_sign-in {
   align-self: flex-start;
 }
@@ -38,6 +70,47 @@
     text-decoration: underline;
   }
 }
+
+.popup__container_success {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  position: absolute;
+  padding: inherit;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: .5s ease;
+  
+  &_opened {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+    transition: .5s ease;
+  }
+}
+  
+  .popup__container_success-animation {
+    max-width: 450px;
+    max-height: 190px;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto 30px;
+  
+    & > svg {
+      max-height: 190px;
+    }
+  }
+  
+  @include atDesktop1024 {
+    .popup__container_success-animation {
+      max-height: 170px;
+  
+      & > svg {
+        max-height: 170px;
+      }
+    }
+  }
 
 @include atMobile {
   .popup__sign-in {
