@@ -8,6 +8,7 @@ import {
   ButtonRound,
   Loader,
   ScrollableContainer,
+  UserMenuButton,
 } from '../../components/utils/index';
 
 export {
@@ -20,4 +21,5 @@ export {
   ButtonRound,
   Loader,
   ScrollableContainer,
+  UserMenuButton,
 };

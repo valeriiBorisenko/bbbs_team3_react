@@ -6,11 +6,22 @@
     border-bottom: 1px solid $darkGray;
   }
 
-  &__title {
+  &__events-heading {
+    display: flex;
+    justify-content: center;
     margin-bottom: 50px;
+  }
+
+  &__title {
     width: fit-content;
     text-align: center;
     color: $lightBlack;
+    transform: translateX(-100px);
+  }
+
+  &__archive-button {
+    min-width: 200px;
+    text-align: left;
   }
 
   &__events {
@@ -112,6 +123,10 @@
       &__scroll-anchor {
       top: 0;
     }
+
+    &__archive-button {
+      font-size: 18px;
+    }
   }
 }
 
@@ -123,6 +138,20 @@
 
     &__form-container {
       margin-bottom: 30px;
+    }
+
+    &__events-heading {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__archive-button {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    &__title {
+      transform: translateX(0);
     }
   }
 }
@@ -136,6 +165,10 @@
         line-height: 1.41;
       }
     }
+
+    &__archive-button {
+      font-size: 15px;
+    }
   }
 }
 
@@ -147,8 +180,12 @@
       margin-bottom: 20px;
     }
 
-    &__title {
+    &__events-heading {
       margin-bottom: 20px;
+    }
+
+    &__archive-button {
+      margin-bottom: 5px;
     }
 
     &__diaries {

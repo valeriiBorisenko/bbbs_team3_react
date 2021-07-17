@@ -42,8 +42,40 @@
     align-items: center;
   }
 
-  &_waiting-for-data {
+  &_nested {
     margin: 100px auto;
+  }
+
+  &_small-grid {
+    margin: 70px auto;
+  }
+}
+
+@include atDesktop1199 {
+  .spinner {
+    &_small-grid {
+      margin: 87px auto;
+    }
+  }
+}
+
+@include atDesktop1024 {
+  .spinner {
+    &_small-grid {
+      margin: 81px auto;
+    }
+  }
+}
+
+@include atTablet {
+  .spinner {
+    &_nested {
+      margin: 50px auto;
+    }
+
+    &_small-grid {
+      margin: 25px auto;
+    }
   }
 }
 
@@ -132,12 +164,4 @@
   right: 33px;
   top: 14px;
   animation-delay: -0.08s;
-}
-
-@include atTablet {
-  .spinner {
-    &_waiting-for-data {
-      margin: 50px auto;
-    }
-  }
 }

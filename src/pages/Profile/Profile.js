@@ -9,7 +9,10 @@ import {
   editDiary,
   deleteDiary,
 } from '../../api/profile-page';
-import { getBookedEvents } from '../../api/event-participants';
+import {
+  getBookedEvents,
+  getArchiveOfBookedEvents,
+} from '../../api/event-participants';
 import { DELAY_RENDER, ERROR_CODES } from '../../config/constants';
 import {
   BasePage,
@@ -21,6 +24,7 @@ import {
   ButtonRound,
   Loader,
   ScrollableContainer,
+  UserMenuButton,
 } from './index';
 
 const {
@@ -29,6 +33,10 @@ const {
   eventsTitle,
   eventsTitleNoResults,
   formTitle,
+  eventsArchiveButton,
+  eventsCurrentButton,
+  eventsTitleArchive,
+  eventsTitleNoResultsArchive,
 } = profilePageTexts;
 
 function Profile() {
@@ -39,13 +47,27 @@ function Profile() {
   const { unauthorized, badRequest } = ERROR_CODES;
 
   const [events, setEvents] = useState(null);
+  const [archivedEvents, setArchivedEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formDataToEdit, setFormDataToEdit] = useState(null);
   const [isDeleteDiaryPopupOpen, setIsDeleteDiaryPopupOpen] = useState(false);
 
-  useEffect(() => {
+  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+
+  const getArchiveOfEvents = () => {
+    getArchiveOfBookedEvents()
+      .then((eventsData) => {
+        setArchivedEvents(eventsData);
+      })
+      .catch(console.log)
+      .finally(() => setIsLoadingEvents(false));
+  };
+
+  const getCurrentBookedEvents = () => {
     getBookedEvents()
       .then((eventsData) => {
         const sortedEvents = eventsData
@@ -61,7 +83,12 @@ function Profile() {
           });
         setEvents(sortedEvents);
       })
-      .catch(() => openPopupError());
+      .catch(() => openPopupError())
+      .finally(() => setIsLoadingEvents(false));
+  };
+
+  useEffect(() => {
+    getCurrentBookedEvents();
   }, []);
 
   useEffect(() => {
@@ -85,6 +112,18 @@ function Profile() {
 
   // работа с карточками мероприятий календаря
   const openEventCard = () => openPopupAboutEvent();
+
+  const openArchiveOfEvents = () => {
+    setIsArchiveOpen(true);
+    setIsLoadingEvents(true);
+    getArchiveOfEvents();
+  };
+
+  const openCurrentEvents = () => {
+    setIsArchiveOpen(false);
+    setIsLoadingEvents(true);
+    getCurrentBookedEvents();
+  };
 
   // работа с формой
   const scrollAnchorRef = useRef(null);
@@ -184,13 +223,32 @@ function Profile() {
   };
 
   // функции рендера
-  const titleH1 = events?.length > 0 ? eventsTitle : eventsTitleNoResults;
+  const titleH1Current =
+    events?.length > 0 ? eventsTitle : eventsTitleNoResults;
+  const titleH1Archive =
+    archivedEvents?.length > 0
+      ? eventsTitleArchive
+      : eventsTitleNoResultsArchive;
 
   const renderEventCards = () => {
-    if (events && events?.length > 0) {
+    if (events && !isArchiveOpen && events?.length > 0) {
       return (
         <>
           {events.map((item) => (
+            <ProfileEventCard
+              key={item?.id}
+              data={item}
+              onOpen={openEventCard}
+              sectionClass="scrollable-container__child"
+            />
+          ))}
+        </>
+      );
+    }
+    if (archivedEvents && isArchiveOpen && archivedEvents?.length > 0) {
+      return (
+        <>
+          {archivedEvents.map((item) => (
             <ProfileEventCard
               key={item?.id}
               data={item}
@@ -266,10 +324,30 @@ function Profile() {
       <BasePage headTitle={headTitle} headDescription={headDescription}>
         <section className="profile fade-in">
           <div className="profile__events-area page__section">
-            <TitleH2 sectionClass="profile__title" title={titleH1} />
-            <ScrollableContainer sectionClass="profile__events" step={3}>
-              {renderEventCards()}
-            </ScrollableContainer>
+            {!isLoadingEvents ? (
+              <>
+                <div className="profile__events-heading">
+                  <UserMenuButton
+                    sectionClass="profile__archive-button"
+                    title={
+                      isArchiveOpen ? eventsCurrentButton : eventsArchiveButton
+                    }
+                    handleClick={
+                      isArchiveOpen ? openCurrentEvents : openArchiveOfEvents
+                    }
+                  />
+                  <TitleH2
+                    sectionClass="profile__title"
+                    title={isArchiveOpen ? titleH1Archive : titleH1Current}
+                  />
+                </div>
+                <ScrollableContainer sectionClass="profile__events" step={3}>
+                  {renderEventCards()}
+                </ScrollableContainer>
+              </>
+            ) : (
+              <Loader isSmallGrid />
+            )}
           </div>
 
           <div className="profile__diaries page__section">
