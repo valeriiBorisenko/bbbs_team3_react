@@ -24,6 +24,7 @@
   }
 
   &__pagination {
+    padding-top: 80px;
     height: 50px;
     margin: 0 auto;
     display: flex;
@@ -55,6 +56,7 @@
     grid-template-rows: max-content [first-line] 1px max-content;
 
     &__pagination {
+      padding-top: 60px;
       height: 38px;
     }
 
@@ -69,5 +71,13 @@
     padding: 0;
     grid-template-columns: 1fr;
     grid-template-rows: max-content [first-line] 1px max-content [second-line] 1px max-content [third-line] 1px max-content;
+  }
+}
+
+@include atTablet {
+  .cards-section {
+    &__pagination {
+      padding-top: 30px;
+    }
   }
 }
