@@ -111,7 +111,12 @@ function Profile() {
   }, [selectedEvent]);
 
   // работа с карточками мероприятий календаря
-  const openEventCard = () => openPopupAboutEvent();
+  const openEventCard = () => {
+    if (isArchiveOpen) {
+      // без записи на ивент
+      openPopupAboutEvent(true);
+    } else openPopupAboutEvent();
+  };
 
   const openArchiveOfEvents = () => {
     setIsArchiveOpen(true);

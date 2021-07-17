@@ -40,6 +40,8 @@ function App() {
     useState(false);
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
 
+  const [isWithoutRegister, setIsWithoutRegister] = useState(false);
+
   // управление попапами (открыть/закрыть)
   function closeAllPopups() {
     setIsPopupConfirmationOpen(false);
@@ -59,7 +61,12 @@ function App() {
     setIsPopupSuccessfullyOpen(true);
   }
 
-  function openPopupAboutEvent() {
+  function openPopupAboutEvent(withoutRegister) {
+    if (withoutRegister) {
+      setIsWithoutRegister(true);
+    } else {
+      setIsWithoutRegister(false);
+    }
     setIsPopupAboutDescriptionOpen(true);
   }
 
@@ -154,6 +161,7 @@ function App() {
                   onClose={closeAllPopups}
                 />
                 <PopupAboutEvent
+                  isWithoutRegister={isWithoutRegister}
                   isOpen={isPopupAboutDescriptionOpen}
                   onClose={closeAllPopups}
                 />
