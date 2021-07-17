@@ -236,24 +236,11 @@ function Profile() {
       : eventsTitleNoResultsArchive;
 
   const renderEventCards = () => {
-    if (events && !isArchiveOpen && events?.length > 0) {
+    const renderingEvents = isArchiveOpen ? archivedEvents : events;
+    if (renderingEvents && renderingEvents?.length > 0) {
       return (
         <>
-          {events.map((item) => (
-            <ProfileEventCard
-              key={item?.id}
-              data={item}
-              onOpen={openEventCard}
-              sectionClass="scrollable-container__child slide-in"
-            />
-          ))}
-        </>
-      );
-    }
-    if (archivedEvents && isArchiveOpen && archivedEvents?.length > 0) {
-      return (
-        <>
-          {archivedEvents.map((item) => (
+          {renderingEvents.map((item) => (
             <ProfileEventCard
               key={item?.id}
               data={item}
@@ -289,7 +276,7 @@ function Profile() {
             <TitleH2 sectionClass="profile__title fade-in" title={formTitle} />
           )}
           <ProfileForm
-            sectionClass="profile__diary-form fade-in"
+            sectionClass="profile__diary-form scale-in"
             isEditMode={isEditMode}
             isOpen={isFormOpen}
             data={formDataToEdit}
@@ -312,6 +299,7 @@ function Profile() {
               data={diary}
               onEdit={handleEditMode}
               onDelete={openDeleteDiaryPopup}
+              sectionClass="scale-in"
             />
           ))}
         </>

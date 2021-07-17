@@ -9,7 +9,7 @@ import defaultImage from '../../assets/icon-logo-no-text.svg';
 import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationContainer';
 import { Card, TitleH2, Rating, Caption, Button } from '../utils/index';
 
-function ProfileDiary({ data, onEdit, onDelete }) {
+function ProfileDiary({ data, onEdit, onDelete, sectionClass }) {
   const { image, place, description, mark, date } = data;
 
   const eventDay = formatDate(date);
@@ -34,7 +34,7 @@ function ProfileDiary({ data, onEdit, onDelete }) {
   };
 
   return (
-    <div className="card-container profile-diary">
+    <div className={`card-container profile-diary ${sectionClass}`}>
       <Card sectionClass="profile-diary__image-container">
         <img
           className={
@@ -105,12 +105,14 @@ ProfileDiary.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
+  sectionClass: PropTypes.string,
 };
 
 ProfileDiary.defaultProps = {
   data: {},
   onEdit: () => {},
   onDelete: () => {},
+  sectionClass: '',
 };
 
 export default ProfileDiary;

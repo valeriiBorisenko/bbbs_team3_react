@@ -60,7 +60,7 @@ function PopupLogin({ isOpen, onClose }) {
     resetForm();
     clearError();
     setIsSuccess(true);
-    setTimeout(successForgotPassword, 8000);
+    setTimeout(successForgotPassword, 5000);
   }
 
   //! аварийный перевод на главную, если не хочешь логиниться
