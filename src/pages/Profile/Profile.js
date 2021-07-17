@@ -47,15 +47,20 @@ function Profile() {
 
   useEffect(() => {
     getBookedEvents()
-      .then((eventsData) =>
-        setEvents(() =>
-          eventsData.map(({ event }) => {
+      .then((eventsData) => {
+        const sortedEvents = eventsData
+          .sort((a, b) => {
+            const date1 = new Date(a?.event?.startAt);
+            const date2 = new Date(b?.event?.startAt);
+            return date1 - date2;
+          })
+          .map(({ event }) => {
             const updatedEvent = event;
             updatedEvent.booked = true;
             return updatedEvent;
-          })
-        )
-      )
+          });
+        setEvents(sortedEvents);
+      })
       .catch(() => openPopupError());
   }, []);
 
