@@ -14,6 +14,7 @@ function ProfileDiary({ data, onEdit, onDelete }) {
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
+  const [isShared, setIsShared] = useState(false);
 
   useEffect(() => {
     setCaption(captions[mark]);
@@ -25,6 +26,11 @@ function ProfileDiary({ data, onEdit, onDelete }) {
 
   const handleDeleteButtonClick = () => {
     onDelete(data);
+  };
+
+  // временное решение, функционал отправки дорабатывается бэкендом
+  const handleShareButtonClick = () => {
+    setIsShared(true);
   };
 
   return (
@@ -69,9 +75,12 @@ function ProfileDiary({ data, onEdit, onDelete }) {
           </div>
           <div className="profile-diary__action-elements">
             <Button
-              title={texts.buttonShareText}
+              title={isShared ? texts.buttonTextShared : texts.buttonShareText}
               color="gray-borderless"
-              sectionClass="profile-diary__button"
+              sectionClass={`profile-diary__button ${
+                isShared ? 'profile-diary__button_shared' : ''
+              }`}
+              onClick={handleShareButtonClick}
             />
             <Button
               title={texts.buttonEditText}
