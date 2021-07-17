@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.5f1bb78a.chunk.css",
-    "main.js": "/static/js/main.017b2546.chunk.js",
-    "main.js.map": "/static/js/main.017b2546.chunk.js.map",
+    "main.css": "/static/css/main.821b68ee.chunk.css",
+    "main.js": "/static/js/main.9a1d3d66.chunk.js",
+    "main.js.map": "/static/js/main.9a1d3d66.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.c76aa7b9.js",
     "runtime-main.js.map": "/static/js/runtime-main.c76aa7b9.js.map",
-    "static/js/2.6e4df307.chunk.js": "/static/js/2.6e4df307.chunk.js",
-    "static/js/2.6e4df307.chunk.js.map": "/static/js/2.6e4df307.chunk.js.map",
+    "static/js/2.5c580e7a.chunk.js": "/static/js/2.5c580e7a.chunk.js",
+    "static/js/2.5c580e7a.chunk.js.map": "/static/js/2.5c580e7a.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.5f1bb78a.chunk.css.map": "/static/css/main.5f1bb78a.chunk.css.map",
-    "static/js/2.6e4df307.chunk.js.LICENSE.txt": "/static/js/2.6e4df307.chunk.js.LICENSE.txt",
-    "static/js/main.017b2546.chunk.js.LICENSE.txt": "/static/js/main.017b2546.chunk.js.LICENSE.txt",
+    "static/css/main.821b68ee.chunk.css.map": "/static/css/main.821b68ee.chunk.css.map",
+    "static/js/2.5c580e7a.chunk.js.LICENSE.txt": "/static/js/2.5c580e7a.chunk.js.LICENSE.txt",
+    "static/js/main.9a1d3d66.chunk.js.LICENSE.txt": "/static/js/main.9a1d3d66.chunk.js.LICENSE.txt",
     "static/media/index.scss": "/static/media/Proto-Grotesk-Light-Web.c43cb6b7.woff",
     "static/media/ReadAndWatch.scss": "/static/media/arrow-right-grey.f732637d.svg",
     "static/media/RightsArticle.scss": "/static/media/arrow-right-blue.444f1920.svg",
@@ -27,8 +27,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.c76aa7b9.js",
-    "static/js/2.6e4df307.chunk.js",
-    "static/css/main.5f1bb78a.chunk.css",
-    "static/js/main.017b2546.chunk.js"
+    "static/js/2.5c580e7a.chunk.js",
+    "static/css/main.821b68ee.chunk.css",
+    "static/js/main.9a1d3d66.chunk.js"
   ]
 }
