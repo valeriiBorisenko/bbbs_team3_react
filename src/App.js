@@ -143,6 +143,7 @@ function App() {
             <PopupsContext.Provider
               value={{
                 closeAllPopups,
+                closePopupLogin,
                 openPopupConfirmation,
                 openPopupSuccessfully,
                 openPopupAboutEvent,
