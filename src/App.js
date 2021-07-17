@@ -47,7 +47,6 @@ function App() {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
-    setIsPopupLoginOpen(false);
     setIsPopupRecommendSuccessOpen(false);
     setIsVideoPopupOpen(false);
   }
@@ -88,6 +87,10 @@ function App() {
 
   function openPopupLogin() {
     setIsPopupLoginOpen(true);
+  }
+
+  function closePopupLogin() {
+    setIsPopupLoginOpen(false);
   }
 
   function openPopupRecommendSuccess() {
@@ -167,7 +170,7 @@ function App() {
                 />
                 <PopupLogin
                   isOpen={isPopupLoginOpen}
-                  onClose={closeAllPopups}
+                  onClose={closePopupLogin}
                 />
                 <PopupCities
                   isOpen={isPopupCitiesOpen}
