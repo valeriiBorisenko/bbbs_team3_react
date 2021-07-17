@@ -1,8 +1,8 @@
 import './Articles.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import articlesPageTexts from '../../locales/articles-page-RU';
 import { useScrollToTop } from '../../hooks/index';
-import { COLORS } from '../../config/constants';
+import { COLORS, ERROR_MESSAGES } from '../../config/constants';
 import {
   BasePage,
   TitleH1,
@@ -12,6 +12,7 @@ import {
   Loader,
 } from './index';
 import getArticlesPageData from '../../api/articles-page';
+import { ErrorsContext } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
   small: 2,
@@ -22,6 +23,8 @@ const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
 
 function Articles() {
   useScrollToTop();
+
+  const { serverError, setError } = useContext(ErrorsContext);
 
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
@@ -78,7 +81,10 @@ function Articles() {
             setPageCount(Math.ceil(count / pageSize));
           }
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+          setError(true);
+          console.log(err);
+        })
         .finally(() => {
           setIsLoadingPage(false);
         });
@@ -106,6 +112,11 @@ function Articles() {
 
   // отрисовка заглушки
   function renderAnimatedContainer() {
+    if (serverError) {
+      return (
+        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+      );
+    }
     return <AnimatedPageContainer titleText={textStubNoData} />;
   }
 
