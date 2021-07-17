@@ -194,8 +194,8 @@ function PopupLogin({ isOpen, onClose }) {
   );
 
   const className = [
-    'popup__container_success',
-    `${isSuccess ? 'popup__container_success_opened' : ''}`,
+    'popup__login-container_success',
+    `${isSuccess ? 'popup__login-container_success_opened' : ''}`,
   ]
     .join(' ')
     .trim();
@@ -204,7 +204,7 @@ function PopupLogin({ isOpen, onClose }) {
     <div className={className}>
       <div
         ref={animationContainer}
-        className="popup__container_success-animation"
+        className="popup__login-container_success-animation"
       />
       <TitleH2 title={texts.successTitle} />
     </div>

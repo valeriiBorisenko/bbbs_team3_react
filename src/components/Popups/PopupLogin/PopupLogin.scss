@@ -71,7 +71,7 @@
   }
 }
 
-.popup__container_success {
+.popup__login-container_success {
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -90,7 +90,7 @@
   }
 }
   
-  .popup__container_success-animation {
+  .popup__login-container_success-animation {
     max-width: 450px;
     max-height: 190px;
     height: 100%;
@@ -103,7 +103,7 @@
   }
   
   @include atDesktop1024 {
-    .popup__container_success-animation {
+    .popup__login-container_success-animation {
       max-height: 170px;
   
       & > svg {
