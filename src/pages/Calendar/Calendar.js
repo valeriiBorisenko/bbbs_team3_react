@@ -23,6 +23,7 @@ import {
   AnimatedPageContainer,
   Loader,
   TagsList,
+  Paginate,
 } from './index';
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
@@ -95,33 +96,72 @@ function Calendar() {
   // нужно ли рисовать фильтры (если месяц всего 1 - не рисуем)
   const areThereEventsMoreForOneMonth = calendarPageData?.length > 0;
 
-  // вспомогательная функция загрузки ивентов
-  function getInitialPageData() {
-    console.log('getInitialPageData FUNC');
-    setIsCityChanging(true);
-    const offset = pageSize * pageIndex;
-    console.log('offset', offset);
-    console.log('pageSize', pageSize);
-    getCalendarPageData({ limit: pageSize, offset })
-      .then((calendarEvents) => {
-        const { results, count } = calendarEvents;
-        setTotalPages(Math.ceil(count / pageSize));
+  function getActiveFilters() {
+    if (!filters) {
+      // обязательно возвращаем пустой массив
+      return [];
+    }
+
+    return filters.filter((filter) => filter.isActive);
+  }
+
+  // общая функция загрузки ивентов
+  function getPageData({ offset, activeFilters }) {
+    console.log('NEW getPageData FUNC');
+    getCalendarPageData({
+      limit: pageSize,
+      offset,
+      months: activeFilters,
+    })
+      .then((events) => {
+        const { results, count } = events;
+        if (pageIndex === 0) {
+          setTotalPages(Math.ceil(count / pageSize));
+        }
         setCalendarPageData(results);
       })
       .catch((error) => console.log(error))
       .finally(() => {
+        //! надо это переделать потом
         setIsLoading(false);
         setIsCityChanging(false);
       });
   }
 
+  useEffect(() => {
+    console.log('useEffect pageIndex');
+    console.log('pageIndex', pageIndex);
+    const activeMonths = getActiveFilters();
+
+    // Переключение вперед - работает
+    //* переключение ВПЕРЕД дает индекс = 1
+    //! переключение НАЗАД дает индекс = 0 и мы не можем попасть в условие
+    //! переключение НАЗАД не работает ПРИ выбранных фильтрах И БЕЗ фильтров
+    // при нажатых фильтрах нажимаем пагинацию
+    if (pageIndex > 0 && activeMonths.length > 0) {
+      console.log('useEffect pageIndex IF');
+      const offset = pageSize * pageIndex;
+      const { filter } = activeMonths[0];
+      getPageData({ offset, activeFilters: filter });
+    }
+
+    // просто нажимаем пагинацию + месяц не выбран
+    // pageIndex > 0 &&
+    if (pageIndex > 0 && activeMonths.length === 0) {
+      console.log('useEffect pageIndex ELSE');
+      const offset = pageSize * pageIndex;
+      getPageData({ offset });
+    }
+  }, [pageIndex]);
+
   // загрузка страницы палендаря при старте либо показ попапа логина
   useEffect(() => {
     console.log('useEffect загрузка страницы первичная');
-    console.log('pageSize', pageSize);
+    // console.log('pageSize', pageSize);
     if (currentUser && pageSize) {
       console.log('useEffect IF');
-      getInitialPageData();
+      const offset = pageSize * pageIndex;
+      getPageData({ offset });
     }
 
     if (!currentUser) {
@@ -157,16 +197,19 @@ function Calendar() {
 
   // вспомогательная функция фильтрации
   function handleFiltration() {
-    if (isFiltersUsed) {
-      const activeFilter = filters.find((filter) => filter.isActive);
-      if (activeFilter) {
-        getEventsByFilters(activeFilter.filter)
-          .then((filteredEvents) => setCalendarPageData(filteredEvents))
-          .catch((error) => console.log(error))
-          .finally(() => setIsLoading(false));
-      } else {
-        getInitialPageData();
-      }
+    console.log('handleFiltration FUNC');
+    const activeMonths = getActiveFilters();
+
+    const offset = pageSize * pageIndex;
+    if (activeMonths.length === 0) {
+      console.log('handleFiltration IF');
+      // фильтров нет
+      getPageData({ limit: pageSize, offset });
+    } else {
+      console.log('handleFiltration ELSE');
+      // фильтруется по месяцу
+      const { filter } = activeMonths[0];
+      getPageData({ limit: pageSize, offset, activeFilters: filter });
     }
   }
 
@@ -177,6 +220,8 @@ function Calendar() {
       setIsLoading(true);
       debounceFiltration();
     }
+
+    // провели фильтрацию, флажок фильтров меняем
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
@@ -220,19 +265,17 @@ function Calendar() {
     return cards;
   }
 
-  // function renderPagination() {
-  //   if (pageCount > 1) {
-  //     return (
-  //       <Paginate
-  //         sectionClass="cards-section__pagination"
-  //         pageCount={pageCount}
-  //         value={pageNumber}
-  //         onChange={setPageNumber}
-  //       />
-  //     );
-  //   }
-  //   return null;
-  // }
+  // блок пагинации
+  function renderPagination() {
+    return (
+      <Paginate
+        sectionClass="calendar-page__pagination"
+        pageCount={totalPages}
+        value={pageIndex}
+        onChange={setPageIndex}
+      />
+    );
+  }
 
   // главная функция рендера
   function renderPageContent() {
@@ -261,7 +304,7 @@ function Calendar() {
                   {renderEventCardsContainer()}
                 </div>
               )}
-              {/* {renderPagination()} */}
+              {totalPages > 1 && renderPagination()}
             </div>
           )}
         </>
