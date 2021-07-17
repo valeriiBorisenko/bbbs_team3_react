@@ -43,11 +43,11 @@ function ReadAndWatch() {
   // console.log('ReadAndWatch');
 
   useEffect(() => {
-    // 1 элемент в ряду
+    // 1 элемент в ряду (до 700px)
     const querySizeS = window.matchMedia(`(max-width: ${S}px)`);
-    // 2 элемента в ряду
+    // 2 элемента в ряду (до 1120px)
     const querySizeM = window.matchMedia(`(max-width: ${M}px)`);
-    // 3 элемента в ряду
+    // 3 элемента в ряду (до 1440px)
     const querySizeL = window.matchMedia(`(max-width: ${L}px)`);
     // больше 1440px будет 4 элемента в ряду
 
