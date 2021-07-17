@@ -132,29 +132,29 @@
 @include atDesktop1279 {
   .footer {
     padding: 40px 130px 30px;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, auto);
-    grid-auto-flow: column;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .footer__column_content_concept {
     justify-self: center;
+    align-self: center;
     display: flex;
     padding-top: 30px;
+    order: 5;
   }
 
   .footer__column_content_social {
-    grid-row: 3/4;
-    grid-column: 1/2;
     padding-bottom: 23px;
     padding-top: 13px;
+    order: 3;
   }
 
   .footer__column_content_info {
     padding-top: 0;
-    grid-row: 2/3;
-    grid-column: 1/2;
     padding-bottom: 13px;
     border-bottom: 1px solid $lightGray;
+    order: 2;
   }
 
   .footer__column-list {
@@ -177,6 +177,7 @@
   .footer__logo {
     justify-self: center;
     height: 60%;
+    order: 1;
   }
 
   .footer__logo-image {
@@ -187,8 +188,8 @@
   .footer__button {
     margin-top: 0;
     justify-self: center;
-    grid-row: 4/5;
     max-width: 134px;
+    order: 4;
   }
 
   .footer__copyright {
