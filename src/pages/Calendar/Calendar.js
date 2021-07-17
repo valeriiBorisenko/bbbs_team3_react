@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import calendarPageTexts from '../../locales/calendar-page-RU';
@@ -7,7 +8,7 @@ import {
   useDebounce,
   useEventBooking,
 } from '../../hooks/index';
-import { months, DELAY_DEBOUNCE, DELAY_RENDER } from '../../config/constants';
+import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
@@ -25,6 +26,14 @@ import {
 } from './index';
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
+
+// const INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX = 1;
+const INITIAL_PAGE_INDEX = 0;
+export const PAGE_SIZE_PAGINATE = {
+  small: 6,
+  medium: 8,
+  big: 12,
+};
 
 function Calendar() {
   useScrollToTop();
@@ -47,13 +56,58 @@ function Calendar() {
   // флаг использования фильтров
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
 
-  // нужно ли рисовать фильтры (если месяц всего 1 - не рисуем)
-  const dataForCurrentCityExist = calendarPageData?.length > 0;
+  // Стейты для пагинации
+  const [pageSize, setPageSize] = useState(null);
+  const [totalPages, setTotalPages] = useState(null);
+  const [pageIndex, setPageIndex] = useState(INITIAL_PAGE_INDEX);
 
+  // определение размера страницы
+  useEffect(() => {
+    console.log('useEffect ресайз');
+    const small = window.matchMedia('(max-width: 1024px)');
+    const medium = window.matchMedia('(max-width: 1440px)');
+
+    const listener = () => {
+      if (small.matches) {
+        // 320px-1024px по 6 элементов на странице
+        setPageSize(PAGE_SIZE_PAGINATE.small);
+      } else if (medium.matches) {
+        // 1024px-1440px по 8 элементов на странице
+        setPageSize(PAGE_SIZE_PAGINATE.medium);
+      } else {
+        // больше 1440px по 12 элементов на странице
+        setPageSize(PAGE_SIZE_PAGINATE.big);
+      }
+    };
+    listener();
+
+    small.addEventListener('change', listener);
+    medium.addEventListener('change', listener);
+    // largeQuery.addEventListener('change', listener);
+
+    return () => {
+      small.removeEventListener('change', listener);
+      medium.removeEventListener('change', listener);
+      // largeQuery.removeEventListener('change', listener);
+    };
+  }, []);
+
+  // нужно ли рисовать фильтры (если месяц всего 1 - не рисуем)
+  const areThereEventsMoreForOneMonth = calendarPageData?.length > 0;
+
+  // вспомогательная функция загрузки ивентов
   function getInitialPageData() {
+    console.log('getInitialPageData FUNC');
     setIsCityChanging(true);
-    getCalendarPageData()
-      .then((calendarEvents) => setCalendarPageData(calendarEvents))
+    const offset = pageSize * pageIndex;
+    console.log('offset', offset);
+    console.log('pageSize', pageSize);
+    getCalendarPageData({ limit: pageSize, offset })
+      .then((calendarEvents) => {
+        const { results, count } = calendarEvents;
+        setTotalPages(Math.ceil(count / pageSize));
+        setCalendarPageData(results);
+      })
       .catch((error) => console.log(error))
       .finally(() => {
         setIsLoading(false);
@@ -61,20 +115,24 @@ function Calendar() {
       });
   }
 
-  // загрузка главной страницы при старте
+  // загрузка страницы палендаря при старте либо показ попапа логина
   useEffect(() => {
-    if (currentUser) {
+    console.log('useEffect загрузка страницы первичная');
+    console.log('pageSize', pageSize);
+    if (currentUser && pageSize) {
+      console.log('useEffect IF');
       getInitialPageData();
-    } else {
-      setTimeout(() => {
-        openPopupLogin();
-      }, DELAY_RENDER);
     }
-  }, [currentUser]);
+
+    if (!currentUser) {
+      openPopupLogin();
+    }
+  }, [pageSize, currentUser]);
 
   // загрузка фильтров страницы при старте
   useEffect(() => {
     if (currentUser) {
+      console.log('useEffect запрсо фильтров IF');
       getActiveMonthTags()
         .then((monthsTags) => {
           const customFilters = monthsTags.map((tag) => {
@@ -91,6 +149,13 @@ function Calendar() {
     }
   }, [currentUser?.city]);
 
+  // хэндлер фильтр-кнопки
+  function handleFilterButtonClick(inputValue, isChecked) {
+    handleRadioBehavior(setFilters, { inputValue, isChecked });
+    setIsFiltersUsed(true);
+  }
+
+  // вспомогательная функция фильтрации
   function handleFiltration() {
     if (isFiltersUsed) {
       const activeFilter = filters.find((filter) => filter.isActive);
@@ -102,13 +167,7 @@ function Calendar() {
       } else {
         getInitialPageData();
       }
-      setIsFiltersUsed(false);
     }
-  }
-
-  function handleFilterClick(inputValue, isChecked) {
-    handleRadioBehavior(setFilters, { inputValue, isChecked });
-    setIsFiltersUsed(true);
   }
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
@@ -116,13 +175,13 @@ function Calendar() {
     // в дальнейшем надо изменить количество секунд
     if (isFiltersUsed) {
       setIsLoading(true);
+      debounceFiltration();
     }
-    debounceFiltration();
+    setIsFiltersUsed(false);
   }, [isFiltersUsed]);
 
   // подписка/отписка от ивентов
   const { handleEventBooking, selectedEvent } = useEventBooking();
-
   useEffect(() => {
     if (selectedEvent) {
       setCalendarPageData(() =>
@@ -161,10 +220,24 @@ function Calendar() {
     return cards;
   }
 
+  // function renderPagination() {
+  //   if (pageCount > 1) {
+  //     return (
+  //       <Paginate
+  //         sectionClass="cards-section__pagination"
+  //         pageCount={pageCount}
+  //         value={pageNumber}
+  //         onChange={setPageNumber}
+  //       />
+  //     );
+  //   }
+  //   return null;
+  // }
+
   // главная функция рендера
   function renderPageContent() {
     // залогинен и есть ивенты
-    if (currentUser && dataForCurrentCityExist) {
+    if (currentUser && areThereEventsMoreForOneMonth) {
       return (
         <>
           <TitleH1 title={title} sectionClass="calendar-page__title" />
@@ -177,7 +250,7 @@ function Calendar() {
                 <TagsList
                   filterList={filters}
                   name="month"
-                  handleClick={handleFilterClick}
+                  handleClick={handleFilterButtonClick}
                 />
               )}
 
@@ -188,28 +261,31 @@ function Calendar() {
                   {renderEventCardsContainer()}
                 </div>
               )}
+              {/* {renderPagination()} */}
             </div>
           )}
         </>
       );
     }
 
-    // залогинен и нет ивентов
-    if (currentUser && !dataForCurrentCityExist && calendarPageData) {
+    // залогинен и нет ивентов для города вообще
+    if (currentUser && !areThereEventsMoreForOneMonth && calendarPageData) {
       return returnAnimatedContainer();
     }
 
     return null;
   }
 
-  // глобальный лоадер
+  // глобальный лоадер при первой загрузке
   if (!calendarPageData || !filters) {
+    console.log('Global loader');
     return <Loader isCentered />;
   }
 
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="calendar-page page__section fade-in">
+        {/* {currentUser ? renderPageContent() : openPopupLogin()} */}
         {renderPageContent()}
       </section>
     </BasePage>
