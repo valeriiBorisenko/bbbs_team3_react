@@ -2,11 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.scss';
 import profilePageTexts from '../../locales/profile-page-RU';
 import { PopupsContext, ErrorsContext } from '../../contexts/index';
-import {
-  useSmoothHorizontalScroll,
-  useScrollToTop,
-  useEventBooking,
-} from '../../hooks/index';
+import { useScrollToTop, useEventBooking } from '../../hooks/index';
 import {
   getProfileDiariesData,
   createDiary,
@@ -24,6 +20,7 @@ import {
   PopupDeleteDiary,
   ButtonRound,
   Loader,
+  ScrollableContainer,
 } from './index';
 
 const {
@@ -83,9 +80,6 @@ function Profile() {
 
   // работа с карточками мероприятий календаря
   const openEventCard = () => openPopupAboutEvent();
-
-  // скролл контейнера с карточками мероприятий
-  const containerEvents = useSmoothHorizontalScroll({ step: 3 });
 
   // работа с формой
   const scrollAnchorRef = useRef(null);
@@ -267,9 +261,9 @@ function Profile() {
         <section className="profile fade-in">
           <div className="profile__events-area page__section">
             <TitleH2 sectionClass="profile__title" title={titleH1} />
-            <div className="profile__events" ref={containerEvents}>
+            <ScrollableContainer sectionClass="profile__events" step={3}>
               {renderEventCards()}
-            </div>
+            </ScrollableContainer>
           </div>
 
           <div className="profile__diaries page__section">
