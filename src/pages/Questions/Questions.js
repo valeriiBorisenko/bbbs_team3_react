@@ -163,14 +163,13 @@ function Questions() {
   };
 
   const handleFiltration = (activeCategories) => {
-    // активных фильтров нету и сейчас нажато "ВСЕ"
+    // активных фильтров нету и сейчас нажали "ВСЕ"
+    const offset = pageSize * pageIndex;
     if (activeCategories.length === 0) {
-      const offset = pageSize * pageIndex;
       getFiltratedQuestions({ limit: pageSize, offset });
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       // выбрана какая то категория
-      const offset = pageSize * pageIndex;
       const query = activeCategories.join();
       getFiltratedQuestions({ limit: pageSize, offset, tags: query });
       deselectOneTag(setCategories, ALL_CATEGORIES);
@@ -181,8 +180,8 @@ function Questions() {
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
     // используем фильтры (2 варианта развития внутри)
-    const activeCategories = getActiveCategories();
     if (isFiltersUsed) {
+      const activeCategories = getActiveCategories();
       debounceFiltration(activeCategories);
     }
 
