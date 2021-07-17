@@ -1,6 +1,5 @@
 import './CardArticle.scss';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
@@ -30,24 +29,25 @@ function CardArticle({
         color={cardColor}
       >
         <div className="article-card__title-wrap">
-          {/* если будет редирект на внутреннюю страницу, лучше делать через Link */}
-          <a href={articleUrl} className="article-card__link-wrap">
+          <a
+            href={articleUrl}
+            className="article-card__link-wrap"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <TitleH2 sectionClass="article-card__title" title={title} />
           </a>
           <Caption sectionClass="article-card__info" title={info} />
         </div>
 
         {isMain && (
-          <Link
-            to={articleUrl}
-            className="article-card__link-wrap article-card__link-wrap_content_article-img"
-          >
+          <div className="article-card__link-wrap article-card__link-wrap_content_article-img">
             <img
               src={`${staticImageUrl}/${image}`}
               alt={title}
               className="article-card__image"
             />
-          </Link>
+          </div>
         )}
 
         <a
