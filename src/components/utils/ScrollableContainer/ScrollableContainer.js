@@ -4,6 +4,8 @@ import './ScrollableContainer.scss';
 import PropTypes from 'prop-types';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
+const DELAY_NO_POINTER_EVENTS = 150;
+
 function ScrollableContainer({ children, step, sectionClass }) {
   const ref = useRef();
   const [state, setState] = useState({
@@ -37,11 +39,13 @@ function ScrollableContainer({ children, step, sectionClass }) {
       return;
     }
     evt.preventDefault();
-    setState({
-      ...state,
-      isScrolling: true,
-      clientX: evt.clientX,
-    });
+    setTimeout(() => {
+      setState({
+        ...state,
+        isScrolling: true,
+        clientX: evt.clientX,
+      });
+    }, DELAY_NO_POINTER_EVENTS);
   };
 
   const onMouseUp = (evt) => {

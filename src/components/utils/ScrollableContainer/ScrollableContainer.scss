@@ -13,5 +13,9 @@
 
   &_scrolling {
     cursor: grabbing;
+    
+    > .scrollable-container__child {
+      pointer-events: none;
+    }
   }
 }

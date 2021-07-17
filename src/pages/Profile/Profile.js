@@ -190,6 +190,7 @@ function Profile() {
               key={item?.id}
               data={item}
               onOpen={openEventCard}
+              sectionClass="scrollable-container__child"
             />
           ))}
         </>
