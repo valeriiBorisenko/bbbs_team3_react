@@ -18,14 +18,12 @@ import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
-  localStChosenVideo,
 } from '../../config/constants';
 import {
   handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
-import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import { ErrorsContext, PopupsContext } from '../../contexts/index';
 
 const PAGE_SIZE_PAGINATE = {
@@ -55,10 +53,6 @@ function Movies() {
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
-
-  const { openPopupVideo } = useContext(PopupsContext);
-  const chosenVideoOnRedirectFromMainPage =
-    getLocalStorageData(localStChosenVideo);
 
   const getActiveTags = () => {
     if (categories) {
@@ -272,9 +266,6 @@ function Movies() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="movies page__section fade-in">
-        {/* Открытие попапа Трейлера при переходе с Главной страницы */}
-        {chosenVideoOnRedirectFromMainPage && openPopupVideo()}
-
         {renderPageContent()}
       </section>
     </BasePage>

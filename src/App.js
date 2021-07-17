@@ -3,6 +3,8 @@ import './App.scss';
 import { HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import Router from './navigation/Router';
+import { MOVIES_URL, VIDEO_URL } from './config/routes';
+import { localStChosenVideo } from './config/constants';
 import Loader from './components/utils/Loader/Loader';
 // попапы
 import {
@@ -24,6 +26,7 @@ import {
 } from './contexts/index';
 // хуки
 import { useCities, useAuth } from './hooks/index';
+import { removeLocalStorageData } from './hooks/useLocalStorage';
 
 function App() {
   const { pathname } = useLocation();
@@ -48,7 +51,6 @@ function App() {
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupRecommendSuccessOpen(false);
-    setIsVideoPopupOpen(false);
   }
 
   function openPopupConfirmation() {
@@ -101,6 +103,11 @@ function App() {
     setIsVideoPopupOpen(true);
   }
 
+  function closePopupVideo() {
+    removeLocalStorageData(localStChosenVideo);
+    setIsVideoPopupOpen(false);
+  }
+
   // текущий юзер/контекст
   const [currentUser, setCurrentUser] = useState(null);
   const updateUser = (value) => setCurrentUser(value);
@@ -121,6 +128,10 @@ function App() {
 
   // закрытие всех попапов при смене страницы
   useEffect(() => {
+    // без проверки попап с видео не откроется при редиректе
+    if (pathname !== MOVIES_URL && pathname !== VIDEO_URL) {
+      closePopupVideo();
+    }
     closeAllPopups();
     closePopupError();
     closePopupCities();
@@ -131,8 +142,15 @@ function App() {
     window.addEventListener('keyup', (evt) => {
       if (evt.key === 'Escape') {
         closeAllPopups();
+        closePopupVideo();
       }
     });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('redirectToPageAndOpenPopup', openPopupVideo);
+    return () =>
+      window.removeEventListener('redirectToPageAndOpenPopup', openPopupVideo);
   }, []);
 
   return (
@@ -187,7 +205,7 @@ function App() {
                 />
                 <PopupVideo
                   isOpen={isVideoPopupOpen}
-                  onClose={closeAllPopups}
+                  onClose={closePopupVideo}
                 />
               </div>
             </PopupsContext.Provider>
