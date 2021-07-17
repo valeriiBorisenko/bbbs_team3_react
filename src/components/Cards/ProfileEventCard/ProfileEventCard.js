@@ -6,7 +6,7 @@ import { localStAfishaEvent } from '../../../config/constants';
 import { formatDate } from '../../../utils/utils';
 import { Card } from '../../utils/index';
 
-function ProfileEventCard({ data, onOpen }) {
+function ProfileEventCard({ data, onOpen, sectionClass }) {
   const startDay = formatDate(data?.startAt);
 
   const handleOpen = () => {
@@ -16,7 +16,7 @@ function ProfileEventCard({ data, onOpen }) {
 
   return (
     <button
-      className="profile-event-card"
+      className={`profile-event-card ${sectionClass}`}
       type="button"
       aria-label={texts.buttonLabel}
       onClick={handleOpen}
@@ -37,10 +37,12 @@ function ProfileEventCard({ data, onOpen }) {
 ProfileEventCard.propTypes = {
   data: PropTypes.objectOf(PropTypes.any).isRequired,
   onOpen: PropTypes.func,
+  sectionClass: PropTypes.string,
 };
 
 ProfileEventCard.defaultProps = {
   onOpen: () => {},
+  sectionClass: '',
 };
 
 export default ProfileEventCard;

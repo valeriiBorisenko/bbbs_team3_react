@@ -58,6 +58,16 @@ function MainPage() {
     }
   }, [selectedEvent]);
 
+  // редиректы
+  function dispatchRedirectEvent() {
+    const event = new Event('redirectToPageAndOpenPopup');
+    window.dispatchEvent(event);
+  }
+
+  function redirectToPage() {
+    dispatchRedirectEvent();
+  }
+
   // запрос даты главной страницы при загрузке и при смене города
   //! из-за этого главная 2 раза запрашивается для юзера!!
   useEffect(() => {
@@ -168,7 +178,12 @@ function MainPage() {
     return (
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {randomMovies.map((movie) => (
-          <Link to={MOVIES_URL} className={className} key={movie?.id}>
+          <Link
+            to={MOVIES_URL}
+            onClick={redirectToPage}
+            className={className}
+            key={movie?.id}
+          >
             <CardFilm data={movie} />
           </Link>
         ))}
@@ -179,7 +194,11 @@ function MainPage() {
   function renderVideoSection() {
     return (
       <section className="video main-section page__section">
-        <Link to={VIDEO_URL} className="main-section__link scale-in">
+        <Link
+          to={VIDEO_URL}
+          onClick={redirectToPage}
+          className="main-section__link scale-in"
+        >
           <CardVideoMain
             key={mainPageData?.video?.id}
             data={mainPageData?.video}

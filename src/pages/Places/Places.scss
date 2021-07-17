@@ -19,7 +19,7 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(290px, 1fr));
     gap: 80px 30px;
-    padding: 80px 0;
+    padding: 80px 0 0;
   }
 
   &__paragraph {
@@ -55,7 +55,7 @@
 
     &__cards-grid {
       grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      padding: 50px 0 60px;
+      padding-top: 50px;
       row-gap: 30px;
     }
 
@@ -69,7 +69,7 @@
   .places {
     &__cards-grid {
       grid-template-columns: 1fr;
-      padding: 30px 0;
+      padding-top: 30px;
     }
   }
 }

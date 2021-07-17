@@ -66,12 +66,24 @@ function PopupLogin({ isOpen, onClose }) {
   //! аварийный перевод на главную, если не хочешь логиниться
   const history = useHistory();
   const { pathname } = useLocation();
+
   function closePopup() {
     if (pathname === AFISHA_URL) {
       history.push('/');
     }
     onClose();
   }
+
+  function closePopupOnEsc(evt) {
+    if (evt.key === 'Escape') {
+      closePopup();
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keyup', closePopupOnEsc);
+    return () => window.removeEventListener('keyup', closePopupOnEsc);
+  }, [pathname]);
 
   useEffect(() => {
     resetForm();

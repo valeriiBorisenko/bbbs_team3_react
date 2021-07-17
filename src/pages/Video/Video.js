@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Video.scss';
 import videoPageTexts from '../../locales/video-page-RU';
 import {
@@ -11,11 +11,7 @@ import {
   AnimatedPageContainer,
   TagsList,
 } from './index';
-import {
-  ALL_CATEGORIES,
-  DELAY_DEBOUNCE,
-  localStChosenVideo,
-} from '../../config/constants';
+import { ALL_CATEGORIES, DELAY_DEBOUNCE } from '../../config/constants';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
   handleCheckboxBehavior,
@@ -24,8 +20,6 @@ import {
 } from '../../utils/filter-tags';
 import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { getLocalStorageData } from '../../hooks/useLocalStorage';
-import { PopupsContext } from '../../contexts/index';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -38,11 +32,6 @@ const { headTitle, headDescription, title, resourceGroupTag, textStubNoData } =
 
 const Video = () => {
   useScrollToTop();
-
-  const { openPopupVideo } = useContext(PopupsContext);
-
-  const chosenVideoOnRedirectFromMainPage =
-    getLocalStorageData(localStChosenVideo);
 
   // Стейты для пагинации
   const [pageSize, setPageSize] = useState(null);
@@ -322,8 +311,6 @@ const Video = () => {
         <TitleH1 title={title} sectionClass="video__title" />
         {categories?.length > 1 && !isLoadingPage && renderTagsContainer()}
       </section>
-      {/* Открытие попапа Видео при переходе с Главной страницы */}
-      {chosenVideoOnRedirectFromMainPage && openPopupVideo()}
 
       {renderMainContent()}
     </BasePage>

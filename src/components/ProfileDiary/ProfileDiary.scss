@@ -129,6 +129,7 @@
 
   &__button {
     margin-right: 30px;
+    transition: .3s ease;
   
     &:first-of-type {
       margin-left: 10px;
@@ -136,6 +137,11 @@
   
     &:last-of-type {
       margin-right: 0;
+    }
+
+    &_shared {
+      color: $black;
+      pointer-events: none;
     }
   }
 }

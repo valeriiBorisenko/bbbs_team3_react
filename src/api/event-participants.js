@@ -25,4 +25,16 @@ function getBookedEvents() {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-export { makeEventRegistration, cancelEventRegistration, getBookedEvents };
+function getArchiveOfBookedEvents() {
+  return axios
+    .get(`${baseURL}${apiUrl}/afisha/event-participants/archive/`)
+    .then((response) => response.data.results)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+}
+
+export {
+  makeEventRegistration,
+  cancelEventRegistration,
+  getBookedEvents,
+  getArchiveOfBookedEvents,
+};
