@@ -11,11 +11,7 @@ import {
 import { months, DELAY_DEBOUNCE } from '../../config/constants';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import {
-  getCalendarPageData,
-  getActiveMonthTags,
-  getEventsByFilters,
-} from '../../api/afisha-page';
+import { getCalendarPageData, getActiveMonthTags } from '../../api/afisha-page';
 import {
   BasePage,
   TitleH1,
@@ -42,10 +38,12 @@ function Calendar() {
   const { currentUser } = useContext(CurrentUserContext);
   const { openPopupLogin, openPopupAboutEvent } = useContext(PopupsContext);
 
-  // переход между фильтрами, лоадер
+  // переход между фильтрами/страницами пагинации, лоадер
   const [isLoading, setIsLoading] = useState(false);
   // переход между городами, лоадер
-  const [isCityChanging, setIsCityChanging] = useState(false);
+  const [isGlobalLoader, setIsGlobalLoader] = useState(false);
+  //
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   // загрузка данных страницы календаря, если ты залогиненный
   const [calendarPageData, setCalendarPageData] = useState(null);
@@ -122,35 +120,35 @@ function Calendar() {
       })
       .catch((error) => console.log(error))
       .finally(() => {
-        //! надо это переделать потом
         setIsLoading(false);
-        setIsCityChanging(false);
+        setIsGlobalLoader(false);
+        setIsLoadingPaginate(false);
       });
   }
 
+  // эффект пагинации
+  const debouncePaginate = useDebounce(getPageData, DELAY_DEBOUNCE);
   useEffect(() => {
     console.log('useEffect pageIndex');
     console.log('pageIndex', pageIndex);
     const activeMonths = getActiveFilters();
+    setIsLoadingPaginate(true);
 
-    // Переключение вперед - работает
-    //* переключение ВПЕРЕД дает индекс = 1
-    //! переключение НАЗАД дает индекс = 0 и мы не можем попасть в условие
-    //! переключение НАЗАД не работает ПРИ выбранных фильтрах И БЕЗ фильтров
     // при нажатых фильтрах нажимаем пагинацию
     if (pageIndex > 0 && activeMonths.length > 0) {
       console.log('useEffect pageIndex IF');
       const offset = pageSize * pageIndex;
-      const { filter } = activeMonths[0];
-      getPageData({ offset, activeFilters: filter });
+      const { filter } = activeMonths[0]; // задел под мультифильтры
+      debouncePaginate({ offset, activeFilters: filter });
     }
 
     // просто нажимаем пагинацию + месяц не выбран
-    // pageIndex > 0 &&
     if (pageIndex > 0 && activeMonths.length === 0) {
       console.log('useEffect pageIndex ELSE');
-      const offset = pageSize * pageIndex;
-      getPageData({ offset });
+      // const offset = pageSize * pageIndex;
+      const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
+      // getPageData({ offset });
+      debouncePaginate({ offset });
     }
   }, [pageIndex]);
 
@@ -172,7 +170,8 @@ function Calendar() {
   // загрузка фильтров страницы при старте
   useEffect(() => {
     if (currentUser) {
-      console.log('useEffect запрсо фильтров IF');
+      setIsGlobalLoader(true);
+      console.log('useEffect запрос фильтров IF');
       getActiveMonthTags()
         .then((monthsTags) => {
           const customFilters = monthsTags.map((tag) => {
@@ -200,20 +199,21 @@ function Calendar() {
     console.log('handleFiltration FUNC');
     const activeMonths = getActiveFilters();
 
-    const offset = pageSize * pageIndex;
+    const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
+    // фильтров нет
     if (activeMonths.length === 0) {
       console.log('handleFiltration IF');
-      // фильтров нет
       getPageData({ limit: pageSize, offset });
     } else {
-      console.log('handleFiltration ELSE');
       // фильтруется по месяцу
-      const { filter } = activeMonths[0];
+      console.log('handleFiltration ELSE');
+      const { filter } = activeMonths[0]; // задел под мультифильтры
       getPageData({ limit: pageSize, offset, activeFilters: filter });
     }
   }
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
+  // эффект фильтрации
   useEffect(() => {
     // в дальнейшем надо изменить количество секунд
     if (isFiltersUsed) {
@@ -242,7 +242,7 @@ function Calendar() {
   function returnAnimatedContainer() {
     return (
       <>
-        {isCityChanging ? (
+        {isGlobalLoader ? (
           <Loader isNested />
         ) : (
           <AnimatedPageContainer titleText={textStubNoData} />
@@ -265,6 +265,17 @@ function Calendar() {
     return cards;
   }
 
+  // фильтры
+  function renderFilters() {
+    return (
+      <TagsList
+        filterList={filters}
+        name="month"
+        handleClick={handleFilterButtonClick}
+      />
+    );
+  }
+
   // блок пагинации
   function renderPagination() {
     return (
@@ -283,29 +294,33 @@ function Calendar() {
     if (currentUser && areThereEventsMoreForOneMonth) {
       return (
         <>
-          <TitleH1 title={title} sectionClass="calendar-page__title" />
-
-          {isCityChanging ? (
+          {/* лоадер смены городов */}
+          {isGlobalLoader ? (
             <Loader isNested />
           ) : (
-            <div className="calendar-page__container">
-              {filters?.length > 1 && (
-                <TagsList
-                  filterList={filters}
-                  name="month"
-                  handleClick={handleFilterButtonClick}
-                />
-              )}
+            <>
+              <TitleH1 title={title} sectionClass="calendar-page__title" />
+              <div className="calendar-page__container">
+                {filters?.length > 1 && renderFilters()}
 
-              {isLoading ? (
-                <Loader isNested />
-              ) : (
-                <div className="calendar-page__grid">
-                  {renderEventCardsContainer()}
-                </div>
-              )}
-              {totalPages > 1 && renderPagination()}
-            </div>
+                {/* лоадер смены фильтров */}
+                {isLoading ? (
+                  <Loader isNested />
+                ) : (
+                  <>
+                    {/* лоадер переключения пагинации */}
+                    {isLoadingPaginate ? (
+                      <Loader isNested />
+                    ) : (
+                      <div className="calendar-page__grid">
+                        {renderEventCardsContainer()}
+                      </div>
+                    )}
+                    {totalPages > 1 && renderPagination()}
+                  </>
+                )}
+              </div>
+            </>
           )}
         </>
       );
@@ -319,7 +334,7 @@ function Calendar() {
     return null;
   }
 
-  // глобальный лоадер при первой загрузке
+  // глобальный лоадер при первой загрузке пока ждем ивенты и фильтры
   if (!calendarPageData || !filters) {
     console.log('Global loader');
     return <Loader isCentered />;
@@ -328,7 +343,6 @@ function Calendar() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="calendar-page page__section fade-in">
-        {/* {currentUser ? renderPageContent() : openPopupLogin()} */}
         {renderPageContent()}
       </section>
     </BasePage>
