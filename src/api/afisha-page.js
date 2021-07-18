@@ -19,12 +19,4 @@ function getActiveMonthTags() {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-// фильтрация по конкретному месяцу
-function getEventsByFilters(monthNumber) {
-  return axios
-    .get(`${baseURL}${apiUrl}/afisha/events/?months=${monthNumber}`)
-    .then((response) => response.data.results)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
-}
-
-export { getCalendarPageData, getActiveMonthTags, getEventsByFilters };
+export { getCalendarPageData, getActiveMonthTags };
