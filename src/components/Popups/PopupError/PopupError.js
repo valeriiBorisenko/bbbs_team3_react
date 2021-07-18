@@ -4,10 +4,10 @@ import { useContext, useEffect } from 'react';
 import Popup from '../Popup/Popup';
 import { Button, TitleH2 } from '../../utils/index';
 import { ErrorsContext } from '../../../contexts';
-//! текст прокинуть через пропс
 
 function PopupError({ isOpen, onClose }) {
   const { serverError } = useContext(ErrorsContext);
+
   const closeOnEsc = (evt) => {
     if (evt.key === 'Escape') {
       onClose();

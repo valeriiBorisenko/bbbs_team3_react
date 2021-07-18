@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import calendarPageTexts from '../../locales/calendar-page-RU';

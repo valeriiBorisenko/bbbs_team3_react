@@ -3,6 +3,7 @@ import ProfileEventCard from '../../components/Cards/ProfileEventCard/ProfileEve
 import ProfileForm from '../../components/ProfileForm/ProfileForm';
 import ProfileDiary from '../../components/ProfileDiary/ProfileDiary';
 import PopupDeleteDiary from '../../components/Popups/PopupDeleteDiary/PopupDeleteDiary';
+import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import {
   TitleH2,
   ButtonRound,
@@ -22,4 +23,5 @@ export {
   Loader,
   ScrollableContainer,
   UserMenuButton,
+  AnimatedPageContainer,
 };

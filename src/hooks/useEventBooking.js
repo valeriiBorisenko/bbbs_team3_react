@@ -53,13 +53,12 @@ const useEventBooking = () => {
     makeEventRegistration({ event: card.id })
       .then(() => setRegisterEvent())
       .then(() => openPopupSuccessfully())
-      .catch((error) => {
+      .catch(() => {
         setError({
           title: ERROR_MESSAGES.eventAddErrorMessage.title,
           button: ERROR_MESSAGES.eventAddErrorMessage.button,
         });
         openPopupError();
-        console.log(error);
       });
   };
 
@@ -67,13 +66,12 @@ const useEventBooking = () => {
     cancelEventRegistration(card.id)
       .then(() => setCancelRegisterEvent())
       .then(() => closeAllPopups())
-      .catch((error) => {
+      .catch(() => {
         setError({
           title: ERROR_MESSAGES.eventCancelErrorMessage.title,
           button: ERROR_MESSAGES.eventCancelErrorMessage.button,
         });
         openPopupError();
-        console.log(error);
       });
   };
 

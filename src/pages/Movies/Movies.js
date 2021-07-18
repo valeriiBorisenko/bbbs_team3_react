@@ -38,7 +38,7 @@ const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 function Movies() {
   useScrollToTop();
 
-  const { serverError, setError } = useContext(ErrorsContext);
+  const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 
   // Загрузка данных
@@ -53,6 +53,8 @@ function Movies() {
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
+  // Стейт ошибки
+  const [isPageError, setIsPageError] = useState(false);
 
   const getActiveTags = () => {
     if (categories) {
@@ -78,10 +80,7 @@ function Movies() {
         return results;
       })
       .then((results) => setMoviesPageData(results))
-      .catch((err) => {
-        setError(true);
-        console.log(err);
-      })
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -103,17 +102,15 @@ function Movies() {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => {
+      .catch(() => {
         if (isFiltersUsed) {
           setError({
             title: ERROR_MESSAGES.filterErrorMessage.title,
             button: ERROR_MESSAGES.filterErrorMessage.button,
           });
           openPopupError();
-          console.log(err);
         } else {
-          setError(true);
-          console.log(err);
+          setIsPageError(true);
         }
       });
   };
@@ -229,9 +226,11 @@ function Movies() {
   };
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (serverError) {
+    if (isPageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
     return (

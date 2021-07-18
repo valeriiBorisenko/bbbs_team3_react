@@ -36,4 +36,18 @@ function deleteDiary(diaryId, data) {
     .catch((err) => Promise.reject(err?.response));
 }
 
-export { getProfileDiariesData, createDiary, editDiary, deleteDiary };
+// открыть дневник куратору
+function shareDiary(diaryId) {
+  return axios
+    .post(`${baseURL}${apiUrl}/profile/diaries/${diaryId}/send/`)
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(err?.response));
+}
+
+export {
+  getProfileDiariesData,
+  createDiary,
+  editDiary,
+  deleteDiary,
+  shareDiary,
+};

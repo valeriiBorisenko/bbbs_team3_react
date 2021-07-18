@@ -140,10 +140,6 @@ function ReadAndWatch() {
     );
   }
 
-  // useEffect(() => {
-  //   renderUniqueSliderSections();
-  // }, []);
-
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="readwatch-page page__section fade-in">

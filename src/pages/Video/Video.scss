@@ -12,6 +12,7 @@
   &__cards-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(290px, 1fr));
+    grid-auto-rows: -webkit-min-content;
     gap: 80px 30px;
     padding: 80px 0 0;
   }
