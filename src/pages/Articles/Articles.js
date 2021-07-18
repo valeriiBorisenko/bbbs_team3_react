@@ -2,7 +2,7 @@ import './Articles.scss';
 import { useEffect, useState } from 'react';
 import articlesPageTexts from '../../locales/articles-page-RU';
 import { useScrollToTop } from '../../hooks/index';
-import { COLORS } from '../../config/constants';
+import { COLORS, ERROR_MESSAGES } from '../../config/constants';
 import {
   BasePage,
   TitleH1,
@@ -31,6 +31,8 @@ function Articles() {
   const [mainArticle, setMainCard] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+  // Стейт ошибки
+  const [pageError, setPageError] = useState(false);
 
   function getPageData() {
     const offset = pageSize * pageNumber;
@@ -78,7 +80,10 @@ function Articles() {
             setPageCount(Math.ceil(count / pageSize));
           }
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+          setPageError(true);
+          console.log(err);
+        })
         .finally(() => {
           setIsLoadingPage(false);
         });
@@ -106,6 +111,11 @@ function Articles() {
 
   // отрисовка заглушки
   function renderAnimatedContainer() {
+    if (pageError) {
+      return (
+        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+      );
+    }
     return <AnimatedPageContainer titleText={textStubNoData} />;
   }
 
