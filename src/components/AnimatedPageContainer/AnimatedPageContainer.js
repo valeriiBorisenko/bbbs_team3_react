@@ -7,7 +7,13 @@ import texts from './locales/RU';
 import animation404 from '../../assets/animation/Illustration_404.json';
 import { TitleH2 } from '../utils/index';
 
-function AnimatedPageContainer({ is404, titleText, buttonText }) {
+function AnimatedPageContainer({
+  is404,
+  titleText,
+  buttonText,
+  staticPage,
+  urlBack,
+}) {
   const animationContainer = useRef();
 
   useEffect(() => {
@@ -25,7 +31,10 @@ function AnimatedPageContainer({ is404, titleText, buttonText }) {
       <div ref={animationContainer} className="animated-section__animation" />
       {is404 && <h1 className="page-not-found-title">{texts.title404}</h1>}
       <TitleH2 title={titleText} sectionClass="animated-section__subtitle" />
-      <Link className="button animated-section__link button_color_blue" to="/">
+      <Link
+        className="button animated-section__link button_color_blue"
+        to={staticPage ? `${urlBack}` : '/'}
+      >
         {buttonText}
       </Link>
     </div>
@@ -36,12 +45,16 @@ AnimatedPageContainer.propTypes = {
   is404: PropTypes.bool,
   titleText: PropTypes.string,
   buttonText: PropTypes.string,
+  staticPage: PropTypes.bool,
+  urlBack: PropTypes.string,
 };
 
 AnimatedPageContainer.defaultProps = {
   is404: false,
   titleText: '',
   buttonText: texts.buttonText,
+  staticPage: false,
+  urlBack: '',
 };
 
 export default AnimatedPageContainer;

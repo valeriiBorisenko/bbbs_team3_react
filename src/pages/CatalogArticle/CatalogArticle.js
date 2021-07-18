@@ -6,6 +6,7 @@ import getCatalogArticlePageData from '../../api/catalog-article-page';
 import catalogArticlePageTexts from '../../locales/catalog-article-page-RU';
 import { AnimatedPageContainer } from '../Books';
 import { ERROR_MESSAGES } from '../../config/constants';
+import { CATALOG_URL } from '../../config/routes';
 
 function CatalogArticle({ articleId }) {
   const { headTitle, headDescription } = catalogArticlePageTexts;
@@ -31,7 +32,12 @@ function CatalogArticle({ articleId }) {
   function renderPage() {
     if (pageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage}
+          urlBack={CATALOG_URL}
+          buttonText="Вернуться назад"
+          staticPage
+        />
       );
     }
     return (

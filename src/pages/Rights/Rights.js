@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import rightsPageTexts from '../../locales/rights-page-RU';
 import './Rights.scss';
 import {
@@ -6,6 +6,7 @@ import {
   FIGURES,
   COLORS,
   DELAY_DEBOUNCE,
+  ERROR_MESSAGES,
 } from '../../config/constants';
 import {
   handleCheckboxBehavior,
@@ -24,6 +25,7 @@ import {
   AnimatedPageContainer,
   TagsList,
 } from './index';
+import { ErrorsContext, PopupsContext } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -35,6 +37,9 @@ const { headTitle, headDescription, title, textStubNoData } = rightsPageTexts;
 
 const Rights = () => {
   useScrollToTop();
+
+  const { setError } = useContext(ErrorsContext);
+  const { openPopupError } = useContext(PopupsContext);
 
   // Стейты для пагинации
   const [pageSize, setPageSize] = useState(null);
@@ -49,6 +54,9 @@ const Rights = () => {
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+
+  // Стейт ошибки
+  const [pageError, setPageError] = useState(false);
 
   // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
@@ -136,7 +144,10 @@ const Rights = () => {
         return results;
       })
       .then((results) => setArticles(results))
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        setPageError(true);
+        console.log(err);
+      })
       .finally(() => {
         setIsLoadingPaginate(false);
         setIsFiltersUsed(false);
@@ -167,7 +178,19 @@ const Rights = () => {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+          console.log(err);
+        } else {
+          setPageError(true);
+          console.log(err);
+        }
+      })
       .finally(() => {
         setIsLoadingPage(false);
       });
@@ -240,9 +263,17 @@ const Rights = () => {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="rights page__section fade-in">
-        <TitleH1 title={title} sectionClass="rights__title" />
-        {categories?.length > 1 && renderTagsContainer()}
-        {renderMainContent()}
+        {pageError ? (
+          <AnimatedPageContainer
+            titleText={ERROR_MESSAGES.generalErrorMessage}
+          />
+        ) : (
+          <>
+            <TitleH1 title={title} sectionClass="rights__title" />
+            {categories?.length > 1 && renderTagsContainer()}
+            {renderMainContent()}
+          </>
+        )}
       </section>
     </BasePage>
   );
