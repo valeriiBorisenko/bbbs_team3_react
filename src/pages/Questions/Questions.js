@@ -279,20 +279,8 @@ function Questions() {
   );
 
   // контейнер с вопросами
-  const renderQuestionsContainer = () => (
-    <ul className="questions">
-      {questionsPageData.map((question) => (
-        <li className="questions__list-item fade-in" key={question.id}>
-          <CardQuestion
-            data={question}
-            sectionClass="card__questions_type_questions-page"
-            isQuestionsPage
-          />
-        </li>
-      ))}
-    </ul>
-  );
-
+  // const renderQuestionsContainer = () => (
+  // );
   // кнопка "еще"
   const renderLoadMoreButton = () => (
     <Button
@@ -301,6 +289,28 @@ function Questions() {
       sectionClass="load-more-button"
     />
   );
+
+  function renderQuestionsContainer() {
+    return (
+      <>
+        <ul className="questions">
+          {questionsPageData.map((question) => (
+            <li className="questions__list-item fade-in" key={question.id}>
+              <CardQuestion
+                data={question}
+                sectionClass="card__questions_type_questions-page"
+                isQuestionsPage
+              />
+            </li>
+          ))}
+        </ul>
+        {totalPages > 1 &&
+        totalPages - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX > pageIndex
+          ? renderLoadMoreButton()
+          : null}
+      </>
+    );
+  }
 
   // главная функция рендеринга
   const renderPageContent = () => {
@@ -318,13 +328,9 @@ function Questions() {
             />
           )}
 
-          {/* рендерим сами вопросы */}
+          {/* рендерим сами вопросы + кнопку еще при надобности */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
 
-          {totalPages > 1 &&
-          totalPages - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX > pageIndex
-            ? renderLoadMoreButton()
-            : null}
           {/* если залогинен рендерим форму */}
           {currentUser && renderQuestionForm()}
         </>
