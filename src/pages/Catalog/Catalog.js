@@ -41,10 +41,7 @@ function Catalog() {
         setCatalogPageData(results);
         setPageCount(Math.ceil(count / pageSize));
       })
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setPageError(true))
       .finally(() => {
         setIsLoadingPaginate(false);
         setIsLoadingPage(false);
@@ -112,7 +109,9 @@ function Catalog() {
   function renderPageContent() {
     if (pageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
     if (!catalogPageData && !isLoadingPage && !pageError) {

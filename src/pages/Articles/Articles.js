@@ -48,7 +48,7 @@ function Articles() {
           );
         } else setArticlesPageData(results);
       })
-      .catch((err) => console.log(err))
+      .catch(() => setPageError(true))
       .finally(() => {
         setIsLoadingPaginate(false);
       });
@@ -80,9 +80,8 @@ function Articles() {
             setPageCount(Math.ceil(count / pageSize));
           }
         })
-        .catch((err) => {
+        .catch(() => {
           setPageError(true);
-          console.log(err);
         })
         .finally(() => {
           setIsLoadingPage(false);
@@ -113,7 +112,9 @@ function Articles() {
   function renderAnimatedContainer() {
     if (pageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
     return <AnimatedPageContainer titleText={textStubNoData} />;

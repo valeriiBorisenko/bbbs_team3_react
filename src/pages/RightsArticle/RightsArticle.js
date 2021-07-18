@@ -70,7 +70,7 @@ function RightsArticle({ id }) {
     if (pageError) {
       return (
         <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage}
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
           urlBack={RIGHTS_URL}
           buttonText="Вернуться назад"
           staticPage
@@ -91,10 +91,7 @@ function RightsArticle({ id }) {
     if (isLoadingPage && id) {
       getRightsArticle(id)
         .then((res) => setArticleData(res))
-        .catch((err) => {
-          setPageError(true);
-          console.log(err);
-        })
+        .catch(() => setPageError(true))
         .finally(() => {
           setIsLoadingPage(false);
         });
@@ -103,10 +100,7 @@ function RightsArticle({ id }) {
     if (!isLoadingPage && id) {
       getRightsArticle(nextId)
         .then((res) => setArticleData(res))
-        .catch((err) => {
-          setPageError(true);
-          console.log(err);
-        })
+        .catch(() => setPageError(true))
         .finally(() => {
           setIsLoadingPage(false);
         });

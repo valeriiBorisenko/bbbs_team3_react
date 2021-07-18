@@ -136,17 +136,15 @@ const Video = () => {
           setIsShowMainCard(true);
         } else setVideo(results);
       })
-      .catch((err) => {
+      .catch(() => {
         if (isFiltersUsed) {
           setError({
             title: ERROR_MESSAGES.filterErrorMessage.title,
             button: ERROR_MESSAGES.filterErrorMessage.button,
           });
           openPopupError();
-          console.log(err);
         } else {
           setPageError(true);
-          console.log(err);
         }
       })
       .finally(() => {
@@ -179,10 +177,7 @@ const Video = () => {
         const isResourceGroup = videoData.some((item) => item?.resourceGroup);
         setCategories(defineCategories(tags, isResourceGroup));
       })
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setPageError(true))
       .finally(() => {
         setIsLoadingPage(false);
       });
@@ -332,7 +327,9 @@ const Video = () => {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       {pageError ? (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       ) : (
         <>
           <section className="lead page__section">

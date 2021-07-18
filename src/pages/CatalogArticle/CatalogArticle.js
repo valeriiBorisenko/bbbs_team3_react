@@ -20,10 +20,7 @@ function CatalogArticle({ articleId }) {
       .then((data) => {
         setCatalogArticlePageData(data);
       })
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setPageError(true))
       .finally(() => {
         setIsLoadingPage(false);
       });
@@ -33,7 +30,7 @@ function CatalogArticle({ articleId }) {
     if (pageError) {
       return (
         <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage}
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
           urlBack={CATALOG_URL}
           buttonText="Вернуться назад"
           staticPage

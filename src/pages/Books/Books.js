@@ -78,10 +78,7 @@ function Books() {
         return results;
       })
       .then((results) => setBooksPageData(results))
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setPageError(true))
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -103,17 +100,15 @@ function Books() {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => {
+      .catch(() => {
         if (isFiltersUsed) {
           setError({
             title: ERROR_MESSAGES.filterErrorMessage.title,
             button: ERROR_MESSAGES.filterErrorMessage.button,
           });
           openPopupError();
-          console.log(err);
         } else {
           setPageError(true);
-          console.log(err);
         }
       });
   };

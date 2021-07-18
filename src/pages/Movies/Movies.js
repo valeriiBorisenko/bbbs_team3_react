@@ -80,10 +80,7 @@ function Movies() {
         return results;
       })
       .then((results) => setMoviesPageData(results))
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setPageError(true))
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -105,17 +102,15 @@ function Movies() {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => {
+      .catch(() => {
         if (isFiltersUsed) {
           setError({
             title: ERROR_MESSAGES.filterErrorMessage.title,
             button: ERROR_MESSAGES.filterErrorMessage.button,
           });
           openPopupError();
-          console.log(err);
         } else {
           setPageError(true);
-          console.log(err);
         }
       });
   };
