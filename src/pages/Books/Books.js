@@ -221,7 +221,9 @@ function Books() {
   const renderPageContent = () => {
     if (serverError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
     return (

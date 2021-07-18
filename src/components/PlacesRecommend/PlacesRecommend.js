@@ -54,7 +54,7 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
           closeForm();
         } else
           setError({
-            message: generalErrorMessage,
+            message: generalErrorMessage.title,
           });
       });
   };

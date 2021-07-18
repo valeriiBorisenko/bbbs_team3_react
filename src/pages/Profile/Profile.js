@@ -13,7 +13,11 @@ import {
   getBookedEvents,
   getArchiveOfBookedEvents,
 } from '../../api/event-participants';
-import { DELAY_RENDER, ERROR_CODES } from '../../config/constants';
+import {
+  DELAY_RENDER,
+  ERROR_CODES,
+  ERROR_MESSAGES,
+} from '../../config/constants';
 import {
   BasePage,
   ProfileEventCard,
@@ -63,7 +67,10 @@ function Profile() {
       .then((eventsData) => {
         setArchivedEvents(eventsData);
       })
-      .catch(console.log)
+      .catch(() => {
+        setError(ERROR_MESSAGES.generalErrorMessage);
+        openPopupError();
+      })
       .finally(() => setIsLoadingEvents(false));
   };
 

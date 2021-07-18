@@ -65,8 +65,9 @@ export const jwt = 'jwt';
 export const localStChosenVideo = 'chosenVideo';
 
 export const ERROR_MESSAGES = {
-  generalErrorMessage:
-    'При передаче данных произошла ошибка. Повторите попытку позже.',
+  generalErrorMessage: {
+    title: 'При передаче данных произошла ошибка. Повторите попытку позже.',
+  },
   eventAddErrorMessage: {
     title: 'Что-то пошло не так, попробуйте записаться снова',
     button: 'Вернуться к мероприятию',

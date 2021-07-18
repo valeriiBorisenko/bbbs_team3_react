@@ -28,7 +28,7 @@ const useAuth = (setCurrentUser) => {
       errors.setError(err?.data);
     else
       errors.setError({
-        message: generalErrorMessage,
+        message: generalErrorMessage.title,
       });
   };
 
