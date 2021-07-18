@@ -40,14 +40,13 @@ const { one, two, three, four } = ELEMS_PER_SLIDE;
 function ReadAndWatch() {
   // определяет сколько объектов показывать в ряду
   const [pageSize, setPageSize] = useState(null);
-  // console.log('ReadAndWatch');
 
   useEffect(() => {
-    // 1 элемент в ряду
+    // 1 элемент в ряду (до 700px)
     const querySizeS = window.matchMedia(`(max-width: ${S}px)`);
-    // 2 элемента в ряду
+    // 2 элемента в ряду (до 1120px)
     const querySizeM = window.matchMedia(`(max-width: ${M}px)`);
-    // 3 элемента в ряду
+    // 3 элемента в ряду (до 1440px)
     const querySizeL = window.matchMedia(`(max-width: ${L}px)`);
     // больше 1440px будет 4 элемента в ряду
 
@@ -140,10 +139,6 @@ function ReadAndWatch() {
       </>
     );
   }
-
-  // useEffect(() => {
-  //   renderUniqueSliderSections();
-  // }, []);
 
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>

@@ -2,7 +2,6 @@ import './RightsArticle.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import rightsPageTexts from '../../locales/rights-page-RU';
 import {
   PageWithTransparentHeader,
   Loader,
@@ -11,13 +10,16 @@ import {
 } from './index';
 import { getRightsArticle } from '../../api/rights-page';
 import { useScrollToTop } from '../../hooks/index';
+import { ERROR_MESSAGES } from '../../config/constants';
+import { RIGHTS_URL } from '../../config/routes';
 
-const { textStubNoArticle } = rightsPageTexts;
 function RightsArticle({ id }) {
   useScrollToTop();
 
   const [articleData, setArticleData] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
+  // Стейт ошибки
+  const [isPageError, setIsPageError] = useState(false);
 
   // ХардКод пока не понятно как узнавать ID следующей статьи
   const [nextId, setNextId] = useState(Number(id) + 1);
@@ -65,8 +67,15 @@ function RightsArticle({ id }) {
   );
 
   const renderMainContent = () => {
-    if (!articleData && !isLoadingPage) {
-      return <AnimatedPageContainer is404 titleText={textStubNoArticle} />;
+    if (isPageError) {
+      return (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+          urlBack={RIGHTS_URL}
+          buttonText="Вернуться назад"
+          staticPage
+        />
+      );
     }
 
     return (
@@ -82,7 +91,7 @@ function RightsArticle({ id }) {
     if (isLoadingPage && id) {
       getRightsArticle(id)
         .then((res) => setArticleData(res))
-        .catch((err) => console.log(err))
+        .catch(() => setIsPageError(true))
         .finally(() => {
           setIsLoadingPage(false);
         });
@@ -91,7 +100,7 @@ function RightsArticle({ id }) {
     if (!isLoadingPage && id) {
       getRightsArticle(nextId)
         .then((res) => setArticleData(res))
-        .catch((err) => console.log(err))
+        .catch(() => setIsPageError(true))
         .finally(() => {
           setIsLoadingPage(false);
         });

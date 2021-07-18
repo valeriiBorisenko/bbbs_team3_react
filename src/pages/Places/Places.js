@@ -2,7 +2,11 @@ import './Places.scss';
 import { useEffect, useState, useContext } from 'react';
 import placesPageTexts from '../../locales/places-page-RU';
 import { ageFilters, PAGE_SIZE_PAGINATE } from './constants';
-import { CurrentUserContext, PopupsContext } from '../../contexts/index';
+import {
+  CurrentUserContext,
+  PopupsContext,
+  ErrorsContext,
+} from '../../contexts/index';
 import {
   useDebounce,
   useActivityTypes,
@@ -14,6 +18,7 @@ import {
   DELAY_DEBOUNCE,
   DELAY_RENDER,
   localStUserCity,
+  ERROR_MESSAGES,
 } from '../../config/constants';
 import {
   handleCheckboxBehavior,
@@ -52,7 +57,8 @@ function Places() {
   const activityTypes = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
-  const { openPopupCities } = useContext(PopupsContext);
+  const { openPopupCities, openPopupError } = useContext(PopupsContext);
+  const { setError } = useContext(ErrorsContext);
 
   const getLocalStorageItem = useLocalStorage(localStUserCity);
 
@@ -64,6 +70,7 @@ function Places() {
   const [places, setPlaces] = useState(null);
   const [chosenPlace, setChosenPlace] = useState(null);
   const [isChosenOnPageOne, setIsChosenOnPageOne] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // переход между фильтрами, лоадер
@@ -227,7 +234,17 @@ function Places() {
 
         setPlaces(restOfPlaces);
       })
-      .catch(console.log)
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
+      })
       .finally(() => {
         setIsLoadingFilters(false);
         setIsLoadingPaginate(false);
@@ -352,7 +369,7 @@ function Places() {
 
           setCategories(defineCategories(tagsData, mainCard?.chosen));
         })
-        .catch(console.log)
+        .catch(() => setIsPageError(true))
         .finally(() => setIsCityChanging(false));
     }
   }, [userCity, pageSize]);
@@ -441,6 +458,13 @@ function Places() {
   };
 
   const renderPageContent = () => {
+    if (isPageError) {
+      return (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      );
+    }
     if (isFirstRender && !chosenPlace && places?.length === 0) {
       return renderAnimatedContainer();
     }

@@ -28,7 +28,7 @@ const useAuth = (setCurrentUser) => {
       errors.setError(err?.data);
     else
       errors.setError({
-        message: generalErrorMessage,
+        message: generalErrorMessage.title,
       });
   };
 
@@ -48,7 +48,7 @@ const useAuth = (setCurrentUser) => {
           setLocalStorageData(jwt, access);
           getUserData()
             .then((userData) => setCurrentUser(userData))
-            .then(() => popups.closeAllPopups())
+            .then(() => popups.closePopupLogin())
             .catch((err) => handleError(err));
         }
       })
@@ -62,7 +62,13 @@ const useAuth = (setCurrentUser) => {
       getUserData()
         .then((userData) => setCurrentUser(userData))
         .then(() => setIsCheckingToken(false))
-        .catch((error) => console.log(error)); // при получении userData возникла проблема
+        .catch(() => {
+          errors.setError({
+            title: generalErrorMessage.title,
+            button: generalErrorMessage.button,
+          });
+          popups.openPopupError();
+        }); // при получении userData возникла проблема
     } else {
       setIsCheckingToken(false);
     }

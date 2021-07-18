@@ -5,14 +5,12 @@
   height: 627px;
   border: 0;
   overflow: hidden;
-  // margin-right: 30px;
   border-radius: 30px;
 }
 
 @media (max-width: 1440px) {
   .widget-facebook {
     width: 404px;
-    // margin-left: -10px;
   }
 }
 
@@ -25,7 +23,6 @@
 @media (max-width: 860px) {
   .widget-facebook {
     margin-right: 0;
-    // margin-bottom: 30px;
     align-self: center;
     height: 427.5px;
   }

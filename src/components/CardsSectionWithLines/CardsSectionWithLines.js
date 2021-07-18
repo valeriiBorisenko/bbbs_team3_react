@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import './CardsSectionWithLines.scss';
 import { useEffect, useState } from 'react';
-import { Paginate, Loader } from '../../utils/index';
-import renderThoseDamnedLines from '../../../utils/render-lines';
+import { Paginate, Loader } from '../utils/index';
+import renderThoseDamnedLines from '../../utils/render-lines';
 
 function CardsSectionWithLines({
   pageCount,
@@ -47,7 +47,7 @@ function CardsSectionWithLines({
 
       {pageCount > 1 && (
         <Paginate
-          sectionClass="cards-section__pagination"
+          sectionClass="cards-section__pagination cards-section__pagination_no-padding"
           pageCount={pageCount}
           value={pageNumber}
           onChange={setPageNumber}

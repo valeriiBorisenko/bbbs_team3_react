@@ -105,7 +105,7 @@ function CardPlace({
 
       <CardAnnotation
         info={`${sex}, ${age} лет, ${
-          activityTypes ? types[activityType] : { activityTypeDefault }
+          activityTypes ? types[activityType] : activityTypeDefault
         } отдых`}
         description={description}
         isMain={isBig}

@@ -9,8 +9,8 @@ import defaultImage from '../../assets/icon-logo-no-text.svg';
 import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationContainer';
 import { Card, TitleH2, Rating, Caption, Button } from '../utils/index';
 
-function ProfileDiary({ data, onEdit, onDelete }) {
-  const { image, place, description, mark, date } = data;
+function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
+  const { image, place, description, mark, date, sentToCurator } = data;
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
@@ -27,8 +27,14 @@ function ProfileDiary({ data, onEdit, onDelete }) {
     onDelete(data);
   };
 
+  const handleShareButtonClick = () => {
+    if (!sentToCurator) {
+      onShare(data?.id);
+    }
+  };
+
   return (
-    <div className="card-container profile-diary">
+    <div className={`card-container profile-diary ${sectionClass}`}>
       <Card sectionClass="profile-diary__image-container">
         <img
           className={
@@ -69,9 +75,14 @@ function ProfileDiary({ data, onEdit, onDelete }) {
           </div>
           <div className="profile-diary__action-elements">
             <Button
-              title={texts.buttonShareText}
+              title={
+                sentToCurator ? texts.buttonTextShared : texts.buttonShareText
+              }
               color="gray-borderless"
-              sectionClass="profile-diary__button"
+              sectionClass={`profile-diary__button ${
+                sentToCurator ? 'profile-diary__button_shared' : ''
+              }`}
+              onClick={handleShareButtonClick}
             />
             <Button
               title={texts.buttonEditText}
@@ -96,12 +107,16 @@ ProfileDiary.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
+  onShare: PropTypes.func,
+  sectionClass: PropTypes.string,
 };
 
 ProfileDiary.defaultProps = {
   data: {},
   onEdit: () => {},
   onDelete: () => {},
+  onShare: () => {},
+  sectionClass: '',
 };
 
 export default ProfileDiary;

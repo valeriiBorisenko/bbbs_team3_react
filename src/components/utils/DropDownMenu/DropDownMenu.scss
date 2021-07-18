@@ -34,20 +34,3 @@
     color: $blue;
   }
 }
-
-// .menu__dropdown-item {
-//   position: relative;
-
-//   &:hover .menu__dropdown-list{
-//     visibility: visible;
-//     opacity: 1;
-//   }
-// }
-
-@include atDesktop1380 {
-  // .menu__dropdown-item {
-  //   &:hover .menu__dropdown-list{
-  //     display: none;
-  //   }
-  // }
-}

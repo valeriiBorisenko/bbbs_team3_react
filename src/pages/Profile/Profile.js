@@ -2,19 +2,23 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.scss';
 import profilePageTexts from '../../locales/profile-page-RU';
 import { PopupsContext, ErrorsContext } from '../../contexts/index';
-import {
-  useSmoothHorizontalScroll,
-  useScrollToTop,
-  useEventBooking,
-} from '../../hooks/index';
+import { useScrollToTop, useEventBooking } from '../../hooks/index';
 import {
   getProfileDiariesData,
   createDiary,
   editDiary,
   deleteDiary,
+  shareDiary,
 } from '../../api/profile-page';
-import { getBookedEvents } from '../../api/event-participants';
-import { DELAY_RENDER, ERROR_CODES } from '../../config/constants';
+import {
+  getBookedEvents,
+  getArchiveOfBookedEvents,
+} from '../../api/event-participants';
+import {
+  DELAY_RENDER,
+  ERROR_CODES,
+  ERROR_MESSAGES,
+} from '../../config/constants';
 import {
   BasePage,
   ProfileEventCard,
@@ -24,6 +28,9 @@ import {
   PopupDeleteDiary,
   ButtonRound,
   Loader,
+  ScrollableContainer,
+  UserMenuButton,
+  AnimatedPageContainer,
 } from './index';
 
 const {
@@ -32,6 +39,10 @@ const {
   eventsTitle,
   eventsTitleNoResults,
   formTitle,
+  eventsArchiveButton,
+  eventsCurrentButton,
+  eventsTitleArchive,
+  eventsTitleNoResultsArchive,
 } = profilePageTexts;
 
 function Profile() {
@@ -42,30 +53,61 @@ function Profile() {
   const { unauthorized, badRequest } = ERROR_CODES;
 
   const [events, setEvents] = useState(null);
+  const [archivedEvents, setArchivedEvents] = useState(null);
   const [diaries, setDiaries] = useState(null);
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formDataToEdit, setFormDataToEdit] = useState(null);
   const [isDeleteDiaryPopupOpen, setIsDeleteDiaryPopupOpen] = useState(false);
 
-  useEffect(() => {
+  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+  const [isPageError, setIsPageError] = useState(false);
+
+  const getArchiveOfEvents = () => {
+    getArchiveOfBookedEvents()
+      .then((eventsData) => {
+        setArchivedEvents(eventsData);
+      })
+      .catch(() => {
+        setError({
+          title: ERROR_MESSAGES.generalErrorMessage.title,
+          button: ERROR_MESSAGES.generalErrorMessage.button,
+        });
+        openPopupError();
+      })
+      .finally(() => setIsLoadingEvents(false));
+  };
+
+  const getCurrentBookedEvents = () => {
     getBookedEvents()
-      .then((eventsData) =>
-        setEvents(() =>
-          eventsData.map(({ event }) => {
+      .then((eventsData) => {
+        const sortedEvents = eventsData
+          .sort((a, b) => {
+            const date1 = new Date(a?.event?.startAt);
+            const date2 = new Date(b?.event?.startAt);
+            return date1 - date2;
+          })
+          .map(({ event }) => {
             const updatedEvent = event;
             updatedEvent.booked = true;
             return updatedEvent;
-          })
-        )
-      )
-      .catch(() => openPopupError());
+          });
+        setEvents(sortedEvents);
+      })
+      .catch(() => setIsPageError(true))
+      .finally(() => setIsLoadingEvents(false));
+  };
+
+  useEffect(() => {
+    getCurrentBookedEvents();
   }, []);
 
   useEffect(() => {
     getProfileDiariesData()
       .then(setDiaries)
-      .catch(() => openPopupError());
+      .catch(() => setIsPageError(true));
   }, []);
 
   // отписка от ивентов
@@ -82,10 +124,24 @@ function Profile() {
   }, [selectedEvent]);
 
   // работа с карточками мероприятий календаря
-  const openEventCard = () => openPopupAboutEvent();
+  const openEventCard = () => {
+    if (isArchiveOpen) {
+      // без записи на ивент
+      openPopupAboutEvent(true);
+    } else openPopupAboutEvent();
+  };
 
-  // скролл контейнера с карточками мероприятий
-  const containerEvents = useSmoothHorizontalScroll({ step: 3 });
+  const openArchiveOfEvents = () => {
+    setIsArchiveOpen(true);
+    setIsLoadingEvents(true);
+    getArchiveOfEvents();
+  };
+
+  const openCurrentEvents = () => {
+    setIsArchiveOpen(false);
+    setIsLoadingEvents(true);
+    getCurrentBookedEvents();
+  };
 
   // работа с формой
   const scrollAnchorRef = useRef(null);
@@ -181,21 +237,54 @@ function Profile() {
         );
         closeDeleteDiaryPopup();
       })
-      .catch(() => openPopupError());
+      .catch(() => {
+        setError({
+          title: ERROR_MESSAGES.generalErrorMessage.title,
+          button: ERROR_MESSAGES.generalErrorMessage.button,
+        });
+        openPopupError();
+      });
+  };
+
+  const handleShareDiary = (diaryId) => {
+    shareDiary(diaryId)
+      .then(() => {
+        const newDiary = diaries.find((diary) => diary?.id === diaryId);
+        newDiary.sentToCurator = true;
+        setDiaries(() =>
+          diaries.map((diary) =>
+            diary?.id === newDiary?.id ? newDiary : diary
+          )
+        );
+      })
+      .catch(() => {
+        setError({
+          title: ERROR_MESSAGES.generalErrorMessage.title,
+          button: ERROR_MESSAGES.generalErrorMessage.button,
+        });
+        openPopupError();
+      });
   };
 
   // функции рендера
-  const titleH1 = events?.length > 0 ? eventsTitle : eventsTitleNoResults;
+  const titleH1Current =
+    events?.length > 0 ? eventsTitle : eventsTitleNoResults;
+  const titleH1Archive =
+    archivedEvents?.length > 0
+      ? eventsTitleArchive
+      : eventsTitleNoResultsArchive;
 
   const renderEventCards = () => {
-    if (events && events?.length > 0) {
+    const renderingEvents = isArchiveOpen ? archivedEvents : events;
+    if (renderingEvents && renderingEvents?.length > 0) {
       return (
         <>
-          {events.map((item) => (
+          {renderingEvents.map((item) => (
             <ProfileEventCard
               key={item?.id}
               data={item}
               onOpen={openEventCard}
+              sectionClass="scrollable-container__child slide-in"
             />
           ))}
         </>
@@ -226,7 +315,7 @@ function Profile() {
             <TitleH2 sectionClass="profile__title fade-in" title={formTitle} />
           )}
           <ProfileForm
-            sectionClass="profile__diary-form fade-in"
+            sectionClass="profile__diary-form scale-in"
             isEditMode={isEditMode}
             isOpen={isFormOpen}
             data={formDataToEdit}
@@ -249,12 +338,67 @@ function Profile() {
               data={diary}
               onEdit={handleEditMode}
               onDelete={openDeleteDiaryPopup}
+              onShare={handleShareDiary}
+              sectionClass="scale-in"
             />
           ))}
         </>
       );
     }
     return null;
+  };
+
+  const renderPageContent = () => {
+    if (isPageError) {
+      return (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      );
+    }
+    return (
+      <>
+        <div className="profile__events-area page__section">
+          {!isLoadingEvents ? (
+            <>
+              <div className="profile__events-heading">
+                <UserMenuButton
+                  sectionClass="profile__archive-button"
+                  title={
+                    isArchiveOpen ? eventsCurrentButton : eventsArchiveButton
+                  }
+                  handleClick={
+                    isArchiveOpen ? openCurrentEvents : openArchiveOfEvents
+                  }
+                />
+                <TitleH2
+                  sectionClass="profile__title"
+                  title={isArchiveOpen ? titleH1Archive : titleH1Current}
+                />
+              </div>
+              <ScrollableContainer sectionClass="profile__events" step={3}>
+                {renderEventCards()}
+              </ScrollableContainer>
+            </>
+          ) : (
+            <Loader isSmallGrid />
+          )}
+        </div>
+
+        <div className="profile__diaries page__section">
+          <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
+          <div className="profile__diaries-container">
+            <div className="profile__form-container">
+              {renderAddDiaryButton()}
+
+              {renderDiaryForm()}
+            </div>
+
+            {renderDiaries()}
+          </div>
+        </div>
+      </>
+    );
   };
 
   if (!events && !diaries) {
@@ -264,27 +408,7 @@ function Profile() {
   return (
     <>
       <BasePage headTitle={headTitle} headDescription={headDescription}>
-        <section className="profile fade-in">
-          <div className="profile__events-area page__section">
-            <TitleH2 sectionClass="profile__title" title={titleH1} />
-            <div className="profile__events" ref={containerEvents}>
-              {renderEventCards()}
-            </div>
-          </div>
-
-          <div className="profile__diaries page__section">
-            <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
-            <div className="profile__diaries-container">
-              <div className="profile__form-container">
-                {renderAddDiaryButton()}
-
-                {renderDiaryForm()}
-              </div>
-
-              {renderDiaries()}
-            </div>
-          </div>
-        </section>
+        <section className="profile fade-in">{renderPageContent()}</section>
       </BasePage>
       <PopupDeleteDiary
         isOpen={isDeleteDiaryPopupOpen}

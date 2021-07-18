@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Video.scss';
 import videoPageTexts from '../../locales/video-page-RU';
 import {
@@ -14,7 +14,7 @@ import {
 import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
-  localStChosenVideo,
+  ERROR_MESSAGES,
 } from '../../config/constants';
 import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
@@ -24,8 +24,7 @@ import {
 } from '../../utils/filter-tags';
 import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { getLocalStorageData } from '../../hooks/useLocalStorage';
-import { PopupsContext } from '../../contexts/index';
+import { ErrorsContext, PopupsContext } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -38,11 +37,8 @@ const { headTitle, headDescription, title, resourceGroupTag, textStubNoData } =
 
 const Video = () => {
   useScrollToTop();
-
-  const { openPopupVideo } = useContext(PopupsContext);
-
-  const chosenVideoOnRedirectFromMainPage =
-    getLocalStorageData(localStChosenVideo);
+  const { setError } = useContext(ErrorsContext);
+  const { openPopupError } = useContext(PopupsContext);
 
   // Стейты для пагинации
   const [pageSize, setPageSize] = useState(null);
@@ -59,6 +55,8 @@ const Video = () => {
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
   const [isShowMainCard, setIsShowMainCard] = useState(true);
+  // Стейт ошибки
+  const [isPageError, setIsPageError] = useState(false);
 
   // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
@@ -138,7 +136,17 @@ const Video = () => {
           setIsShowMainCard(true);
         } else setVideo(results);
       })
-      .catch((err) => console.log(err))
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
+      })
       .finally(() => {
         setIsFiltersUsed(false);
         setIsLoadingPaginate(false);
@@ -169,7 +177,7 @@ const Video = () => {
         const isResourceGroup = videoData.some((item) => item?.resourceGroup);
         setCategories(defineCategories(tags, isResourceGroup));
       })
-      .catch((err) => console.log(err))
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoadingPage(false);
       });
@@ -229,7 +237,7 @@ const Video = () => {
   // Резайз пагинации
   useEffect(() => {
     const smallQuery = window.matchMedia('(max-width: 1023px)');
-    const largeQuery = window.matchMedia('(max-width: 1439px)');
+    const largeQuery = window.matchMedia('(max-width: 1450px)');
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -318,14 +326,20 @@ const Video = () => {
 
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="lead page__section">
-        <TitleH1 title={title} sectionClass="video__title" />
-        {categories?.length > 1 && !isLoadingPage && renderTagsContainer()}
-      </section>
-      {/* Открытие попапа Видео при переходе с Главной страницы */}
-      {chosenVideoOnRedirectFromMainPage && openPopupVideo()}
+      {isPageError ? (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      ) : (
+        <>
+          <section className="lead page__section">
+            <TitleH1 title={title} sectionClass="video__title" />
+            {categories?.length > 1 && !isLoadingPage && renderTagsContainer()}
+          </section>
 
-      {renderMainContent()}
+          {renderMainContent()}
+        </>
+      )}
     </BasePage>
   );
 };

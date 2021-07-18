@@ -129,6 +129,12 @@
     grid-column: 1 / -1;
   }
 
+  &__ratings-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   &__ratings {
     display: flex;
     align-items: center;
@@ -161,7 +167,6 @@
 
   &__buttons {
     display: flex;
-    justify-content: space-between;
     align-items: center;
   }
 
@@ -190,6 +195,11 @@
     }
 
     &__submit-zone {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__ratings-buttons {
       flex-direction: column;
       align-items: stretch;
     }

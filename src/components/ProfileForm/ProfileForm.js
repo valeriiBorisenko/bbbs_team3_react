@@ -196,7 +196,7 @@ function ProfileForm({
 
           <div className="profile-form__submit-zone">
             <span className="form-error-message">{errorsString}</span>
-            <div className="profile-form__buttons">
+            <div className="profile-form__ratings-buttons">
               <div className="profile-form__ratings">
                 <Rating
                   type="radio"

@@ -13,14 +13,14 @@
   position: relative;
   visibility: hidden;
   opacity: 0;
-  transform: scale(0);
+  transform: scale(.8);
   transition: .5s ease;
 
   &_opened {
     visibility: visible;
     opacity: 1;
     transform: scale(1);
-    transition: .5s ease;
+    transition: .8s ease;
   }
 }
 

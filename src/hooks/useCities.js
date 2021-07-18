@@ -13,7 +13,7 @@ const useCities = () => {
         const mainCity = citiesData.find((city) => city?.name === DEFAULT_CITY);
         setDefaultCity(mainCity);
       })
-      .catch(console.log);
+      .catch(console.error);
   }, []);
 
   return { cities, defaultCity };

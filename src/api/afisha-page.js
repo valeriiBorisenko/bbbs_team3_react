@@ -2,10 +2,12 @@ import axios from 'axios';
 import { apiUrl, baseURL } from '../config/config';
 
 // получить дату страницы
-function getCalendarPageData() {
+function getCalendarPageData({ limit, offset, months }) {
   return axios
-    .get(`${baseURL}${apiUrl}/afisha/events/`)
-    .then((response) => response.data.results)
+    .get(`${baseURL}${apiUrl}/afisha/events/`, {
+      params: { limit, offset, months },
+    })
+    .then((response) => response.data)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
@@ -17,12 +19,4 @@ function getActiveMonthTags() {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-// фильтрация по конкретному месяцу
-function getEventsByFilters(monthNumber) {
-  return axios
-    .get(`${baseURL}${apiUrl}/afisha/events/?months=${monthNumber}`)
-    .then((response) => response.data.results)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
-}
-
-export { getCalendarPageData, getActiveMonthTags, getEventsByFilters };
+export { getCalendarPageData, getActiveMonthTags };

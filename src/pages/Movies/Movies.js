@@ -18,14 +18,12 @@ import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
-  localStChosenVideo,
 } from '../../config/constants';
 import {
   handleCheckboxBehavior,
   selectOneTag,
   deselectOneTag,
 } from '../../utils/filter-tags';
-import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import { ErrorsContext, PopupsContext } from '../../contexts/index';
 
 const PAGE_SIZE_PAGINATE = {
@@ -40,7 +38,7 @@ const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 function Movies() {
   useScrollToTop();
 
-  const { serverError, setError } = useContext(ErrorsContext);
+  const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 
   // Загрузка данных
@@ -55,10 +53,8 @@ function Movies() {
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
-
-  const { openPopupVideo } = useContext(PopupsContext);
-  const chosenVideoOnRedirectFromMainPage =
-    getLocalStorageData(localStChosenVideo);
+  // Стейт ошибки
+  const [isPageError, setIsPageError] = useState(false);
 
   const getActiveTags = () => {
     if (categories) {
@@ -84,9 +80,16 @@ function Movies() {
         return results;
       })
       .then((results) => setMoviesPageData(results))
-      .catch((err) => {
-        setError(true);
-        console.log(err);
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -109,19 +112,7 @@ function Movies() {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => {
-        if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
-          openPopupError();
-          console.log(err);
-        } else {
-          setError(true);
-          console.log(err);
-        }
-      });
+      .catch(() => setIsPageError(true));
   };
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
@@ -215,12 +206,7 @@ function Movies() {
           <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
             {moviesPageData.map((movie) => (
               <li className="card-container scale-in" key={movie.id}>
-                <CardFilm
-                  data={movie}
-                  pageCount={pageCount}
-                  pageNumber={pageNumber}
-                  setPageNumber={setPageNumber}
-                />
+                <CardFilm data={movie} />
                 <CardAnnotation description={movie.annotation} />
               </li>
             ))}
@@ -240,9 +226,11 @@ function Movies() {
   };
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (serverError) {
+    if (isPageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
     return (
@@ -272,9 +260,6 @@ function Movies() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="movies page__section fade-in">
-        {/* Открытие попапа Трейлера при переходе с Главной страницы */}
-        {chosenVideoOnRedirectFromMainPage && openPopupVideo()}
-
         {renderPageContent()}
       </section>
     </BasePage>

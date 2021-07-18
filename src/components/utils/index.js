@@ -17,6 +17,7 @@ import Paginate from './Paginate/Paginate';
 import PseudoButtonTag from './PseudoButtonTag/PseudoButtonTag';
 import Rating from './Rating/Rating';
 import Rubric from './Rubric/Rubric';
+import ScrollableContainer from './ScrollableContainer/ScrollableContainer';
 import SearchButton from './SearchButton/SearchButton';
 import TitleH1 from './TitleH1/TitleH1';
 import TitleH2 from './TitleH2/TitleH2';
@@ -45,6 +46,7 @@ export {
   PseudoButtonTag,
   Rating,
   Rubric,
+  ScrollableContainer,
   SearchButton,
   TitleH1,
   TitleH2,

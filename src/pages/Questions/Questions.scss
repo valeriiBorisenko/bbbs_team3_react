@@ -77,6 +77,8 @@
   width: 250px;
   margin: 0 auto;
   margin-top: 70px;
+  position: relative;
+  z-index: 3;
 }
 
 @include atDesktop1024 {

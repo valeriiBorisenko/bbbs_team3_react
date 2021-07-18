@@ -36,7 +36,7 @@ const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 function Books() {
   useScrollToTop();
 
-  const { serverError, setError } = useContext(ErrorsContext);
+  const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 
   // Загрузка данных
@@ -51,6 +51,8 @@ function Books() {
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
+  // Стейт ошибки
+  const [isPageError, setIsPageError] = useState(false);
 
   const getActiveTags = () => {
     if (categories) {
@@ -76,9 +78,16 @@ function Books() {
         return results;
       })
       .then((results) => setBooksPageData(results))
-      .catch((err) => {
-        setError(true);
-        console.log(err);
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -101,19 +110,7 @@ function Books() {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => {
-        if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
-          openPopupError();
-          console.log(err);
-        } else {
-          setError(true);
-          console.log(err);
-        }
-      });
+      .catch(() => setIsPageError(true));
   };
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
@@ -219,9 +216,11 @@ function Books() {
 
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (serverError) {
+    if (isPageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
     return (
