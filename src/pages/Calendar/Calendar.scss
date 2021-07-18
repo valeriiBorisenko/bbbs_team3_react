@@ -4,6 +4,14 @@
   &__title {
     margin-bottom: 25px;
   }
+
+  &__pagination {
+    height: 50px;
+    margin: 0 auto;
+    margin-top: 80px;
+    display: flex;
+    align-items: center;
+  }
 }
 
 .calendar-page__grid {
@@ -27,6 +35,10 @@
     &__title {
       margin-bottom: 10px;
     }
+
+    &__pagination {
+      height: 38px;
+    }
   }
 
   .calendar-page__grid {
@@ -35,14 +47,27 @@
 }
 
 @include atTablet {
-  .calendar-page__grid {
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  .calendar-page {
+    &__grid {
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    }
+
+    &__pagination {
+      height: 38px;
+      margin-top: 60px;
+    }
   }
 }
 
 
 @include atMobile {
-  .calendar-page__grid {
-    padding-top: 30px;
-  }
+  .calendar-page {
+    &__grid {
+      padding-top: 30px;
+    }
+
+    &__pagination {
+      margin-top: 30px;
+    }
+  } 
 }

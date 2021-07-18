@@ -30,7 +30,7 @@ function CardCalendar({
   const endDayParts = formatDate(endAt);
 
   // будет ли заблокирована кнопка
-  const isDisabled = remainSeats < 1;
+  const isDisabled = remainSeats < 1 && !booked;
 
   function changeStateOfEvent() {
     setLocalStorageData(localStAfishaEvent, cardData);

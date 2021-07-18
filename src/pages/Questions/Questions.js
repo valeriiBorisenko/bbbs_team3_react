@@ -163,14 +163,13 @@ function Questions() {
   };
 
   const handleFiltration = (activeCategories) => {
-    // активных фильтров нету и сейчас нажато "ВСЕ"
+    // активных фильтров нету и сейчас нажали "ВСЕ"
+    const offset = pageSize * pageIndex;
     if (activeCategories.length === 0) {
-      const offset = pageSize * pageIndex;
       getFiltratedQuestions({ limit: pageSize, offset });
       selectOneTag(setCategories, ALL_CATEGORIES);
     } else {
       // выбрана какая то категория
-      const offset = pageSize * pageIndex;
       const query = activeCategories.join();
       getFiltratedQuestions({ limit: pageSize, offset, tags: query });
       deselectOneTag(setCategories, ALL_CATEGORIES);
@@ -181,8 +180,8 @@ function Questions() {
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   useEffect(() => {
     // используем фильтры (2 варианта развития внутри)
-    const activeCategories = getActiveCategories();
     if (isFiltersUsed) {
+      const activeCategories = getActiveCategories();
       debounceFiltration(activeCategories);
     }
 
@@ -280,20 +279,8 @@ function Questions() {
   );
 
   // контейнер с вопросами
-  const renderQuestionsContainer = () => (
-    <ul className="questions">
-      {questionsPageData.map((question) => (
-        <li className="questions__list-item fade-in" key={question.id}>
-          <CardQuestion
-            data={question}
-            sectionClass="card__questions_type_questions-page"
-            isQuestionsPage
-          />
-        </li>
-      ))}
-    </ul>
-  );
-
+  // const renderQuestionsContainer = () => (
+  // );
   // кнопка "еще"
   const renderLoadMoreButton = () => (
     <Button
@@ -302,6 +289,28 @@ function Questions() {
       sectionClass="load-more-button"
     />
   );
+
+  function renderQuestionsContainer() {
+    return (
+      <>
+        <ul className="questions">
+          {questionsPageData.map((question) => (
+            <li className="questions__list-item fade-in" key={question.id}>
+              <CardQuestion
+                data={question}
+                sectionClass="card__questions_type_questions-page"
+                isQuestionsPage
+              />
+            </li>
+          ))}
+        </ul>
+        {totalPages > 1 &&
+        totalPages - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX > pageIndex
+          ? renderLoadMoreButton()
+          : null}
+      </>
+    );
+  }
 
   // главная функция рендеринга
   const renderPageContent = () => {
@@ -319,13 +328,9 @@ function Questions() {
             />
           )}
 
-          {/* рендерим сами вопросы */}
+          {/* рендерим сами вопросы + кнопку еще при надобности */}
           {isLoading ? <Loader isNested /> : renderQuestionsContainer()}
 
-          {totalPages > 1 &&
-          totalPages - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX > pageIndex
-            ? renderLoadMoreButton()
-            : null}
           {/* если залогинен рендерим форму */}
           {currentUser && renderQuestionForm()}
         </>

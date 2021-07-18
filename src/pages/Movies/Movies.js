@@ -206,12 +206,7 @@ function Movies() {
           <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
             {moviesPageData.map((movie) => (
               <li className="card-container scale-in" key={movie.id}>
-                <CardFilm
-                  data={movie}
-                  pageCount={pageCount}
-                  pageNumber={pageNumber}
-                  setPageNumber={setPageNumber}
-                />
+                <CardFilm data={movie} />
                 <CardAnnotation description={movie.annotation} />
               </li>
             ))}
