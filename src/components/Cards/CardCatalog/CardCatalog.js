@@ -5,7 +5,8 @@ import { TitleH2 } from '../../utils/index';
 import CardFigure from '../CardFigure/CardFigure';
 import { staticImageUrl } from '../../../config/config';
 
-function CardCatalog({ title, shape, image, sectionClass, link }) {
+function CardCatalog({ data: { id, title, image }, shape, sectionClass }) {
+  const link = `/catalog/${id}`;
   return (
     <div className={`card-catalog ${sectionClass}`}>
       <Link to={link} className="card-catalog__link-wrap">
@@ -29,19 +30,19 @@ function CardCatalog({ title, shape, image, sectionClass, link }) {
 }
 
 CardCatalog.propTypes = {
+  data: PropTypes.objectOf(PropTypes.any),
   title: PropTypes.string,
   shape: PropTypes.string,
   image: PropTypes.string,
   sectionClass: PropTypes.string,
-  link: PropTypes.string,
 };
 
 CardCatalog.defaultProps = {
+  data: {},
   title: '',
   shape: 'square',
   image: '',
   sectionClass: '',
-  link: '',
 };
 
 export default CardCatalog;
