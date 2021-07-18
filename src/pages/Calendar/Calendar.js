@@ -103,6 +103,7 @@ function Calendar() {
   }
 
   // общая функция загрузки ивентов
+  // в будущем упростить эту функцию
   function getPageData({ offset, activeFilters }) {
     console.log('NEW getPageData FUNC');
     getCalendarPageData({
@@ -112,9 +113,7 @@ function Calendar() {
     })
       .then((events) => {
         const { results, count } = events;
-        if (pageIndex === 0) {
-          setTotalPages(Math.ceil(count / pageSize));
-        }
+        setTotalPages(Math.ceil(count / pageSize));
         setCalendarPageData(results);
       })
       .catch((error) => console.log(error))
@@ -128,7 +127,6 @@ function Calendar() {
   // загрузка страницы палендаря при старте либо показ попапа логина
   useEffect(() => {
     console.log('useEffect загрузка страницы первичная');
-    // console.log('pageSize', pageSize);
     if (currentUser && pageSize) {
       console.log('useEffect загрузка страницы первичная IF 1');
       const offset = pageSize * pageIndex;
