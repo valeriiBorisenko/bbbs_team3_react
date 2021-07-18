@@ -145,10 +145,15 @@ function Calendar() {
     // просто нажимаем пагинацию + месяц не выбран
     if (pageIndex > 0 && activeMonths.length === 0) {
       console.log('useEffect pageIndex ELSE');
-      // const offset = pageSize * pageIndex;
-      const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
-      // getPageData({ offset });
+      const offset = pageSize * pageIndex;
       debouncePaginate({ offset });
+    }
+
+    if (!isLoadingPaginate && pageIndex === 0) {
+      console.log('tyt');
+      console.log(pageSize * pageIndex);
+      // const offset = pageSize * pageIndex;
+      // debouncePaginate({ offset });
     }
   }, [pageIndex]);
 
@@ -238,7 +243,7 @@ function Calendar() {
   }, [selectedEvent]);
 
   // рендеринг
-  // отрисовка заглушки
+  // отрисовка заглушки, если ивентов нет
   function returnAnimatedContainer() {
     return (
       <>
