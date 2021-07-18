@@ -15,7 +15,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
-  transition: visibility 0.3s, opacity 0.3s linear;
+  transition: 0.3s linear;
   z-index: 100;
 
   &__container {
@@ -28,6 +28,10 @@
     position: relative;
     justify-content: center;
     align-items: center;
+    transform: scale(2);
+    filter: blur(4px);
+    opacity: 0;
+    transition: .3s ease-out;
 
     &_type_sign-in {
       width: 770px;
@@ -46,6 +50,12 @@
       max-height: 238px;
       padding: 30px;
     }
+
+    &_type_video {
+      filter: blur(0);
+      transform: rotateX(80deg) scale(1);
+      transition: .5s ease-out;
+    }
   }
 
   &__form {
@@ -63,6 +73,20 @@
   display: flex;
   opacity: 1;
   visibility: visible;
+}
+
+.popup.popup_opened {
+  .popup {
+    &__container {
+      transform: scale(1);
+      filter: blur(0px);
+      opacity: 1;
+    }
+
+    &_type_video {
+      transform: rotateX(0) scale(1);
+    }
+  }
 }
 
 .popup__close {
