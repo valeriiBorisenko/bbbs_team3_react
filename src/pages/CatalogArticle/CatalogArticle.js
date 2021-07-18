@@ -13,21 +13,21 @@ function CatalogArticle({ articleId }) {
   const [catalogArticlePageData, setCatalogArticlePageData] = useState();
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   useEffect(() => {
     getCatalogArticlePageData({ articleId })
       .then((data) => {
         setCatalogArticlePageData(data);
       })
-      .catch(() => setPageError(true))
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoadingPage(false);
       });
   }, [articleId]);
 
   function renderPage() {
-    if (pageError) {
+    if (isPageError) {
       return (
         <AnimatedPageContainer
           titleText={ERROR_MESSAGES.generalErrorMessage.title}

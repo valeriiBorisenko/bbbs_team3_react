@@ -19,7 +19,7 @@ function RightsArticle({ id }) {
   const [articleData, setArticleData] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   // ХардКод пока не понятно как узнавать ID следующей статьи
   const [nextId, setNextId] = useState(Number(id) + 1);
@@ -67,7 +67,7 @@ function RightsArticle({ id }) {
   );
 
   const renderMainContent = () => {
-    if (pageError) {
+    if (isPageError) {
       return (
         <AnimatedPageContainer
           titleText={ERROR_MESSAGES.generalErrorMessage.title}
@@ -91,7 +91,7 @@ function RightsArticle({ id }) {
     if (isLoadingPage && id) {
       getRightsArticle(id)
         .then((res) => setArticleData(res))
-        .catch(() => setPageError(true))
+        .catch(() => setIsPageError(true))
         .finally(() => {
           setIsLoadingPage(false);
         });
@@ -100,7 +100,7 @@ function RightsArticle({ id }) {
     if (!isLoadingPage && id) {
       getRightsArticle(nextId)
         .then((res) => setArticleData(res))
-        .catch(() => setPageError(true))
+        .catch(() => setIsPageError(true))
         .finally(() => {
           setIsLoadingPage(false);
         });

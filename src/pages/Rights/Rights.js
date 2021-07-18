@@ -56,7 +56,7 @@ const Rights = () => {
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
@@ -144,7 +144,7 @@ const Rights = () => {
         return results;
       })
       .then((results) => setArticles(results))
-      .catch(() => setPageError(true))
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoadingPaginate(false);
         setIsFiltersUsed(false);
@@ -183,7 +183,7 @@ const Rights = () => {
           });
           openPopupError();
         } else {
-          setPageError(true);
+          setIsPageError(true);
         }
       })
       .finally(() => {
@@ -258,7 +258,7 @@ const Rights = () => {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="rights page__section fade-in">
-        {pageError ? (
+        {isPageError ? (
           <AnimatedPageContainer
             titleText={ERROR_MESSAGES.generalErrorMessage.title}
           />

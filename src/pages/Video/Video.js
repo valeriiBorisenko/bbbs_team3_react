@@ -56,7 +56,7 @@ const Video = () => {
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
   const [isShowMainCard, setIsShowMainCard] = useState(true);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
@@ -144,7 +144,7 @@ const Video = () => {
           });
           openPopupError();
         } else {
-          setPageError(true);
+          setIsPageError(true);
         }
       })
       .finally(() => {
@@ -177,7 +177,7 @@ const Video = () => {
         const isResourceGroup = videoData.some((item) => item?.resourceGroup);
         setCategories(defineCategories(tags, isResourceGroup));
       })
-      .catch(() => setPageError(true))
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoadingPage(false);
       });
@@ -326,7 +326,7 @@ const Video = () => {
 
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {pageError ? (
+      {isPageError ? (
         <AnimatedPageContainer
           titleText={ERROR_MESSAGES.generalErrorMessage.title}
         />
