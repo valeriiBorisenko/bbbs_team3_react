@@ -71,7 +71,6 @@ function Calendar() {
 
   // определение размера страницы
   useEffect(() => {
-    console.log('useEffect ресайз');
     const small = window.matchMedia('(max-width: 1024px)');
     const medium = window.matchMedia('(max-width: 1440px)');
 
@@ -113,7 +112,6 @@ function Calendar() {
   // общая функция загрузки ивентов
   // в будущем упростить эту функцию
   function getPageData({ offset, activeFilters }) {
-    console.log('NEW getPageData FUNC');
     getCalendarPageData({
       limit: pageSize,
       offset,
@@ -145,16 +143,13 @@ function Calendar() {
 
   // загрузка страницы палендаря при старте либо показ попапа логина
   useEffect(() => {
-    console.log('useEffect загрузка страницы первичная');
     if (currentUser && pageSize) {
-      console.log('useEffect загрузка страницы первичная IF 1');
       const offset = pageSize * pageIndex;
       getPageData({ offset });
       setIsFirstRender(false);
     }
 
     if (!currentUser) {
-      console.log('useEffect загрузка страницы первичная IF 2');
       openPopupLogin();
     }
 
@@ -164,7 +159,6 @@ function Calendar() {
   // загрузка фильтров страницы при старте или смене города юзера
   useEffect(() => {
     if (currentUser) {
-      console.log('useEffect currentUser?.city');
       setIsGlobalLoader(true);
       getActiveMonthTags()
         .then((monthsTags) => {
@@ -190,17 +184,14 @@ function Calendar() {
 
   // вспомогательная функция фильтрации
   function handleFiltration() {
-    console.log('handleFiltration FUNC');
     const activeMonths = getActiveFilters();
 
     const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
     // фильтров нет (грузим стартовую страницу)
     if (activeMonths.length === 0) {
-      console.log('handleFiltration IF');
       getPageData({ limit: pageSize, offset });
     } else {
       // фильтруемся по месяцу
-      console.log('handleFiltration ELSE');
       const { filter } = activeMonths[0]; // задел под мультифильтры
       getPageData({ limit: pageSize, offset, activeFilters: filter });
     }
@@ -209,10 +200,8 @@ function Calendar() {
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   // эффект фильтрации
   useEffect(() => {
-    console.log('useEffect isFiltersUsed');
     // в дальнейшем надо изменить количество секунд
     if (isFiltersUsed) {
-      console.log('useEffect isFiltersUsed IF');
       setIsLoading(true);
       debounceFiltration();
     }
@@ -225,13 +214,10 @@ function Calendar() {
   const debouncePaginate = useDebounce(getPageData, DELAY_DEBOUNCE);
   useEffect(() => {
     if (!isFirstRender) {
-      console.log('useEffect pageIndex');
-      console.log('pageIndex', pageIndex);
       const activeMonths = getActiveFilters();
       setIsLoadingPaginate(true);
       // при нажатых фильтрах нажимаем пагинацию
       if (activeMonths.length > 0) {
-        console.log('useEffect pageIndex IF');
         const offset = pageSize * pageIndex;
         const { filter } = activeMonths[0]; // задел под мультифильтры
         debouncePaginate({ offset, activeFilters: filter });
@@ -239,7 +225,6 @@ function Calendar() {
 
       // просто нажимаем пагинацию + месяц не выбран
       if (activeMonths.length === 0) {
-        console.log('useEffect pageIndex ELSE');
         const offset = pageSize * pageIndex;
         debouncePaginate({ offset });
       }
