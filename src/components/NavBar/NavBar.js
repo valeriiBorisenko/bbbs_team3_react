@@ -160,7 +160,7 @@ function NavBar({
                 : texts.changeCityDefault
             }
             handleClick={onCityChangeClick}
-            sectionClass="mobile-link"
+            sectionClass="mobile-link menu__user-info_center"
           />
         </div>
       )}
