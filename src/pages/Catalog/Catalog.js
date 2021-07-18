@@ -96,10 +96,8 @@ function Catalog() {
           <CardCatalog
             sectionClass="cards-section__item scale-in"
             key={item?.id}
-            title={item?.title}
-            image={item?.image}
+            data={item}
             shape={FIGURES[i % FIGURES.length]}
-            link={`/catalog/${item.id}`}
           />
         ))}
       </CardsSectionWithLines>
