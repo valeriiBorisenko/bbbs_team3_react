@@ -54,7 +54,7 @@ function Movies() {
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   const getActiveTags = () => {
     if (categories) {
@@ -80,7 +80,7 @@ function Movies() {
         return results;
       })
       .then((results) => setMoviesPageData(results))
-      .catch(() => setPageError(true))
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -110,7 +110,7 @@ function Movies() {
           });
           openPopupError();
         } else {
-          setPageError(true);
+          setIsPageError(true);
         }
       });
   };
@@ -231,7 +231,7 @@ function Movies() {
   };
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (pageError) {
+    if (isPageError) {
       return (
         <AnimatedPageContainer
           titleText={ERROR_MESSAGES.generalErrorMessage.title}

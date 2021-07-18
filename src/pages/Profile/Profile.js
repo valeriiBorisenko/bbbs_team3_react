@@ -29,6 +29,7 @@ import {
   Loader,
   ScrollableContainer,
   UserMenuButton,
+  AnimatedPageContainer,
 } from './index';
 
 const {
@@ -61,6 +62,7 @@ function Profile() {
   const [isDeleteDiaryPopupOpen, setIsDeleteDiaryPopupOpen] = useState(false);
 
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+  const [isPageError, setIsPageError] = useState(false);
 
   const getArchiveOfEvents = () => {
     getArchiveOfBookedEvents()
@@ -68,7 +70,10 @@ function Profile() {
         setArchivedEvents(eventsData);
       })
       .catch(() => {
-        setError(ERROR_MESSAGES.generalErrorMessage);
+        setError({
+          title: ERROR_MESSAGES.generalErrorMessage.title,
+          button: ERROR_MESSAGES.generalErrorMessage.button,
+        });
         openPopupError();
       })
       .finally(() => setIsLoadingEvents(false));
@@ -90,7 +95,7 @@ function Profile() {
           });
         setEvents(sortedEvents);
       })
-      .catch(() => openPopupError())
+      .catch(() => setIsPageError(true))
       .finally(() => setIsLoadingEvents(false));
   };
 
@@ -101,7 +106,7 @@ function Profile() {
   useEffect(() => {
     getProfileDiariesData()
       .then(setDiaries)
-      .catch(() => openPopupError());
+      .catch(() => setIsPageError(true));
   }, []);
 
   // отписка от ивентов
@@ -231,7 +236,13 @@ function Profile() {
         );
         closeDeleteDiaryPopup();
       })
-      .catch(() => openPopupError());
+      .catch(() => {
+        setError({
+          title: ERROR_MESSAGES.generalErrorMessage.title,
+          button: ERROR_MESSAGES.generalErrorMessage.button,
+        });
+        openPopupError();
+      });
   };
 
   // функции рендера
@@ -315,6 +326,59 @@ function Profile() {
     return null;
   };
 
+  const renderPageContent = () => {
+    if (isPageError) {
+      return (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      );
+    }
+    return (
+      <>
+        <div className="profile__events-area page__section">
+          {!isLoadingEvents ? (
+            <>
+              <div className="profile__events-heading">
+                <UserMenuButton
+                  sectionClass="profile__archive-button"
+                  title={
+                    isArchiveOpen ? eventsCurrentButton : eventsArchiveButton
+                  }
+                  handleClick={
+                    isArchiveOpen ? openCurrentEvents : openArchiveOfEvents
+                  }
+                />
+                <TitleH2
+                  sectionClass="profile__title"
+                  title={isArchiveOpen ? titleH1Archive : titleH1Current}
+                />
+              </div>
+              <ScrollableContainer sectionClass="profile__events" step={3}>
+                {renderEventCards()}
+              </ScrollableContainer>
+            </>
+          ) : (
+            <Loader isSmallGrid />
+          )}
+        </div>
+
+        <div className="profile__diaries page__section">
+          <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
+          <div className="profile__diaries-container">
+            <div className="profile__form-container">
+              {renderAddDiaryButton()}
+
+              {renderDiaryForm()}
+            </div>
+
+            {renderDiaries()}
+          </div>
+        </div>
+      </>
+    );
+  };
+
   if (!events && !diaries) {
     return <Loader isCentered />;
   }
@@ -322,47 +386,7 @@ function Profile() {
   return (
     <>
       <BasePage headTitle={headTitle} headDescription={headDescription}>
-        <section className="profile fade-in">
-          <div className="profile__events-area page__section">
-            {!isLoadingEvents ? (
-              <>
-                <div className="profile__events-heading">
-                  <UserMenuButton
-                    sectionClass="profile__archive-button"
-                    title={
-                      isArchiveOpen ? eventsCurrentButton : eventsArchiveButton
-                    }
-                    handleClick={
-                      isArchiveOpen ? openCurrentEvents : openArchiveOfEvents
-                    }
-                  />
-                  <TitleH2
-                    sectionClass="profile__title"
-                    title={isArchiveOpen ? titleH1Archive : titleH1Current}
-                  />
-                </div>
-                <ScrollableContainer sectionClass="profile__events" step={3}>
-                  {renderEventCards()}
-                </ScrollableContainer>
-              </>
-            ) : (
-              <Loader isSmallGrid />
-            )}
-          </div>
-
-          <div className="profile__diaries page__section">
-            <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
-            <div className="profile__diaries-container">
-              <div className="profile__form-container">
-                {renderAddDiaryButton()}
-
-                {renderDiaryForm()}
-              </div>
-
-              {renderDiaries()}
-            </div>
-          </div>
-        </section>
+        <section className="profile fade-in">{renderPageContent()}</section>
       </BasePage>
       <PopupDeleteDiary
         isOpen={isDeleteDiaryPopupOpen}
