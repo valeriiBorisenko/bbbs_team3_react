@@ -9,12 +9,11 @@ import defaultImage from '../../assets/icon-logo-no-text.svg';
 import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationContainer';
 import { Card, TitleH2, Rating, Caption, Button } from '../utils/index';
 
-function ProfileDiary({ data, onEdit, onDelete, sectionClass }) {
-  const { image, place, description, mark, date } = data;
+function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
+  const { image, place, description, mark, date, sentToCurator } = data;
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
-  const [isShared, setIsShared] = useState(false);
 
   useEffect(() => {
     setCaption(captions[mark]);
@@ -28,9 +27,10 @@ function ProfileDiary({ data, onEdit, onDelete, sectionClass }) {
     onDelete(data);
   };
 
-  // временное решение, функционал отправки дорабатывается бэкендом
   const handleShareButtonClick = () => {
-    setIsShared(true);
+    if (!sentToCurator) {
+      onShare(data?.id);
+    }
   };
 
   return (
@@ -75,10 +75,12 @@ function ProfileDiary({ data, onEdit, onDelete, sectionClass }) {
           </div>
           <div className="profile-diary__action-elements">
             <Button
-              title={isShared ? texts.buttonTextShared : texts.buttonShareText}
+              title={
+                sentToCurator ? texts.buttonTextShared : texts.buttonShareText
+              }
               color="gray-borderless"
               sectionClass={`profile-diary__button ${
-                isShared ? 'profile-diary__button_shared' : ''
+                sentToCurator ? 'profile-diary__button_shared' : ''
               }`}
               onClick={handleShareButtonClick}
             />
@@ -105,6 +107,7 @@ ProfileDiary.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
+  onShare: PropTypes.func,
   sectionClass: PropTypes.string,
 };
 
@@ -112,6 +115,7 @@ ProfileDiary.defaultProps = {
   data: {},
   onEdit: () => {},
   onDelete: () => {},
+  onShare: () => {},
   sectionClass: '',
 };
 

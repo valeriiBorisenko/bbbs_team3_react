@@ -8,6 +8,7 @@ import {
   createDiary,
   editDiary,
   deleteDiary,
+  shareDiary,
 } from '../../api/profile-page';
 import {
   getBookedEvents,
@@ -245,6 +246,26 @@ function Profile() {
       });
   };
 
+  const handleShareDiary = (diaryId) => {
+    shareDiary(diaryId)
+      .then(() => {
+        const newDiary = diaries.find((diary) => diary?.id === diaryId);
+        newDiary.sentToCurator = true;
+        setDiaries(() =>
+          diaries.map((diary) =>
+            diary?.id === newDiary?.id ? newDiary : diary
+          )
+        );
+      })
+      .catch(() => {
+        setError({
+          title: ERROR_MESSAGES.generalErrorMessage.title,
+          button: ERROR_MESSAGES.generalErrorMessage.button,
+        });
+        openPopupError();
+      });
+  };
+
   // функции рендера
   const titleH1Current =
     events?.length > 0 ? eventsTitle : eventsTitleNoResults;
@@ -317,6 +338,7 @@ function Profile() {
               data={diary}
               onEdit={handleEditMode}
               onDelete={openDeleteDiaryPopup}
+              onShare={handleShareDiary}
               sectionClass="scale-in"
             />
           ))}
