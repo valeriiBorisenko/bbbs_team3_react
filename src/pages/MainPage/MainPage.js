@@ -16,6 +16,7 @@ import {
   ARTICLES_URL,
 } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
+import { ERROR_MESSAGES } from '../../config/constants';
 import { randomizeArray } from '../../utils/utils';
 import getMainPageData from '../../api/main-page';
 import {
@@ -31,6 +32,7 @@ import {
   Widget,
   CardQuestion,
   CardAnimatedPlug,
+  AnimatedPageContainer,
 } from './index';
 
 // количество отображаемых карточек с фильмами и вопросами
@@ -47,6 +49,7 @@ function MainPage() {
 
   const [mainPageData, setMainPageData] = useState(null);
   const [isCityChanging, setIsCityChanging] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
   const activityTypes = useActivityTypes();
 
   // запись/отписка на мероприятия
@@ -71,7 +74,7 @@ function MainPage() {
       setIsCityChanging(true);
       getMainPageData()
         .then((data) => setMainPageData(data))
-        .catch((error) => console.log(error))
+        .catch(() => setIsPageError(true))
         .finally(() => setIsCityChanging(false));
     }
   }, [currentUser?.city]);
@@ -79,11 +82,11 @@ function MainPage() {
   useEffect(() => {
     getMainPageData()
       .then((data) => setMainPageData(data))
-      .catch((error) => console.log(error));
+      .catch(() => setIsPageError(true));
   }, []);
 
   // глобальный лоадер (без футера)
-  if (!mainPageData) {
+  if (!mainPageData && !isPageError) {
     return <Loader isCentered />;
   }
 
@@ -227,48 +230,62 @@ function MainPage() {
     );
   }
 
+  function renderPageContent() {
+    return (
+      <>
+        {/* секция из ивента + истории */}
+        <section className="lead page__section">
+          <div className="card-container card-container_type_identical">
+            {/* ивент */}
+            {isCityChanging ? <Loader isNested /> : renderEventsBlock()}
+
+            {/* история дружбы */}
+            {renderHistoryBlock()}
+          </div>
+        </section>
+
+        {/* секция Место */}
+        {mainPageData?.place && renderPlaceSection()}
+
+        {/* секция Статья */}
+        {mainPageData?.articles?.length > 0 &&
+          renderArticleSection(mainPageData?.articles[0])}
+
+        {/* секция Фильмы */}
+        {mainPageData?.movies && renderMoviesSection()}
+
+        {/* секция Видео */}
+        {mainPageData?.video && renderVideoSection()}
+
+        {/* секция Виджет + Вопросы */}
+        <section className="main-questions main-section page__section fade-in">
+          <div className="card-container card-container_type_iframe">
+            <Widget
+              title="Facebook"
+              link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
+            />
+
+            {/* секция Вопросов */}
+            {mainPageData?.questions?.length > 0 && renderQuestionBlock()}
+          </div>
+        </section>
+
+        {/* секция Статья */}
+        {mainPageData?.articles?.length > 1 &&
+          renderArticleSection(mainPageData?.articles[1])}
+      </>
+    );
+  }
+
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {/* секция из ивента + истории */}
-      <section className="lead page__section">
-        <div className="card-container card-container_type_identical">
-          {/* ивент */}
-          {isCityChanging ? <Loader isNested /> : renderEventsBlock()}
-
-          {/* история дружбы */}
-          {renderHistoryBlock()}
-        </div>
-      </section>
-
-      {/* секция Место */}
-      {mainPageData?.place && renderPlaceSection()}
-
-      {/* секция Статья */}
-      {mainPageData?.articles?.length > 0 &&
-        renderArticleSection(mainPageData?.articles[0])}
-
-      {/* секция Фильмы */}
-      {mainPageData?.movies && renderMoviesSection()}
-
-      {/* секция Видео */}
-      {mainPageData?.video && renderVideoSection()}
-
-      {/* секция Виджет + Вопросы */}
-      <section className="main-questions main-section page__section fade-in">
-        <div className="card-container card-container_type_iframe">
-          <Widget
-            title="Facebook"
-            link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
-          />
-
-          {/* секция Вопросов */}
-          {mainPageData?.questions?.length > 0 && renderQuestionBlock()}
-        </div>
-      </section>
-
-      {/* секция Статья */}
-      {mainPageData?.articles?.length > 1 &&
-        renderArticleSection(mainPageData?.articles[1])}
+      {isPageError ? (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      ) : (
+        renderPageContent()
+      )}
     </BasePage>
   );
 }
