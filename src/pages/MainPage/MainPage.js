@@ -64,10 +64,6 @@ function MainPage() {
     window.dispatchEvent(event);
   }
 
-  function redirectToPage() {
-    dispatchRedirectEvent();
-  }
-
   // запрос даты главной страницы при загрузке и при смене города
   //! из-за этого главная 2 раза запрашивается для юзера!!
   useEffect(() => {
@@ -119,7 +115,7 @@ function MainPage() {
           <img
             src={`${staticImageUrl}/${mainPageData?.history?.image}`}
             alt={mainPageData.history.title}
-            className="card__media-img"
+            className="lead__media-img"
           />
           <Link to={STORIES_URL} className="lead__link">
             {mainPageData?.history?.title}
@@ -180,7 +176,7 @@ function MainPage() {
         {randomMovies.map((movie) => (
           <Link
             to={MOVIES_URL}
-            onClick={redirectToPage}
+            onClick={dispatchRedirectEvent}
             className={className}
             key={movie?.id}
           >
@@ -196,7 +192,7 @@ function MainPage() {
       <section className="video main-section page__section">
         <Link
           to={VIDEO_URL}
-          onClick={redirectToPage}
+          onClick={dispatchRedirectEvent}
           className="main-section__link scale-in"
         >
           <CardVideoMain
