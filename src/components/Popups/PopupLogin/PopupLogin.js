@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import './PopupLogin.scss';
 import { useEffect, useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
@@ -81,9 +82,11 @@ function PopupLogin({ isOpen, onClose }) {
   }
 
   useEffect(() => {
-    window.addEventListener('keyup', closePopupOnEsc);
-    return () => window.removeEventListener('keyup', closePopupOnEsc);
-  }, [pathname]);
+    if (isOpen) {
+      window.addEventListener('keyup', closePopupOnEsc);
+      return () => window.removeEventListener('keyup', closePopupOnEsc);
+    }
+  }, [pathname, isOpen]);
 
   useEffect(() => {
     resetForm();
