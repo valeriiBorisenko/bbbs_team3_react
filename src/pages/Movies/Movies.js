@@ -38,7 +38,7 @@ const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 function Movies() {
   useScrollToTop();
 
-  const { serverError, setError } = useContext(ErrorsContext);
+  const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 
   // Загрузка данных
@@ -53,6 +53,8 @@ function Movies() {
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
+  // Стейт ошибки
+  const [pageError, setPageError] = useState(false);
 
   const getActiveTags = () => {
     if (categories) {
@@ -79,7 +81,7 @@ function Movies() {
       })
       .then((results) => setMoviesPageData(results))
       .catch((err) => {
-        setError(true);
+        setPageError(true);
         console.log(err);
       })
       .finally(() => {
@@ -112,7 +114,7 @@ function Movies() {
           openPopupError();
           console.log(err);
         } else {
-          setError(true);
+          setPageError(true);
           console.log(err);
         }
       });
@@ -234,7 +236,7 @@ function Movies() {
   };
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (serverError) {
+    if (pageError) {
       return (
         <AnimatedPageContainer
           titleText={ERROR_MESSAGES.generalErrorMessage.title}

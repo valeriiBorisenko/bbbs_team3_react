@@ -11,7 +11,7 @@ import {
 } from './index';
 import getCatalogPageData from '../../api/catalog-page';
 import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
-import { FIGURES } from '../../config/constants';
+import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -30,6 +30,8 @@ function Catalog() {
   const [catalogPageData, setCatalogPageData] = useState([]);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+  // Стейт ошибки
+  const [pageError, setPageError] = useState(false);
 
   function getPageData() {
     const offset = pageSize * pageNumber;
@@ -39,7 +41,10 @@ function Catalog() {
         setCatalogPageData(results);
         setPageCount(Math.ceil(count / pageSize));
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        setPageError(true);
+        console.log(err);
+      })
       .finally(() => {
         setIsLoadingPaginate(false);
         setIsLoadingPage(false);
@@ -105,7 +110,12 @@ function Catalog() {
   }
 
   function renderPageContent() {
-    if (!catalogPageData && !isLoadingPage) {
+    if (pageError) {
+      return (
+        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+      );
+    }
+    if (!catalogPageData && !isLoadingPage && !pageError) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
