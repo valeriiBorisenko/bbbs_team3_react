@@ -20,11 +20,7 @@ function CardAnimatedPlug({ text, sectionClass }) {
   return (
     <Card sectionClass={sectionClass}>
       <div className="card-animatedbox">
-        <div
-          className="card-animatedbox__animation"
-          // style={{ width: '150px', height: '150px' }}
-          ref={animationContainer}
-        />
+        <div className="card-animatedbox__animation" ref={animationContainer} />
         <p className="paragraph card-animatedbox__text">{text}</p>
       </div>
     </Card>

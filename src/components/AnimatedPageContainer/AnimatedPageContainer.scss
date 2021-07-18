@@ -12,7 +12,6 @@
 
 .animated-section__animation {
   max-width: 720px;
-  // min-height: 220px;
   margin-top: 40px;
   width: 100%;
   margin-bottom: 36px;
@@ -29,10 +28,6 @@
 }
 
 @include atDesktop1024 {
-  // .animated-section__animation {
-  //   margin-top: 40px;
-  // }
-
   .animated-section__subtitle {
     max-width: 590px;
   }

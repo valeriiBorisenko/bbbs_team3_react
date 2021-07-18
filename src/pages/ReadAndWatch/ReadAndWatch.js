@@ -40,7 +40,6 @@ const { one, two, three, four } = ELEMS_PER_SLIDE;
 function ReadAndWatch() {
   // определяет сколько объектов показывать в ряду
   const [pageSize, setPageSize] = useState(null);
-  // console.log('ReadAndWatch');
 
   useEffect(() => {
     // 1 элемент в ряду (до 700px)
