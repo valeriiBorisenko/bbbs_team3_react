@@ -237,7 +237,7 @@ const Video = () => {
   // Резайз пагинации
   useEffect(() => {
     const smallQuery = window.matchMedia('(max-width: 1023px)');
-    const largeQuery = window.matchMedia('(max-width: 1439px)');
+    const largeQuery = window.matchMedia('(max-width: 1450px)');
 
     const listener = () => {
       if (smallQuery.matches) {
