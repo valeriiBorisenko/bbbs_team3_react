@@ -52,7 +52,7 @@ function Books() {
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   const getActiveTags = () => {
     if (categories) {
@@ -78,10 +78,7 @@ function Books() {
         return results;
       })
       .then((results) => setBooksPageData(results))
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -103,17 +100,15 @@ function Books() {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => {
+      .catch(() => {
         if (isFiltersUsed) {
           setError({
             title: ERROR_MESSAGES.filterErrorMessage.title,
             button: ERROR_MESSAGES.filterErrorMessage.button,
           });
           openPopupError();
-          console.log(err);
         } else {
-          setPageError(true);
-          console.log(err);
+          setIsPageError(true);
         }
       });
   };
@@ -221,9 +216,11 @@ function Books() {
 
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (pageError) {
+    if (isPageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
     return (

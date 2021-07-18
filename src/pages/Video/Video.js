@@ -56,7 +56,7 @@ const Video = () => {
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
   const [isShowMainCard, setIsShowMainCard] = useState(true);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   // Функция состояний чекбоксов фильтра
   const changeCategory = (inputValue, isChecked) => {
@@ -136,17 +136,15 @@ const Video = () => {
           setIsShowMainCard(true);
         } else setVideo(results);
       })
-      .catch((err) => {
+      .catch(() => {
         if (isFiltersUsed) {
           setError({
             title: ERROR_MESSAGES.filterErrorMessage.title,
             button: ERROR_MESSAGES.filterErrorMessage.button,
           });
           openPopupError();
-          console.log(err);
         } else {
-          setPageError(true);
-          console.log(err);
+          setIsPageError(true);
         }
       })
       .finally(() => {
@@ -179,10 +177,7 @@ const Video = () => {
         const isResourceGroup = videoData.some((item) => item?.resourceGroup);
         setCategories(defineCategories(tags, isResourceGroup));
       })
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoadingPage(false);
       });
@@ -242,7 +237,7 @@ const Video = () => {
   // Резайз пагинации
   useEffect(() => {
     const smallQuery = window.matchMedia('(max-width: 1023px)');
-    const largeQuery = window.matchMedia('(max-width: 1439px)');
+    const largeQuery = window.matchMedia('(max-width: 1450px)');
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -331,8 +326,10 @@ const Video = () => {
 
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {pageError ? (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+      {isPageError ? (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       ) : (
         <>
           <section className="lead page__section">

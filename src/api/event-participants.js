@@ -5,7 +5,7 @@ import { apiUrl, baseURL } from '../config/config';
 function makeEventRegistration(eventId) {
   return axios
     .post(`${baseURL}${apiUrl}/afisha/event-participants/`, eventId)
-    .then((response) => console.log(response))
+    .then((response) => response)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
@@ -13,7 +13,7 @@ function makeEventRegistration(eventId) {
 function cancelEventRegistration(eventId) {
   return axios
     .delete(`${baseURL}${apiUrl}/afisha/event-participants/${eventId}/`)
-    .then((response) => console.log(response))
+    .then((response) => response)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 

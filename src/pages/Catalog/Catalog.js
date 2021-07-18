@@ -31,7 +31,7 @@ function Catalog() {
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   function getPageData() {
     const offset = pageSize * pageNumber;
@@ -41,10 +41,7 @@ function Catalog() {
         setCatalogPageData(results);
         setPageCount(Math.ceil(count / pageSize));
       })
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoadingPaginate(false);
         setIsLoadingPage(false);
@@ -110,12 +107,14 @@ function Catalog() {
   }
 
   function renderPageContent() {
-    if (pageError) {
+    if (isPageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
-    if (!catalogPageData && !isLoadingPage && !pageError) {
+    if (!catalogPageData && !isLoadingPage && !isPageError) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 

@@ -32,7 +32,7 @@ function Articles() {
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   function getPageData() {
     const offset = pageSize * pageNumber;
@@ -48,7 +48,7 @@ function Articles() {
           );
         } else setArticlesPageData(results);
       })
-      .catch((err) => console.log(err))
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoadingPaginate(false);
       });
@@ -80,9 +80,8 @@ function Articles() {
             setPageCount(Math.ceil(count / pageSize));
           }
         })
-        .catch((err) => {
-          setPageError(true);
-          console.log(err);
+        .catch(() => {
+          setIsPageError(true);
         })
         .finally(() => {
           setIsLoadingPage(false);
@@ -111,9 +110,11 @@ function Articles() {
 
   // отрисовка заглушки
   function renderAnimatedContainer() {
-    if (pageError) {
+    if (isPageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
     return <AnimatedPageContainer titleText={textStubNoData} />;

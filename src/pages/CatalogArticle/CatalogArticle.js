@@ -13,27 +13,24 @@ function CatalogArticle({ articleId }) {
   const [catalogArticlePageData, setCatalogArticlePageData] = useState();
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   useEffect(() => {
     getCatalogArticlePageData({ articleId })
       .then((data) => {
         setCatalogArticlePageData(data);
       })
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoadingPage(false);
       });
   }, [articleId]);
 
   function renderPage() {
-    if (pageError) {
+    if (isPageError) {
       return (
         <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage}
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
           urlBack={CATALOG_URL}
           buttonText="Вернуться назад"
           staticPage

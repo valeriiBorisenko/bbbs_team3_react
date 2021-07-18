@@ -7,6 +7,7 @@ import CardFilm from '../../components/Cards/CardFilm/CardFilm';
 import CardVideoMain from '../../components/Cards/CardVideoMain/CardVideoMain';
 import CardQuestion from '../../components/Cards/CardQuestion/CardQuestion';
 import CardAnimatedPlug from '../../components/Cards/CardAnimatedPlug/CardAnimatedPlug';
+import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import { Widget, Card, Loader } from '../../components/utils/index';
 
 export {
@@ -22,4 +23,5 @@ export {
   Widget,
   CardQuestion,
   CardAnimatedPlug,
+  AnimatedPageContainer,
 };

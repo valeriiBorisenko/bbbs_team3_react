@@ -13,7 +13,7 @@ import {
   NoDataNotificationBox,
   Loader,
 } from '../utils/index';
-import { FIGURES, COLORS } from '../../config/constants';
+import { FIGURES, COLORS, ERROR_MESSAGES } from '../../config/constants';
 
 function ReadAndWatchSection({
   pageSize,
@@ -37,6 +37,7 @@ function ReadAndWatchSection({
   const [sectionData, setSectionData] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isSectionError, setIsSectionError] = useState(false);
 
   const breakPoints = [
     { width: S, itemsToShow: pageSize, itemsToScroll: pageSize },
@@ -62,7 +63,7 @@ function ReadAndWatchSection({
         setSectionData(results);
         setIsLoading(false);
       })
-      .catch((error) => console.log(error));
+      .catch(() => setIsSectionError(true));
   }, [pageSize]);
 
   function slideBackHandler() {
@@ -88,7 +89,7 @@ function ReadAndWatchSection({
           setSectionData((previousData) => [...previousData, ...results]);
           setPageIndex((prevIndex) => prevIndex + 1);
         })
-        .catch((error) => console.log(error));
+        .catch(() => setIsSectionError(true));
     } else {
       setPageIndex((prevIndex) => prevIndex + 1);
     }
@@ -117,7 +118,21 @@ function ReadAndWatchSection({
   }
 
   function renderSliderSection() {
-    if (!isLoading && sectionData && sectionData?.length === 0) {
+    if (isSectionError) {
+      return (
+        <NoDataNotificationBox
+          text={ERROR_MESSAGES.generalErrorMessage.title}
+          sectionClass="no-data-text_padding-both"
+        />
+      );
+    }
+
+    if (
+      !isLoading &&
+      !isSectionError &&
+      sectionData &&
+      sectionData?.length === 0
+    ) {
       return (
         <NoDataNotificationBox
           text={paragraphNoContentText}

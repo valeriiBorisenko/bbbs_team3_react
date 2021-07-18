@@ -54,7 +54,7 @@ function Movies() {
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
   // Стейт ошибки
-  const [pageError, setPageError] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   const getActiveTags = () => {
     if (categories) {
@@ -80,10 +80,7 @@ function Movies() {
         return results;
       })
       .then((results) => setMoviesPageData(results))
-      .catch((err) => {
-        setPageError(true);
-        console.log(err);
-      })
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -105,17 +102,15 @@ function Movies() {
           ...categoriesArr,
         ]);
       })
-      .catch((err) => {
+      .catch(() => {
         if (isFiltersUsed) {
           setError({
             title: ERROR_MESSAGES.filterErrorMessage.title,
             button: ERROR_MESSAGES.filterErrorMessage.button,
           });
           openPopupError();
-          console.log(err);
         } else {
-          setPageError(true);
-          console.log(err);
+          setIsPageError(true);
         }
       });
   };
@@ -211,12 +206,7 @@ function Movies() {
           <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
             {moviesPageData.map((movie) => (
               <li className="card-container scale-in" key={movie.id}>
-                <CardFilm
-                  data={movie}
-                  pageCount={pageCount}
-                  pageNumber={pageNumber}
-                  setPageNumber={setPageNumber}
-                />
+                <CardFilm data={movie} />
                 <CardAnnotation description={movie.annotation} />
               </li>
             ))}
@@ -236,9 +226,11 @@ function Movies() {
   };
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (pageError) {
+    if (isPageError) {
       return (
-        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
       );
     }
     return (
