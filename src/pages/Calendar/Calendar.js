@@ -27,7 +27,6 @@ import {
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
 
-// const INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX = 1;
 const INITIAL_PAGE_INDEX = 0;
 export const PAGE_SIZE_PAGINATE = {
   small: 6,
@@ -138,7 +137,6 @@ function Calendar() {
         setIsGlobalLoader(false);
         setIsLoadingPaginate(false);
       });
-    // .catch((error) => console.log(error))
   }
 
   // загрузка страницы палендаря при старте либо показ попапа логина
@@ -152,8 +150,6 @@ function Calendar() {
     if (!currentUser) {
       openPopupLogin();
     }
-
-    console.log(pageSize);
   }, [pageSize, currentUser]);
 
   // загрузка фильтров страницы при старте или смене города юзера
@@ -351,7 +347,6 @@ function Calendar() {
 
   // глобальный лоадер при первой загрузке пока ждем ивенты и фильтры
   if ((!calendarPageData || !filters) && !isPageError) {
-    console.log('Global loader');
     return <Loader isCentered />;
   }
 

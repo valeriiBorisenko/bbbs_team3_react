@@ -80,7 +80,17 @@ function Movies() {
         return results;
       })
       .then((results) => setMoviesPageData(results))
-      .catch(() => setIsPageError(true))
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
+      })
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -102,17 +112,7 @@ function Movies() {
           ...categoriesArr,
         ]);
       })
-      .catch(() => {
-        if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
-          openPopupError();
-        } else {
-          setIsPageError(true);
-        }
-      });
+      .catch(() => setIsPageError(true));
   };
 
   // хэндлер клика по фильтру КАТЕГОРИЯ

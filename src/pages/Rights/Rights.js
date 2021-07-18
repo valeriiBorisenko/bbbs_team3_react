@@ -144,7 +144,17 @@ const Rights = () => {
         return results;
       })
       .then((results) => setArticles(results))
-      .catch(() => setIsPageError(true))
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
+      })
       .finally(() => {
         setIsLoadingPaginate(false);
         setIsFiltersUsed(false);
@@ -175,17 +185,7 @@ const Rights = () => {
           ...categoriesArr,
         ]);
       })
-      .catch(() => {
-        if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
-          openPopupError();
-        } else {
-          setIsPageError(true);
-        }
-      })
+      .catch(() => setIsPageError(true))
       .finally(() => {
         setIsLoadingPage(false);
       });

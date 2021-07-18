@@ -78,7 +78,17 @@ function Books() {
         return results;
       })
       .then((results) => setBooksPageData(results))
-      .catch(() => setIsPageError(true))
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
+      })
       .finally(() => {
         setIsLoading(false);
         setIsLoadingPaginate(false);
@@ -100,17 +110,7 @@ function Books() {
           ...categoriesArr,
         ]);
       })
-      .catch(() => {
-        if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
-          openPopupError();
-        } else {
-          setIsPageError(true);
-        }
-      });
+      .catch(() => setIsPageError(true));
   };
 
   // хэндлер клика по фильтру КАТЕГОРИЯ
