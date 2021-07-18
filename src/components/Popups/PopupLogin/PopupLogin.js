@@ -1,39 +1,226 @@
-import { useEffect } from 'react';
 import './PopupLogin.scss';
+import { useEffect, useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import Lottie from 'lottie-web';
+import texts from './locales/RU';
+import { CurrentUserContext, ErrorsContext } from '../../../contexts/index';
+import { useAuth, useFormWithValidation } from '../../../hooks/index';
+import { AFISHA_URL } from '../../../config/routes';
 import Popup from '../Popup/Popup';
-import Input from '../../ui/Input/Input';
-import Button from '../../ui/Button/Button';
-import TitleH2 from '../../ui/TitleH2/TitleH2';
-import { AfishaUrl } from '../../../utils/routes';
+import { Input, Button, TitleH2 } from '../../utils/index';
+import animationSuccess from '../../../assets/animation/ill_popup_success.json';
 
-function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
-  const {
-    register, handleSubmit, formState: { errors }, reset
-  } = useForm();
+function PopupLogin({ isOpen, onClose }) {
+  const { updateUser } = useContext(CurrentUserContext);
+  const { serverError, clearError } = useContext(ErrorsContext);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  function onFormSubmit(values) {
-    onLoginFormSubmit(values);
+  const animationContainer = useRef(null);
+
+  useEffect(() => {
+    Lottie.loadAnimation({
+      container: animationContainer.current,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      animationData: animationSuccess,
+    });
+  }, []);
+
+  const errorsString = serverError
+    ? Object.values(serverError)
+        .map((err) => err)
+        .join(' ')
+        .trim()
+    : '';
+
+  const { handleLogin } = useAuth(updateUser);
+  function handleClickForgotPassword() {
+    setIsForgotPassword(!isForgotPassword);
+  }
+
+  function successForgotPassword() {
+    setIsSuccess(false);
+    setIsForgotPassword(false);
+  }
+
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormWithValidation();
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    handleLogin(values);
+  }
+
+  function handleSubmitForgotPassword(evt) {
+    evt.preventDefault();
+    // временное решение имитации отправки
+    resetForm();
+    clearError();
+    setIsSuccess(true);
+    setTimeout(successForgotPassword, 5000);
   }
 
   //! аварийный перевод на главную, если не хочешь логиниться
   const history = useHistory();
-  const location = useLocation();
+  const { pathname } = useLocation();
+
   function closePopup() {
-    if (location.pathname === AfishaUrl) {
+    if (pathname === AFISHA_URL) {
       history.push('/');
     }
     onClose();
   }
 
+  function closePopupOnEsc(evt) {
+    if (evt.key === 'Escape') {
+      closePopup();
+    }
+  }
+
   useEffect(() => {
-    reset({
-      login: '',
-      password: ''
-    });
+    window.addEventListener('keyup', closePopupOnEsc);
+    return () => window.removeEventListener('keyup', closePopupOnEsc);
+  }, [pathname]);
+
+  useEffect(() => {
+    resetForm();
+    clearError();
+  }, [isOpen, isForgotPassword]);
+
+  useEffect(() => {
+    setIsForgotPassword(false);
   }, [isOpen]);
+
+  const classNameAuth = [
+    'popup__form',
+    'popup__form_type_sign-in',
+    `${isOpen && !isForgotPassword ? 'popup__form_type_sign-in_opened' : ''}`,
+  ]
+    .join(' ')
+    .trim();
+
+  const formAuth = () => (
+    <form
+      className={classNameAuth}
+      onSubmit={(evt) => handleSubmit(evt)}
+      noValidate
+    >
+      <TitleH2 sectionClass="popup__title_type_sign-in" title={texts.title} />
+      <p className="paragraph popup__sign-in">{texts.firstParagraph}</p>
+      <p className="paragraph popup__sign-in">{texts.secondParagraph}</p>
+
+      <Input
+        id="loginUsernameInput"
+        sectionClass="popup__input"
+        type="text"
+        name="username"
+        placeholder={texts.loginPlaceholder}
+        onChange={handleChange}
+        value={values?.username}
+        error={errors?.username}
+        minLength="2"
+        required
+      />
+
+      <Input
+        id="loginPasswordInput"
+        sectionClass="popup__input"
+        type="password"
+        name="password"
+        placeholder={texts.passwordPlaceholder}
+        onChange={handleChange}
+        value={values?.password}
+        error={errors?.password}
+        minLength="8"
+        required
+      />
+
+      <button
+        className="popup__forgot-password"
+        type="button"
+        onClick={handleClickForgotPassword}
+      >
+        {texts.forgotButtonText}
+      </button>
+      <span className="form-error-message">{errorsString}</span>
+      <Button
+        sectionClass="popup__button_type_sign-in"
+        color="blue"
+        title={texts.submitButtonText}
+        isDisabled={!isValid}
+        isSubmittable
+      />
+    </form>
+  );
+
+  const classForgotPassword = [
+    'popup__form',
+    'popup__form_type_email',
+    `${isForgotPassword && !isSuccess ? 'popup__form_type_email_opened' : ''}`,
+  ]
+    .join(' ')
+    .trim();
+
+  const formForgotPassword = () => (
+    <form
+      className={classForgotPassword}
+      onSubmit={(evt) => handleSubmitForgotPassword(evt)}
+      noValidate
+    >
+      <TitleH2
+        sectionClass="popup__title_type_sign-in"
+        title={texts.titleForgotForm}
+      />
+      <p className="paragraph popup__sign-in">{texts.paragraphForgotForm}</p>
+
+      <Input
+        id="loginUseremailInput"
+        sectionClass="popup__input"
+        type="email"
+        name="usermail"
+        placeholder={texts.emailPlaceholder}
+        onChange={handleChange}
+        value={values?.usermail}
+        error={errors?.usermail}
+        required
+      />
+      <button
+        className="popup__forgot-password"
+        type="button"
+        onClick={handleClickForgotPassword}
+      >
+        {texts.backButtonText}
+      </button>
+      <span className="form-error-message">{errorsString}</span>
+      <Button
+        sectionClass="popup__button_type_sign-in"
+        color="blue"
+        title={texts.submitButtonTextForgot}
+        isDisabled={!isValid}
+        isSubmittable
+      />
+    </form>
+  );
+
+  const className = [
+    'popup__login-container_success',
+    `${isSuccess ? 'popup__login-container_success_opened' : ''}`,
+  ]
+    .join(' ')
+    .trim();
+
+  const containerAnimationSuccessLogin = () => (
+    <div className={className}>
+      <div
+        ref={animationContainer}
+        className="popup__login-container_success-animation"
+      />
+      <TitleH2 title={texts.successTitle} />
+    </div>
+  );
 
   return (
     <Popup
@@ -41,45 +228,10 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
       typeContainer="sign-in"
       isOpen={isOpen}
       onClose={closePopup}
-      onSubmit={handleSubmit(onFormSubmit)}
     >
-      <TitleH2 sectionClass="popup__title_type_sign-in" title="Вход" />
-      <p className="paragraph popup__sign-in">
-        Вход в личный кабинет доступен наставникам программы «Старшие Братья
-        Старшие Сёстры».
-      </p>
-      <p className="paragraph popup__sign-in">
-        Пожалуйста, введите логин и пароль из письма. Если вам не приходило
-        письмо, свяжитесь с вашим куратором.
-      </p>
-      <Input
-        sectionClass="popup__input"
-        type="text"
-        name="login"
-        placeholder="Логин"
-        register={register}
-        required
-        error={errors?.login}
-        errorMessage="Логин*"
-      />
-      <Input
-        sectionClass="popup__input"
-        type="password"
-        name="password"
-        placeholder="Пароль"
-        register={register}
-        required
-        error={errors?.password}
-        errorMessage="Пароль*"
-      />
-      <a href="/" className="popup__forgot-password">Забыли пароль?</a>
-      <Button
-        sectionClass="popup__button_type_sign-in"
-        color="blue"
-        title="Войти"
-        isDisabled={!!(errors.login || errors.password)}
-        isSubmittable
-      />
+      {formAuth()}
+      {formForgotPassword()}
+      {containerAnimationSuccessLogin()}
     </Popup>
   );
 }
@@ -87,7 +239,6 @@ function PopupLogin({ isOpen, onClose, onLoginFormSubmit }) {
 PopupLogin.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onLoginFormSubmit: PropTypes.func.isRequired
 };
 
 export default PopupLogin;

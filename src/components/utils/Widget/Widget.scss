@@ -1,0 +1,42 @@
+@import './styles/utils.scss';
+
+.widget-facebook {
+  width: 420px;
+  height: 627px;
+  border: 0;
+  overflow: hidden;
+  border-radius: 30px;
+}
+
+@media (max-width: 1440px) {
+  .widget-facebook {
+    width: 404px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .widget-facebook {
+    height: 545px;
+  }
+}
+
+@media (max-width: 860px) {
+  .widget-facebook {
+    margin-right: 0;
+    align-self: center;
+    height: 427.5px;
+  }
+}
+
+
+@media (max-width: 420px) {
+  .widget-facebook {
+    width: 100%;
+  }
+}
+
+@media (max-width: 320px) {
+  .widget-facebook {
+    width: 100%;
+  }
+}

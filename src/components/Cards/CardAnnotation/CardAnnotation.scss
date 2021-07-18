@@ -1,0 +1,53 @@
+@import './styles/utils.scss';
+
+.card-annotation {
+  padding: 33px;
+  overflow: hidden;
+
+  &_main {
+    padding-top: 47px;
+    padding-bottom: 30px;
+
+    & .card-annotation__desc {
+      margin-top: 95px;
+    }
+  }
+
+  &__caption {
+    box-sizing: border-box;
+    padding-right: 10px;
+  }
+}
+
+.card-annotation__thumb {
+  background-color: $backgroundAnnotation;
+  border-radius: 5px;
+}
+
+.card-annotation__desc {
+  box-sizing: border-box;
+  padding-right: 10px;
+}
+
+@include atDesktop1199 {
+  .card-annotation {
+    &_main {
+      padding: 30px 15px;
+  
+      & .card-annotation__desc {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@include atDesktop1024 {
+  .card-annotation {
+    padding-right: 7px;
+    padding-bottom: 30px;
+  }
+
+  .card-annotation__caption {
+    margin-bottom: 5px;
+  }
+}

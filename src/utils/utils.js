@@ -1,37 +1,16 @@
-import { months, weekdays } from './constants';
+import { months, weekdays } from '../config/constants';
 
 // форматирует секунды в часы, минуты и секунды, принимает на вход number
 export const formatDuration = (duration) => {
-  let hours = Math.floor(duration / 3600);
-  let minutes = Math.floor(duration / 60);
-  let seconds = Math.floor(duration % 60);
-
-  if (minutes >= 60) {
-    hours += 1;
-    minutes -= 60;
-  }
-
-  if (seconds >= 60) {
-    minutes += 1;
-    seconds -= 60;
-  }
-
-  if (minutes < 10) {
-    minutes = `0${minutes}`;
-  }
-
-  if (seconds < 10) {
-    seconds = `0${seconds}`;
-  }
-
-  hours = String(hours);
-  minutes = String(minutes);
-  seconds = String(seconds);
+  const hours = parseInt(duration / (60 * 60), 10);
+  const minutes = parseInt((duration / 60) % 60, 10);
+  const seconds = duration % 60;
+  const format = (value) => (value < 10 ? `0${value}` : `${value}`);
 
   return {
-    hours,
-    minutes,
-    seconds
+    hours: format(hours),
+    minutes: format(minutes),
+    seconds: format(seconds),
   };
 };
 
@@ -40,7 +19,7 @@ export const formatDate = (date) => {
   const parsedDate = new Date(date);
   let day = parsedDate.getDate();
   const weekdayName = weekdays[parsedDate.getDay()];
-  const monthName = months[parsedDate.getMonth()];
+  const monthName = months[parsedDate.getMonth() + 1]; // потому что months начинается с 1, а не 0
   const hour = String(parsedDate.getHours());
   const year = String(parsedDate.getFullYear());
   let minutes = parsedDate.getMinutes();
@@ -59,7 +38,7 @@ export const formatDate = (date) => {
     weekdayName,
     monthName,
     hour,
-    minutes
+    minutes,
   };
 };
 
@@ -82,6 +61,11 @@ export const parseDate = (dateString) => {
 // принимает на вход количество оставшихся мест из чего формирует падеж слова
 // нужно в карточках, попапах
 export const formatWordCase = (remainSeats) => {
+  // промежуток 11 - 14
+  const lastTwoDigits = remainSeats % 100;
+  if (lastTwoDigits > 10 && lastTwoDigits < 15) {
+    return 'мест';
+  }
   // если кончается на 1 - окончание О
   // если кончается на 2 3 4 - окончание A
   // если кончается на другое - окончания нет
@@ -96,37 +80,45 @@ export const formatWordCase = (remainSeats) => {
   return 'мест';
 };
 
-// вернет заголовок состоящий из тегов
-// принимает массив тегов
-export const getCardType = (tags) => {
-  if (tags) {
-    return tags.map((tag, idx) => {
-      if (tags.length === 1) {
-        return `${tag.name}`;
-      }
-      if (idx !== tags.length - 1) {
-        return `${tag.name} + `;
-      }
-      return `${tag.name.toLowerCase()}`;
-    });
-  }
-  return undefined;
-};
-
-// повторить схему (цвета/фигуры) : индекс, длина массива, который рендерится, схема(массив)
-export const repeatSchema = (idx, size, schema) => {
-  const repeats = Math.ceil(size / schema.length);
-  const array = Array.from({ length: repeats }, () => schema).flat();
-  return array[idx];
-};
-
 export const questionForm = {
-  before: {
-    title: 'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список',
-    sectionClass: ''
+  beforeSubmit: {
+    title:
+      'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список',
+    titleClass: '',
+    formVisibilityClass: '',
   },
-  after: {
-    title: 'Спасибо! Мы приняли ваш вопрос',
-    sectionClass: 'question-form_invisible'
+  successSubmit: {
+    title:
+      'Спасибо! Мы приняли ваш вопрос. Ваш вопрос опубликуют, как только он пройдет проверку и модератор даст на него ответ!',
+    titleClass: 'add-question__title_success',
+    formVisibilityClass: 'question-form_invisible',
+  },
+  errorSubmit: {
+    title:
+      'Произошла ошибка при отправке вашего вопроса! Попробуйте повторить позже или обратиться в службу поддержки!',
+    titleClass: 'add-question__title_error',
+  },
+};
+
+// меняет в слове первую букву на заглавную
+export const changeCaseOfFirstLetter = (str) => {
+  if (!str) return str;
+
+  return str[0].toUpperCase() + str.slice(1);
+};
+
+// управление падежами месяцев
+export const formatMonthsGenitiveCase = (month) => {
+  if (month === 'март' || month === 'август') return `${month}а`;
+  return `${month.slice(0, -1)}я`;
+};
+
+export const randomizeArray = (arr, size) => {
+  if (arr && size < arr.length) {
+    const array = arr.slice();
+    return [...Array(size)].map(
+      () => array.splice(Math.floor(Math.random() * array.length), 1)[0]
+    );
   }
+  return arr;
 };

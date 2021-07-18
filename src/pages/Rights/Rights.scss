@@ -1,0 +1,13 @@
+@import './styles/utils.scss';
+
+.rights {
+  &__title {
+    margin-bottom: 25px;
+  }
+
+  @include atDesktop1024 {
+    &__title {
+      margin-bottom: 10px;
+    }
+  }
+}

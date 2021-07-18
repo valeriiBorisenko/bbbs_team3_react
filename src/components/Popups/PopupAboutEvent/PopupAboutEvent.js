@@ -1,34 +1,35 @@
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
+import {
+  formatDate,
+  formatWordCase,
+  changeCaseOfFirstLetter,
+} from '../../../utils/utils';
 import Popup from '../Popup/Popup';
-import Button from '../../ui/Button/Button';
-import TitleH2 from '../../ui/TitleH2/TitleH2';
-import { formatDate, formatWordCase, getCardType } from '../../../utils/utils';
+import { Button, TitleH2, ModificatedScrollbars } from '../../utils/index';
+import { getLocalStorageData } from '../../../hooks/useLocalStorage';
+import { useEventBooking } from '../../../hooks/index';
+import { localStAfishaEvent } from '../../../config/constants';
 
-function PopupAboutEvent({
-  isOpen,
-  onClose,
-  onEventSignUpClick,
-  cardData
-}) {
+function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
   const {
-    booked,
-    tags,
-    title,
-    startAt,
-    endAt,
-    address,
-    contact,
-    remainSeats,
-    description
-  } = cardData;
+    buttonTitle,
+    buttonTitleSelected,
+    buttonTitleDisabled,
+    remainSeatsText,
+  } = texts;
 
-  const startDateParts = formatDate(startAt);
-  const endDayParts = formatDate(endAt);
-  const isDisabled = (remainSeats < 1);
+  const { handleEventBooking } = useEventBooking();
+  const card = getLocalStorageData(localStAfishaEvent);
 
-  function submitHandler(event) {
-    event.preventDefault();
-    onEventSignUpClick(cardData, cardData.booked);
+  const startDateParts = formatDate(card?.startAt);
+  const endDayParts = formatDate(card?.endAt);
+  const isDisabled = card?.remainSeats < 1;
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    // передаем карточку и сообщаем функции, что запись без подтверждения
+    handleEventBooking(card, true);
   }
 
   return (
@@ -37,59 +38,71 @@ function PopupAboutEvent({
       typeContainer="calendar"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={submitHandler}
     >
-      <div className="calendar__caption">
-        <div className="calendar__info">
-          <p className="calendar__type">
-            {getCardType(tags)}
-          </p>
-          <p className="calendar__weekday">
-            {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
-          </p>
-        </div>
-        <div className="calendar__about">
-          <TitleH2
-            title={title}
-            sectionClass="calendar__title calendar__title_type_popup"
-          />
-          <p className="calendar__date">{startDateParts.day}</p>
-        </div>
-      </div>
-      <div className="calendar__meetup">
-        <ul className="calendar__info-list">
-          <li className="calendar__info-item">
-            <p className="calendar__time">
-              {`${startDateParts.hour}:${startDateParts.minutes} - ${endDayParts.hour}:${endDayParts.minutes}`}
-            </p>
-          </li>
-          <li className="calendar__info-item">
-            <p className="calendar__place">{address}</p>
-          </li>
-          <li className="calendar__info-item">
-            <p className="calendar__contact">{contact}</p>
-          </li>
-        </ul>
-        <div className="calendar__description">
-          <p className="paragraph calendar__desc-paragraph">{description}</p>
-        </div>
-        <div className="calendar__submit">
-          <Button
-            color="blue"
-            title="Записаться"
-            titleSelected="Отменить запись"
-            sectionClass="button_action_confirm"
-            isSubmittable
-            isBooked={booked}
-            isDisabled={isDisabled}
-          />
-          <p className="calendar__place-left">
-            {/* если запись закрыта, то карточка не должна быть выделенной */}
-            {(isDisabled && 'Запись закрыта')
-            || (!booked && `Осталось ${remainSeats} ${formatWordCase(remainSeats)}`)}
-          </p>
-        </div>
-      </div>
+      {card && (
+        <form className="popup__form" onSubmit={handleSubmit}>
+          <div className="calendar__caption">
+            <div className="calendar__info">
+              <p className="calendar__type">
+                {changeCaseOfFirstLetter(card?.tags?.name)}
+              </p>
+              <p className="calendar__weekday">
+                {`${startDateParts?.monthName} / ${startDateParts?.weekdayName}`}
+              </p>
+            </div>
+            <div className="calendar__about calendar__about_modal">
+              <TitleH2
+                title={card?.title}
+                sectionClass="calendar__title calendar__title_type_popup"
+              />
+              <p className="calendar__date">{startDateParts?.day}</p>
+            </div>
+          </div>
+          <div className="calendar__meetup">
+            <ul className="calendar__info-list">
+              <li className="calendar__info-item">
+                <p className="calendar__time">
+                  {`${startDateParts?.hour}:${startDateParts?.minutes} - ${endDayParts?.hour}:${endDayParts?.minutes}`}
+                </p>
+              </li>
+              <li className="calendar__info-item">
+                <p className="calendar__place">{card?.address}</p>
+              </li>
+              <li className="calendar__info-item">
+                <p className="calendar__contact">{card?.contact}</p>
+              </li>
+            </ul>
+            <div className="calendar__description">
+              <ModificatedScrollbars horizontalScrollClass="calendar__thumb">
+                <p className="paragraph calendar__desc-paragraph">
+                  {card?.description}
+                </p>
+              </ModificatedScrollbars>
+            </div>
+
+            {!isWithoutRegister && (
+              <div className="calendar__submit">
+                <Button
+                  color="blue"
+                  title={buttonTitle}
+                  titleSelected={buttonTitleSelected}
+                  sectionClass="button_action_confirm"
+                  isSubmittable
+                  isBooked={card?.booked}
+                  isDisabled={isDisabled}
+                />
+                <p className="calendar__place-left">
+                  {(isDisabled && buttonTitleDisabled) ||
+                    (!card?.booked &&
+                      `${remainSeatsText} ${card?.remainSeats} ${formatWordCase(
+                        card?.remainSeats
+                      )}`)}
+                </p>
+              </div>
+            )}
+          </div>
+        </form>
+      )}
     </Popup>
   );
 }
@@ -97,15 +110,13 @@ function PopupAboutEvent({
 PopupAboutEvent.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onEventSignUpClick: PropTypes.func,
-  cardData: PropTypes.objectOf(PropTypes.any)
+  isWithoutRegister: PropTypes.bool,
 };
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
   onClose: () => {},
-  onEventSignUpClick: () => {},
-  cardData: {}
+  isWithoutRegister: false,
 };
 
 export default PopupAboutEvent;

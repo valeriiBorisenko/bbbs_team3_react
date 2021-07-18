@@ -1,0 +1,161 @@
+@import './styles/utils.scss';
+
+.card-film {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.card-film__video {
+  width: 100%;
+  position: relative;
+}
+
+.card-film__preview {
+  display: block;
+  width: 100%;
+  height: 236px;
+  object-fit: cover;
+  cursor: pointer;
+  transform: scale(1.1);
+  transform-origin: bottom;
+  transition: 1s ease-out;
+
+  &:hover {
+    transform: scale(1);
+  }
+}
+
+.card-film__duration {
+  position: absolute;
+  bottom: 6px;
+  right: 3px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background-color: rgba($black, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: white;
+
+  &_position_main-video {
+    bottom: 12px;
+    right: 8px;
+    font-weight: 700;
+    font-size: 40px;
+  }
+}
+
+.card-film__rubric-list {
+  margin: 0 auto;
+  padding: 0;
+  list-style-type: none;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+}
+
+.card-film__rubric {
+  background-color: rgba(255, 255, 255, .6);
+}
+
+.card-film__video-info {
+  box-sizing: border-box;
+  padding: 15px 30px;
+  text-align: center;
+  width: 100%;
+  min-height: 169px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-film__title-wrap {
+  text-align: center;
+}
+
+.card-film__title {
+  margin: 0 auto 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  box-orient: vertical;
+}
+
+.card-film__info {
+  margin: 0 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  box-orient: vertical;
+}
+
+.card-film__button {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  outline: none;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@include atDesktop1440 {
+  .card-film__preview {
+    height: 208px;
+  }
+
+  .card-film__duration {
+    &_position_main-video {
+      bottom: 8px;
+      font-size: 25px;
+    }
+  }
+}
+
+@include atDesktop1024 {
+  .card-film__video-info {
+    padding: 15px;
+    min-height: 147px;
+  }
+
+  .card-film__title {
+    font-size: 19px;
+    line-height: 1.2;
+  }
+
+  .card-film__info {
+    font-size: 12px;
+  }
+}
+
+@include atMobile {
+  .card-film {
+    max-width: 450px;
+  }
+
+  .card-film__preview {
+    height: 163px;
+  }
+}

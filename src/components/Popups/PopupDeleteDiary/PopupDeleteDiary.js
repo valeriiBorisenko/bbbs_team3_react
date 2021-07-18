@@ -1,20 +1,26 @@
 import './PopupDeleteDiary.scss';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { formatDate } from '../../../utils/utils';
+import texts from './locales/RU';
+import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import Popup from '../Popup/Popup';
-import TitleH2 from '../../ui/TitleH2/TitleH2';
-import Button from '../../ui/Button/Button';
+import { TitleH2, Button } from '../../utils/index';
 
-function PopupDeleteDiary({
-  isOpen, onClose, onCardDelete, cardData
-}) {
-  const { title, date } = cardData;
+function PopupDeleteDiary({ isOpen, onClose, onCardDelete, cardData }) {
+  const { place, date } = cardData;
   const day = formatDate(date);
+  const [month, setMonth] = useState(null);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     onCardDelete(cardData);
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      setMonth(formatMonthsGenitiveCase(day?.monthName));
+    }
+  }, [isOpen]);
 
   return (
     <Popup
@@ -22,28 +28,31 @@ function PopupDeleteDiary({
       typeContainer="confirm-diary"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}
       withoutCloseButton
       sectionClass="popup-diary"
     >
-      <TitleH2
-        title={`Удалить встречу в ${title} ${parseInt(day.day, 10)} ${day.monthName} ${day.year}?`}
-        sectionClass="popup-diary__title"
-      />
-      <div className="popup-diary__buttons">
-        <Button
-          color="gray"
-          sectionClass="popup-diary__button"
-          title="Удалить"
-          isSubmittable
+      <form className="popup__form" onSubmit={handleSubmit}>
+        <TitleH2
+          title={`${texts.title} ${place} ${parseInt(day.day, 10)} ${month} ${
+            day.year
+          }?`}
+          sectionClass="popup-diary__title"
         />
-        <Button
-          color="black"
-          sectionClass="popup-diary__button"
-          title="Отмена"
-          onClick={onClose}
-        />
-      </div>
+        <div className="popup-diary__buttons">
+          <Button
+            color="gray"
+            sectionClass="popup-diary__button"
+            title={texts.submitButtonText}
+            isSubmittable
+          />
+          <Button
+            color="black"
+            sectionClass="popup-diary__button"
+            title={texts.cancelButtonText}
+            onClick={onClose}
+          />
+        </div>
+      </form>
     </Popup>
   );
 }
@@ -52,14 +61,14 @@ PopupDeleteDiary.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   onCardDelete: PropTypes.func,
-  cardData: PropTypes.objectOf(PropTypes.any)
+  cardData: PropTypes.objectOf(PropTypes.any),
 };
 
 PopupDeleteDiary.defaultProps = {
   isOpen: false,
   onClose: () => {},
   onCardDelete: () => {},
-  cardData: {}
+  cardData: {},
 };
 
 export default PopupDeleteDiary;

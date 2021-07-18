@@ -1,5 +1,10 @@
 @import './styles/utils.scss';
 
+.popup__container_success {
+  display: flex;
+  flex-direction: column;
+}
+
 .popup__animation-success {
   max-width: 450px;
   max-height: 190px;

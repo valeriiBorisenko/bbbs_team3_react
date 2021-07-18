@@ -1,0 +1,230 @@
+@import './styles/utils.scss';
+
+.profile-diary {
+  max-width: 1170px;
+  width: 100%;
+  grid-template-columns: minmax(300px, 470px) minmax(600px, 700px);
+  grid-template-rows: 470px;
+  margin-bottom: 80px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &__image-container {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    &_default {
+      max-width: 60%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  &__date-container {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    grid-template-rows: 346px;
+    grid-auto-rows: auto;
+    align-items: start;
+    padding: 30px;
+  }
+
+  &__text-wrap {
+    grid-column: 1;
+    height: 100%;
+  }
+
+  &__card-text {
+    height: calc(100% - 60px);
+  }
+
+  &__card-title {
+    margin-bottom: 30px;
+  }
+
+  &__paragraph {
+    margin: 0;
+    font-family: $ptRootUI;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.4;
+    color: $black;
+    padding-right: 5px;
+  }
+
+  &__card-date {
+    grid-column: 2;
+  }
+
+  &__weekday {
+    margin: 0;
+    width: 100px;
+    font-family: $ptRootUI;
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: right;
+  }
+
+  &__day {
+    margin: 0;
+    font-family: $protoGrotesk;
+    font-size: 60px;
+    text-align: right;
+  }
+
+  &__actions {
+    grid-column: 1 / 3;
+    align-self: end;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+  }
+
+  &__rate {
+    pointer-events: none;
+    
+    &:hover {
+      cursor: default;
+    }
+  }
+
+  &__ratings-text {
+    margin-left: 15px;
+  
+    &_type_good {
+      color: $green;
+    }
+  
+    &_type_neutral {
+      color: $lightGray;
+    }
+  
+    &_type_bad {
+      color: $error;
+    }
+  }
+
+  &__action-elements {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__button {
+    margin-right: 30px;
+    transition: .3s ease;
+  
+    &:first-of-type {
+      margin-left: 10px;
+    }
+  
+    &:last-of-type {
+      margin-right: 0;
+    }
+
+    &_shared {
+      color: $black;
+      pointer-events: none;
+    }
+  }
+}
+
+@include atDesktop1199 {
+  .profile-diary {
+    max-width: 700px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 290px 1fr;
+    margin-bottom: 30px;
+
+    &__date-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: 307px;
+    }
+
+    &__card-title {
+      margin-bottom: 74px;
+    }
+
+    &__card-text {
+      height: calc(100% - 96px);
+    }
+
+    &__paragraph {
+      font-size: 15px;
+      padding-right: 17px;
+    }
+
+    &__card-date {
+      position: absolute;
+      top: 30px;
+      right: 15px;
+    }
+
+    &__weekday {
+      font-size: 12px;
+      line-height: 1.41;
+    }
+
+    &__actions {
+      margin-top: 20px;
+    }
+
+    &__image {
+      &_default {
+        max-width: 60%;
+        max-height: 200px;
+        object-fit: contain;
+        object-position: center;
+      }
+    }
+  }
+}
+
+@include atTabletL {
+  .profile-diary {
+    &__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__rating {
+      margin-bottom: 20px;
+    }
+
+    &__action-elements {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    &__button {
+      margin: 0;
+      justify-self: start;
+  
+      &:first-of-type {
+        grid-column: 1 / -1;
+        margin: 0 auto 10px 0;
+      }
+  
+      &:last-of-type {
+        justify-self: end;
+      }
+    }
+  }
+}

@@ -1,38 +1,56 @@
-import '../Popup/Popup.scss';
 import './PopupError.scss';
 import PropTypes from 'prop-types';
-import Button from '../../ui/Button/Button';
-import TitleH2 from '../../ui/TitleH2/TitleH2';
+import { useContext, useEffect } from 'react';
+import Popup from '../Popup/Popup';
+import { Button, TitleH2 } from '../../utils/index';
+import { ErrorsContext } from '../../../contexts';
 
 function PopupError({ isOpen, onClose }) {
+  const { serverError } = useContext(ErrorsContext);
+
+  const closeOnEsc = (evt) => {
+    if (evt.key === 'Escape') {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keyup', closeOnEsc);
+    return () => window.removeEventListener('keyup', closeOnEsc);
+  }, []);
+
   return (
-    <div className={`popup popup_type_error ${isOpen ? 'popup_opened' : ''} `}>
-      <div className="popup__container popup__container_type_calendar popup__container_error">
-        <TitleH2
-          sectionClass="popup__title_type_calendar popup__title_type_error"
-          title="Что-то пошло не так, попробуйте записаться снова"
+    <Popup
+      type="error"
+      typeContainer="calendar"
+      sectionClass="popup__container_error"
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <TitleH2
+        sectionClass="popup__title_type_calendar popup__title_type_error"
+        title={serverError?.title}
+      />
+      <div className="popup__buttons_type_calendar">
+        <Button
+          color="black"
+          title={serverError?.button}
+          sectionClass="popup__button_type_error"
+          onClick={onClose}
         />
-        <div className="popup__buttons_type_calendar">
-          <Button
-            color="black"
-            title="Вернуться к мероприятию"
-            sectionClass="popup__button_type_error"
-            onClick={onClose}
-          />
-        </div>
       </div>
-    </div>
+    </Popup>
   );
 }
 
 PopupError.propTypes = {
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
 PopupError.defaultProps = {
   isOpen: false,
-  onClose: () => {}
+  onClose: () => {},
 };
 
 export default PopupError;

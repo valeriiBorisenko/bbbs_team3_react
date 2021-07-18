@@ -1,0 +1,279 @@
+@import './styles/utils.scss';
+
+.article-lead {
+  background-color: $yellow;
+  border-top-right-radius: 400px;
+  border-bottom-right-radius: 400px;
+  padding: 230px 50px;
+  box-sizing: border-box;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 100px;
+  &::before {
+    content: '';
+    position: absolute;
+    background-color: $yellow;
+    border-bottom-left-radius: 400px;
+    height: 250px;
+    width: 80%;
+    top: -250px;
+    right: 0;
+    z-index: -1;
+  }
+
+  &_form_oval {
+    border-radius: 400px;
+    &::before {
+      right: auto;
+      left: 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 400px;
+    }
+  }
+
+  &_form_trapezoid {
+    border-radius: 3px 3px 400px 400px;
+    &::before {
+      width: 100%;
+      border-radius: 3px 3px 400px 400px;
+    }
+  }
+}
+
+.article-lead__content {
+  margin: auto;
+  max-width: 870px;
+  text-align: center;
+}
+
+.article-lead__text {
+  margin-top: 30px;
+  word-wrap: break-word;
+}
+
+.article__main-title {
+  text-align: center;
+}
+
+.article__description {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.article__figure {
+  margin: 50px 0 0;
+}
+
+.article__image {
+  width: 100%;
+  border-radius: 30px;
+  object-fit: cover;
+}
+
+.article__figcaption {
+  margin-top: 10px;
+}
+
+.article__card-list-item {
+  list-style-type: none;
+  width: 100%;
+  padding: 15px 0;
+  border-bottom: 1px solid $lightGray;
+
+  &:first-of-type {
+    padding-top: 0;
+  }
+
+  &:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.next-page {
+  display: flex;
+  align-items: center;
+  margin: 80px auto 0;
+}
+
+.next-page__img-wrap {
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
+  background-color: $green;
+}
+
+.next-page__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  &[src='#'] {
+    display: none;
+  }
+}
+
+.next-page__link {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-decoration: none;
+}
+
+.next-page__title {
+  color: $blue;
+  padding: 0 30px;
+}
+
+.next-page__arrow-icon {
+  width: 30px;
+  height: 30px;
+  background-image: url('../../assets/arrow-right-blue.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  transition: .3s ease;
+
+  &:hover {
+    transform: translateX(4px);
+  }
+}
+
+@include atDesktop1440 {
+  .article-lead {
+    padding-top: 135px;
+    padding-bottom: 135px;
+    margin-top: 170px;
+    &::before {
+      height: 320px;
+      top: -320px;
+    }
+
+    &_form_oval {
+      margin-top: 150px;
+      padding-top: 185px;
+      padding-bottom: 185px;
+      &::before {
+        height: 220px;
+        top: -220px;
+      }
+    }
+
+    &_form_trapezoid {
+      margin-top: 150px;
+      padding-top: 185px;
+      padding-bottom: 185px;
+      &::before {
+        height: 220px;
+        top: -220px;
+      }
+    }
+  }
+
+  .article-lead__content {
+    max-width: 761px;
+  }
+}
+
+@include atDesktop1024 {
+  .article-lead {
+    margin-top: 160px;
+    padding-top: 70px;
+    padding-bottom: 70px;
+    &::before {
+      height: 270px;
+      top: -270px;
+    }
+
+    &_form_oval {
+      margin-top: 85px;
+      padding-top: 120px;
+      padding-bottom: 120px;
+      &::before {
+        height: 165px;
+        top: -165px;
+      }
+    }
+
+    &_form_trapezoid {
+      margin-top: 85px;
+      padding-top: 120px;
+      padding-bottom: 120px;
+      &::before {
+        height: 165px;
+        top: -165px;
+      }
+    }
+  }
+
+  .article-lead__content {
+    max-width: 570px;
+  }
+
+  .article__main-title {
+    max-width: 650px;
+    font-size: 37px;
+  }
+
+  .article__description {
+    margin-top: 20px;
+  }
+
+  .article__figure {
+    margin-top: 40px;
+  }
+
+  .next-page {
+    padding-top: 30px;
+  }
+
+  .next-page__arrow-icon {
+    width: 20px;
+    height: 20px;
+    padding-right: 25px;
+  }
+}
+
+@include atTablet {
+  .article-lead {
+    padding: 20px 15px 50px;
+    margin-top: 0;
+    border-radius: unset;
+    &::before {
+      height: 60px;
+      top: -60px;
+      width: 100%;
+      border-radius: unset;
+    }
+  }
+}
+
+
+@include atMobile {
+  .article__main-title {
+    font-size: 23px;
+  }
+
+  .article__description {
+    margin-top: 30px;
+  }
+
+  .article__figure {
+    margin-top: 20px;
+  }
+
+  .next-page {
+    max-width: 290px;
+  }
+
+  .next-page__title {
+    padding-left: 15px;
+  }
+
+  .next-page__arrow-icon {
+    padding-right: 5px;
+  }
+}

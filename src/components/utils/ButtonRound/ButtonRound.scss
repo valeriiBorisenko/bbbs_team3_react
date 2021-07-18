@@ -1,0 +1,71 @@
+@import './styles/utils.scss';
+
+.button-round {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: none;
+  padding: 0;
+  border-radius: 100%;
+  background-size: 23px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: 0.2s linear;
+
+  &_color_lightblue {
+    background-image: (url(../../../assets/black-cross.svg));
+    background-color: $lightBlue;
+  }
+
+  &_color_blue {
+    background-image: url(../../../assets/blue-cross.svg);
+    border: solid 1px $blue;
+  }
+
+  &_color_lightGray {
+    background-image: url(../../../assets/lightGray-cross.svg);
+    border: solid 1px $lightGray;
+  }
+
+  &_color_error {
+    background-image: url(../../../assets/error-cross.svg);
+    border: solid 1px $error;
+  }
+
+  &_active {
+    transform: rotate(45deg);
+  }
+
+  &_small {
+    width: 48px;
+    height: 48px;
+    background-size: 14px;
+  }
+}
+
+@include atDesktop1024 {
+  .button-round {
+    &_color_lightblue {
+      width: 48px;
+      height: 48px;
+    }
+
+    &_color_blue {
+      width: 40px;
+      height: 40px;
+    }
+
+    &_color_lightGray {
+      width: 80px;
+      height: 80px;
+    }
+
+    &_small {
+      width: 40px;
+      height: 40px;
+      background-size: 10px;
+    }
+  }
+}

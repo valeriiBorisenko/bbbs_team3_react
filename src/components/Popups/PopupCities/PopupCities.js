@@ -1,84 +1,136 @@
-import { useContext } from 'react';
-import PropTypes from 'prop-types';
-import CurrentUserContext from '../../../contexts/CurrentUserContext';
 import './PopupCities.scss';
+import { useContext, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import texts from './locales/RU';
+import {
+  CurrentUserContext,
+  CitiesContext,
+  ErrorsContext,
+  PopupsContext,
+} from '../../../contexts/index';
+import { updateUserProfile } from '../../../api/user';
+import {
+  localStUserCity,
+  DELAY_DEBOUNCE,
+  ERROR_MESSAGES,
+} from '../../../config/constants';
+import {
+  dispatchLocalStorageEvent,
+  getLocalStorageData,
+} from '../../../hooks/useLocalStorage';
+import { useDebounce } from '../../../hooks/index';
 import Popup from '../Popup/Popup';
-import TitleH2 from '../../ui/TitleH2/TitleH2';
+import { TitleH2 } from '../../utils/index';
 
-function PopupCities({
-  cities, isOpen, onClose, onSubmit
-}) {
-  const currentUser = useContext(CurrentUserContext);
+function PopupCities({ isOpen, onClose }) {
+  const { currentUser, updateUser } = useContext(CurrentUserContext);
+  const { cities, defaultCity } = useContext(CitiesContext);
+  const { setError } = useContext(ErrorsContext);
+  const { openPopupError } = useContext(PopupsContext);
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    const cityId = parseInt(evt.nativeEvent.submitter.value, 10);
-    if (currentUser) {
-      onSubmit({ ...currentUser, city: cityId });
+  function closePopup() {
+    if (!currentUser && !getLocalStorageData(localStUserCity)) {
+      dispatchLocalStorageEvent(localStUserCity, defaultCity?.id);
     }
     onClose();
-  };
+  }
+
+  function closePopupOnEsc(evt) {
+    if (evt.key === 'Escape') {
+      closePopup();
+    }
+  }
+
+  function submitCity(evt) {
+    const cityId = parseInt(evt.target.value, 10);
+    if (currentUser) {
+      updateUserProfile({ city: cityId })
+        .then((res) => {
+          updateUser(res);
+          onClose();
+        })
+        .catch(() => {
+          setError({
+            title: ERROR_MESSAGES.citiesErrorMessage.title,
+            button: ERROR_MESSAGES.citiesErrorMessage.button,
+          });
+          openPopupError();
+        });
+    } else {
+      dispatchLocalStorageEvent(localStUserCity, cityId);
+      onClose();
+    }
+  }
+
+  const debounceSubmitCity = useDebounce(submitCity, DELAY_DEBOUNCE);
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (defaultCity) {
+      window.addEventListener('keyup', closePopupOnEsc);
+      return () => window.removeEventListener('keyup', closePopupOnEsc);
+    }
+  }, [defaultCity]);
 
   return (
-    cities && (
     <Popup
       type="cities"
       typeContainer="cities"
       isOpen={isOpen}
-      onClose={onClose}
-      onSubmit={handleSubmit}
+      onClose={closePopup}
       withoutCloseButton
     >
-      <TitleH2 title="Выберите ваш город" sectionClass="cities__title" />
-      <div className="cities__container">
-        <ul className="cities__list cities__list_type_primary">
-          {cities
-            .filter((item) => item.isPrimary === true)
-            .map((item) => (
-              <li className="cities__list-item" key={item.id}>
-                <button
-                  className="cities__city"
-                  type="submit"
-                  value={item.id}
-                >
-                  {item.name}
-                </button>
-              </li>
-            ))}
-        </ul>
-        <ul className="cities__list">
-          {cities
-            .filter((item) => item.isPrimary !== true)
-            .map((item) => (
-              <li className="cities__list-item" key={item.id}>
-                <button
-                  className="cities__city"
-                  type="submit"
-                  value={item.id}
-                >
-                  {item.name}
-                </button>
-              </li>
-            ))}
-        </ul>
+      <div className="popup__form">
+        <TitleH2 title={texts.title} sectionClass="cities__title" />
+        <div className="cities__container">
+          <ul className="cities__list cities__list_type_primary">
+            {cities &&
+              cities
+                .filter((item) => item?.isPrimary === true)
+                .map((item) => (
+                  <li className="cities__list-item" key={item?.id}>
+                    <button
+                      className="cities__city"
+                      type="button"
+                      value={item?.id}
+                      onClick={(evt) => debounceSubmitCity(evt)}
+                    >
+                      {item?.name}
+                    </button>
+                  </li>
+                ))}
+          </ul>
+          <ul className="cities__list">
+            {cities &&
+              cities
+                .filter((item) => item?.isPrimary !== true)
+                .map((item) => (
+                  <li className="cities__list-item" key={item?.id}>
+                    <button
+                      className="cities__city"
+                      type="button"
+                      value={item?.id}
+                      onClick={(evt) => debounceSubmitCity(evt)}
+                    >
+                      {item?.name}
+                    </button>
+                  </li>
+                ))}
+          </ul>
+        </div>
       </div>
     </Popup>
-    )
   );
 }
 
 PopupCities.propTypes = {
-  cities: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onSubmit: PropTypes.func
 };
 
 PopupCities.defaultProps = {
-  cities: [],
   isOpen: false,
   onClose: () => {},
-  onSubmit: () => {}
 };
 
 export default PopupCities;

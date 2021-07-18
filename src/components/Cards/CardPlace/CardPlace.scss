@@ -1,0 +1,111 @@
+@import './styles/utils.scss';
+
+.card-place {
+  justify-content: space-between;
+  align-items: center;
+  padding: 37px 30px 15px;
+  overflow: hidden;
+
+  &_main { 
+    padding: 47px 30px 30px;
+  }
+
+  &__rubric {
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &__title-wrap {
+    text-align: center;
+  }
+
+  &__link-wrap {
+    width: 100%;
+    text-decoration: none;
+  
+    &_content_article-img {
+      margin-top: 70px;
+      margin-bottom: 15px;
+    }
+  }
+
+  &__title {
+    margin: 0 auto 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+    box-orient: vertical;
+  }
+
+  &__address {
+    margin: 0 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    box-orient: vertical;
+
+    &_test {
+      font-weight: 900;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 394px;
+    border-radius: 15px;
+    object-fit: cover;
+    object-position: center;
+
+    &_type_article {
+      margin-top: 70px;
+      margin-bottom: 15px;
+    }
+  }
+}
+
+@include atDesktop1024 {
+  .card-place {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    &_main {
+      padding: 37px 15px 15px;
+    }
+
+    &__link-wrap {
+      &_content_article-img {
+        margin-top: 60px;
+      }
+    }
+
+    &__image {
+      height: 345px;
+    }
+  }
+}
+
+@include atMobile {
+  .card-place {
+    &__link-wrap {
+      &_content_article-img {
+        margin-top: 40px;
+      }
+    }
+
+    &__image {
+      height: 142px;
+    }
+  }
+}

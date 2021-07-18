@@ -1,0 +1,33 @@
+@import './styles/utils.scss';
+
+.popup__container_recommend-success {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup__animation-recommend {
+  max-width: 450px;
+  max-height: 174px;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto 30px;
+
+  & > svg {
+    max-height: 174px;
+  }
+}
+
+.popup__title_type_recommend-success {
+  margin: 0 auto;
+  max-width: 504px;
+}
+
+@include atDesktop1024 {
+  .popup__animation-recommend {
+    max-height: 164px;
+
+    & > svg {
+      max-height: 164px;
+    }
+  }
+}

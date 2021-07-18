@@ -1,23 +1,23 @@
 import './PopupConfirmation.scss';
 import PropTypes from 'prop-types';
-import Popup from '../Popup/Popup';
-import Button from '../../ui/Button/Button';
-import TitleH2 from '../../ui/TitleH2/TitleH2';
+import texts from './locales/RU';
 import { formatDate } from '../../../utils/utils';
+import { getLocalStorageData } from '../../../hooks/useLocalStorage';
+import { useEventBooking } from '../../../hooks/index';
+import { localStAfishaEvent } from '../../../config/constants';
+import Popup from '../Popup/Popup';
+import { Button, TitleH2 } from '../../utils/index';
 
-function PopupConfirmation({
-  isOpen,
-  onClose,
-  onConfirmButtonClick,
-  cardData
-}) {
-  const { title, startAt, endAt } = cardData;
-  const startDay = formatDate(startAt);
-  const endDay = formatDate(endAt);
+function PopupConfirmation({ isOpen, onClose }) {
+  const { registerOnEvent } = useEventBooking();
+  const card = getLocalStorageData(localStAfishaEvent);
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-    onConfirmButtonClick(cardData);
+  const startDay = formatDate(card?.startAt);
+  const endDay = formatDate(card?.endAt);
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    registerOnEvent(card);
   };
 
   return (
@@ -26,30 +26,33 @@ function PopupConfirmation({
       typeContainer="calendar"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={submitHandler}
     >
-      <p className="section-title popup__title_type_calendar">Подтвердить запись на мероприятие</p>
-      <TitleH2
-        sectionClass="popup__title_type_calendar"
-        title={`«${title}»`}
-      />
-      <TitleH2
-        sectionClass="popup__title_type_calendar"
-        title={`${startDay.day} ${startDay.monthName} с ${startDay.hour}:${startDay.minutes} - ${endDay.hour}:${endDay.minutes}`}
-      />
-      <div className="popup__buttons_type_calendar">
-        <Button
-          color="blue"
-          title="Подтвердить запись"
-          sectionClass="popup__button_type_calendar"
-          isSubmittable
+      <form className="popup__form" onSubmit={handleSubmit}>
+        <p className="section-title popup__title_type_calendar">
+          {texts.title}
+        </p>
+        <TitleH2
+          sectionClass="popup__title_type_calendar"
+          title={`«${card?.title}»`}
         />
-        <Button
-          color="black"
-          title="Отменить"
-          onClick={onClose}
+        <TitleH2
+          sectionClass="popup__title_type_calendar"
+          title={`${startDay?.day} ${startDay?.monthName} с ${startDay?.hour}:${startDay?.minutes} - ${endDay?.hour}:${endDay?.minutes}`}
         />
-      </div>
+        <div className="popup__buttons_type_calendar">
+          <Button
+            color="blue"
+            title={texts.submitButtonText}
+            sectionClass="popup__button_type_calendar"
+            isSubmittable
+          />
+          <Button
+            color="black"
+            title={texts.cancelButtonText}
+            onClick={onClose}
+          />
+        </div>
+      </form>
     </Popup>
   );
 }
@@ -57,15 +60,11 @@ function PopupConfirmation({
 PopupConfirmation.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
-  onConfirmButtonClick: PropTypes.func,
-  cardData: PropTypes.objectOf(PropTypes.any)
 };
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
   onClose: () => {},
-  onConfirmButtonClick: () => {},
-  cardData: {}
 };
 
 export default PopupConfirmation;

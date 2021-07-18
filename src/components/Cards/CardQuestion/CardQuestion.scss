@@ -1,0 +1,75 @@
+@import './styles/utils.scss';
+
+.card-question {
+  padding: 50px 50px 47px;
+  position: relative;
+  width: 100%;
+  transition: all 0.5s linear;
+
+  &__rubric {
+    align-self: flex-start;
+    background-color: $background;
+  }
+
+  &__title {
+    max-width: 770px;
+    margin: 0 0 17px;
+  }
+
+  &__tags {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  &__wrap {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__answer {
+    height: 0;
+    min-height: 0;
+    opacity: 0;
+    transition: min-height, 0.3s ease-out;
+  }
+
+  &__answer_opened {
+    margin-top: 30px;
+    opacity: 1;
+  }
+
+  &__answer_text-hidden {
+    opacity: 0;
+    transition: opacity 0.15s linear;
+  }
+
+  &__answer_text-active {
+    opacity: 1;
+  }
+}
+
+@include atDesktop1024 {
+  .card-question {
+    padding: 30px 15px 15px;
+
+    &__answer_opened {
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+  }
+}
+
+@include atMobile {
+  .card-question {
+    padding: 30px 15px 15px;
+
+    &__tags {
+      flex-direction: column;
+    }
+  }
+}
