@@ -1,5 +1,5 @@
 import './Catalog.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import catalogPageTexts from '../../locales/catalog-page-RU';
 import {
   BasePage,
@@ -11,7 +11,8 @@ import {
 } from './index';
 import getCatalogPageData from '../../api/catalog-page';
 import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
-import { FIGURES } from '../../config/constants';
+import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
+import { ErrorsContext } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -23,6 +24,8 @@ const { headTitle, headDescription, title, subtitle, textStubNoData } =
   catalogPageTexts;
 
 function Catalog() {
+  const { serverError, setError } = useContext(ErrorsContext);
+
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
@@ -39,7 +42,10 @@ function Catalog() {
         setCatalogPageData(results);
         setPageCount(Math.ceil(count / pageSize));
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        setError(true);
+        console.log(err);
+      })
       .finally(() => {
         setIsLoadingPaginate(false);
         setIsLoadingPage(false);
@@ -105,7 +111,12 @@ function Catalog() {
   }
 
   function renderPageContent() {
-    if (!catalogPageData && !isLoadingPage) {
+    if (serverError) {
+      return (
+        <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
+      );
+    }
+    if (!catalogPageData && !isLoadingPage && !serverError) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
