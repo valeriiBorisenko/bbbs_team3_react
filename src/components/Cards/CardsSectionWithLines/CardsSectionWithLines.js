@@ -47,7 +47,7 @@ function CardsSectionWithLines({
 
       {pageCount > 1 && (
         <Paginate
-          sectionClass="cards-section__pagination"
+          sectionClass="cards-section__pagination cards-section__pagination_no-padding"
           pageCount={pageCount}
           value={pageNumber}
           onChange={setPageNumber}

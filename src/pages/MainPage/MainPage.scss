@@ -23,6 +23,14 @@
   }
 }
 
+@include atDesktop1279 {
+  .main-questions_pagination {
+    &:nth-last-of-type(-n+1) {
+      display: none;
+    }
+  }
+}
+
 @include atDesktop1217 {
   .movies_pagination {
     &_3 {
@@ -34,14 +42,6 @@
       &:nth-last-of-type(-n+2) {
         display: none;
       }
-    }
-  }
-}
-
-@include atDesktop1024 {
-  .main-questions_pagination {
-    &:nth-last-of-type(-n+1) {
-      display: none;
     }
   }
 }

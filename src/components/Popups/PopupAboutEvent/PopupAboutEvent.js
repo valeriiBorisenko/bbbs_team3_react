@@ -11,7 +11,7 @@ import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks/index';
 import { localStAfishaEvent } from '../../../config/constants';
 
-function PopupAboutEvent({ isOpen, onClose }) {
+function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
   const {
     buttonTitle,
     buttonTitleSelected,
@@ -28,7 +28,8 @@ function PopupAboutEvent({ isOpen, onClose }) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    handleEventBooking(card);
+    // передаем карточку и сообщаем функции, что запись без подтверждения
+    handleEventBooking(card, true);
   }
 
   return (
@@ -79,24 +80,26 @@ function PopupAboutEvent({ isOpen, onClose }) {
               </ModificatedScrollbars>
             </div>
 
-            <div className="calendar__submit">
-              <Button
-                color="blue"
-                title={buttonTitle}
-                titleSelected={buttonTitleSelected}
-                sectionClass="button_action_confirm"
-                isSubmittable
-                isBooked={card?.booked}
-                isDisabled={isDisabled}
-              />
-              <p className="calendar__place-left">
-                {(isDisabled && buttonTitleDisabled) ||
-                  (!card?.booked &&
-                    `${remainSeatsText} ${card?.remainSeats} ${formatWordCase(
-                      card?.remainSeats
-                    )}`)}
-              </p>
-            </div>
+            {!isWithoutRegister && (
+              <div className="calendar__submit">
+                <Button
+                  color="blue"
+                  title={buttonTitle}
+                  titleSelected={buttonTitleSelected}
+                  sectionClass="button_action_confirm"
+                  isSubmittable
+                  isBooked={card?.booked}
+                  isDisabled={isDisabled}
+                />
+                <p className="calendar__place-left">
+                  {(isDisabled && buttonTitleDisabled) ||
+                    (!card?.booked &&
+                      `${remainSeatsText} ${card?.remainSeats} ${formatWordCase(
+                        card?.remainSeats
+                      )}`)}
+                </p>
+              </div>
+            )}
           </div>
         </form>
       )}
@@ -107,11 +110,13 @@ function PopupAboutEvent({ isOpen, onClose }) {
 PopupAboutEvent.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
+  isWithoutRegister: PropTypes.bool,
 };
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
   onClose: () => {},
+  isWithoutRegister: false,
 };
 
 export default PopupAboutEvent;

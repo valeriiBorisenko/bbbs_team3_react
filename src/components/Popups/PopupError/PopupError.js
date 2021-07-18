@@ -1,11 +1,13 @@
 import './PopupError.scss';
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import Popup from '../Popup/Popup';
 import { Button, TitleH2 } from '../../utils/index';
+import { ErrorsContext } from '../../../contexts';
 //! текст прокинуть через пропс
 
 function PopupError({ isOpen, onClose }) {
+  const { serverError } = useContext(ErrorsContext);
   const closeOnEsc = (evt) => {
     if (evt.key === 'Escape') {
       onClose();
@@ -27,12 +29,12 @@ function PopupError({ isOpen, onClose }) {
     >
       <TitleH2
         sectionClass="popup__title_type_calendar popup__title_type_error"
-        title="Что-то пошло не так, попробуйте записаться снова"
+        title={serverError?.title}
       />
       <div className="popup__buttons_type_calendar">
         <Button
           color="black"
-          title="Вернуться к мероприятию"
+          title={serverError?.button}
           sectionClass="popup__button_type_error"
           onClick={onClose}
         />

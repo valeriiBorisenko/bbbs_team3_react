@@ -9,11 +9,12 @@ import defaultImage from '../../assets/icon-logo-no-text.svg';
 import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationContainer';
 import { Card, TitleH2, Rating, Caption, Button } from '../utils/index';
 
-function ProfileDiary({ data, onEdit, onDelete }) {
+function ProfileDiary({ data, onEdit, onDelete, sectionClass }) {
   const { image, place, description, mark, date } = data;
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
+  const [isShared, setIsShared] = useState(false);
 
   useEffect(() => {
     setCaption(captions[mark]);
@@ -27,8 +28,13 @@ function ProfileDiary({ data, onEdit, onDelete }) {
     onDelete(data);
   };
 
+  // временное решение, функционал отправки дорабатывается бэкендом
+  const handleShareButtonClick = () => {
+    setIsShared(true);
+  };
+
   return (
-    <div className="card-container profile-diary">
+    <div className={`card-container profile-diary ${sectionClass}`}>
       <Card sectionClass="profile-diary__image-container">
         <img
           className={
@@ -69,9 +75,12 @@ function ProfileDiary({ data, onEdit, onDelete }) {
           </div>
           <div className="profile-diary__action-elements">
             <Button
-              title={texts.buttonShareText}
+              title={isShared ? texts.buttonTextShared : texts.buttonShareText}
               color="gray-borderless"
-              sectionClass="profile-diary__button"
+              sectionClass={`profile-diary__button ${
+                isShared ? 'profile-diary__button_shared' : ''
+              }`}
+              onClick={handleShareButtonClick}
             />
             <Button
               title={texts.buttonEditText}
@@ -96,12 +105,14 @@ ProfileDiary.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
+  sectionClass: PropTypes.string,
 };
 
 ProfileDiary.defaultProps = {
   data: {},
   onEdit: () => {},
   onDelete: () => {},
+  sectionClass: '',
 };
 
 export default ProfileDiary;

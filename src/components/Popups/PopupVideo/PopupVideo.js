@@ -5,35 +5,24 @@ import Popup from '../Popup/Popup';
 import { TitleH2, Caption } from '../../utils/index';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
 import Loader from '../../utils/Loader/Loader';
-import {
-  getLocalStorageData,
-  removeLocalStorageData,
-} from '../../../hooks/useLocalStorage';
+import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
 
 const PopupVideo = ({ isOpen, onClose }) => {
-  // console.log('PopupVideo COMPONENT');
   const data = getLocalStorageData(localStChosenVideo);
   const { frameSrc } = parserLinkYoutube(data?.link);
 
-  // console.log('data', data);
-
   const [iframeIsLoading, setIframeIsLoading] = useState(true);
-
-  const onCloseHandler = () => {
-    removeLocalStorageData(localStChosenVideo);
-    onClose();
-  };
 
   return (
     <Popup
       type="video"
       typeContainer="video"
       isOpen={isOpen}
-      onClose={onCloseHandler}
+      onClose={onClose}
       withoutCloseButton
     >
-      {iframeIsLoading ? <Loader isNested /> : null}
+      {iframeIsLoading && <Loader isNested />}
       <>
         <iframe
           title="youTubePlayer"

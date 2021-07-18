@@ -13,6 +13,7 @@ import {
   STORIES_URL,
   VIDEO_URL,
   MOVIES_URL,
+  ARTICLES_URL,
 } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { randomizeArray } from '../../utils/utils';
@@ -56,6 +57,16 @@ function MainPage() {
       setMainPageData({ ...mainPageData, event: selectedEvent });
     }
   }, [selectedEvent]);
+
+  // редиректы
+  function dispatchRedirectEvent() {
+    const event = new Event('redirectToPageAndOpenPopup');
+    window.dispatchEvent(event);
+  }
+
+  function redirectToPage() {
+    dispatchRedirectEvent();
+  }
 
   // запрос даты главной страницы при загрузке и при смене города
   //! из-за этого главная 2 раза запрашивается для юзера!!
@@ -101,14 +112,17 @@ function MainPage() {
   function renderHistoryBlock() {
     if (mainPageData?.history) {
       return (
-        <Card sectionClass="lead__media scale-in" key={mainPageData.history.id}>
+        <Card
+          sectionClass="lead__media scale-in"
+          key={mainPageData?.history?.id}
+        >
           <img
-            src={`${staticImageUrl}/${mainPageData.history.image}`}
+            src={`${staticImageUrl}/${mainPageData?.history?.image}`}
             alt={mainPageData.history.title}
             className="card__media-img"
           />
           <Link to={STORIES_URL} className="lead__link">
-            {mainPageData.history.title}
+            {mainPageData?.history?.title}
           </Link>
         </Card>
       );
@@ -126,8 +140,8 @@ function MainPage() {
     return (
       <section className="place main-section page__section">
         <CardPlace
-          key={mainPageData.place.id}
-          data={mainPageData.place}
+          key={mainPageData?.place?.id}
+          data={mainPageData?.place}
           sectionClass="card-container_type_main-article scale-in"
           activityTypes={activityTypes}
           isBig
@@ -140,16 +154,20 @@ function MainPage() {
   function renderArticleSection(article) {
     return (
       <section className="articles main-section page__section scale-in">
-        <Link to="/articles" className="main-section__link">
-          <CardArticleBig key={article.id} title={article.title} color="blue" />
-        </Link>
+        <CardArticleBig
+          key={article?.id}
+          title={article?.title}
+          color="blue"
+          articleUrl={article?.articleUrl}
+          pageUrl={ARTICLES_URL}
+        />
       </section>
     );
   }
 
   function renderMoviesSection() {
     // рандомизируем массив
-    const randomMovies = randomizeArray(mainPageData.movies, MOVIES_COUNT);
+    const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
 
     const additionalMoviesClasses =
       randomMovies.length > 1
@@ -160,7 +178,12 @@ function MainPage() {
     return (
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {randomMovies.map((movie) => (
-          <Link to={MOVIES_URL} className={className} key={movie.id}>
+          <Link
+            to={MOVIES_URL}
+            onClick={redirectToPage}
+            className={className}
+            key={movie?.id}
+          >
             <CardFilm data={movie} />
           </Link>
         ))}
@@ -171,10 +194,14 @@ function MainPage() {
   function renderVideoSection() {
     return (
       <section className="video main-section page__section">
-        <Link to={VIDEO_URL} className="main-section__link scale-in">
+        <Link
+          to={VIDEO_URL}
+          onClick={redirectToPage}
+          className="main-section__link scale-in"
+        >
           <CardVideoMain
-            key={mainPageData.video.id}
-            data={mainPageData.video}
+            key={mainPageData?.video?.id}
+            data={mainPageData?.video}
           />
         </Link>
       </section>
@@ -183,7 +210,7 @@ function MainPage() {
 
   function renderQuestionBlock() {
     const randomQuestions = randomizeArray(
-      mainPageData.questions,
+      mainPageData?.questions,
       QUESTIONS_COUNT
     );
 
@@ -195,7 +222,7 @@ function MainPage() {
             className={`main-section__link scale-in main-section__link_el_question ${
               randomQuestions.length > 2 ? ' main-questions_pagination' : ''
             }`}
-            key={item.id}
+            key={item?.id}
           >
             <CardQuestion data={item} />
           </Link>

@@ -1,20 +1,33 @@
 import './PopupLogin.scss';
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
+import Lottie from 'lottie-web';
 import texts from './locales/RU';
 import { CurrentUserContext, ErrorsContext } from '../../../contexts/index';
 import { useAuth, useFormWithValidation } from '../../../hooks/index';
 import { AFISHA_URL } from '../../../config/routes';
 import Popup from '../Popup/Popup';
 import { Input, Button, TitleH2 } from '../../utils/index';
-import AnimationSuccessLogin from '../../utils/AnimationSuccessLogin/AnimationSuccessLogin';
+import animationSuccess from '../../../assets/animation/ill_popup_success.json';
 
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
   const { serverError, clearError } = useContext(ErrorsContext);
-  const [isForgotPassword, isSetForgotPassword] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const animationContainer = useRef(null);
+
+  useEffect(() => {
+    Lottie.loadAnimation({
+      container: animationContainer.current,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      animationData: animationSuccess,
+    });
+  }, []);
 
   const errorsString = serverError
     ? Object.values(serverError)
@@ -25,12 +38,12 @@ function PopupLogin({ isOpen, onClose }) {
 
   const { handleLogin } = useAuth(updateUser);
   function handleClickForgotPassword() {
-    isSetForgotPassword(!isForgotPassword);
+    setIsForgotPassword(!isForgotPassword);
   }
 
   function successForgotPassword() {
     setIsSuccess(false);
-    isSetForgotPassword(false);
+    setIsForgotPassword(false);
   }
 
   const { values, handleChange, errors, isValid, resetForm } =
@@ -53,6 +66,7 @@ function PopupLogin({ isOpen, onClose }) {
   //! аварийный перевод на главную, если не хочешь логиниться
   const history = useHistory();
   const { pathname } = useLocation();
+
   function closePopup() {
     if (pathname === AFISHA_URL) {
       history.push('/');
@@ -60,15 +74,37 @@ function PopupLogin({ isOpen, onClose }) {
     onClose();
   }
 
+  function closePopupOnEsc(evt) {
+    if (evt.key === 'Escape') {
+      closePopup();
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keyup', closePopupOnEsc);
+    return () => window.removeEventListener('keyup', closePopupOnEsc);
+  }, [pathname]);
+
   useEffect(() => {
     resetForm();
     clearError();
-    isSetForgotPassword(false);
+  }, [isOpen, isForgotPassword]);
+
+  useEffect(() => {
+    setIsForgotPassword(false);
   }, [isOpen]);
+
+  const classNameAuth = [
+    'popup__form',
+    'popup__form_type_sign-in',
+    `${isOpen && !isForgotPassword ? 'popup__form_type_sign-in_opened' : ''}`,
+  ]
+    .join(' ')
+    .trim();
 
   const formAuth = () => (
     <form
-      className="popup__form"
+      className={classNameAuth}
       onSubmit={(evt) => handleSubmit(evt)}
       noValidate
     >
@@ -120,51 +156,71 @@ function PopupLogin({ isOpen, onClose }) {
     </form>
   );
 
-  const formForgotPassword = () => {
-    if (isSuccess) {
-      return <AnimationSuccessLogin isSuccess={isSuccess} />;
-    }
-    return (
-      <form
-        className="popup__form"
-        onSubmit={(evt) => handleSubmitForgotPassword(evt)}
-        noValidate
-      >
-        <TitleH2
-          sectionClass="popup__title_type_sign-in"
-          title={texts.titleForgotForm}
-        />
-        <p className="paragraph popup__sign-in">{texts.paragraphForgotForm}</p>
+  const classForgotPassword = [
+    'popup__form',
+    'popup__form_type_email',
+    `${isForgotPassword && !isSuccess ? 'popup__form_type_email_opened' : ''}`,
+  ]
+    .join(' ')
+    .trim();
 
-        <Input
-          id="loginUseremailInput"
-          sectionClass="popup__input"
-          type="email"
-          name="usermail"
-          placeholder={texts.emailPlaceholder}
-          onChange={handleChange}
-          value={values?.usermail}
-          error={errors?.usermail}
-          required
-        />
-        <button
-          className="popup__forgot-password"
-          type="button"
-          onClick={handleClickForgotPassword}
-        >
-          {texts.backButtonText}
-        </button>
-        <span className="form-error-message">{errorsString}</span>
-        <Button
-          sectionClass="popup__button_type_sign-in"
-          color="blue"
-          title={texts.submitButtonTextForgot}
-          isDisabled={!isValid}
-          isSubmittable
-        />
-      </form>
-    );
-  };
+  const formForgotPassword = () => (
+    <form
+      className={classForgotPassword}
+      onSubmit={(evt) => handleSubmitForgotPassword(evt)}
+      noValidate
+    >
+      <TitleH2
+        sectionClass="popup__title_type_sign-in"
+        title={texts.titleForgotForm}
+      />
+      <p className="paragraph popup__sign-in">{texts.paragraphForgotForm}</p>
+
+      <Input
+        id="loginUseremailInput"
+        sectionClass="popup__input"
+        type="email"
+        name="usermail"
+        placeholder={texts.emailPlaceholder}
+        onChange={handleChange}
+        value={values?.usermail}
+        error={errors?.usermail}
+        required
+      />
+      <button
+        className="popup__forgot-password"
+        type="button"
+        onClick={handleClickForgotPassword}
+      >
+        {texts.backButtonText}
+      </button>
+      <span className="form-error-message">{errorsString}</span>
+      <Button
+        sectionClass="popup__button_type_sign-in"
+        color="blue"
+        title={texts.submitButtonTextForgot}
+        isDisabled={!isValid}
+        isSubmittable
+      />
+    </form>
+  );
+
+  const className = [
+    'popup__login-container_success',
+    `${isSuccess ? 'popup__login-container_success_opened' : ''}`,
+  ]
+    .join(' ')
+    .trim();
+
+  const containerAnimationSuccessLogin = () => (
+    <div className={className}>
+      <div
+        ref={animationContainer}
+        className="popup__login-container_success-animation"
+      />
+      <TitleH2 title={texts.successTitle} />
+    </div>
+  );
 
   return (
     <Popup
@@ -173,7 +229,9 @@ function PopupLogin({ isOpen, onClose }) {
       isOpen={isOpen}
       onClose={closePopup}
     >
-      {isForgotPassword ? formForgotPassword() : formAuth()}
+      {formAuth()}
+      {formForgotPassword()}
+      {containerAnimationSuccessLogin()}
     </Popup>
   );
 }

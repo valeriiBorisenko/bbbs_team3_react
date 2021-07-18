@@ -48,7 +48,7 @@ const useAuth = (setCurrentUser) => {
           setLocalStorageData(jwt, access);
           getUserData()
             .then((userData) => setCurrentUser(userData))
-            .then(() => popups.closeAllPopups())
+            .then(() => popups.closePopupLogin())
             .catch((err) => handleError(err));
         }
       })
