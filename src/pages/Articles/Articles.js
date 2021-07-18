@@ -1,5 +1,5 @@
 import './Articles.scss';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import articlesPageTexts from '../../locales/articles-page-RU';
 import { useScrollToTop } from '../../hooks/index';
 import { COLORS, ERROR_MESSAGES } from '../../config/constants';
@@ -12,7 +12,6 @@ import {
   Loader,
 } from './index';
 import getArticlesPageData from '../../api/articles-page';
-import { ErrorsContext } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
   small: 2,
@@ -24,8 +23,6 @@ const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
 function Articles() {
   useScrollToTop();
 
-  const { serverError, setError } = useContext(ErrorsContext);
-
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
@@ -34,6 +31,8 @@ function Articles() {
   const [mainArticle, setMainCard] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+  // Стейт ошибки
+  const [pageError, setPageError] = useState(false);
 
   function getPageData() {
     const offset = pageSize * pageNumber;
@@ -82,7 +81,7 @@ function Articles() {
           }
         })
         .catch((err) => {
-          setError(true);
+          setPageError(true);
           console.log(err);
         })
         .finally(() => {
@@ -112,7 +111,7 @@ function Articles() {
 
   // отрисовка заглушки
   function renderAnimatedContainer() {
-    if (serverError) {
+    if (pageError) {
       return (
         <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
       );

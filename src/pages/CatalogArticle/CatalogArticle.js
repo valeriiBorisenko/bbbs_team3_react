@@ -1,19 +1,18 @@
 import './CatalogArticle.scss';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { BasePage, Loader } from './index';
 import getCatalogArticlePageData from '../../api/catalog-article-page';
 import catalogArticlePageTexts from '../../locales/catalog-article-page-RU';
 import { AnimatedPageContainer } from '../Books';
 import { ERROR_MESSAGES } from '../../config/constants';
-import { ErrorsContext } from '../../contexts';
 
 function CatalogArticle({ articleId }) {
-  const { serverError, setError } = useContext(ErrorsContext);
-
   const { headTitle, headDescription } = catalogArticlePageTexts;
   const [catalogArticlePageData, setCatalogArticlePageData] = useState();
   const [isLoadingPage, setIsLoadingPage] = useState(true);
+  // Стейт ошибки
+  const [pageError, setPageError] = useState(false);
 
   useEffect(() => {
     getCatalogArticlePageData({ articleId })
@@ -21,7 +20,7 @@ function CatalogArticle({ articleId }) {
         setCatalogArticlePageData(data);
       })
       .catch((err) => {
-        setError(true);
+        setPageError(true);
         console.log(err);
       })
       .finally(() => {
@@ -30,7 +29,7 @@ function CatalogArticle({ articleId }) {
   }, [articleId]);
 
   function renderPage() {
-    if (serverError) {
+    if (pageError) {
       return (
         <AnimatedPageContainer titleText={ERROR_MESSAGES.generalErrorMessage} />
       );
