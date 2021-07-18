@@ -1,7 +1,11 @@
 import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
 import questionsPageTexts from '../../locales/questions-page-RU';
-import { CurrentUserContext, ErrorsContext } from '../../contexts/index';
+import {
+  CurrentUserContext,
+  ErrorsContext,
+  PopupsContext,
+} from '../../contexts/index';
 import {
   useScrollToTop,
   useDebounce,
@@ -11,6 +15,7 @@ import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_CODES,
+  ERROR_MESSAGES,
 } from '../../config/constants';
 import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
 import {
@@ -53,7 +58,10 @@ function Questions() {
 
   const { currentUser } = useContext(CurrentUserContext);
   const { serverError, setError, clearError } = useContext(ErrorsContext);
+  const { openPopupError } = useContext(PopupsContext);
   const { unauthorized, badRequest } = ERROR_CODES;
+
+  const [isPageError, setIsPageError] = useState(false);
 
   const errorsString = serverError
     ? Object.values(serverError)
@@ -117,7 +125,6 @@ function Questions() {
     // выбираем кнопку все
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
-      // setPageIndex(INITIAL_PAGE_INDEX);
     } else {
       // выбираем другие фильтры
       handleCheckboxBehavior(setCategories, { inputValue, isChecked });
@@ -147,7 +154,13 @@ function Questions() {
         setTotalPages(Math.ceil(count / pageSize));
         setQuestionsPageData(results);
       })
-      .catch((error) => console.log(error))
+      .catch(() => {
+        setError({
+          title: ERROR_MESSAGES.filterErrorMessage.title,
+          button: ERROR_MESSAGES.filterErrorMessage.button,
+        });
+        openPopupError();
+      })
       .finally(() => setIsLoading(false));
   };
 
@@ -159,7 +172,13 @@ function Questions() {
         const { results } = questionsData;
         setQuestionsPageData((prevData) => [...prevData, ...results]);
       })
-      .catch((error) => console.log(error));
+      .catch(() => {
+        setError({
+          title: ERROR_MESSAGES.generalErrorMessage.title,
+          button: ERROR_MESSAGES.generalErrorMessage.button,
+        });
+        openPopupError();
+      });
   };
 
   const handleFiltration = (activeCategories) => {
@@ -216,11 +235,11 @@ function Questions() {
         setQuestionsPageData(results);
 
         const customFilters = tagsFilters.map((tag) => {
-          const filterName = changeCaseOfFirstLetter(tag.name);
+          const filterName = changeCaseOfFirstLetter(tag?.name);
           return {
             isActive: false,
             name: filterName,
-            filter: tag.slug,
+            filter: tag?.slug,
           };
         });
         setCategories([
@@ -228,13 +247,21 @@ function Questions() {
           ...customFilters,
         ]);
       })
-      .catch((error) => console.log(error));
+      .catch(() => setIsPageError(true));
   }, []);
 
   // рендеринг
-  // заглушка, если нет даты
+  // заглушка, если нет даты или ошибка
   function returnAnimatedContainer() {
-    return <AnimatedPageContainer titleText={textStubNoData} />;
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
   }
 
   // форма вопросов
@@ -295,7 +322,7 @@ function Questions() {
       <>
         <ul className="questions">
           {questionsPageData.map((question) => (
-            <li className="questions__list-item fade-in" key={question.id}>
+            <li className="questions__list-item fade-in" key={question?.id}>
               <CardQuestion
                 data={question}
                 sectionClass="card__questions_type_questions-page"
@@ -314,7 +341,7 @@ function Questions() {
 
   // главная функция рендеринга
   const renderPageContent = () => {
-    if (questionsPageData.length > 0) {
+    if (questionsPageData?.length > 0) {
       return (
         <>
           <TitleH1 title={title} sectionClass="questions__title" />
@@ -338,8 +365,8 @@ function Questions() {
     }
 
     // залогинен и нет вопросов, покажем заглушку
-    const isDataForPage = questionsPageData.length > 1;
-    if (!isDataForPage) {
+    const isDataForPage = questionsPageData?.length > 1;
+    if (isPageError || !isDataForPage) {
       return returnAnimatedContainer();
     }
 
@@ -347,7 +374,7 @@ function Questions() {
   };
 
   // глобальный лоадер
-  if (!questionsPageData || !categories) {
+  if ((!questionsPageData || !categories) && !isPageError) {
     return <Loader isCentered />;
   }
 
