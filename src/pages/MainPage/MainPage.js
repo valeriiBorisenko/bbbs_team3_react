@@ -68,22 +68,19 @@ function MainPage() {
   }
 
   // запрос даты главной страницы при загрузке и при смене города
-  //! из-за этого главная 2 раза запрашивается для юзера!!
+  function getMainPageDataOnLoad() {
+    getMainPageData()
+      .then((data) => setMainPageData(data))
+      .catch(() => setIsPageError(true))
+      .finally(() => setIsCityChanging(false));
+  }
+
   useEffect(() => {
     if (currentUser) {
       setIsCityChanging(true);
-      getMainPageData()
-        .then((data) => setMainPageData(data))
-        .catch(() => setIsPageError(true))
-        .finally(() => setIsCityChanging(false));
     }
+    getMainPageDataOnLoad();
   }, [currentUser?.city]);
-
-  useEffect(() => {
-    getMainPageData()
-      .then((data) => setMainPageData(data))
-      .catch(() => setIsPageError(true));
-  }, []);
 
   // глобальный лоадер (без футера)
   if (!mainPageData && !isPageError) {

@@ -49,13 +49,12 @@ function PopupCities({ isOpen, onClose }) {
           updateUser(res);
           onClose();
         })
-        .catch((error) => {
+        .catch(() => {
           setError({
             title: ERROR_MESSAGES.citiesErrorMessage.title,
             button: ERROR_MESSAGES.citiesErrorMessage.button,
           });
           openPopupError();
-          console.log(error);
         });
     } else {
       dispatchLocalStorageEvent(localStUserCity, cityId);
