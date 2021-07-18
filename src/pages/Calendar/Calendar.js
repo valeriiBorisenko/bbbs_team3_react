@@ -42,7 +42,7 @@ function Calendar() {
   const [isLoading, setIsLoading] = useState(false);
   // переход между городами, лоадер
   const [isGlobalLoader, setIsGlobalLoader] = useState(false);
-  //
+  // лоадер для пагинации
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   // загрузка данных страницы календаря, если ты залогиненный
@@ -59,6 +59,7 @@ function Calendar() {
   const [pageSize, setPageSize] = useState(null);
   const [totalPages, setTotalPages] = useState(null);
   const [pageIndex, setPageIndex] = useState(INITIAL_PAGE_INDEX);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   // определение размера страницы
   useEffect(() => {
@@ -82,12 +83,10 @@ function Calendar() {
 
     small.addEventListener('change', listener);
     medium.addEventListener('change', listener);
-    // largeQuery.addEventListener('change', listener);
 
     return () => {
       small.removeEventListener('change', listener);
       medium.removeEventListener('change', listener);
-      // largeQuery.removeEventListener('change', listener);
     };
   }, []);
 
@@ -126,57 +125,30 @@ function Calendar() {
       });
   }
 
-  // эффект пагинации
-  const debouncePaginate = useDebounce(getPageData, DELAY_DEBOUNCE);
-  useEffect(() => {
-    console.log('useEffect pageIndex');
-    console.log('pageIndex', pageIndex);
-    const activeMonths = getActiveFilters();
-    setIsLoadingPaginate(true);
-
-    // при нажатых фильтрах нажимаем пагинацию
-    if (pageIndex > 0 && activeMonths.length > 0) {
-      console.log('useEffect pageIndex IF');
-      const offset = pageSize * pageIndex;
-      const { filter } = activeMonths[0]; // задел под мультифильтры
-      debouncePaginate({ offset, activeFilters: filter });
-    }
-
-    // просто нажимаем пагинацию + месяц не выбран
-    if (pageIndex > 0 && activeMonths.length === 0) {
-      console.log('useEffect pageIndex ELSE');
-      const offset = pageSize * pageIndex;
-      debouncePaginate({ offset });
-    }
-
-    if (!isLoadingPaginate && pageIndex === 0) {
-      console.log('tyt');
-      console.log(pageSize * pageIndex);
-      // const offset = pageSize * pageIndex;
-      // debouncePaginate({ offset });
-    }
-  }, [pageIndex]);
-
   // загрузка страницы палендаря при старте либо показ попапа логина
   useEffect(() => {
     console.log('useEffect загрузка страницы первичная');
     // console.log('pageSize', pageSize);
     if (currentUser && pageSize) {
-      console.log('useEffect IF');
+      console.log('useEffect загрузка страницы первичная IF 1');
       const offset = pageSize * pageIndex;
       getPageData({ offset });
+      setIsFirstRender(false);
     }
 
     if (!currentUser) {
+      console.log('useEffect загрузка страницы первичная IF 2');
       openPopupLogin();
     }
+
+    console.log(pageSize);
   }, [pageSize, currentUser]);
 
-  // загрузка фильтров страницы при старте
+  // загрузка фильтров страницы при старте или смене города юзера
   useEffect(() => {
     if (currentUser) {
+      console.log('useEffect currentUser?.city');
       setIsGlobalLoader(true);
-      console.log('useEffect запрос фильтров IF');
       getActiveMonthTags()
         .then((monthsTags) => {
           const customFilters = monthsTags.map((tag) => {
@@ -205,12 +177,12 @@ function Calendar() {
     const activeMonths = getActiveFilters();
 
     const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
-    // фильтров нет
+    // фильтров нет (грузим стартовую страницу)
     if (activeMonths.length === 0) {
       console.log('handleFiltration IF');
       getPageData({ limit: pageSize, offset });
     } else {
-      // фильтруется по месяцу
+      // фильтруемся по месяцу
       console.log('handleFiltration ELSE');
       const { filter } = activeMonths[0]; // задел под мультифильтры
       getPageData({ limit: pageSize, offset, activeFilters: filter });
@@ -220,8 +192,10 @@ function Calendar() {
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   // эффект фильтрации
   useEffect(() => {
+    console.log('useEffect isFiltersUsed');
     // в дальнейшем надо изменить количество секунд
     if (isFiltersUsed) {
+      console.log('useEffect isFiltersUsed IF');
       setIsLoading(true);
       debounceFiltration();
     }
@@ -229,6 +203,31 @@ function Calendar() {
     // провели фильтрацию, флажок фильтров меняем
     setIsFiltersUsed(false);
   }, [isFiltersUsed]);
+
+  // эффект пагинации
+  const debouncePaginate = useDebounce(getPageData, DELAY_DEBOUNCE);
+  useEffect(() => {
+    if (!isFirstRender) {
+      console.log('useEffect pageIndex');
+      console.log('pageIndex', pageIndex);
+      const activeMonths = getActiveFilters();
+      setIsLoadingPaginate(true);
+      // при нажатых фильтрах нажимаем пагинацию
+      if (activeMonths.length > 0) {
+        console.log('useEffect pageIndex IF');
+        const offset = pageSize * pageIndex;
+        const { filter } = activeMonths[0]; // задел под мультифильтры
+        debouncePaginate({ offset, activeFilters: filter });
+      }
+
+      // просто нажимаем пагинацию + месяц не выбран
+      if (activeMonths.length === 0) {
+        console.log('useEffect pageIndex ELSE');
+        const offset = pageSize * pageIndex;
+        debouncePaginate({ offset });
+      }
+    }
+  }, [pageIndex]);
 
   // подписка/отписка от ивентов
   const { handleEventBooking, selectedEvent } = useEventBooking();
@@ -285,7 +284,7 @@ function Calendar() {
   function renderPagination() {
     return (
       <Paginate
-        sectionClass="calendar-page__pagination"
+        sectionClass="cards-section__pagination"
         pageCount={totalPages}
         value={pageIndex}
         onChange={setPageIndex}
