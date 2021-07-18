@@ -1,13 +1,17 @@
 import './Calendar.scss';
 import { useEffect, useState, useContext } from 'react';
 import calendarPageTexts from '../../locales/calendar-page-RU';
-import { CurrentUserContext, PopupsContext } from '../../contexts/index';
+import {
+  ErrorsContext,
+  CurrentUserContext,
+  PopupsContext,
+} from '../../contexts/index';
 import {
   useScrollToTop,
   useDebounce,
   useEventBooking,
 } from '../../hooks/index';
-import { months, DELAY_DEBOUNCE } from '../../config/constants';
+import { months, DELAY_DEBOUNCE, ERROR_MESSAGES } from '../../config/constants';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { getCalendarPageData, getActiveMonthTags } from '../../api/afisha-page';
@@ -35,7 +39,9 @@ function Calendar() {
   useScrollToTop();
 
   const { currentUser } = useContext(CurrentUserContext);
-  const { openPopupLogin, openPopupAboutEvent } = useContext(PopupsContext);
+  const { openPopupLogin, openPopupAboutEvent, openPopupError } =
+    useContext(PopupsContext);
+  const { setError } = useContext(ErrorsContext);
 
   // переход между фильтрами/страницами пагинации, лоадер
   const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +65,9 @@ function Calendar() {
   const [totalPages, setTotalPages] = useState(null);
   const [pageIndex, setPageIndex] = useState(INITIAL_PAGE_INDEX);
   const [isFirstRender, setIsFirstRender] = useState(true);
+
+  // Стейт ошибки
+  const [isPageError, setIsPageError] = useState(false);
 
   // определение размера страницы
   useEffect(() => {
@@ -115,12 +124,23 @@ function Calendar() {
         setTotalPages(Math.ceil(count / pageSize));
         setCalendarPageData(results);
       })
-      .catch((error) => console.log(error))
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError({
+            title: ERROR_MESSAGES.filterErrorMessage.title,
+            button: ERROR_MESSAGES.filterErrorMessage.button,
+          });
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
+      })
       .finally(() => {
         setIsLoading(false);
         setIsGlobalLoader(false);
         setIsLoadingPaginate(false);
       });
+    // .catch((error) => console.log(error))
   }
 
   // загрузка страницы палендаря при старте либо показ попапа логина
@@ -158,7 +178,7 @@ function Calendar() {
           });
           setFilters(customFilters);
         })
-        .catch((error) => console.log(error));
+        .catch(() => setIsPageError(true));
     }
   }, [currentUser?.city]);
 
@@ -291,6 +311,15 @@ function Calendar() {
 
   // главная функция рендера
   function renderPageContent() {
+    // ошибка загрузки данных
+    if (isPageError) {
+      return (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      );
+    }
+
     // залогинен и есть ивенты
     if (currentUser && areThereEventsMoreForOneMonth) {
       return (
@@ -336,7 +365,7 @@ function Calendar() {
   }
 
   // глобальный лоадер при первой загрузке пока ждем ивенты и фильтры
-  if (!calendarPageData || !filters) {
+  if ((!calendarPageData || !filters) && !isPageError) {
     console.log('Global loader');
     return <Loader isCentered />;
   }
