@@ -16,6 +16,7 @@ import {
   PopupLogin,
   PopupRecommendSuccess,
   PopupVideo,
+  PopupInfoTooltip,
 } from './components/Popups/index';
 // логины, авторизация
 import {
@@ -42,6 +43,7 @@ function App() {
   const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
     useState(false);
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
   const [isWithoutRegister, setIsWithoutRegister] = useState(false);
 
@@ -51,6 +53,11 @@ function App() {
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupRecommendSuccessOpen(false);
+    setIsInfoTooltipOpen(false);
+  }
+
+  function openPopupInfoTooltip() {
+    setIsInfoTooltipOpen(true);
   }
 
   function openPopupConfirmation() {
@@ -170,6 +177,7 @@ function App() {
                 openPopupLogin,
                 openPopupRecommendSuccess,
                 openPopupVideo,
+                openPopupInfoTooltip,
               }}
             >
               <div className="page">
@@ -206,6 +214,10 @@ function App() {
                 <PopupVideo
                   isOpen={isVideoPopupOpen}
                   onClose={closePopupVideo}
+                />
+                <PopupInfoTooltip
+                  isOpen={isInfoTooltipOpen}
+                  onClose={closeAllPopups}
                 />
               </div>
             </PopupsContext.Provider>
