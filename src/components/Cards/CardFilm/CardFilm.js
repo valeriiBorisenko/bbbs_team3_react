@@ -36,7 +36,7 @@ function CardFilm({
 
   // Следит за шириной экрана и записывает в стейт
   useEffect(() => {
-    const mobile = window.matchMedia('(max-width: 640px)');
+    const mobile = window.matchMedia('(max-width: 767px)');
 
     const listener = () => {
       if (mobile.matches) setIsMobile(true);
