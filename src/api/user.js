@@ -17,4 +17,12 @@ function updateUserProfile(dataToUpdate) {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-export { getUserData, updateUserProfile };
+// восстановить пароль
+function recoverPassword(email) {
+  return axios
+    .post(`${baseURL}${apiUrl}/profile/send_password/`, email)
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(err?.response));
+}
+
+export { getUserData, updateUserProfile, recoverPassword };

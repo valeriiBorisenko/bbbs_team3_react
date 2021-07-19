@@ -8,15 +8,21 @@ import texts from './locales/RU';
 import { CurrentUserContext, ErrorsContext } from '../../../contexts/index';
 import { useAuth, useFormWithValidation } from '../../../hooks/index';
 import { AFISHA_URL } from '../../../config/routes';
+import { ERROR_MESSAGES, ERROR_CODES } from '../../../config/constants';
+import { recoverPassword } from '../../../api/user';
 import Popup from '../Popup/Popup';
 import { Input, Button, TitleH2 } from '../../utils/index';
 import animationSuccess from '../../../assets/animation/ill_popup_success.json';
 
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
-  const { serverError, clearError } = useContext(ErrorsContext);
+  const { serverError, clearError, setError } = useContext(ErrorsContext);
+  const { generalErrorMessage } = ERROR_MESSAGES;
+  const { badRequest } = ERROR_CODES;
+
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const animationContainer = useRef(null);
 
@@ -55,13 +61,22 @@ function PopupLogin({ isOpen, onClose }) {
     handleLogin(values);
   }
 
+  function handleError(err) {
+    if (err?.status === badRequest) setError(err?.data);
+    else setError({ message: generalErrorMessage.title });
+  }
+
   function handleSubmitForgotPassword(evt) {
     evt.preventDefault();
-    // временное решение имитации отправки
-    resetForm();
-    clearError();
-    setIsSuccess(true);
-    setTimeout(successForgotPassword, 5000);
+    recoverPassword(values)
+      .then((res) => {
+        setSuccessMessage(res?.email);
+        resetForm();
+        clearError();
+        setIsSuccess(true);
+        setTimeout(successForgotPassword, 6000);
+      })
+      .catch(handleError);
   }
 
   //! аварийный перевод на главную, если не хочешь логиниться
@@ -72,6 +87,7 @@ function PopupLogin({ isOpen, onClose }) {
     if (pathname === AFISHA_URL) {
       history.push('/');
     }
+    setSuccessMessage('');
     onClose();
   }
 
@@ -124,7 +140,7 @@ function PopupLogin({ isOpen, onClose }) {
         onChange={handleChange}
         value={values?.username}
         error={errors?.username}
-        minLength="2"
+        minLength="4"
         required
       />
 
@@ -183,11 +199,11 @@ function PopupLogin({ isOpen, onClose }) {
         id="loginUseremailInput"
         sectionClass="popup__input"
         type="email"
-        name="usermail"
+        name="email"
         placeholder={texts.emailPlaceholder}
         onChange={handleChange}
-        value={values?.usermail}
-        error={errors?.usermail}
+        value={values?.email}
+        error={errors?.email}
         required
       />
       <button
@@ -221,7 +237,7 @@ function PopupLogin({ isOpen, onClose }) {
         ref={animationContainer}
         className="popup__login-container_success-animation"
       />
-      <TitleH2 title={texts.successTitle} />
+      <TitleH2 title={successMessage} />
     </div>
   );
 
