@@ -47,11 +47,11 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
     postPlace(createFormData(data))
       .then(() => {
         openPopupRecommendSuccess(true);
+        closeForm();
       })
       .catch((err) => {
         if (err?.status === badRequest || err?.status === unauthorized) {
           setError(err?.data);
-          closeForm();
         } else
           setError({
             message: generalErrorMessage.title,

@@ -14,8 +14,6 @@ const texts = {
   emailPlaceholder: 'Email',
   backButtonText: 'Я вспомнил пароль',
   submitButtonTextForgot: 'Отправить',
-  successTitle:
-    'Данная функция пока находится в разработке. Пожалуйста, обратитесь к куратору для восстановления пароля',
 };
 
 export default texts;
