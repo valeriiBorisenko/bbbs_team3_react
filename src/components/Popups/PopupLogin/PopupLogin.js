@@ -68,14 +68,13 @@ function PopupLogin({ isOpen, onClose }) {
 
   function handleSubmitForgotPassword(evt) {
     evt.preventDefault();
-    recoverPassword(values?.useremail)
+    recoverPassword(values)
       .then((res) => {
-        console.log(res);
         setSuccessMessage(res?.email);
         resetForm();
         clearError();
         setIsSuccess(true);
-        setTimeout(successForgotPassword, 5000);
+        setTimeout(successForgotPassword, 6000);
       })
       .catch(handleError);
   }
@@ -200,11 +199,11 @@ function PopupLogin({ isOpen, onClose }) {
         id="loginUseremailInput"
         sectionClass="popup__input"
         type="email"
-        name="useremail"
+        name="email"
         placeholder={texts.emailPlaceholder}
         onChange={handleChange}
-        value={values?.useremail}
-        error={errors?.useremail}
+        value={values?.email}
+        error={errors?.email}
         required
       />
       <button
