@@ -117,6 +117,16 @@
 }
 
 @include atDesktop1380 {
+  .menu__list-item {
+    margin-right: 20px;
+  
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}
+
+@include atDesktop1279 {
   .menu {
     display: grid;
     grid-template-columns: 60px 1fr 40px;
