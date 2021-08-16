@@ -45,7 +45,7 @@ function CatalogArticle({ articleId }) {
           title={catalogArticlePageData.title}
           sectionClass="article__main-title"
         />
-        <p className="article__description">
+        <p className="article__description section-title">
           {catalogArticlePageData.description}
         </p>
         <figure className="article__figure">
