@@ -31,50 +31,47 @@
   margin-top: 10px;
 }
 
-.article__container {
+.article__markdown {
   margin: 50px auto 0;
   max-width: 770px;
 
-  & > .paragraph {
+  & h2 {
+    margin-top: 80px;
+    margin-bottom: 30px;
+    text-align: center;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  & p {
     text-align: justify;
   }
-}
 
-.article__subtitle {
-  margin-top: 80px;
-  margin-bottom: 30px;
-  text-align: center;
+  & ul {
+    margin: 0;
+    padding: 50px;
+    background-color: $white;
 
-  &:first-of-type {
-    margin-top: 0;
+    & li {
+      list-style-type: none;
+      width: 100%;
+      padding: 15px 0;
+      border-bottom: 1px solid $lightGray;
+
+      &:first-of-type {
+        padding-top: 0;
+      }
+
+      &:last-of-type {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+    }
   }
 }
 
-.article__card {
-  margin: 0;
-  padding: 50px;
-  background-color: $white;
-}
-
-.card_color_yellow {
-  background-color: $yellow;
-}
-
-.article__card-list-item {
-  list-style-type: none;
-  width: 100%;
-  padding: 15px 0;
-  border-bottom: 1px solid $lightGray;
-
-  &:first-of-type {
-    padding-top: 0;
-  }
-
-  &:last-of-type {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-}
 
 @include atDesktop1440 {
   .article {
@@ -100,18 +97,18 @@
     margin-top: 40px;
   }
 
-  .article__container {
+  .article__markdown {
     margin-top: 30px;
     max-width: 570px;
-  }
 
-  .article__subtitle {
-    margin-top: 30px;
-    margin-bottom: 20px;
-  }
+    & h2 {
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
 
-  .article__card {
-    padding: 30px;
+    & ul {
+      padding: 30px;
+    }
   }
 }
 
@@ -132,7 +129,7 @@
     margin-top: 20px;
   }
 
-  .article__card {
+  .article__markdown ul {
     padding: 30px 15px;
   }
 }
