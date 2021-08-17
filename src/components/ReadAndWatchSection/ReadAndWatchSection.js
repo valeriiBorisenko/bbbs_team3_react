@@ -19,6 +19,7 @@ function ReadAndWatchSection({
   pageSize,
   getDataFromApi,
   CardTemplateComponent,
+  isVideo,
   path,
   sectionTitle,
   breakpoints,
@@ -108,6 +109,8 @@ function ReadAndWatchSection({
           shape={FIGURES[i % FIGURES.length]}
           // для секции Статьи
           color={COLORS[(i + 1) % COLORS.length]}
+          // для секции с Видео
+          isVideo={isVideo}
           {...item}
         />
       ));
@@ -193,10 +196,12 @@ ReadAndWatchSection.propTypes = {
   transitionDelay: PropTypes.number.isRequired,
   paragraphNoContentText: PropTypes.string.isRequired,
   sectionClass: PropTypes.string,
+  isVideo: PropTypes.bool,
 };
 
 ReadAndWatchSection.defaultProps = {
   sectionClass: '',
+  isVideo: false,
 };
 
 export default ReadAndWatchSection;

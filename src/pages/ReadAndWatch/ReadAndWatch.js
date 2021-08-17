@@ -99,6 +99,7 @@ function ReadAndWatch() {
           path={VIDEO_URL}
           sectionTitle={videosTitle}
           sectionClass="readwatch__slider-container_el_video"
+          isVideo
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
