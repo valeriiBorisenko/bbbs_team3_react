@@ -25,6 +25,7 @@
 .pseudo-button-checkbox:checked + .pseudo-button {
   background-color: $black;
   color: $background;
+  border: 0;
 
   &:hover {
     background-color: $darkBlue;
