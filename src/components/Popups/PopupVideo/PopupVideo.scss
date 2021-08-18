@@ -6,10 +6,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 30px;
-    width: 80vw;
-    height: 800px;
-
+    max-width: 1770px;
+    width: 100vw;
+    max-height: 80vh;
+    aspect-ratio: 16 / 9;
+    padding: 30px 30px 0 30px;
   }
 
   &__video-iframe {
@@ -21,17 +22,13 @@
 
   &__video-title {
     margin-top: 30px;
+    text-align: center;
   }
 
   &__video-caption {
+    text-align: center;
     margin-top: 5px;
-    margin-bottom: 20px;
-  }
-
-  @include atTablet {
-    &__container_type_video {
-      height: 60vh;
-    }
+    margin-bottom: 50px;
   }
 
   @include atMobile {
@@ -41,26 +38,18 @@
   }
 }
 
-@media screen and (max-width: 1440px) {
+@include atDesktop1440 {
   .popup {
     &__container_type_video {
-      height: 730px;
+      max-width: 1170px;
     }
   }
 }
 
-@media screen and (max-width: 1100px) {
+@include atDesktop1279 {
   .popup {
     &__container_type_video {
-      height: 550px;
-    }
-  }
-}
-
-@media screen and (max-width: 700px) {
-  .popup {
-    &__container_type_video {
-      height: 450px;
+      width: 90vw;
     }
   }
 }
