@@ -15,13 +15,7 @@ const PopupVideo = ({ isOpen, onClose }) => {
   const [iframeIsLoading, setIframeIsLoading] = useState(true);
 
   return (
-    <Popup
-      type="video"
-      typeContainer="video"
-      isOpen={isOpen}
-      onClose={onClose}
-      withoutCloseButton
-    >
+    <Popup type="video" typeContainer="video" isOpen={isOpen} onClose={onClose}>
       {iframeIsLoading && <Loader isNested />}
       <>
         <iframe

@@ -97,6 +97,12 @@
   border: none;
   color: $blue;
   cursor: pointer;
+
+  &_type_video {
+    right: 30px;
+    bottom: 30px;
+    top: unset;
+  }
 }
 
 .popup__title {
