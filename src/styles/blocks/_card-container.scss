@@ -55,7 +55,7 @@
     }
 
     &_type_main-video {
-      grid-template-rows: minmax(451px, 1fr);
+      grid-template-rows: max(451px);
     }
   }
 }
@@ -103,7 +103,7 @@
     }
 
     &_type_main-video {
-      grid-template-rows: minmax(585px, 1fr);
+      grid-template-rows: max(438px);
     }
   }
 }
@@ -129,7 +129,7 @@
     }
 
     &_type_main-video {
-      grid-template-rows: minmax(312px, 1fr);
+      grid-template-rows: max(163px);
     }
   }
 }
