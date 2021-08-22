@@ -13,6 +13,7 @@ import parserLinkYoutube from '../../../utils/parser-link-youtube';
 function CardFilm({
   data: { image, title, info, link, tags, duration },
   sectionClass,
+  isVideo,
 }) {
   const { openPopupVideo } = useContext(PopupsContext);
   // Пробрасываем данные в попап
@@ -124,7 +125,10 @@ function CardFilm({
             title={changeCaseOfFirstLetter(info)}
           />
         </div>
-        {link && renderVideoPlayback(texts.linkText)}
+        {link &&
+          renderVideoPlayback(
+            isVideo ? texts.linkTextVideo : texts.linkTextMovie
+          )}
       </div>
     </Card>
   );
@@ -139,6 +143,7 @@ CardFilm.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.object),
   duration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sectionClass: PropTypes.string,
+  isVideo: PropTypes.bool,
 };
 
 CardFilm.defaultProps = {
@@ -150,6 +155,7 @@ CardFilm.defaultProps = {
   tags: [],
   duration: '',
   sectionClass: '',
+  isVideo: false,
 };
 
 export default CardFilm;
