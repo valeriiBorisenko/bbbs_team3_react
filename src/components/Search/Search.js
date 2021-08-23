@@ -19,7 +19,7 @@ function Search({ isOpenSearch, setIsOpenSearch }) {
   };
 
   const renderSearchItems = () => {
-    if (isVoidSearch) return <p>Ничего не найдено</p>;
+    if (isVoidSearch) return <div>По вашему заросу ничего не найдено</div>;
 
     if (searchValue.length > 0) {
       return (
@@ -40,7 +40,9 @@ function Search({ isOpenSearch, setIsOpenSearch }) {
         </ul>
       );
     }
-    return <p>Воспользуйтесь поиском</p>;
+
+    return <></>;
+    // return <div>Воспользуйтесь поиском</div>;
   };
 
   const renderSearchContent = () =>
