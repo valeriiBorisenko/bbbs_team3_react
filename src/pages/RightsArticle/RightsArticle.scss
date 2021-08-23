@@ -1,7 +1,7 @@
 @import './styles/utils.scss';
 
 .article-lead {
-  background-color: $yellow;
+  background-color: $white;
   border-top-right-radius: 400px;
   border-bottom-right-radius: 400px;
   padding: 230px 50px;
@@ -15,10 +15,10 @@
   &::before {
     content: '';
     position: absolute;
-    background-color: $yellow;
+    background-color: $white;
     border-bottom-left-radius: 400px;
     height: 250px;
-    width: 80%;
+    width: 70%;
     top: -250px;
     right: 0;
     z-index: -1;

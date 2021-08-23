@@ -70,7 +70,12 @@ function Router() {
 
       <Route
         path={RIGHTS_ARTICLE_URL}
-        render={({ match }) => <RightsArticle id={match.params.id} />}
+        render={({ match, location }) => (
+          <RightsArticle
+            id={match.params.id}
+            getActiveTags={location.getActiveTags}
+          />
+        )}
       />
 
       <Route exact path={MOVIES_URL}>
