@@ -9,7 +9,12 @@ function CardRights({ title, tags, shape, color, sectionClass, id }) {
   return (
     <div className={`rights-card ${sectionClass}`}>
       <Link to={`/rights/${id}`} className="rights-card__link">
-        <CardFigure shape={shape} title={title} color={color}>
+        <CardFigure
+          shape={shape}
+          title={title}
+          color={color}
+          sectionClass="rights-card__card"
+        >
           <div className="rights-card__block">
             {tags.map((tag) => (
               <Rubric
