@@ -39,6 +39,11 @@
   -webkit-box-orient: vertical;
   line-clamp: 3;
   box-orient: vertical;
+  transition: .3s ease;
+
+  &:hover {
+    color: $blue;
+  }
 }
 
 .article-card__info {
@@ -60,6 +65,19 @@
   height: 394px;
   object-fit: cover;
   object-position: center;
+}
+
+.article-card__container {
+  display: flex;
+  justify-content: flex-end;
+
+  > div {
+    max-height: 428px;
+  }
+
+  > div > div > .card-annotation__desc {
+    margin-top: 0;
+  }
 }
 
 @include atDesktop1024 {
