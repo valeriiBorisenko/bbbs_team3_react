@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // import { useContext } from 'react';
 // import { PopupsContext } from '../../../contexts/index';
 
-function SearchButton({ isOpenSearch, setIsOpenSearch }) {
+function SearchButton({ handleClickButton }) {
   // const { openPopupInfoTooltip } = useContext(PopupsContext);
   return (
     <button
@@ -12,19 +12,17 @@ function SearchButton({ isOpenSearch, setIsOpenSearch }) {
       type="button"
       aria-label="Поиск"
       title="Поиск"
-      onClick={() => setIsOpenSearch(!isOpenSearch)}
+      onClick={handleClickButton}
     />
   );
 }
 
 SearchButton.propTypes = {
-  isOpenSearch: PropTypes.bool,
-  setIsOpenSearch: PropTypes.func,
+  handleClickButton: PropTypes.func,
 };
 
 SearchButton.defaultProps = {
-  isOpenSearch: false,
-  setIsOpenSearch: () => {},
+  handleClickButton: () => {},
 };
 
 export default SearchButton;

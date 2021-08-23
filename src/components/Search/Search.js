@@ -1,19 +1,78 @@
-/* eslint-disable no-unused-vars */
 import './Search.scss';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { SearchButton } from '../utils/index';
+import { SearchButton, Loader } from '../utils/index';
+import { useFormWithValidation } from '../../hooks/index';
+import search from '../../api/search';
 
 function Search({ isOpenSearch, setIsOpenSearch }) {
+  const { values, handleChange, resetForm } = useFormWithValidation();
+  const [searchValue, setSearchValue] = useState([]);
+  const [isVoidSearch, setIsVoidSearch] = useState(false);
+  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
+
+  const handleClickButton = () => {
+    setIsOpenSearch(!isOpenSearch);
+    resetForm();
+    setSearchValue([]);
+    setIsVoidSearch(false);
+  };
+
+  const renderSearchItems = () => {
+    if (isVoidSearch) return <p>Ничего не найдено</p>;
+
+    if (searchValue.length > 0) {
+      return (
+        <ul className="search__option-list">
+          {searchValue.map((item) => (
+            <li className="search__option-item">
+              <a
+                href="/"
+                className="search__title-link section-title section-title_clickable"
+              >
+                {item.title}
+              </a>
+              <a href="/" className="link search__link">
+                {item.modelName}
+              </a>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    return <p>Воспользуйтесь поиском</p>;
+  };
+
+  const renderSearchContent = () =>
+    isLoadingSearch ? <Loader isNested /> : renderSearchItems();
+
+  useEffect(() => {
+    if (!('search' in values)) return;
+
+    setIsLoadingSearch(true);
+
+    search({ text: values.search })
+      .then(({ count, results }) => {
+        if (count === 0) {
+          setIsVoidSearch(true);
+        } else {
+          setIsVoidSearch(false);
+        }
+
+        setSearchValue(results);
+      })
+      .finally(setIsLoadingSearch(false));
+  }, [values]);
+
   return (
     <form className="search" name="search-form">
       <SearchButton
         isOpenSearch={isOpenSearch}
-        setIsOpenSearch={setIsOpenSearch}
+        handleClickButton={handleClickButton}
       />
       <div
         className={`search__options menu__search-options ${
-          isOpenSearch && 'search__options_visible'
+          isOpenSearch ? 'search__options_visible' : ''
         }`}
       >
         <div className="search__container-input">
@@ -22,106 +81,19 @@ function Search({ isOpenSearch, setIsOpenSearch }) {
             name="search"
             placeholder="Введите ваш запрос"
             className="search__input paragraph"
+            autoComplete="off"
+            onChange={handleChange}
+            value={values.search || ''}
           />
           <button
             type="button"
             aria-label="Закрыть"
             className="search__close-button"
-            onClick={() => setIsOpenSearch(!isOpenSearch)}
+            onClick={handleClickButton}
           />
         </div>
 
-        <ul className="search__option-list">
-          <li className="search__option-item">
-            <a
-              href="./article.html"
-              className="search__title-link section-title section-title_clickable"
-            >
-              Причины подростковой агрессии
-            </a>
-            <a href="./article.html" className="link search__link">
-              статьи
-            </a>
-          </li>
-          <li className="search__option-item">
-            <a
-              href="./video.html"
-              className="search__title-link section-title section-title_clickable"
-            >
-              Агрессивное поведение детей-сирот
-            </a>
-            <a href="./video.html" className="link search__link">
-              видео
-            </a>
-          </li>
-          <li className="search__option-item">
-            <a
-              href="./questions.html"
-              className="search__title-link section-title section-title_clickable"
-            >
-              Что делать если ваш младший агрессивно себя ведет, решил закрыть
-              пару?
-            </a>
-            <a href="./questions.html" className="link search__link">
-              вопросы
-            </a>
-          </li>
-          <li className="search__option-item">
-            <a
-              href="./books.html"
-              className="search__title-link section-title section-title_clickable"
-            >
-              Как реагировать на агрессивное поведения ребенка
-            </a>
-            <a href="./books.html" className="link search__link">
-              книги
-            </a>
-          </li>
-          <li className="search__option-item">
-            <a
-              href="./books.html"
-              className="search__title-link section-title section-title_clickable"
-            >
-              Как реагировать на агрессивное поведения ребенка
-            </a>
-            <a href="./books.html" className="link search__link">
-              книги
-            </a>
-          </li>
-          <li className="search__option-item">
-            <a
-              href="./books.html"
-              className="search__title-link section-title section-title_clickable"
-            >
-              Как реагировать на агрессивное поведения ребенка
-            </a>
-            <a href="./books.html" className="link search__link">
-              книги
-            </a>
-          </li>
-          <li className="search__option-item">
-            <a
-              href="./books.html"
-              className="search__title-link section-title section-title_clickable"
-            >
-              Как реагировать на агрессивное поведения ребенка
-            </a>
-            <a href="./books.html" className="link search__link">
-              книги
-            </a>
-          </li>
-          <li className="search__option-item">
-            <a
-              href="./books.html"
-              className="search__title-link section-title section-title_clickable"
-            >
-              Как реагировать на агрессивное поведения ребенка
-            </a>
-            <a href="./books.html" className="link search__link">
-              книги
-            </a>
-          </li>
-        </ul>
+        {renderSearchContent()}
       </div>
     </form>
   );
