@@ -147,13 +147,13 @@ function MainPage() {
     );
   }
 
-  function renderArticleSection(article) {
+  function renderArticleSection(article, color) {
     return (
       <section className="articles main-section page__section scale-in">
         <CardArticleBig
           key={article?.id}
           title={article?.title}
-          color="blue"
+          color={color}
           articleUrl={article?.articleUrl}
           pageUrl={ARTICLES_URL}
         />
@@ -241,19 +241,6 @@ function MainPage() {
           </div>
         </section>
 
-        {/* секция Место */}
-        {mainPageData?.place && renderPlaceSection()}
-
-        {/* секция Статья */}
-        {mainPageData?.articles?.length > 0 &&
-          renderArticleSection(mainPageData?.articles[0])}
-
-        {/* секция Фильмы */}
-        {mainPageData?.movies && renderMoviesSection()}
-
-        {/* секция Видео */}
-        {mainPageData?.video && renderVideoSection()}
-
         {/* секция Виджет + Вопросы */}
         <section className="main-questions main-section page__section fade-in">
           <div className="card-container card-container_type_iframe">
@@ -267,9 +254,22 @@ function MainPage() {
           </div>
         </section>
 
+        {/* секция Место */}
+        {mainPageData?.place && renderPlaceSection()}
+
+        {/* секция Статья */}
+        {mainPageData?.articles?.length > 0 &&
+          renderArticleSection(mainPageData?.articles[0], 'blue')}
+
+        {/* секция Фильмы */}
+        {mainPageData?.movies && renderMoviesSection()}
+
+        {/* секция Видео */}
+        {mainPageData?.video && renderVideoSection()}
+
         {/* секция Статья */}
         {mainPageData?.articles?.length > 1 &&
-          renderArticleSection(mainPageData?.articles[1])}
+          renderArticleSection(mainPageData?.articles[1], 'green')}
       </>
     );
   }
