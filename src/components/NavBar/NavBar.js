@@ -41,7 +41,7 @@ function NavBar({
   // console.log(isOpenSearch);
 
   return (
-    <nav className={`menu ${isOpenSearch && 'menu_state_search'}`}>
+    <nav className={`menu ${isOpenSearch ? 'menu_state_search' : ''}`}>
       {/* логотип */}
       <Link to="/" target="_self" className="menu__logo mobile-link">
         {MAIN_PAGE_TITLE}
