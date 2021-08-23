@@ -91,9 +91,10 @@
 .menu_state_search {
   display: grid;
   grid-template-columns: 260px 1fr;
-  // grid-template-rows: 600px;
+  grid-template-rows: 100vh;
   justify-items: start;
   align-items: start;
+
 
   & .menu__logo {
     grid-column: 1;

@@ -41,8 +41,8 @@ function Search({ isOpenSearch, setIsOpenSearch }) {
       );
     }
 
-    return <></>;
-    // return <div>Воспользуйтесь поиском</div>;
+    // return <></>;
+    return <div>Воспользуйтесь поиском</div>;
   };
 
   const renderSearchContent = () =>
