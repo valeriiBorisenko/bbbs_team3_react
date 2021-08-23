@@ -5,7 +5,10 @@ import Popup from '../Popup/Popup';
 import { TitleH2, Caption } from '../../utils/index';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
 import Loader from '../../utils/Loader/Loader';
-import { getLocalStorageData } from '../../../hooks/useLocalStorage';
+import {
+  getLocalStorageData,
+  removeLocalStorageData,
+} from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
 
 const PopupVideo = ({ isOpen, onClose }) => {
@@ -14,8 +17,18 @@ const PopupVideo = ({ isOpen, onClose }) => {
 
   const [iframeIsLoading, setIframeIsLoading] = useState(true);
 
+  const closePopup = () => {
+    removeLocalStorageData(localStChosenVideo);
+    onClose();
+  };
+
   return (
-    <Popup type="video" typeContainer="video" isOpen={isOpen} onClose={onClose}>
+    <Popup
+      type="video"
+      typeContainer="video"
+      isOpen={isOpen}
+      onClose={closePopup}
+    >
       {iframeIsLoading && <Loader isNested />}
       <>
         <iframe

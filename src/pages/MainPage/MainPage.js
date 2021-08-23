@@ -8,13 +8,7 @@ import {
   useEventBooking,
   useActivityTypes,
 } from '../../hooks/index';
-import {
-  QUESTIONS_URL,
-  STORIES_URL,
-  VIDEO_URL,
-  MOVIES_URL,
-  ARTICLES_URL,
-} from '../../config/routes';
+import { QUESTIONS_URL, STORIES_URL, ARTICLES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { randomizeArray } from '../../utils/utils';
@@ -60,12 +54,6 @@ function MainPage() {
       setMainPageData({ ...mainPageData, event: selectedEvent });
     }
   }, [selectedEvent]);
-
-  // редиректы
-  function dispatchRedirectEvent() {
-    const event = new Event('redirectToPageAndOpenPopup');
-    window.dispatchEvent(event);
-  }
 
   // запрос даты главной страницы при загрузке и при смене города
   function getMainPageDataOnLoad() {
@@ -169,19 +157,11 @@ function MainPage() {
       randomMovies.length > 1
         ? `movies_pagination movies_pagination_${randomMovies.length}`
         : '';
-    const className = `main-section__link scale-in ${additionalMoviesClasses}`;
     // возвращаем
     return (
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {randomMovies.map((movie) => (
-          <Link
-            to={MOVIES_URL}
-            onClick={dispatchRedirectEvent}
-            className={className}
-            key={movie?.id}
-          >
-            <CardFilm data={movie} />
-          </Link>
+          <CardFilm data={movie} sectionClass={additionalMoviesClasses} />
         ))}
       </section>
     );
@@ -190,16 +170,10 @@ function MainPage() {
   function renderVideoSection() {
     return (
       <section className="video main-section page__section">
-        <Link
-          to={VIDEO_URL}
-          onClick={dispatchRedirectEvent}
-          className="main-section__link scale-in"
-        >
-          <CardVideoMain
-            key={mainPageData?.video?.id}
-            data={mainPageData?.video}
-          />
-        </Link>
+        <CardVideoMain
+          key={mainPageData?.video?.id}
+          data={mainPageData?.video}
+        />
       </section>
     );
   }
