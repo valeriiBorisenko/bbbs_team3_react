@@ -45,7 +45,7 @@ function CardArticle({
             <img
               src={`${staticImageUrl}/${image}`}
               alt={title}
-              className="article-card__image"
+              className="article-card__image image-scale"
             />
           </div>
         )}

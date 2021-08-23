@@ -81,7 +81,7 @@ function MainPage() {
       return (
         <CardCalendar
           sectionClass="scale-in"
-          key={mainPageData.event.id}
+          key={mainPageData.event?.id}
           cardData={mainPageData.event}
           onEventSignUpClick={handleEventBooking}
           onEventDescriptionClick={openPopupAboutEvent}
@@ -100,14 +100,14 @@ function MainPage() {
           sectionClass="lead__media scale-in"
           key={mainPageData?.history?.id}
         >
+          <Link to={STORIES_URL} className="lead__link">
+            {mainPageData?.history?.title}
+          </Link>
           <img
             src={`${staticImageUrl}/${mainPageData?.history?.image}`}
             alt={mainPageData.history.title}
             className="lead__media-img"
           />
-          <Link to={STORIES_URL} className="lead__link">
-            {mainPageData?.history?.title}
-          </Link>
         </Card>
       );
     }
@@ -155,13 +155,17 @@ function MainPage() {
 
     const additionalMoviesClasses =
       randomMovies.length > 1
-        ? `movies_pagination movies_pagination_${randomMovies.length}`
+        ? `movies_pagination movies_pagination_${randomMovies.length} scale-in`
         : '';
     // возвращаем
     return (
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {randomMovies.map((movie) => (
-          <CardFilm data={movie} sectionClass={additionalMoviesClasses} />
+          <CardFilm
+            data={movie}
+            key={movie.id}
+            sectionClass={additionalMoviesClasses}
+          />
         ))}
       </section>
     );
@@ -169,7 +173,7 @@ function MainPage() {
 
   function renderVideoSection() {
     return (
-      <section className="video main-section page__section">
+      <section className="video main-section page__section scale-in">
         <CardVideoMain
           key={mainPageData?.video?.id}
           data={mainPageData?.video}

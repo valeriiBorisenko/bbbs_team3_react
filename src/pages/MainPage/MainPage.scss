@@ -85,6 +85,9 @@
     width: 100%;
     height: 100%;
     object-position: center;
+    transform: scale(1.1);
+    transform-origin: bottom;
+    transition: 1s ease-out;
   }
 
   &__link {
@@ -106,6 +109,11 @@
     text-align: center;
     background-image: linear-gradient(180deg, rgba($black, 0) 80%, rgba($black, 0.67) 91%);
     padding-bottom: 30px;
+    z-index: 1;
+
+    &:hover + .lead__media-img {
+      transform: scale(1);
+    }
   }
 }
 
