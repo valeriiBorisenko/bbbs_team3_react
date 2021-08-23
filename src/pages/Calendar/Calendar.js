@@ -6,11 +6,7 @@ import {
   CurrentUserContext,
   PopupsContext,
 } from '../../contexts/index';
-import {
-  useScrollToTop,
-  useDebounce,
-  useEventBooking,
-} from '../../hooks/index';
+import { useDebounce, useEventBooking } from '../../hooks/index';
 import { months, DELAY_DEBOUNCE, ERROR_MESSAGES } from '../../config/constants';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
@@ -35,8 +31,6 @@ export const PAGE_SIZE_PAGINATE = {
 };
 
 function Calendar() {
-  useScrollToTop();
-
   const { currentUser } = useContext(CurrentUserContext);
   const { openPopupLogin, openPopupAboutEvent, openPopupError } =
     useContext(PopupsContext);

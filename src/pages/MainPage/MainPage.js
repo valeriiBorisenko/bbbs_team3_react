@@ -3,11 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import mainPageTexts from '../../locales/main-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
-import {
-  useScrollToTop,
-  useEventBooking,
-  useActivityTypes,
-} from '../../hooks/index';
+import { useEventBooking, useActivityTypes } from '../../hooks/index';
 import { QUESTIONS_URL, STORIES_URL, ARTICLES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { ERROR_MESSAGES } from '../../config/constants';
@@ -36,8 +32,6 @@ const QUESTIONS_COUNT = 3;
 const { headTitle, headDescription, CardAnimatedPlugText } = mainPageTexts;
 
 function MainPage() {
-  useScrollToTop();
-
   const { currentUser } = useContext(CurrentUserContext);
   const { openPopupAboutEvent } = useContext(PopupsContext);
 

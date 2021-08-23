@@ -6,11 +6,7 @@ import {
   ErrorsContext,
   PopupsContext,
 } from '../../contexts/index';
-import {
-  useScrollToTop,
-  useDebounce,
-  useFormWithValidation,
-} from '../../hooks/index';
+import { useDebounce, useFormWithValidation } from '../../hooks/index';
 import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
@@ -54,8 +50,6 @@ const INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX = 1;
 const INITIAL_PAGE_INDEX = 0;
 
 function Questions() {
-  useScrollToTop();
-
   const { currentUser } = useContext(CurrentUserContext);
   const { serverError, setError, clearError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
