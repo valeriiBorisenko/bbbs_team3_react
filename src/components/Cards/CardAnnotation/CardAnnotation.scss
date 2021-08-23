@@ -32,7 +32,7 @@
 
 .card-annotation__desc {
   box-sizing: border-box;
-  padding-right: 13px;
+  padding-right: 18px;
 }
 
 @include atDesktop1199 {
@@ -69,6 +69,6 @@
   }
 
   .card-annotation__desc {
-    padding-right: 8px;
+    padding-right: 15px;
   }
 }

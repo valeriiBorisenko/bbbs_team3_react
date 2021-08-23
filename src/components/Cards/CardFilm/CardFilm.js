@@ -67,7 +67,7 @@ function CardFilm({
         <img
           src={`${staticImageUrl}/${image}` || imagePreview}
           alt={`${texts.altText} ${title}`}
-          className="card-film__preview"
+          className="card-film__preview image-scale"
         />
         {duration ? (
           <span className="card-film__duration paragraph">

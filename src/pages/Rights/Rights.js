@@ -14,7 +14,7 @@ import {
   deselectOneTag,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
+import { useDebounce } from '../../hooks/index';
 import { getRightsData, getRightsTags } from '../../api/rights-page';
 import {
   BasePage,
@@ -36,8 +36,6 @@ const PAGE_SIZE_PAGINATE = {
 const { headTitle, headDescription, title, textStubNoData } = rightsPageTexts;
 
 const Rights = () => {
-  useScrollToTop();
-
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 

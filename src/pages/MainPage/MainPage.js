@@ -3,18 +3,8 @@ import { Link } from 'react-router-dom';
 import { useState, useContext, useEffect } from 'react';
 import mainPageTexts from '../../locales/main-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
-import {
-  useScrollToTop,
-  useEventBooking,
-  useActivityTypes,
-} from '../../hooks/index';
-import {
-  QUESTIONS_URL,
-  STORIES_URL,
-  VIDEO_URL,
-  MOVIES_URL,
-  ARTICLES_URL,
-} from '../../config/routes';
+import { useEventBooking, useActivityTypes } from '../../hooks/index';
+import { QUESTIONS_URL, STORIES_URL, ARTICLES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { randomizeArray } from '../../utils/utils';
@@ -42,8 +32,6 @@ const QUESTIONS_COUNT = 3;
 const { headTitle, headDescription, CardAnimatedPlugText } = mainPageTexts;
 
 function MainPage() {
-  useScrollToTop();
-
   const { currentUser } = useContext(CurrentUserContext);
   const { openPopupAboutEvent } = useContext(PopupsContext);
 
@@ -60,12 +48,6 @@ function MainPage() {
       setMainPageData({ ...mainPageData, event: selectedEvent });
     }
   }, [selectedEvent]);
-
-  // редиректы
-  function dispatchRedirectEvent() {
-    const event = new Event('redirectToPageAndOpenPopup');
-    window.dispatchEvent(event);
-  }
 
   // запрос даты главной страницы при загрузке и при смене города
   function getMainPageDataOnLoad() {
@@ -93,7 +75,7 @@ function MainPage() {
       return (
         <CardCalendar
           sectionClass="scale-in"
-          key={mainPageData.event.id}
+          key={mainPageData.event?.id}
           cardData={mainPageData.event}
           onEventSignUpClick={handleEventBooking}
           onEventDescriptionClick={openPopupAboutEvent}
@@ -112,14 +94,14 @@ function MainPage() {
           sectionClass="lead__media scale-in"
           key={mainPageData?.history?.id}
         >
+          <Link to={STORIES_URL} className="lead__link">
+            {mainPageData?.history?.title}
+          </Link>
           <img
             src={`${staticImageUrl}/${mainPageData?.history?.image}`}
             alt={mainPageData.history.title}
             className="lead__media-img"
           />
-          <Link to={STORIES_URL} className="lead__link">
-            {mainPageData?.history?.title}
-          </Link>
         </Card>
       );
     }
@@ -147,13 +129,13 @@ function MainPage() {
     );
   }
 
-  function renderArticleSection(article) {
+  function renderArticleSection(article, color) {
     return (
       <section className="articles main-section page__section scale-in">
         <CardArticleBig
           key={article?.id}
           title={article?.title}
-          color="blue"
+          color={color}
           articleUrl={article?.articleUrl}
           pageUrl={ARTICLES_URL}
         />
@@ -167,21 +149,17 @@ function MainPage() {
 
     const additionalMoviesClasses =
       randomMovies.length > 1
-        ? `movies_pagination movies_pagination_${randomMovies.length}`
+        ? `movies_pagination movies_pagination_${randomMovies.length} scale-in`
         : '';
-    const className = `main-section__link scale-in ${additionalMoviesClasses}`;
     // возвращаем
     return (
       <section className="movies main-section page__section cards-grid cards-grid_content_small-cards">
         {randomMovies.map((movie) => (
-          <Link
-            to={MOVIES_URL}
-            onClick={dispatchRedirectEvent}
-            className={className}
-            key={movie?.id}
-          >
-            <CardFilm data={movie} />
-          </Link>
+          <CardFilm
+            data={movie}
+            key={movie.id}
+            sectionClass={additionalMoviesClasses}
+          />
         ))}
       </section>
     );
@@ -189,17 +167,11 @@ function MainPage() {
 
   function renderVideoSection() {
     return (
-      <section className="video main-section page__section">
-        <Link
-          to={VIDEO_URL}
-          onClick={dispatchRedirectEvent}
-          className="main-section__link scale-in"
-        >
-          <CardVideoMain
-            key={mainPageData?.video?.id}
-            data={mainPageData?.video}
-          />
-        </Link>
+      <section className="video main-section page__section scale-in">
+        <CardVideoMain
+          key={mainPageData?.video?.id}
+          data={mainPageData?.video}
+        />
       </section>
     );
   }
@@ -241,19 +213,6 @@ function MainPage() {
           </div>
         </section>
 
-        {/* секция Место */}
-        {mainPageData?.place && renderPlaceSection()}
-
-        {/* секция Статья */}
-        {mainPageData?.articles?.length > 0 &&
-          renderArticleSection(mainPageData?.articles[0])}
-
-        {/* секция Фильмы */}
-        {mainPageData?.movies && renderMoviesSection()}
-
-        {/* секция Видео */}
-        {mainPageData?.video && renderVideoSection()}
-
         {/* секция Виджет + Вопросы */}
         <section className="main-questions main-section page__section fade-in">
           <div className="card-container card-container_type_iframe">
@@ -267,9 +226,22 @@ function MainPage() {
           </div>
         </section>
 
+        {/* секция Место */}
+        {mainPageData?.place && renderPlaceSection()}
+
+        {/* секция Статья */}
+        {mainPageData?.articles?.length > 0 &&
+          renderArticleSection(mainPageData?.articles[0], 'blue')}
+
+        {/* секция Фильмы */}
+        {mainPageData?.movies && renderMoviesSection()}
+
+        {/* секция Видео */}
+        {mainPageData?.video && renderVideoSection()}
+
         {/* секция Статья */}
         {mainPageData?.articles?.length > 1 &&
-          renderArticleSection(mainPageData?.articles[1])}
+          renderArticleSection(mainPageData?.articles[1], 'green')}
       </>
     );
   }

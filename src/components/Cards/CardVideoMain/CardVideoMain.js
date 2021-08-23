@@ -63,7 +63,7 @@ function CardVideoMain({ data: { title, info, link, image, duration } }) {
         <img
           src={`${staticImageUrl}/${image}` || imagePreview}
           alt={`${texts.imageAlt}: ${title}`}
-          className="card-video-main__image"
+          className="card-video-main__image image-scale"
         />
 
         <span className="card-video-main__duration paragraph">

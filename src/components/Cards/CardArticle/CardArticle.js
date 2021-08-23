@@ -45,7 +45,7 @@ function CardArticle({
             <img
               src={`${staticImageUrl}/${image}`}
               alt={title}
-              className="article-card__image"
+              className="article-card__image image-scale"
             />
           </div>
         )}
@@ -59,7 +59,11 @@ function CardArticle({
           {texts.linkText}
         </a>
       </Card>
-      <CardAnnotation description={annotation} isMain={isMain} />
+      <CardAnnotation
+        description={annotation}
+        isMain={isMain}
+        sectionClass="article-card__container"
+      />
     </article>
   );
 }

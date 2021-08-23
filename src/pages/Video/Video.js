@@ -16,7 +16,7 @@ import {
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
 } from '../../config/constants';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
+import { useDebounce } from '../../hooks/index';
 import {
   handleCheckboxBehavior,
   selectOneTag,
@@ -36,7 +36,6 @@ const { headTitle, headDescription, title, resourceGroupTag, textStubNoData } =
   videoPageTexts;
 
 const Video = () => {
-  useScrollToTop();
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 

@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.scss';
 import profilePageTexts from '../../locales/profile-page-RU';
 import { PopupsContext, ErrorsContext } from '../../contexts/index';
-import { useScrollToTop, useEventBooking } from '../../hooks/index';
+import { useEventBooking } from '../../hooks/index';
 import {
   getProfileDiariesData,
   createDiary,
@@ -46,8 +46,6 @@ const {
 } = profilePageTexts;
 
 function Profile() {
-  useScrollToTop();
-
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
   const { setError } = useContext(ErrorsContext);
   const { unauthorized, badRequest } = ERROR_CODES;
