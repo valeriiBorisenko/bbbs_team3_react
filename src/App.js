@@ -137,14 +137,14 @@ function App() {
 
   const citiesContextValue = useMemo(() => ({ cities, defaultCity }), [cities]);
 
-  // серверные ошибки контекст
+  // серверные ошибки/контекст
   const [serverError, setServerError] = useState(null);
   const setError = (value) => setServerError(value);
   const clearError = () => setServerError(null);
 
   const errorsContextValue = useMemo(
     () => ({ serverError, setError, clearError }),
-    []
+    [serverError]
   );
 
   const { isCheckingToken, checkToken } = useAuth(updateUser);
