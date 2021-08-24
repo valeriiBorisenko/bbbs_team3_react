@@ -36,8 +36,11 @@ function MainPage() {
   const { openPopupAboutEvent } = useContext(PopupsContext);
 
   const [mainPageData, setMainPageData] = useState(null);
+  const [randomQuestions, setRandomQuestions] = useState([]);
+  const [randomMovies, setRandomMovies] = useState([]);
   const [isCityChanging, setIsCityChanging] = useState(false);
   const [isPageError, setIsPageError] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const activityTypes = useActivityTypes();
 
   // запись/отписка на мероприятия
@@ -45,7 +48,7 @@ function MainPage() {
 
   useEffect(() => {
     if (selectedEvent) {
-      setMainPageData({ ...mainPageData, event: selectedEvent });
+      setMainPageData((prevData) => ({ ...prevData, event: selectedEvent }));
     }
   }, [selectedEvent]);
 
@@ -63,6 +66,17 @@ function MainPage() {
     }
     getMainPageDataOnLoad();
   }, [currentUser?.city]);
+
+  // рандомизируем вопросы и фильмы 1 раз при загрузке страницы
+  useEffect(() => {
+    if (mainPageData && isPageLoading) {
+      setRandomQuestions(
+        randomizeArray(mainPageData.questions, QUESTIONS_COUNT)
+      );
+      setRandomMovies(randomizeArray(mainPageData.movies, MOVIES_COUNT));
+      setIsPageLoading(false);
+    }
+  }, [mainPageData]);
 
   // глобальный лоадер (без футера)
   if (!mainPageData && !isPageError) {
@@ -144,9 +158,6 @@ function MainPage() {
   }
 
   function renderMoviesSection() {
-    // рандомизируем массив
-    const randomMovies = randomizeArray(mainPageData?.movies, MOVIES_COUNT);
-
     const additionalMoviesClasses =
       randomMovies.length > 1
         ? `movies_pagination movies_pagination_${randomMovies.length} scale-in`
@@ -177,11 +188,6 @@ function MainPage() {
   }
 
   function renderQuestionBlock() {
-    const randomQuestions = randomizeArray(
-      mainPageData?.questions,
-      QUESTIONS_COUNT
-    );
-
     return (
       <div className="main-questions__container">
         {randomQuestions.map((item) => (
@@ -202,44 +208,32 @@ function MainPage() {
   function renderPageContent() {
     return (
       <>
-        {/* секция из ивента + истории */}
         <section className="lead page__section">
           <div className="card-container card-container_type_identical">
-            {/* ивент */}
             {isCityChanging ? <Loader isNested /> : renderEventsBlock()}
-
-            {/* история дружбы */}
             {renderHistoryBlock()}
           </div>
         </section>
 
-        {/* секция Виджет + Вопросы */}
         <section className="main-questions main-section page__section fade-in">
           <div className="card-container card-container_type_iframe">
             <Widget
               title="Facebook"
               link="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FBigBrothers.BigSisters.Russia&tabs=timeline&width=420&height=627&small_header=false&adapt_container_width=false&hide_cover=false&show_facepile=true&appId"
             />
-
-            {/* секция Вопросов */}
-            {mainPageData?.questions?.length > 0 && renderQuestionBlock()}
+            {randomQuestions?.length > 0 && renderQuestionBlock()}
           </div>
         </section>
 
-        {/* секция Место */}
         {mainPageData?.place && renderPlaceSection()}
 
-        {/* секция Статья */}
         {mainPageData?.articles?.length > 0 &&
           renderArticleSection(mainPageData?.articles[0], 'blue')}
 
-        {/* секция Фильмы */}
-        {mainPageData?.movies && renderMoviesSection()}
+        {randomMovies?.length > 0 && renderMoviesSection()}
 
-        {/* секция Видео */}
         {mainPageData?.video && renderVideoSection()}
 
-        {/* секция Статья */}
         {mainPageData?.articles?.length > 1 &&
           renderArticleSection(mainPageData?.articles[1], 'green')}
       </>
