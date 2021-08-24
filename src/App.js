@@ -109,7 +109,7 @@ function App() {
   }
 
   // контекст попапов
-  const PopupsContextValue = {
+  const popupsContextValue = {
     closeAllPopups,
     closePopupLogin,
     openPopupConfirmation,
@@ -174,7 +174,7 @@ function App() {
       <CitiesContext.Provider value={citiesContextValue}>
         <CurrentUserContext.Provider value={currentUserContextValue}>
           <ErrorsContext.Provider value={errorsContextValue}>
-            <PopupsContext.Provider value={PopupsContextValue}>
+            <PopupsContext.Provider value={popupsContextValue}>
               <div className="page">
                 {!isCheckingToken ? <Router /> : <Loader isCentered />}
                 <PopupConfirmation
