@@ -121,6 +121,7 @@ function Header({ isTransparent }) {
           onCityChangeClick={openPopupCities}
           onLogout={handleLogout}
           isMobileMenuOpen={isMobileMenuOpen}
+          setIsMobileMenuOpen={setIsMobileMenuOpen}
         />
 
         {pathname === PROFILE_URL && (

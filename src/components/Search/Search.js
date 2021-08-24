@@ -5,7 +5,12 @@ import { SearchButton, Loader } from '../utils/index';
 import { useFormWithValidation } from '../../hooks/index';
 import search from '../../api/search';
 
-function Search({ isOpenSearch, setIsOpenSearch }) {
+function Search({
+  isOpenSearch,
+  setIsOpenSearch,
+  isMobileMenuOpen,
+  setIsMobileMenuOpen,
+}) {
   const { values, handleChange, resetForm } = useFormWithValidation();
   const [searchValue, setSearchValue] = useState([]);
   const [isVoidSearch, setIsVoidSearch] = useState(false);
@@ -41,7 +46,6 @@ function Search({ isOpenSearch, setIsOpenSearch }) {
       );
     }
 
-    // return <></>;
     return <div>Воспользуйтесь поиском</div>;
   };
 
@@ -55,16 +59,19 @@ function Search({ isOpenSearch, setIsOpenSearch }) {
 
     search({ text: values.search })
       .then(({ count, results }) => {
-        if (count === 0) {
-          setIsVoidSearch(true);
-        } else {
-          setIsVoidSearch(false);
-        }
-
         setSearchValue(results);
+        return count === 0 ? setIsVoidSearch(true) : setIsVoidSearch(false);
       })
       .finally(setIsLoadingSearch(false));
   }, [values]);
+
+  useEffect(() => {
+    if (isMobileMenuOpen) setIsOpenSearch(false);
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    if (isOpenSearch) setIsMobileMenuOpen(false);
+  }, [isOpenSearch]);
 
   return (
     <form className="search" name="search-form">
@@ -104,11 +111,15 @@ function Search({ isOpenSearch, setIsOpenSearch }) {
 Search.propTypes = {
   isOpenSearch: PropTypes.bool,
   setIsOpenSearch: PropTypes.func,
+  isMobileMenuOpen: PropTypes.bool,
+  setIsMobileMenuOpen: PropTypes.func,
 };
 
 Search.defaultProps = {
   isOpenSearch: false,
   setIsOpenSearch: () => {},
+  isMobileMenuOpen: false,
+  setIsMobileMenuOpen: () => {},
 };
 
 export default Search;

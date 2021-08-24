@@ -33,12 +33,12 @@ function NavBar({
   onCityChangeClick,
   onLogout,
   userCityName,
+  setIsMobileMenuOpen,
 }) {
   const { pathname } = useLocation();
   const { currentUser } = useContext(CurrentUserContext);
 
   const [isOpenSearch, setIsOpenSearch] = useState(false);
-  // console.log(isOpenSearch);
 
   return (
     <nav className={`menu ${isOpenSearch ? 'menu_state_search' : ''}`}>
@@ -181,6 +181,8 @@ function NavBar({
           <Search
             isOpenSearch={isOpenSearch}
             setIsOpenSearch={setIsOpenSearch}
+            isMobileMenuOpen={isMobileMenuOpen}
+            setIsMobileMenuOpen={setIsMobileMenuOpen}
           />
         </li>
         <li className="menu__button-item">
@@ -202,6 +204,7 @@ NavBar.propTypes = {
   onLogout: PropTypes.func,
   isMobileMenuOpen: PropTypes.bool,
   userCityName: PropTypes.string,
+  setIsMobileMenuOpen: PropTypes.func,
 };
 
 NavBar.defaultProps = {
@@ -211,6 +214,7 @@ NavBar.defaultProps = {
   onLogout: () => {},
   isMobileMenuOpen: false,
   userCityName: '',
+  setIsMobileMenuOpen: () => {},
 };
 
 export default NavBar;
