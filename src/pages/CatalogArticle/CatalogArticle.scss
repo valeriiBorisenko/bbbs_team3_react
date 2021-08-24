@@ -43,12 +43,12 @@
     font-size: 23px;
     line-height: 1.3;
     color: $black;
-  
+
     &_clickable {
       display: inline-block;
       text-decoration: none;
       transition: 0.2s linear;
-  
+
       &:hover {
         color: $blue;
       }
@@ -74,7 +74,7 @@
   }
 
   & ul {
-    margin: 0;
+    margin: 30px 0 0;
     padding: 50px;
     background-color: $white;
     border-radius: 30px;
@@ -83,6 +83,7 @@
       list-style-type: none;
       width: 100%;
       padding: 15px 0;
+      font-family: $ptRootUI;
       border-bottom: 1px solid $lightGray;
 
       &:first-of-type {
@@ -95,8 +96,27 @@
       }
     }
   }
-}
 
+  & pre {
+    border-radius: 30px;
+    background-color: $white;
+    padding: 50px;
+    & code {
+      text-align: left;
+      margin: 0;
+      font-family: $ptRootUI;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 1.4;
+      color: $black;
+      white-space: normal;
+    }
+  }
+
+  & blockquote {
+    margin: 0;
+  }
+}
 
 @include atDesktop1440 {
   .article {
@@ -139,6 +159,14 @@
     & p {
       font-size: 15px;
     }
+
+    & pre {
+      padding: 30px;
+
+      & code {
+        font-size: 15px;
+      }
+    }
   }
 }
 
@@ -159,7 +187,13 @@
     margin-top: 20px;
   }
 
-  .article__markdown ul {
-    padding: 30px 15px;
+  .article__markdown {
+    & ul {
+      padding: 30px 15px;
+    }
+
+    & pre {
+      padding: 30px 15px;
+    }
   }
 }
