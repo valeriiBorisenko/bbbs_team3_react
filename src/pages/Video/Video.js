@@ -24,7 +24,11 @@ import {
 } from '../../utils/filter-tags';
 import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { ErrorsContext, PopupsContext } from '../../contexts';
+import {
+  CurrentUserContext,
+  ErrorsContext,
+  PopupsContext,
+} from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -36,6 +40,7 @@ const { headTitle, headDescription, title, resourceGroupTag, textStubNoData } =
   videoPageTexts;
 
 const Video = () => {
+  const { currentUser } = useContext(CurrentUserContext);
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 
@@ -71,13 +76,13 @@ const Video = () => {
   };
 
   // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Ресурсная группа"
-  const defineCategories = (tags, resourceGroup) => {
+  const defineCategories = (tags, isResourceGroup) => {
     const categoriesArray = tags.map((tag) => ({
       filter: tag?.slug.toLowerCase(),
       name: changeCaseOfFirstLetter(tag?.name),
       isActive: false,
     }));
-    if (resourceGroup) {
+    if (isResourceGroup) {
       return [
         { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
         { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
@@ -159,8 +164,11 @@ const Video = () => {
       getVideoPageData({
         limit: pageSize + 1,
       }),
+      getVideoPageData({
+        resource_group: true,
+      }),
     ])
-      .then(([tags, { results, count }]) => {
+      .then(([tags, { results, count }, resourceGroupData]) => {
         const videoData = results;
         const mainCard = videoData.find((item) => item?.pinnedFullSize);
         setMainVideo(mainCard);
@@ -173,7 +181,7 @@ const Video = () => {
           setPageCount(Math.ceil(count / pageSize));
         }
 
-        const isResourceGroup = videoData.some((item) => item?.resourceGroup);
+        const isResourceGroup = resourceGroupData.count > 0;
         setCategories(defineCategories(tags, isResourceGroup));
       })
       .catch(() => setIsPageError(true))
@@ -216,7 +224,7 @@ const Video = () => {
     if (pageSize) {
       getFirstPageData();
     }
-  }, [pageSize]);
+  }, [pageSize, currentUser]);
 
   useEffect(() => {
     if (!isLoadingPage && !isFiltersUsed) {
