@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './App.scss';
 import { HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
@@ -108,17 +108,44 @@ function App() {
     setIsVideoPopupOpen(true);
   }
 
+  // контекст попапов
+  const PopupsContextValue = {
+    closeAllPopups,
+    closePopupLogin,
+    openPopupConfirmation,
+    openPopupSuccessfully,
+    openPopupAboutEvent,
+    openPopupError,
+    openPopupCities,
+    openPopupLogin,
+    openPopupRecommendSuccess,
+    openPopupVideo,
+    openPopupInfoTooltip,
+  };
+
   // текущий юзер/контекст
   const [currentUser, setCurrentUser] = useState(null);
   const updateUser = (value) => setCurrentUser(value);
 
+  const currentUserContextValue = useMemo(
+    () => ({ currentUser, updateUser }),
+    [currentUser]
+  );
+
   // список городов/контекст
   const { cities, defaultCity } = useCities();
+
+  const citiesContextValue = useMemo(() => ({ cities, defaultCity }), [cities]);
 
   // серверные ошибки контекст
   const [serverError, setServerError] = useState(null);
   const setError = (value) => setServerError(value);
   const clearError = () => setServerError(null);
+
+  const errorsContextValue = useMemo(
+    () => ({ serverError, setError, clearError }),
+    []
+  );
 
   const { isCheckingToken, checkToken } = useAuth(updateUser);
 
@@ -144,24 +171,10 @@ function App() {
 
   return (
     <HelmetProvider>
-      <CitiesContext.Provider value={{ cities, defaultCity }}>
-        <CurrentUserContext.Provider value={{ currentUser, updateUser }}>
-          <ErrorsContext.Provider value={{ serverError, setError, clearError }}>
-            <PopupsContext.Provider
-              value={{
-                closeAllPopups,
-                closePopupLogin,
-                openPopupConfirmation,
-                openPopupSuccessfully,
-                openPopupAboutEvent,
-                openPopupError,
-                openPopupCities,
-                openPopupLogin,
-                openPopupRecommendSuccess,
-                openPopupVideo,
-                openPopupInfoTooltip,
-              }}
-            >
+      <CitiesContext.Provider value={citiesContextValue}>
+        <CurrentUserContext.Provider value={currentUserContextValue}>
+          <ErrorsContext.Provider value={errorsContextValue}>
+            <PopupsContext.Provider value={PopupsContextValue}>
               <div className="page">
                 {!isCheckingToken ? <Router /> : <Loader isCentered />}
                 <PopupConfirmation
