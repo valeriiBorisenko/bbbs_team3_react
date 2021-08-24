@@ -76,23 +76,41 @@ const Video = () => {
   };
 
   // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Ресурсная группа"
-  const defineCategories = (tags, isResourceGroup) => {
+  const defineCategories = (tags) => {
     const categoriesArray = tags.map((tag) => ({
       filter: tag?.slug.toLowerCase(),
       name: changeCaseOfFirstLetter(tag?.name),
       isActive: false,
     }));
-    if (isResourceGroup) {
-      return [
-        { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-        { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
-        ...categoriesArray,
-      ];
-    }
-    return [
+
+    let isResourceGroup = false;
+
+    const tagsWithoutResorceGroup = [
       { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
       ...categoriesArray,
     ];
+
+    const tagsWithResourseGroup = [
+      { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+      { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
+      ...categoriesArray,
+    ];
+
+    if (currentUser) {
+      getVideoPageData({
+        resource_group: true,
+      })
+        .then((resourceGroupData) => {
+          isResourceGroup = resourceGroupData.count > 0;
+
+          if (isResourceGroup) {
+            setCategories(tagsWithResourseGroup);
+          }
+        })
+        .catch(() => setIsPageError(true));
+    }
+
+    setCategories(tagsWithoutResorceGroup);
   };
 
   // Сортировка значений Тэгов для АПИ
@@ -164,11 +182,8 @@ const Video = () => {
       getVideoPageData({
         limit: pageSize + 1,
       }),
-      getVideoPageData({
-        resource_group: true,
-      }),
     ])
-      .then(([tags, { results, count }, resourceGroupData]) => {
+      .then(([tags, { results, count }]) => {
         const videoData = results;
         const mainCard = videoData.find((item) => item?.pinnedFullSize);
         setMainVideo(mainCard);
@@ -180,9 +195,7 @@ const Video = () => {
           setVideo(videoData);
           setPageCount(Math.ceil(count / pageSize));
         }
-
-        const isResourceGroup = resourceGroupData.count > 0;
-        setCategories(defineCategories(tags, isResourceGroup));
+        defineCategories(tags);
       })
       .catch(() => setIsPageError(true))
       .finally(() => {
