@@ -50,7 +50,7 @@ function CardPlace({
     : '';
 
   const renderImage = () => {
-    if (chosen && (isBig || isMainPage)) {
+    if ((chosen && isBig) || isMainPage) {
       return (
         <img
           src={`${staticImageUrl}/${image}`}
