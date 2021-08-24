@@ -61,6 +61,11 @@ const useAuth = (setCurrentUser) => {
       .catch((err) => handleError(err)); // авторизация (работа с сервером) закончилась ошибкой
   };
 
+  const handleTokenError = () => {
+    clearLocalStorage();
+    setIsCheckingToken(false);
+  };
+
   const checkRefreshToken = (refresh) => {
     AuthApi.refreshToken({ refresh })
       .then(({ access }) => {
@@ -68,13 +73,10 @@ const useAuth = (setCurrentUser) => {
         setLocalStorageData(jwt, access);
         getUserData()
           .then((userData) => setCurrentUser(userData))
-          .catch(() => handleLogout())
+          .catch((err) => handleError(err))
           .finally(() => setIsCheckingToken(false));
       })
-      .catch(() => {
-        clearLocalStorage();
-        setIsCheckingToken(false);
-      });
+      .catch(() => handleTokenError());
   };
 
   const checkToken = () => {
@@ -93,13 +95,11 @@ const useAuth = (setCurrentUser) => {
           if (err?.status === unauthorized && refreshToken) {
             checkRefreshToken(refreshToken);
           } else {
-            clearLocalStorage();
-            setIsCheckingToken(false);
+            handleTokenError();
           }
         });
     } else {
-      clearLocalStorage();
-      setIsCheckingToken(false);
+      handleTokenError();
     }
   };
 
