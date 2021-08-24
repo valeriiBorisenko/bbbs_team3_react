@@ -13,8 +13,17 @@
     height: 100%;
     box-sizing: border-box;
 
-    & .card-annotation__desc {
-      margin-top: 95px;
+    &_center {
+      display: flex;
+      justify-content: flex-end;
+
+      > div {
+        max-height: 428px;
+      }
+
+      > div > div > .card-annotation__desc {
+        margin-top: 0;
+      }
     }
   }
 
@@ -33,6 +42,11 @@
 .card-annotation__desc {
   box-sizing: border-box;
   padding-right: 18px;
+  margin-top: 95px;
+
+  &_center {
+    margin-top: 0;
+  }
 }
 
 @include atDesktop1199 {
