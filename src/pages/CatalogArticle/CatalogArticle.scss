@@ -102,24 +102,11 @@
     list-style-type: decimal;
   }
 
-  & pre {
+  & blockquote {
+    margin: 0;
     border-radius: 30px;
     background-color: $white;
     padding: 50px;
-    & code {
-      text-align: left;
-      margin: 0;
-      font-family: $ptRootUI;
-      font-weight: 400;
-      font-size: 18px;
-      line-height: 1.4;
-      color: $black;
-      white-space: normal;
-    }
-  }
-
-  & blockquote {
-    margin: 0;
   }
 }
 
@@ -165,12 +152,8 @@
       font-size: 15px;
     }
 
-    & pre {
+    & blockquote {
       padding: 30px;
-
-      & code {
-        font-size: 15px;
-      }
     }
   }
 }
@@ -197,7 +180,7 @@
       padding: 30px 15px;
     }
 
-    & pre {
+    & blockquote {
       padding: 30px 15px;
     }
   }
