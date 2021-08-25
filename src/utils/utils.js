@@ -2,8 +2,8 @@ import { months, weekdays } from '../config/constants';
 
 // форматирует секунды в часы, минуты и секунды, принимает на вход number
 export const formatDuration = (duration) => {
-  const hours = parseInt(duration / (60 * 60), 10);
-  const minutes = parseInt((duration / 60) % 60, 10);
+  const hours = Math.floor(duration / (60 * 60));
+  const minutes = Math.floor((duration / 60) % 60);
   const seconds = duration % 60;
   const format = (value) => (value < 10 ? `0${value}` : `${value}`);
 
@@ -18,6 +18,7 @@ export const formatDuration = (duration) => {
 export const formatDate = (date) => {
   const parsedDate = new Date(date);
   let day = parsedDate.getDate();
+  let month = parsedDate.getMonth() + 1;
   const weekdayName = weekdays[parsedDate.getDay()];
   const monthName = months[parsedDate.getMonth() + 1]; // потому что months начинается с 1, а не 0
   const hour = String(parsedDate.getHours());
@@ -32,9 +33,14 @@ export const formatDate = (date) => {
     day = `0${day}`;
   }
 
+  if (month < 10) {
+    month = `0${month}`;
+  }
+
   return {
     year,
     day,
+    month,
     weekdayName,
     monthName,
     hour,
