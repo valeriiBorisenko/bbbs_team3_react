@@ -7,7 +7,7 @@ function CardAnnotation({ info, description, isMain, sectionClass }) {
   const classNames = [
     'card-annotation',
     isMain ? 'card-annotation_main' : '',
-    info ? '' : 'card-annotation_main_center',
+    info && isMain ? '' : 'card-annotation_main_center',
     sectionClass,
   ]
     .join(' ')

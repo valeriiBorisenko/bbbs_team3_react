@@ -135,7 +135,10 @@ function App() {
   // список городов/контекст
   const { cities, defaultCity } = useCities();
 
-  const citiesContextValue = useMemo(() => ({ cities, defaultCity }), [cities]);
+  const citiesContextValue = useMemo(
+    () => ({ cities, defaultCity }),
+    [cities, defaultCity]
+  );
 
   // серверные ошибки/контекст
   const [serverError, setServerError] = useState(null);

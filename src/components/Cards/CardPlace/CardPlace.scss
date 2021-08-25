@@ -60,16 +60,29 @@
 
     &_type_article {
       margin-top: auto;
-      margin-bottom: 15px;
     }
+
+    &_big {
+      height: 428px;
+    }
+  }
+
+  &__link {
+    margin-top: 15px;
   }
 }
 
 @include atDesktop1199 {
   .card-place {
     &__image {
+      height: 346px;
+    
       &_type_article {
         margin-top: 62px;
+      }
+    
+      &_big {
+        height: 380px;
       }
     }
   }
@@ -85,7 +98,15 @@
     }
 
     &__image {
-      height: 345px;
+      margin-bottom: 15px;
+
+      &_big {
+        height: 362px;
+      }
+    }
+
+    &__link {
+      margin-top: 0;
     }
   }
 }
@@ -94,8 +115,13 @@
   .card-place {
     &__image {
       height: 142px;
+
       &_type_article {
         margin-top: 39px;
+      }
+
+      &_big {
+        height: 158px;
       }
     }
   }
