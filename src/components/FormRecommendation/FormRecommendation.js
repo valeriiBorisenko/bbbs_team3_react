@@ -20,6 +20,9 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
     descPlaceholder,
     descPlaceholderMobile,
     buttonText,
+    addPhotoBtnDefault,
+    addPhotoBtnChange,
+    addPhotoAdded,
   } = texts;
 
   const [textAreaPlaceholder, setTextAreaPlaceholder] = useState('');
@@ -232,29 +235,48 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
           <div className="form-recom__submit-zone">
             <div className="form-recom__add-photo">
               {errors?.image && (
-                <span className="form-recom__add-photo_error">
+                <span className="form-recom__add-photo-error">
                   {errors?.image}
                 </span>
               )}
-              <label htmlFor="formRecomInputUpload">
-                <input
-                  id="formRecomInputUpload"
-                  type="file"
-                  name="image"
-                  accept="image/png, image/jpeg"
-                  className="form-recom__input-radio"
-                  onChange={(evt) => handleChangeFiles(evt, regExpImages)}
-                  required
-                />
-                <ButtonRound
-                  sectionClass={`form-recom__add-photo-btn ${
-                    errors?.image ? 'form-recom__add-photo-btn_error' : ''
-                  }`}
-                  color={`${errors?.image ? 'error' : 'lightGray'}`}
-                  isSmall
-                  isSpan
-                />
-              </label>
+              <div className="form-recom__add-photo-container">
+                {values?.image && (
+                  <span className="form-recom__add-photo-span form-recom__add-photo-span_text">
+                    {addPhotoAdded}
+                  </span>
+                )}
+                <label
+                  className="form-recom__add-photo-label"
+                  htmlFor="formRecomInputUpload"
+                >
+                  <input
+                    id="formRecomInputUpload"
+                    type="file"
+                    name="image"
+                    accept="image/png, image/jpeg"
+                    className="form-recom__input-radio"
+                    onChange={(evt) => handleChangeFiles(evt, regExpImages)}
+                    required
+                  />
+                  {!values?.image && (
+                    <ButtonRound
+                      sectionClass={`form-recom__add-photo-btn ${
+                        errors?.image ? 'form-recom__add-photo-btn_error' : ''
+                      }`}
+                      color={`${errors?.image ? 'error' : 'lightGray'}`}
+                      isSmall
+                      isSpan
+                    />
+                  )}
+                  <span
+                    className={`form-recom__add-photo-span ${
+                      errors?.image ? 'form-recom__add-photo-span_error' : ''
+                    }`}
+                  >
+                    {values?.image ? addPhotoBtnChange : addPhotoBtnDefault}
+                  </span>
+                </label>
+              </div>
             </div>
 
             <Button

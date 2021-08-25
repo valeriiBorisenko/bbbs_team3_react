@@ -1,7 +1,9 @@
 @import './styles/utils.scss';
 
 .button-round {
+  box-sizing: border-box;
   position: relative;
+  display: inline-block;
   width: 100px;
   height: 100px;
   border: none;
@@ -12,7 +14,7 @@
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
-  transition: 0.2s linear;
+  transition: 0.3s ease;
 
   &_color_lightblue {
     background-image: (url(../../../assets/black-cross.svg));
