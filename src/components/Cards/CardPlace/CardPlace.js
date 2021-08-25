@@ -31,9 +31,18 @@ function CardPlace({
     chosenTagText,
     activityTypeDefault,
   } = texts;
+
   const cardColor = isBig ? 'yellow' : color;
   const cardSize = isBig ? 'card-place_main' : '';
   const sexType = gender === 'male' ? genderMale : genderFemale;
+
+  const imageClassNames = [
+    'card-place__image',
+    'card-place__image_type_article',
+    link ? '' : 'card-place__image_big',
+  ]
+    .join(' ')
+    .trim();
 
   const types = activityTypes
     ? activityTypes.reduce((obj, { id, name }) => {
@@ -55,7 +64,7 @@ function CardPlace({
         <img
           src={`${staticImageUrl}/${image}`}
           alt={title}
-          className="card-place__image card-place__image_type_article"
+          className={imageClassNames}
         />
       );
     }

@@ -7,21 +7,42 @@ import { regExpImages } from '../../config/constants';
 import { useFormWithValidation } from '../../hooks/index';
 import { Input, Button, ButtonRound, DropDownSelect } from '../utils/index';
 
-function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
-  const {
-    titlePlaceholder,
-    linkPlaceholder,
-    addressPlaceholder,
-    genderMale,
-    genderFemale,
-    agePlaceholder,
-    activityPlaceholder,
-    cityPlaceholder,
-    descPlaceholder,
-    descPlaceholderMobile,
-    buttonText,
-  } = texts;
+const {
+  titlePlaceholder,
+  linkPlaceholder,
+  addressPlaceholder,
+  genderMale,
+  genderFemale,
+  agePlaceholder,
+  activityPlaceholder,
+  cityPlaceholder,
+  descPlaceholder,
+  descPlaceholderMobile,
+  buttonText,
+  addPhotoBtnDefault,
+  addPhotoBtnChange,
+  addPhotoAdded,
+} = texts;
 
+const validationSettings = {
+  title: {
+    minLength: 5,
+    maxLength: 50,
+  },
+  address: {
+    minLength: 5,
+    maxLength: 50,
+  },
+  age: {
+    min: 8,
+    max: 25,
+  },
+  description: {
+    maxLength: 200,
+  },
+};
+
+function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const [textAreaPlaceholder, setTextAreaPlaceholder] = useState('');
 
   useEffect(() => {
@@ -105,8 +126,8 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
               onChange={handleChange}
               value={values.title}
               required
-              minLength="5"
-              maxLength="50"
+              minLength={validationSettings.title.minLength}
+              maxLength={validationSettings.title.maxLength}
               error={errors?.title}
             />
 
@@ -131,8 +152,8 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             onChange={handleChange}
             value={values.address}
             required
-            minLength="5"
-            maxLength="50"
+            minLength={validationSettings.address.minLength}
+            maxLength={validationSettings.address.maxLength}
             error={errors?.address}
           />
 
@@ -189,8 +210,8 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
               onChange={handleChange}
               value={values.age}
               required
-              max="25"
-              min="1"
+              max={validationSettings.age.max}
+              min={validationSettings.age.min}
               error={errors?.age}
             />
           </div>
@@ -222,7 +243,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             onChange={handleChange}
             value={values.description}
             required
-            maxLength="200"
+            maxLength={validationSettings.description.maxLength}
             error={errors?.description}
             isTextarea
           />
@@ -232,29 +253,48 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
           <div className="form-recom__submit-zone">
             <div className="form-recom__add-photo">
               {errors?.image && (
-                <span className="form-recom__add-photo_error">
+                <span className="form-recom__add-photo-error">
                   {errors?.image}
                 </span>
               )}
-              <label htmlFor="formRecomInputUpload">
-                <input
-                  id="formRecomInputUpload"
-                  type="file"
-                  name="image"
-                  accept="image/png, image/jpeg"
-                  className="form-recom__input-radio"
-                  onChange={(evt) => handleChangeFiles(evt, regExpImages)}
-                  required
-                />
-                <ButtonRound
-                  sectionClass={`form-recom__add-photo-btn ${
-                    errors?.image ? 'form-recom__add-photo-btn_error' : ''
-                  }`}
-                  color={`${errors?.image ? 'error' : 'lightGray'}`}
-                  isSmall
-                  isSpan
-                />
-              </label>
+              <div className="form-recom__add-photo-container">
+                {values?.image && (
+                  <span className="form-recom__add-photo-span form-recom__add-photo-span_text">
+                    {addPhotoAdded}
+                  </span>
+                )}
+                <label
+                  className="form-recom__add-photo-label"
+                  htmlFor="formRecomInputUpload"
+                >
+                  <input
+                    id="formRecomInputUpload"
+                    type="file"
+                    name="image"
+                    accept="image/png, image/jpeg"
+                    className="form-recom__input-radio"
+                    onChange={(evt) => handleChangeFiles(evt, regExpImages)}
+                    required
+                  />
+                  {!values?.image && (
+                    <ButtonRound
+                      sectionClass={`form-recom__add-photo-btn ${
+                        errors?.image ? 'form-recom__add-photo-btn_error' : ''
+                      }`}
+                      color={`${errors?.image ? 'error' : 'lightGray'}`}
+                      isSmall
+                      isSpan
+                    />
+                  )}
+                  <span
+                    className={`form-recom__add-photo-span ${
+                      errors?.image ? 'form-recom__add-photo-span_error' : ''
+                    }`}
+                  >
+                    {values?.image ? addPhotoBtnChange : addPhotoBtnDefault}
+                  </span>
+                </label>
+              </div>
             </div>
 
             <Button
