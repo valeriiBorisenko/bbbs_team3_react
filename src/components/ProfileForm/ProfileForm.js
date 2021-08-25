@@ -143,13 +143,13 @@ function ProfileForm({
               color={`${errors?.image ? 'error' : 'lightGray'}`}
               isSpan
             />
+            <Caption
+              title={errors?.image || texts.uploadCaptionText}
+              sectionClass={`profile-form__caption ${
+                errors?.image ? 'profile-form__caption_error' : ''
+              }`}
+            />
           </label>
-          <Caption
-            title={errors?.image || texts.uploadCaptionText}
-            sectionClass={`profile-form__caption ${
-              errors?.image ? 'profile-form__caption_error' : ''
-            }`}
-          />
         </div>
       </Card>
 
