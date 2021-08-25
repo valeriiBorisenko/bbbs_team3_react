@@ -12,6 +12,7 @@
   background-color: transparent;
   padding: 0;
   color: $lightGray;
+  transition: .3s ease;
 
   &:last-of-type {
     margin-right: 0;
@@ -19,10 +20,11 @@
 
   &:hover {
     cursor: pointer;
+    color: $blue;
   }
 }
 
-@include atDesktop1380 {
+@include atDesktop1279 {
   .user-menu-button {
     font-size: 15px;
   }
