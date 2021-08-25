@@ -161,7 +161,7 @@ function Profile() {
 
   const handleEditMode = (data) => {
     setIsFormOpen(false);
-    //! необходима небольшая задержка перед ререндером
+    //! небольшая задержка перед ререндером
     setTimeout(() => {
       setIsEditMode(true);
       setFormDataToEdit(data);
@@ -292,23 +292,24 @@ function Profile() {
   };
 
   const renderAddDiaryButton = () => {
-    if (!isFormOpen && diaries && diaries?.length > 0) {
+    if (!isFormOpen && diaries && diaries.length > 0) {
       return (
-        <ButtonRound
-          sectionClass="profile__button-add-diary fade-in"
-          color="blue"
-          isSmall
+        <button
+          className="profile__button-add-diary fade-in"
+          type="button"
           onClick={openForm}
-        />
+        >
+          <ButtonRound color="blue" isSmall isSpan />
+        </button>
       );
     }
     return null;
   };
 
   const renderDiaryForm = () => {
-    if (isFormOpen || (diaries && diaries?.length === 0)) {
+    if (isFormOpen || (diaries && diaries.length === 0)) {
       return (
-        <>
+        <div className="profile__form-container">
           {!isEditMode && (
             <TitleH2 sectionClass="profile__title fade-in" title={formTitle} />
           )}
@@ -320,14 +321,14 @@ function Profile() {
             onClose={closeForm}
             onSubmit={handleSubmitDiary}
           />
-        </>
+        </div>
       );
     }
     return null;
   };
 
   const renderDiaries = () => {
-    if (diaries && diaries?.length > 0) {
+    if (diaries && diaries.length > 0) {
       return (
         <>
           {diaries.map((diary) => (
@@ -370,7 +371,7 @@ function Profile() {
                   }
                 />
                 <TitleH2
-                  sectionClass="profile__title"
+                  sectionClass="profile__title profile__title_shifted"
                   title={isArchiveOpen ? titleH1Archive : titleH1Current}
                 />
               </div>
@@ -386,11 +387,9 @@ function Profile() {
         <div className="profile__diaries page__section">
           <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
           <div className="profile__diaries-container">
-            <div className="profile__form-container">
-              {renderAddDiaryButton()}
+            {renderAddDiaryButton()}
 
-              {renderDiaryForm()}
-            </div>
+            {renderDiaryForm()}
 
             {renderDiaries()}
           </div>

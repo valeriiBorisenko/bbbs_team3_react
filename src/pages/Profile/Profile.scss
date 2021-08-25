@@ -16,7 +16,11 @@
     width: fit-content;
     text-align: center;
     color: $lightBlack;
-    transform: translateX(-100px);
+    
+
+    &_shifted {
+      transform: translateX(-100px);
+    }
   }
 
   &__archive-button {
@@ -56,6 +60,14 @@
   &__button-add-diary {
     display: flex;
     align-items: center;
+    padding: 0;
+    border: none;
+    background-color: rgba(255, 255, 255, 0);
+    margin-bottom: 50px;
+
+    & .button-round {
+      margin-right: 15px;
+    }
   
     &::after {
       content: 'Добавить встречу';
@@ -66,13 +78,14 @@
       font-size: 15px;
       line-height: 1.27;
       letter-spacing: 0.2px;
-      margin-left: 68px;
-      pointer-events: none;
     }
-  
+
     &:hover {
       cursor: pointer;
-      background-color: $lightBlue;
+
+      & .button-round {
+        background-color: $lightBlue;
+      }
     }
   }
 
@@ -158,7 +171,7 @@
       margin-bottom: 10px;
     }
 
-    &__title {
+    &__title_shifted {
       transform: translateX(0);
     }
   }
@@ -168,7 +181,6 @@
   .profile {
     &__button-add-diary {
       &::after {
-        margin-left: 55px;
         font-size: 12px;
         line-height: 1.41;
       }
@@ -201,6 +213,10 @@
     }
 
     &__form-container {
+      margin-bottom: 20px;
+    }
+
+    &__button-add-diary {
       margin-bottom: 20px;
     }
   }
