@@ -2,6 +2,7 @@
 
 .user-menu-button {
   display: block;
+  width: fit-content;
   margin-right: 30px;
   font-family: $ptRootUI;
   font-weight: 400;
@@ -12,6 +13,7 @@
   background-color: transparent;
   padding: 0;
   color: $lightGray;
+  text-align: left;
   transition: .3s ease;
 
   &:last-of-type {

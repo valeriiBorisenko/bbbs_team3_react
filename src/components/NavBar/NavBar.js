@@ -1,4 +1,3 @@
-import './NavBar.scss';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
@@ -29,6 +28,7 @@ import {
   UserIconButton,
   UserMenuButton,
 } from '../utils/index';
+import './NavBar.scss';
 
 function NavBar({
   isMobileMenuOpen,

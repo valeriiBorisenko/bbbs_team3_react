@@ -19,4 +19,8 @@
   &_authorized {
     background-image: url('../../../assets/user-icon_active.svg');
   }
+
+  &:hover {
+    transform: scale(1.15);
+  }
 }

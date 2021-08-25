@@ -17,7 +17,7 @@
   transition: 0.3s ease;
 
   &_color_lightblue {
-    background-image: (url(../../../assets/black-cross.svg));
+    background-image: url(../../../assets/black-cross.svg);
     background-color: $lightBlue;
   }
 
