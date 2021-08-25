@@ -113,8 +113,8 @@ function Profile() {
 
   useEffect(() => {
     if (selectedEvent) {
-      setEvents(() =>
-        events.filter((event) =>
+      setEvents((prevEvents) =>
+        prevEvents.filter((event) =>
           event?.id === selectedEvent?.id ? null : event
         )
       );
@@ -171,12 +171,14 @@ function Profile() {
 
   const createFormData = (data) => {
     const formData = new FormData();
-    if (data?.id) formData.append('id', data?.id);
-    if (data?.image) formData.append('image', data?.image);
-    formData.append('date', data?.date);
-    formData.append('place', data?.place);
-    formData.append('description', data?.description);
-    formData.append('mark', data?.mark);
+    if (data) {
+      if (data.id) formData.append('id', data.id);
+      if (data.image) formData.append('image', data.image);
+      formData.append('date', data.date);
+      formData.append('place', data.place);
+      formData.append('description', data.description);
+      formData.append('mark', data.mark);
+    }
     return formData;
   };
 
@@ -189,7 +191,7 @@ function Profile() {
   const handleCreateDiary = (data) => {
     createDiary(createFormData(data))
       .then((newDiary) => {
-        setDiaries([newDiary, ...diaries]);
+        setDiaries((prevDiaries) => [newDiary, ...prevDiaries]);
         closeForm();
       })
       .catch((err) => handleErrorOnFormSubmit(err));
@@ -198,8 +200,8 @@ function Profile() {
   const handleEditDiary = (data) => {
     editDiary(data?.id, createFormData(data))
       .then((newDiary) => {
-        setDiaries(() =>
-          diaries.map((diary) =>
+        setDiaries((prevDiaries) =>
+          prevDiaries.map((diary) =>
             diary?.id === newDiary?.id ? newDiary : diary
           )
         );
@@ -228,8 +230,8 @@ function Profile() {
   const handleDeleteDiary = (diary) => {
     deleteDiary(diary?.id, diary)
       .then(() => {
-        setDiaries(() =>
-          diaries.filter((prevDiary) =>
+        setDiaries((prevDiaries) =>
+          prevDiaries.filter((prevDiary) =>
             prevDiary?.id === diary?.id ? null : prevDiary
           )
         );
@@ -249,8 +251,8 @@ function Profile() {
       .then(() => {
         const newDiary = diaries.find((diary) => diary?.id === diaryId);
         newDiary.sentToCurator = true;
-        setDiaries(() =>
-          diaries.map((diary) =>
+        setDiaries((prevDiaries) =>
+          prevDiaries.map((diary) =>
             diary?.id === newDiary?.id ? newDiary : diary
           )
         );
