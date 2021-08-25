@@ -24,7 +24,11 @@ import {
 } from '../../utils/filter-tags';
 import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { ErrorsContext, PopupsContext } from '../../contexts';
+import {
+  CurrentUserContext,
+  ErrorsContext,
+  PopupsContext,
+} from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -36,6 +40,7 @@ const { headTitle, headDescription, title, resourceGroupTag, textStubNoData } =
   videoPageTexts;
 
 const Video = () => {
+  const { currentUser } = useContext(CurrentUserContext);
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 
@@ -71,23 +76,41 @@ const Video = () => {
   };
 
   // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Ресурсная группа"
-  const defineCategories = (tags, resourceGroup) => {
+  const defineCategories = (tags) => {
     const categoriesArray = tags.map((tag) => ({
       filter: tag?.slug.toLowerCase(),
       name: changeCaseOfFirstLetter(tag?.name),
       isActive: false,
     }));
-    if (resourceGroup) {
-      return [
-        { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-        { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
-        ...categoriesArray,
-      ];
-    }
-    return [
+
+    let isResourceGroup = false;
+
+    const tagsWithoutResorceGroup = [
       { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
       ...categoriesArray,
     ];
+
+    const tagsWithResourseGroup = [
+      { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+      { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
+      ...categoriesArray,
+    ];
+
+    if (currentUser) {
+      getVideoPageData({
+        resource_group: true,
+      })
+        .then((resourceGroupData) => {
+          isResourceGroup = resourceGroupData.count > 0;
+
+          if (isResourceGroup) {
+            setCategories(tagsWithResourseGroup);
+          }
+        })
+        .catch(() => setIsPageError(true));
+    }
+
+    setCategories(tagsWithoutResorceGroup);
   };
 
   // Сортировка значений Тэгов для АПИ
@@ -172,9 +195,7 @@ const Video = () => {
           setVideo(videoData);
           setPageCount(Math.ceil(count / pageSize));
         }
-
-        const isResourceGroup = videoData.some((item) => item?.resourceGroup);
-        setCategories(defineCategories(tags, isResourceGroup));
+        defineCategories(tags);
       })
       .catch(() => setIsPageError(true))
       .finally(() => {
@@ -216,7 +237,7 @@ const Video = () => {
     if (pageSize) {
       getFirstPageData();
     }
-  }, [pageSize]);
+  }, [pageSize, currentUser]);
 
   useEffect(() => {
     if (!isLoadingPage && !isFiltersUsed) {

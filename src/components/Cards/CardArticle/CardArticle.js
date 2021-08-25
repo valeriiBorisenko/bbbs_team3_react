@@ -59,11 +59,7 @@ function CardArticle({
           {texts.linkText}
         </a>
       </Card>
-      <CardAnnotation
-        description={annotation}
-        isMain={isMain}
-        sectionClass="article-card__container"
-      />
+      <CardAnnotation description={annotation} isMain={isMain} />
     </article>
   );
 }

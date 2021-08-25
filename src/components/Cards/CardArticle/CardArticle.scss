@@ -67,19 +67,6 @@
   object-position: center;
 }
 
-.article-card__container {
-  display: flex;
-  justify-content: flex-end;
-
-  > div {
-    max-height: 428px;
-  }
-
-  > div > div > .card-annotation__desc {
-    margin-top: 0;
-  }
-}
-
 @include atDesktop1024 {
   .article-card {
     padding-left: 15px;
@@ -92,7 +79,7 @@
 
   .article-card__link-wrap {
     &_content_article-img {
-      margin-top: 60px;
+      margin-top: 62px;
     }
   }
 
@@ -104,7 +91,7 @@
 @include atMobile {
   .article-card__link-wrap {
     &_content_article-img {
-      margin-top: 40px;
+      margin-top: 39px;
     }
   }
 
