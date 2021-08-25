@@ -16,6 +16,28 @@ import {
   ButtonRound,
 } from '../utils/index';
 
+const {
+  rateCaptionText,
+  uploadCaptionText,
+  placePlaceholder,
+  datePlaceholder,
+  descrPlaceholder,
+  buttonAddText,
+  buttonDeleteText,
+  buttonCancelText,
+  buttonSaveText,
+} = texts;
+
+const validationSettings = {
+  place: {
+    minLength: 5,
+    maxLength: 128,
+  },
+  description: {
+    maxLength: 1024,
+  },
+};
+
 function ProfileForm({
   data,
   sectionClass,
@@ -37,7 +59,7 @@ function ProfileForm({
         .trim()
     : '';
 
-  const [caption, setCaption] = useState(texts.rateCaptionText);
+  const [caption, setCaption] = useState(rateCaptionText);
   const [userImage, setUserImage] = useState(null);
 
   const {
@@ -75,13 +97,13 @@ function ProfileForm({
     setUserImage(null);
     resetForm();
     clearError();
-    setCaption(texts.rateCaptionText);
+    setCaption(rateCaptionText);
     onClose();
   };
 
   useEffect(() => {
     if (values?.mark) setCaption(captions[values.mark]);
-    else setCaption(texts.rateCaptionText);
+    else setCaption(rateCaptionText);
   }, [values.mark]);
 
   useEffect(() => {
@@ -144,7 +166,7 @@ function ProfileForm({
               isSpan
             />
             <Caption
-              title={errors?.image || texts.uploadCaptionText}
+              title={errors?.image || uploadCaptionText}
               sectionClass={`profile-form__caption ${
                 errors?.image ? 'profile-form__caption_error' : ''
               }`}
@@ -159,12 +181,12 @@ function ProfileForm({
             id="profileInputPlace"
             type="text"
             name="place"
-            placeholder={texts.placePlaceholder}
+            placeholder={placePlaceholder}
             onChange={handleChange}
             value={values.place}
             required
-            minLength="5"
-            maxLength="128"
+            minLength={validationSettings.place.minLength}
+            maxLength={validationSettings.place.maxLength}
             error={errors?.place}
           />
 
@@ -172,7 +194,7 @@ function ProfileForm({
             id="profileInputDate"
             type="text"
             name="date"
-            placeholder={texts.datePlaceholder}
+            placeholder={datePlaceholder}
             onFocus={handleFocusDataInput}
             onChange={handleChange}
             value={values.date}
@@ -184,12 +206,12 @@ function ProfileForm({
             id="profileInputTextarea"
             type="text"
             name="description"
-            placeholder={texts.descrPlaceholder}
+            placeholder={descrPlaceholder}
             sectionClass="profile-form__input-wrap profile-form__input-wrap_textarea"
             onChange={handleChange}
             value={values.description}
             required
-            maxLength="1024"
+            maxLength={validationSettings.description.maxLength}
             error={errors?.description}
             isTextarea
           />
@@ -232,17 +254,13 @@ function ProfileForm({
               </div>
               <div className="profile-form__buttons">
                 <Button
-                  title={`${
-                    isEditMode ? texts.buttonCancelText : texts.buttonDeleteText
-                  }`}
+                  title={`${isEditMode ? buttonCancelText : buttonDeleteText}`}
                   color="gray-borderless"
                   sectionClass="profile-form__button_el_delete"
                   onClick={handleCloseForm}
                 />
                 <Button
-                  title={`${
-                    isEditMode ? texts.buttonSaveText : texts.buttonAddText
-                  }`}
+                  title={`${isEditMode ? buttonSaveText : buttonAddText}`}
                   sectionClass="profile-form__button_el_add"
                   isDisabled={!isValid}
                   isSubmittable

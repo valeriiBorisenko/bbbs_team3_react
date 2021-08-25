@@ -200,6 +200,10 @@
       gap: 5px;
     }
 
+    &__text-container {
+      padding: 30px 15px;
+    }
+
     &__input_el_textarea {
       min-height: 120px;
     }
@@ -236,10 +240,6 @@
 
 @include atMobile {
   .profile-form {
-    &__text-container {
-      padding: 30px 15px;
-    }
-
     &__caption {
       font-size: 12px;
       line-height: 1.42;

@@ -59,7 +59,7 @@
     font-family: $ptRootUI;
     font-weight: 400;
     font-size: 18px;
-    line-height: 1.4;
+    line-height: 1.44;
     color: $black;
   }
 
@@ -183,7 +183,7 @@
     }
 
     &__actions {
-      margin-top: 20px;
+      margin-top: 25px;
       margin-right: 10px;
     }
 
@@ -194,6 +194,14 @@
         object-fit: contain;
         object-position: center;
       }
+    }
+  }
+}
+
+@include atDesktop1024 {
+  .profile-diary {
+    &__actions {
+      margin-top: 20px;
     }
   }
 }
