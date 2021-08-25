@@ -7,24 +7,42 @@ import { regExpImages } from '../../config/constants';
 import { useFormWithValidation } from '../../hooks/index';
 import { Input, Button, ButtonRound, DropDownSelect } from '../utils/index';
 
-function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
-  const {
-    titlePlaceholder,
-    linkPlaceholder,
-    addressPlaceholder,
-    genderMale,
-    genderFemale,
-    agePlaceholder,
-    activityPlaceholder,
-    cityPlaceholder,
-    descPlaceholder,
-    descPlaceholderMobile,
-    buttonText,
-    addPhotoBtnDefault,
-    addPhotoBtnChange,
-    addPhotoAdded,
-  } = texts;
+const {
+  titlePlaceholder,
+  linkPlaceholder,
+  addressPlaceholder,
+  genderMale,
+  genderFemale,
+  agePlaceholder,
+  activityPlaceholder,
+  cityPlaceholder,
+  descPlaceholder,
+  descPlaceholderMobile,
+  buttonText,
+  addPhotoBtnDefault,
+  addPhotoBtnChange,
+  addPhotoAdded,
+} = texts;
 
+const validationSettings = {
+  title: {
+    minLength: 5,
+    maxLength: 50,
+  },
+  address: {
+    minLength: 5,
+    maxLength: 50,
+  },
+  age: {
+    min: 8,
+    max: 25,
+  },
+  description: {
+    maxLength: 200,
+  },
+};
+
+function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const [textAreaPlaceholder, setTextAreaPlaceholder] = useState('');
 
   useEffect(() => {
@@ -108,8 +126,8 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
               onChange={handleChange}
               value={values.title}
               required
-              minLength="5"
-              maxLength="50"
+              minLength={validationSettings.title.minLength}
+              maxLength={validationSettings.title.maxLength}
               error={errors?.title}
             />
 
@@ -134,8 +152,8 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             onChange={handleChange}
             value={values.address}
             required
-            minLength="5"
-            maxLength="50"
+            minLength={validationSettings.address.minLength}
+            maxLength={validationSettings.address.maxLength}
             error={errors?.address}
           />
 
@@ -192,8 +210,8 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
               onChange={handleChange}
               value={values.age}
               required
-              max="25"
-              min="1"
+              max={validationSettings.age.max}
+              min={validationSettings.age.min}
               error={errors?.age}
             />
           </div>
@@ -225,7 +243,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             onChange={handleChange}
             value={values.description}
             required
-            maxLength="200"
+            maxLength={validationSettings.description.maxLength}
             error={errors?.description}
             isTextarea
           />
