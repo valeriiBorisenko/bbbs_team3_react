@@ -188,6 +188,7 @@
   .profile-form {
     &__texts {
       grid-template-columns: 1fr;
+      gap: 5px;
     }
 
     &__input_el_textarea {
@@ -197,6 +198,7 @@
     &__submit-zone {
       flex-direction: column;
       align-items: stretch;
+      margin-top: 15px;
     }
 
     &__ratings-buttons {
