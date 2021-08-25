@@ -49,6 +49,13 @@ const {
 const INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX = 1;
 const INITIAL_PAGE_INDEX = 0;
 
+const validationSettings = {
+  question: {
+    minLength: 10,
+    maxLength: 200,
+  },
+};
+
 function Questions() {
   const { currentUser } = useContext(CurrentUserContext);
   const { serverError, setError, clearError } = useContext(ErrorsContext);
@@ -279,8 +286,8 @@ function Questions() {
               placeholder={formPlaceholder}
               onChange={handleChange}
               value={values?.question}
-              minLength="10"
-              maxLength="200"
+              minLength={validationSettings.question.minLength}
+              maxLength={validationSettings.question.maxLength}
               required
               error={errors?.question}
               sectionClass="input__question-form"
