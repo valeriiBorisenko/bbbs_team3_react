@@ -96,10 +96,6 @@
     border: 1px solid $error;
     background-image: url(../../assets/error-cross.svg);
     background-color: rgba($error, .2);
-
-    &:hover {
-      background-color: rgba($error, .5);
-    }
   }
 
   &__text-container {
