@@ -180,11 +180,11 @@
   }
 }
 
-@include atTablet {
+@include atTabletL {
   .profile {
     &__events {
-      margin-right: -60px;
-      margin-left: -60px;
+      margin-right: -127px;
+      margin-left: -127px;
       margin-bottom: 15px;
     }
 
@@ -202,6 +202,27 @@
 
     &__form-container {
       margin-bottom: 20px;
+    }
+  }
+
+  .profile-event-card {
+    margin-right: 20px;
+
+    &:first-of-type {
+      margin-left: 127px;
+    }
+
+    &:last-of-type {
+      margin-right: 127px;
+    }
+  }
+}
+
+@include atTablet {
+  .profile {
+    &__events {
+      margin-right: -60px;
+      margin-left: -60px;
     }
   }
 
