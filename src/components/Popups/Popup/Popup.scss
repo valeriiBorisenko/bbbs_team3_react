@@ -50,11 +50,6 @@
       max-height: 238px;
       padding: 30px;
     }
-
-    &_type_video {
-      transform: rotateX(80deg) scale(1);
-      transition: .5s ease-out;
-    }
   }
 
   &__form {
@@ -97,12 +92,13 @@
   outline: none;
   border: none;
   color: $blue;
-  cursor: pointer;
+
+  &:hover {
+    cursor: pointer;
+  }
 
   &_type_video {
-    right: 30px;
-    bottom: 30px;
-    top: unset;
+    top: 10px;
   }
 }
 
@@ -130,11 +126,11 @@
   .popup__container {
     padding: 50px;
     max-width: 570px;
-    min-height: 470px;
     margin: 0 15px;
 
     &_type_calendar {
       margin: 0 60px;
+      min-height: 470px;
     }
 
     &_type_confirm-diary {
@@ -147,14 +143,28 @@
   }
 }
 
+@include atTabletL {
+  .popup__close {
+    &_type_video {
+      right: 5px;
+    }
+  }
+}
+
 @include atMobileL {
   .popup__close {
     top: 15px;
     right: 15px;
+
+    &_type_video {
+      top: 5px;
+      right: 5px;
+    }
   }
 
   .popup__container {
     padding: 60px 15px 30px;
+    margin: 0;
 
     &_type_sign-in {
       padding-bottom: 50px;
