@@ -20,6 +20,7 @@
 
   &__container {
     display: flex;
+    width: 100%;
     padding: 50px 100px;
     border-radius: 30px;
     background-color: $white;
@@ -33,13 +34,13 @@
     transition: .3s ease-out;
 
     &_type_sign-in {
-      width: 770px;
+      max-width: 770px;
       overflow: hidden;
     }
 
     &_type_calendar {
       min-height: 670px;
-      width: 770px;
+      max-width: 770px;
     }
 
     &_type_confirm-diary {
@@ -128,8 +129,13 @@
 @include atDesktop1024 {
   .popup__container {
     padding: 50px;
-    width: 570px;
+    max-width: 570px;
     min-height: 470px;
+    margin: 0 15px;
+
+    &_type_calendar {
+      margin: 0 60px;
+    }
 
     &_type_confirm-diary {
       width: 100%;
@@ -148,7 +154,6 @@
   }
 
   .popup__container {
-    width: 450px;
     padding: 60px 15px 30px;
 
     &_type_sign-in {
@@ -163,10 +168,12 @@
 
 @include atMobile {
   .popup__container {
-    width: 290px;
-
     &_type_cities {
       max-width: 320px;
+    }
+
+    &_type_calendar {
+      margin: 0 15px;
     }
   }
 }

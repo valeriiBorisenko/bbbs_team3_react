@@ -22,16 +22,6 @@
   &__title {
     margin: 0 15px 0 0;
     max-width: 320px;
-    max-height: 4em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -moz-box;
-    -moz-box-orient: vertical;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    line-clamp: 3;
-    box-orient: vertical;
   }
 
   &__weekday {
@@ -102,14 +92,13 @@
 
   &__desc-paragraph {
     box-sizing: border-box;
-    max-width: 570px;
     margin: 0;
     font-family: $ptRootUI;
     font-weight: 400;
     font-size: 18px;
     line-height: 1.4;
     color: $black;
-    padding: 10px 10px 0 0;
+    padding: 10px 15px 0 0;
     color: $lightBlack;
   
     &:first-of-type {
@@ -224,8 +213,13 @@
     }
 
     &__desc-paragraph {
-      max-width: 470px;
       font-size: 15px;
+    }
+
+    &__description {
+      > div {
+        min-height: 170px;
+      }
     }
   }
 }
@@ -233,8 +227,13 @@
 @include atMobileL {
   .calendar {
     &__desc-paragraph {
-      max-width: 420px;
       font-size: 12px;
+    }
+
+    &__description {
+      > div {
+        min-height: 100px;
+      }
     }
   }
 }
@@ -252,8 +251,10 @@
       height: 106px;
     }
 
-    &__desc-paragraph {
-      max-width: 260px;
+    &__description {
+      > div {
+        min-height: 130px;
+      }
     }
   }
 }
