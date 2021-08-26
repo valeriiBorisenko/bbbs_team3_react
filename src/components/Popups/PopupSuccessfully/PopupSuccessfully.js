@@ -6,7 +6,7 @@ import Lottie from 'lottie-web';
 import animationSuccess from '../../../assets/animation/ill_popup_success.json';
 import texts from './locales/RU';
 import { AFISHA_URL } from '../../../config/routes';
-import { formatDate } from '../../../utils/utils';
+import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 import Popup from '../Popup/Popup';
@@ -22,6 +22,7 @@ function PopupSuccessfully({ isOpen, onClose }) {
   const card = getLocalStorageData(localStAfishaEvent);
   const startDay = formatDate(card?.startAt);
   const endDay = formatDate(card?.endAt);
+  const month = formatMonthsGenitiveCase(startDay?.monthName);
 
   const pushToCalendar = () => {
     history.push(AFISHA_URL);
@@ -61,7 +62,9 @@ function PopupSuccessfully({ isOpen, onClose }) {
       />
       <TitleH2
         sectionClass="popup__title_type_calendar"
-        title={`${startDay?.day} ${startDay?.monthName} с ${startDay?.hour}:${startDay?.minutes}—${endDay?.hour}:${endDay?.minutes}`}
+        title={`${parseInt(startDay?.day, 10)} ${month} с ${startDay?.hour}:${
+          startDay?.minutes
+        }—${endDay?.hour}:${endDay?.minutes}`}
       />
       <p className="section-title popup__title_type_calendar popup__title_type_successfully">
         {paragraph}

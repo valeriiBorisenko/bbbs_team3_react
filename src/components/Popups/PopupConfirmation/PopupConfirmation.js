@@ -1,7 +1,7 @@
 import './PopupConfirmation.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { formatDate } from '../../../utils/utils';
+import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks/index';
 import { localStAfishaEvent } from '../../../config/constants';
@@ -14,6 +14,7 @@ function PopupConfirmation({ isOpen, onClose }) {
 
   const startDay = formatDate(card?.startAt);
   const endDay = formatDate(card?.endAt);
+  const month = formatMonthsGenitiveCase(startDay?.monthName);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -37,7 +38,9 @@ function PopupConfirmation({ isOpen, onClose }) {
         />
         <TitleH2
           sectionClass="popup__title_type_calendar"
-          title={`${startDay?.day} ${startDay?.monthName} с ${startDay?.hour}:${startDay?.minutes}—${endDay?.hour}:${endDay?.minutes}`}
+          title={`${parseInt(startDay?.day, 10)} ${month} с ${startDay?.hour}:${
+            startDay?.minutes
+          }—${endDay?.hour}:${endDay?.minutes}`}
         />
         <div className="popup__buttons_type_calendar">
           <Button

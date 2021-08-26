@@ -115,8 +115,11 @@ export const changeCaseOfFirstLetter = (str) => {
 
 // управление падежами месяцев
 export const formatMonthsGenitiveCase = (month) => {
-  if (month === 'март' || month === 'август') return `${month}а`;
-  return `${month.slice(0, -1)}я`;
+  if (month) {
+    if (month === 'март' || month === 'август') return `${month}а`;
+    return `${month.slice(0, -1)}я`;
+  }
+  return month;
 };
 
 export const randomizeArray = (arr, size) => {
