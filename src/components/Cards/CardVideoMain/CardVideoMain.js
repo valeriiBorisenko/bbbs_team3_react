@@ -1,5 +1,5 @@
 import './CardVideoMain.scss';
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { PopupsContext } from '../../../contexts/index';
@@ -26,27 +26,7 @@ function CardVideoMain({ data: { title, info, link, image, duration } }) {
     // записать дату в локал, ключ вынести в константы
   };
 
-  // Стейт записывает ширину окна
-  const [isMobile, setIsMobile] = useState(false);
-
   const { imagePreview } = parserLinkYoutube(link);
-
-  // Следит за шириной экрана и записывает в стейт
-  useEffect(() => {
-    const mobile = window.matchMedia('(max-width: 767px)');
-
-    const listener = () => {
-      if (mobile.matches) setIsMobile(true);
-      else setIsMobile(false);
-    };
-    listener();
-
-    mobile.addEventListener('change', listener);
-
-    return () => {
-      mobile.removeEventListener('change', listener);
-    };
-  }, []);
 
   // Рендерим верхную часть с фоткой и props.children из компонета выше
   const renderPrewiew = () => {
@@ -73,27 +53,15 @@ function CardVideoMain({ data: { title, info, link, image, duration } }) {
     );
   };
 
-  // Редерим либо кнопку либо ссылку в зависимости от ширины
-  // Пробрасываем елементы в функцию в завизимости от положения
-  const renderVideoPlayback = (childrenElem) =>
-    !isMobile ? (
-      <button
-        className="link card-video-main__button"
-        type="button"
-        onClick={handleClick}
-      >
-        {childrenElem}
-      </button>
-    ) : (
-      <a
-        href={link}
-        className="link card-video-main__button"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        {childrenElem}
-      </a>
-    );
+  const renderVideoPlayback = (childrenElem) => (
+    <button
+      className="link card-video-main__button"
+      type="button"
+      onClick={handleClick}
+    >
+      {childrenElem}
+    </button>
+  );
 
   return (
     <div className="card-container card-container_type_main-video">

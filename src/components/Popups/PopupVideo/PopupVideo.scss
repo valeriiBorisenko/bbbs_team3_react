@@ -46,6 +46,11 @@
   .popup {
     &__container_type_video {
       padding: 50px 15px 30px;
+      max-height: 100vh;
+    }
+
+    &__video-iframe {
+      max-height: calc(100vh - 143px);
     }
 
     &__video-title {
@@ -58,6 +63,11 @@
   .popup {
     &__container_type_video {
       padding: 40px 10px 20px;
+      margin: 0;
+    }
+
+    &__video-iframe {
+      max-height: calc(100vh - 118px);
     }
   }
 }
