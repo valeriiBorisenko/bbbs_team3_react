@@ -61,7 +61,7 @@ function PopupSuccessfully({ isOpen, onClose }) {
       />
       <TitleH2
         sectionClass="popup__title_type_calendar"
-        title={`${startDay?.day} ${startDay?.monthName} с ${startDay?.hour}:${startDay?.minutes} - ${endDay?.hour}:${endDay?.minutes}`}
+        title={`${startDay?.day} ${startDay?.monthName} с ${startDay?.hour}:${startDay?.minutes}—${endDay?.hour}:${endDay?.minutes}`}
       />
       <p className="section-title popup__title_type_calendar popup__title_type_successfully">
         {paragraph}

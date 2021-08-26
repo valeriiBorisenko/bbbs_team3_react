@@ -37,7 +37,7 @@ function PopupConfirmation({ isOpen, onClose }) {
         />
         <TitleH2
           sectionClass="popup__title_type_calendar"
-          title={`${startDay?.day} ${startDay?.monthName} с ${startDay?.hour}:${startDay?.minutes} - ${endDay?.hour}:${endDay?.minutes}`}
+          title={`${startDay?.day} ${startDay?.monthName} с ${startDay?.hour}:${startDay?.minutes}—${endDay?.hour}:${endDay?.minutes}`}
         />
         <div className="popup__buttons_type_calendar">
           <Button
