@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
 import { TitleH2, Caption } from '../../utils/index';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
-import Loader from '../../utils/Loader/Loader';
 import {
   getLocalStorageData,
   removeLocalStorageData,
 } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
+import Loader from '../../utils/Loader/Loader';
 
 const PopupVideo = ({ isOpen, onClose }) => {
   const data = getLocalStorageData(localStChosenVideo);

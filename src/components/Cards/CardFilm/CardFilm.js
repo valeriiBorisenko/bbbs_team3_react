@@ -1,6 +1,6 @@
 import './CardFilm.scss';
 import PropTypes from 'prop-types';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { PopupsContext } from '../../../contexts/index';
 import { TitleH2, Card, Caption, Rubric } from '../../utils/index';
 import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
@@ -30,27 +30,7 @@ function CardFilm({
     openPopupVideo();
   };
 
-  // Стейт записывает ширину окна
-  const [isMobile, setIsMobile] = useState(false);
-
   const { imagePreview } = parserLinkYoutube(link);
-
-  // Следит за шириной экрана и записывает в стейт
-  useEffect(() => {
-    const mobile = window.matchMedia('(max-width: 767px)');
-
-    const listener = () => {
-      if (mobile.matches) setIsMobile(true);
-      else setIsMobile(false);
-    };
-    listener();
-
-    mobile.addEventListener('change', listener);
-
-    return () => {
-      mobile.removeEventListener('change', listener);
-    };
-  }, []);
 
   // Рендерим верхную часть с фоткой
   const renderPrewiew = () => {
@@ -86,27 +66,15 @@ function CardFilm({
     );
   };
 
-  // Редерим либо кнопку либо ссылку в зависимости от ширины
-  // Пробрасываем елементы в функцию в завизимости от положения
-  const renderVideoPlayback = (childrenElem) =>
-    !isMobile ? (
-      <button
-        className="link card-film__button"
-        type="button"
-        onClick={handleClick}
-      >
-        {childrenElem}
-      </button>
-    ) : (
-      <a
-        href={link}
-        className="link card-film__button"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        {childrenElem}
-      </a>
-    );
+  const renderVideoPlayback = (childrenElem) => (
+    <button
+      className="link card-film__button"
+      type="button"
+      onClick={handleClick}
+    >
+      {childrenElem}
+    </button>
+  );
 
   return (
     <Card sectionClass={`card-film ${sectionClass}`}>
