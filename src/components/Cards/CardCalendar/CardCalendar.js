@@ -70,7 +70,7 @@ function CardCalendar({
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
             <p className="calendar__time">
-              {`${startDateParts.hour}:${startDateParts.minutes} - ${endDayParts.hour}:${endDayParts.minutes}`}
+              {`${startDateParts.hour}:${startDateParts.minutes}–${endDayParts.hour}:${endDayParts.minutes}`}
             </p>
           </li>
           <li className="calendar__info-item">
