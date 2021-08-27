@@ -57,7 +57,7 @@ function CardQuestion({
     .trim();
 
   useEffect(() => {
-    if (isOpenByDefault) {
+    if (ref && ref.current && isOpenByDefault) {
       setIsOpened(true);
       setIsAnimated(true);
     }
