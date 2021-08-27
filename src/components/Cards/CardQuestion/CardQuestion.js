@@ -38,6 +38,13 @@ function CardQuestion({
     };
   };
 
+  const tagsClassNames = [
+    'card-question__tags',
+    isQuestionsPage ? 'card-question__tags_questions-page' : '',
+  ]
+    .join(' ')
+    .trim();
+
   const answerWrapperClassNames = [
     'card-question__answer',
     isOpened ? 'card-question__answer_opened' : '',
@@ -47,24 +54,37 @@ function CardQuestion({
 
   return (
     <Card sectionClass={`card-question ${sectionClass}`}>
-      <TitleH2 sectionClass="card-question__title" title={title} />
       <div className="card-question__wrap">
-        <ul className="card-question__tags">
+        {isQuestionsPage && (
+          <ButtonRound
+            label={texts.labelText}
+            sectionClass="button-round__questions-page clickable"
+            color="lightblue"
+            onClick={handleClickButton}
+            isClick={isOpened}
+          />
+        )}
+
+        <div
+          className="card-question__title-container"
+          onClick={handleClickButton}
+          onKeyPress={handleClickButton}
+          role="button"
+          tabIndex="0"
+        >
+          <TitleH2
+            sectionClass="card-question__title clickable"
+            title={title}
+          />
+        </div>
+
+        <ul className={tagsClassNames}>
           {tags?.map((tag) => (
             <li className="card-question__tag" key={tag?.id}>
               <Rubric title={tag?.name} sectionClass="card-question__rubric" />
             </li>
           ))}
         </ul>
-        {isQuestionsPage && (
-          <ButtonRound
-            label={texts.labelText}
-            sectionClass="button-round__questions-page"
-            color="lightblue"
-            onClick={handleClickButton}
-            isClick={isOpened}
-          />
-        )}
       </div>
       {isQuestionsPage && (
         <div className={answerWrapperClassNames} style={getDynamicStyle()}>
