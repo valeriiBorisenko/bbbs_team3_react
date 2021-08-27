@@ -338,6 +338,7 @@ function Questions() {
                 data={chosenQuestion}
                 sectionClass="card__questions_type_questions-page"
                 isQuestionsPage
+                isOpenByDefault
               />
             </li>
           )}

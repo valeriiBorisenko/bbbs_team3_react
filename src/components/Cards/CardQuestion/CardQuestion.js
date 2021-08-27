@@ -1,5 +1,5 @@
 import './CardQuestion.scss';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { Rubric, TitleH2, Card, ButtonRound } from '../../utils/index';
@@ -8,21 +8,25 @@ function CardQuestion({
   data: { title, tags, answer },
   sectionClass,
   isQuestionsPage,
+  isOpenByDefault,
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
   const ref = useRef();
+
   function handleClickButton() {
-    if (isOpened) {
-      setIsAnimated(false);
-      setTimeout(() => {
-        setIsOpened(false);
-      }, 300);
-    } else {
-      setIsOpened(true);
-      setTimeout(() => {
-        setIsAnimated(true);
-      }, 300);
+    if (isQuestionsPage) {
+      if (isOpened) {
+        setIsAnimated(false);
+        setTimeout(() => {
+          setIsOpened(false);
+        }, 300);
+      } else {
+        setIsOpened(true);
+        setTimeout(() => {
+          setIsAnimated(true);
+        }, 300);
+      }
     }
   }
 
@@ -33,9 +37,9 @@ function CardQuestion({
       };
     }
 
-    return {
-      height: 0,
-    };
+    if (isOpenByDefault && isAnimated) return { height: 'auto' };
+
+    return { height: 0 };
   };
 
   const tagsClassNames = [
@@ -51,6 +55,13 @@ function CardQuestion({
   ]
     .join(' ')
     .trim();
+
+  useEffect(() => {
+    if (isOpenByDefault) {
+      setIsOpened(true);
+      setIsAnimated(true);
+    }
+  }, [ref.current]);
 
   return (
     <Card sectionClass={`card-question ${sectionClass}`}>
@@ -109,6 +120,7 @@ CardQuestion.propTypes = {
   sectionClass: PropTypes.string,
   isQuestionsPage: PropTypes.bool,
   answer: PropTypes.string,
+  isOpenByDefault: PropTypes.bool,
 };
 
 CardQuestion.defaultProps = {
@@ -118,6 +130,7 @@ CardQuestion.defaultProps = {
   sectionClass: '',
   isQuestionsPage: false,
   answer: '',
+  isOpenByDefault: false,
 };
 
 export default CardQuestion;
