@@ -1,5 +1,6 @@
 import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import questionsPageTexts from '../../locales/questions-page-RU';
 import {
   CurrentUserContext,
@@ -12,6 +13,7 @@ import {
   DELAY_DEBOUNCE,
   ERROR_CODES,
   ERROR_MESSAGES,
+  localStChosenQuestion,
 } from '../../config/constants';
 import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
 import {
@@ -35,6 +37,7 @@ import {
   getQuestionsPageTags,
   postQuestion,
 } from '../../api/questions-page';
+import { getLocalStorageData } from '../../hooks/useLocalStorage';
 
 const {
   headTitle,
@@ -60,8 +63,8 @@ function Questions() {
   const { currentUser } = useContext(CurrentUserContext);
   const { serverError, setError, clearError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
-  const { unauthorized, badRequest } = ERROR_CODES;
 
+  const { unauthorized, badRequest } = ERROR_CODES;
   const [isPageError, setIsPageError] = useState(false);
 
   const errorsString = serverError
@@ -70,6 +73,10 @@ function Questions() {
         .join(' ')
         .trim()
     : '';
+
+  // определение редиректа с Главной, чтобы показать выбранный вопрос
+  const { state } = useLocation();
+  const chosenQuestion = getLocalStorageData(localStChosenQuestion);
 
   // крутилка-лоадер
   const [isLoading, setIsLoading] = useState(false);
@@ -322,6 +329,18 @@ function Questions() {
     return (
       <>
         <ul className="questions">
+          {state?.fromMainPage && chosenQuestion && (
+            <li
+              className="questions__list-item fade-in"
+              key={chosenQuestion.id}
+            >
+              <CardQuestion
+                data={chosenQuestion}
+                sectionClass="card__questions_type_questions-page"
+                isQuestionsPage
+              />
+            </li>
+          )}
           {questionsPageData.map((question) => (
             <li className="questions__list-item fade-in" key={question?.id}>
               <CardQuestion

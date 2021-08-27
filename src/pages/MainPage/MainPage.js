@@ -6,7 +6,7 @@ import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import { useEventBooking, useActivityTypes } from '../../hooks/index';
 import { QUESTIONS_URL, STORIES_URL, ARTICLES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
-import { ERROR_MESSAGES } from '../../config/constants';
+import { ERROR_MESSAGES, localStChosenQuestion } from '../../config/constants';
 import { randomizeArray } from '../../utils/utils';
 import getMainPageData from '../../api/main-page';
 import {
@@ -24,6 +24,7 @@ import {
   CardAnimatedPlug,
   AnimatedPageContainer,
 } from './index';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
 
 // количество отображаемых карточек с фильмами и вопросами
 const MOVIES_COUNT = 4;
@@ -42,6 +43,16 @@ function MainPage() {
   const [isPageError, setIsPageError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const activityTypes = useActivityTypes();
+
+  // редирект на страницу Вопросов и сохранение объекта для отрисовки
+  const linkToQuestionsPage = {
+    pathname: QUESTIONS_URL,
+    state: { fromMainPage: true },
+  };
+
+  const saveQuestionToLocalStorage = (question) => {
+    setLocalStorageData(localStChosenQuestion, question);
+  };
 
   // запись/отписка на мероприятия
   const { handleEventBooking, selectedEvent } = useEventBooking();
@@ -192,11 +203,12 @@ function MainPage() {
       <div className="main-questions__container">
         {randomQuestions.map((item) => (
           <Link
-            to={QUESTIONS_URL}
+            to={linkToQuestionsPage}
             className={`main-section__link scale-in main-section__link_el_question ${
               randomQuestions.length > 2 ? ' main-questions_pagination' : ''
             }`}
             key={item?.id}
+            onClick={() => saveQuestionToLocalStorage(item)}
           >
             <CardQuestion data={item} />
           </Link>
