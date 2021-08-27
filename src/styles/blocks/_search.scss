@@ -45,6 +45,20 @@
     }
   }
 
+  &__content_type_ask {
+    margin: 44px 0 0 0;
+    font-family: $protoGrotesk;
+    font-size: 44px;
+    color: $lightGray;
+  }
+
+  &__content_type_void {
+    margin: 44px 0 0 0;
+    font-family: $protoGrotesk;
+    font-size: 23px;
+    color: $black;
+  }
+
   &__option-list {
     margin-top: 44px;
     padding: 0 3px 0 0;
@@ -78,27 +92,41 @@
     padding-bottom: 10px;
     text-decoration: none;
   }
+
+  @include atDesktop1380 {
+    &__options {
+      margin: 0;
+      position: absolute;
+      top: 10px;
+      left: 0;
+    }
+  
+    &__option-list {
+      margin-top: 30px;
+      max-height: 70vh;
+    }
+  
+    &__option-item {
+      margin-top: 10px;
+      padding-bottom: 10px;
+    }
+  
+    &__title-link {
+      padding-bottom: 5px;
+    }
+  }
+
+  @include atMobile {
+    &__content_type_ask {
+      margin: 22px 0 0 0;
+      font-size: 28px;
+    }
+  
+    &__content_type_void {
+      margin: 22px 0 0 0;
+    }
+  }  
 }
 
-@include atDesktop1380 {
-  .search__options {
-    margin: 0;
-    position: absolute;
-    top: 10px;
-    left: 0;
-  }
 
-  .search__option-list {
-    margin-top: 30px;
-    max-height: 70vh;
-  }
 
-  .search__option-item {
-    margin-top: 10px;
-    padding-bottom: 10px;
-  }
-
-  .search__title-link {
-    padding-bottom: 5px;
-  }
-}

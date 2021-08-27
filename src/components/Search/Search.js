@@ -24,7 +24,12 @@ function Search({
   };
 
   const renderSearchItems = () => {
-    if (isVoidSearch) return <div>По вашему заросу ничего не найдено</div>;
+    if (isVoidSearch)
+      return (
+        <p className="search__content_type_void">
+          По вашему заросу ничего не найдено
+        </p>
+      );
 
     if (searchValue.length > 0) {
       return (
@@ -46,7 +51,7 @@ function Search({
       );
     }
 
-    return <div>Воспользуйтесь поиском</div>;
+    return <p className="search__content_type_ask">Введите свой запрос</p>;
   };
 
   const renderSearchContent = () =>
@@ -88,7 +93,7 @@ function Search({
           <input
             type="text"
             name="search"
-            placeholder="Введите ваш запрос"
+            placeholder=""
             className="search__input paragraph"
             autoComplete="off"
             onChange={handleChange}
