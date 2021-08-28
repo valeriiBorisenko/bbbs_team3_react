@@ -1,12 +1,17 @@
 import './CardQuestion.scss';
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { QUESTIONS_URL } from '../../../config/routes';
 import { Rubric, TitleH2, Card, ButtonRound } from '../../utils/index';
+
+const animationTransition = 300;
 
 function CardQuestion({
   data: { title, tags, answer },
   sectionClass,
+  href,
   isQuestionsPage,
   isOpenByDefault,
 }) {
@@ -20,18 +25,18 @@ function CardQuestion({
         setIsAnimated(false);
         setTimeout(() => {
           setIsOpened(false);
-        }, 300);
+        }, animationTransition);
       } else {
         setIsOpened(true);
         setTimeout(() => {
           setIsAnimated(true);
-        }, 300);
+        }, animationTransition);
       }
     }
   }
 
   const getDynamicStyle = () => {
-    if (isOpened) {
+    if (ref && ref.current && isOpened) {
       return {
         minHeight: ref.current.clientHeight,
       };
@@ -63,6 +68,31 @@ function CardQuestion({
     }
   }, [ref.current]);
 
+  const renderTitleWrap = (childElement) => {
+    if (isQuestionsPage)
+      return (
+        <div
+          className="card-question__title-wrap"
+          onClick={handleClickButton}
+          onKeyPress={handleClickButton}
+          role="button"
+          tabIndex="0"
+          aria-label={texts.labelText}
+        >
+          {childElement}
+        </div>
+      );
+    return (
+      <Link
+        to={href}
+        className="card-question__title-wrap"
+        onClick={handleClickButton}
+      >
+        {childElement}
+      </Link>
+    );
+  };
+
   return (
     <Card sectionClass={`card-question ${sectionClass}`}>
       <div className="card-question__wrap">
@@ -76,18 +106,12 @@ function CardQuestion({
           />
         )}
 
-        <div
-          className="card-question__title-container"
-          onClick={handleClickButton}
-          onKeyPress={handleClickButton}
-          role="button"
-          tabIndex="0"
-        >
+        {renderTitleWrap(
           <TitleH2
             sectionClass="card-question__title clickable"
             title={title}
           />
-        </div>
+        )}
 
         <ul className={tagsClassNames}>
           {tags?.map((tag) => (
@@ -118,8 +142,9 @@ CardQuestion.propTypes = {
   title: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.object),
   sectionClass: PropTypes.string,
-  isQuestionsPage: PropTypes.bool,
   answer: PropTypes.string,
+  href: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  isQuestionsPage: PropTypes.bool,
   isOpenByDefault: PropTypes.bool,
 };
 
@@ -128,8 +153,9 @@ CardQuestion.defaultProps = {
   title: '',
   tags: [],
   sectionClass: '',
-  isQuestionsPage: false,
   answer: '',
+  href: QUESTIONS_URL,
+  isQuestionsPage: false,
   isOpenByDefault: false,
 };
 

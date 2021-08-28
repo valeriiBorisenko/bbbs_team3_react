@@ -20,7 +20,7 @@ export const formatDate = (date) => {
   let day = parsedDate.getDate();
   let month = parsedDate.getMonth() + 1;
   const weekdayName = weekdays[parsedDate.getDay()];
-  const monthName = months[parsedDate.getMonth() + 1]; // потому что months начинается с 1, а не 0
+  const monthName = months[parsedDate.getMonth()];
   const hour = String(parsedDate.getHours());
   const year = String(parsedDate.getFullYear());
   let minutes = parsedDate.getMinutes();

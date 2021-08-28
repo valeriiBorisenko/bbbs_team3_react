@@ -13,7 +13,6 @@ import {
   DELAY_DEBOUNCE,
   ERROR_CODES,
   ERROR_MESSAGES,
-  localStChosenQuestion,
 } from '../../config/constants';
 import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
 import {
@@ -37,7 +36,6 @@ import {
   getQuestionsPageTags,
   postQuestion,
 } from '../../api/questions-page';
-import { getLocalStorageData } from '../../hooks/useLocalStorage';
 
 const {
   headTitle,
@@ -76,7 +74,7 @@ function Questions() {
 
   // определение редиректа с Главной, чтобы показать выбранный вопрос
   const { state } = useLocation();
-  const chosenQuestion = getLocalStorageData(localStChosenQuestion);
+  const chosenQuestion = state?.question;
 
   // крутилка-лоадер
   const [isLoading, setIsLoading] = useState(false);

@@ -9,7 +9,6 @@ export const weekdays = [
 ];
 
 export const months = [
-  '', // специально, т.к у бекенда с номера 1 начинается расчет месяцев
   'январь',
   'февраль',
   'март',
@@ -64,7 +63,6 @@ export const localStAfishaEvent = 'afishaEvent';
 export const jwt = 'jwt';
 export const jwtRefresh = 'jwtRefresh';
 export const localStChosenVideo = 'chosenVideo';
-export const localStChosenQuestion = 'chosenQuestion';
 
 export const ERROR_MESSAGES = {
   generalErrorMessage: {

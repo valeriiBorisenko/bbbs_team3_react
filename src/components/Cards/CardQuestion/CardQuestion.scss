@@ -11,6 +11,11 @@
     background-color: $background;
   }
 
+  &__title-wrap {
+    display: block;
+    text-decoration: none;
+  }
+
   &__title {
     width: fit-content;
     max-width: 770px;
@@ -66,7 +71,7 @@
   bottom: calc(50% - 49px);
 }
 
-.button-round__questions-page:hover ~ .card-question__title-container > .card-question__title {
+.button-round__questions-page:hover ~ .card-question__title-wrap > .card-question__title {
   color: $blue;
 }
 
