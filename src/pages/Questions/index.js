@@ -8,6 +8,7 @@ import {
   Loader,
   Input,
   Button,
+  Paginate,
 } from '../../components/utils/index';
 
 export {
@@ -20,4 +21,5 @@ export {
   Loader,
   AnimatedPageContainer,
   TagsList,
+  Paginate,
 };
