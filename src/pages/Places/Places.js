@@ -64,7 +64,7 @@ function Places() {
 
   // сохранённый в localStorage город анонимуса
   const currentAnonymousCity = getLocalStorageItem();
-  const userCity = currentUser?.city || currentAnonymousCity;
+  const userCity = currentUser?.city ?? currentAnonymousCity;
 
   // места из API
   const [places, setPlaces] = useState(null);

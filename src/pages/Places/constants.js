@@ -26,7 +26,7 @@ export const ageFilters = [
 ];
 
 export const PAGE_SIZE_PAGINATE = {
-  small: 2,
-  medium: 4,
-  big: 6,
+  small: 8,
+  medium: 8,
+  big: 12,
 };
