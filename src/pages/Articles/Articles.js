@@ -13,7 +13,7 @@ import {
 import getArticlesPageData from '../../api/articles-page';
 
 const PAGE_SIZE_PAGINATE = {
-  small: 2,
+  small: 8,
   big: 12,
 };
 

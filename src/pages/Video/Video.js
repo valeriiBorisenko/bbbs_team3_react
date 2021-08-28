@@ -31,7 +31,7 @@ import {
 } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
-  small: 4,
+  small: 8,
   medium: 12,
   big: 16,
 };

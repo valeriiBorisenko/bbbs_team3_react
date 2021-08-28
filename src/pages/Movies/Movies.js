@@ -27,8 +27,8 @@ import {
 import { ErrorsContext, PopupsContext } from '../../contexts/index';
 
 const PAGE_SIZE_PAGINATE = {
-  mobile: 2,
-  tablet: 4,
+  mobile: 8,
+  tablet: 8,
   medium: 12,
   big: 16,
 };

@@ -7,6 +7,7 @@ import { MAIN_PAGE_URL } from '../config/routes';
 import {
   setLocalStorageData,
   getLocalStorageData,
+  removeLocalStorageData,
   clearLocalStorage,
 } from './useLocalStorage';
 import {
@@ -62,7 +63,8 @@ const useAuth = (setCurrentUser) => {
   };
 
   const handleTokenError = () => {
-    clearLocalStorage();
+    removeLocalStorageData(jwt);
+    removeLocalStorageData(jwtRefresh);
     setIsCheckingToken(false);
   };
 
