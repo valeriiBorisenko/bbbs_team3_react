@@ -20,7 +20,7 @@ export const formatDate = (date) => {
   let day = parsedDate.getDate();
   let month = parsedDate.getMonth() + 1;
   const weekdayName = weekdays[parsedDate.getDay()];
-  const monthName = months[parsedDate.getMonth() + 1]; // потому что months начинается с 1, а не 0
+  const monthName = months[parsedDate.getMonth()];
   const hour = String(parsedDate.getHours());
   const year = String(parsedDate.getFullYear());
   let minutes = parsedDate.getMinutes();
@@ -115,8 +115,11 @@ export const changeCaseOfFirstLetter = (str) => {
 
 // управление падежами месяцев
 export const formatMonthsGenitiveCase = (month) => {
-  if (month === 'март' || month === 'август') return `${month}а`;
-  return `${month.slice(0, -1)}я`;
+  if (month) {
+    if (month === 'март' || month === 'август') return `${month}а`;
+    return `${month.slice(0, -1)}я`;
+  }
+  return month;
 };
 
 export const randomizeArray = (arr, size) => {

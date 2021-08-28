@@ -191,15 +191,17 @@ function MainPage() {
     return (
       <div className="main-questions__container">
         {randomQuestions.map((item) => (
-          <Link
-            to={QUESTIONS_URL}
-            className={`main-section__link scale-in main-section__link_el_question ${
+          <CardQuestion
+            key={item?.id}
+            data={item}
+            href={{
+              pathname: QUESTIONS_URL,
+              state: { fromMainPage: true, question: item },
+            }}
+            sectionClass={`main-section__question scale-in ${
               randomQuestions.length > 2 ? ' main-questions_pagination' : ''
             }`}
-            key={item?.id}
-          >
-            <CardQuestion data={item} />
-          </Link>
+          />
         ))}
       </div>
     );

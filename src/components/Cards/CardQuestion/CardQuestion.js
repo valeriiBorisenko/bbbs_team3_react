@@ -1,42 +1,58 @@
 import './CardQuestion.scss';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { QUESTIONS_URL } from '../../../config/routes';
 import { Rubric, TitleH2, Card, ButtonRound } from '../../utils/index';
+
+const animationTransition = 300;
 
 function CardQuestion({
   data: { title, tags, answer },
   sectionClass,
+  href,
   isQuestionsPage,
+  isOpenByDefault,
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
   const ref = useRef();
+
   function handleClickButton() {
-    if (isOpened) {
-      setIsAnimated(false);
-      setTimeout(() => {
-        setIsOpened(false);
-      }, 300);
-    } else {
-      setIsOpened(true);
-      setTimeout(() => {
-        setIsAnimated(true);
-      }, 300);
+    if (isQuestionsPage) {
+      if (isOpened) {
+        setIsAnimated(false);
+        setTimeout(() => {
+          setIsOpened(false);
+        }, animationTransition);
+      } else {
+        setIsOpened(true);
+        setTimeout(() => {
+          setIsAnimated(true);
+        }, animationTransition);
+      }
     }
   }
 
   const getDynamicStyle = () => {
-    if (isOpened) {
+    if (ref && ref.current && isOpened) {
       return {
         minHeight: ref.current.clientHeight,
       };
     }
 
-    return {
-      height: 0,
-    };
+    if (isOpenByDefault && isAnimated) return { height: 'auto' };
+
+    return { height: 0 };
   };
+
+  const tagsClassNames = [
+    'card-question__tags',
+    isQuestionsPage ? 'card-question__tags_questions-page' : '',
+  ]
+    .join(' ')
+    .trim();
 
   const answerWrapperClassNames = [
     'card-question__answer',
@@ -45,26 +61,65 @@ function CardQuestion({
     .join(' ')
     .trim();
 
+  useEffect(() => {
+    if (ref && ref.current && isOpenByDefault) {
+      setIsOpened(true);
+      setIsAnimated(true);
+    }
+  }, [ref.current]);
+
+  const renderTitleWrap = (childElement) => {
+    if (isQuestionsPage)
+      return (
+        <div
+          className="card-question__title-wrap"
+          onClick={handleClickButton}
+          onKeyPress={handleClickButton}
+          role="button"
+          tabIndex="0"
+          aria-label={texts.labelText}
+        >
+          {childElement}
+        </div>
+      );
+    return (
+      <Link
+        to={href}
+        className="card-question__title-wrap"
+        onClick={handleClickButton}
+      >
+        {childElement}
+      </Link>
+    );
+  };
+
   return (
     <Card sectionClass={`card-question ${sectionClass}`}>
-      <TitleH2 sectionClass="card-question__title" title={title} />
       <div className="card-question__wrap">
-        <ul className="card-question__tags">
+        {isQuestionsPage && (
+          <ButtonRound
+            label={texts.labelText}
+            sectionClass="button-round__questions-page clickable"
+            color="lightblue"
+            onClick={handleClickButton}
+            isClick={isOpened}
+          />
+        )}
+
+        {renderTitleWrap(
+          <TitleH2
+            sectionClass="card-question__title clickable"
+            title={title}
+          />
+        )}
+
+        <ul className={tagsClassNames}>
           {tags?.map((tag) => (
             <li className="card-question__tag" key={tag?.id}>
               <Rubric title={tag?.name} sectionClass="card-question__rubric" />
             </li>
           ))}
         </ul>
-        {isQuestionsPage && (
-          <ButtonRound
-            label={texts.labelText}
-            sectionClass="button-round__questions-page"
-            color="lightblue"
-            onClick={handleClickButton}
-            isClick={isOpened}
-          />
-        )}
       </div>
       {isQuestionsPage && (
         <div className={answerWrapperClassNames} style={getDynamicStyle()}>
@@ -87,8 +142,10 @@ CardQuestion.propTypes = {
   title: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.object),
   sectionClass: PropTypes.string,
-  isQuestionsPage: PropTypes.bool,
   answer: PropTypes.string,
+  href: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  isQuestionsPage: PropTypes.bool,
+  isOpenByDefault: PropTypes.bool,
 };
 
 CardQuestion.defaultProps = {
@@ -96,8 +153,10 @@ CardQuestion.defaultProps = {
   title: '',
   tags: [],
   sectionClass: '',
-  isQuestionsPage: false,
   answer: '',
+  href: QUESTIONS_URL,
+  isQuestionsPage: false,
+  isOpenByDefault: false,
 };
 
 export default CardQuestion;

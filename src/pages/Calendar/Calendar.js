@@ -153,7 +153,7 @@ function Calendar() {
       getActiveMonthTags()
         .then((monthsTags) => {
           const customFilters = monthsTags.map((tag) => {
-            const filterName = changeCaseOfFirstLetter(months[tag]);
+            const filterName = changeCaseOfFirstLetter(months[tag - 1]); // бэк считает с 1, у нас массив с 0
             return {
               isActive: false,
               name: filterName,
