@@ -323,23 +323,28 @@ function Questions() {
     />
   );
 
+  const renderchosenQuestion = () => {
+    if (state?.fromMainPage && chosenQuestion) {
+      return (
+        <li className="questions__list-item fade-in" key={chosenQuestion.id}>
+          <CardQuestion
+            data={chosenQuestion}
+            sectionClass="card__questions_type_questions-page"
+            isQuestionsPage
+            isOpenByDefault
+          />
+        </li>
+      );
+    }
+
+    return null;
+  };
+
   function renderQuestionsContainer() {
     return (
       <>
         <ul className="questions">
-          {state?.fromMainPage && chosenQuestion && (
-            <li
-              className="questions__list-item fade-in"
-              key={chosenQuestion.id}
-            >
-              <CardQuestion
-                data={chosenQuestion}
-                sectionClass="card__questions_type_questions-page"
-                isQuestionsPage
-                isOpenByDefault
-              />
-            </li>
-          )}
+          {renderchosenQuestion()}
           {questionsPageData.map((question) => (
             <li className="questions__list-item fade-in" key={question?.id}>
               <CardQuestion
