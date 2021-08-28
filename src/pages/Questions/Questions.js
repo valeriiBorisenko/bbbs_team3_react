@@ -160,6 +160,7 @@ function Questions() {
       .then(({ results, count }) => {
         setPageCount(Math.ceil(count / pageSize));
         setQuestionsPageData(results);
+        setIsChosenQuestionVisible(false);
       })
       .catch(() => {
         if (isFiltersUsed) {
