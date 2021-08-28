@@ -317,7 +317,10 @@ function Questions() {
       <ul className="questions">
         {renderChosenQuestion()}
         {questionsPageData.map((question) => (
-          <li className="questions__list-item fade-in" key={question?.id}>
+          <li
+            className="questions__list-item slide-bottom-up"
+            key={question?.id}
+          >
             <CardQuestion
               data={question}
               sectionClass="card__questions_type_questions-page"
