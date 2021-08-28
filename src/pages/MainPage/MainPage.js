@@ -4,7 +4,7 @@ import { useState, useContext, useEffect } from 'react';
 import mainPageTexts from '../../locales/main-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
 import { useEventBooking, useActivityTypes } from '../../hooks/index';
-import { QUESTIONS_URL, STORIES_URL, ARTICLES_URL } from '../../config/routes';
+import { QUESTIONS_URL, STORIES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { randomizeArray } from '../../utils/utils';
@@ -151,7 +151,6 @@ function MainPage() {
           title={article?.title}
           color={color}
           articleUrl={article?.articleUrl}
-          pageUrl={ARTICLES_URL}
         />
       </section>
     );
