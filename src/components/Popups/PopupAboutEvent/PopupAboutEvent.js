@@ -4,6 +4,7 @@ import {
   formatDate,
   formatWordCase,
   changeCaseOfFirstLetter,
+  formatPhoneNumber,
 } from '../../../utils/utils';
 import Popup from '../Popup/Popup';
 import { Button, TitleH2, ModificatedScrollbars } from '../../utils/index';
@@ -24,13 +25,19 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
 
   const startDateParts = formatDate(card?.startAt);
   const endDayParts = formatDate(card?.endAt);
-  const isDisabled = card?.remainSeats < 1;
+  const isDisabled = (card?.remainSeats < 1 && !card?.booked) || card?.canceled;
 
   function handleSubmit(evt) {
     evt.preventDefault();
     // передаем карточку и сообщаем функции, что запись без подтверждения
     handleEventBooking(card, true);
   }
+
+  const renderPhone = () => (
+    <a className="calendar__phone" href={`tel:${card?.phoneNumber}`}>
+      {formatPhoneNumber(card?.phoneNumber)}
+    </a>
+  );
 
   return (
     <Popup
@@ -69,7 +76,10 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
                 <p className="calendar__place">{card?.address}</p>
               </li>
               <li className="calendar__info-item">
-                <p className="calendar__contact">{card?.contact}</p>
+                <p className="calendar__contact">
+                  {`${card?.contact}, `}
+                  {renderPhone()}
+                </p>
               </li>
             </ul>
             <div className="calendar__description">

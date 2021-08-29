@@ -157,6 +157,15 @@
     box-orient: vertical;
   }
 
+  &__phone {
+    color: $blue;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   &__submit {
     margin-top: 30px;
     display: flex;

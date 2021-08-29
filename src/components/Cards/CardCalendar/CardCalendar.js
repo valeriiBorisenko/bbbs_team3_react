@@ -5,6 +5,7 @@ import {
   formatDate,
   formatWordCase,
   changeCaseOfFirstLetter,
+  formatPhoneNumber,
 } from '../../../utils/utils';
 import { ButtonDots, Button } from '../../utils/index';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
@@ -23,14 +24,24 @@ function CardCalendar({
     remainSeatsText,
   } = texts;
 
-  const { booked, tags, title, startAt, endAt, address, contact, remainSeats } =
-    cardData;
+  const {
+    booked,
+    tags,
+    title,
+    startAt,
+    endAt,
+    address,
+    contact,
+    remainSeats,
+    phoneNumber,
+    canceled,
+  } = cardData;
 
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
 
   // будет ли заблокирована кнопка
-  const isDisabled = remainSeats < 1 && !booked;
+  const isDisabled = (remainSeats < 1 && !booked) || canceled;
 
   function changeStateOfEvent() {
     setLocalStorageData(localStAfishaEvent, cardData);
@@ -49,6 +60,12 @@ function CardCalendar({
   ]
     .join(' ')
     .trim();
+
+  const renderPhone = () => (
+    <a className="calendar__phone" href={`tel:${phoneNumber}`}>
+      {formatPhoneNumber(phoneNumber)}
+    </a>
+  );
 
   return (
     <article className={classNames}>
@@ -77,7 +94,10 @@ function CardCalendar({
             <p className="calendar__place">{address}</p>
           </li>
           <li className="calendar__info-item">
-            <p className="calendar__contact">{contact}</p>
+            <p className="calendar__contact">
+              {`${contact}, `}
+              {renderPhone()}
+            </p>
           </li>
         </ul>
         <div className="calendar__submit">
