@@ -20,6 +20,7 @@ function CardBook({
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass="card-book">
         <a
+          draggable="false"
           className="card-book__cover"
           style={backgroundColor}
           href={url}

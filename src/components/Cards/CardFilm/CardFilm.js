@@ -45,6 +45,7 @@ function CardFilm({
     return (
       <>
         <img
+          draggable="false"
           src={`${staticImageUrl}/${image}` || imagePreview}
           alt={`${texts.altText} ${title}`}
           className="card-film__preview image-scale"
@@ -71,6 +72,7 @@ function CardFilm({
       className="link card-film__button"
       type="button"
       onClick={handleClick}
+      draggable="false"
     >
       {childrenElem}
     </button>
