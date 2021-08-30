@@ -83,7 +83,7 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
               </li>
             </ul>
             <div className="calendar__description">
-              <ModificatedScrollbars horizontalScrollClass="calendar__thumb">
+              <ModificatedScrollbars horizontalScrollClass="scroll-thumb">
                 <p className="paragraph calendar__desc-paragraph">
                   {card?.description}
                 </p>
