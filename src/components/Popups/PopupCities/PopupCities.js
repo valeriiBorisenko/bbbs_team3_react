@@ -1,4 +1,3 @@
-import './PopupCities.scss';
 import { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
@@ -20,7 +19,8 @@ import {
 } from '../../../hooks/useLocalStorage';
 import { useDebounce } from '../../../hooks/index';
 import Popup from '../Popup/Popup';
-import { TitleH2 } from '../../utils/index';
+import { TitleH2, ModificatedScrollbars } from '../../utils/index';
+import './PopupCities.scss';
 
 function PopupCities({ isOpen, onClose }) {
   const { currentUser, updateUser } = useContext(CurrentUserContext);
@@ -100,23 +100,25 @@ function PopupCities({ isOpen, onClose }) {
                   </li>
                 ))}
           </ul>
-          <ul className="cities__list">
-            {cities &&
-              cities
-                .filter((item) => item?.isPrimary !== true)
-                .map((item) => (
-                  <li className="cities__list-item" key={item?.id}>
-                    <button
-                      className="cities__city"
-                      type="button"
-                      value={item?.id}
-                      onClick={(evt) => debounceSubmitCity(evt)}
-                    >
-                      {item?.name}
-                    </button>
-                  </li>
-                ))}
-          </ul>
+          <ModificatedScrollbars horizontalScrollClass="scroll-thumb">
+            <ul className="cities__list">
+              {cities &&
+                cities
+                  .filter((item) => item?.isPrimary !== true)
+                  .map((item) => (
+                    <li className="cities__list-item" key={item?.id}>
+                      <button
+                        className="cities__city"
+                        type="button"
+                        value={item?.id}
+                        onClick={(evt) => debounceSubmitCity(evt)}
+                      >
+                        {item?.name}
+                      </button>
+                    </li>
+                  ))}
+            </ul>
+          </ModificatedScrollbars>
         </div>
       </div>
     </Popup>
