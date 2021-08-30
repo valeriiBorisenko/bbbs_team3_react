@@ -131,3 +131,15 @@ export const randomizeArray = (arr, size) => {
   }
   return arr;
 };
+
+export const formatPhoneNumber = (phoneNum) => {
+  if (phoneNum.length === 12) {
+    const str1 = phoneNum.slice(0, 2);
+    const str2 = phoneNum.slice(2, 5);
+    const str3 = phoneNum.slice(5, 8);
+    const str4 = phoneNum.slice(8, 10);
+    const str5 = phoneNum.slice(10, 12);
+    return `${str1} ${str2} ${str3}-${str4}-${str5}`;
+  }
+  return phoneNum;
+};

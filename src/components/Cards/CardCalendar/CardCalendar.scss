@@ -19,6 +19,15 @@
     background-color: $lightBlue;
   }
 
+  &__label-canceled {
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+    background-color: $background;
+  }
+
   &__title {
     margin: 0 15px 0 0;
     max-width: 320px;
@@ -155,6 +164,15 @@
     -webkit-box-orient: vertical;
     line-clamp: 2;
     box-orient: vertical;
+  }
+
+  &__phone {
+    color: $blue;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   &__submit {
