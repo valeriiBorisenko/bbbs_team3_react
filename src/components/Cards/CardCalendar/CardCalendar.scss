@@ -19,6 +19,15 @@
     background-color: $lightBlue;
   }
 
+  &__label-canceled {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+    background-color: $background;
+  }
+
   &__title {
     margin: 0 15px 0 0;
     max-width: 320px;

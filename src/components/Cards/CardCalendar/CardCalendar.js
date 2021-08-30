@@ -7,7 +7,7 @@ import {
   changeCaseOfFirstLetter,
   formatPhoneNumber,
 } from '../../../utils/utils';
-import { ButtonDots, Button } from '../../utils/index';
+import { ButtonDots, Button, Rubric } from '../../utils/index';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 
@@ -22,6 +22,7 @@ function CardCalendar({
     buttonTitleSelected,
     buttonTitleDisabled,
     remainSeatsText,
+    eventCanceled,
   } = texts;
 
   const {
@@ -69,6 +70,9 @@ function CardCalendar({
 
   return (
     <article className={classNames}>
+      {canceled && (
+        <Rubric sectionClass="calendar__label-canceled" title={eventCanceled} />
+      )}
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
