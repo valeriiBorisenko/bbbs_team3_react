@@ -37,6 +37,7 @@
 .card-annotation__thumb {
   background-color: $backgroundAnnotation;
   border-radius: 5px;
+  width: 5px;
 }
 
 .card-annotation__desc {
@@ -80,5 +81,9 @@
 
   .card-annotation__desc {
     padding-right: 15px;
+  }
+
+  .card-annotation__thumb { 
+    width: 3px;
   }
 }
