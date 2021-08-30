@@ -37,7 +37,7 @@
 .card-annotation__thumb {
   background-color: $backgroundAnnotation;
   border-radius: 5px;
-  height: 30px !important;
+  max-height: 30px !important;
   width: 5px;
 }
 
