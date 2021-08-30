@@ -5,8 +5,9 @@ import {
   formatDate,
   formatWordCase,
   changeCaseOfFirstLetter,
+  formatPhoneNumber,
 } from '../../../utils/utils';
-import { ButtonDots, Button } from '../../utils/index';
+import { ButtonDots, Button, Rubric } from '../../utils/index';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 
@@ -21,16 +22,27 @@ function CardCalendar({
     buttonTitleSelected,
     buttonTitleDisabled,
     remainSeatsText,
+    eventCanceled,
   } = texts;
 
-  const { booked, tags, title, startAt, endAt, address, contact, remainSeats } =
-    cardData;
+  const {
+    booked,
+    tags,
+    title,
+    startAt,
+    endAt,
+    address,
+    contact,
+    remainSeats,
+    phoneNumber,
+    canceled,
+  } = cardData;
 
   const startDateParts = formatDate(startAt);
   const endDayParts = formatDate(endAt);
 
   // будет ли заблокирована кнопка
-  const isDisabled = remainSeats < 1 && !booked;
+  const isDisabled = (remainSeats < 1 && !booked) || canceled;
 
   function changeStateOfEvent() {
     setLocalStorageData(localStAfishaEvent, cardData);
@@ -50,8 +62,17 @@ function CardCalendar({
     .join(' ')
     .trim();
 
+  const renderPhone = () => (
+    <a className="calendar__phone" href={`tel:${phoneNumber}`}>
+      {formatPhoneNumber(phoneNumber)}
+    </a>
+  );
+
   return (
     <article className={classNames}>
+      {canceled && (
+        <Rubric sectionClass="calendar__label-canceled" title={eventCanceled} />
+      )}
       <div className="calendar__caption">
         <div className="calendar__info">
           <p className="calendar__type">
@@ -77,7 +98,10 @@ function CardCalendar({
             <p className="calendar__place">{address}</p>
           </li>
           <li className="calendar__info-item">
-            <p className="calendar__contact">{contact}</p>
+            <p className="calendar__contact">
+              {`${contact}, `}
+              {renderPhone()}
+            </p>
           </li>
         </ul>
         <div className="calendar__submit">

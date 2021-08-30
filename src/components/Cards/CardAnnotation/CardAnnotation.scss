@@ -32,20 +32,15 @@
     padding-right: 10px;
     padding-bottom: 10px;
   }
-}
 
-.card-annotation__thumb {
-  background-color: $backgroundAnnotation;
-  border-radius: 5px;
-}
-
-.card-annotation__desc {
-  box-sizing: border-box;
-  padding-right: 18px;
-  margin-top: 95px;
-
-  &_center {
-    margin-top: 0;
+  &__desc {
+    box-sizing: border-box;
+    padding-right: 18px;
+    margin-top: 95px;
+  
+    &_center {
+      margin-top: 0;
+    }
   }
 }
 
@@ -76,9 +71,9 @@
     &__caption {
       padding-bottom: 5px;
     }
-  }
 
-  .card-annotation__desc {
-    padding-right: 15px;
+    &__desc {
+      padding-right: 15px;
+    }
   }
 }

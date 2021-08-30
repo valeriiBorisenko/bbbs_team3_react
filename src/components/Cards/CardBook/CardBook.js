@@ -9,7 +9,6 @@ function CardBook({
     author,
     year,
     type: { color },
-    url,
     annotation,
   },
   sectionClass,
@@ -19,13 +18,9 @@ function CardBook({
   return (
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass="card-book">
-        <a
-          draggable="false"
+        <div
           className="card-book__cover"
           style={backgroundColor}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
         >
           <TitleH2 sectionClass="card-book__title" title={title} />
           <div className="card-book__info">
@@ -33,7 +28,7 @@ function CardBook({
             <p className="caption card-book__text">{author}</p>
             <p className="caption card-book__text">{year}</p>
           </div>
-        </a>
+        </div>
       </Card>
       <CardAnnotation description={annotation} />
     </article>
@@ -45,7 +40,6 @@ CardBook.propTypes = {
   title: PropTypes.string,
   author: PropTypes.string,
   year: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  url: PropTypes.string,
   annotation: PropTypes.string,
   sectionClass: PropTypes.string,
 };
@@ -56,7 +50,6 @@ CardBook.defaultProps = {
   title: '',
   author: '',
   year: '',
-  url: '',
   annotation: '',
   sectionClass: '',
 };
