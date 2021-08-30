@@ -18,10 +18,7 @@ function CardBook({
   return (
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass="card-book">
-        <div
-          className="card-book__cover"
-          style={backgroundColor}
-        >
+        <div className="card-book__cover" style={backgroundColor}>
           <TitleH2 sectionClass="card-book__title" title={title} />
           <div className="card-book__info">
             <div className="card-book__border" />
