@@ -21,8 +21,6 @@ function CardBook({
         <div
           className="card-book__cover"
           style={backgroundColor}
-          target="_blank"
-          rel="noopener noreferrer"
         >
           <TitleH2 sectionClass="card-book__title" title={title} />
           <div className="card-book__info">

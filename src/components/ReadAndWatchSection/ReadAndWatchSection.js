@@ -151,7 +151,6 @@ function ReadAndWatchSection({
           transitionMs={transitionDelay}
           pagination={false}
           outerSpacing={0}
-          preventDefaultTouchmoveEvent
           itemPadding={elemPaddings}
           breakPoints={breakPoints}
           disableArrowsOnEnd

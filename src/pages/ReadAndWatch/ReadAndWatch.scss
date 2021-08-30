@@ -226,6 +226,18 @@
   }
 }
 
+@media (max-width: 640px) {
+  .readwatch__container {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 420px) {
+  .readwatch__container {
+    margin-bottom: 20px;
+  }
+}
+
 @media (max-width: 1920px) {
   .readwatch__slider-container {
     &_el_catalog {
