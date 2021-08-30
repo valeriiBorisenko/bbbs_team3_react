@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import './PopupVideo.scss';
 import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
@@ -9,13 +8,10 @@ import {
   removeLocalStorageData,
 } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
-import Loader from '../../utils/Loader/Loader';
 
 const PopupVideo = ({ isOpen, onClose }) => {
   const data = getLocalStorageData(localStChosenVideo);
   const { frameSrc } = parserLinkYoutube(data?.link);
-
-  const [iframeIsLoading, setIframeIsLoading] = useState(true);
 
   const closePopup = () => {
     removeLocalStorageData(localStChosenVideo);
@@ -29,12 +25,10 @@ const PopupVideo = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onClose={closePopup}
     >
-      {iframeIsLoading && <Loader isNested />}
       <>
         <iframe
           title="youTubePlayer"
           id="playeryt"
-          onLoad={() => setIframeIsLoading(false)}
           className="popup__video-iframe"
           src={frameSrc}
           frameBorder="0"
