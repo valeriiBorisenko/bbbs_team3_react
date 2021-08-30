@@ -41,7 +41,7 @@ function CatalogArticle({ articleId }) {
       );
     }
     return (
-      <div className=" page__section">
+      <div className="article page__section">
         <TitleH1
           title={catalogArticlePageData.title}
           sectionClass="article__main-title"
