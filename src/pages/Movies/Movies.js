@@ -1,7 +1,7 @@
 import './Movies.scss';
 import { useEffect, useState, useContext } from 'react';
 import moviesPageTexts from '../../locales/movies-page-RU';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
+import { useDebounce } from '../../hooks/index';
 import { getMoviesPageData, getMoviesPageFilter } from '../../api/movies-page';
 import {
   BasePage,
@@ -27,8 +27,8 @@ import {
 import { ErrorsContext, PopupsContext } from '../../contexts/index';
 
 const PAGE_SIZE_PAGINATE = {
-  mobile: 2,
-  tablet: 4,
+  mobile: 8,
+  tablet: 8,
   medium: 12,
   big: 16,
 };
@@ -36,8 +36,6 @@ const PAGE_SIZE_PAGINATE = {
 const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 
 function Movies() {
-  useScrollToTop();
-
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 

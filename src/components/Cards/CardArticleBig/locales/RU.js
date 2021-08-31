@@ -1,5 +1,5 @@
 const texts = {
-  linkText: 'читать статью',
+  linkText: 'читать на сайте',
 };
 
 export default texts;

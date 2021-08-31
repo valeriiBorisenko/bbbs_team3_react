@@ -64,9 +64,11 @@
   border: none;
   align-self: flex-start;
   padding: 0;
-  cursor: pointer;
+  transition: .3s ease;
 
   &:hover {
+    cursor: pointer;
+    color: $blue;
     text-decoration: underline;
   }
 }

@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import './ReadAndWatchSection.scss';
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
@@ -19,6 +20,7 @@ function ReadAndWatchSection({
   pageSize,
   getDataFromApi,
   CardTemplateComponent,
+  isVideo,
   path,
   sectionTitle,
   breakpoints,
@@ -108,6 +110,8 @@ function ReadAndWatchSection({
           shape={FIGURES[i % FIGURES.length]}
           // для секции Статьи
           color={COLORS[(i + 1) % COLORS.length]}
+          // для секции с Видео
+          isVideo={isVideo}
           {...item}
         />
       ));
@@ -148,7 +152,6 @@ function ReadAndWatchSection({
           transitionMs={transitionDelay}
           pagination={false}
           outerSpacing={0}
-          preventDefaultTouchmoveEvent
           itemPadding={elemPaddings}
           breakPoints={breakPoints}
           disableArrowsOnEnd
@@ -193,10 +196,12 @@ ReadAndWatchSection.propTypes = {
   transitionDelay: PropTypes.number.isRequired,
   paragraphNoContentText: PropTypes.string.isRequired,
   sectionClass: PropTypes.string,
+  isVideo: PropTypes.bool,
 };
 
 ReadAndWatchSection.defaultProps = {
   sectionClass: '',
+  isVideo: false,
 };
 
 export default ReadAndWatchSection;

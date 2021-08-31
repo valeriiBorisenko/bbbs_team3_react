@@ -9,13 +9,10 @@ import {
   AnimatedPageContainer,
 } from './index';
 import { getRightsArticle } from '../../api/rights-page';
-import { useScrollToTop } from '../../hooks/index';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { RIGHTS_URL } from '../../config/routes';
 
 function RightsArticle({ id }) {
-  useScrollToTop();
-
   const [articleData, setArticleData] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки

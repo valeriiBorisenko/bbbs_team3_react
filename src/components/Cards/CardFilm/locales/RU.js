@@ -1,6 +1,7 @@
 const texts = {
   altText: 'Превью к видео:',
-  linkText: 'смотреть трейлер',
+  linkTextMovie: 'смотреть трейлер',
+  linkTextVideo: 'смотреть видео',
 };
 
 export default texts;

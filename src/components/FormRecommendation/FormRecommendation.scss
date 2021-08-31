@@ -124,38 +124,62 @@
     align-items: flex-end;
   }
 
-  &__add-photo {
-    display: flex;
-    flex-direction: column;
+  &__add-photo-error {
+    display: block;
+    color: $error;
+    font-family: $protoGrotesk;
+    font-size: 11px;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
 
-    &_error {
-      color: $error;
-      font-family: $protoGrotesk;
-      font-size: 11px;
-      line-height: 1.2;
-      margin-bottom: 5px;
+  &__add-photo-container {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+    height: 48px;
+  }
+
+  &__add-photo-label {
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      cursor: pointer;
+
+      & .form-recom__add-photo-btn {
+        background-image: url(../../assets/blue-cross.svg);
+        border: solid 1px $blue;
+      }
+
+      & .form-recom__add-photo-span {
+        color: $blue;
+      }
     }
   }
 
   &__add-photo-btn {
-    display: flex;
-    align-items: center;
-  
-    &::after {
-      content: 'Добавить фото';
-      white-space: nowrap;
-      color: $lightGray;
-      font-family: $protoGrotesk;
-      font-weight: 300;
-      font-size: 15px;
-      line-height: 1.27;
-      letter-spacing: 0.2px;
-      margin-left: 68px;
-      pointer-events: none;
-    }
-  
-    &_error::after {
+    margin-right: 20px;
+  }
+
+  &__add-photo-span {
+    white-space: nowrap;
+    color: $lightGray;
+    font-family: $protoGrotesk;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.27;
+    letter-spacing: 0.2px;
+    transition: 0.3s ease;
+
+    &_error {
       color: $error;
+    }
+
+    &_text {
+      color: $black;
+      white-space: normal;
+      pointer-events: none;
     }
   }
 }
@@ -183,12 +207,20 @@
       min-height: 509px;
     }
 
+    &__add-photo-container {
+      height: 40px;
+      column-gap: 15px;
+      margin-right: 20px;
+    }
+
     &__add-photo-btn {
-      &::after {
-        font-size: 12px;
-        line-height: 1.42;
-        margin-left: 55px;
-      }
+      margin-right: 15px;
+    }
+
+    &__add-photo-span {
+      font-size: 12px;
+      line-height: 1.42;
+      text-align: center;
     }
   }
 }

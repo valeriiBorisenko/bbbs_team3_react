@@ -67,14 +67,18 @@
   }
 }
 
+@include atTabletL {
+  .spinner {
+   &_small-grid {
+      margin: 25px auto;
+    }
+  }
+}
+
 @include atTablet {
   .spinner {
     &_nested {
       margin: 50px auto;
-    }
-
-    &_small-grid {
-      margin: 25px auto;
     }
   }
 }

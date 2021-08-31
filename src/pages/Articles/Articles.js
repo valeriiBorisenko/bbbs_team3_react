@@ -1,7 +1,6 @@
 import './Articles.scss';
 import { useEffect, useState } from 'react';
 import articlesPageTexts from '../../locales/articles-page-RU';
-import { useScrollToTop } from '../../hooks/index';
 import { COLORS, ERROR_MESSAGES } from '../../config/constants';
 import {
   BasePage,
@@ -14,15 +13,13 @@ import {
 import getArticlesPageData from '../../api/articles-page';
 
 const PAGE_SIZE_PAGINATE = {
-  small: 2,
+  small: 8,
   big: 12,
 };
 
 const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
 
 function Articles() {
-  useScrollToTop();
-
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);

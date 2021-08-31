@@ -17,6 +17,7 @@ function CardCatalog({ data: { id, title, image }, shape, sectionClass }) {
             color="white"
           >
             <img
+              draggable="false"
               className="card-catalog__image"
               src={`${staticImageUrl}/${image}`}
               alt={title}

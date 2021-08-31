@@ -36,6 +36,7 @@ import {
   CATALOG_ITEM_URL,
   RIGHTS_ARTICLE_URL,
   STORIES_URL,
+  NOT_FOUND_URL,
 } from '../config/routes';
 
 function Router() {
@@ -106,7 +107,7 @@ function Router() {
         <Stories />
       </Route>
 
-      <Route path="*">
+      <Route path={NOT_FOUND_URL}>
         <PageNotFound />
       </Route>
     </Switch>

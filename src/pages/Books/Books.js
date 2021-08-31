@@ -1,7 +1,7 @@
 import './Books.scss';
 import { useContext, useEffect, useState } from 'react';
 import booksPageTexts from '../../locales/books-page-RU';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
+import { useDebounce } from '../../hooks/index';
 import { getBooksPageData, getBooksPageFilter } from '../../api/books-page';
 import {
   BasePage,
@@ -26,7 +26,7 @@ import {
 import { ErrorsContext, PopupsContext } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
-  mobile: 2,
+  mobile: 8,
   medium: 12,
   big: 16,
 };
@@ -34,8 +34,6 @@ const PAGE_SIZE_PAGINATE = {
 const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
 function Books() {
-  useScrollToTop();
-
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 

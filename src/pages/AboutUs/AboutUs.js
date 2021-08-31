@@ -1,6 +1,5 @@
 import './AboutUs.scss';
 import aboutUsTexts from '../../locales/about-us-page-RU';
-import { useScrollToTop } from '../../hooks/index';
 import {
   BasePage,
   TitleH3,
@@ -23,8 +22,6 @@ const {
 } = aboutUsTexts;
 
 function AboutUs() {
-  useScrollToTop();
-
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="about page__section fade-in">

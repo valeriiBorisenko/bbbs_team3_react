@@ -1,6 +1,6 @@
 const texts = {
-  changeCity: 'Изменить ваш город',
-  changeCityDefault: 'Изменить город',
+  changeCity: 'Изменить город',
+  changeCityDefault: 'Изменить ваш город',
   logoutText: 'Выйти',
 };
 

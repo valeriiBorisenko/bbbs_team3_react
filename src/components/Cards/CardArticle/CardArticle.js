@@ -30,6 +30,7 @@ function CardArticle({
       >
         <div className="article-card__title-wrap">
           <a
+            draggable="false"
             href={articleUrl}
             className="article-card__link-wrap"
             target="_blank"
@@ -43,14 +44,16 @@ function CardArticle({
         {isMain && (
           <div className="article-card__link-wrap article-card__link-wrap_content_article-img">
             <img
+              draggable="false"
               src={`${staticImageUrl}/${image}`}
               alt={title}
-              className="article-card__image"
+              className="article-card__image image-scale"
             />
           </div>
         )}
 
         <a
+          draggable="false"
           href={articleUrl}
           className="link article-card__link"
           target="_blank"

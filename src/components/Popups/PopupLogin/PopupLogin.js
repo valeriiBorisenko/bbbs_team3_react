@@ -14,6 +14,30 @@ import Popup from '../Popup/Popup';
 import { Input, Button, TitleH2 } from '../../utils/index';
 import animationSuccess from '../../../assets/animation/ill_popup_success.json';
 
+const {
+  title,
+  firstParagraph,
+  secondParagraph,
+  loginPlaceholder,
+  passwordPlaceholder,
+  forgotButtonText,
+  submitButtonText,
+  titleForgotForm,
+  paragraphForgotForm,
+  emailPlaceholder,
+  backButtonText,
+  submitButtonTextForgot,
+} = texts;
+
+const validationSettings = {
+  username: {
+    minLength: 4,
+  },
+  password: {
+    minLength: 8,
+  },
+};
+
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
   const { serverError, clearError, setError } = useContext(ErrorsContext);
@@ -127,20 +151,20 @@ function PopupLogin({ isOpen, onClose }) {
       onSubmit={(evt) => handleSubmit(evt)}
       noValidate
     >
-      <TitleH2 sectionClass="popup__title_type_sign-in" title={texts.title} />
-      <p className="paragraph popup__sign-in">{texts.firstParagraph}</p>
-      <p className="paragraph popup__sign-in">{texts.secondParagraph}</p>
+      <TitleH2 sectionClass="popup__title_type_sign-in" title={title} />
+      <p className="paragraph popup__sign-in">{firstParagraph}</p>
+      <p className="paragraph popup__sign-in">{secondParagraph}</p>
 
       <Input
         id="loginUsernameInput"
         sectionClass="popup__input"
         type="text"
         name="username"
-        placeholder={texts.loginPlaceholder}
+        placeholder={loginPlaceholder}
         onChange={handleChange}
         value={values?.username}
         error={errors?.username}
-        minLength="4"
+        minLength={validationSettings.username.minLength}
         required
       />
 
@@ -149,11 +173,11 @@ function PopupLogin({ isOpen, onClose }) {
         sectionClass="popup__input"
         type="password"
         name="password"
-        placeholder={texts.passwordPlaceholder}
+        placeholder={passwordPlaceholder}
         onChange={handleChange}
         value={values?.password}
         error={errors?.password}
-        minLength="8"
+        minLength={validationSettings.password.minLength}
         required
       />
 
@@ -162,13 +186,13 @@ function PopupLogin({ isOpen, onClose }) {
         type="button"
         onClick={handleClickForgotPassword}
       >
-        {texts.forgotButtonText}
+        {forgotButtonText}
       </button>
       <span className="form-error-message">{errorsString}</span>
       <Button
         sectionClass="popup__button_type_sign-in"
         color="blue"
-        title={texts.submitButtonText}
+        title={submitButtonText}
         isDisabled={!isValid}
         isSubmittable
       />
@@ -191,16 +215,16 @@ function PopupLogin({ isOpen, onClose }) {
     >
       <TitleH2
         sectionClass="popup__title_type_sign-in"
-        title={texts.titleForgotForm}
+        title={titleForgotForm}
       />
-      <p className="paragraph popup__sign-in">{texts.paragraphForgotForm}</p>
+      <p className="paragraph popup__sign-in">{paragraphForgotForm}</p>
 
       <Input
         id="loginUseremailInput"
         sectionClass="popup__input"
         type="email"
         name="email"
-        placeholder={texts.emailPlaceholder}
+        placeholder={emailPlaceholder}
         onChange={handleChange}
         value={values?.email}
         error={errors?.email}
@@ -211,13 +235,13 @@ function PopupLogin({ isOpen, onClose }) {
         type="button"
         onClick={handleClickForgotPassword}
       >
-        {texts.backButtonText}
+        {backButtonText}
       </button>
       <span className="form-error-message">{errorsString}</span>
       <Button
         sectionClass="popup__button_type_sign-in"
         color="blue"
-        title={texts.submitButtonTextForgot}
+        title={submitButtonTextForgot}
         isDisabled={!isValid}
         isSubmittable
       />
