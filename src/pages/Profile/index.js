@@ -10,6 +10,7 @@ import {
   Loader,
   ScrollableContainer,
   UserMenuButton,
+  Paginate,
 } from '../../components/utils/index';
 
 export {
@@ -24,4 +25,5 @@ export {
   ScrollableContainer,
   UserMenuButton,
   AnimatedPageContainer,
+  Paginate,
 };
