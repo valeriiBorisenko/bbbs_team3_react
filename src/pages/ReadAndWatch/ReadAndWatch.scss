@@ -7,28 +7,7 @@
   grid-template-columns: 1fr;
 }
 
-@include atDesktop1024 {
-  .readwatch-page {
-    grid-gap: 50px;
-    gap: 50px;
-  }
-}
-
-@include atTablet {
-  .readwatch-page {
-    grid-gap: 30px;
-    gap: 30px;
-  }
-}
-
-// настройки слайдера
-.readwatch__section {
-  position: relative;
-}
-
-.readwatch__slider-container {
-  width: 100%;
-  
+.readwatch-page__slider-container {
   &_el_catalog {
     min-height: 470px;
   }
@@ -50,196 +29,8 @@
   }
 }
 
-.rec.rec-slider-container {
-  margin: 0;
-}
-
-.readwatch__slider-container .cards-section__item {
-  margin-top: 0; // отступ от карточки выше
-  margin-bottom: 0; // отступ от карточки ниже
-}
-
-.rec.rec-arrow {
-  position: absolute;
-  font-size: 0;
-  box-shadow: none;
-  border: none; 
-  width: 30px;
-  min-width: 30px;
-  height: 30px;
-  border-radius: 0;
-  background-color: transparent;
-}
-
-/* левая стрелка, настройка */
-.rec.rec-arrow.rec-arrow-left {
-  top: 15px;
-  right: 60px;
-  background-image: url("../../assets/arrow-left-blue.svg"); /* нормальный цвет стрелки (активна) */
-  background-position: center;
-  background-size: 30px 30px;
-  background-repeat: no-repeat;
-}
-
-/* правая стрелка, настройка */
-.rec.rec-arrow.rec-arrow-right {
-  top: 15px;
-  right: 5px;
-
-  background-image: url("../../assets/arrow-right-blue.svg"); /* нормальный цвет стрелки (активна) */
-  background-position: center;
-  background-size: 30px 30px;
-  background-repeat: no-repeat;
-}
-
-/* стрелка влево, когда неактивна */
-.rec.rec-arrow.rec-arrow-left:disabled {
-  background-image: url("../../assets/arrow-left-grey.svg");
-  background-position: center;
-  background-size: 30px 30px;
-  background-repeat: no-repeat;
-  cursor: default;
-}
-
-/* стрелка вправо, когда неактивна */
-.rec.rec-arrow.rec-arrow-right:disabled {
-  background-image: url("../../assets/arrow-right-grey.svg");
-  background-position: center;
-  background-size: 30px 30px;
-  background-repeat: no-repeat;
-  cursor: default;
-}
-
-/* отмена ховеров чуваков из библиотеки */
-.rec.rec-arrow.rec-arrow-right:hover,
-.rec.rec-arrow.rec-arrow-right:focus,
-.rec.rec-arrow.rec-arrow-left:hover,
-.rec.rec-arrow.rec-arrow-left:focus {
-  color: none;
-  background-color: transparent;
-  box-shadow: none;
-
-}
-
-.rec.rec-arrow.rec-arrow-right:hover {
-  transform: translateX(4px);
-}
-
-.rec.rec-arrow.rec-arrow-left:hover {
-  transform: translateX(-4px);
-}
-
-.rec.rec-arrow.rec-arrow-left:disabled:hover,
-.rec.rec-arrow.rec-arrow-right:disabled:hover {
-  transform: none;
-}
-
-/* выделение квадратиком при фокусе */
-.rec.rec-arrow.rec-arrow-right:focus,
-.rec.rec-arrow.rec-arrow-left:focus {
-  // outline: 1px solid #224CFF;
-}
-
-@media (max-width: 1100px) {
-  .rec.rec-arrow.rec-arrow-right,
-  .rec.rec-arrow.rec-arrow-left {
-    top: 5px;
-    width: 20px;
-    min-width: 20px;
-    height: 20px;
-    background-size: 20px 20px;
-  }
-  
-  .rec.rec-arrow.rec-arrow-left:disabled,
-  .rec.rec-arrow.rec-arrow-right:disabled {
-    background-size: 20px 20px;
-  }
-
-  .rec.rec-arrow.rec-arrow-left {
-    right: 40px;
-  }
-}
-
-@keyframes scale {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.rec-item-wrapper {
-  animation: scale 1s ease-out forwards;
-  height: 100%;
-}
-
-//////////////////////
-.readwatch__container {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  padding-bottom: 20px;
-  border-bottom: 1px solid $blue;
-  margin-bottom: 50px;
-}
-
-.readwatch__heading-link {
-  text-decoration: none;
-}
-
-.readwatch__heading {
-  text-align: center;
-  color: $blue;
-
-  transition: all 0.3s linear;
-}
-
-.readwatch__heading:hover {
-  color: $darkBlue;
-}
-
-.readwatch__item-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-@media (max-width: 1024px) {
-  .readwatch__heading {
-    text-align: left;
-  }
-
-  .readwatch__container {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 640px) {
-  .readwatch__container {
-    padding-bottom: 10px;
-  }
-}
-
-@media (max-width: 640px) {
-  .readwatch__container {
-    margin-bottom: 30px;
-  }
-}
-
-@media (max-width: 420px) {
-  .readwatch__container {
-    margin-bottom: 20px;
-  }
-}
-
 @media (max-width: 1920px) {
-  .readwatch__slider-container {
+  .readwatch-page__slider-container {
     &_el_catalog {
       min-height: calc(308px + (470 - 308) * ((100vw - 1440px) / (1920 - 1440)));
     }
@@ -247,11 +38,7 @@
 }
 
 @media (max-width: 1440px) {
-  .readwatch__item-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .readwatch__slider-container {
+  .readwatch-page__slider-container {
     &_el_catalog {
       min-height: calc(278px + (432 - 278) * ((100vw - 1120px) / (1440 - 1120)));
     }
@@ -267,11 +54,7 @@
 }
 
 @media (max-width: 1120px) {
-  .readwatch__item-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .readwatch__slider-container {
+  .readwatch-page__slider-container {
     &_el_catalog {
       min-height: calc(294px + (435 - 294) * ((100vw - 820px) / (1120 - 820)));
     }
@@ -294,14 +77,22 @@
   }
 }
 
-@media (max-width: 820px) {
-  .readwatch__item-grid {
-    grid-template-columns: 1fr;
+@include atDesktop1024 {
+  .readwatch-page {
+    grid-gap: 50px;
+    gap: 50px;
+  }
+}
+
+@include atTablet {
+  .readwatch-page {
+    grid-gap: 30px;
+    gap: 30px;
   }
 }
 
 @media (max-width: 700px) {
-  .readwatch__slider-container {
+  .readwatch-page__slider-container {
     &_el_catalog {
       min-height: 484px;
     }
@@ -313,7 +104,7 @@
 }
 
 @media (max-width: 499px) {
-  .readwatch__slider-container {
+  .readwatch-page__slider-container {
     &_el_catalog {
       min-height: calc(324px + (484 - 324) * ((100vw - 320px) / (499 - 320)));
     }

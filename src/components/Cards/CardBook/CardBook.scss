@@ -50,9 +50,13 @@
 }
 
 @include atDesktop1217 {
-
   .card-book {
     padding: 30px 45px;
+  }
+
+  .card-book__title {
+    font-size: 19px;
+    line-height: 1.21;
   }
 
   .card-book__cover {

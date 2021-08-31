@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import './ReadAndWatchSection.scss';
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
