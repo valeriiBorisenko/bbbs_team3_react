@@ -1,34 +1,35 @@
 {
   "files": {
-    "main.css": "/static/css/main.e7a26808.chunk.css",
-    "main.js": "/static/js/main.1f2a9ceb.chunk.js",
-    "main.js.map": "/static/js/main.1f2a9ceb.chunk.js.map",
+    "main.css": "/static/css/main.57eb97da.chunk.css",
+    "main.js": "/static/js/main.a8e8e4ba.chunk.js",
+    "main.js.map": "/static/js/main.a8e8e4ba.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.c76aa7b9.js",
     "runtime-main.js.map": "/static/js/runtime-main.c76aa7b9.js.map",
-    "static/js/2.55bc2f78.chunk.js": "/static/js/2.55bc2f78.chunk.js",
-    "static/js/2.55bc2f78.chunk.js.map": "/static/js/2.55bc2f78.chunk.js.map",
+    "static/js/2.a70ddbd7.chunk.js": "/static/js/2.a70ddbd7.chunk.js",
+    "static/js/2.a70ddbd7.chunk.js.map": "/static/js/2.a70ddbd7.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.e7a26808.chunk.css.map": "/static/css/main.e7a26808.chunk.css.map",
-    "static/js/2.55bc2f78.chunk.js.LICENSE.txt": "/static/js/2.55bc2f78.chunk.js.LICENSE.txt",
-    "static/js/main.1f2a9ceb.chunk.js.LICENSE.txt": "/static/js/main.1f2a9ceb.chunk.js.LICENSE.txt",
+    "static/css/main.57eb97da.chunk.css.map": "/static/css/main.57eb97da.chunk.css.map",
+    "static/js/2.a70ddbd7.chunk.js.LICENSE.txt": "/static/js/2.a70ddbd7.chunk.js.LICENSE.txt",
+    "static/js/main.a8e8e4ba.chunk.js.LICENSE.txt": "/static/js/main.a8e8e4ba.chunk.js.LICENSE.txt",
     "static/media/index.scss": "/static/media/Proto-Grotesk-Light-Web.c43cb6b7.woff",
-    "static/media/ReadAndWatch.scss": "/static/media/arrow-right-grey.f732637d.svg",
+    "static/media/ReadAndWatchSection.scss": "/static/media/arrow-right-grey.f732637d.svg",
     "static/media/RightsArticle.scss": "/static/media/arrow-right-blue.444f1920.svg",
     "static/media/ProfileForm.scss": "/static/media/error-cross.cbc9aec6.svg",
-    "static/media/ButtonRound.scss": "/static/media/lightGray-cross.218b9345.svg",
+    "static/media/FormRecommendation.scss": "/static/media/blue-cross.b9716365.svg",
     "static/media/footer-logo.476770b8.svg": "/static/media/footer-logo.476770b8.svg",
     "static/media/icon-logo-no-text.ebdb8e22.svg": "/static/media/icon-logo-no-text.ebdb8e22.svg",
-    "static/media/Rating.scss": "/static/media/icon-rating_3_default.7a7604c0.svg",
-    "static/media/logo.2968d95e.svg": "/static/media/logo.2968d95e.svg",
+    "static/media/Rating.scss": "/static/media/icon-rating_3_default.12ef9c8f.svg",
+    "static/media/ButtonRound.scss": "/static/media/lightGray-cross.955596af.svg",
+    "static/media/logo.35cca11c.svg": "/static/media/logo.35cca11c.svg",
     "static/media/Paginate.scss": "/static/media/pagination-arrow-prev_black.c80b87b3.svg",
-    "static/media/PlacesRecommend.scss": "/static/media/popup_close.b4cb7a45.svg",
-    "static/media/SearchButton.scss": "/static/media/search-icon.75591941.svg",
-    "static/media/UserIconButton.scss": "/static/media/user-icon_active.a4e43867.svg"
+    "static/media/PlacesRecommend.scss": "/static/media/popup_close.6eed92d1.svg",
+    "static/media/SearchButton.scss": "/static/media/search-icon.365a6a63.svg",
+    "static/media/UserIconButton.scss": "/static/media/user-icon_active.77729f8c.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.c76aa7b9.js",
-    "static/js/2.55bc2f78.chunk.js",
-    "static/css/main.e7a26808.chunk.css",
-    "static/js/main.1f2a9ceb.chunk.js"
+    "static/js/2.a70ddbd7.chunk.js",
+    "static/css/main.57eb97da.chunk.css",
+    "static/js/main.a8e8e4ba.chunk.js"
   ]
 }
