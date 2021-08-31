@@ -31,6 +31,7 @@ import {
   ScrollableContainer,
   UserMenuButton,
   AnimatedPageContainer,
+  Paginate,
 } from './index';
 
 const {
@@ -44,6 +45,8 @@ const {
   eventsTitleArchive,
   eventsTitleNoResultsArchive,
 } = profilePageTexts;
+
+const diariesPerPageCount = 10;
 
 function Profile() {
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
@@ -62,6 +65,10 @@ function Profile() {
 
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
+
+  // пагинация
+  const [pageCount, setPageCount] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
 
   const getArchiveOfEvents = () => {
     getArchiveOfBookedEvents()
@@ -98,15 +105,24 @@ function Profile() {
       .finally(() => setIsLoadingEvents(false));
   };
 
+  const getDiaries = () => {
+    const offset = diariesPerPageCount * pageIndex;
+
+    getProfileDiariesData({ limit: diariesPerPageCount, offset })
+      .then(({ results, count }) => {
+        setDiaries(results);
+        setPageCount(Math.ceil(count / diariesPerPageCount));
+      })
+      .catch(() => setIsPageError(true));
+  };
+
   useEffect(() => {
     getCurrentBookedEvents();
   }, []);
 
   useEffect(() => {
-    getProfileDiariesData()
-      .then(setDiaries)
-      .catch(() => setIsPageError(true));
-  }, []);
+    getDiaries();
+  }, [pageIndex]);
 
   // отписка от ивентов
   const { selectedEvent } = useEventBooking();
@@ -394,6 +410,13 @@ function Profile() {
             {renderDiaryForm()}
 
             {renderDiaries()}
+
+            <Paginate
+              sectionClass="cards-section__pagination"
+              pageCount={pageCount}
+              value={pageIndex}
+              onChange={setPageIndex}
+            />
           </div>
         </div>
       </>
