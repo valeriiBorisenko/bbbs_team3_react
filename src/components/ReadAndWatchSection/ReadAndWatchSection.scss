@@ -5,7 +5,9 @@
 }
 
 .readwatch__slider-container {
-  width: 100%;
+  width: calc(100% + 30px);
+  margin-left: -15px;
+  margin-right: -15px;
 }
 
 .rec.rec-slider-container {
