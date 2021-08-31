@@ -55,9 +55,13 @@ function CatalogArticle({ articleId }) {
             alt={catalogArticlePageData.title}
             className="article__image"
           />
-          <figcaption className="caption article__figcaption">
-            Возможно подпись к фотографии. Автор фото.
-          </figcaption>
+          {catalogArticlePageData.imageCaption ? (
+            <figcaption className="caption article__figcaption">
+              {catalogArticlePageData.imageCaption}
+            </figcaption>
+          ) : (
+            ''
+          )}
         </figure>
         <ReactMarkdown className="article__markdown">
           {catalogArticlePageData.body}
