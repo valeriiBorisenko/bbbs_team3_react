@@ -2,15 +2,15 @@ import './Catalog.scss';
 import { useEffect, useState } from 'react';
 import catalogPageTexts from '../../locales/catalog-page-RU';
 import {
+  AnimatedPageContainer,
   BasePage,
+  CardCatalog,
+  CardsSectionWithLines,
+  Loader,
   TitleH1,
   TitleH2,
-  CardsSectionWithLines,
-  AnimatedPageContainer,
-  Loader,
 } from './index';
 import getCatalogPageData from '../../api/catalog-page';
-import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
 import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
 
 const PAGE_SIZE_PAGINATE = {

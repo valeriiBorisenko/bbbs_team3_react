@@ -32,7 +32,7 @@ function CardRights({ title, tags, shape, color, sectionClass, id }) {
 
 CardRights.propTypes = {
   title: PropTypes.string,
-  shape: PropTypes.string,
+  shape: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(Array),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
@@ -41,7 +41,6 @@ CardRights.propTypes = {
 
 CardRights.defaultProps = {
   title: '',
-  shape: 'square',
   tags: [],
   color: '',
   sectionClass: '',

@@ -14,7 +14,7 @@ function CardFigure({ title, shape, color, children, sectionClass }) {
 
 CardFigure.propTypes = {
   title: PropTypes.string,
-  shape: PropTypes.string,
+  shape: PropTypes.string.isRequired,
   color: PropTypes.string,
   children: PropTypes.node,
   sectionClass: PropTypes.string,
@@ -22,7 +22,6 @@ CardFigure.propTypes = {
 
 CardFigure.defaultProps = {
   title: '',
-  shape: 'square',
   color: 'yellow',
   children: null,
   sectionClass: '',
