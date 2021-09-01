@@ -5,8 +5,8 @@ import {
   CurrentUserContext,
   ErrorsContext,
   PopupsContext,
-} from '../../contexts/index';
-import { useDebounce, useEventBooking } from '../../hooks/index';
+} from '../../contexts';
+import { useDebounce, useEventBooking } from '../../hooks';
 import { DELAY_DEBOUNCE, ERROR_MESSAGES, months } from '../../config/constants';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
