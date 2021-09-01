@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import articlesPageTexts from '../../locales/articles-page-RU';
 import { COLORS, ERROR_MESSAGES } from '../../config/constants';
 import {
-  BasePage,
-  TitleH1,
-  CardArticle,
-  Paginate,
   AnimatedPageContainer,
+  BasePage,
+  CardArticle,
   Loader,
+  Paginate,
+  TitleH1,
 } from './index';
 import getArticlesPageData from '../../api/articles-page';
 
@@ -159,7 +159,7 @@ function Articles() {
       <section className="articles page__section">
         <TitleH1 title={title} sectionClass="fade-in" />
 
-        {isLoadingPaginate ? <Loader isNested /> : renderCards()}
+        {isLoadingPaginate ? <Loader isPaginate /> : renderCards()}
 
         {renderPagination()}
       </section>
