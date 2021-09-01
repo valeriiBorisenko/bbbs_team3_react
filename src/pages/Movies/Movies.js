@@ -1,16 +1,17 @@
 import './Movies.scss';
-import { useEffect, useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import moviesPageTexts from '../../locales/movies-page-RU';
-import { useDebounce } from '../../hooks/index';
+import { ErrorsContext, PopupsContext } from '../../contexts';
+import { useDebounce } from '../../hooks';
 import { getMoviesPageData, getMoviesPageFilter } from '../../api/movies-page';
 import {
-  BasePage,
-  TitleH1,
-  CardFilm,
-  CardAnnotation,
-  Loader,
   AnimatedPageContainer,
+  BasePage,
+  CardAnnotation,
+  CardFilm,
+  Loader,
   TagsList,
+  TitleH1,
 } from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
@@ -20,11 +21,10 @@ import {
   ERROR_MESSAGES,
 } from '../../config/constants';
 import {
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
 } from '../../utils/filter-tags';
-import { ErrorsContext, PopupsContext } from '../../contexts/index';
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 8,
@@ -199,7 +199,7 @@ function Movies() {
     return (
       <>
         {isLoadingPaginate ? (
-          <Loader isNested />
+          <Loader isPaginate />
         ) : (
           <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
             {moviesPageData.map((movie) => (
@@ -245,7 +245,7 @@ function Movies() {
         )}
 
         {/* рендерим фильмы */}
-        {isFiltersUsed ? <Loader isNested /> : renderMoviesContainer()}
+        {isFiltersUsed ? <Loader isPaginate /> : renderMoviesContainer()}
       </>
     );
   };

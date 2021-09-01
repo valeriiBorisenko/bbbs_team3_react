@@ -1,24 +1,24 @@
 import './Calendar.scss';
-import { useEffect, useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import calendarPageTexts from '../../locales/calendar-page-RU';
 import {
-  ErrorsContext,
   CurrentUserContext,
+  ErrorsContext,
   PopupsContext,
-} from '../../contexts/index';
-import { useDebounce, useEventBooking } from '../../hooks/index';
-import { months, DELAY_DEBOUNCE, ERROR_MESSAGES } from '../../config/constants';
+} from '../../contexts';
+import { useDebounce, useEventBooking } from '../../hooks';
+import { DELAY_DEBOUNCE, ERROR_MESSAGES, months } from '../../config/constants';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { getCalendarPageData, getActiveMonthTags } from '../../api/afisha-page';
+import { getActiveMonthTags, getCalendarPageData } from '../../api/afisha-page';
 import {
-  BasePage,
-  TitleH1,
-  CardCalendar,
   AnimatedPageContainer,
+  BasePage,
+  CardCalendar,
   Loader,
-  TagsList,
   Paginate,
+  TagsList,
+  TitleH1,
 } from './index';
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
@@ -239,7 +239,7 @@ function Calendar() {
     return (
       <>
         {isGlobalLoader ? (
-          <Loader isNested />
+          <Loader isPaginate />
         ) : (
           <AnimatedPageContainer titleText={textStubNoData} />
         )}
@@ -249,7 +249,7 @@ function Calendar() {
 
   // отрисовка карточек ивентов
   function renderEventCardsContainer() {
-    const cards = calendarPageData.map((cardData) => (
+    return calendarPageData.map((cardData) => (
       <CardCalendar
         key={cardData.id}
         cardData={cardData}
@@ -258,7 +258,6 @@ function Calendar() {
         sectionClass="scale-in"
       />
     ));
-    return cards;
   }
 
   // фильтры
@@ -301,7 +300,7 @@ function Calendar() {
         <>
           {/* лоадер смены городов */}
           {isGlobalLoader ? (
-            <Loader isNested />
+            <Loader isPaginate />
           ) : (
             <>
               <TitleH1 title={title} sectionClass="calendar-page__title" />
@@ -310,12 +309,12 @@ function Calendar() {
 
                 {/* лоадер смены фильтров */}
                 {isLoading ? (
-                  <Loader isNested />
+                  <Loader isPaginate />
                 ) : (
                   <>
                     {/* лоадер переключения пагинации */}
                     {isLoadingPaginate ? (
-                      <Loader isNested />
+                      <Loader isPaginate />
                     ) : (
                       <div className="calendar-page__grid">
                         {renderEventCardsContainer()}

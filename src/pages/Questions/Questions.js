@@ -6,32 +6,32 @@ import {
   CurrentUserContext,
   ErrorsContext,
   PopupsContext,
-} from '../../contexts/index';
-import { useDebounce, useFormWithValidation } from '../../hooks/index';
+} from '../../contexts';
+import { useDebounce, useFormWithValidation } from '../../hooks';
 import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_CODES,
   ERROR_MESSAGES,
 } from '../../config/constants';
-import { questionForm, changeCaseOfFirstLetter } from '../../utils/utils';
+import { changeCaseOfFirstLetter, questionForm } from '../../utils/utils';
 import {
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
 } from '../../utils/filter-tags';
 import getServerErrors from '../../utils/form-errors';
 import {
+  AnimatedPageContainer,
   BasePage,
-  TitleH1,
-  TitleH2,
+  Button,
   CardQuestion,
   Input,
-  Button,
   Loader,
-  AnimatedPageContainer,
-  TagsList,
   Paginate,
+  TagsList,
+  TitleH1,
+  TitleH2,
 } from './index';
 import {
   getQuestionsPageData,
@@ -334,11 +334,11 @@ function Questions() {
 
   const renderQuestionsWithPaginate = () => {
     if (isFiltersUsed) {
-      return <Loader isNested />;
+      return <Loader isPaginate />;
     }
     return (
       <>
-        {isLoadingPaginate ? <Loader isNested /> : renderQuestionsContainer()}
+        {isLoadingPaginate ? <Loader isPaginate /> : renderQuestionsContainer()}
 
         {pageCount > 1 && (
           <Paginate

@@ -1,34 +1,34 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './Video.scss';
 import videoPageTexts from '../../locales/video-page-RU';
 import {
-  BasePage,
-  Loader,
-  TitleH1,
-  Paginate,
-  CardVideoMain,
-  CardFilm,
   AnimatedPageContainer,
+  BasePage,
+  CardFilm,
+  CardVideoMain,
+  Loader,
+  Paginate,
   TagsList,
+  TitleH1,
 } from './index';
 import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
 } from '../../config/constants';
-import { useDebounce } from '../../hooks/index';
-import {
-  handleCheckboxBehavior,
-  selectOneTag,
-  deselectOneTag,
-} from '../../utils/filter-tags';
-import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
-import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
   CurrentUserContext,
   ErrorsContext,
   PopupsContext,
 } from '../../contexts';
+import { useDebounce } from '../../hooks';
+import {
+  deselectOneTag,
+  handleCheckboxBehavior,
+  selectOneTag,
+} from '../../utils/filter-tags';
+import { getVideoPageData, getVideoPageTags } from '../../api/video-page';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
 
 const PAGE_SIZE_PAGINATE = {
   small: 8,
@@ -291,7 +291,7 @@ const Video = () => {
   // Загрузка карточек при нажатии на пагинацию
   const loadingContentPagination = () =>
     isLoadingPaginate ? (
-      <Loader isNested />
+      <Loader isPaginate />
     ) : (
       <>
         {mainVideo && isShowMainCard && !pageNumber && (
@@ -323,7 +323,7 @@ const Video = () => {
     return (
       <>
         {isFiltersUsed ? (
-          <Loader isNested />
+          <Loader isPaginate />
         ) : (
           <>
             {loadingContentPagination()}

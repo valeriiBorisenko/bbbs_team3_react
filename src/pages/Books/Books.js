@@ -1,17 +1,18 @@
 import './Books.scss';
 import { useContext, useEffect, useState } from 'react';
 import booksPageTexts from '../../locales/books-page-RU';
-import { useDebounce } from '../../hooks/index';
+import { useDebounce } from '../../hooks';
 import { getBooksPageData, getBooksPageFilter } from '../../api/books-page';
 import {
+  AnimatedPageContainer,
   BasePage,
-  TitleH1,
   CardBook,
   Loader,
-  AnimatedPageContainer,
+  Paginate,
   TagsList,
+  TitleH1,
 } from './index';
-import Paginate from '../../components/utils/Paginate/Paginate';
+
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
   ALL_CATEGORIES,
@@ -19,9 +20,9 @@ import {
   ERROR_MESSAGES,
 } from '../../config/constants';
 import {
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
 } from '../../utils/filter-tags';
 import { ErrorsContext, PopupsContext } from '../../contexts';
 
@@ -192,7 +193,7 @@ function Books() {
     return (
       <>
         {isLoadingPaginate ? (
-          <Loader isNested />
+          <Loader isPaginate />
         ) : (
           <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
             {booksPageData.map((books) => (
@@ -235,7 +236,7 @@ function Books() {
         )}
 
         {/* рендерим книги */}
-        {isFiltersUsed ? <Loader isNested /> : renderBooksContainer()}
+        {isFiltersUsed ? <Loader isPaginate /> : renderBooksContainer()}
       </>
     );
   };
