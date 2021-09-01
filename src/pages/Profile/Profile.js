@@ -1,18 +1,18 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.scss';
 import profilePageTexts from '../../locales/profile-page-RU';
-import { PopupsContext, ErrorsContext } from '../../contexts/index';
-import { useEventBooking } from '../../hooks/index';
+import { ErrorsContext, PopupsContext } from '../../contexts';
+import { useEventBooking } from '../../hooks';
 import {
-  getProfileDiariesData,
   createDiary,
-  editDiary,
   deleteDiary,
+  editDiary,
+  getProfileDiariesData,
   shareDiary,
 } from '../../api/profile-page';
 import {
-  getBookedEvents,
   getArchiveOfBookedEvents,
+  getBookedEvents,
 } from '../../api/event-participants';
 import {
   DELAY_RENDER,
@@ -20,18 +20,18 @@ import {
   ERROR_MESSAGES,
 } from '../../config/constants';
 import {
+  AnimatedPageContainer,
   BasePage,
-  ProfileEventCard,
-  TitleH2,
-  ProfileForm,
-  ProfileDiary,
-  PopupDeleteDiary,
   ButtonRound,
   Loader,
-  ScrollableContainer,
-  UserMenuButton,
-  AnimatedPageContainer,
   Paginate,
+  PopupDeleteDiary,
+  ProfileDiary,
+  ProfileEventCard,
+  ProfileForm,
+  ScrollableContainer,
+  TitleH2,
+  UserMenuButton,
 } from './index';
 
 const {
@@ -69,6 +69,7 @@ function Profile() {
   // пагинация
   const [pageCount, setPageCount] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   const getArchiveOfEvents = () => {
     getArchiveOfBookedEvents()
@@ -113,7 +114,8 @@ function Profile() {
         setDiaries(results);
         setPageCount(Math.ceil(count / diariesPerPageCount));
       })
-      .catch(() => setIsPageError(true));
+      .catch(() => setIsPageError(true))
+      .finally(() => setIsLoadingPaginate(false));
   };
 
   useEffect(() => {
@@ -121,6 +123,7 @@ function Profile() {
   }, []);
 
   useEffect(() => {
+    setIsLoadingPaginate(true);
     getDiaries();
   }, [pageIndex]);
 
@@ -346,6 +349,7 @@ function Profile() {
   };
 
   const renderDiaries = () => {
+    if (isLoadingPaginate) return <Loader isPaginate />;
     if (diaries && diaries.length > 0) {
       return (
         <>
@@ -411,12 +415,14 @@ function Profile() {
 
             {renderDiaries()}
 
-            <Paginate
-              sectionClass="cards-section__pagination"
-              pageCount={pageCount}
-              value={pageIndex}
-              onChange={setPageIndex}
-            />
+            {pageCount > 1 && (
+              <Paginate
+                sectionClass="cards-section__pagination"
+                pageCount={pageCount}
+                value={pageIndex}
+                onChange={setPageIndex}
+              />
+            )}
           </div>
         </div>
       </>

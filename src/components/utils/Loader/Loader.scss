@@ -72,14 +72,6 @@
     &_small-grid {
       margin: 81px auto;
     }
-  }
-}
-
-@include atTabletL {
-  .spinner {
-    &_small-grid {
-      margin: 25px auto;
-    }
 
     &_paginate {
       min-height: 35vh;
@@ -87,6 +79,14 @@
       & .spinner__container {
         margin: 100px auto;
       }
+    }
+  }
+}
+
+@include atTabletL {
+  .spinner {
+    &_small-grid {
+      margin: 25px auto;
     }
   }
 }
