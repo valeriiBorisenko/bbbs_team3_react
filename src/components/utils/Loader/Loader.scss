@@ -51,7 +51,7 @@
   }
 
   &_paginate {
-    min-height: 55vh;
+    min-height: 60vh;
 
     & .spinner__container {
       margin: 150px auto;
@@ -102,7 +102,7 @@
 @include atMobileL {
   .spinner {
     &_paginate {
-      min-height: 70vh;
+      min-height: 80vh;
     }
   }
 }
