@@ -13,13 +13,9 @@ import { getRightsArticle } from '../../api/rights-page';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { RIGHTS_URL } from '../../config/routes';
 
-<<<<<<< HEAD
 function RightsArticle({ id, getActiveTags }) {
-  useScrollToTop();
+  // useScrollToTop();
 
-=======
-function RightsArticle({ id }) {
->>>>>>> dev
   const [articleData, setArticleData] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
