@@ -2,6 +2,7 @@ import './RightsArticle.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import {
   PageWithTransparentHeader,
   Loader,
@@ -33,12 +34,9 @@ function RightsArticle({ id, getActiveTags }) {
   );
 
   const renderHtmlBlock = () => (
-    <div
-      className="page__section"
-      dangerouslySetInnerHTML={{
-        __html: articleData?.rawHtml,
-      }}
-    />
+    <ReactMarkdown className="article__markdown">
+      {articleData.body}
+    </ReactMarkdown>
   );
 
   const rendenNextPageBlock = () => {
