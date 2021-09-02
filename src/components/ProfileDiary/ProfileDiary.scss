@@ -32,7 +32,6 @@
   }
 
   &__date-container {
-    box-sizing: border-box;
     display: grid;
     grid-template-columns: 1fr 100px;
     grid-template-rows: 346px;
@@ -47,7 +46,7 @@
   }
 
   &__card-text {
-    height: calc(100% - 60px);
+    height: calc(100% - 65px);
   }
 
   &__card-title {
@@ -59,9 +58,8 @@
     font-family: $ptRootUI;
     font-weight: 400;
     font-size: 18px;
-    line-height: 1.4;
+    line-height: 1.44;
     color: $black;
-    padding-right: 5px;
   }
 
   &__card-date {
@@ -75,6 +73,7 @@
     font-size: 14px;
     line-height: 1.4;
     text-align: right;
+    letter-spacing: 0.2px;
   }
 
   &__day {
@@ -82,6 +81,7 @@
     font-family: $protoGrotesk;
     font-size: 60px;
     text-align: right;
+    letter-spacing: 0.2px;
   }
 
   &__actions {
@@ -156,6 +156,8 @@
     &__date-container {
       grid-template-columns: 1fr;
       grid-template-rows: 307px;
+      padding-left: 15px;
+      padding-right: 5px;
     }
 
     &__card-title {
@@ -163,18 +165,18 @@
     }
 
     &__card-text {
-      height: calc(100% - 96px);
+      height: calc(100% - 95px);
     }
 
     &__paragraph {
       font-size: 15px;
-      padding-right: 17px;
     }
 
     &__card-date {
       position: absolute;
       top: 30px;
       right: 15px;
+      grid-column: 1;
     }
 
     &__weekday {
@@ -183,7 +185,8 @@
     }
 
     &__actions {
-      margin-top: 20px;
+      margin-top: 25px;
+      margin-right: 10px;
     }
 
     &__image {
@@ -193,6 +196,14 @@
         object-fit: contain;
         object-position: center;
       }
+    }
+  }
+}
+
+@include atDesktop1024 {
+  .profile-diary {
+    &__actions {
+      margin-top: 20px;
     }
   }
 }

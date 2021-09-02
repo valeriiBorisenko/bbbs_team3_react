@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import './ReadAndWatchSection.scss';
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
@@ -151,7 +152,6 @@ function ReadAndWatchSection({
           transitionMs={transitionDelay}
           pagination={false}
           outerSpacing={0}
-          preventDefaultTouchmoveEvent
           itemPadding={elemPaddings}
           breakPoints={breakPoints}
           disableArrowsOnEnd

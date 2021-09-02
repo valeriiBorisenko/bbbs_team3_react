@@ -37,7 +37,6 @@
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
 
@@ -52,9 +51,17 @@
   }
 
   &__label-file {
-    display: inline-block;
+    display: block;
     position: relative;
     margin: 0 auto;
+
+    &:hover {
+      cursor: pointer;
+
+      & .profile-form__pseudo-button {
+        transform: scale(1.1);
+      }
+    }
   }
 
   &__input-file {
@@ -66,7 +73,8 @@
   }
 
   &__pseudo-button {
-    display: inline-block;
+    display: block;
+    margin: 0 auto;
 
     &_error {
       border: 1px solid $error;
@@ -88,10 +96,6 @@
     border: 1px solid $error;
     background-image: url(../../assets/error-cross.svg);
     background-color: rgba($error, .2);
-
-    &:hover {
-      background-color: rgba($error, .5);
-    }
   }
 
   &__text-container {
@@ -115,9 +119,9 @@
 
     &_error {
       color: $error;
-	    -webkit-text-shadow: 1px 1px 0 rgba($background, .5); 
-	    -moz-text-shadow: 1px 1px 0 rgba($background, .5);
-      text-shadow: 1px 1px 0 rgba($background, .5); 
+	    -webkit-text-shadow: 1px 1px 0 $black; 
+	    -moz-text-shadow: 1px 1px 0 $black;
+      text-shadow: 1px 1px 0 $black; 
     }
   }
 
@@ -159,9 +163,14 @@
 
   &__rating {
     margin-right: 15px;
+    transition: .3s ease;
   
     &:last-of-type {
       margin-right: 0;
+    }
+
+    &:hover {
+      transform: scale(1.1);
     }
   }
 
@@ -188,6 +197,11 @@
   .profile-form {
     &__texts {
       grid-template-columns: 1fr;
+      gap: 5px;
+    }
+
+    &__text-container {
+      padding: 30px 15px;
     }
 
     &__input_el_textarea {
@@ -197,6 +211,7 @@
     &__submit-zone {
       flex-direction: column;
       align-items: stretch;
+      margin-top: 15px;
     }
 
     &__ratings-buttons {
@@ -225,10 +240,6 @@
 
 @include atMobile {
   .profile-form {
-    &__text-container {
-      padding: 30px 15px;
-    }
-
     &__caption {
       font-size: 12px;
       line-height: 1.42;

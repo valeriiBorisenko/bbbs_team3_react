@@ -22,27 +22,14 @@
     padding: 30px;
   }
 
-  &__date {
-    display: flex;
-    margin-bottom: 10px;
-  }
-
   &__day {
-    margin-right: 10px;
+    margin: 0 0 10px 0;
     font-family: $protoGrotesk;
     font-style: normal;
     font-weight: 300;
     font-size: 44px;
-    line-height: 1.13;  
-  }
-
-  &__month {
-    font-family: $ptRootUI;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 1.36;
-    letter-spacing: 0.2px;
+    line-height: 1.13;
+    text-align: left;
   }
 
   &__title {
@@ -67,7 +54,7 @@
   }
 }
 
-@include atTablet {
+@include atTabletL {
   .profile-event-card {
     max-width: 205px;
     max-height: 108px;
@@ -79,16 +66,12 @@
     &__day {
       font-size: 37px;
       line-height: 1.05;
-    }
-
-    &__month {
-      font-size: 12px;
-      line-height: 1.2;
+      margin-bottom: 5px;
     }
 
     &__title {
       font-size: 12px;
-      line-height: 1.2;
+      line-height: 1.4;
     }
   }
 }

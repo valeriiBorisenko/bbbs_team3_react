@@ -13,8 +13,17 @@
     height: 100%;
     box-sizing: border-box;
 
-    & .card-annotation__desc {
-      margin-top: 95px;
+    &_center {
+      display: flex;
+      justify-content: flex-end;
+
+      > div {
+        max-height: 428px;
+      }
+
+      > div > div > .card-annotation__desc {
+        margin-top: 0;
+      }
     }
   }
 
@@ -23,16 +32,16 @@
     padding-right: 10px;
     padding-bottom: 10px;
   }
-}
 
-.card-annotation__thumb {
-  background-color: $backgroundAnnotation;
-  border-radius: 5px;
-}
-
-.card-annotation__desc {
-  box-sizing: border-box;
-  padding-right: 13px;
+  &__desc {
+    box-sizing: border-box;
+    padding-right: 18px;
+    margin-top: 95px;
+  
+    &_center {
+      margin-top: 0;
+    }
+  }
 }
 
 @include atDesktop1199 {
@@ -62,13 +71,9 @@
     &__caption {
       padding-bottom: 5px;
     }
-  }
 
-  .card-annotation__caption {
-    margin-bottom: 5px;
-  }
-
-  .card-annotation__desc {
-    padding-right: 8px;
+    &__desc {
+      padding-right: 15px;
+    }
   }
 }

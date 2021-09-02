@@ -16,11 +16,21 @@ function CardRights({
 }) {
   return (
     <div className={`rights-card ${sectionClass}`}>
+<<<<<<< HEAD
       <Link
         to={{ pathname: `/rights/${id}`, getActiveTags }}
         className="rights-card__link"
       >
         <CardFigure shape={shape} title={title} color={color}>
+=======
+      <Link to={`/rights/${id}`} className="rights-card__link">
+        <CardFigure
+          shape={shape}
+          title={title}
+          color={color}
+          sectionClass="rights-card__card"
+        >
+>>>>>>> dev
           <div className="rights-card__block">
             {tags.map((tag) => (
               <Rubric
@@ -38,7 +48,7 @@ function CardRights({
 
 CardRights.propTypes = {
   title: PropTypes.string,
-  shape: PropTypes.string,
+  shape: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(Array),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
@@ -48,7 +58,6 @@ CardRights.propTypes = {
 
 CardRights.defaultProps = {
   title: '',
-  shape: 'square',
   tags: [],
   color: '',
   sectionClass: '',

@@ -1,5 +1,4 @@
 import './PopupDeleteDiary.scss';
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
@@ -9,18 +8,12 @@ import { TitleH2, Button } from '../../utils/index';
 function PopupDeleteDiary({ isOpen, onClose, onCardDelete, cardData }) {
   const { place, date } = cardData;
   const day = formatDate(date);
-  const [month, setMonth] = useState(null);
+  const month = formatMonthsGenitiveCase(day?.monthName);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     onCardDelete(cardData);
   };
-
-  useEffect(() => {
-    if (isOpen) {
-      setMonth(formatMonthsGenitiveCase(day?.monthName));
-    }
-  }, [isOpen]);
 
   return (
     <Popup

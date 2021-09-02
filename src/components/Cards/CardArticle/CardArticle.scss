@@ -23,6 +23,8 @@
   &_content_article-img {
     margin-top: 70px;
     margin-bottom: 15px;
+    overflow: hidden;
+    border-radius: 15px;
   }
 }
 
@@ -37,6 +39,11 @@
   -webkit-box-orient: vertical;
   line-clamp: 3;
   box-orient: vertical;
+  transition: .3s ease;
+
+  &:hover {
+    color: $blue;
+  }
 }
 
 .article-card__info {
@@ -53,9 +60,9 @@
 }
 
 .article-card__image {
+  display: block;
   width: 100%;
   height: 394px;
-  border-radius: 15px;
   object-fit: cover;
   object-position: center;
 }
@@ -72,7 +79,7 @@
 
   .article-card__link-wrap {
     &_content_article-img {
-      margin-top: 60px;
+      margin-top: 62px;
     }
   }
 
@@ -84,7 +91,7 @@
 @include atMobile {
   .article-card__link-wrap {
     &_content_article-img {
-      margin-top: 40px;
+      margin-top: 39px;
     }
   }
 

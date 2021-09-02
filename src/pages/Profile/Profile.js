@@ -1,18 +1,18 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.scss';
 import profilePageTexts from '../../locales/profile-page-RU';
-import { PopupsContext, ErrorsContext } from '../../contexts/index';
-import { useScrollToTop, useEventBooking } from '../../hooks/index';
+import { ErrorsContext, PopupsContext } from '../../contexts';
+import { useEventBooking } from '../../hooks';
 import {
-  getProfileDiariesData,
   createDiary,
-  editDiary,
   deleteDiary,
+  editDiary,
+  getProfileDiariesData,
   shareDiary,
 } from '../../api/profile-page';
 import {
-  getBookedEvents,
   getArchiveOfBookedEvents,
+  getBookedEvents,
 } from '../../api/event-participants';
 import {
   DELAY_RENDER,
@@ -20,17 +20,18 @@ import {
   ERROR_MESSAGES,
 } from '../../config/constants';
 import {
+  AnimatedPageContainer,
   BasePage,
-  ProfileEventCard,
-  TitleH2,
-  ProfileForm,
-  ProfileDiary,
-  PopupDeleteDiary,
   ButtonRound,
   Loader,
+  Paginate,
+  PopupDeleteDiary,
+  ProfileDiary,
+  ProfileEventCard,
+  ProfileForm,
   ScrollableContainer,
+  TitleH2,
   UserMenuButton,
-  AnimatedPageContainer,
 } from './index';
 
 const {
@@ -45,9 +46,9 @@ const {
   eventsTitleNoResultsArchive,
 } = profilePageTexts;
 
-function Profile() {
-  useScrollToTop();
+const diariesPerPageCount = 10;
 
+function Profile() {
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
   const { setError } = useContext(ErrorsContext);
   const { unauthorized, badRequest } = ERROR_CODES;
@@ -64,6 +65,11 @@ function Profile() {
 
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
+
+  // пагинация
+  const [pageCount, setPageCount] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   const getArchiveOfEvents = () => {
     getArchiveOfBookedEvents()
@@ -100,23 +106,34 @@ function Profile() {
       .finally(() => setIsLoadingEvents(false));
   };
 
+  const getDiaries = () => {
+    const offset = diariesPerPageCount * pageIndex;
+
+    getProfileDiariesData({ limit: diariesPerPageCount, offset })
+      .then(({ results, count }) => {
+        setDiaries(results);
+        setPageCount(Math.ceil(count / diariesPerPageCount));
+      })
+      .catch(() => setIsPageError(true))
+      .finally(() => setIsLoadingPaginate(false));
+  };
+
   useEffect(() => {
     getCurrentBookedEvents();
   }, []);
 
   useEffect(() => {
-    getProfileDiariesData()
-      .then(setDiaries)
-      .catch(() => setIsPageError(true));
-  }, []);
+    setIsLoadingPaginate(true);
+    getDiaries();
+  }, [pageIndex]);
 
   // отписка от ивентов
   const { selectedEvent } = useEventBooking();
 
   useEffect(() => {
     if (selectedEvent) {
-      setEvents(() =>
-        events.filter((event) =>
+      setEvents((prevEvents) =>
+        prevEvents.filter((event) =>
           event?.id === selectedEvent?.id ? null : event
         )
       );
@@ -163,7 +180,7 @@ function Profile() {
 
   const handleEditMode = (data) => {
     setIsFormOpen(false);
-    //! необходима небольшая задержка перед ререндером
+    //! небольшая задержка перед ререндером
     setTimeout(() => {
       setIsEditMode(true);
       setFormDataToEdit(data);
@@ -173,12 +190,14 @@ function Profile() {
 
   const createFormData = (data) => {
     const formData = new FormData();
-    if (data?.id) formData.append('id', data?.id);
-    if (data?.image) formData.append('image', data?.image);
-    formData.append('date', data?.date);
-    formData.append('place', data?.place);
-    formData.append('description', data?.description);
-    formData.append('mark', data?.mark);
+    if (data) {
+      if (data.id) formData.append('id', data.id);
+      if (data.image) formData.append('image', data.image);
+      formData.append('date', data.date);
+      formData.append('place', data.place);
+      formData.append('description', data.description);
+      formData.append('mark', data.mark);
+    }
     return formData;
   };
 
@@ -191,7 +210,7 @@ function Profile() {
   const handleCreateDiary = (data) => {
     createDiary(createFormData(data))
       .then((newDiary) => {
-        setDiaries([newDiary, ...diaries]);
+        setDiaries((prevDiaries) => [newDiary, ...prevDiaries]);
         closeForm();
       })
       .catch((err) => handleErrorOnFormSubmit(err));
@@ -200,8 +219,8 @@ function Profile() {
   const handleEditDiary = (data) => {
     editDiary(data?.id, createFormData(data))
       .then((newDiary) => {
-        setDiaries(() =>
-          diaries.map((diary) =>
+        setDiaries((prevDiaries) =>
+          prevDiaries.map((diary) =>
             diary?.id === newDiary?.id ? newDiary : diary
           )
         );
@@ -230,8 +249,8 @@ function Profile() {
   const handleDeleteDiary = (diary) => {
     deleteDiary(diary?.id, diary)
       .then(() => {
-        setDiaries(() =>
-          diaries.filter((prevDiary) =>
+        setDiaries((prevDiaries) =>
+          prevDiaries.filter((prevDiary) =>
             prevDiary?.id === diary?.id ? null : prevDiary
           )
         );
@@ -251,8 +270,8 @@ function Profile() {
       .then(() => {
         const newDiary = diaries.find((diary) => diary?.id === diaryId);
         newDiary.sentToCurator = true;
-        setDiaries(() =>
-          diaries.map((diary) =>
+        setDiaries((prevDiaries) =>
+          prevDiaries.map((diary) =>
             diary?.id === newDiary?.id ? newDiary : diary
           )
         );
@@ -294,23 +313,24 @@ function Profile() {
   };
 
   const renderAddDiaryButton = () => {
-    if (!isFormOpen && diaries && diaries?.length > 0) {
+    if (!isFormOpen && diaries && diaries.length > 0) {
       return (
-        <ButtonRound
-          sectionClass="profile__button-add-diary fade-in"
-          color="blue"
-          isSmall
+        <button
+          className="profile__button-add-diary fade-in"
+          type="button"
           onClick={openForm}
-        />
+        >
+          <ButtonRound color="blue" isSmall isSpan />
+        </button>
       );
     }
     return null;
   };
 
   const renderDiaryForm = () => {
-    if (isFormOpen || (diaries && diaries?.length === 0)) {
+    if (isFormOpen || (diaries && diaries.length === 0)) {
       return (
-        <>
+        <div className="profile__form-container">
           {!isEditMode && (
             <TitleH2 sectionClass="profile__title fade-in" title={formTitle} />
           )}
@@ -322,14 +342,15 @@ function Profile() {
             onClose={closeForm}
             onSubmit={handleSubmitDiary}
           />
-        </>
+        </div>
       );
     }
     return null;
   };
 
   const renderDiaries = () => {
-    if (diaries && diaries?.length > 0) {
+    if (isLoadingPaginate) return <Loader isPaginate />;
+    if (diaries && diaries.length > 0) {
       return (
         <>
           {diaries.map((diary) => (
@@ -372,7 +393,7 @@ function Profile() {
                   }
                 />
                 <TitleH2
-                  sectionClass="profile__title"
+                  sectionClass="profile__title profile__title_shifted"
                   title={isArchiveOpen ? titleH1Archive : titleH1Current}
                 />
               </div>
@@ -388,13 +409,20 @@ function Profile() {
         <div className="profile__diaries page__section">
           <span className="profile__scroll-anchor" ref={scrollAnchorRef} />
           <div className="profile__diaries-container">
-            <div className="profile__form-container">
-              {renderAddDiaryButton()}
+            {renderAddDiaryButton()}
 
-              {renderDiaryForm()}
-            </div>
+            {renderDiaryForm()}
 
             {renderDiaries()}
+
+            {pageCount > 1 && (
+              <Paginate
+                sectionClass="cards-section__pagination"
+                pageCount={pageCount}
+                value={pageIndex}
+                onChange={setPageIndex}
+              />
+            )}
           </div>
         </div>
       </>

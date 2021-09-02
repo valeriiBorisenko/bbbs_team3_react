@@ -21,16 +21,6 @@
     text-align: center;
   }
 
-  &__link-wrap {
-    width: 100%;
-    text-decoration: none;
-  
-    &_content_article-img {
-      margin-top: 70px;
-      margin-bottom: 15px;
-    }
-  }
-
   &__title {
     margin: 0 auto 5px;
     overflow: hidden;
@@ -69,8 +59,31 @@
     object-position: center;
 
     &_type_article {
-      margin-top: 70px;
-      margin-bottom: 15px;
+      margin-top: auto;
+    }
+
+    &_big {
+      height: 428px;
+    }
+  }
+
+  &__link {
+    margin-top: 15px;
+  }
+}
+
+@include atDesktop1199 {
+  .card-place {
+    &__image {
+      height: 346px;
+    
+      &_type_article {
+        margin-top: 62px;
+      }
+    
+      &_big {
+        height: 380px;
+      }
     }
   }
 }
@@ -84,28 +97,32 @@
       padding: 37px 15px 15px;
     }
 
-    &__link-wrap {
-      &_content_article-img {
-        margin-top: 60px;
+    &__image {
+      margin-bottom: 15px;
+
+      &_big {
+        height: 362px;
       }
     }
 
-    &__image {
-      height: 345px;
+    &__link {
+      margin-top: 0;
     }
   }
 }
 
 @include atMobile {
   .card-place {
-    &__link-wrap {
-      &_content_article-img {
-        margin-top: 40px;
-      }
-    }
-
     &__image {
       height: 142px;
+
+      &_type_article {
+        margin-top: 39px;
+      }
+
+      &_big {
+        height: 158px;
+      }
     }
   }
 }

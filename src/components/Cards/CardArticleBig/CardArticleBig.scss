@@ -15,6 +15,11 @@
     color: $lightBlack;
     max-width: 970px;
     text-align: center;
+    transition: .3s ease;
+
+    &:hover {
+      color: $blue;
+    }
   }
 
   &__link {
