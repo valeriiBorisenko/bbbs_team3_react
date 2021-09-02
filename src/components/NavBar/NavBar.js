@@ -1,5 +1,5 @@
 import './NavBar.scss';
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
@@ -34,11 +34,11 @@ function NavBar({
   onLogout,
   userCityName,
   setIsMobileMenuOpen,
+  isOpenSearch,
+  setIsOpenSearch,
 }) {
   const { pathname } = useLocation();
   const { currentUser } = useContext(CurrentUserContext);
-
-  const [isOpenSearch, setIsOpenSearch] = useState(false);
 
   return (
     <nav className={`menu ${isOpenSearch ? 'menu_state_search' : ''}`}>
@@ -205,6 +205,8 @@ NavBar.propTypes = {
   isMobileMenuOpen: PropTypes.bool,
   userCityName: PropTypes.string,
   setIsMobileMenuOpen: PropTypes.func,
+  isOpenSearch: PropTypes.bool,
+  setIsOpenSearch: PropTypes.func,
 };
 
 NavBar.defaultProps = {
@@ -215,6 +217,8 @@ NavBar.defaultProps = {
   isMobileMenuOpen: false,
   userCityName: '',
   setIsMobileMenuOpen: () => {},
+  isOpenSearch: false,
+  setIsOpenSearch: () => {},
 };
 
 export default NavBar;

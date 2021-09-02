@@ -73,6 +73,9 @@ function Header({ isTransparent }) {
     }
   };
 
+  // Состояние поиска
+  const [isOpenSearch, setIsOpenSearch] = useState(false);
+
   // липкий хедер
   const [isHeaderActive, setIsHeaderActive] = useState(true);
   let prevScrollPos = 0;
@@ -101,7 +104,7 @@ function Header({ isTransparent }) {
       ? 'header_transparent'
       : '',
     isMobileMenuOpen ? 'header_displayed' : '',
-    !isHeaderActive ? 'header__on-scroll-up' : '',
+    !isHeaderActive && !isOpenSearch ? 'header__on-scroll-up' : '',
   ]
     .join(' ')
     .trim();
@@ -122,6 +125,8 @@ function Header({ isTransparent }) {
           onLogout={handleLogout}
           isMobileMenuOpen={isMobileMenuOpen}
           setIsMobileMenuOpen={setIsMobileMenuOpen}
+          isOpenSearch={isOpenSearch}
+          setIsOpenSearch={setIsOpenSearch}
         />
 
         {pathname === PROFILE_URL && (
