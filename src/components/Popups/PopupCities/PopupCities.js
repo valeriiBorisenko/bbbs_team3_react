@@ -1,4 +1,3 @@
-import './PopupCities.scss';
 import { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
@@ -20,13 +19,17 @@ import {
 } from '../../../hooks/useLocalStorage';
 import { useDebounce } from '../../../hooks/index';
 import Popup from '../Popup/Popup';
-import { TitleH2 } from '../../utils/index';
+import { TitleH2, ModificatedScrollbars } from '../../utils/index';
+import './PopupCities.scss';
 
 function PopupCities({ isOpen, onClose }) {
   const { currentUser, updateUser } = useContext(CurrentUserContext);
   const { cities, defaultCity } = useContext(CitiesContext);
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
+
+  const currentUserCity =
+    currentUser?.city || getLocalStorageData(localStUserCity);
 
   function closePopup() {
     if (!currentUser && !getLocalStorageData(localStUserCity)) {
@@ -35,13 +38,13 @@ function PopupCities({ isOpen, onClose }) {
     onClose();
   }
 
-  function closePopupOnEsc(evt) {
+  const closePopupOnEsc = (evt) => {
     if (evt.key === 'Escape') {
       closePopup();
     }
-  }
+  };
 
-  function submitCity(evt) {
+  const submitCity = (evt) => {
     const cityId = parseInt(evt.target.value, 10);
     if (currentUser) {
       updateUserProfile({ city: cityId })
@@ -60,7 +63,7 @@ function PopupCities({ isOpen, onClose }) {
       dispatchLocalStorageEvent(localStUserCity, cityId);
       onClose();
     }
-  }
+  };
 
   const debounceSubmitCity = useDebounce(submitCity, DELAY_DEBOUNCE);
 
@@ -71,6 +74,21 @@ function PopupCities({ isOpen, onClose }) {
       return () => window.removeEventListener('keyup', closePopupOnEsc);
     }
   }, [defaultCity]);
+
+  const renderCityItem = (city) => (
+    <li className="cities__list-item" key={city?.id}>
+      <button
+        className={`cities__city ${
+          currentUserCity === city?.id ? 'cities__city_current' : ''
+        }`}
+        type="button"
+        value={city?.id}
+        onClick={(evt) => debounceSubmitCity(evt)}
+      >
+        {city?.name}
+      </button>
+    </li>
+  );
 
   return (
     <Popup
@@ -86,37 +104,17 @@ function PopupCities({ isOpen, onClose }) {
           <ul className="cities__list cities__list_type_primary">
             {cities &&
               cities
-                .filter((item) => item?.isPrimary === true)
-                .map((item) => (
-                  <li className="cities__list-item" key={item?.id}>
-                    <button
-                      className="cities__city"
-                      type="button"
-                      value={item?.id}
-                      onClick={(evt) => debounceSubmitCity(evt)}
-                    >
-                      {item?.name}
-                    </button>
-                  </li>
-                ))}
+                .filter((city) => city?.isPrimary === true)
+                .map((city) => renderCityItem(city))}
           </ul>
-          <ul className="cities__list">
-            {cities &&
-              cities
-                .filter((item) => item?.isPrimary !== true)
-                .map((item) => (
-                  <li className="cities__list-item" key={item?.id}>
-                    <button
-                      className="cities__city"
-                      type="button"
-                      value={item?.id}
-                      onClick={(evt) => debounceSubmitCity(evt)}
-                    >
-                      {item?.name}
-                    </button>
-                  </li>
-                ))}
-          </ul>
+          <ModificatedScrollbars horizontalScrollClass="scroll-thumb">
+            <ul className="cities__list">
+              {cities &&
+                cities
+                  .filter((city) => city?.isPrimary !== true)
+                  .map((city) => renderCityItem(city))}
+            </ul>
+          </ModificatedScrollbars>
         </div>
       </div>
     </Popup>

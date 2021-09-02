@@ -1,33 +1,37 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './Video.scss';
 import videoPageTexts from '../../locales/video-page-RU';
 import {
-  BasePage,
-  Loader,
-  TitleH1,
-  Paginate,
-  CardVideoMain,
-  CardFilm,
   AnimatedPageContainer,
+  BasePage,
+  CardFilm,
+  CardVideoMain,
+  Loader,
+  Paginate,
   TagsList,
+  TitleH1,
 } from './index';
 import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
 } from '../../config/constants';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
+  CurrentUserContext,
+  ErrorsContext,
+  PopupsContext,
+} from '../../contexts';
+import { useDebounce } from '../../hooks';
+import {
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
 } from '../../utils/filter-tags';
-import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
+import { getVideoPageData, getVideoPageTags } from '../../api/video-page';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { ErrorsContext, PopupsContext } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
-  small: 4,
+  small: 8,
   medium: 12,
   big: 16,
 };
@@ -36,7 +40,7 @@ const { headTitle, headDescription, title, resourceGroupTag, textStubNoData } =
   videoPageTexts;
 
 const Video = () => {
-  useScrollToTop();
+  const { currentUser } = useContext(CurrentUserContext);
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 
@@ -72,23 +76,41 @@ const Video = () => {
   };
 
   // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Ресурсная группа"
-  const defineCategories = (tags, resourceGroup) => {
+  const defineCategories = (tags) => {
     const categoriesArray = tags.map((tag) => ({
       filter: tag?.slug.toLowerCase(),
       name: changeCaseOfFirstLetter(tag?.name),
       isActive: false,
     }));
-    if (resourceGroup) {
-      return [
-        { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-        { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
-        ...categoriesArray,
-      ];
-    }
-    return [
+
+    let isResourceGroup = false;
+
+    const tagsWithoutResorceGroup = [
       { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
       ...categoriesArray,
     ];
+
+    const tagsWithResourseGroup = [
+      { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+      { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
+      ...categoriesArray,
+    ];
+
+    if (currentUser) {
+      getVideoPageData({
+        resource_group: true,
+      })
+        .then((resourceGroupData) => {
+          isResourceGroup = resourceGroupData.count > 0;
+
+          if (isResourceGroup) {
+            setCategories(tagsWithResourseGroup);
+          }
+        })
+        .catch(() => setIsPageError(true));
+    }
+
+    setCategories(tagsWithoutResorceGroup);
   };
 
   // Сортировка значений Тэгов для АПИ
@@ -173,9 +195,7 @@ const Video = () => {
           setVideo(videoData);
           setPageCount(Math.ceil(count / pageSize));
         }
-
-        const isResourceGroup = videoData.some((item) => item?.resourceGroup);
-        setCategories(defineCategories(tags, isResourceGroup));
+        defineCategories(tags);
       })
       .catch(() => setIsPageError(true))
       .finally(() => {
@@ -217,7 +237,7 @@ const Video = () => {
     if (pageSize) {
       getFirstPageData();
     }
-  }, [pageSize]);
+  }, [pageSize, currentUser]);
 
   useEffect(() => {
     if (!isLoadingPage && !isFiltersUsed) {
@@ -271,7 +291,7 @@ const Video = () => {
   // Загрузка карточек при нажатии на пагинацию
   const loadingContentPagination = () =>
     isLoadingPaginate ? (
-      <Loader isNested />
+      <Loader isPaginate />
     ) : (
       <>
         {mainVideo && isShowMainCard && !pageNumber && (
@@ -283,7 +303,12 @@ const Video = () => {
         <section className="video__cards-grid page__section">
           {video &&
             video.map((item) => (
-              <CardFilm key={item?.id} data={item} sectionClass="scale-in" />
+              <CardFilm
+                key={item?.id}
+                data={item}
+                sectionClass="scale-in"
+                isVideo
+              />
             ))}
         </section>
       </>
@@ -298,7 +323,7 @@ const Video = () => {
     return (
       <>
         {isFiltersUsed ? (
-          <Loader isNested />
+          <Loader isPaginate />
         ) : (
           <>
             {loadingContentPagination()}

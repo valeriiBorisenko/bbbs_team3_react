@@ -86,7 +86,7 @@ function ReadAndWatch() {
           CardTemplateComponent={CardCatalog}
           path={CATALOG_URL}
           sectionTitle={catalogTitle}
-          sectionClass="readwatch__slider-container_el_catalog"
+          sectionClass="readwatch-page__slider-container_el_catalog"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -98,7 +98,8 @@ function ReadAndWatch() {
           CardTemplateComponent={CardFilm}
           path={VIDEO_URL}
           sectionTitle={videosTitle}
-          sectionClass="readwatch__slider-container_el_video"
+          sectionClass="readwatch-page__slider-container_el_video"
+          isVideo
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -110,7 +111,7 @@ function ReadAndWatch() {
           CardTemplateComponent={CardArticle}
           path={ARTICLES_URL}
           sectionTitle={articlesTitle}
-          sectionClass="readwatch__slider-container_el_articles"
+          sectionClass="readwatch-page__slider-container_el_articles"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -122,7 +123,7 @@ function ReadAndWatch() {
           CardTemplateComponent={CardFilm}
           path={MOVIES_URL}
           sectionTitle={moviesTitle}
-          sectionClass="readwatch__slider-container_el_movies"
+          sectionClass="readwatch-page__slider-container_el_movies"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -134,7 +135,7 @@ function ReadAndWatch() {
           CardTemplateComponent={CardBook}
           path={BOOKS_URL}
           sectionTitle={booksTitle}
-          sectionClass="readwatch__slider-container_el_books"
+          sectionClass="readwatch-page__slider-container_el_books"
         />
       </>
     );

@@ -22,12 +22,7 @@ function ProfileEventCard({ data, onOpen, sectionClass }) {
       onClick={handleOpen}
     >
       <Card sectionClass="profile-event-card__card">
-        <div className="profile-event-card__date">
-          <span className="profile-event-card__day">{startDay?.day}</span>
-          <span className="profile-event-card__month">
-            {startDay?.monthName}
-          </span>
-        </div>
+        <p className="profile-event-card__day">{`${startDay?.day}.${startDay?.month}`}</p>
         <p className="profile-event-card__title">{data?.title}</p>
       </Card>
     </button>

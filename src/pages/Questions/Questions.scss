@@ -29,12 +29,6 @@
   }
 }
 
-.button-round__questions-page {
-  position: absolute;
-  right: -150px;
-  top: -80px;
-}
-
 .add-question {
   box-sizing: border-box;
   max-width: 970px;
@@ -98,13 +92,6 @@
     &_visible {
       margin-top: 10px;
     }
-  }
-
-  .button-round__questions-page {
-    position: relative;
-    top: auto;
-    right: auto;
-    align-self: flex-end;
   }
 
   .question-form__add-question {

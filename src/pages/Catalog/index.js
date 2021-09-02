@@ -1,7 +1,8 @@
 import BasePage from '../../layout/BasePage';
 import CardsSectionWithLines from '../../components/CardsSectionWithLines/CardsSectionWithLines';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
-import { TitleH1, TitleH2, Loader } from '../../components/utils/index';
+import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
+import { Loader, TitleH1, TitleH2 } from '../../components/utils/index';
 
 export {
   BasePage,
@@ -10,4 +11,5 @@ export {
   CardsSectionWithLines,
   AnimatedPageContainer,
   Loader,
+  CardCatalog,
 };

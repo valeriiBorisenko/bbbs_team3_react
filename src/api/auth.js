@@ -19,6 +19,14 @@ class AuthApi {
       .then((response) => response.data)
       .catch((err) => Promise.reject(err?.response));
   }
+
+  // функция рефреша токена
+  static refreshToken(refreshToken) {
+    return axios
+      .post(`${baseURL}${apiUrl}/token/refresh/`, refreshToken)
+      .then((response) => response.data)
+      .catch((err) => Promise.reject(err?.response));
+  }
 }
 
 export default AuthApi;

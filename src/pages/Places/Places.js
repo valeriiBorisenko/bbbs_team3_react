@@ -1,47 +1,43 @@
 import './Places.scss';
-import { useEffect, useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import placesPageTexts from '../../locales/places-page-RU';
 import { ageFilters, PAGE_SIZE_PAGINATE } from './constants';
 import {
   CurrentUserContext,
-  PopupsContext,
   ErrorsContext,
-} from '../../contexts/index';
+  PopupsContext,
+} from '../../contexts';
+import { useActivityTypes, useDebounce, useLocalStorage } from '../../hooks';
 import {
-  useDebounce,
-  useActivityTypes,
-  useLocalStorage,
-} from '../../hooks/index';
-import {
-  COLORS,
   ALL_CATEGORIES,
+  COLORS,
   DELAY_DEBOUNCE,
   DELAY_RENDER,
-  localStUserCity,
   ERROR_MESSAGES,
+  localStUserCity,
 } from '../../config/constants';
 import {
+  deselectAllTags,
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
-  deselectAllTags,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
-  BasePage,
-  TitleH1,
-  CardPlace,
-  PlacesRecommend,
   AnimatedPageContainer,
+  BasePage,
+  CardPlace,
   Loader,
-  TagsList,
   NoDataNotificationBox,
   Paginate,
+  PlacesRecommend,
+  TagsList,
+  TitleH1,
 } from './index';
 import {
+  getChosenPlace,
   getPlaces,
   getPlacesTags,
-  getChosenPlace,
 } from '../../api/places-page';
 
 const {
@@ -64,7 +60,7 @@ function Places() {
 
   // сохранённый в localStorage город анонимуса
   const currentAnonymousCity = getLocalStorageItem();
-  const userCity = currentUser?.city || currentAnonymousCity;
+  const userCity = currentUser?.city ?? currentAnonymousCity;
 
   // места из API
   const [places, setPlaces] = useState(null);
@@ -391,7 +387,7 @@ function Places() {
           {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
         </>
       ) : (
-        <Loader isNested />
+        <Loader isPaginate />
       )}
     </>
   );
@@ -448,7 +444,7 @@ function Places() {
               ))}
             </section>
           ) : (
-            <Loader isNested />
+            <Loader isPaginate />
           )}
           {renderPagination()}
         </>
@@ -486,10 +482,10 @@ function Places() {
             />
             {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
 
-            {!isLoadingFilters ? renderPlaces() : <Loader isNested />}
+            {!isLoadingFilters ? renderPlaces() : <Loader isPaginate />}
           </>
         ) : (
-          <Loader isNested />
+          <Loader isPaginate />
         )}
       </>
     );

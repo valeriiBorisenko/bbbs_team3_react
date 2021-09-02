@@ -1,28 +1,25 @@
 import './Articles.scss';
 import { useEffect, useState } from 'react';
 import articlesPageTexts from '../../locales/articles-page-RU';
-import { useScrollToTop } from '../../hooks/index';
 import { COLORS, ERROR_MESSAGES } from '../../config/constants';
 import {
-  BasePage,
-  TitleH1,
-  CardArticle,
-  Paginate,
   AnimatedPageContainer,
+  BasePage,
+  CardArticle,
   Loader,
+  Paginate,
+  TitleH1,
 } from './index';
 import getArticlesPageData from '../../api/articles-page';
 
 const PAGE_SIZE_PAGINATE = {
-  small: 2,
+  small: 8,
   big: 12,
 };
 
 const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
 
 function Articles() {
-  useScrollToTop();
-
   const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
@@ -162,7 +159,7 @@ function Articles() {
       <section className="articles page__section">
         <TitleH1 title={title} sectionClass="fade-in" />
 
-        {isLoadingPaginate ? <Loader isNested /> : renderCards()}
+        {isLoadingPaginate ? <Loader isPaginate /> : renderCards()}
 
         {renderPagination()}
       </section>
