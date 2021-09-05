@@ -41,10 +41,6 @@
   .widget {
     height: 545px;
 
-    &__iframe {
-      height: inherit;
-    }
-
     &__stub {
       font-size: 19px;
     }
@@ -58,7 +54,6 @@
     &__iframe {
       margin-right: 0;
       align-self: center;
-      height: inherit;
     }
   }
 }
