@@ -1,7 +1,9 @@
+import { AFISHA_TITLE, MAIN_PAGE_TITLE } from '../config/routes';
+
 const calendarPageTexts = {
-  headTitle: 'Календарь',
+  headTitle: `${MAIN_PAGE_TITLE} | ${AFISHA_TITLE}`,
   headDescription: 'Календарь событий и мероприятий для наставников.',
-  title: 'Календарь',
+  title: AFISHA_TITLE,
   textStubNoData: 'Мы работаем над планом мероприятий на ближайшие месяцы.',
 };
 

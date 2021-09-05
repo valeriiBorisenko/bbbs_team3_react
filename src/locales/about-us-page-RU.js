@@ -1,7 +1,8 @@
 import { bbbsLinks } from '../utils/external-links';
+import { ABOUT_US_TITLE, MAIN_PAGE_TITLE } from '../config/routes';
 
 const aboutUsTexts = {
-  headTitle: 'О проекте',
+  headTitle: `${MAIN_PAGE_TITLE} | ${ABOUT_US_TITLE}`,
   headDescription: 'Информация об организации Старшие Братья Старшие Сёстры.',
   title:
     'Наставники.про – цифровая информационная платформа организации «Старшие Братья Старшие Сестры». Созданная для поддержки наставников программы.',

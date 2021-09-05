@@ -30,3 +30,4 @@ export const ARTICLES_TITLE = 'Статьи';
 export const MOVIES_TITLE = 'Фильмы';
 export const BOOKS_TITLE = 'Книги';
 export const STORIES_TITLE = 'Истории';
+export const NOT_FOUND_TITLE = 'Страницы не существует';
