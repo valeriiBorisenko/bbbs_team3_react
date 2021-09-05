@@ -1,24 +1,25 @@
 import './Footer.scss';
+import React from 'react';
 import {
-  AFISHA_URL,
-  ABOUT_US_URL,
-  QUESTIONS_URL,
-  PLACES_URL,
-  RIGHTS_URL,
-  READ_AND_WATCH_URL,
-  STORIES_URL,
-  AFISHA_TITLE,
   ABOUT_US_TITLE,
+  ABOUT_US_URL,
+  AFISHA_TITLE,
+  AFISHA_URL,
   PLACES_TITLE,
+  PLACES_URL,
   QUESTIONS_TITLE,
+  QUESTIONS_URL,
   READ_AND_WATCH_TITLE,
+  READ_AND_WATCH_URL,
   RIGHTS_TITLE,
+  RIGHTS_URL,
   STORIES_TITLE,
+  STORIES_URL,
 } from '../../config/routes';
 import texts from './locales/RU';
 import { socialLinks } from '../../utils/external-links';
 import footerLogoPath from '../../assets/footer-logo.svg';
-import { NavItem } from '../utils/index';
+import { NavItem } from '../utils';
 
 function Footer() {
   return (
@@ -72,49 +73,42 @@ function Footer() {
       </div>
       <div className="footer__column footer__column_content_info">
         <ul className="footer__column-list">
-          {/* о проекте */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={ABOUT_US_URL}
             linkText={ABOUT_US_TITLE}
           />
-          {/* каленарь */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={AFISHA_URL}
             linkText={AFISHA_TITLE}
           />
-          {/* куда пойти */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={PLACES_URL}
             linkText={PLACES_TITLE}
           />
-          {/* вопросы */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={QUESTIONS_URL}
             linkText={QUESTIONS_TITLE}
           />
-          {/* читать и смотреть */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={READ_AND_WATCH_URL}
             linkText={READ_AND_WATCH_TITLE}
           />
-          {/* права детей */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
             href={RIGHTS_URL}
             linkText={RIGHTS_TITLE}
           />
-          {/* истории */}
           <NavItem
             sectionWrapperClass="footer__column-links"
             sectionLinkClass="footer__column-link"
@@ -125,18 +119,20 @@ function Footer() {
       </div>
       <div className="footer__column footer__column_content_social">
         <ul className="footer__column-list">
-          {socialLinks.map((link) => (
-            <li key={link?.id} className="footer__column-links">
-              <a
-                className="footer__column-link"
-                href={link?.url}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {link?.title}
-              </a>
-            </li>
-          ))}
+          {React.Children.toArray(
+            socialLinks.map((link) => (
+              <li className="footer__column-links">
+                <a
+                  className="footer__column-link"
+                  href={link.url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {link.title}
+                </a>
+              </li>
+            ))
+          )}
         </ul>
       </div>
     </footer>
