@@ -1,42 +1,72 @@
 @import './styles/utils.scss';
 
-.widget-facebook {
-  width: 420px;
+.widget {
+  position: relative;
   height: 627px;
-  border: 0;
-  overflow: hidden;
-  border-radius: 30px;
+
+  &__iframe {
+    width: 420px;
+    height: inherit;
+    border: 0;
+    overflow: hidden;
+    border-radius: 30px;
+  }
+
+  &__stub {
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: fit-content;
+    margin: 0 auto;
+    padding: 0 10px;
+    font-family: $protoGrotesk;
+    font-size: 24px;
+    line-height: 1.2;
+    text-align: center;
+    z-index: -1;
+  }
 }
 
 @media (max-width: 1440px) {
-  .widget-facebook {
-    width: 404px;
+  .widget {
+    &__iframe {
+      width: 404px;
+    }
   }
 }
 
 @media (max-width: 1024px) {
-  .widget-facebook {
+  .widget {
     height: 545px;
+
+    &__iframe {
+      height: inherit;
+    }
+
+    &__stub {
+      font-size: 19px;
+    }
   }
 }
 
 @media (max-width: 860px) {
-  .widget-facebook {
-    margin-right: 0;
-    align-self: center;
+  .widget {
     height: 427.5px;
+
+    &__iframe {
+      margin-right: 0;
+      align-self: center;
+      height: inherit;
+    }
   }
 }
-
 
 @media (max-width: 420px) {
-  .widget-facebook {
-    width: 100%;
-  }
-}
-
-@media (max-width: 320px) {
-  .widget-facebook {
-    width: 100%;
+  .widget {
+    &__iframe {
+      width: 100%;
+    }
   }
 }
