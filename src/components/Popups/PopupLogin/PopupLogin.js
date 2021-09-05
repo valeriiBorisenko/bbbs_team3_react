@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 import './PopupLogin.scss';
-import { useEffect, useContext, useState, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import Lottie from 'lottie-web';
@@ -8,10 +8,10 @@ import texts from './locales/RU';
 import { CurrentUserContext, ErrorsContext } from '../../../contexts/index';
 import { useAuth, useFormWithValidation } from '../../../hooks/index';
 import { AFISHA_URL } from '../../../config/routes';
-import { ERROR_MESSAGES, ERROR_CODES } from '../../../config/constants';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../../config/constants';
 import { recoverPassword } from '../../../api/user';
 import Popup from '../Popup/Popup';
-import { Input, Button, TitleH2 } from '../../utils/index';
+import { Button, Input, TitleH2 } from '../../utils/index';
 import animationSuccess from '../../../assets/animation/ill_popup_success.json';
 
 const {
@@ -31,7 +31,7 @@ const {
 
 const validationSettings = {
   username: {
-    minLength: 4,
+    maxLength: 150,
   },
   password: {
     minLength: 8,
@@ -68,6 +68,7 @@ function PopupLogin({ isOpen, onClose }) {
     : '';
 
   const { handleLogin } = useAuth(updateUser);
+
   function handleClickForgotPassword() {
     setIsForgotPassword(!isForgotPassword);
   }
@@ -164,7 +165,7 @@ function PopupLogin({ isOpen, onClose }) {
         onChange={handleChange}
         value={values?.username}
         error={errors?.username}
-        minLength={validationSettings.username.minLength}
+        maxLength={validationSettings.username.maxLength}
         required
       />
 

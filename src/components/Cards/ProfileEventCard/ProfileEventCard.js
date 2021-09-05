@@ -14,16 +14,46 @@ function ProfileEventCard({ data, onOpen, sectionClass }) {
     onOpen();
   };
 
+  const buttonClassNames = ['profile-event-card', sectionClass]
+    .join(' ')
+    .trim();
+
+  const cardClassNames = [
+    'profile-event-card__card',
+    data?.canceled ? 'profile-event-card__card_canceled' : '',
+  ]
+    .join(' ')
+    .trim();
+
+  const dayClassNames = [
+    'profile-event-card__day',
+    data?.canceled ? 'profile-event-card__day_canceled' : '',
+  ]
+    .join(' ')
+    .trim();
+
+  const titleClassNames = [
+    'profile-event-card__title',
+    data?.canceled ? 'profile-event-card__title_canceled' : '',
+  ]
+    .join(' ')
+    .trim();
+
   return (
     <button
-      className={`profile-event-card ${sectionClass}`}
+      className={buttonClassNames}
       type="button"
       aria-label={texts.buttonLabel}
       onClick={handleOpen}
     >
-      <Card sectionClass="profile-event-card__card">
-        <p className="profile-event-card__day">{`${startDay?.day}.${startDay?.month}`}</p>
-        <p className="profile-event-card__title">{data?.title}</p>
+      <Card sectionClass={cardClassNames}>
+        {data?.canceled && (
+          <p className="profile-event-card__text-canceled">
+            {texts.eventCanceled}
+          </p>
+        )}
+        <p className={dayClassNames}>{`${startDay?.day}.${startDay?.month}`}</p>
+        <p className={titleClassNames}>{data?.title}</p>
       </Card>
     </button>
   );

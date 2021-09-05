@@ -4,7 +4,7 @@
   padding: 33px;
   padding-right: 10px;
   overflow: hidden;
-  height: 155px;
+  height: 153px;
   box-sizing: content-box;
 
   &_main {
@@ -37,7 +37,7 @@
     box-sizing: border-box;
     padding-right: 18px;
     margin-top: 95px;
-  
+
     &_center {
       margin-top: 0;
     }
@@ -48,7 +48,7 @@
   .card-annotation {
     &_main {
       padding: 30px 15px;
-  
+
       & .card-annotation__desc {
         margin-top: 0;
       }
