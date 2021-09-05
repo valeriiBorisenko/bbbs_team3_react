@@ -5,7 +5,7 @@ import texts from './locales/RU';
 import { CitiesContext, ErrorsContext } from '../../contexts/index';
 import { regExpImages } from '../../config/constants';
 import { useFormWithValidation } from '../../hooks/index';
-import { Input, Button, ButtonRound, DropDownSelect } from '../utils/index';
+import { Button, ButtonRound, DropDownSelect, Input } from '../utils/index';
 
 const {
   titlePlaceholder,
@@ -37,10 +37,9 @@ const validationSettings = {
     min: 8,
     max: 25,
   },
-  description: {
-    maxLength: 200,
-  },
 };
+
+const animationDelay = 600;
 
 function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const [textAreaPlaceholder, setTextAreaPlaceholder] = useState('');
@@ -92,7 +91,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
       resetForm();
       setTimeout(() => {
         setIsAnimated(true);
-      }, 600);
+      }, animationDelay);
     } else {
       setIsAnimated(false);
     }
@@ -243,7 +242,6 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             onChange={handleChange}
             value={values.description}
             required
-            maxLength={validationSettings.description.maxLength}
             error={errors?.description}
             isTextarea
           />

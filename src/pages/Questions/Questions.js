@@ -51,7 +51,7 @@ const {
 const validationSettings = {
   question: {
     minLength: 10,
-    maxLength: 200,
+    maxLength: 500,
   },
 };
 
