@@ -2,10 +2,11 @@ import './FormRecommendation.scss';
 import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { CitiesContext, ErrorsContext } from '../../contexts/index';
+import { CitiesContext, ErrorsContext } from '../../contexts';
 import { regExpImages } from '../../config/constants';
-import { useFormWithValidation } from '../../hooks/index';
-import { Button, ButtonRound, DropDownSelect, Input } from '../utils/index';
+import { useFormWithValidation } from '../../hooks';
+import getServerErrors from '../../utils/form-errors';
+import { Button, ButtonRound, DropDownSelect, Input } from '../utils';
 
 const {
   titlePlaceholder,
@@ -63,12 +64,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const { cities } = useContext(CitiesContext);
   const { serverError, clearError } = useContext(ErrorsContext);
 
-  const errorsString = serverError
-    ? Object.values(serverError)
-        .map((err) => err)
-        .join(' ')
-        .trim()
-    : '';
+  const errorsString = serverError ? getServerErrors(serverError) : '';
 
   const [isAnimated, setIsAnimated] = useState(false);
 

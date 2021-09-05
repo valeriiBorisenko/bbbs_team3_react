@@ -1,18 +1,18 @@
-/* eslint-disable consistent-return */
 import './PopupLogin.scss';
 import { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import Lottie from 'lottie-web';
 import texts from './locales/RU';
-import { CurrentUserContext, ErrorsContext } from '../../../contexts/index';
-import { useAuth, useFormWithValidation } from '../../../hooks/index';
+import { CurrentUserContext, ErrorsContext } from '../../../contexts';
+import { useAuth, useFormWithValidation } from '../../../hooks';
+import getServerErrors from '../../../utils/form-errors';
 import { AFISHA_URL } from '../../../config/routes';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../../config/constants';
 import { recoverPassword } from '../../../api/user';
 import Popup from '../Popup/Popup';
-import { Button, Input, TitleH2 } from '../../utils/index';
-import animationSuccess from '../../../assets/animation/ill_popup_success.json';
+import { Button, Input, TitleH2 } from '../../utils';
+import animationSuccess from '../../../assets/animation/ill_popup_recommend-success.json';
 
 const {
   title,
@@ -60,12 +60,7 @@ function PopupLogin({ isOpen, onClose }) {
     });
   }, []);
 
-  const errorsString = serverError
-    ? Object.values(serverError)
-        .map((err) => err)
-        .join(' ')
-        .trim()
-    : '';
+  const errorsString = serverError ? getServerErrors(serverError) : '';
 
   const { handleLogin } = useAuth(updateUser);
 
@@ -122,6 +117,7 @@ function PopupLogin({ isOpen, onClose }) {
     }
   }
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (isOpen) {
       window.addEventListener('keyup', closePopupOnEsc);
