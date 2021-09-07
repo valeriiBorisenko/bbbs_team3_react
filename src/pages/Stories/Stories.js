@@ -42,48 +42,51 @@ function Stories() {
 
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <TitleH1 title={title} sectionClass="stories__title" />
-      <p className="stories__subtitle">{subtitle}</p>
+      <div className="stories page__section">
+        <TitleH1 title={title} sectionClass="stories__title" />
+        <p className="stories__subtitle">{subtitle}</p>
 
-      {/* Slider */}
+        {/* Slider */}
 
-      <TagsList
-        filterList={storiesTags}
-        name="stories"
-        handleClick={() => {}}
-        sectionClass="stories__tags"
-      />
-      <img
-        className="stories__main-photo"
-        src={`${staticImageUrl}/${currentStory?.image}`}
-        alt={currentStory?.title}
-      />
-      <TitleH2 title={pairTitle?.name} sectionClass="stories__pair-title" />
-      <Caption
-        title={`Вместе с ${formatMonthsGenitiveCase(
-          togetherSince?.monthName
-        )} ${togetherSince?.year} года`}
-        sectionClass="stories__caption"
-      />
-      <p className="stories__subtitle stories__subtitle_block">
-        {currentStory?.description}
-      </p>
-      <ReactMarkdown className="stories__markdown">
-        {currentStory?.uperBody}
-      </ReactMarkdown>
+        <TagsList
+          filterList={storiesTags}
+          name="stories"
+          handleClick={() => {}}
+          sectionClass="stories__tags"
+        />
+        <img
+          className="stories__main-photo"
+          src={`${staticImageUrl}/${currentStory?.image}`}
+          alt={currentStory?.title}
+        />
+        <TitleH2 title={pairTitle?.name} sectionClass="stories__pair-title" />
+        <Caption
+          title={`Вместе с ${formatMonthsGenitiveCase(
+            togetherSince?.monthName
+          )} ${togetherSince?.year} года`}
+          sectionClass="stories__caption"
+        />
+        <p className="stories__subtitle stories__subtitle_block">
+          {currentStory?.description}
+        </p>
 
-      {/* Slider */}
+        <ReactMarkdown className="stories__markdown">
+          {currentStory?.uperBody}
+        </ReactMarkdown>
 
-      <ReactMarkdown className="stories__markdown stories__markdown_last">
-        {currentStory?.lowerBody}
-      </ReactMarkdown>
+        {/* Slider */}
 
-      <div className="stories__links">
-        <a
-          className="link stories__link"
-          href={`mailto:${currentStory?.mentor?.email}`}
-        >{`написать ${currentStory?.mentor?.firstName}`}</a>
-        <NextArticleLink text={currentStory?.nextArticle?.title} href="/" />
+        <ReactMarkdown className="stories__markdown stories__markdown_last">
+          {currentStory?.lowerBody}
+        </ReactMarkdown>
+
+        <div className="stories__links">
+          <a
+            className="link stories__link"
+            href={`mailto:${currentStory?.mentor?.email}`}
+          >{`написать ${currentStory?.mentor?.firstName}`}</a>
+          <NextArticleLink text={currentStory?.nextArticle?.title} href="/" />
+        </div>
       </div>
     </BasePage>
   );
