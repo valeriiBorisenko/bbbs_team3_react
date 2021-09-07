@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { BasePage, Caption, TagsList, TitleH1, TitleH2 } from './index';
+import {
+  BasePage,
+  Caption,
+  NextArticleLink,
+  TagsList,
+  TitleH1,
+  TitleH2,
+} from './index';
 import storiesPageTexts from '../../locales/stories-page-RU';
 import { staticImageUrl } from '../../config/config';
 import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
@@ -77,26 +83,7 @@ function Stories() {
           className="link stories__link"
           href={`mailto:${currentStory?.mentor?.email}`}
         >{`написать ${currentStory?.mentor?.firstName}`}</a>
-        <Link className="article__link" to="/">
-          <p className="article__link-text">
-            {currentStory?.nextArticle?.title}
-          </p>
-          <svg
-            className="article__link-arrow"
-            width="30"
-            height="30"
-            viewBox="0 0 30 30"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M16.5916 0L30 14.3793L15.5318 30H13.4987L23.3441 19.3448C25.5145 17.1724 24.9357 15.3103 22.1865 15.1552H0V13.6034H22.0418C24.791 13.4483 25.3698 11.8966 23.6334 9.72414L14.5659 0H16.5916Z"
-              fill="#224CFF"
-            />
-          </svg>
-        </Link>
+        <NextArticleLink text={currentStory?.nextArticle?.title} href="/" />
       </div>
     </BasePage>
   );
