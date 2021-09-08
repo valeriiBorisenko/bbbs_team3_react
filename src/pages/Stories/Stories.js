@@ -30,7 +30,7 @@ function Stories() {
   const [storiesTags, setStoriesTags] = useState([]);
   const [currentStory, setCurrentStory] = useState(null);
 
-  const currentStoryId = +storyId ?? storiesTags[0]?.filter;
+  const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
   const nextPageLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
 
   const handleFilters = (inputValue, isChecked) => {
