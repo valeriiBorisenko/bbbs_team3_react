@@ -88,7 +88,6 @@
 
           &:disabled {
             background-image: url("../../assets/arrow-left-grey.svg");
-            cursor: default;
           }
 
           &:hover {
@@ -102,7 +101,6 @@
 
           &:disabled {
             background-image: url("../../assets/arrow-right-grey.svg");
-            cursor: default;
           }
 
           &:hover {
@@ -111,6 +109,7 @@
         }
 
         &:disabled:hover {
+          cursor: default;
           transform: none;
         }
       }

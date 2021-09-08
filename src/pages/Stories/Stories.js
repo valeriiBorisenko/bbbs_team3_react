@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Carousel from 'react-elastic-carousel';
 import { useParams } from 'react-router-dom';
@@ -23,6 +23,7 @@ const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
 
 function Stories() {
   const { storyId } = useParams();
+  const carouselRef = useRef(null);
 
   const [storiesTags, setStoriesTags] = useState([]);
   const [currentStory, setCurrentStory] = useState(null);
@@ -57,6 +58,18 @@ function Stories() {
   if (!currentStory && !storiesTags.length) {
     return <Loader isCentered />;
   }
+
+  const onNextStart = (currentItem, nextItem) => {
+    if (currentItem.index === nextItem.index) {
+      carouselRef.current.goTo(0);
+    }
+  };
+
+  const onPrevStart = (currentItem, nextItem) => {
+    if (currentItem.index === nextItem.index) {
+      carouselRef.current.goTo(currentStory?.images?.length);
+    }
+  };
 
   return (
     <BasePage
@@ -147,20 +160,28 @@ function Stories() {
 
   function renderPhotosCarousel() {
     return (
-      <Carousel
-        className="stories__photo-carousel"
-        itemsToShow={3}
-        pagination={false}
-      >
-        {currentStory?.images?.map((image) => (
-          <img
-            className="stories__carousel-image"
-            key={image.id}
-            src={`${staticImageUrl}/${image.image}`}
-            alt={image.imageCaption}
-          />
-        ))}
-      </Carousel>
+      <div className="stories__photo-carousel-container">
+        <Carousel
+          ref={carouselRef}
+          className="stories__photo-carousel"
+          itemsToScroll={1}
+          itemsToShow={1}
+          itemPadding={[0, 65]}
+          onPrevStart={onPrevStart}
+          onNextStart={onNextStart}
+          disableArrowsOnEnd={false}
+          pagination={false}
+        >
+          {currentStory?.images?.map((image) => (
+            <img
+              className="stories__carousel-image"
+              key={image.id}
+              src={`${staticImageUrl}/${image.image}`}
+              alt={image.imageCaption}
+            />
+          ))}
+        </Carousel>
+      </div>
     );
   }
 }
