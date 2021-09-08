@@ -117,10 +117,13 @@ function Stories() {
           className="link stories__link"
           href={`mailto:${currentStory?.mentor?.email}`}
         >{`написать ${currentStory?.mentor?.firstName}`}</a>
-        <NextArticleLink
-          text={currentStory?.nextArticle?.title}
-          href={nextPageLink}
-        />
+        {currentStory?.nextArticle && (
+          <NextArticleLink
+            text={currentStory?.nextArticle?.title}
+            href={nextPageLink}
+            sectionClass="stories__link_next"
+          />
+        )}
       </div>
     );
   }

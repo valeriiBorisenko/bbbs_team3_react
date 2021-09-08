@@ -55,26 +55,8 @@
   &__link {
     margin: 0;
 
-    &:first-of-type {
-      margin-bottom: 85px;
-    }
-
     &_next {
-      display: flex;
-      align-items: center;
-      column-gap: 30px;
-      font-size: 23px;
-      line-height: 1.3;
-
-      &::after {
-        content: '';
-        display: block;
-        width: 30px;
-        height: 30px;
-        background-image: url("../../assets/arrow-right-blue.svg");
-        background-repeat: no-repeat;
-        background-position: center;
-      }
+      margin-top: 85px;
     }
   }
 
