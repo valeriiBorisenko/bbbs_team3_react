@@ -146,7 +146,22 @@ function Stories() {
   }
 
   function renderPhotosCarousel() {
-    return <Carousel />;
+    return (
+      <Carousel
+        className="stories__photo-carousel"
+        itemsToShow={3}
+        pagination={false}
+      >
+        {currentStory?.images?.map((image) => (
+          <img
+            className="stories__carousel-image"
+            key={image.id}
+            src={`${staticImageUrl}/${image.image}`}
+            alt={image.imageCaption}
+          />
+        ))}
+      </Carousel>
+    );
   }
 }
 

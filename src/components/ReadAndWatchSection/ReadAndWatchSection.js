@@ -1,20 +1,20 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import './ReadAndWatchSection.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
 import {
-  PAGES_TO_LOAD,
-  INDEX_ERROR_FOR_PENULTIMATE_PAGE,
   INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX,
+  INDEX_ERROR_FOR_PENULTIMATE_PAGE,
+  PAGES_TO_LOAD,
 } from './constants';
 import {
-  TitleH3,
   LinkableHeading,
-  NoDataNotificationBox,
   Loader,
+  NoDataNotificationBox,
+  TitleH3,
 } from '../utils/index';
-import { FIGURES, COLORS, ERROR_MESSAGES } from '../../config/constants';
+import { COLORS, ERROR_MESSAGES, FIGURES } from '../../config/constants';
+import './ReadAndWatchSection.scss';
 
 function ReadAndWatchSection({
   pageSize,
@@ -99,7 +99,7 @@ function ReadAndWatchSection({
 
   function renderCardsForSlider() {
     if (sectionData) {
-      const cardArray = sectionData.map((item, i) => (
+      return sectionData.map((item, i) => (
         <CardTemplateComponent
           key={`${sectionTitle}-${item?.id}`}
           sectionClass="cards-section__item"
@@ -115,8 +115,6 @@ function ReadAndWatchSection({
           {...item}
         />
       ));
-
-      return cardArray;
     }
     return [];
   }
@@ -149,6 +147,7 @@ function ReadAndWatchSection({
       return (
         <Carousel
           ref={ref}
+          className="readwatch__carousel"
           transitionMs={transitionDelay}
           pagination={false}
           outerSpacing={0}

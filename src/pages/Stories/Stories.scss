@@ -60,6 +60,20 @@
     }
   }
 
+  &__photo-carousel {
+    max-height: 505px;
+    margin: 0 -75px;
+  }
+
+  &__carousel-image {
+    display: block;
+    width: 770px;
+    height: 505px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 30px;
+  }
+
   &__markdown {
     max-width: 1170px;
     margin: 0 auto;
