@@ -133,6 +133,7 @@ function Stories() {
       <ScrollableContainer step={6} sectionClass="stories__tags-carousel">
         {storiesTags?.map((item) => (
           <PseudoButtonTag
+            key={item.filter}
             name={item.name}
             value={item.filter}
             title={item.name}
