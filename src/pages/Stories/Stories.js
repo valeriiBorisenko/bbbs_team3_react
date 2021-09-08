@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Carousel from 'react-elastic-carousel';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import storiesPageTexts from '../../locales/stories-page-RU';
+import { staticImageUrl } from '../../config/config';
+import { STORIES_URL } from '../../config/routes';
+import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
+import { formatDate, formatMonthsGenitiveCase } from '../../utils/utils';
+import { handleRadioBehavior } from '../../utils/filter-tags';
 import {
   BasePage,
   Caption,
@@ -12,22 +18,25 @@ import {
   TitleH1,
   TitleH2,
 } from './index';
-import storiesPageTexts from '../../locales/stories-page-RU';
-import { staticImageUrl } from '../../config/config';
-import { STORIES_URL } from '../../config/routes';
-import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
-import { formatDate, formatMonthsGenitiveCase } from '../../utils/utils';
 import './Stories.scss';
 
 const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
 
 function Stories() {
   const { storyId } = useParams();
-  const carouselRef = useRef(null);
+  const history = useHistory();
+  const photoCarouselRef = useRef(null);
 
   const [storiesTags, setStoriesTags] = useState([]);
   const [currentStory, setCurrentStory] = useState(null);
+
+  const currentStoryId = storyId ?? storiesTags[0]?.filter;
   const nextPageLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
+
+  const handleFilters = (inputValue, isChecked) => {
+    handleRadioBehavior(setStoriesTags, { inputValue, isChecked });
+    history.push(`${STORIES_URL}/${inputValue}`);
+  };
 
   useEffect(() => {
     getStoriesPageTags()
@@ -36,9 +45,8 @@ function Stories() {
           const storiesTagsData = results.map((tag) => ({
             filter: tag.id,
             name: tag.pair,
-            isActive: false,
+            isActive: +storyId === +tag.id,
           }));
-
           setStoriesTags(storiesTagsData);
         }
       })
@@ -46,11 +54,24 @@ function Stories() {
   }, []);
 
   useEffect(() => {
-    if (storiesTags.length) {
-      const id = storyId ?? storiesTags[0].filter;
-      getStoryById(id).then(setCurrentStory).catch(console.log);
+    if (storiesTags.length && currentStoryId) {
+      getStoryById(currentStoryId).then(setCurrentStory).catch(console.log);
     }
-  }, [storiesTags, storyId]);
+  }, [storiesTags, currentStoryId]);
+
+  useEffect(() => {
+    if (storiesTags.length) {
+      const tagToBeActive = storiesTags.find(
+        (tag) => tag.filter === currentStoryId
+      );
+      if (tagToBeActive) {
+        handleRadioBehavior(setStoriesTags, {
+          inputValue: tagToBeActive.filter,
+          isChecked: true,
+        });
+      }
+    }
+  }, [currentStoryId]);
 
   const pairTitle = storiesTags.find((tag) => tag.filter === currentStory?.id);
   const togetherSince = formatDate(currentStory?.togetherSince);
@@ -59,45 +80,48 @@ function Stories() {
     return <Loader isCentered />;
   }
 
+  // бесконечная прокрутка карусели с фото с возвращением на старт/конец
   const onNextStart = (currentItem, nextItem) => {
     if (currentItem.index === nextItem.index) {
-      carouselRef.current.goTo(0);
+      photoCarouselRef.current.goTo(0);
     }
   };
 
   const onPrevStart = (currentItem, nextItem) => {
     if (currentItem.index === nextItem.index) {
-      carouselRef.current.goTo(currentStory?.images?.length);
+      photoCarouselRef.current.goTo(currentStory?.images?.length);
     }
   };
 
   return (
-    <BasePage
-      headTitle={headTitle}
-      headDescription={headDescription}
-      scrollUpDeps={[storyId]}
-    >
-      <div className="stories page__section">
-        <TitleH1 title={title} sectionClass="stories__title" />
-        <p className="stories__subtitle">{subtitle}</p>
+    currentStory && (
+      <BasePage
+        headTitle={headTitle}
+        headDescription={headDescription}
+        scrollUpDeps={[storyId]}
+      >
+        <div className="stories page__section">
+          <TitleH1 title={title} sectionClass="stories__title" />
+          <p className="stories__subtitle">{subtitle}</p>
 
-        {renderTagsCarousel()}
+          {renderTagsCarousel()}
 
-        {renderUpperBlock()}
+          {renderUpperBlock()}
 
-        <ReactMarkdown className="stories__markdown">
-          {currentStory?.uperBody}
-        </ReactMarkdown>
+          <ReactMarkdown className="stories__markdown">
+            {currentStory.uperBody}
+          </ReactMarkdown>
 
-        {renderPhotosCarousel()}
+          {renderPhotosCarousel()}
 
-        <ReactMarkdown className="stories__markdown stories__markdown_last">
-          {currentStory?.lowerBody}
-        </ReactMarkdown>
+          <ReactMarkdown className="stories__markdown stories__markdown_last">
+            {currentStory.lowerBody}
+          </ReactMarkdown>
 
-        {renderLinksBlock()}
-      </div>
-    </BasePage>
+          {renderLinksBlock()}
+        </div>
+      </BasePage>
+    )
   );
 
   // функции рендера
@@ -107,7 +131,7 @@ function Stories() {
         <img
           className="stories__main-photo"
           src={`${staticImageUrl}/${currentStory?.image}`}
-          alt={currentStory?.title}
+          alt={currentStory.title}
         />
         <TitleH2 title={pairTitle?.name} sectionClass="stories__pair-title" />
         <Caption
@@ -117,7 +141,7 @@ function Stories() {
           sectionClass="stories__caption"
         />
         <p className="stories__subtitle stories__subtitle_block">
-          {currentStory?.description}
+          {currentStory.description}
         </p>
       </>
     );
@@ -128,11 +152,11 @@ function Stories() {
       <div className="stories__links">
         <a
           className="link stories__link"
-          href={`mailto:${currentStory?.mentor?.email}`}
-        >{`написать ${currentStory?.mentor?.firstName}`}</a>
-        {currentStory?.nextArticle && (
+          href={`mailto:${currentStory.mentor?.email}`}
+        >{`написать ${currentStory.mentor?.firstName}`}</a>
+        {currentStory.nextArticle && (
           <NextArticleLink
-            text={currentStory?.nextArticle?.title}
+            text={currentStory.nextArticle.title}
             href={nextPageLink}
             sectionClass="stories__link_next"
           />
@@ -144,14 +168,14 @@ function Stories() {
   function renderTagsCarousel() {
     return (
       <ScrollableContainer step={6} sectionClass="stories__tags-carousel">
-        {storiesTags?.map((item) => (
+        {storiesTags.map((item) => (
           <PseudoButtonTag
             key={item.filter}
             name={item.name}
             value={item.filter}
             title={item.name}
             isActive={item.isActive}
-            onClick={() => {}}
+            onClick={handleFilters}
           />
         ))}
       </ScrollableContainer>
@@ -162,7 +186,7 @@ function Stories() {
     return (
       <div className="stories__photo-carousel-container">
         <Carousel
-          ref={carouselRef}
+          ref={photoCarouselRef}
           className="stories__photo-carousel"
           itemsToScroll={1}
           itemsToShow={1}
