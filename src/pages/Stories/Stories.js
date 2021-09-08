@@ -166,7 +166,7 @@ function Stories() {
           className="stories__photo-carousel"
           itemsToScroll={1}
           itemsToShow={1}
-          itemPadding={[0, 65]}
+          itemPadding={[0, 50]}
           onPrevStart={onPrevStart}
           onNextStart={onNextStart}
           disableArrowsOnEnd={false}
