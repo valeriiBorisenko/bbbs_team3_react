@@ -175,6 +175,7 @@ function Stories() {
           {currentStory?.images?.map((image) => (
             <img
               className="stories__carousel-image"
+              draggable={false}
               key={image.id}
               src={`${staticImageUrl}/${image.image}`}
               alt={image.imageCaption}
