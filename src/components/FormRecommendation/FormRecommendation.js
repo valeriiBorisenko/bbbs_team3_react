@@ -2,10 +2,11 @@ import './FormRecommendation.scss';
 import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { CitiesContext, ErrorsContext } from '../../contexts/index';
+import { CitiesContext, ErrorsContext } from '../../contexts';
 import { regExpImages } from '../../config/constants';
-import { useFormWithValidation } from '../../hooks/index';
-import { Input, Button, ButtonRound, DropDownSelect } from '../utils/index';
+import { useFormWithValidation } from '../../hooks';
+import getServerErrors from '../../utils/form-errors';
+import { Button, ButtonRound, DropDownSelect, Input } from '../utils';
 
 const {
   titlePlaceholder,
@@ -37,10 +38,9 @@ const validationSettings = {
     min: 8,
     max: 25,
   },
-  description: {
-    maxLength: 200,
-  },
 };
+
+const animationDelay = 600;
 
 function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const [textAreaPlaceholder, setTextAreaPlaceholder] = useState('');
@@ -64,12 +64,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const { cities } = useContext(CitiesContext);
   const { serverError, clearError } = useContext(ErrorsContext);
 
-  const errorsString = serverError
-    ? Object.values(serverError)
-        .map((err) => err)
-        .join(' ')
-        .trim()
-    : '';
+  const errorsString = serverError ? getServerErrors(serverError) : '';
 
   const [isAnimated, setIsAnimated] = useState(false);
 
@@ -92,7 +87,7 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
       resetForm();
       setTimeout(() => {
         setIsAnimated(true);
-      }, 600);
+      }, animationDelay);
     } else {
       setIsAnimated(false);
     }
@@ -243,7 +238,6 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             onChange={handleChange}
             value={values.description}
             required
-            maxLength={validationSettings.description.maxLength}
             error={errors?.description}
             isTextarea
           />

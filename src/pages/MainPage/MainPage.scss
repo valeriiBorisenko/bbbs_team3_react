@@ -15,6 +15,10 @@
 
 .main-section__question {
   margin-bottom: 30px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 }
 
 @include atDesktop1440 {
@@ -32,6 +36,10 @@
     &:nth-last-of-type(-n+1) {
       display: none;
     }
+
+    &:nth-last-of-type(2) {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -42,6 +50,7 @@
         display: none;
       }
     }
+
     &_4 {
       &:nth-last-of-type(-n+2) {
         display: none;
@@ -54,6 +63,10 @@
   .main-questions_pagination {
     &:nth-last-of-type(-n+1) {
       display: flex;
+    }
+
+    &:nth-last-of-type(2) {
+      margin-bottom: 30px;
     }
   }
 

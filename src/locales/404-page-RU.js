@@ -1,5 +1,7 @@
+import { NOT_FOUND_TITLE } from '../config/routes';
+
 const page404Texts = {
-  headTitle: 'Страницы не существует',
+  headTitle: NOT_FOUND_TITLE,
   headDescription: 'Запрашиваемая страница не найдена.',
   animatedContainerText:
     'К сожалению, запрашиваемая страница не найдена. Попробуйте перейти на главную страницу',

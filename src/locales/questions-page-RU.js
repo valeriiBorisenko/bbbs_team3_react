@@ -1,5 +1,7 @@
+import { MAIN_PAGE_TITLE, QUESTIONS_TITLE } from '../config/routes';
+
 const questionsPageTexts = {
-  headTitle: 'Ответы на вопросы',
+  headTitle: `${MAIN_PAGE_TITLE} | ${QUESTIONS_TITLE}`,
   headDescription: 'Страница с ответами на основные вопросы.',
   title: 'Ответы на вопросы',
   textStubNoData:

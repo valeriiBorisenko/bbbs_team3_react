@@ -1,7 +1,9 @@
+import { ARTICLES_TITLE, MAIN_PAGE_TITLE } from '../config/routes';
+
 const articlesPageTexts = {
-  headTitle: 'Статьи',
+  headTitle: `${MAIN_PAGE_TITLE} | ${ARTICLES_TITLE}`,
   headDescription: 'Статьи, которые рекомендуют наши наставники.',
-  title: 'Статьи',
+  title: ARTICLES_TITLE,
   textStubNoData: 'Информация появится в ближайшее время.',
 };
 
