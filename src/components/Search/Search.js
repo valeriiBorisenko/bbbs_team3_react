@@ -15,6 +15,7 @@ function Search({
   const [searchValue, setSearchValue] = useState([]);
   const [isVoidSearch, setIsVoidSearch] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
+  const [timer, setTimer] = useState(null);
 
   const handleClickButton = () => {
     setIsOpenSearch(!isOpenSearch);
@@ -57,17 +58,26 @@ function Search({
   const renderSearchContent = () =>
     isLoadingSearch ? <Loader isNested /> : renderSearchItems();
 
+  const searchTimer = () => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    setTimer(
+      setTimeout(async () => {
+        const { count, results } = await search({ text: values.search });
+        setSearchValue(results);
+        setIsLoadingSearch(false);
+        return count === 0 ? setIsVoidSearch(true) : setIsVoidSearch(false);
+      }, 500)
+    );
+  };
+
   useEffect(() => {
     if (!('search' in values)) return;
 
     setIsLoadingSearch(true);
-
-    search({ text: values.search })
-      .then(({ count, results }) => {
-        setSearchValue(results);
-        return count === 0 ? setIsVoidSearch(true) : setIsVoidSearch(false);
-      })
-      .finally(setIsLoadingSearch(false));
+    searchTimer();
   }, [values]);
 
   useEffect(() => {
