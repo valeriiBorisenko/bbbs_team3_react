@@ -1,6 +1,7 @@
 import './Search.scss';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { SearchButton, Loader } from '../utils/index';
 import { useFormWithValidation } from '../../hooks/index';
 import search from '../../api/search';
@@ -37,15 +38,15 @@ function Search({
         <ul className="search__option-list">
           {searchValue.map((item) => (
             <li className="search__option-item">
-              <a
-                href="/"
+              <Link
+                to={`/${item.path}`}
                 className="search__title-link section-title section-title_clickable"
               >
                 {item.title}
-              </a>
-              <a href="/" className="link search__link">
+              </Link>
+              <Link to={`/${item.page}`} className="link search__link">
                 {item.modelName}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
