@@ -252,6 +252,7 @@ const Video = () => {
           setLocalStorageData(localStChosenVideo, res);
           openPopupVideo();
         })
+        .catch(() => setIsPageError(true))
         .finally(push(VIDEO_URL, null));
     }
   }, [location.state]);

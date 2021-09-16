@@ -154,6 +154,7 @@ function Calendar() {
           setLocalStorageData(localStAfishaEvent, res);
           openPopupAboutEvent();
         })
+        .catch(() => setIsPageError(true))
         .finally(push(AFISHA_URL, null));
     }
   }, [location.state]);

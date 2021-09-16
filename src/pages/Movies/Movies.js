@@ -153,6 +153,7 @@ function Movies() {
           setLocalStorageData(localStChosenVideo, res);
           openPopupVideo();
         })
+        .catch(() => setIsPageError(true))
         .finally(push(MOVIES_URL, null));
     }
   }, [location.state]);
