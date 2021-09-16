@@ -1,5 +1,6 @@
 import './Calendar.scss';
 import { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import calendarPageTexts from '../../locales/calendar-page-RU';
 import {
   CurrentUserContext,
@@ -7,10 +8,19 @@ import {
   PopupsContext,
 } from '../../contexts';
 import { useDebounce, useEventBooking } from '../../hooks';
-import { DELAY_DEBOUNCE, ERROR_MESSAGES, months } from '../../config/constants';
+import {
+  DELAY_DEBOUNCE,
+  ERROR_MESSAGES,
+  localStAfishaEvent,
+  months,
+} from '../../config/constants';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { getActiveMonthTags, getCalendarPageData } from '../../api/afisha-page';
+import {
+  getActiveMonthTags,
+  getCalendarItem,
+  getCalendarPageData,
+} from '../../api/afisha-page';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -20,6 +30,8 @@ import {
   TagsList,
   TitleH1,
 } from './index';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import { AFISHA_URL } from '../../config/routes';
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
 
@@ -35,6 +47,7 @@ function Calendar() {
   const { openPopupLogin, openPopupAboutEvent, openPopupError } =
     useContext(PopupsContext);
   const { setError } = useContext(ErrorsContext);
+  const { location, push } = useHistory();
 
   // переход между фильтрами/страницами пагинации, лоадер
   const [isLoading, setIsLoading] = useState(false);
@@ -132,6 +145,18 @@ function Calendar() {
         setIsLoadingPaginate(false);
       });
   }
+
+  // Откртие попапа при переходе из поиска
+  useEffect(() => {
+    if (location.state) {
+      getCalendarItem(location.state.id)
+        .then((res) => {
+          setLocalStorageData(localStAfishaEvent, res);
+          openPopupAboutEvent();
+        })
+        .finally(push(AFISHA_URL, null));
+    }
+  }, [location.state]);
 
   // загрузка страницы палендаря при старте либо показ попапа логина
   useEffect(() => {
