@@ -25,6 +25,10 @@ function Search({
     setIsVoidSearch(false);
   };
 
+  const handleClickLink = () => {
+    setIsOpenSearch(!isOpenSearch);
+  };
+
   const renderSearchItems = () => {
     if (isVoidSearch)
       return (
@@ -37,14 +41,22 @@ function Search({
       return (
         <ul className="search__option-list">
           {searchValue.map((item) => (
-            <li className="search__option-item">
+            <li key={item.page + item.id} className="search__option-item">
               <Link
-                to={`/${item.path}`}
+                onClick={handleClickLink}
+                to={{
+                  pathname: `/${item.page}`,
+                  state: { id: item.id },
+                }}
                 className="search__title-link section-title section-title_clickable"
               >
                 {item.title}
               </Link>
-              <Link to={`/${item.page}`} className="link search__link">
+              <Link
+                to={`/${item.page}`}
+                className="link search__link"
+                onClick={handleClickLink}
+              >
                 {item.modelName}
               </Link>
             </li>
