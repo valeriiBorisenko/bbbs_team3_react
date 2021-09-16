@@ -19,4 +19,12 @@ function getMoviesPageFilter() {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-export { getMoviesPageData, getMoviesPageFilter };
+// получение одного видео
+function getMovie(id) {
+  return axios
+    .get(`${baseURL}${apiUrl}/movies/${id}`)
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+}
+
+export { getMoviesPageData, getMoviesPageFilter, getMovie };
