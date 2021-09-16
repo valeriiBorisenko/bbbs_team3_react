@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { SearchButton, Loader } from '../utils/index';
 import { useFormWithValidation } from '../../hooks/index';
 import search from '../../api/search';
+import { CATALOG_URL, RIGHTS_URL } from '../../config/routes';
 
 function Search({
   isOpenSearch,
@@ -17,6 +18,12 @@ function Search({
   const [isVoidSearch, setIsVoidSearch] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [timer, setTimer] = useState(null);
+
+  const getPathName = (url, id) => {
+    if (`/${url}` === RIGHTS_URL) return `/${url}/${id}`;
+    if (`/${url}` === CATALOG_URL) return `/${url}/${id}`;
+    return `/${url}`;
+  };
 
   const handleClickButton = () => {
     setIsOpenSearch(!isOpenSearch);
@@ -45,7 +52,7 @@ function Search({
               <Link
                 onClick={handleClickLink}
                 to={{
-                  pathname: `/${item.page}`,
+                  pathname: getPathName(item.page, item.id),
                   state: { id: item.id },
                 }}
                 className="search__title-link section-title section-title_clickable"
