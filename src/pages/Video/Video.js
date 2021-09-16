@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import './Video.scss';
+import { useHistory } from 'react-router-dom';
 import videoPageTexts from '../../locales/video-page-RU';
 import {
   AnimatedPageContainer,
@@ -15,6 +16,7 @@ import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
+  localStChosenVideo,
 } from '../../config/constants';
 import {
   CurrentUserContext,
@@ -27,8 +29,13 @@ import {
   handleCheckboxBehavior,
   selectOneTag,
 } from '../../utils/filter-tags';
-import { getVideoPageData, getVideoPageTags } from '../../api/video-page';
+import {
+  getVideoPageData,
+  getVideoPageTags,
+  getVideo,
+} from '../../api/video-page';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
 
 const PAGE_SIZE_PAGINATE = {
   small: 8,
@@ -40,6 +47,10 @@ const { headTitle, headDescription, title, resourceGroupTag, textStubNoData } =
   videoPageTexts;
 
 const Video = () => {
+  // работа с открытием попапа видое при переходе из поиска
+  const { location, push } = useHistory();
+  const { openPopupVideo } = useContext(PopupsContext);
+
   const { currentUser } = useContext(CurrentUserContext);
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
@@ -232,6 +243,18 @@ const Video = () => {
     }
   }, [isFiltersUsed]);
 
+  // Откртие попапа при переходе из поиска
+  useEffect(() => {
+    if (location.state) {
+      getVideo(location.state.id)
+        .then((res) => {
+          setLocalStorageData(localStChosenVideo, res);
+          openPopupVideo();
+        })
+        .finally(push('/video', null));
+    }
+  }, [location.state]);
+
   // Загрузка страницы, динамическая пагинация, динамический ресайз
   useEffect(() => {
     if (pageSize) {
@@ -359,7 +382,7 @@ const Video = () => {
         <>
           <section className="lead page__section">
             <TitleH1 title={title} sectionClass="video__title" />
-            {categories?.length > 1 && !isLoadingPage && renderTagsContainer()}
+            {categories?.length > 0 && !isLoadingPage && renderTagsContainer()}
           </section>
 
           {renderMainContent()}
