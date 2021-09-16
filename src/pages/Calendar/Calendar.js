@@ -1,6 +1,6 @@
 import './Calendar.scss';
 import { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import calendarPageTexts from '../../locales/calendar-page-RU';
 import {
   CurrentUserContext,
@@ -31,7 +31,6 @@ import {
   TitleH1,
 } from './index';
 import { setLocalStorageData } from '../../hooks/useLocalStorage';
-import { AFISHA_URL } from '../../config/routes';
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
 
@@ -47,7 +46,7 @@ function Calendar() {
   const { openPopupLogin, openPopupAboutEvent, openPopupError } =
     useContext(PopupsContext);
   const { setError } = useContext(ErrorsContext);
-  const { location, push } = useHistory();
+  const { state } = useLocation();
 
   // переход между фильтрами/страницами пагинации, лоадер
   const [isLoading, setIsLoading] = useState(false);
@@ -148,16 +147,15 @@ function Calendar() {
 
   // Откртие попапа при переходе из поиска
   useEffect(() => {
-    if (location.state) {
-      getCalendarItem(location.state.id)
+    if (state) {
+      getCalendarItem(state.id)
         .then((res) => {
           setLocalStorageData(localStAfishaEvent, res);
           openPopupAboutEvent();
         })
-        .catch(() => setIsPageError(true))
-        .finally(push(AFISHA_URL, null));
+        .catch(() => setIsPageError(true));
     }
-  }, [location.state]);
+  }, [state]);
 
   // загрузка страницы палендаря при старте либо показ попапа логина
   useEffect(() => {

@@ -1,6 +1,6 @@
 import './Movies.scss';
 import { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import moviesPageTexts from '../../locales/movies-page-RU';
 import { ErrorsContext, PopupsContext } from '../../contexts';
 import { useDebounce } from '../../hooks';
@@ -32,7 +32,6 @@ import {
   selectOneTag,
 } from '../../utils/filter-tags';
 import { setLocalStorageData } from '../../hooks/useLocalStorage';
-import { MOVIES_URL } from '../../config/routes';
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 8,
@@ -44,7 +43,7 @@ const PAGE_SIZE_PAGINATE = {
 const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 
 function Movies() {
-  const { location, push } = useHistory();
+  const { state } = useLocation();
   const { setError } = useContext(ErrorsContext);
   const { openPopupError, openPopupVideo } = useContext(PopupsContext);
 
@@ -147,16 +146,15 @@ function Movies() {
 
   // Откртие попапа при переходе из поиска
   useEffect(() => {
-    if (location.state) {
-      getMovie(location.state.id)
+    if (state) {
+      getMovie(state.id)
         .then((res) => {
           setLocalStorageData(localStChosenVideo, res);
           openPopupVideo();
         })
-        .catch(() => setIsPageError(true))
-        .finally(push(MOVIES_URL, null));
+        .catch(() => setIsPageError(true));
     }
-  }, [location.state]);
+  }, [state]);
 
   /// Фильтрация с делэем
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
