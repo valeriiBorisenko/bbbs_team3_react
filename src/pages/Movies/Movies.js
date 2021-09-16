@@ -1,9 +1,14 @@
 import './Movies.scss';
 import { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import moviesPageTexts from '../../locales/movies-page-RU';
 import { ErrorsContext, PopupsContext } from '../../contexts';
 import { useDebounce } from '../../hooks';
-import { getMoviesPageData, getMoviesPageFilter } from '../../api/movies-page';
+import {
+  getMovie,
+  getMoviesPageData,
+  getMoviesPageFilter,
+} from '../../api/movies-page';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -19,12 +24,15 @@ import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
+  localStChosenVideo,
 } from '../../config/constants';
 import {
   deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
 } from '../../utils/filter-tags';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import { MOVIES_URL } from '../../config/routes';
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 8,
@@ -36,8 +44,9 @@ const PAGE_SIZE_PAGINATE = {
 const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 
 function Movies() {
+  const { location, push } = useHistory();
   const { setError } = useContext(ErrorsContext);
-  const { openPopupError } = useContext(PopupsContext);
+  const { openPopupError, openPopupVideo } = useContext(PopupsContext);
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(true);
@@ -135,6 +144,18 @@ function Movies() {
       getMoviesData(activeCategories);
     }
   };
+
+  // Откртие попапа при переходе из поиска
+  useEffect(() => {
+    if (location.state) {
+      getMovie(location.state.id)
+        .then((res) => {
+          setLocalStorageData(localStChosenVideo, res);
+          openPopupVideo();
+        })
+        .finally(push(MOVIES_URL, null));
+    }
+  }, [location.state]);
 
   /// Фильтрация с делэем
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
