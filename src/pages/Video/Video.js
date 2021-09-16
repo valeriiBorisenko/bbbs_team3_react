@@ -36,6 +36,7 @@ import {
 } from '../../api/video-page';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import { VIDEO_URL } from '../../config/routes';
 
 const PAGE_SIZE_PAGINATE = {
   small: 8,
@@ -251,7 +252,7 @@ const Video = () => {
           setLocalStorageData(localStChosenVideo, res);
           openPopupVideo();
         })
-        .finally(push('/video', null));
+        .finally(push(VIDEO_URL, null));
     }
   }, [location.state]);
 
