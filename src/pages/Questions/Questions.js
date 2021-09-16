@@ -34,6 +34,7 @@ import {
   TitleH2,
 } from './index';
 import {
+  getQuestion,
   getQuestionsPageData,
   getQuestionsPageTags,
   postQuestion,
@@ -70,8 +71,11 @@ function Questions() {
   const errorsString = serverError ? getServerErrors(serverError) : '';
 
   // определение редиректа с Главной, чтобы показать выбранный вопрос
+  // + обработка редиректа поиска
+  const [mainQuestion, setMainQuestion] = useState(null);
   const { state } = useLocation();
   const chosenQuestion = state?.question;
+  const searchQuestionId = state?.id;
 
   // начальная дата с API
   const [questionsPageData, setQuestionsPageData] = useState(null);
@@ -199,6 +203,10 @@ function Questions() {
     if (isFiltersUsed) {
       debounceFiltration();
     }
+
+    return () => {
+      setIsChosenQuestionVisible(false);
+    };
   }, [isFiltersUsed]);
 
   // пагинация
@@ -218,11 +226,25 @@ function Questions() {
       .then(([{ results, count }, tags]) => {
         setPageCount(Math.ceil(count / pageSize));
 
+        if (searchQuestionId) {
+          getQuestion(searchQuestionId)
+            .then((res) => {
+              setIsChosenQuestionVisible(true);
+              const filteredResult = results.filter(
+                (question) => question.id !== res.id
+              );
+              setMainQuestion(res);
+              setQuestionsPageData(filteredResult);
+            })
+            .catch(() => setIsPageError(true));
+        }
+
         if (chosenQuestion) {
           setIsChosenQuestionVisible(true);
           const filteredResult = results.filter(
             (question) => question.id !== chosenQuestion.id
           );
+          setMainQuestion(chosenQuestion);
           setQuestionsPageData(filteredResult);
         } else setQuestionsPageData(results);
 
@@ -242,7 +264,7 @@ function Questions() {
       })
       .catch(() => setIsPageError(true))
       .finally(() => setIsLoadingPage(false));
-  }, []);
+  }, [searchQuestionId]);
 
   // рендеринг
   // заглушка, если нет даты или ошибка
@@ -296,11 +318,11 @@ function Questions() {
   );
 
   const renderChosenQuestion = () => {
-    if (state?.fromMainPage && isChosenQuestionVisible) {
+    if (isChosenQuestionVisible && mainQuestion) {
       return (
-        <li className="questions__list-item fade-in" key={chosenQuestion.id}>
+        <li className="questions__list-item fade-in">
           <CardQuestion
-            data={chosenQuestion}
+            data={mainQuestion}
             sectionClass="card__questions_type_questions-page"
             isQuestionsPage
             isOpenByDefault
