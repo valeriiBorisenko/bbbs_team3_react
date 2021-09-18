@@ -63,6 +63,7 @@ export const localStAfishaEvent = 'afishaEvent';
 export const jwt = 'jwt';
 export const jwtRefresh = 'jwtRefresh';
 export const localStChosenVideo = 'chosenVideo';
+export const localStChosenBook = 'chosenBook';
 
 export const ERROR_MESSAGES = {
   generalErrorMessage: {

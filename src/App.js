@@ -25,6 +25,7 @@ import {
 } from './contexts/index';
 // хуки
 import { useCities, useAuth } from './hooks/index';
+import PopupBook from './components/Popups/PopupBook/PopupBook';
 
 function App() {
   const { pathname } = useLocation();
@@ -41,6 +42,7 @@ function App() {
     useState(false);
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
 
   const [isWithoutRegister, setIsWithoutRegister] = useState(false);
 
@@ -52,6 +54,7 @@ function App() {
     setIsPopupRecommendSuccessOpen(false);
     setIsInfoTooltipOpen(false);
     setIsVideoPopupOpen(false);
+    setIsBookPopupOpen(false);
   }
 
   function openPopupInfoTooltip() {
@@ -108,6 +111,10 @@ function App() {
     setIsVideoPopupOpen(true);
   }
 
+  function openPopupBook() {
+    setIsBookPopupOpen(true);
+  }
+
   // контекст попапов
   const popupsContextValue = {
     closeAllPopups,
@@ -121,6 +128,7 @@ function App() {
     openPopupRecommendSuccess,
     openPopupVideo,
     openPopupInfoTooltip,
+    openPopupBook,
   };
 
   // текущий юзер/контекст
@@ -213,6 +221,7 @@ function App() {
                   isOpen={isVideoPopupOpen}
                   onClose={closeAllPopups}
                 />
+                <PopupBook isOpen={isBookPopupOpen} onClose={closeAllPopups} />
                 <PopupInfoTooltip
                   isOpen={isInfoTooltipOpen}
                   onClose={closeAllPopups}
