@@ -4,21 +4,15 @@ import { Card, TitleH2 } from '../../utils/index';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
 
 function CardBook({
-  data: {
-    title,
-    author,
-    year,
-    type: { color },
-    annotation,
-  },
+  data: { title, author, year, type, annotation },
   sectionClass,
 }) {
-  const backgroundColor = { backgroundColor: color };
+  const backgroundColor = { backgroundColor: type?.color };
 
   return (
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass="card-book">
-        <div className="card-book__cover" style={backgroundColor}>
+        <div className="card-book__cover" style={backgroundColor || ''}>
           <TitleH2 sectionClass="card-book__title" title={title} />
           <div className="card-book__info">
             <div className="card-book__border" />
