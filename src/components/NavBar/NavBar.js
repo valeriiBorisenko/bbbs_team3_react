@@ -40,10 +40,19 @@ function NavBar({
   const { pathname } = useLocation();
   const { currentUser } = useContext(CurrentUserContext);
 
+  const handleClick = () => {
+    setIsOpenSearch(false);
+  };
+
   return (
     <nav className={`menu ${isOpenSearch ? 'menu_state_search' : ''}`}>
       {/* логотип */}
-      <Link to="/" target="_self" className="menu__logo mobile-link">
+      <Link
+        to="/"
+        target="_self"
+        className="menu__logo mobile-link"
+        onClick={handleClick}
+      >
         {MAIN_PAGE_TITLE}
       </Link>
       {/* обычное меню */}
