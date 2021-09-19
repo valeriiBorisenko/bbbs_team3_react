@@ -27,13 +27,14 @@
 
   &__container {
     width: 100%;
-  
+
     > div {
       min-height: 305px;
     }
   }
-  
+
   &__list {
+    max-width: 370px;
     margin: 0;
     padding: 0;
     font-family: $protoGrotesk;
@@ -41,7 +42,7 @@
     line-height: 1.25;
     letter-spacing: .2px;
     list-style: none;
-  
+
     &_type_primary:after {
       content: '';
       display: block;
@@ -54,7 +55,7 @@
   &__list-item {
     margin-bottom: 10px;
     text-align: center;
-  
+
     &:last-of-type {
       margin-bottom: 15px;
     }
@@ -66,7 +67,7 @@
     outline: none;
     padding: 0;
     transition: .3s ease;
-  
+
     &:hover {
       cursor: pointer;
       color: $blue;

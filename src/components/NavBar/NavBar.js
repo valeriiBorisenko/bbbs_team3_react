@@ -1,24 +1,24 @@
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import texts from './locales/RU';
 import {
-  AFISHA_URL,
-  ABOUT_US_URL,
-  QUESTIONS_URL,
-  PLACES_URL,
-  RIGHTS_URL,
-  READ_AND_WATCH_URL,
-  STORIES_URL,
-  MAIN_PAGE_TITLE,
   ABOUT_US_TITLE,
+  ABOUT_US_URL,
   AFISHA_TITLE,
+  AFISHA_URL,
+  MAIN_PAGE_TITLE,
   PLACES_TITLE,
+  PLACES_URL,
   QUESTIONS_TITLE,
+  QUESTIONS_URL,
   READ_AND_WATCH_TITLE,
+  READ_AND_WATCH_URL,
   RIGHTS_TITLE,
+  RIGHTS_URL,
   STORIES_TITLE,
+  STORIES_URL,
 } from '../../config/routes';
 import { socialLinks } from '../../utils/external-links';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
@@ -109,18 +109,20 @@ function NavBar({
             !isMobileMenuOpen ? 'menu__list_hidden' : ''
           }`}
         >
-          {socialLinks.map((link) => (
-            <li key={link?.id} className="menu__list-item">
-              <a
-                className="menu__link mobile-link"
-                href={link?.url}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {link?.title}
-              </a>
-            </li>
-          ))}
+          {React.Children.toArray(
+            socialLinks.map((link) => (
+              <li className="menu__list-item">
+                <a
+                  className="menu__link mobile-link"
+                  href={link.url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {link.title}
+                </a>
+              </li>
+            ))
+          )}
         </ul>
       </div>
 

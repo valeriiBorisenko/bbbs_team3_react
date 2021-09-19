@@ -3,7 +3,7 @@ const texts = {
   buttonTitleSelected: 'Отменить запись',
   buttonTitleDisabled: 'Запись закрыта',
   remainSeatsText: 'Осталось',
-  eventCanceled: 'Мероприятие отменено',
+  eventCanceled: 'Извините, мы отменили это мероприятие',
 };
 
 export default texts;

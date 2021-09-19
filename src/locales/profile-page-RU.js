@@ -1,5 +1,7 @@
+import { MAIN_PAGE_TITLE, PROFILE_TITLE } from '../config/routes';
+
 const profilePageTexts = {
-  headTitle: 'Личный кабинет',
+  headTitle: `${MAIN_PAGE_TITLE} | ${PROFILE_TITLE}`,
   headDescription: 'Личный кабинет наставника.',
   eventsTitle: 'Вы записаны на мероприятия:',
   eventsTitleArchive: 'Ваши прошлые мероприятия:',

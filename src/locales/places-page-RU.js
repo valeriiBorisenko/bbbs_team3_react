@@ -1,7 +1,9 @@
+import { MAIN_PAGE_TITLE, PLACES_TITLE } from '../config/routes';
+
 const placesPageTexts = {
-  headTitle: 'Куда пойти',
+  headTitle: `${MAIN_PAGE_TITLE} | ${PLACES_TITLE}`,
   headDescription: 'Куда вы можете пойти, что рекомендуют наши наставники.',
-  title: 'Куда пойти',
+  title: PLACES_TITLE,
   textStubNoData:
     'Рекомендуемых мест для выбранного города ещё нет, но они обязательно появятся!',
   paragraphNoContent: 'По вашему запросу ничего не нашлось.',

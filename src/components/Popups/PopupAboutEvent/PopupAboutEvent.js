@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import {
-  formatDate,
-  formatWordCase,
   changeCaseOfFirstLetter,
+  formatDate,
   formatPhoneNumber,
+  formatWordCase,
 } from '../../../utils/utils';
 import Popup from '../Popup/Popup';
-import { Button, TitleH2, ModificatedScrollbars } from '../../utils/index';
+import { Button, ModificatedScrollbars, TitleH2 } from '../../utils/index';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks/index';
 import { localStAfishaEvent } from '../../../config/constants';
@@ -25,7 +25,7 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
 
   const startDateParts = formatDate(card?.startAt);
   const endDayParts = formatDate(card?.endAt);
-  const isDisabled = (card?.remainSeats < 1 && !card?.booked) || card?.canceled;
+  const isDisabled = card?.remainSeats < 1 && !card?.booked;
 
   function handleSubmit(evt) {
     evt.preventDefault();
