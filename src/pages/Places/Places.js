@@ -303,18 +303,6 @@ function Places() {
     }
   };
 
-  // // Откртие попапа при переходе из поиска
-  // useEffect(() => {
-  //   if (state) {
-  //     getPlace(searchPlaceId)
-  //       .then((res) => {
-  //         setLocalStorageData(localStChosenPlace, res);
-  //         openPopupPlace();
-  //       })
-  //       .catch(() => setIsPageError(true));
-  //   }
-  // }, [state]);
-
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePagination = useDebounce(getFilteredPlaces, DELAY_DEBOUNCE);
   // запуск фильтрации

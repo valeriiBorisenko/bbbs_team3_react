@@ -1,11 +1,13 @@
 import './Search.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SearchButton, Loader } from '../utils/index';
-import { useFormWithValidation } from '../../hooks/index';
+import { useFormWithValidation, useLocalStorage } from '../../hooks/index';
 import search from '../../api/search';
 import { CATALOG_URL, RIGHTS_URL } from '../../config/routes';
+import { CurrentUserContext } from '../../contexts';
+import { localStUserCity } from '../../config/constants';
 
 function Search({
   isOpenSearch,
@@ -13,6 +15,12 @@ function Search({
   isMobileMenuOpen,
   setIsMobileMenuOpen,
 }) {
+  const { currentUser } = useContext(CurrentUserContext);
+
+  const getLocalStorageItem = useLocalStorage(localStUserCity);
+  const currentAnonymousCity = getLocalStorageItem();
+  const userCity = currentUser?.city ?? currentAnonymousCity;
+
   const { values, handleChange, resetForm } = useFormWithValidation();
   const [searchValue, setSearchValue] = useState([]);
   const [isVoidSearch, setIsVoidSearch] = useState(false);
@@ -85,7 +93,16 @@ function Search({
 
     setTimer(
       setTimeout(async () => {
-        const { count, results } = await search({ text: values.search });
+        const currentRequest =
+          userCity && !currentUser
+            ? search({
+                text: values.search,
+                city: userCity,
+              })
+            : search({
+                text: values.search,
+              });
+        const { count, results } = await currentRequest;
         setSearchValue(results);
         setIsLoadingSearch(false);
         return count === 0 ? setIsVoidSearch(true) : setIsVoidSearch(false);
