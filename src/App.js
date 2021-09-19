@@ -27,6 +27,7 @@ import {
 import { useCities, useAuth } from './hooks/index';
 import PopupBook from './components/Popups/PopupBook/PopupBook';
 import PopupPlace from './components/Popups/PopupPlace/PopupPlace';
+import PopupArticle from './components/Popups/PopupArticle/PopupArticle';
 
 function App() {
   const { pathname } = useLocation();
@@ -45,6 +46,7 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
   const [isPlacePopupOpen, setIsPlacePopupOpen] = useState(false);
+  const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
 
   const [isWithoutRegister, setIsWithoutRegister] = useState(false);
 
@@ -58,6 +60,7 @@ function App() {
     setIsVideoPopupOpen(false);
     setIsBookPopupOpen(false);
     setIsPlacePopupOpen(false);
+    setIsArticlePopupOpen(false);
   }
 
   function openPopupInfoTooltip() {
@@ -122,6 +125,10 @@ function App() {
     setIsPlacePopupOpen(true);
   }
 
+  function openPopupArticle() {
+    setIsArticlePopupOpen(true);
+  }
+
   // контекст попапов
   const popupsContextValue = {
     closeAllPopups,
@@ -137,6 +144,7 @@ function App() {
     openPopupInfoTooltip,
     openPopupBook,
     openPopupPlace,
+    openPopupArticle,
   };
 
   // текущий юзер/контекст
@@ -232,6 +240,10 @@ function App() {
                 <PopupBook isOpen={isBookPopupOpen} onClose={closeAllPopups} />
                 <PopupPlace
                   isOpen={isPlacePopupOpen}
+                  onClose={closeAllPopups}
+                />
+                <PopupArticle
+                  isOpen={isArticlePopupOpen}
                   onClose={closeAllPopups}
                 />
                 <PopupInfoTooltip
