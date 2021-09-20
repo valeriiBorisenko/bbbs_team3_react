@@ -2,11 +2,13 @@ import './TagsList.scss';
 import PropTypes from 'prop-types';
 import { PseudoButtonTag } from '../utils/index';
 
+const centeringFiltersMaxLength = 3;
+
 function TagsList({ filterList, name, handleClick, sectionClass }) {
   const classNames = ['tags', sectionClass].join(' ').trim();
   const classNamesList = [
     'tags__list',
-    filterList.length > 3 ? 'tags__list_mobile' : '',
+    filterList.length > centeringFiltersMaxLength ? 'tags__list_mobile' : '',
   ]
     .join(' ')
     .trim();
