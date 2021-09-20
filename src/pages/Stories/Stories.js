@@ -20,6 +20,12 @@ import {
 } from './index';
 import './Stories.scss';
 
+const carouselItemPaddings = {
+  desktop: [0, 65],
+  tablet: [0, 15],
+  mobile: [0, 7.5],
+};
+
 const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
 
 function Stories() {
@@ -29,6 +35,9 @@ function Stories() {
 
   const [storiesTags, setStoriesTags] = useState([]);
   const [currentStory, setCurrentStory] = useState(null);
+  const [carouselItemPadding, setCarouselItemPaddings] = useState(
+    carouselItemPaddings.desktop
+  );
 
   const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
   const nextPageLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
@@ -37,6 +46,31 @@ function Stories() {
     handleRadioBehavior(setStoriesTags, { inputValue, isChecked });
     history.push(`${STORIES_URL}/${inputValue}`);
   };
+
+  // динамические падинги для фото слайдера
+  useEffect(() => {
+    const tablet = window.matchMedia(`(max-width: 1279px)`);
+    const mobile = window.matchMedia(`(max-width: 706px)`);
+
+    const listenWindowWidth = () => {
+      if (mobile.matches)
+        return setCarouselItemPaddings(carouselItemPaddings.mobile);
+
+      if (tablet.matches)
+        return setCarouselItemPaddings(carouselItemPaddings.tablet);
+
+      return setCarouselItemPaddings(carouselItemPaddings.desktop);
+    };
+    listenWindowWidth();
+
+    mobile.addEventListener('change', listenWindowWidth);
+    tablet.addEventListener('change', listenWindowWidth);
+
+    return () => {
+      mobile.removeEventListener('change', listenWindowWidth);
+      tablet.removeEventListener('change', listenWindowWidth);
+    };
+  }, []);
 
   useEffect(() => {
     getStoriesPageTags()
@@ -192,7 +226,7 @@ function Stories() {
             itemsToScroll={1}
             itemsToShow={3}
             initialActiveIndex={1}
-            itemPadding={[0, 65]}
+            itemPadding={carouselItemPadding}
             onPrevStart={onPrevStart}
             onNextStart={onNextStart}
             disableArrowsOnEnd={false}
