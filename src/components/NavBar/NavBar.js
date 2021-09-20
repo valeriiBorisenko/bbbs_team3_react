@@ -1,6 +1,7 @@
+import './NavBar.scss';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
-import React, { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import texts from './locales/RU';
 import {
@@ -22,13 +23,8 @@ import {
 } from '../../config/routes';
 import { socialLinks } from '../../utils/external-links';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
-import {
-  NavItem,
-  SearchButton,
-  UserIconButton,
-  UserMenuButton,
-} from '../utils/index';
-import './NavBar.scss';
+import Search from '../Search/Search';
+import { NavItem, UserIconButton, UserMenuButton } from '../utils/index';
 
 function NavBar({
   isMobileMenuOpen,
@@ -37,14 +33,26 @@ function NavBar({
   onCityChangeClick,
   onLogout,
   userCityName,
+  setIsMobileMenuOpen,
+  isOpenSearch,
+  setIsOpenSearch,
 }) {
   const { pathname } = useLocation();
   const { currentUser } = useContext(CurrentUserContext);
 
+  const handleClick = () => {
+    setIsOpenSearch(false);
+  };
+
   return (
-    <nav className="menu">
+    <nav className={`menu ${isOpenSearch ? 'menu_state_search' : ''}`}>
       {/* логотип */}
-      <Link to="/" target="_self" className="menu__logo mobile-link">
+      <Link
+        to="/"
+        target="_self"
+        className="menu__logo mobile-link"
+        onClick={handleClick}
+      >
         {MAIN_PAGE_TITLE}
       </Link>
       {/* обычное меню */}
@@ -181,64 +189,12 @@ function NavBar({
 
       <ul className="menu__button-list">
         <li className="menu__button-item">
-          <form className="search" name="search-form">
-            <SearchButton />
-            <div className="search__options menu__search-options">
-              <input
-                type="text"
-                name="search"
-                placeholder={texts.searchPlaceholder}
-                className="search__input paragraph"
-              />
-              <ul className="search__option-list">
-                <li className="search__option-item">
-                  <a
-                    href="./article.html"
-                    className="search__title-link section-title section-title_clickable"
-                  >
-                    Причины подростковой агрессии
-                  </a>
-                  <a href="./article.html" className="link search__link">
-                    статьи
-                  </a>
-                </li>
-                <li className="search__option-item">
-                  <a
-                    href="./video.html"
-                    className="search__title-link section-title section-title_clickable"
-                  >
-                    Агрессивное поведение детей-сирот
-                  </a>
-                  <a href="./video.html" className="link search__link">
-                    видео
-                  </a>
-                </li>
-                <li className="search__option-item">
-                  <a
-                    href="./questions.html"
-                    className="search__title-link section-title section-title_clickable"
-                  >
-                    Что делать если ваш младший агрессивно себя ведет, решил
-                    закрыть пару?
-                  </a>
-                  <a href="./questions.html" className="link search__link">
-                    вопросы
-                  </a>
-                </li>
-                <li className="search__option-item">
-                  <a
-                    href="./books.html"
-                    className="search__title-link section-title section-title_clickable"
-                  >
-                    Как реагировать на агрессивное поведения ребенка
-                  </a>
-                  <a href="./books.html" className="link search__link">
-                    книги
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </form>
+          <Search
+            isOpenSearch={isOpenSearch}
+            setIsOpenSearch={setIsOpenSearch}
+            isMobileMenuOpen={isMobileMenuOpen}
+            setIsMobileMenuOpen={setIsMobileMenuOpen}
+          />
         </li>
         <li className="menu__button-item">
           <UserIconButton
@@ -259,6 +215,9 @@ NavBar.propTypes = {
   onLogout: PropTypes.func,
   isMobileMenuOpen: PropTypes.bool,
   userCityName: PropTypes.string,
+  setIsMobileMenuOpen: PropTypes.func,
+  isOpenSearch: PropTypes.bool,
+  setIsOpenSearch: PropTypes.func,
 };
 
 NavBar.defaultProps = {
@@ -268,6 +227,9 @@ NavBar.defaultProps = {
   onLogout: () => {},
   isMobileMenuOpen: false,
   userCityName: '',
+  setIsMobileMenuOpen: () => {},
+  isOpenSearch: false,
+  setIsOpenSearch: () => {},
 };
 
 export default NavBar;

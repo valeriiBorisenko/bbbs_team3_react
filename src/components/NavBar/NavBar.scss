@@ -91,9 +91,10 @@
 .menu_state_search {
   display: grid;
   grid-template-columns: 260px 1fr;
-  grid-template-rows: 600px;
+  grid-template-rows: 100vh;
   justify-items: start;
   align-items: start;
+
 
   & .menu__logo {
     grid-column: 1;
@@ -191,8 +192,9 @@
     align-self: center;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     cursor: pointer;
+    justify-self: end;
   }
 
   .menu__burger-line {
@@ -297,7 +299,7 @@
   // меню для поиска
   .menu_state_search {
     grid-template-columns: 60px 1fr 40px;
-    grid-template-rows: 30px 500px;
+    grid-template-rows: 30px 100vh;
     justify-items: center;
     position: relative;
 

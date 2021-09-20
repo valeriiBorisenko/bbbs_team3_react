@@ -1,8 +1,13 @@
 import './Books.scss';
 import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import booksPageTexts from '../../locales/books-page-RU';
 import { useDebounce } from '../../hooks';
-import { getBooksPageData, getBooksPageFilter } from '../../api/books-page';
+import {
+  getBook,
+  getBooksPageData,
+  getBooksPageFilter,
+} from '../../api/books-page';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -18,6 +23,7 @@ import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
+  localStChosenBook,
 } from '../../config/constants';
 import {
   deselectOneTag,
@@ -25,6 +31,7 @@ import {
   selectOneTag,
 } from '../../utils/filter-tags';
 import { ErrorsContext, PopupsContext } from '../../contexts';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 8,
@@ -36,7 +43,10 @@ const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
 function Books() {
   const { setError } = useContext(ErrorsContext);
-  const { openPopupError } = useContext(PopupsContext);
+  const { openPopupError, openPopupBook } = useContext(PopupsContext);
+
+  const { state } = useLocation();
+  const searchBookId = state?.id;
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(true);
@@ -134,6 +144,18 @@ function Books() {
       getBooksData(activeCategories);
     }
   };
+
+  // Откртие попапа при переходе из поиска
+  useEffect(() => {
+    if (state) {
+      getBook(searchBookId)
+        .then((res) => {
+          setLocalStorageData(localStChosenBook, res);
+          openPopupBook();
+        })
+        .catch(() => setIsPageError(true));
+    }
+  }, [state]);
 
   /// Фильтрация с делэем
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);

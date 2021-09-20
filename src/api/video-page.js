@@ -23,4 +23,12 @@ function getVideoPageTags() {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-export { getVideoPageTags, getVideoPageData };
+// получение одного видео
+function getVideo(id) {
+  return axios
+    .get(`${baseURL}${apiUrl}/videos/${id}`)
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+}
+
+export { getVideoPageTags, getVideoPageData, getVideo };

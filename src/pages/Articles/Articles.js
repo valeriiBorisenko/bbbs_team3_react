@@ -1,7 +1,12 @@
 import './Articles.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import articlesPageTexts from '../../locales/articles-page-RU';
-import { COLORS, ERROR_MESSAGES } from '../../config/constants';
+import {
+  COLORS,
+  ERROR_MESSAGES,
+  localStChosenArticle,
+} from '../../config/constants';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -10,7 +15,9 @@ import {
   Paginate,
   TitleH1,
 } from './index';
-import getArticlesPageData from '../../api/articles-page';
+import { getArticlesPageData, getArticle } from '../../api/articles-page';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import { PopupsContext } from '../../contexts';
 
 const PAGE_SIZE_PAGINATE = {
   small: 8,
@@ -31,6 +38,10 @@ function Articles() {
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
+  const { state } = useLocation();
+  const searchArticleId = state?.id;
+  const { openPopupArticle } = useContext(PopupsContext);
+
   function getPageData() {
     const offset = pageSize * pageNumber;
     const fixedPageSize =
@@ -50,6 +61,18 @@ function Articles() {
         setIsLoadingPaginate(false);
       });
   }
+
+  // Откртие попапа при переходе из поиска
+  useEffect(() => {
+    if (state) {
+      getArticle(searchArticleId)
+        .then((res) => {
+          setLocalStorageData(localStChosenArticle, res);
+          openPopupArticle();
+        })
+        .catch(() => setIsPageError(true));
+    }
+  }, [state]);
 
   // пагинация
   useEffect(() => {
@@ -155,6 +178,14 @@ function Articles() {
   }
 
   function renderPageContent() {
+    if (isPageError) {
+      return (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      );
+    }
+
     return (
       <section className="articles page__section">
         <TitleH1 title={title} sectionClass="fade-in" />

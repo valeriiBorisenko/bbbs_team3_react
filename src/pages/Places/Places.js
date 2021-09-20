@@ -1,5 +1,6 @@
 import './Places.scss';
 import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import placesPageTexts from '../../locales/places-page-RU';
 import { ageFilters, PAGE_SIZE_PAGINATE } from './constants';
 import {
@@ -14,6 +15,7 @@ import {
   DELAY_DEBOUNCE,
   DELAY_RENDER,
   ERROR_MESSAGES,
+  localStChosenPlace,
   localStUserCity,
 } from '../../config/constants';
 import {
@@ -36,9 +38,11 @@ import {
 } from './index';
 import {
   getChosenPlace,
+  getPlace,
   getPlaces,
   getPlacesTags,
 } from '../../api/places-page';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
 
 const {
   headTitle,
@@ -50,10 +54,14 @@ const {
 } = placesPageTexts;
 
 function Places() {
+  const { state } = useLocation();
+  const searchPlaceId = state?.id;
+
   const activityTypes = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
-  const { openPopupCities, openPopupError } = useContext(PopupsContext);
+  const { openPopupCities, openPopupError, openPopupPlace } =
+    useContext(PopupsContext);
   const { setError } = useContext(ErrorsContext);
 
   const getLocalStorageItem = useLocalStorage(localStUserCity);
@@ -376,7 +384,16 @@ function Places() {
         openPopupCities();
       }, DELAY_RENDER);
     }
-  }, []);
+
+    if (state && userCity) {
+      getPlace(searchPlaceId)
+        .then((res) => {
+          setLocalStorageData(localStChosenPlace, res);
+          openPopupPlace();
+        })
+        .catch(() => setIsPageError(true));
+    }
+  }, [state]);
 
   // функции рендера
   const renderAnimatedContainer = () => (
