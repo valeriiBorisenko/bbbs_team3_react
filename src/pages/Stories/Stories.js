@@ -104,7 +104,7 @@ function Stories() {
           <TitleH1 title={title} sectionClass="stories__title" />
           <p className="stories__subtitle">{subtitle}</p>
 
-          {renderTagsCarousel()}
+          {renderTags()}
 
           {renderUpperBlock()}
 
@@ -165,7 +165,7 @@ function Stories() {
     );
   }
 
-  function renderTagsCarousel() {
+  function renderTags() {
     return (
       <ScrollableContainer step={6} sectionClass="stories__tags-carousel">
         {storiesTags.map((item) => (
@@ -185,27 +185,32 @@ function Stories() {
   function renderPhotosCarousel() {
     return (
       <div className="stories__photo-carousel-container">
-        <Carousel
-          ref={photoCarouselRef}
-          className="stories__photo-carousel"
-          itemsToScroll={1}
-          itemsToShow={1}
-          itemPadding={[0, 50]}
-          onPrevStart={onPrevStart}
-          onNextStart={onNextStart}
-          disableArrowsOnEnd={false}
-          pagination={false}
-        >
-          {currentStory?.images?.map((image) => (
-            <img
-              className="stories__carousel-image"
-              draggable={false}
-              key={image.id}
-              src={`${staticImageUrl}/${image.image}`}
-              alt={image.imageCaption}
-            />
-          ))}
-        </Carousel>
+        <div className="stories__photo-carousel-wrapper">
+          <Carousel
+            ref={photoCarouselRef}
+            className="stories__photo-carousel"
+            itemsToScroll={1}
+            itemsToShow={3}
+            initialActiveIndex={1}
+            itemPadding={[0, 65]}
+            onPrevStart={onPrevStart}
+            onNextStart={onNextStart}
+            disableArrowsOnEnd={false}
+            pagination={false}
+          >
+            <div className="stories__carousel-image" />
+            {currentStory?.images?.map((image) => (
+              <img
+                className="stories__carousel-image"
+                draggable={false}
+                key={image.id}
+                src={`${staticImageUrl}/${image.image}`}
+                alt={image.imageCaption}
+              />
+            ))}
+            <div className="stories__carousel-image" />
+          </Carousel>
+        </div>
       </div>
     );
   }
