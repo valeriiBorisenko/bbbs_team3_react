@@ -67,6 +67,17 @@ const Rights = () => {
     setIsFiltersUsed(true);
   };
 
+  // Сортировка значений Тэгов для АПИ
+  const getActiveTags = () => {
+    if (categories) {
+      return categories
+        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
+        .map((filter) => filter.filter)
+        .join(',');
+    }
+    return null;
+  };
+
   // Фильтры страницы
   const renderTagsContainer = () => {
     if (articles && !isLoadingPage) {
@@ -94,6 +105,7 @@ const Rights = () => {
       >
         {articles.map((item, i) => (
           <CardRights
+            getActiveTags={getActiveTags}
             key={item?.id}
             sectionClass="cards-section__item scale-in"
             title={item?.title}
@@ -114,17 +126,6 @@ const Rights = () => {
     }
 
     return isFiltersUsed ? <Loader isPaginate /> : renderCards();
-  };
-
-  // Сортировка значений Тэгов для АПИ
-  const getActiveTags = () => {
-    if (categories) {
-      return categories
-        .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-        .map((filter) => filter.filter)
-        .join(',');
-    }
-    return null;
   };
 
   // Функция обработки запроса АПИ с карточками

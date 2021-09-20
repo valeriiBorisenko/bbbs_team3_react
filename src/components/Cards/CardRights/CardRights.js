@@ -5,16 +5,22 @@ import { Link } from 'react-router-dom';
 import { Rubric } from '../../utils/index';
 import CardFigure from '../CardFigure/CardFigure';
 
-function CardRights({ title, tags, shape, color, sectionClass, id }) {
+function CardRights({
+  title,
+  tags,
+  shape,
+  color,
+  sectionClass,
+  id,
+  getActiveTags,
+}) {
   return (
     <div className={`rights-card ${sectionClass}`}>
-      <Link to={`/rights/${id}`} className="rights-card__link">
-        <CardFigure
-          shape={shape}
-          title={title}
-          color={color}
-          sectionClass="rights-card__card"
-        >
+      <Link
+        to={{ pathname: `/rights/${id}`, getActiveTags }}
+        className="rights-card__link"
+      >
+        <CardFigure shape={shape} title={title} color={color}>
           <div className="rights-card__block">
             {tags.map((tag) => (
               <Rubric
@@ -37,6 +43,7 @@ CardRights.propTypes = {
   color: PropTypes.string,
   sectionClass: PropTypes.string,
   id: PropTypes.number,
+  getActiveTags: PropTypes.func,
 };
 
 CardRights.defaultProps = {
@@ -45,6 +52,7 @@ CardRights.defaultProps = {
   color: '',
   sectionClass: '',
   id: 0,
+  getActiveTags: () => {},
 };
 
 export default CardRights;

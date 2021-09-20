@@ -2,6 +2,7 @@ import './RightsArticle.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import {
   PageWithTransparentHeader,
   Loader,
@@ -12,19 +13,13 @@ import { getRightsArticle } from '../../api/rights-page';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { RIGHTS_URL } from '../../config/routes';
 
-function RightsArticle({ id }) {
+function RightsArticle({ id, getActiveTags }) {
+  // useScrollToTop();
+
   const [articleData, setArticleData] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
-
-  // ХардКод пока не понятно как узнавать ID следующей статьи
-  const [nextId, setNextId] = useState(Number(id) + 1);
-
-  const changeClick = () => {
-    setIsLoadingPage(true);
-    setNextId(nextId + 1);
-  };
 
   const renderLeadBlock = () => (
     <section className="article-lead">
@@ -38,30 +33,41 @@ function RightsArticle({ id }) {
   );
 
   const renderHtmlBlock = () => (
-    <div
-      className="page__section"
-      dangerouslySetInnerHTML={{
-        __html: articleData?.rawHtml,
-      }}
-    />
+    <ReactMarkdown className="article__markdown">
+      {articleData.body}
+    </ReactMarkdown>
   );
 
-  const rendenNextPageBlock = () => (
-    <section className="next-page">
-      <div className="next-page__img-wrap">
-        <img src="#" alt="Льготы детей на жилье" className="next-page__img" />
-      </div>
-      <Link
-        to={`/rights/${nextId}`}
-        onClick={changeClick}
-        className="next-page__link"
-        target="_self"
-      >
-        <TitleH2 sectionClass="next-page__title" title="Следующая статья" />
-        <div className="next-page__arrow-icon" />
-      </Link>
-    </section>
-  );
+  const rendenNextPageBlock = () => {
+    if (articleData.nextArticle) {
+      return (
+        <section className="next-page">
+          <div className="next-page__img-wrap">
+            <img
+              src="#"
+              alt="Льготы детей на жилье"
+              className="next-page__img"
+            />
+          </div>
+          <Link
+            to={{
+              pathname: `/rights/${articleData.nextArticle?.id}`,
+              getActiveTags,
+            }}
+            className="next-page__link"
+          >
+            <TitleH2
+              sectionClass="next-page__title"
+              title={articleData.nextArticle?.title}
+            />
+            <div className="next-page__arrow-icon" />
+          </Link>
+        </section>
+      );
+    }
+
+    return <></>;
+  };
 
   const renderMainContent = () => {
     if (isPageError) {
@@ -85,8 +91,10 @@ function RightsArticle({ id }) {
   };
 
   useEffect(() => {
+    setIsLoadingPage(true);
+
     if (isLoadingPage && id) {
-      getRightsArticle(id)
+      getRightsArticle({ id, tags: getActiveTags() })
         .then((res) => setArticleData(res))
         .catch(() => setIsPageError(true))
         .finally(() => {
@@ -95,7 +103,10 @@ function RightsArticle({ id }) {
     }
 
     if (!isLoadingPage && id) {
-      getRightsArticle(nextId)
+      getRightsArticle({
+        id: articleData.nextArticle?.id,
+        tags: getActiveTags(),
+      })
         .then((res) => setArticleData(res))
         .catch(() => setIsPageError(true))
         .finally(() => {
@@ -105,7 +116,7 @@ function RightsArticle({ id }) {
 
     // Хард Код для демо
     window.scrollTo({ top: 0 });
-  }, [id, nextId]);
+  }, [id]);
 
   return (
     <PageWithTransparentHeader
@@ -119,10 +130,12 @@ function RightsArticle({ id }) {
 
 RightsArticle.propTypes = {
   id: PropTypes.number,
+  getActiveTags: PropTypes.func,
 };
 
 RightsArticle.defaultProps = {
   id: null,
+  getActiveTags: () => {},
 };
 
 export default RightsArticle;
