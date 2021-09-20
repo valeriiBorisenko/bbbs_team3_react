@@ -39,6 +39,7 @@
     margin-bottom: 10px;
     font-size: 44px;
     line-height: 1.14;
+    font-weight: 300;
   }
 
   &__caption {
@@ -53,6 +54,7 @@
   }
 
   &__link {
+    width: fit-content;
     margin: 0;
 
     &_next {
@@ -190,7 +192,7 @@
     &__photo-carousel {
       & > .rec-carousel {
         & .rec-swipable {
-          transform: translateX(calc(-720px + (-400 - -720) * ((100vw - 1280px) / (1920 - 1280))));
+          transform: translateX(calc(-808px + (-400 - -808) * ((100vw - 1101px) / (1920 - 1101))));
         }
       }
     }
@@ -205,27 +207,79 @@
   }
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: 1101px) {
   .stories {
     &__photo-carousel {
       & > .rec-carousel {
         & .rec-swipable {
-          transform: translateX(-720px);
+          transform: translateX(-808px);
         }
       }
     }
   }
 }
 
-@include atDesktop1279 {
+@include atDesktop1024 {
   .stories {
-    &__carousel-image {
-      width: 570px;
-      height: 379px;
+    &__title {
+      margin-bottom: 20px;
+    }
+
+    &__subtitle {
+      max-width: 770px;
+      margin: 0 auto 30px;
+      font-size: 19px;
+      line-height: 1.21;
+
+      &_block {
+        margin-bottom: 30px;
+      }
+    }
+
+    &__main-photo {
+      margin: 0 auto 20px;
+      max-height: 507px;
+    }
+
+    &__pair-title {
+      font-size: 23px;
+      line-height: 1.3;
+    }
+
+    &__caption {
+      margin-bottom: 20px;
+    }
+
+    &__links {
+      max-width: 570px;
+    }
+
+    &__link {
+      &_next {
+        margin-top: 55px;
+      }
+    }
+
+    &__tags-carousel {
+      max-width: 100vw;
+      margin: 0 -127px 30px;
+
+      > .pseudo-button-label:first-of-type {
+        margin-left: 127px;
+      }
+
+      > .pseudo-button-label:last-of-type {
+        margin-right: 127px;
+      }
     }
 
     &__photo-carousel-container {
-      margin: 50px -135px;
+      margin: 50px -127px;
+    }
+
+    &__carousel-image {
+      width: 570px;
+      height: 379px;
     }
 
     &__photo-carousel-wrapper {
@@ -235,7 +289,7 @@
     &__photo-carousel {
       & > .rec-carousel {
         & .rec-swipable {
-          transform: translateX(-267px);
+          transform: translateX(-358px);
         }
 
         & > .rec-arrow {
@@ -255,6 +309,7 @@
         max-width: 570px;
         font-size: 15px;
         line-height: 1.4;
+        margin: 0 auto 20px;
       }
 
       & blockquote {
@@ -277,28 +332,32 @@
   }
 }
 
-@media screen and (max-width: 1278px) {
+@media screen and (max-width: 1099px) {
   .stories {
     &__photo-carousel {
       & > .rec-carousel {
         & .rec-swipable {
-          transform: translateX(calc(-555px + (-267 - -555) * ((100vw - 707px) / (1279 - 707))));
+          transform: translateX(calc(-555px + (-358 - -555) * ((100vw - 706px) / (1100 - 706))));
         }
       }
     }
   }
 }
 
-@include atDesktop1024 {
-  .stories {
-    &__photo-carousel-container {
-      margin: 50px -127px;
-    }
-  }
-}
-
 @include atTablet {
   .stories {
+    &__tags-carousel {
+      margin: 0 -60px 30px;
+
+      > .pseudo-button-label:first-of-type {
+        margin-left: 60px;
+      }
+
+      > .pseudo-button-label:last-of-type {
+        margin-right: 60px;
+      }
+    }
+
     &__photo-carousel-container {
       margin: 50px -60px;
     }
@@ -352,6 +411,22 @@
 
 @include atMobile {
   .stories {
+    &__main-photo {
+      margin: 0 auto 15px;
+    }
+
+    &__tags-carousel {
+      margin: 0 -15px 30px;
+
+      > .pseudo-button-label:first-of-type {
+        margin-left: 15px;
+      }
+
+      > .pseudo-button-label:last-of-type {
+        margin-right: 15px;
+      }
+    }
+
     &__photo-carousel-container {
       margin: 50px -15px;
     }

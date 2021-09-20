@@ -49,7 +49,7 @@ function Stories() {
 
   // динамические падинги для фото слайдера
   useEffect(() => {
-    const tablet = window.matchMedia(`(max-width: 1279px)`);
+    const tablet = window.matchMedia(`(max-width: 1100px)`);
     const mobile = window.matchMedia(`(max-width: 706px)`);
 
     const listenWindowWidth = () => {

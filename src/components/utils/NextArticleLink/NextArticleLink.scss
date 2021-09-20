@@ -3,6 +3,7 @@
 .next-article-link {
   display: flex;
   align-items: center;
+  width: fit-content;
   max-width: 770px;
   color: $blue;
   text-decoration: none;
