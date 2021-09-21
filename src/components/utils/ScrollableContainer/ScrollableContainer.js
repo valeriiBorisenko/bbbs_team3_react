@@ -13,6 +13,7 @@ function ScrollableContainer({
   sectionClass,
   onScrollCallback,
   useButtons,
+  disableMouseDrag,
   prevButtonClass,
   nextButtonClass,
 }) {
@@ -127,7 +128,9 @@ function ScrollableContainer({
 
   const classNames = [
     'scrollable-container',
-    state.isScrolling ? 'scrollable-container_scrolling' : '',
+    state.isScrolling && !disableMouseDrag
+      ? 'scrollable-container_scrolling'
+      : '',
     sectionClass,
   ]
     .join(' ')
@@ -140,10 +143,10 @@ function ScrollableContainer({
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
       <div
         className={classNames}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseLeave}
+        onMouseDown={disableMouseDrag ? undefined : onMouseDown}
+        onMouseMove={disableMouseDrag ? undefined : onMouseMove}
+        onMouseUp={disableMouseDrag ? undefined : onMouseUp}
+        onMouseLeave={disableMouseDrag ? undefined : onMouseLeave}
         ref={parentRef}
       >
         {children}
@@ -186,6 +189,7 @@ ScrollableContainer.propTypes = {
   useButtons: PropTypes.bool,
   prevButtonClass: PropTypes.string,
   nextButtonClass: PropTypes.string,
+  disableMouseDrag: PropTypes.bool,
 };
 
 ScrollableContainer.defaultProps = {
@@ -196,6 +200,7 @@ ScrollableContainer.defaultProps = {
   useButtons: false,
   prevButtonClass: '',
   nextButtonClass: '',
+  disableMouseDrag: false,
 };
 
 export default ScrollableContainer;

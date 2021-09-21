@@ -211,6 +211,7 @@ function Stories() {
         <ScrollableContainer
           step={3}
           useButtons
+          disableMouseDrag
           onScrollCallback={() =>
             fetchTags({ limit: tagsLimit, offset: tagsOffset })
           }

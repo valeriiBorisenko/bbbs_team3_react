@@ -29,18 +29,6 @@
 
   &__scroll-container {
     flex-grow: 1;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 50px;
-      width: 40px;
-      height: 100%;
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, $background 100%);
-      z-index: 1;
-      pointer-events: none;
-    }
   }
 
   &__next-button,
@@ -312,8 +300,15 @@
 
     &__scroll-container {
       &::after {
+        content: '';
+        position: absolute;
         top: 0;
         right: 0;
+        width: 40px;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, $background 100%);
+        z-index: 1;
+        pointer-events: none;
       }
     }
 
