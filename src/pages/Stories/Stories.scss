@@ -105,6 +105,12 @@
         background-color: transparent;
         z-index: 1;
 
+        &:disabled {
+          visibility: hidden;
+          opacity: 0;
+          cursor: default;
+        }
+
         &.rec-arrow-left {
           left: calc((100% - 932px) / 2);
           background-image: url("../../assets/pagination-arrow-prev_black.svg");
@@ -187,6 +193,7 @@
   }
 }
 
+// ниже адаптив под разные экраны
 @media screen and (max-width: 1919px) {
   .stories {
     &__photo-carousel {

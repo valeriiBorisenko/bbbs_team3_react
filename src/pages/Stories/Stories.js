@@ -114,19 +114,6 @@ function Stories() {
     return <Loader isCentered />;
   }
 
-  // бесконечная прокрутка карусели с фото с возвращением на старт/конец
-  const onNextStart = (currentItem, nextItem) => {
-    if (currentItem.index === nextItem.index) {
-      photoCarouselRef.current.goTo(0);
-    }
-  };
-
-  const onPrevStart = (currentItem, nextItem) => {
-    if (currentItem.index === nextItem.index) {
-      photoCarouselRef.current.goTo(currentStory?.images?.length);
-    }
-  };
-
   return (
     currentStory && (
       <BasePage
@@ -225,11 +212,8 @@ function Stories() {
             className="stories__photo-carousel"
             itemsToScroll={1}
             itemsToShow={3}
-            initialActiveIndex={1}
+            initialActiveIndex={0}
             itemPadding={carouselItemPadding}
-            onPrevStart={onPrevStart}
-            onNextStart={onNextStart}
-            disableArrowsOnEnd={false}
             pagination={false}
           >
             <div className="stories__carousel-image" />
