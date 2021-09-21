@@ -15,6 +15,7 @@ import {
   Caption,
   Loader,
   NextArticleLink,
+  PopupPhoto,
   PseudoButtonTag,
   ScrollableContainer,
   TitleH1,
@@ -41,12 +42,21 @@ function Stories() {
   const { storyId } = useParams();
   const history = useHistory();
   const { currentUser } = useContext(CurrentUserContext);
-  const scrollAnchorRef = useRef(null);
 
   const [storiesTags, setStoriesTags] = useState([]);
   const [tagsOffset, setTagsOffset] = useState(0);
 
   const [currentStory, setCurrentStory] = useState(null);
+  const [isPopupPhotoOpen, setIsPopupPhotoOpen] = useState(false);
+  const [currentPhoto, setCurrentPhoto] = useState({});
+
+  const openPhotoPopup = () => {
+    setIsPopupPhotoOpen(true);
+  };
+
+  const closePhotoPopup = () => {
+    setIsPopupPhotoOpen(false);
+  };
 
   const photoCarouselRef = useRef(null);
   const [carouselItemPadding, setCarouselItemPaddings] = useState(
@@ -55,6 +65,8 @@ function Stories() {
 
   const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
   const nextPageLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
+  const pairTitle = storiesTags.find((tag) => tag.filter === currentStory?.id);
+  const togetherSince = formatDate(currentStory?.togetherSince);
 
   const handleFilters = (inputValue, isChecked) => {
     handleRadioBehavior(setStoriesTags, { inputValue, isChecked });
@@ -131,10 +143,9 @@ function Stories() {
     }
   }, [currentStoryId]);
 
-  const pairTitle = storiesTags.find((tag) => tag.filter === currentStory?.id);
-  const togetherSince = formatDate(currentStory?.togetherSince);
-
   // прокрутка наверх при переключении историй
+  const scrollAnchorRef = useRef(null);
+
   useEffect(() => {
     if (scrollAnchorRef.current) {
       scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -147,28 +158,35 @@ function Stories() {
 
   return (
     currentStory && (
-      <BasePage headTitle={headTitle} headDescription={headDescription}>
-        <div className="stories page__section">
-          <TitleH1 title={title} sectionClass="stories__title" />
-          <p className="stories__subtitle">{subtitle}</p>
+      <>
+        <BasePage headTitle={headTitle} headDescription={headDescription}>
+          <div className="stories page__section">
+            <TitleH1 title={title} sectionClass="stories__title" />
+            <p className="stories__subtitle">{subtitle}</p>
 
-          {renderTags()}
+            {renderTags()}
 
-          {renderUpperBlock()}
+            {renderUpperBlock()}
 
-          <ReactMarkdown className="stories__markdown">
-            {currentStory.uperBody}
-          </ReactMarkdown>
+            <ReactMarkdown className="stories__markdown">
+              {currentStory.uperBody}
+            </ReactMarkdown>
 
-          {renderPhotosCarousel()}
+            {renderPhotosCarousel()}
 
-          <ReactMarkdown className="stories__markdown stories__markdown_last">
-            {currentStory.lowerBody}
-          </ReactMarkdown>
+            <ReactMarkdown className="stories__markdown stories__markdown_last">
+              {currentStory.lowerBody}
+            </ReactMarkdown>
 
-          {renderLinksBlock()}
-        </div>
-      </BasePage>
+            {renderLinksBlock()}
+          </div>
+        </BasePage>
+        <PopupPhoto
+          isOpen={isPopupPhotoOpen}
+          onClose={closePhotoPopup}
+          currentPhoto={currentPhoto}
+        />
+      </>
     )
   );
 
@@ -179,7 +197,7 @@ function Stories() {
         <img
           className="stories__main-photo"
           src={`${staticImageUrl}/${currentStory?.image}`}
-          alt={currentStory.title}
+          alt={pairTitle?.name}
         />
         <TitleH2 title={pairTitle?.name} sectionClass="stories__pair-title" />
         <Caption
@@ -270,12 +288,20 @@ function Stories() {
           >
             <div className="stories__carousel-image" />
             {currentStory?.images?.map((image) => (
+              // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions
               <img
                 className="stories__carousel-image"
                 draggable={false}
                 key={image.id}
                 src={`${staticImageUrl}/${image.image}`}
                 alt={image.imageCaption}
+                onClick={() => {
+                  setCurrentPhoto({
+                    photoSrc: `${staticImageUrl}/${image.image}`,
+                    caption: image.imageCaption,
+                  });
+                  openPhotoPopup();
+                }}
               />
             ))}
             <div className="stories__carousel-image" />

@@ -163,6 +163,10 @@
     object-fit: cover;
     object-position: center;
     border-radius: 30px;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   &__markdown {

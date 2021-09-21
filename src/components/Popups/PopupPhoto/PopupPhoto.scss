@@ -1,0 +1,65 @@
+@import './styles/utils.scss';
+
+.popup {
+ &__container_type_photo {
+    max-width: fit-content;
+    padding: 50px 30px 30px;
+  }
+
+  &__close_type_photo {
+    top: 10px;
+  }
+
+  &__photo-figure {
+    margin: 0;
+    width: 100%;
+  }
+
+  &__full-image {
+    display: block;
+    max-width: 90vw;
+    max-height: 80vh;
+    width: 100%;
+    object-fit: contain;
+    margin-bottom: 20px;
+    border-radius: 30px;
+  }
+
+  &__full-caption {
+    font-family: $protoGrotesk;
+    color: $black;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.3;
+    text-align: center;
+  }
+}
+
+@include atDesktop1024 {
+  .popup {
+    &__container_type_photo {
+      padding: 40px 15px 20px;
+    }
+
+    &__close_type_photo {
+      top: 3px;
+      right: 5px;
+    }
+
+    &__full-image {
+      margin-bottom: 10px;
+    }
+
+    &__full-caption {
+      font-size: 15px;
+    }
+  }
+}
+
+@include atMobileL {
+  .popup {
+    &__container_type_photo {
+      padding: 40px 10px 20px;
+    }
+  }
+}
