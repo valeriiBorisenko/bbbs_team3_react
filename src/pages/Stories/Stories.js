@@ -202,10 +202,14 @@ function Stories() {
           <a
             className="link stories__link"
             href={`mailto:${currentStory.mentor.email}`}
-          >{`написать ${inclineFirstname(
-            currentStory.mentor?.firstName,
-            'dative'
-          )}`}</a>
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {`написать ${inclineFirstname(
+              currentStory.mentor?.firstName,
+              'dative'
+            )}`}
+          </a>
         )}
 
         {currentStory.nextArticle && (
