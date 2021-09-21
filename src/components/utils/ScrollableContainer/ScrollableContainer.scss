@@ -29,6 +29,11 @@
     background-position: center;
     transition: .3s ease;
 
+    &:disabled {
+      opacity: 0;
+      visibility: hidden;
+    }
+
     &:hover {
       cursor: pointer;
     }

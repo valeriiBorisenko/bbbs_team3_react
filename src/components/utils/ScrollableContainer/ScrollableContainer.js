@@ -1,9 +1,10 @@
 import './ScrollableContainer.scss';
 import PropTypes from 'prop-types';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import texts from './locales/RU';
 import { useInfiniteScroll } from '../../../hooks';
 
-const DELAY_NO_POINTER_EVENTS = 100;
+const DELAY_NO_POINTER_EVENTS = 150;
 const DEFAULT_DELTA_Y = 100;
 
 function ScrollableContainer({
@@ -26,14 +27,18 @@ function ScrollableContainer({
     scrollX: 0,
   });
 
+  const scrollHandler = (deltaY) => {
+    parentRef.current.scrollTo({
+      left: parentRef.current.scrollLeft + deltaY * step,
+      behavior: 'smooth',
+    });
+  };
+
   const scrollByWheel = useCallback(
     (evt) => {
       if (parentRef && parentRef.current) {
         evt.preventDefault();
-        parentRef.current.scrollTo({
-          left: parentRef.current.scrollLeft + evt.deltaY * step,
-          behavior: 'smooth',
-        });
+        scrollHandler(evt.deltaY);
       }
     },
     [parentRef.current]
@@ -41,10 +46,7 @@ function ScrollableContainer({
 
   const scrollByButtons = (type) => {
     const deltaY = type === 'prev' ? -DEFAULT_DELTA_Y : DEFAULT_DELTA_Y;
-    parentRef.current.scrollTo({
-      left: parentRef.current.scrollLeft + deltaY * step,
-      behavior: 'smooth',
-    });
+    scrollHandler(deltaY);
   };
 
   // eslint-disable-next-line consistent-return
@@ -150,7 +152,7 @@ function ScrollableContainer({
           ref={childRef}
           aria-hidden
         >
-          More
+          .
         </div>
       </div>
     </>
@@ -162,15 +164,13 @@ function ScrollableContainer({
         <button
           className={`scrollable-container__button scrollable-container__button_prev ${prevButtonClass}`}
           type="button"
-          aria-label="Prev"
-          title="Prev"
+          aria-label={texts.ariaLabelPrevButton}
           onClick={() => scrollByButtons('prev')}
         />
         <button
           className={`scrollable-container__button scrollable-container__button_next ${nextButtonClass}`}
           type="button"
-          aria-label="Next"
-          title="Next"
+          aria-label={texts.ariaLabelNextButton}
           onClick={() => scrollByButtons('next')}
         />
       </>

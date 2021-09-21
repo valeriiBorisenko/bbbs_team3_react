@@ -246,6 +246,7 @@ function Stories() {
             initialActiveIndex={0}
             itemPadding={carouselItemPadding}
             pagination={false}
+            disableArrowsOnEnd={false}
           >
             <div className="stories__carousel-image" />
             {currentStory?.images?.map((image) => (
