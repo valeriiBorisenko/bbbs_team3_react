@@ -39,16 +39,10 @@ function ScrollableContainer({
     [parentRef.current]
   );
 
-  const prevButtonScroll = () => {
+  const scrollByButtons = (type) => {
+    const deltaY = type === 'prev' ? -DEFAULT_DELTA_Y : DEFAULT_DELTA_Y;
     parentRef.current.scrollTo({
-      left: parentRef.current.scrollLeft - DEFAULT_DELTA_Y * step,
-      behavior: 'smooth',
-    });
-  };
-
-  const nextButtonScroll = () => {
-    parentRef.current.scrollTo({
-      left: parentRef.current.scrollLeft + DEFAULT_DELTA_Y * step,
+      left: parentRef.current.scrollLeft + deltaY * step,
       behavior: 'smooth',
     });
   };
@@ -170,14 +164,14 @@ function ScrollableContainer({
           type="button"
           aria-label="Prev"
           title="Prev"
-          onClick={prevButtonScroll}
+          onClick={() => scrollByButtons('prev')}
         />
         <button
           className={`scrollable-container__button scrollable-container__button_next ${nextButtonClass}`}
           type="button"
           aria-label="Next"
           title="Next"
-          onClick={nextButtonScroll}
+          onClick={() => scrollByButtons('next')}
         />
       </>
     );

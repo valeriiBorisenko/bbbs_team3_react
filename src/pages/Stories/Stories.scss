@@ -28,6 +28,8 @@
   }
 
   &__scroll-container {
+    flex-grow: 1;
+
     &::after {
       content: '';
       position: absolute;
