@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Carousel from 'react-elastic-carousel';
 import { useHistory, useParams } from 'react-router-dom';
 import storiesPageTexts from '../../locales/stories-page-RU';
+import { CurrentUserContext } from '../../contexts';
 import { staticImageUrl } from '../../config/config';
 import { STORIES_URL } from '../../config/routes';
 import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
@@ -36,6 +37,7 @@ const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
 function Stories() {
   const { storyId } = useParams();
   const history = useHistory();
+  const { currentUser } = useContext(CurrentUserContext);
 
   const [storiesTags, setStoriesTags] = useState([]);
   const [tagsOffset, setTagsOffset] = useState(0);
@@ -190,10 +192,13 @@ function Stories() {
   function renderLinksBlock() {
     return (
       <div className="stories__links">
-        <a
-          className="link stories__link"
-          href={`mailto:${currentStory.mentor?.email}`}
-        >{`написать ${currentStory.mentor?.firstName}`}</a>
+        {currentUser && currentStory.mentor?.email && (
+          <a
+            className="link stories__link"
+            href={`mailto:${currentStory.mentor.email}`}
+          >{`написать ${currentStory.mentor?.firstName}`}</a>
+        )}
+
         {currentStory.nextArticle && (
           <NextArticleLink
             text={currentStory.nextArticle.title}
