@@ -36,14 +36,14 @@ const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
 function Stories() {
   const { storyId } = useParams();
   const history = useHistory();
-  const photoCarouselRef = useRef(null);
 
-  // теги и динамическая подгрузка тегов
   const [storiesTags, setStoriesTags] = useState([]);
   const [tagsOffset, setTagsOffset] = useState(0);
   const tagsLimit = 10;
 
   const [currentStory, setCurrentStory] = useState(null);
+
+  const photoCarouselRef = useRef(null);
   const [carouselItemPadding, setCarouselItemPaddings] = useState(
     carouselItemPaddings.desktop
   );
@@ -56,7 +56,7 @@ function Stories() {
     history.push(`${STORIES_URL}/${inputValue}`);
   };
 
-  function fetchTags({ limit, offset }) {
+  const fetchTags = ({ limit, offset }) => {
     if (tagsOffset <= storiesTags.length) {
       getStoriesPageTags({ limit, offset })
         .then(({ results }) => {
@@ -72,7 +72,7 @@ function Stories() {
         })
         .catch(console.log);
     }
-  }
+  };
 
   // динамические падинги для фото слайдера
   useEffect(() => {
@@ -104,12 +104,14 @@ function Stories() {
     fetchTags({ limit: tagsLimit, offset: tagsOffset });
   }, []);
 
+  // получение конкретной истории по id
   useEffect(() => {
-    if (storiesTags.length && currentStoryId) {
+    if (currentStoryId) {
       getStoryById(currentStoryId).then(setCurrentStory).catch(console.log);
     }
-  }, [storiesTags, currentStoryId]);
+  }, [currentStoryId]);
 
+  // синхронизация фильтров в зависимости от выбранной истории
   useEffect(() => {
     if (storiesTags.length) {
       const tagToBeActive = storiesTags.find(
@@ -205,25 +207,30 @@ function Stories() {
 
   function renderTags() {
     return (
-      <ScrollableContainer
-        step={3}
-        sectionClass="stories__tags-carousel"
-        onScrollCallback={() =>
-          fetchTags({ limit: tagsLimit, offset: tagsOffset })
-        }
-      >
-        {storiesTags.map((item) => (
-          <PseudoButtonTag
-            key={item.filter}
-            name={item.name}
-            value={item.filter}
-            title={item.name}
-            isActive={item.isActive}
-            onClick={handleFilters}
-            sectionClass="scrollable-container__child"
-          />
-        ))}
-      </ScrollableContainer>
+      <div className="stories__tags-carousel">
+        <ScrollableContainer
+          step={3}
+          useButtons
+          onScrollCallback={() =>
+            fetchTags({ limit: tagsLimit, offset: tagsOffset })
+          }
+          sectionClass="stories__scroll-container"
+          prevButtonClass="stories__prev-button"
+          nextButtonClass="stories__next-button"
+        >
+          {storiesTags.map((item) => (
+            <PseudoButtonTag
+              key={item.filter}
+              name={item.name}
+              value={item.filter}
+              title={item.name}
+              isActive={item.isActive}
+              onClick={handleFilters}
+              sectionClass="scrollable-container__child"
+            />
+          ))}
+        </ScrollableContainer>
+      </div>
     );
   }
 

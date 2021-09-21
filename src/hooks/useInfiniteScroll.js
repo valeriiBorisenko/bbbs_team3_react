@@ -24,7 +24,7 @@ const useInfiniteScroll = (parentRef, childRef, callback) => {
         observer.current.unobserve(childRef.current);
       };
     }
-  }, [callback]);
+  }, [callback, parentRef, childRef]);
 };
 
 export default useInfiniteScroll;

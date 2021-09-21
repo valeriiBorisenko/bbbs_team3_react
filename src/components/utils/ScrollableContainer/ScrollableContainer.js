@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { useInfiniteScroll } from '../../../hooks';
 
-const DELAY_NO_POINTER_EVENTS = 150;
+const DELAY_NO_POINTER_EVENTS = 100;
+const DEFAULT_DELTA_Y = 100;
 
 function ScrollableContainer({
   children,
   step,
   sectionClass,
   onScrollCallback,
+  useButtons,
+  prevButtonClass,
+  nextButtonClass,
 }) {
   const parentRef = useRef(null);
   const childRef = useRef(null);
@@ -34,6 +38,20 @@ function ScrollableContainer({
     },
     [parentRef.current]
   );
+
+  const prevButtonScroll = () => {
+    parentRef.current.scrollTo({
+      left: parentRef.current.scrollLeft - DEFAULT_DELTA_Y * step,
+      behavior: 'smooth',
+    });
+  };
+
+  const nextButtonScroll = () => {
+    parentRef.current.scrollTo({
+      left: parentRef.current.scrollLeft + DEFAULT_DELTA_Y * step,
+      behavior: 'smooth',
+    });
+  };
 
   // eslint-disable-next-line consistent-return
   useLayoutEffect(() => {
@@ -120,25 +138,50 @@ function ScrollableContainer({
     .trim();
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div
-      className={classNames}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseLeave}
-      ref={parentRef}
-    >
-      {children}
+    <>
+      {useButtons && renderButtons()}
+
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
       <div
-        className="scrollable-container__callback-anchor"
-        ref={childRef}
-        aria-hidden
+        className={classNames}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseLeave}
+        ref={parentRef}
       >
-        More
+        {children}
+        <div
+          className="scrollable-container__callback-anchor"
+          ref={childRef}
+          aria-hidden
+        >
+          More
+        </div>
       </div>
-    </div>
+    </>
   );
+
+  function renderButtons() {
+    return (
+      <>
+        <button
+          className={`scrollable-container__button scrollable-container__button_prev ${prevButtonClass}`}
+          type="button"
+          aria-label="Prev"
+          title="Prev"
+          onClick={prevButtonScroll}
+        />
+        <button
+          className={`scrollable-container__button scrollable-container__button_next ${nextButtonClass}`}
+          type="button"
+          aria-label="Next"
+          title="Next"
+          onClick={nextButtonScroll}
+        />
+      </>
+    );
+  }
 }
 
 ScrollableContainer.propTypes = {
@@ -146,6 +189,9 @@ ScrollableContainer.propTypes = {
   children: PropTypes.node,
   step: PropTypes.number,
   onScrollCallback: PropTypes.func,
+  useButtons: PropTypes.bool,
+  prevButtonClass: PropTypes.string,
+  nextButtonClass: PropTypes.string,
 };
 
 ScrollableContainer.defaultProps = {
@@ -153,6 +199,9 @@ ScrollableContainer.defaultProps = {
   children: null,
   step: 1,
   onScrollCallback: () => {},
+  useButtons: false,
+  prevButtonClass: '',
+  nextButtonClass: '',
 };
 
 export default ScrollableContainer;
