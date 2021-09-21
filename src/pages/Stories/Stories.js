@@ -38,6 +38,7 @@ function Stories() {
   const { storyId } = useParams();
   const history = useHistory();
   const { currentUser } = useContext(CurrentUserContext);
+  const scrollAnchorRef = useRef(null);
 
   const [storiesTags, setStoriesTags] = useState([]);
   const [tagsOffset, setTagsOffset] = useState(0);
@@ -131,17 +132,20 @@ function Stories() {
   const pairTitle = storiesTags.find((tag) => tag.filter === currentStory?.id);
   const togetherSince = formatDate(currentStory?.togetherSince);
 
+  // прокрутка наверх при переключении историй
+  useEffect(() => {
+    if (scrollAnchorRef.current) {
+      scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [storyId]);
+
   if (!currentStory && !storiesTags.length) {
     return <Loader isCentered />;
   }
 
   return (
     currentStory && (
-      <BasePage
-        headTitle={headTitle}
-        headDescription={headDescription}
-        scrollUpDeps={[storyId]}
-      >
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
         <div className="stories page__section">
           <TitleH1 title={title} sectionClass="stories__title" />
           <p className="stories__subtitle">{subtitle}</p>
@@ -213,6 +217,7 @@ function Stories() {
   function renderTags() {
     return (
       <div className="stories__tags-carousel">
+        <span className="stories__scroll-anchor" ref={scrollAnchorRef} />
         <ScrollableContainer
           step={3}
           useButtons

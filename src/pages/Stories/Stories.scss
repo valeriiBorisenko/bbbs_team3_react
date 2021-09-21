@@ -27,6 +27,12 @@
     column-gap: 20px;
   }
 
+  &__scroll-anchor {
+    position: absolute;
+    top: -40px;
+    left: 0;
+  }
+
   &__scroll-container {
     flex-grow: 1;
   }
@@ -296,6 +302,12 @@
       & .pseudo-button-label:last-of-type {
         margin-right: 127px;
       }
+    }
+
+    &__scroll-anchor {
+      position: absolute;
+      top: -18px;
+      left: 0;
     }
 
     &__scroll-container {
