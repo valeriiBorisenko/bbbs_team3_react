@@ -11,9 +11,16 @@
     height: 0;
   }
 
+  &__callback-anchor {
+    width: 1px;
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+  }
+
   &_scrolling {
     cursor: grabbing;
-    
+
     > .scrollable-container__child {
       pointer-events: none;
     }

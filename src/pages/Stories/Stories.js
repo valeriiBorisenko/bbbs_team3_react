@@ -26,6 +26,11 @@ const carouselItemPaddings = {
   mobile: [0, 7.5],
 };
 
+const maxScreenWidth = {
+  tablet: 1100,
+  mobile: 706,
+};
+
 const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
 
 function Stories() {
@@ -33,7 +38,11 @@ function Stories() {
   const history = useHistory();
   const photoCarouselRef = useRef(null);
 
+  // теги и динамическая подгрузка тегов
   const [storiesTags, setStoriesTags] = useState([]);
+  const [tagsOffset, setTagsOffset] = useState(0);
+  const tagsLimit = 10;
+
   const [currentStory, setCurrentStory] = useState(null);
   const [carouselItemPadding, setCarouselItemPaddings] = useState(
     carouselItemPaddings.desktop
@@ -47,10 +56,28 @@ function Stories() {
     history.push(`${STORIES_URL}/${inputValue}`);
   };
 
+  function fetchTags({ limit, offset }) {
+    if (tagsOffset <= storiesTags.length) {
+      getStoriesPageTags({ limit, offset })
+        .then(({ results }) => {
+          if (results?.length) {
+            const storiesTagsData = results.map((tag) => ({
+              filter: tag.id,
+              name: tag.pair,
+              isActive: +storyId === +tag.id,
+            }));
+            setStoriesTags((prevTags) => [...prevTags, ...storiesTagsData]);
+            setTagsOffset((prevOffset) => prevOffset + limit);
+          }
+        })
+        .catch(console.log);
+    }
+  }
+
   // динамические падинги для фото слайдера
   useEffect(() => {
-    const tablet = window.matchMedia(`(max-width: 1100px)`);
-    const mobile = window.matchMedia(`(max-width: 706px)`);
+    const tablet = window.matchMedia(`(max-width: ${maxScreenWidth.tablet}px)`);
+    const mobile = window.matchMedia(`(max-width: ${maxScreenWidth.mobile}px)`);
 
     const listenWindowWidth = () => {
       if (mobile.matches)
@@ -72,19 +99,9 @@ function Stories() {
     };
   }, []);
 
+  // получение списка всех историй
   useEffect(() => {
-    getStoriesPageTags()
-      .then(({ results }) => {
-        if (results?.length) {
-          const storiesTagsData = results.map((tag) => ({
-            filter: tag.id,
-            name: tag.pair,
-            isActive: +storyId === +tag.id,
-          }));
-          setStoriesTags(storiesTagsData);
-        }
-      })
-      .catch(console.log);
+    fetchTags({ limit: tagsLimit, offset: tagsOffset });
   }, []);
 
   useEffect(() => {
@@ -188,7 +205,13 @@ function Stories() {
 
   function renderTags() {
     return (
-      <ScrollableContainer step={6} sectionClass="stories__tags-carousel">
+      <ScrollableContainer
+        step={3}
+        sectionClass="stories__tags-carousel"
+        onScrollCallback={() =>
+          fetchTags({ limit: tagsLimit, offset: tagsOffset })
+        }
+      >
         {storiesTags.map((item) => (
           <PseudoButtonTag
             key={item.filter}
@@ -197,6 +220,7 @@ function Stories() {
             title={item.name}
             isActive={item.isActive}
             onClick={handleFilters}
+            sectionClass="scrollable-container__child"
           />
         ))}
       </ScrollableContainer>

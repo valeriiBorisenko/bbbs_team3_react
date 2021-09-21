@@ -1,13 +1,21 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable consistent-return */
 import './ScrollableContainer.scss';
 import PropTypes from 'prop-types';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useInfiniteScroll } from '../../../hooks';
 
 const DELAY_NO_POINTER_EVENTS = 150;
 
-function ScrollableContainer({ children, step, sectionClass }) {
-  const ref = useRef();
+function ScrollableContainer({
+  children,
+  step,
+  sectionClass,
+  onScrollCallback,
+}) {
+  const parentRef = useRef(null);
+  const childRef = useRef(null);
+
+  useInfiniteScroll(parentRef, childRef, onScrollCallback);
+
   const [state, setState] = useState({
     isScrolling: false,
     clientX: 0,
@@ -16,26 +24,32 @@ function ScrollableContainer({ children, step, sectionClass }) {
 
   const scrollByWheel = useCallback(
     (evt) => {
-      if (ref && ref.current) {
+      if (parentRef && parentRef.current) {
         evt.preventDefault();
-        ref.current.scrollTo({
-          left: ref.current.scrollLeft + evt.deltaY * step,
+        parentRef.current.scrollTo({
+          left: parentRef.current.scrollLeft + evt.deltaY * step,
           behavior: 'smooth',
         });
       }
     },
-    [ref.current]
+    [parentRef.current]
   );
 
+  // eslint-disable-next-line consistent-return
   useLayoutEffect(() => {
-    if (ref && ref.current) {
-      ref.current.addEventListener('wheel', scrollByWheel);
-      return () => ref.current.removeEventListener('wheel', scrollByWheel);
+    if (parentRef && parentRef.current) {
+      parentRef.current.addEventListener('wheel', scrollByWheel);
+      return () =>
+        parentRef.current.removeEventListener('wheel', scrollByWheel);
     }
-  }, [ref.current]);
+  }, [parentRef.current]);
 
   const onMouseDown = (evt) => {
-    if (ref && ref.current && !ref.current.contains(evt.target)) {
+    if (
+      parentRef &&
+      parentRef.current &&
+      !parentRef.current.contains(evt.target)
+    ) {
       return;
     }
     evt.preventDefault();
@@ -49,7 +63,11 @@ function ScrollableContainer({ children, step, sectionClass }) {
   };
 
   const onMouseUp = (evt) => {
-    if (ref && ref.current && !ref.current.contains(evt.target)) {
+    if (
+      parentRef &&
+      parentRef.current &&
+      !parentRef.current.contains(evt.target)
+    ) {
       return;
     }
     evt.preventDefault();
@@ -60,12 +78,16 @@ function ScrollableContainer({ children, step, sectionClass }) {
   };
 
   const onMouseMove = (evt) => {
-    if (ref && ref.current && !ref.current.contains(evt.target)) {
+    if (
+      parentRef &&
+      parentRef.current &&
+      !parentRef.current.contains(evt.target)
+    ) {
       return;
     }
     const { clientX, scrollX, isScrolling } = state;
     if (isScrolling) {
-      ref.current.scrollLeft = scrollX - evt.clientX + clientX;
+      parentRef.current.scrollLeft = scrollX - evt.clientX + clientX;
       setState({
         ...state,
         scrollX: scrollX - evt.clientX + clientX,
@@ -75,7 +97,11 @@ function ScrollableContainer({ children, step, sectionClass }) {
   };
 
   const onMouseLeave = (evt) => {
-    if (ref && ref.current && !ref.current.contains(evt.target)) {
+    if (
+      parentRef &&
+      parentRef.current &&
+      !parentRef.current.contains(evt.target)
+    ) {
       return;
     }
     evt.preventDefault();
@@ -94,15 +120,23 @@ function ScrollableContainer({ children, step, sectionClass }) {
     .trim();
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       className={classNames}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
       onMouseLeave={onMouseLeave}
-      ref={ref}
+      ref={parentRef}
     >
       {children}
+      <div
+        className="scrollable-container__callback-anchor"
+        ref={childRef}
+        aria-hidden
+      >
+        More
+      </div>
     </div>
   );
 }
@@ -111,12 +145,14 @@ ScrollableContainer.propTypes = {
   sectionClass: PropTypes.string,
   children: PropTypes.node,
   step: PropTypes.number,
+  onScrollCallback: PropTypes.func,
 };
 
 ScrollableContainer.defaultProps = {
   sectionClass: '',
   children: null,
   step: 1,
+  onScrollCallback: () => {},
 };
 
 export default ScrollableContainer;
