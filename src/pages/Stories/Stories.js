@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Carousel from 'react-elastic-carousel';
 import { useHistory, useParams } from 'react-router-dom';
+import { inclineFirstname } from 'lvovich';
 import storiesPageTexts from '../../locales/stories-page-RU';
 import { CurrentUserContext } from '../../contexts';
 import { staticImageUrl } from '../../config/config';
@@ -32,6 +33,8 @@ const maxScreenWidth = {
   mobile: 706,
 };
 
+const tagsLimit = 10;
+
 const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
 
 function Stories() {
@@ -42,7 +45,6 @@ function Stories() {
 
   const [storiesTags, setStoriesTags] = useState([]);
   const [tagsOffset, setTagsOffset] = useState(0);
-  const tagsLimit = 10;
 
   const [currentStory, setCurrentStory] = useState(null);
 
@@ -200,7 +202,10 @@ function Stories() {
           <a
             className="link stories__link"
             href={`mailto:${currentStory.mentor.email}`}
-          >{`написать ${currentStory.mentor?.firstName}`}</a>
+          >{`написать ${inclineFirstname(
+            currentStory.mentor?.firstName,
+            'dative'
+          )}`}</a>
         )}
 
         {currentStory.nextArticle && (
