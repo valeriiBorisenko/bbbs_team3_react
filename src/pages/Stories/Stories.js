@@ -35,6 +35,7 @@ const maxScreenWidth = {
 };
 
 const tagsLimit = 10;
+const disablePointerEventsDelay = 150;
 
 const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
 
@@ -62,6 +63,7 @@ function Stories() {
   const [carouselItemPadding, setCarouselItemPaddings] = useState(
     carouselItemPaddings.desktop
   );
+  const [isCarouselDragging, setIsCarouselDragging] = useState(false);
 
   const openFullPhoto = (imageSrc, caption) => {
     setCurrentPhoto({
@@ -69,6 +71,18 @@ function Stories() {
       caption,
     });
     openPhotoPopup();
+  };
+
+  const preventClickOnMouseDown = () => {
+    setTimeout(() => {
+      setIsCarouselDragging(true);
+    }, disablePointerEventsDelay);
+  };
+
+  const preventClickOnMouseUp = () => {
+    setTimeout(() => {
+      setIsCarouselDragging(false);
+    }, disablePointerEventsDelay);
   };
 
   const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
@@ -283,7 +297,11 @@ function Stories() {
   function renderPhotosCarousel() {
     return (
       <div className="stories__photo-carousel-container">
-        <div className="stories__photo-carousel-wrapper">
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <div
+          className="stories__photo-carousel-wrapper"
+          onMouseUp={preventClickOnMouseUp}
+        >
           <Carousel
             ref={photoCarouselRef}
             className="stories__photo-carousel"
@@ -297,7 +315,11 @@ function Stories() {
             {currentStory?.images?.map((image, idx) => (
               <div
                 key={image.id}
-                className="stories__carousel-image-wrap"
+                className={`stories__carousel-image-wrap ${
+                  isCarouselDragging
+                    ? 'stories__carousel-image-wrap_disabled-events'
+                    : ''
+                }`}
                 onClick={() => {
                   photoCarouselRef.current.goTo(idx);
                   openFullPhoto(
@@ -314,6 +336,7 @@ function Stories() {
                 }}
                 role="button"
                 tabIndex={0}
+                onMouseDown={preventClickOnMouseDown}
               >
                 <img
                   className="stories__carousel-image"
