@@ -1,13 +1,12 @@
 import './RightsArticle.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import {
   PageWithTransparentHeader,
   Loader,
-  TitleH2,
   AnimatedPageContainer,
+  NextArticleLink,
 } from './index';
 import { getRightsArticle } from '../../api/rights-page';
 import { ERROR_MESSAGES } from '../../config/constants';
@@ -38,36 +37,17 @@ function RightsArticle({ id, getActiveTags }) {
     </ReactMarkdown>
   );
 
-  const rendenNextPageBlock = () => {
-    if (articleData.nextArticle) {
-      return (
-        <section className="next-page">
-          <div className="next-page__img-wrap">
-            <img
-              src="#"
-              alt="Льготы детей на жилье"
-              className="next-page__img"
-            />
-          </div>
-          <Link
-            to={{
-              pathname: `/rights/${articleData.nextArticle?.id}`,
-              getActiveTags,
-            }}
-            className="next-page__link"
-          >
-            <TitleH2
-              sectionClass="next-page__title"
-              title={articleData.nextArticle?.title}
-            />
-            <div className="next-page__arrow-icon" />
-          </Link>
-        </section>
-      );
-    }
-
-    return <></>;
-  };
+  const rendenNextPageBlock = () =>
+    articleData.nextArticle && (
+      <NextArticleLink
+        text={articleData.nextArticle.title}
+        href={{
+          pathname: `/rights/${articleData?.nextArticle?.id}`,
+          getActiveTags,
+        }}
+        sectionClass="article__next-article-link"
+      />
+    );
 
   const renderMainContent = () => {
     if (isPageError) {
@@ -84,8 +64,12 @@ function RightsArticle({ id, getActiveTags }) {
     return (
       <>
         {renderLeadBlock()}
-        {renderHtmlBlock()}
-        {rendenNextPageBlock()}
+        <div className="article page-section">
+          <div className="article__container">
+            {renderHtmlBlock()}
+            {rendenNextPageBlock()}
+          </div>
+        </div>
       </>
     );
   };
