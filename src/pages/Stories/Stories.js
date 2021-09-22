@@ -113,6 +113,13 @@ function Stories() {
     }
   };
 
+  // подгрузка тегов при переключении по ссылкам внизу
+  const fetchTagsOnNextLink = () => {
+    if (currentStoryId === storiesTags[storiesTags.length - 1].filter) {
+      fetchTags({ limit: tagsLimit, offset: tagsOffset });
+    }
+  };
+
   // динамические падинги для фото слайдера
   useEffect(() => {
     const tablet = window.matchMedia(`(max-width: ${maxScreenWidth.tablet})`);
@@ -163,7 +170,7 @@ function Stories() {
         });
       }
     }
-  }, [currentStoryId]);
+  }, [currentStoryId, tagsOffset]);
 
   // прокрутка наверх при переключении историй
   const scrollAnchorRef = useRef(null);
@@ -256,6 +263,7 @@ function Stories() {
           <NextArticleLink
             text={currentStory.nextArticle.title}
             href={nextPageLink}
+            onClick={fetchTagsOnNextLink}
             sectionClass="stories__link_next"
           />
         )}
