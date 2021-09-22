@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './App.scss';
 import { HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
@@ -6,25 +6,25 @@ import Router from './navigation/Router';
 import Loader from './components/utils/Loader/Loader';
 // попапы
 import {
-  PopupConfirmation,
-  PopupSuccessfully,
   PopupAboutEvent,
-  PopupError,
   PopupCities,
+  PopupConfirmation,
+  PopupError,
+  PopupInfoTooltip,
   PopupLogin,
   PopupRecommendSuccess,
+  PopupSuccessfully,
   PopupVideo,
-  PopupInfoTooltip,
 } from './components/Popups/index';
 // логины, авторизация
 import {
-  CurrentUserContext,
   CitiesContext,
-  PopupsContext,
+  CurrentUserContext,
   ErrorsContext,
+  PopupsContext,
 } from './contexts/index';
 // хуки
-import { useCities, useAuth } from './hooks/index';
+import { useAuth, useCities } from './hooks/index';
 import PopupBook from './components/Popups/PopupBook/PopupBook';
 import PopupPlace from './components/Popups/PopupPlace/PopupPlace';
 import PopupArticle from './components/Popups/PopupArticle/PopupArticle';
@@ -180,11 +180,12 @@ function App() {
     checkToken();
   }, []);
 
-  // закрытие всех попапов при смене страницы
+  // закрытие всех попапов при смене страницы, очистка ошибок
   useEffect(() => {
     closeAllPopups();
     closePopupError();
     closePopupCities();
+    clearError();
   }, [pathname]);
 
   // эффект закрытия модалок по Escape
