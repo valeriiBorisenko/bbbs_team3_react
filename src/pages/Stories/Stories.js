@@ -98,8 +98,8 @@ function Stories() {
   const pairTitle = storiesTags.find((tag) => tag.filter === currentStory?.id);
   const togetherSince = formatDate(currentStory?.togetherSince);
 
-  const handleFilters = (inputValue, isChecked) => {
-    handleRadioBehavior(setStoriesTags, { inputValue, isChecked });
+  const handleFilters = (inputValue) => {
+    handleRadioBehavior(setStoriesTags, { inputValue, isChecked: true });
     history.push(`${STORIES_URL}/${inputValue}`);
   };
 
@@ -170,9 +170,8 @@ function Stories() {
       getStoryById(currentStoryId)
         .then(setCurrentStory)
         .catch((err) => {
-          if (err.status === ERROR_CODES.notFound) {
-            history.push(NOT_FOUND_URL);
-          } else setIsPageError(true);
+          if (err.status === ERROR_CODES.notFound) history.push(NOT_FOUND_URL);
+          else setIsPageError(true);
         })
         .finally(() => {
           setIsStoryLoading(false);
