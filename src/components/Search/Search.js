@@ -8,6 +8,7 @@ import search from '../../api/search';
 import { CATALOG_URL, RIGHTS_URL } from '../../config/routes';
 import { CurrentUserContext } from '../../contexts';
 import { localStUserCity } from '../../config/constants';
+import searchTexts from '../../locales/search-RU';
 
 function Search({
   isOpenSearch,
@@ -47,9 +48,7 @@ function Search({
   const renderSearchItems = () => {
     if (isVoidSearch)
       return (
-        <p className="search__content_type_void">
-          По вашему заросу ничего не найдено
-        </p>
+        <p className="search__content_type_void">{searchTexts.notFoundText}</p>
       );
 
     if (searchValue.length > 0) {
@@ -80,7 +79,7 @@ function Search({
       );
     }
 
-    return <p className="search__content_type_ask">Введите свой запрос</p>;
+    return <p className="search__content_type_ask">{searchTexts.searchText}</p>;
   };
 
   const renderSearchContent = () =>
