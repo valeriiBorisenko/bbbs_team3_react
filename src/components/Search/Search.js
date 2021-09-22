@@ -7,7 +7,7 @@ import { Loader, SearchButton } from '../utils';
 import { useDebounce, useFormWithValidation } from '../../hooks';
 import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import search from '../../api/search';
-import { CATALOG_URL, RIGHTS_URL } from '../../config/routes';
+import { CATALOG_URL, RIGHTS_URL, STORIES_URL } from '../../config/routes';
 import { CitiesContext, CurrentUserContext } from '../../contexts';
 import { DELAY_DEBOUNCE, localStUserCity } from '../../config/constants';
 
@@ -32,6 +32,7 @@ function Search({
   const getPathName = (url, id) => {
     if (`/${url}` === RIGHTS_URL) return `/${url}/${id}`;
     if (`/${url}` === CATALOG_URL) return `/${url}/${id}`;
+    if (`/${url}` === STORIES_URL) return `/${url}/${id}`;
     return `/${url}`;
   };
 
