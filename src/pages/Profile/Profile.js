@@ -47,14 +47,17 @@ const {
 } = profilePageTexts;
 
 const diariesPerPageCount = 10;
+const eventsLimit = 10;
 
 function Profile() {
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
   const { setError } = useContext(ErrorsContext);
   const { unauthorized, badRequest } = ERROR_CODES;
 
-  const [events, setEvents] = useState(null);
-  const [archivedEvents, setArchivedEvents] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [archivedEvents, setArchivedEvents] = useState([]);
+  const [eventsOffset, setEventsOffset] = useState(0);
+
   const [diaries, setDiaries] = useState(null);
   const [isArchiveOpen, setIsArchiveOpen] = useState(false);
 
@@ -66,44 +69,55 @@ function Profile() {
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
 
+  const titleH1Current = events.length > 0 ? eventsTitle : eventsTitleNoResults;
+  const titleH1Archive =
+    archivedEvents.length > 0
+      ? eventsTitleArchive
+      : eventsTitleNoResultsArchive;
+
   // пагинация
   const [pageCount, setPageCount] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
-  const getArchiveOfEvents = () => {
-    getArchiveOfBookedEvents()
-      .then((eventsData) => {
-        setArchivedEvents(eventsData);
-      })
-      .catch(() => {
-        setError({
-          title: ERROR_MESSAGES.generalErrorMessage.title,
-          button: ERROR_MESSAGES.generalErrorMessage.button,
-        });
-        openPopupError();
-      })
-      .finally(() => setIsLoadingEvents(false));
+  const getArchiveOfEvents = ({ limit, offset }) => {
+    console.log(`Archive, offset: ${offset}, events ${archivedEvents.length}`);
+    if (offset <= archivedEvents.length) {
+      getArchiveOfBookedEvents({ limit, offset })
+        .then((eventsData) => {
+          setArchivedEvents((prevEvents) => [...prevEvents, ...eventsData]);
+          setEventsOffset((prevOffset) => prevOffset + limit);
+        })
+        .catch(() => {
+          setError(ERROR_MESSAGES.generalErrorMessage);
+          openPopupError();
+        })
+        .finally(() => setIsLoadingEvents(false));
+    }
   };
 
-  const getCurrentBookedEvents = () => {
-    getBookedEvents()
-      .then((eventsData) => {
-        const sortedEvents = eventsData
-          .sort((a, b) => {
-            const date1 = new Date(a?.event?.startAt);
-            const date2 = new Date(b?.event?.startAt);
-            return date1 - date2;
-          })
-          .map(({ event }) => {
-            const updatedEvent = event;
-            updatedEvent.booked = true;
-            return updatedEvent;
-          });
-        setEvents(sortedEvents);
-      })
-      .catch(() => setIsPageError(true))
-      .finally(() => setIsLoadingEvents(false));
+  const getCurrentBookedEvents = ({ limit, offset }) => {
+    console.log(`Current, offset: ${offset}, events ${events.length}`);
+    if (offset <= events.length) {
+      getBookedEvents({ limit, offset })
+        .then((eventsData) => {
+          const sortedEvents = eventsData
+            .sort((a, b) => {
+              const date1 = new Date(a?.event?.startAt);
+              const date2 = new Date(b?.event?.startAt);
+              return date1 - date2;
+            })
+            .map(({ event }) => {
+              const updatedEvent = event;
+              updatedEvent.booked = true;
+              return updatedEvent;
+            });
+          setEvents((prevEvents) => [...prevEvents, ...sortedEvents]);
+          setEventsOffset((prevOffset) => prevOffset + limit);
+        })
+        .catch(() => setIsPageError(true))
+        .finally(() => setIsLoadingEvents(false));
+    }
   };
 
   const getDiaries = () => {
@@ -119,7 +133,7 @@ function Profile() {
   };
 
   useEffect(() => {
-    getCurrentBookedEvents();
+    getCurrentBookedEvents({ limit: eventsLimit, offset: eventsOffset });
   }, []);
 
   useEffect(() => {
@@ -149,15 +163,19 @@ function Profile() {
   };
 
   const openArchiveOfEvents = () => {
+    setEvents([]);
+    setEventsOffset(0);
     setIsArchiveOpen(true);
     setIsLoadingEvents(true);
-    getArchiveOfEvents();
+    getArchiveOfEvents({ limit: eventsLimit, offset: 0 });
   };
 
   const openCurrentEvents = () => {
+    setArchivedEvents([]);
+    setEventsOffset(0);
     setIsArchiveOpen(false);
     setIsLoadingEvents(true);
-    getCurrentBookedEvents();
+    getCurrentBookedEvents({ limit: eventsLimit, offset: 0 });
   };
 
   // работа с формой
@@ -257,10 +275,7 @@ function Profile() {
         closeDeleteDiaryPopup();
       })
       .catch(() => {
-        setError({
-          title: ERROR_MESSAGES.generalErrorMessage.title,
-          button: ERROR_MESSAGES.generalErrorMessage.button,
-        });
+        setError(ERROR_MESSAGES.generalErrorMessage);
         openPopupError();
       });
   };
@@ -277,25 +292,33 @@ function Profile() {
         );
       })
       .catch(() => {
-        setError({
-          title: ERROR_MESSAGES.generalErrorMessage.title,
-          button: ERROR_MESSAGES.generalErrorMessage.button,
-        });
+        setError(ERROR_MESSAGES.generalErrorMessage);
         openPopupError();
       });
   };
 
-  // функции рендера
-  const titleH1Current =
-    events?.length > 0 ? eventsTitle : eventsTitleNoResults;
-  const titleH1Archive =
-    archivedEvents?.length > 0
-      ? eventsTitleArchive
-      : eventsTitleNoResultsArchive;
+  if (!events.length && !diaries) {
+    return <Loader isCentered />;
+  }
 
-  const renderEventCards = () => {
+  return (
+    <>
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
+        <section className="profile fade-in">{renderPageContent()}</section>
+      </BasePage>
+      <PopupDeleteDiary
+        isOpen={isDeleteDiaryPopupOpen}
+        cardData={selectedDiary}
+        onClose={closeDeleteDiaryPopup}
+        onCardDelete={handleDeleteDiary}
+      />
+    </>
+  );
+
+  // функции рендера
+  function renderEventCards() {
     const renderingEvents = isArchiveOpen ? archivedEvents : events;
-    if (renderingEvents && renderingEvents?.length > 0) {
+    if (renderingEvents.length > 0) {
       return (
         <>
           {renderingEvents.map((item) => (
@@ -310,9 +333,9 @@ function Profile() {
       );
     }
     return null;
-  };
+  }
 
-  const renderAddDiaryButton = () => {
+  function renderAddDiaryButton() {
     if (!isFormOpen && diaries && diaries.length > 0) {
       return (
         <button
@@ -325,9 +348,9 @@ function Profile() {
       );
     }
     return null;
-  };
+  }
 
-  const renderDiaryForm = () => {
+  function renderDiaryForm() {
     if (isFormOpen || (diaries && diaries.length === 0)) {
       return (
         <div className="profile__form-container">
@@ -346,9 +369,9 @@ function Profile() {
       );
     }
     return null;
-  };
+  }
 
-  const renderDiaries = () => {
+  function renderDiaries() {
     if (isLoadingPaginate) return <Loader isPaginate />;
     if (diaries && diaries.length > 0) {
       return (
@@ -367,9 +390,9 @@ function Profile() {
       );
     }
     return null;
-  };
+  }
 
-  const renderPageContent = () => {
+  function renderPageContent() {
     if (isPageError) {
       return (
         <AnimatedPageContainer
@@ -397,7 +420,23 @@ function Profile() {
                   title={isArchiveOpen ? titleH1Archive : titleH1Current}
                 />
               </div>
-              <ScrollableContainer sectionClass="profile__events" step={3}>
+              <ScrollableContainer
+                sectionClass="profile__events"
+                step={3}
+                onScrollCallback={() => {
+                  if (isArchiveOpen) {
+                    getArchiveOfEvents({
+                      limit: eventsLimit,
+                      offset: eventsOffset,
+                    });
+                  } else {
+                    getCurrentBookedEvents({
+                      limit: eventsLimit,
+                      offset: eventsOffset,
+                    });
+                  }
+                }}
+              >
                 {renderEventCards()}
               </ScrollableContainer>
             </>
@@ -427,25 +466,7 @@ function Profile() {
         </div>
       </>
     );
-  };
-
-  if (!events && !diaries) {
-    return <Loader isCentered />;
   }
-
-  return (
-    <>
-      <BasePage headTitle={headTitle} headDescription={headDescription}>
-        <section className="profile fade-in">{renderPageContent()}</section>
-      </BasePage>
-      <PopupDeleteDiary
-        isOpen={isDeleteDiaryPopupOpen}
-        cardData={selectedDiary}
-        onClose={closeDeleteDiaryPopup}
-        onCardDelete={handleDeleteDiary}
-      />
-    </>
-  );
 }
 
 export default Profile;
