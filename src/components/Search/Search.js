@@ -2,13 +2,14 @@ import './Search.scss';
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { SearchButton, Loader } from '../utils/index';
-import { useFormWithValidation, useLocalStorage } from '../../hooks/index';
+import texts from './locales/RU';
+import { Loader, SearchButton } from '../utils';
+import { useDebounce, useFormWithValidation } from '../../hooks';
+import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import search from '../../api/search';
 import { CATALOG_URL, RIGHTS_URL } from '../../config/routes';
-import { CurrentUserContext } from '../../contexts';
-import { localStUserCity } from '../../config/constants';
-import searchTexts from '../../locales/search-RU';
+import { CitiesContext, CurrentUserContext } from '../../contexts';
+import { DELAY_DEBOUNCE, localStUserCity } from '../../config/constants';
 
 function Search({
   isOpenSearch,
@@ -17,16 +18,16 @@ function Search({
   setIsMobileMenuOpen,
 }) {
   const { currentUser } = useContext(CurrentUserContext);
+  const { defaultCity } = useContext(CitiesContext);
 
-  const getLocalStorageItem = useLocalStorage(localStUserCity);
-  const currentAnonymousCity = getLocalStorageItem();
-  const userCity = currentUser?.city ?? currentAnonymousCity;
+  // приоритет города у авторизованного, затем у выбранного на странице Куда пойти и затем уже по умолчанию
+  const currentAnonymousCity = getLocalStorageData(localStUserCity);
+  const userCity = currentUser?.city ?? currentAnonymousCity ?? defaultCity?.id;
 
   const { values, handleChange, resetForm } = useFormWithValidation();
-  const [searchValue, setSearchValue] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const [isVoidSearch, setIsVoidSearch] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
-  const [timer, setTimer] = useState(null);
 
   const getPathName = (url, id) => {
     if (`/${url}` === RIGHTS_URL) return `/${url}/${id}`;
@@ -37,7 +38,7 @@ function Search({
   const handleClickButton = () => {
     setIsOpenSearch(!isOpenSearch);
     resetForm();
-    setSearchValue([]);
+    setSearchResults([]);
     setIsVoidSearch(false);
   };
 
@@ -45,75 +46,25 @@ function Search({
     setIsOpenSearch(!isOpenSearch);
   };
 
-  const renderSearchItems = () => {
-    if (isVoidSearch)
-      return (
-        <p className="search__content_type_void">{searchTexts.notFoundText}</p>
-      );
-
-    if (searchValue.length > 0) {
-      return (
-        <ul className="search__option-list">
-          {searchValue.map((item) => (
-            <li key={item.page + item.id} className="search__option-item">
-              <Link
-                onClick={handleClickLink}
-                to={{
-                  pathname: getPathName(item.page, item.id),
-                  state: { id: item.id },
-                }}
-                className="search__title-link section-title section-title_clickable"
-              >
-                {item.title}
-              </Link>
-              <Link
-                to={`/${item.page}`}
-                className="link search__link"
-                onClick={handleClickLink}
-              >
-                {item.modelName}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      );
-    }
-
-    return <p className="search__content_type_ask">{searchTexts.searchText}</p>;
+  const handleSearchRequest = async () => {
+    const currentRequest = search({ text: values.search, city: userCity });
+    const { count, results } = await currentRequest;
+    setSearchResults(results);
+    setIsLoadingSearch(false);
+    return count === 0 ? setIsVoidSearch(true) : setIsVoidSearch(false);
   };
 
-  const renderSearchContent = () =>
-    isLoadingSearch ? <Loader isNested /> : renderSearchItems();
-
-  const searchTimer = () => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-
-    setTimer(
-      setTimeout(async () => {
-        const currentRequest =
-          userCity && !currentUser
-            ? search({
-                text: values.search,
-                city: userCity,
-              })
-            : search({
-                text: values.search,
-              });
-        const { count, results } = await currentRequest;
-        setSearchValue(results);
-        setIsLoadingSearch(false);
-        return count === 0 ? setIsVoidSearch(true) : setIsVoidSearch(false);
-      }, 500)
-    );
-  };
+  const handleDebouncedRequest = useDebounce(
+    handleSearchRequest,
+    DELAY_DEBOUNCE
+  );
 
   useEffect(() => {
-    if (!('search' in values)) return;
-
-    setIsLoadingSearch(true);
-    searchTimer();
+    // проверка на пустой запрос и запрос из пробелов
+    if (values.search && values.search.trim()) {
+      setIsLoadingSearch(true);
+      handleDebouncedRequest();
+    }
   }, [values]);
 
   useEffect(() => {
@@ -147,7 +98,7 @@ function Search({
           />
           <button
             type="button"
-            aria-label="Закрыть"
+            aria-label={texts.ariaLabelCloseButton}
             className="search__close-button"
             onClick={handleClickButton}
           />
@@ -157,6 +108,45 @@ function Search({
       </div>
     </form>
   );
+
+  function renderSearchItems() {
+    if (isVoidSearch)
+      return <p className="search__content_type_void">{texts.notFoundText}</p>;
+
+    if (searchResults.length > 0) {
+      return (
+        <ul className="search__option-list">
+          {searchResults.map((item) => (
+            <li key={item.page + item.id} className="search__option-item">
+              <Link
+                onClick={handleClickLink}
+                to={{
+                  pathname: getPathName(item.page, item.id),
+                  state: { id: item.id },
+                }}
+                className="search__title-link section-title section-title_clickable"
+              >
+                {item.title}
+              </Link>
+              <Link
+                to={`/${item.page}`}
+                className="link search__link"
+                onClick={handleClickLink}
+              >
+                {item.modelName.toLowerCase()}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    return <p className="search__content_type_ask">{texts.searchText}</p>;
+  }
+
+  function renderSearchContent() {
+    return isLoadingSearch ? <Loader isNested /> : renderSearchItems();
+  }
 }
 
 Search.propTypes = {

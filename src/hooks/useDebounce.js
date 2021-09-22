@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
 let timer;
-const useDebounce = (callback, delay) => {
-  const debouncedCallback = useCallback(
+const useDebounce = (callback, delay) =>
+  useCallback(
     (...args) => {
       if (timer) {
         clearTimeout(timer);
@@ -14,8 +14,5 @@ const useDebounce = (callback, delay) => {
     },
     [callback, delay]
   );
-
-  return debouncedCallback;
-};
 
 export default useDebounce;
