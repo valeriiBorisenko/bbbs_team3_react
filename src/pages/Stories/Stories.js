@@ -48,6 +48,7 @@ function Stories() {
   const { currentUser } = useContext(CurrentUserContext);
 
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isStoryLoading, setIsStoryLoading] = useState(false);
   const [isPageError, setIsPageError] = useState(false);
 
   const [storiesTags, setStoriesTags] = useState([]);
@@ -106,7 +107,6 @@ function Stories() {
       getStoriesPageTags({ limit, offset })
         .then(({ results }) => {
           if (results?.length) {
-            // eslint-disable-next-line no-unused-vars
             const storiesTagsData = results.map((tag) => ({
               filter: tag.id,
               name: tag.pair,
@@ -114,7 +114,7 @@ function Stories() {
             }));
             setStoriesTags((prevTags) => [...prevTags, ...storiesTagsData]);
             setTagsOffset((prevOffset) => prevOffset + limit);
-          } else {
+          } else if (isPageLoading) {
             setIsPageLoading(false);
           }
         })
@@ -165,6 +165,7 @@ function Stories() {
   // получение конкретной истории по id
   useEffect(() => {
     if (currentStoryId) {
+      setIsStoryLoading(true);
       getStoryById(currentStoryId)
         .then(setCurrentStory)
         .catch((err) => {
@@ -172,7 +173,10 @@ function Stories() {
             history.push(NOT_FOUND_URL);
           } else setIsPageError(true);
         })
-        .finally(() => setIsPageLoading(false));
+        .finally(() => {
+          setIsStoryLoading(false);
+          if (isPageLoading) setIsPageLoading(false);
+        });
     }
   }, [currentStoryId]);
 
@@ -232,25 +236,31 @@ function Stories() {
     }
 
     return (
-      <div className="stories page__section">
+      <div className="stories page__section fade-in">
         <TitleH1 title={title} sectionClass="stories__title" />
         <p className="stories__subtitle">{subtitle}</p>
 
         {renderTags()}
 
-        {renderUpperBlock()}
+        {isStoryLoading ? (
+          <Loader isPaginate />
+        ) : (
+          <>
+            {renderUpperBlock()}
 
-        <ReactMarkdown className="stories__markdown">
-          {currentStory?.uperBody}
-        </ReactMarkdown>
+            <ReactMarkdown className="stories__markdown fade-in">
+              {currentStory?.uperBody}
+            </ReactMarkdown>
 
-        {renderPhotosCarousel()}
+            {renderPhotosCarousel()}
 
-        <ReactMarkdown className="stories__markdown stories__markdown_last">
-          {currentStory?.lowerBody}
-        </ReactMarkdown>
+            <ReactMarkdown className="stories__markdown stories__markdown_last fade-in">
+              {currentStory?.lowerBody}
+            </ReactMarkdown>
 
-        {renderLinksBlock()}
+            {renderLinksBlock()}
+          </>
+        )}
       </div>
     );
   }
@@ -259,18 +269,21 @@ function Stories() {
     return (
       <>
         <img
-          className="stories__main-photo"
+          className="stories__main-photo scale-in"
           src={`${staticImageUrl}/${currentStory?.image}`}
           alt={pairTitle?.name}
         />
-        <TitleH2 title={pairTitle?.name} sectionClass="stories__pair-title" />
+        <TitleH2
+          title={pairTitle?.name}
+          sectionClass="stories__pair-title fade-in"
+        />
         <Caption
           title={`Вместе с ${formatMonthsGenitiveCase(
             togetherSince?.monthName
           )} ${togetherSince?.year} года`}
-          sectionClass="stories__caption"
+          sectionClass="stories__caption fade-in"
         />
-        <p className="stories__subtitle stories__subtitle_block">
+        <p className="stories__subtitle stories__subtitle_block fade-in">
           {currentStory?.description}
         </p>
       </>
@@ -279,7 +292,7 @@ function Stories() {
 
   function renderLinksBlock() {
     return (
-      <div className="stories__links">
+      <div className="stories__links fade-in">
         {currentUser && currentStory?.mentor?.email && (
           <a
             className="link stories__link"
@@ -308,7 +321,7 @@ function Stories() {
 
   function renderTags() {
     return (
-      <div className="stories__tags-carousel">
+      <div className="stories__tags-carousel fade-in">
         <span className="stories__scroll-anchor" ref={scrollAnchorRef} />
         <ScrollableContainer
           step={3}
