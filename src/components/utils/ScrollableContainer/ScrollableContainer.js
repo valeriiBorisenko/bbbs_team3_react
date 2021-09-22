@@ -8,6 +8,7 @@ const DELAY_NO_POINTER_EVENTS = 150;
 const DEFAULT_DELTA_Y = 100;
 
 function ScrollableContainer({
+  reference,
   children,
   step,
   sectionClass,
@@ -17,7 +18,7 @@ function ScrollableContainer({
   prevButtonClass,
   nextButtonClass,
 }) {
-  const parentRef = useRef(null);
+  const parentRef = reference ?? useRef(null);
   const firstChildRef = useRef(null);
   const lastChildRef = useRef(null);
 
@@ -234,6 +235,7 @@ function ScrollableContainer({
 }
 
 ScrollableContainer.propTypes = {
+  reference: PropTypes.node,
   sectionClass: PropTypes.string,
   children: PropTypes.node,
   step: PropTypes.number,
@@ -245,6 +247,7 @@ ScrollableContainer.propTypes = {
 };
 
 ScrollableContainer.defaultProps = {
+  reference: null,
   sectionClass: '',
   children: null,
   step: 1,
