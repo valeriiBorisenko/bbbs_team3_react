@@ -46,13 +46,14 @@ const {
   eventsTitleNoResultsArchive,
 } = profilePageTexts;
 
+const { unauthorized, badRequest } = ERROR_CODES;
+
 const diariesPerPageCount = 10;
 const eventsLimit = 10;
 
 function Profile() {
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
   const { serverError, setError } = useContext(ErrorsContext);
-  const { unauthorized, badRequest } = ERROR_CODES;
 
   const [events, setEvents] = useState([]);
   const [archivedEvents, setArchivedEvents] = useState([]);
@@ -107,7 +108,10 @@ function Profile() {
           setEvents((prevEvents) => [...prevEvents, ...updatedEvents]);
           setEventsOffset((prevOffset) => prevOffset + limit);
         })
-        .catch(() => setIsPageError(true))
+        .catch(() => {
+          setError(ERROR_MESSAGES.generalErrorMessage);
+          openPopupError();
+        })
         .finally(() => setIsLoadingEvents(false));
     }
   };
