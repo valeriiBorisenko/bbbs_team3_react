@@ -7,6 +7,7 @@ import PopupCities from './PopupCities/PopupCities';
 import PopupError from './PopupError/PopupError';
 import PopupVideo from './PopupVideo/PopupVideo';
 import PopupInfoTooltip from './PopupInfoTooltip/PopupInfoTooltip';
+import PopupPhoto from './PopupPhoto/PopupPhoto';
 
 export {
   PopupConfirmation,
@@ -18,4 +19,5 @@ export {
   PopupError,
   PopupVideo,
   PopupInfoTooltip,
+  PopupPhoto,
 };

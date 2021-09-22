@@ -93,4 +93,5 @@ export const ERROR_MESSAGES = {
 export const ERROR_CODES = {
   badRequest: 400,
   unauthorized: 401,
+  notFound: 404,
 };

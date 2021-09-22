@@ -1,5 +1,6 @@
 import BasePage from '../../layout/BasePage';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
+import { PopupPhoto } from '../../components/Popups';
 import {
   Caption,
   Loader,
@@ -20,4 +21,5 @@ export {
   PseudoButtonTag,
   ScrollableContainer,
   Loader,
+  PopupPhoto,
 };

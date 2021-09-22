@@ -11,9 +11,52 @@
     height: 0;
   }
 
+  &__callback-anchor {
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  &__button {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    outline: none;
+    background-color: rgba($white, 0);
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: .3s ease;
+
+    &:disabled {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &_prev {
+      background-image: url("../../../assets/pagination-arrow-prev_black.svg");
+
+      &:hover {
+        transform: translateX(-4px);
+      }
+    }
+
+    &_next {
+      background-image: url("../../../assets/pagination-arrow-next_black.svg");
+
+      &:hover {
+        transform: translateX(4px);
+      }
+    }
+  }
+
   &_scrolling {
     cursor: grabbing;
-    
+
     > .scrollable-container__child {
       pointer-events: none;
     }

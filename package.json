@@ -9,6 +9,7 @@
     "axios": "^0.21.1",
     "get-youtube-id": "^1.0.1",
     "lottie-web": "^5.7.11",
+    "lvovich": "^1.0.16",
     "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

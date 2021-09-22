@@ -1,18 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Carousel from 'react-elastic-carousel';
 import { useHistory, useParams } from 'react-router-dom';
+import { inclineFirstname } from 'lvovich';
 import storiesPageTexts from '../../locales/stories-page-RU';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
+import { CurrentUserContext } from '../../contexts';
 import { staticImageUrl } from '../../config/config';
-import { STORIES_URL } from '../../config/routes';
+import { NOT_FOUND_URL, STORIES_URL } from '../../config/routes';
 import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
 import { formatDate, formatMonthsGenitiveCase } from '../../utils/utils';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import {
+  AnimatedPageContainer,
   BasePage,
   Caption,
   Loader,
   NextArticleLink,
+  PopupPhoto,
   PseudoButtonTag,
   ScrollableContainer,
   TitleH1,
@@ -20,45 +25,162 @@ import {
 } from './index';
 import './Stories.scss';
 
-const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
+const carouselItemPaddings = {
+  desktop: [0, 65],
+  tablet: [0, 15],
+  mobile: [0, 7.5],
+};
+
+const maxScreenWidth = {
+  tablet: '1100px',
+  mobile: '706px',
+};
+
+const tagsLimit = 10;
+const disablePointerEventsDelay = 150;
+const scrollUpDelay = 150;
+
+const { headTitle, headDescription, title, subtitle, textStubNoData } =
+  storiesPageTexts;
 
 function Stories() {
   const { storyId } = useParams();
   const history = useHistory();
-  const photoCarouselRef = useRef(null);
+  const { currentUser } = useContext(CurrentUserContext);
+
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isStoryLoading, setIsStoryLoading] = useState(false);
+  const [isPageError, setIsPageError] = useState(false);
 
   const [storiesTags, setStoriesTags] = useState([]);
+  const [tagsOffset, setTagsOffset] = useState(0);
+
   const [currentStory, setCurrentStory] = useState(null);
+  const [isPopupPhotoOpen, setIsPopupPhotoOpen] = useState(false);
+  const [currentPhoto, setCurrentPhoto] = useState({});
+
+  const openPhotoPopup = () => {
+    setIsPopupPhotoOpen(true);
+  };
+
+  const closePhotoPopup = () => {
+    setIsPopupPhotoOpen(false);
+  };
+
+  const photoCarouselRef = useRef(null);
+  const [carouselItemPadding, setCarouselItemPaddings] = useState(
+    carouselItemPaddings.desktop
+  );
+  const [isCarouselDragging, setIsCarouselDragging] = useState(false);
+
+  const openFullPhoto = (imageSrc, caption) => {
+    setCurrentPhoto({
+      photoSrc: imageSrc,
+      caption,
+    });
+    openPhotoPopup();
+  };
+
+  const preventClickOnMouseDown = () => {
+    setTimeout(() => {
+      setIsCarouselDragging(true);
+    }, disablePointerEventsDelay);
+  };
+
+  const preventClickOnMouseUp = () => {
+    setTimeout(() => {
+      setIsCarouselDragging(false);
+    }, disablePointerEventsDelay);
+  };
 
   const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
   const nextPageLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
+  const pairTitle = storiesTags.find((tag) => tag.filter === currentStory?.id);
+  const togetherSince = formatDate(currentStory?.togetherSince);
 
-  const handleFilters = (inputValue, isChecked) => {
-    handleRadioBehavior(setStoriesTags, { inputValue, isChecked });
+  const handleFilters = (inputValue) => {
+    handleRadioBehavior(setStoriesTags, { inputValue, isChecked: true });
     history.push(`${STORIES_URL}/${inputValue}`);
   };
 
+  const fetchTags = ({ limit, offset }) => {
+    if (tagsOffset <= storiesTags.length) {
+      getStoriesPageTags({ limit, offset })
+        .then(({ results }) => {
+          if (results?.length) {
+            const storiesTagsData = results.map((tag) => ({
+              filter: tag.id,
+              name: tag.pair,
+              isActive: +storyId === +tag.id,
+            }));
+            setStoriesTags((prevTags) => [...prevTags, ...storiesTagsData]);
+            setTagsOffset((prevOffset) => prevOffset + limit);
+          } else {
+            setIsPageLoading(false);
+          }
+        })
+        .catch(() => {
+          setIsPageError(true);
+          setIsPageLoading(false);
+        });
+    }
+  };
+
+  // подгрузка тегов при переключении по ссылкам внизу
+  const fetchTagsOnNextLink = () => {
+    if (currentStoryId === storiesTags[storiesTags.length - 1].filter) {
+      fetchTags({ limit: tagsLimit, offset: tagsOffset });
+    }
+  };
+
+  // динамические падинги для фото слайдера
   useEffect(() => {
-    getStoriesPageTags()
-      .then(({ results }) => {
-        if (results?.length) {
-          const storiesTagsData = results.map((tag) => ({
-            filter: tag.id,
-            name: tag.pair,
-            isActive: +storyId === +tag.id,
-          }));
-          setStoriesTags(storiesTagsData);
-        }
-      })
-      .catch(console.log);
+    const tablet = window.matchMedia(`(max-width: ${maxScreenWidth.tablet})`);
+    const mobile = window.matchMedia(`(max-width: ${maxScreenWidth.mobile})`);
+
+    const listenWindowWidth = () => {
+      if (mobile.matches)
+        return setCarouselItemPaddings(carouselItemPaddings.mobile);
+
+      if (tablet.matches)
+        return setCarouselItemPaddings(carouselItemPaddings.tablet);
+
+      return setCarouselItemPaddings(carouselItemPaddings.desktop);
+    };
+    listenWindowWidth();
+
+    mobile.addEventListener('change', listenWindowWidth);
+    tablet.addEventListener('change', listenWindowWidth);
+
+    return () => {
+      mobile.removeEventListener('change', listenWindowWidth);
+      tablet.removeEventListener('change', listenWindowWidth);
+    };
   }, []);
 
+  // получение списка всех историй
   useEffect(() => {
-    if (storiesTags.length && currentStoryId) {
-      getStoryById(currentStoryId).then(setCurrentStory).catch(console.log);
-    }
-  }, [storiesTags, currentStoryId]);
+    fetchTags({ limit: tagsLimit, offset: tagsOffset });
+  }, []);
 
+  // получение конкретной истории по id
+  useEffect(() => {
+    if (currentStoryId) {
+      setIsStoryLoading(true);
+      getStoryById(currentStoryId)
+        .then(setCurrentStory)
+        .catch((err) => {
+          if (err.status === ERROR_CODES.notFound) history.push(NOT_FOUND_URL);
+          else setIsPageError(true);
+        })
+        .finally(() => {
+          setIsStoryLoading(false);
+          if (isPageLoading) setIsPageLoading(false);
+        });
+    }
+  }, [currentStoryId]);
+
+  // синхронизация фильтров в зависимости от выбранной истории
   useEffect(() => {
     if (storiesTags.length) {
       const tagToBeActive = storiesTags.find(
@@ -71,77 +193,100 @@ function Stories() {
         });
       }
     }
-  }, [currentStoryId]);
+  }, [currentStoryId, tagsOffset]);
 
-  const pairTitle = storiesTags.find((tag) => tag.filter === currentStory?.id);
-  const togetherSince = formatDate(currentStory?.togetherSince);
+  // прокрутка наверх при переключении историй
+  const scrollAnchorRef = useRef(null);
 
-  if (!currentStory && !storiesTags.length) {
+  useEffect(() => {
+    if (scrollAnchorRef && scrollAnchorRef.current) {
+      setTimeout(() => {
+        scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
+      }, scrollUpDelay);
+    }
+  }, [storyId]);
+
+  if (isPageLoading) {
     return <Loader isCentered />;
   }
 
-  // бесконечная прокрутка карусели с фото с возвращением на старт/конец
-  const onNextStart = (currentItem, nextItem) => {
-    if (currentItem.index === nextItem.index) {
-      photoCarouselRef.current.goTo(0);
-    }
-  };
-
-  const onPrevStart = (currentItem, nextItem) => {
-    if (currentItem.index === nextItem.index) {
-      photoCarouselRef.current.goTo(currentStory?.images?.length);
-    }
-  };
-
   return (
-    currentStory && (
-      <BasePage
-        headTitle={headTitle}
-        headDescription={headDescription}
-        scrollUpDeps={[storyId]}
-      >
-        <div className="stories page__section">
-          <TitleH1 title={title} sectionClass="stories__title" />
-          <p className="stories__subtitle">{subtitle}</p>
-
-          {renderTagsCarousel()}
-
-          {renderUpperBlock()}
-
-          <ReactMarkdown className="stories__markdown">
-            {currentStory.uperBody}
-          </ReactMarkdown>
-
-          {renderPhotosCarousel()}
-
-          <ReactMarkdown className="stories__markdown stories__markdown_last">
-            {currentStory.lowerBody}
-          </ReactMarkdown>
-
-          {renderLinksBlock()}
-        </div>
+    <>
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
+        {renderPageContent()}
       </BasePage>
-    )
+      <PopupPhoto
+        isOpen={isPopupPhotoOpen}
+        onClose={closePhotoPopup}
+        currentPhoto={currentPhoto}
+      />
+    </>
   );
 
   // функции рендера
+  function renderPageContent() {
+    if (isPageError) {
+      return (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      );
+    }
+
+    if (!storiesTags.length && !currentStory) {
+      return <AnimatedPageContainer titleText={textStubNoData} />;
+    }
+
+    return (
+      <div className="stories page__section fade-in">
+        <TitleH1 title={title} sectionClass="stories__title" />
+        <p className="stories__subtitle">{subtitle}</p>
+
+        {renderTags()}
+
+        {isStoryLoading ? (
+          <Loader isPaginate />
+        ) : (
+          <>
+            {renderUpperBlock()}
+
+            <ReactMarkdown className="stories__markdown fade-in">
+              {currentStory?.uperBody}
+            </ReactMarkdown>
+
+            {renderPhotosCarousel()}
+
+            <ReactMarkdown className="stories__markdown stories__markdown_last fade-in">
+              {currentStory?.lowerBody}
+            </ReactMarkdown>
+
+            {renderLinksBlock()}
+          </>
+        )}
+      </div>
+    );
+  }
+
   function renderUpperBlock() {
     return (
       <>
         <img
-          className="stories__main-photo"
+          className="stories__main-photo scale-in"
           src={`${staticImageUrl}/${currentStory?.image}`}
-          alt={currentStory.title}
+          alt={pairTitle?.name}
         />
-        <TitleH2 title={pairTitle?.name} sectionClass="stories__pair-title" />
+        <TitleH2
+          title={pairTitle?.name}
+          sectionClass="stories__pair-title fade-in"
+        />
         <Caption
           title={`Вместе с ${formatMonthsGenitiveCase(
             togetherSince?.monthName
           )} ${togetherSince?.year} года`}
-          sectionClass="stories__caption"
+          sectionClass="stories__caption fade-in"
         />
-        <p className="stories__subtitle stories__subtitle_block">
-          {currentStory.description}
+        <p className="stories__subtitle stories__subtitle_block fade-in">
+          {currentStory?.description}
         </p>
       </>
     );
@@ -149,15 +294,26 @@ function Stories() {
 
   function renderLinksBlock() {
     return (
-      <div className="stories__links">
-        <a
-          className="link stories__link"
-          href={`mailto:${currentStory.mentor?.email}`}
-        >{`написать ${currentStory.mentor?.firstName}`}</a>
-        {currentStory.nextArticle && (
+      <div className="stories__links fade-in">
+        {currentUser && currentStory?.mentor?.email && (
+          <a
+            className="link stories__link"
+            href={`mailto:${currentStory.mentor.email}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {`написать ${inclineFirstname(
+              currentStory.mentor.firstName,
+              'dative'
+            )}`}
+          </a>
+        )}
+
+        {currentStory?.nextArticle && (
           <NextArticleLink
             text={currentStory.nextArticle.title}
             href={nextPageLink}
+            onClick={fetchTagsOnNextLink}
             sectionClass="stories__link_next"
           />
         )}
@@ -165,47 +321,92 @@ function Stories() {
     );
   }
 
-  function renderTagsCarousel() {
+  function renderTags() {
     return (
-      <ScrollableContainer step={6} sectionClass="stories__tags-carousel">
-        {storiesTags.map((item) => (
-          <PseudoButtonTag
-            key={item.filter}
-            name={item.name}
-            value={item.filter}
-            title={item.name}
-            isActive={item.isActive}
-            onClick={handleFilters}
-          />
-        ))}
-      </ScrollableContainer>
+      <div className="stories__tags-carousel fade-in">
+        <span className="stories__scroll-anchor" ref={scrollAnchorRef} />
+        <ScrollableContainer
+          step={3}
+          useButtons
+          disableMouseDrag
+          onScrollCallback={() =>
+            fetchTags({ limit: tagsLimit, offset: tagsOffset })
+          }
+          sectionClass="stories__scroll-container"
+          prevButtonClass="stories__prev-button"
+          nextButtonClass="stories__next-button"
+        >
+          {storiesTags.map((item) => (
+            <PseudoButtonTag
+              key={item.filter}
+              name={item.name}
+              value={item.filter}
+              title={item.name}
+              isActive={item.isActive}
+              onClick={handleFilters}
+              sectionClass="scrollable-container__child"
+            />
+          ))}
+        </ScrollableContainer>
+      </div>
     );
   }
 
   function renderPhotosCarousel() {
     return (
       <div className="stories__photo-carousel-container">
-        <Carousel
-          ref={photoCarouselRef}
-          className="stories__photo-carousel"
-          itemsToScroll={1}
-          itemsToShow={1}
-          itemPadding={[0, 50]}
-          onPrevStart={onPrevStart}
-          onNextStart={onNextStart}
-          disableArrowsOnEnd={false}
-          pagination={false}
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <div
+          className="stories__photo-carousel-wrapper"
+          onMouseUp={preventClickOnMouseUp}
         >
-          {currentStory?.images?.map((image) => (
-            <img
-              className="stories__carousel-image"
-              draggable={false}
-              key={image.id}
-              src={`${staticImageUrl}/${image.image}`}
-              alt={image.imageCaption}
-            />
-          ))}
-        </Carousel>
+          <Carousel
+            ref={photoCarouselRef}
+            className="stories__photo-carousel"
+            itemsToScroll={1}
+            itemsToShow={3}
+            initialActiveIndex={0}
+            itemPadding={carouselItemPadding}
+            pagination={false}
+          >
+            <div aria-hidden className="stories__carousel-image" />
+            {currentStory?.images?.map((image, idx) => (
+              <div
+                key={image.id}
+                className={`stories__carousel-image-wrap ${
+                  isCarouselDragging
+                    ? 'stories__carousel-image-wrap_disabled-events'
+                    : ''
+                }`}
+                onClick={() => {
+                  photoCarouselRef.current.goTo(idx);
+                  openFullPhoto(
+                    `${staticImageUrl}/${image.image}`,
+                    image.imageCaption
+                  );
+                }}
+                onKeyPress={() => {
+                  photoCarouselRef.current.goTo(idx);
+                  openFullPhoto(
+                    `${staticImageUrl}/${image.image}`,
+                    image.imageCaption
+                  );
+                }}
+                role="button"
+                tabIndex={0}
+                onMouseDown={preventClickOnMouseDown}
+              >
+                <img
+                  className="stories__carousel-image"
+                  draggable={false}
+                  src={`${staticImageUrl}/${image.image}`}
+                  alt={image.imageCaption}
+                />
+              </div>
+            ))}
+            <div aria-hidden className="stories__carousel-image" />
+          </Carousel>
+        </div>
       </div>
     );
   }
