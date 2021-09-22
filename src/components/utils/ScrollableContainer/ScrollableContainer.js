@@ -18,9 +18,52 @@ function ScrollableContainer({
   nextButtonClass,
 }) {
   const parentRef = useRef(null);
-  const childRef = useRef(null);
+  const firstChildRef = useRef(null);
+  const lastChildRef = useRef(null);
 
-  useInfiniteScroll(parentRef, childRef, onScrollCallback);
+  const [isPrevButtonDisabled, setIsPrevButtonDisabled] = useState(true);
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
+
+  const disablePrevButton = () => {
+    setIsPrevButtonDisabled(true);
+  };
+
+  const enablePrevButton = () => {
+    setIsPrevButtonDisabled(false);
+  };
+
+  const disableNextButton = () => {
+    setIsNextButtonDisabled(true);
+  };
+
+  const enableNextButton = () => {
+    setIsNextButtonDisabled(false);
+  };
+
+  // колбэк при достижении правой границы скролла (для подгрузки данных, например)
+  if (onScrollCallback) {
+    useInfiniteScroll(parentRef, lastChildRef, onScrollCallback);
+  }
+
+  // скрытие стрелки Prev
+  if (useButtons) {
+    useInfiniteScroll(
+      parentRef,
+      firstChildRef,
+      disablePrevButton,
+      enablePrevButton
+    );
+  }
+
+  // скрытие стрелки Next
+  if (useButtons) {
+    useInfiniteScroll(
+      parentRef,
+      lastChildRef,
+      disableNextButton,
+      enableNextButton
+    );
+  }
 
   const [state, setState] = useState({
     isScrolling: false,
@@ -149,10 +192,17 @@ function ScrollableContainer({
         onMouseLeave={disableMouseDrag ? undefined : onMouseLeave}
         ref={parentRef}
       >
+        <div
+          className="scrollable-container__callback-anchor"
+          ref={firstChildRef}
+          aria-hidden
+        >
+          .
+        </div>
         {children}
         <div
           className="scrollable-container__callback-anchor"
-          ref={childRef}
+          ref={lastChildRef}
           aria-hidden
         >
           .
@@ -169,12 +219,14 @@ function ScrollableContainer({
           type="button"
           aria-label={texts.ariaLabelPrevButton}
           onClick={() => scrollByButtons('prev')}
+          disabled={isPrevButtonDisabled}
         />
         <button
           className={`scrollable-container__button scrollable-container__button_next ${nextButtonClass}`}
           type="button"
           aria-label={texts.ariaLabelNextButton}
           onClick={() => scrollByButtons('next')}
+          disabled={isNextButtonDisabled}
         />
       </>
     );
@@ -196,7 +248,7 @@ ScrollableContainer.defaultProps = {
   sectionClass: '',
   children: null,
   step: 1,
-  onScrollCallback: () => {},
+  onScrollCallback: undefined,
   useButtons: false,
   prevButtonClass: '',
   nextButtonClass: '',

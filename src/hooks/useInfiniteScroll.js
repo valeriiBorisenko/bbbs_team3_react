@@ -1,6 +1,11 @@
 import { useLayoutEffect, useRef } from 'react';
 
-const useInfiniteScroll = (parentRef, childRef, callback) => {
+const useInfiniteScroll = (
+  parentRef,
+  childRef,
+  callbackOnIntersect,
+  callbackOnHide
+) => {
   const observer = useRef();
 
   // eslint-disable-next-line consistent-return
@@ -14,7 +19,9 @@ const useInfiniteScroll = (parentRef, childRef, callback) => {
 
       observer.current = new IntersectionObserver(([target]) => {
         if (target.isIntersecting) {
-          callback();
+          callbackOnIntersect();
+        } else if (callbackOnHide) {
+          callbackOnHide();
         }
       }, options);
 
@@ -24,7 +31,7 @@ const useInfiniteScroll = (parentRef, childRef, callback) => {
         observer.current.unobserve(childRef.current);
       };
     }
-  }, [callback, parentRef, childRef]);
+  }, [callbackOnIntersect, callbackOnHide, parentRef, childRef]);
 };
 
 export default useInfiniteScroll;

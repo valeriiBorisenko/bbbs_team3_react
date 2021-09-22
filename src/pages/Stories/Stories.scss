@@ -24,7 +24,7 @@
     margin: 0 auto 40px;
     display: flex;
     align-items: center;
-    column-gap: 20px;
+    column-gap: 15px;
   }
 
   &__scroll-anchor {
@@ -156,6 +156,17 @@
     }
   }
 
+  &__carousel-image-wrap {
+    overflow: hidden;
+    border-radius: 30px;
+    transition: .3s ease;
+
+    &:hover {
+      cursor: zoom-in;
+      box-shadow: -12px 0 20px -12px rgba($black, 0.3), 12px 0 20px -12px rgba($black, 0.3);
+    }
+  }
+
   &__carousel-image {
     display: block;
     width: 770px;
@@ -163,10 +174,6 @@
     object-fit: cover;
     object-position: center;
     border-radius: 30px;
-
-    &:hover {
-      cursor: pointer;
-    }
   }
 
   &__markdown {

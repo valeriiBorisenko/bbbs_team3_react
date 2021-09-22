@@ -30,8 +30,8 @@ const carouselItemPaddings = {
 };
 
 const maxScreenWidth = {
-  tablet: 1100,
-  mobile: 706,
+  tablet: '1100px',
+  mobile: '706px',
 };
 
 const tagsLimit = 10;
@@ -63,6 +63,14 @@ function Stories() {
     carouselItemPaddings.desktop
   );
 
+  const openFullPhoto = (imageSrc, caption) => {
+    setCurrentPhoto({
+      photoSrc: imageSrc,
+      caption,
+    });
+    openPhotoPopup();
+  };
+
   const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
   const nextPageLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
   const pairTitle = storiesTags.find((tag) => tag.filter === currentStory?.id);
@@ -93,8 +101,8 @@ function Stories() {
 
   // динамические падинги для фото слайдера
   useEffect(() => {
-    const tablet = window.matchMedia(`(max-width: ${maxScreenWidth.tablet}px)`);
-    const mobile = window.matchMedia(`(max-width: ${maxScreenWidth.mobile}px)`);
+    const tablet = window.matchMedia(`(max-width: ${maxScreenWidth.tablet})`);
+    const mobile = window.matchMedia(`(max-width: ${maxScreenWidth.mobile})`);
 
     const listenWindowWidth = () => {
       if (mobile.matches)
@@ -284,27 +292,38 @@ function Stories() {
             initialActiveIndex={0}
             itemPadding={carouselItemPadding}
             pagination={false}
-            disableArrowsOnEnd={false}
           >
-            <div className="stories__carousel-image" />
-            {currentStory?.images?.map((image) => (
-              // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions
-              <img
-                className="stories__carousel-image"
-                draggable={false}
+            <div aria-hidden className="stories__carousel-image" />
+            {currentStory?.images?.map((image, idx) => (
+              <div
                 key={image.id}
-                src={`${staticImageUrl}/${image.image}`}
-                alt={image.imageCaption}
+                className="stories__carousel-image-wrap"
                 onClick={() => {
-                  setCurrentPhoto({
-                    photoSrc: `${staticImageUrl}/${image.image}`,
-                    caption: image.imageCaption,
-                  });
-                  openPhotoPopup();
+                  photoCarouselRef.current.goTo(idx);
+                  openFullPhoto(
+                    `${staticImageUrl}/${image.image}`,
+                    image.imageCaption
+                  );
                 }}
-              />
+                onKeyPress={() => {
+                  photoCarouselRef.current.goTo(idx);
+                  openFullPhoto(
+                    `${staticImageUrl}/${image.image}`,
+                    image.imageCaption
+                  );
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                <img
+                  className="stories__carousel-image"
+                  draggable={false}
+                  src={`${staticImageUrl}/${image.image}`}
+                  alt={image.imageCaption}
+                />
+              </div>
             ))}
-            <div className="stories__carousel-image" />
+            <div aria-hidden className="stories__carousel-image" />
           </Carousel>
         </div>
       </div>
