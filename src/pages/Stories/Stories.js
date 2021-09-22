@@ -11,6 +11,7 @@ import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
 import { formatDate, formatMonthsGenitiveCase } from '../../utils/utils';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import {
+  AnimatedPageContainer,
   BasePage,
   Caption,
   Loader,
@@ -37,12 +38,15 @@ const maxScreenWidth = {
 const tagsLimit = 10;
 const disablePointerEventsDelay = 150;
 
-const { headTitle, headDescription, title, subtitle } = storiesPageTexts;
+const { headTitle, headDescription, title, subtitle, textStubNoData } =
+  storiesPageTexts;
 
 function Stories() {
   const { storyId } = useParams();
   const history = useHistory();
   const { currentUser } = useContext(CurrentUserContext);
+
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const [storiesTags, setStoriesTags] = useState([]);
   const [tagsOffset, setTagsOffset] = useState(0);
@@ -100,6 +104,7 @@ function Stories() {
       getStoriesPageTags({ limit, offset })
         .then(({ results }) => {
           if (results?.length) {
+            // eslint-disable-next-line no-unused-vars
             const storiesTagsData = results.map((tag) => ({
               filter: tag.id,
               name: tag.pair,
@@ -107,9 +112,14 @@ function Stories() {
             }));
             setStoriesTags((prevTags) => [...prevTags, ...storiesTagsData]);
             setTagsOffset((prevOffset) => prevOffset + limit);
+          } else {
+            setIsPageLoading(false);
           }
         })
-        .catch(console.log);
+        // крашнуть страницу
+        .catch(() => {
+          setIsPageLoading(false);
+        });
     }
   };
 
@@ -153,7 +163,12 @@ function Stories() {
   // получение конкретной истории по id
   useEffect(() => {
     if (currentStoryId) {
-      getStoryById(currentStoryId).then(setCurrentStory).catch(console.log);
+      // если 404 пуш на 404
+      // если сетевая, то крашнуть страницу
+      getStoryById(currentStoryId)
+        .then(setCurrentStory)
+        .catch(console.log)
+        .finally(() => setIsPageLoading(false));
     }
   }, [currentStoryId]);
 
@@ -181,45 +196,53 @@ function Stories() {
     }
   }, [storyId]);
 
-  if (!currentStory && !storiesTags.length) {
+  if (isPageLoading) {
     return <Loader isCentered />;
   }
 
   return (
-    currentStory && (
-      <>
-        <BasePage headTitle={headTitle} headDescription={headDescription}>
-          <div className="stories page__section">
-            <TitleH1 title={title} sectionClass="stories__title" />
-            <p className="stories__subtitle">{subtitle}</p>
-
-            {renderTags()}
-
-            {renderUpperBlock()}
-
-            <ReactMarkdown className="stories__markdown">
-              {currentStory.uperBody}
-            </ReactMarkdown>
-
-            {renderPhotosCarousel()}
-
-            <ReactMarkdown className="stories__markdown stories__markdown_last">
-              {currentStory.lowerBody}
-            </ReactMarkdown>
-
-            {renderLinksBlock()}
-          </div>
-        </BasePage>
-        <PopupPhoto
-          isOpen={isPopupPhotoOpen}
-          onClose={closePhotoPopup}
-          currentPhoto={currentPhoto}
-        />
-      </>
-    )
+    <>
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
+        {renderPageContent()}
+      </BasePage>
+      <PopupPhoto
+        isOpen={isPopupPhotoOpen}
+        onClose={closePhotoPopup}
+        currentPhoto={currentPhoto}
+      />
+    </>
   );
 
   // функции рендера
+  function renderPageContent() {
+    if (!storiesTags.length) {
+      return <AnimatedPageContainer titleText={textStubNoData} />;
+    }
+
+    return (
+      <div className="stories page__section">
+        <TitleH1 title={title} sectionClass="stories__title" />
+        <p className="stories__subtitle">{subtitle}</p>
+
+        {renderTags()}
+
+        {renderUpperBlock()}
+
+        <ReactMarkdown className="stories__markdown">
+          {currentStory?.uperBody}
+        </ReactMarkdown>
+
+        {renderPhotosCarousel()}
+
+        <ReactMarkdown className="stories__markdown stories__markdown_last">
+          {currentStory?.lowerBody}
+        </ReactMarkdown>
+
+        {renderLinksBlock()}
+      </div>
+    );
+  }
+
   function renderUpperBlock() {
     return (
       <>
@@ -236,7 +259,7 @@ function Stories() {
           sectionClass="stories__caption"
         />
         <p className="stories__subtitle stories__subtitle_block">
-          {currentStory.description}
+          {currentStory?.description}
         </p>
       </>
     );
@@ -245,7 +268,7 @@ function Stories() {
   function renderLinksBlock() {
     return (
       <div className="stories__links">
-        {currentUser && currentStory.mentor?.email && (
+        {currentUser && currentStory?.mentor?.email && (
           <a
             className="link stories__link"
             href={`mailto:${currentStory.mentor.email}`}
@@ -253,13 +276,13 @@ function Stories() {
             rel="noopener noreferrer"
           >
             {`написать ${inclineFirstname(
-              currentStory.mentor?.firstName,
+              currentStory.mentor.firstName,
               'dative'
             )}`}
           </a>
         )}
 
-        {currentStory.nextArticle && (
+        {currentStory?.nextArticle && (
           <NextArticleLink
             text={currentStory.nextArticle.title}
             href={nextPageLink}
