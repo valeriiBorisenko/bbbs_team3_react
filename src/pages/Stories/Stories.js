@@ -4,9 +4,10 @@ import Carousel from 'react-elastic-carousel';
 import { useHistory, useParams } from 'react-router-dom';
 import { inclineFirstname } from 'lvovich';
 import storiesPageTexts from '../../locales/stories-page-RU';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { CurrentUserContext } from '../../contexts';
 import { staticImageUrl } from '../../config/config';
-import { STORIES_URL } from '../../config/routes';
+import { NOT_FOUND_URL, STORIES_URL } from '../../config/routes';
 import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
 import { formatDate, formatMonthsGenitiveCase } from '../../utils/utils';
 import { handleRadioBehavior } from '../../utils/filter-tags';
@@ -47,6 +48,7 @@ function Stories() {
   const { currentUser } = useContext(CurrentUserContext);
 
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isPageError, setIsPageError] = useState(false);
 
   const [storiesTags, setStoriesTags] = useState([]);
   const [tagsOffset, setTagsOffset] = useState(0);
@@ -116,8 +118,8 @@ function Stories() {
             setIsPageLoading(false);
           }
         })
-        // крашнуть страницу
         .catch(() => {
+          setIsPageError(true);
           setIsPageLoading(false);
         });
     }
@@ -163,11 +165,13 @@ function Stories() {
   // получение конкретной истории по id
   useEffect(() => {
     if (currentStoryId) {
-      // если 404 пуш на 404
-      // если сетевая, то крашнуть страницу
       getStoryById(currentStoryId)
         .then(setCurrentStory)
-        .catch(console.log)
+        .catch((err) => {
+          if (err.status === ERROR_CODES.notFound) {
+            history.push(NOT_FOUND_URL);
+          } else setIsPageError(true);
+        })
         .finally(() => setIsPageLoading(false));
     }
   }, [currentStoryId]);
@@ -215,6 +219,14 @@ function Stories() {
 
   // функции рендера
   function renderPageContent() {
+    if (isPageError) {
+      return (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      );
+    }
+
     if (!storiesTags.length) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }

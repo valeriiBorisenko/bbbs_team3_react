@@ -14,7 +14,7 @@ export const ARTICLES_URL = '/articles';
 export const MOVIES_URL = '/movies';
 export const BOOKS_URL = '/books';
 export const STORIES_URL = '/stories';
-export const NOT_FOUND_URL = '*';
+export const NOT_FOUND_URL = '/*';
 
 export const MAIN_PAGE_TITLE = 'наставники.про';
 export const AFISHA_TITLE = 'Календарь';

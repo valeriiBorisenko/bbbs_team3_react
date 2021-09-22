@@ -15,7 +15,7 @@ function getStoryById(id) {
   return axios
     .get(`${baseURL}${apiUrl}/history/${id}/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 export { getStoriesPageTags, getStoryById };
