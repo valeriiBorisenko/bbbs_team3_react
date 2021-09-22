@@ -133,7 +133,7 @@ export const randomizeArray = (arr, size) => {
 };
 
 export const formatPhoneNumber = (phoneNum) => {
-  if (phoneNum.length === 12) {
+  if (phoneNum?.length === 12) {
     const str1 = phoneNum.slice(0, 2);
     const str2 = phoneNum.slice(2, 5);
     const str3 = phoneNum.slice(5, 8);
