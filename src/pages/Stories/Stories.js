@@ -38,6 +38,7 @@ const maxScreenWidth = {
 
 const tagsLimit = 10;
 const disablePointerEventsDelay = 150;
+const scrollUpDelay = 150;
 
 const { headTitle, headDescription, title, subtitle, textStubNoData } =
   storiesPageTexts;
@@ -114,7 +115,7 @@ function Stories() {
             }));
             setStoriesTags((prevTags) => [...prevTags, ...storiesTagsData]);
             setTagsOffset((prevOffset) => prevOffset + limit);
-          } else if (isPageLoading) {
+          } else {
             setIsPageLoading(false);
           }
         })
@@ -199,8 +200,10 @@ function Stories() {
   const scrollAnchorRef = useRef(null);
 
   useEffect(() => {
-    if (scrollAnchorRef.current) {
-      scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (scrollAnchorRef && scrollAnchorRef.current) {
+      setTimeout(() => {
+        scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
+      }, scrollUpDelay);
     }
   }, [storyId]);
 
@@ -231,7 +234,7 @@ function Stories() {
       );
     }
 
-    if (!storiesTags.length) {
+    if (!storiesTags.length && !currentStory) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
