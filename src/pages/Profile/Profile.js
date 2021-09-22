@@ -51,7 +51,7 @@ const eventsLimit = 10;
 
 function Profile() {
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
-  const { setError } = useContext(ErrorsContext);
+  const { serverError, setError } = useContext(ErrorsContext);
   const { unauthorized, badRequest } = ERROR_CODES;
 
   const [events, setEvents] = useState([]);
@@ -81,7 +81,6 @@ function Profile() {
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
 
   const getArchiveOfEvents = ({ limit, offset }) => {
-    console.log(`Archive, offset: ${offset}, events ${archivedEvents.length}`);
     if (offset <= archivedEvents.length) {
       getArchiveOfBookedEvents({ limit, offset })
         .then((eventsData) => {
@@ -97,22 +96,15 @@ function Profile() {
   };
 
   const getCurrentBookedEvents = ({ limit, offset }) => {
-    console.log(`Current, offset: ${offset}, events ${events.length}`);
     if (offset <= events.length) {
       getBookedEvents({ limit, offset })
         .then((eventsData) => {
-          const sortedEvents = eventsData
-            .sort((a, b) => {
-              const date1 = new Date(a?.event?.startAt);
-              const date2 = new Date(b?.event?.startAt);
-              return date1 - date2;
-            })
-            .map(({ event }) => {
-              const updatedEvent = event;
-              updatedEvent.booked = true;
-              return updatedEvent;
-            });
-          setEvents((prevEvents) => [...prevEvents, ...sortedEvents]);
+          const updatedEvents = eventsData.map(({ event }) => {
+            const updatedEvent = event;
+            updatedEvent.booked = true;
+            return updatedEvent;
+          });
+          setEvents((prevEvents) => [...prevEvents, ...updatedEvents]);
           setEventsOffset((prevOffset) => prevOffset + limit);
         })
         .catch(() => setIsPageError(true))
@@ -424,16 +416,18 @@ function Profile() {
                 sectionClass="profile__events"
                 step={3}
                 onScrollCallback={() => {
-                  if (isArchiveOpen) {
-                    getArchiveOfEvents({
-                      limit: eventsLimit,
-                      offset: eventsOffset,
-                    });
-                  } else {
-                    getCurrentBookedEvents({
-                      limit: eventsLimit,
-                      offset: eventsOffset,
-                    });
+                  if (!serverError) {
+                    if (isArchiveOpen) {
+                      getArchiveOfEvents({
+                        limit: eventsLimit,
+                        offset: eventsOffset,
+                      });
+                    } else {
+                      getCurrentBookedEvents({
+                        limit: eventsLimit,
+                        offset: eventsOffset,
+                      });
+                    }
                   }
                 }}
               >
