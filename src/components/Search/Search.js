@@ -1,5 +1,4 @@
-import './Search.scss';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import texts from './locales/RU';
@@ -10,6 +9,7 @@ import search from '../../api/search';
 import { CATALOG_URL, RIGHTS_URL, STORIES_URL } from '../../config/routes';
 import { CitiesContext, CurrentUserContext } from '../../contexts';
 import { DELAY_DEBOUNCE, localStUserCity } from '../../config/constants';
+import './Search.scss';
 
 function Search({
   isOpenSearch,
@@ -125,7 +125,7 @@ function Search({
                   pathname: getPathName(item.page, item.id),
                   state: { id: item.id },
                 }}
-                className="search__title-link section-title section-title_clickable"
+                className="section-title section-title_clickable search__title-link"
               >
                 {item.title}
               </Link>

@@ -15,7 +15,7 @@
     background-color: transparent;
   }
 
-  @include atDesktop1380 {
+  @include atDesktop1279 {
     &_displayed {
       background-color: $white;
       border-radius: 0px 0px 30px 30px;

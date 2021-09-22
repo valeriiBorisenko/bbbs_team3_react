@@ -95,7 +95,6 @@
   justify-items: start;
   align-items: start;
 
-
   & .menu__logo {
     grid-column: 1;
   }
@@ -120,7 +119,7 @@
 @include atDesktop1380 {
   .menu__list-item {
     margin-right: 20px;
-  
+
     &:last-of-type {
       margin-right: 0;
     }
@@ -299,7 +298,7 @@
   // меню для поиска
   .menu_state_search {
     grid-template-columns: 60px 1fr 40px;
-    grid-template-rows: 30px 100vh;
+    grid-template-rows: 30px calc(100vh - 30px);
     justify-items: center;
     position: relative;
 
@@ -319,7 +318,6 @@
 
     & .menu__search-options {
       grid-column: 1 / 4;
-      grid-row: 2;
       justify-self: start;
     }
   }
