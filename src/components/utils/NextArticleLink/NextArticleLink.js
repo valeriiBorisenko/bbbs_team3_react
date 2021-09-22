@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './NextArticleLink.scss';
 
-function NextArticleLink({ text, href, sectionClass }) {
+function NextArticleLink({ text, href, sectionClass, onClick }) {
   const classNames = ['next-article-link', sectionClass].join(' ').trim();
   return (
-    <Link className={classNames} to={href}>
+    <Link className={classNames} to={href} onClick={onClick}>
       <span className="next-article-link__text">{text}</span>
       <svg
         className="next-article-link__arrow"
@@ -30,12 +30,14 @@ NextArticleLink.propTypes = {
   text: PropTypes.string,
   href: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   sectionClass: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 NextArticleLink.defaultProps = {
   text: 'Link',
   href: '/',
   sectionClass: '',
+  onClick: () => {},
 };
 
 export default NextArticleLink;

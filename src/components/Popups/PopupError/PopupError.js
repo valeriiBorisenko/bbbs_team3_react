@@ -6,12 +6,11 @@ import { Button, TitleH2 } from '../../utils/index';
 import { ErrorsContext } from '../../../contexts';
 
 function PopupError({ isOpen, onClose }) {
-  const { serverError, clearError } = useContext(ErrorsContext);
+  const { serverError } = useContext(ErrorsContext);
 
   const closeOnEsc = (evt) => {
     if (evt.key === 'Escape') {
       onClose();
-      clearError();
     }
   };
 

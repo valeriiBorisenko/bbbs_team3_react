@@ -1,28 +1,28 @@
 import './MainPage.scss';
 import { Link } from 'react-router-dom';
-import { useState, useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import mainPageTexts from '../../locales/main-page-RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts/index';
-import { useEventBooking, useActivityTypes } from '../../hooks/index';
+import { useActivityTypes, useEventBooking } from '../../hooks/index';
 import { QUESTIONS_URL, STORIES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { randomizeArray } from '../../utils/utils';
 import getMainPageData from '../../api/main-page';
 import {
-  BasePage,
-  Loader,
-  Card,
-  CardStub,
-  CardCalendar,
-  CardPlace,
-  CardArticleBig,
-  CardFilm,
-  CardVideoMain,
-  Widget,
-  CardQuestion,
-  CardAnimatedPlug,
   AnimatedPageContainer,
+  BasePage,
+  Card,
+  CardAnimatedPlug,
+  CardArticleBig,
+  CardCalendar,
+  CardFilm,
+  CardPlace,
+  CardQuestion,
+  CardStub,
+  CardVideoMain,
+  Loader,
+  Widget,
 } from './index';
 
 // количество отображаемых карточек с фильмами и вопросами
@@ -108,7 +108,10 @@ function MainPage() {
           sectionClass="lead__media scale-in"
           key={mainPageData?.history?.id}
         >
-          <Link to={STORIES_URL} className="lead__link">
+          <Link
+            to={`${STORIES_URL}/${mainPageData?.history?.id}`}
+            className="lead__link"
+          >
             {mainPageData?.history?.title}
           </Link>
           <img
