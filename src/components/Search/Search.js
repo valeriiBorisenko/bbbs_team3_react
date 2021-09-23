@@ -98,21 +98,24 @@ function Search({
         }`}
       >
         <div className="search__container-input">
-          <input
-            type="text"
-            name="search"
-            placeholder=""
-            className="search__input paragraph"
-            autoComplete="off"
-            onChange={handleChange}
-            value={values.search || ''}
-          />
-          <button
-            type="button"
-            aria-label={texts.ariaLabelCloseButton}
-            className="search__close-button"
-            onClick={handleClickButton}
-          />
+          <div className="search__input-wrap">
+            <input
+              type="text"
+              name="search"
+              placeholder=""
+              className="search__input paragraph"
+              autoComplete="off"
+              onChange={handleChange}
+              value={values.search || ''}
+            />
+            <button
+              type="button"
+              aria-label={texts.ariaLabelCloseButton}
+              className="search__close-button"
+              onClick={handleClickButton}
+            />
+          </div>
+          <span className="search__input-border" />
         </div>
 
         {renderSearchContent()}

@@ -15,8 +15,30 @@
 
   &__container-input {
     display: flex;
+    flex-direction: column;
+  }
+
+  &__input-wrap {
+    display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #000;
+    margin-bottom: 5px;
+  }
+
+  @keyframes animate-border-from-l-to-r {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  &__input-border {
+    display: block;
+    width: 0;
+    height: 1px;
+    background-color: $black;
+    animation: animate-border-from-l-to-r .5s ease-out forwards;
   }
 
   &__close-button {
@@ -32,12 +54,13 @@
     color: $blue;
     cursor: pointer;
     padding: 0;
+    opacity: 0;
+    animation: fade-in .5s ease-out .4s forwards;
   }
 
 
   &__input {
     width: calc(100% - 3px); //для единой границы при наличии скроллбара
-    padding: 0 0 5px;
     border: none;
     outline: none;
     background-color: transparent;
@@ -52,6 +75,8 @@
     font-family: $protoGrotesk;
     font-size: 44px;
     color: $lightGray;
+    opacity: 0;
+    animation: fade-in .5s ease-out .3s forwards;
   }
 
   &__content_type_void {
@@ -59,11 +84,13 @@
     font-family: $protoGrotesk;
     font-size: 23px;
     color: $black;
+    opacity: 0;
+    animation: fade-in .5s ease-out .3s forwards;
   }
 
   &__option-list {
     margin-top: 44px;
-    padding: 0 3px 0 0;
+    padding: 0;
     list-style-type: none;
     max-height: 75vh;
     overflow-y: scroll;
