@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
@@ -157,6 +156,7 @@ function ReadAndWatchSection({
           showEmptySlots
           onNextEnd={slideNextHandler}
           onPrevEnd={slideBackHandler}
+          enableMouseSwipe={false}
         >
           {renderCardsForSlider()}
         </Carousel>
