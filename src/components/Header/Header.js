@@ -1,16 +1,16 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import './Header.scss';
-import { useState, useEffect, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  CurrentUserContext,
   CitiesContext,
+  CurrentUserContext,
   PopupsContext,
 } from '../../contexts/index';
 import texts from './locales/RU';
-import { useClickOutside, useAuth, useLocalStorage } from '../../hooks/index';
-import { PROFILE_URL, AFISHA_URL, PLACES_URL } from '../../config/routes';
+import { useAuth, useClickOutside, useLocalStorage } from '../../hooks/index';
+import { AFISHA_URL, PLACES_URL, PROFILE_URL } from '../../config/routes';
 import { localStUserCity } from '../../config/constants';
 import NavBar from '../NavBar/NavBar';
 import { UserMenuButton } from '../utils/index';
@@ -100,7 +100,9 @@ function Header({ isTransparent }) {
 
   const classNamesHeader = [
     'header',
-    isTransparent && !(window.pageYOffset > headerWindowOffsetY)
+    isTransparent &&
+    !isOpenSearch &&
+    !(window.pageYOffset > headerWindowOffsetY)
       ? 'header_transparent'
       : '',
     isMobileMenuOpen ? 'header_displayed' : '',
