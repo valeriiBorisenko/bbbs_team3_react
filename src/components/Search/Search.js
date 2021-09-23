@@ -36,6 +36,16 @@ function Search({
     return `/${url}`;
   };
 
+  const animateListItem = (idx) => ({
+    opacity: '0',
+    animation: `fade-in 0.5s ease-out ${idx / 12}s forwards`,
+  });
+
+  const animateLink = (idx) => ({
+    opacity: '0',
+    animation: `slide-in 0.5s ease-out ${idx / 10}s forwards`,
+  });
+
   const handleClickButton = () => {
     setIsOpenSearch(!isOpenSearch);
     resetForm();
@@ -117,8 +127,12 @@ function Search({
     if (searchResults.length > 0) {
       return (
         <ul className="search__option-list">
-          {searchResults.map((item) => (
-            <li key={item.page + item.id} className="search__option-item">
+          {searchResults.map((item, idx) => (
+            <li
+              key={item.page + item.id}
+              className="search__option-item"
+              style={animateListItem(idx)}
+            >
               <Link
                 onClick={handleClickLink}
                 to={{
@@ -126,12 +140,14 @@ function Search({
                   state: { id: item.id },
                 }}
                 className="section-title section-title_clickable search__title-link"
+                style={animateLink(idx)}
               >
                 {item.title}
               </Link>
               <Link
                 to={`/${item.page}`}
                 className="link search__link"
+                style={animateLink(idx)}
                 onClick={handleClickLink}
               >
                 {item.modelName.toLowerCase()}
