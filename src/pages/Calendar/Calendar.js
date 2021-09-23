@@ -1,7 +1,6 @@
-import './Calendar.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import calendarPageTexts from '../../locales/calendar-page-RU';
+import calendarPageTexts from './locales/RU';
 import {
   CurrentUserContext,
   ErrorsContext,
@@ -31,6 +30,7 @@ import {
   TitleH1,
 } from './index';
 import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import './Calendar.scss';
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
 
@@ -40,6 +40,9 @@ export const PAGE_SIZE_PAGINATE = {
   medium: 8,
   big: 12,
 };
+
+const smallQueryWidth = '1024px';
+const mediumQueryWidth = '1440px';
 
 function Calendar() {
   const { currentUser } = useContext(CurrentUserContext);
@@ -76,8 +79,8 @@ function Calendar() {
 
   // определение размера страницы
   useEffect(() => {
-    const small = window.matchMedia('(max-width: 1024px)');
-    const medium = window.matchMedia('(max-width: 1440px)');
+    const small = window.matchMedia(`(max-width: ${smallQueryWidth})`);
+    const medium = window.matchMedia(`(max-width: ${mediumQueryWidth})`);
 
     const listener = () => {
       if (small.matches) {
@@ -115,7 +118,6 @@ function Calendar() {
   }
 
   // общая функция загрузки ивентов
-  // в будущем упростить эту функцию
   function getPageData({ offset, activeFilters }) {
     getCalendarPageData({
       limit: pageSize,
@@ -129,10 +131,7 @@ function Calendar() {
       })
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -145,7 +144,7 @@ function Calendar() {
       });
   }
 
-  // Откртие попапа при переходе из поиска
+  // Открытие попапа при переходе из поиска
   useEffect(() => {
     if (state) {
       getCalendarItem(state.id)
@@ -214,7 +213,6 @@ function Calendar() {
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   // эффект фильтрации
   useEffect(() => {
-    // в дальнейшем надо изменить количество секунд
     if (isFiltersUsed) {
       setIsLoading(true);
       debounceFiltration();
@@ -256,6 +254,19 @@ function Calendar() {
       );
     }
   }, [selectedEvent]);
+
+  // глобальный лоадер при первой загрузке пока ждем ивенты и фильтры
+  if ((!calendarPageData || !filters) && !isPageError) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="calendar-page page__section fade-in">
+        {renderPageContent()}
+      </section>
+    </BasePage>
+  );
 
   // рендеринг
   // отрисовка заглушки, если ивентов нет
@@ -361,19 +372,6 @@ function Calendar() {
 
     return null;
   }
-
-  // глобальный лоадер при первой загрузке пока ждем ивенты и фильтры
-  if ((!calendarPageData || !filters) && !isPageError) {
-    return <Loader isCentered />;
-  }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="calendar-page page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
-  );
 }
 
 export default Calendar;

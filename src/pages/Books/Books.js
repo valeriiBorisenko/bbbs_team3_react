@@ -91,10 +91,7 @@ function Books() {
       .then((results) => setBooksPageData(results))
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
