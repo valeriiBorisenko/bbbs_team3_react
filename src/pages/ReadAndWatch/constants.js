@@ -5,7 +5,7 @@ export const RAW_SLIDER_BREAKPOINTS = {
   S: 700,
   M: 1120,
   L: 1440,
-  ХL: 1441,
+  XL: 1441,
 };
 export const ELEMS_PER_SLIDE = {
   one: 1,

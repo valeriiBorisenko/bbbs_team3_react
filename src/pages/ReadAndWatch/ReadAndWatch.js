@@ -1,29 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './ReadAndWatch.scss';
 import readAndWatchPageTexts from '../../locales/read-and-watch-page-RU';
 import {
   BasePage,
-  CardCatalog,
   CardArticle,
-  CardFilm,
   CardBook,
+  CardCatalog,
+  CardFilm,
 } from './index';
 import {
-  CATALOG_URL,
   ARTICLES_URL,
+  BOOKS_URL,
+  CATALOG_URL,
   MOVIES_URL,
   VIDEO_URL,
-  BOOKS_URL,
 } from '../../config/routes';
 import {
-  RAW_DELAY_SLIDER_TRANSITION,
-  RAW_SLIDER_PADDINGS,
-  RAW_SLIDER_BREAKPOINTS,
   ELEMS_PER_SLIDE,
+  RAW_DELAY_SLIDER_TRANSITION,
+  RAW_SLIDER_BREAKPOINTS,
+  RAW_SLIDER_PADDINGS,
 } from './constants';
 import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWatchSection';
 // АПИ
-import getCatalogPageDatа from '../../api/catalog-page';
+import getCatalogPageData from '../../api/catalog-page';
 import { getVideoPageData } from '../../api/video-page';
 import { getArticlesPageData } from '../../api/articles-page';
 import { getMoviesPageData } from '../../api/movies-page';
@@ -82,7 +82,7 @@ function ReadAndWatch() {
           transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
           paragraphNoContentText={paragraphNoContent}
           pageSize={pageSize}
-          getDataFromApi={getCatalogPageDatа}
+          getDataFromApi={getCatalogPageData}
           CardTemplateComponent={CardCatalog}
           path={CATALOG_URL}
           sectionTitle={catalogTitle}
