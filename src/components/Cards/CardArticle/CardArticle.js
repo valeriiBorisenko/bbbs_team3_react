@@ -47,7 +47,7 @@ function CardArticle({
               draggable="false"
               src={`${staticImageUrl}/${image}`}
               alt={title}
-              className="article-card__image image-scale"
+              className="article-card__image"
             />
           </div>
         )}

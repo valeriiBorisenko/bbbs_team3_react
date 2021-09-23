@@ -1,4 +1,3 @@
-import './AboutUs.scss';
 import React from 'react';
 import aboutUsTexts from './locales/RU';
 import {
@@ -10,6 +9,7 @@ import {
   LogoBlue,
   TitleH3,
 } from './index';
+import './AboutUs.scss';
 
 const {
   headTitle,
