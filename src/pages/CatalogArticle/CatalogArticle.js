@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 import getCatalogArticlePageData from '../../api/catalog-article-page';
 import catalogArticlePageTexts from '../../locales/catalog-article-page-RU';
 import { ERROR_MESSAGES } from '../../config/constants';
@@ -15,7 +15,9 @@ import {
 } from './index';
 import './CatalogArticle.scss';
 
-function CatalogArticle({ articleId }) {
+function CatalogArticle() {
+  const { articleId } = useParams();
+
   const { headTitle, headDescription } = catalogArticlePageTexts;
   const [catalogArticlePageData, setCatalogArticlePageData] = useState();
   const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -95,9 +97,5 @@ function CatalogArticle({ articleId }) {
     </BasePage>
   );
 }
-
-CatalogArticle.propTypes = {
-  articleId: PropTypes.string.isRequired,
-};
 
 export default CatalogArticle;

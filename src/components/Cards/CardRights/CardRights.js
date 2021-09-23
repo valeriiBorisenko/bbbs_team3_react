@@ -42,7 +42,7 @@ CardRights.propTypes = {
   tags: PropTypes.arrayOf(Array),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
-  id: PropTypes.number,
+  id: PropTypes.number.isRequired,
   getActiveTags: PropTypes.func,
 };
 
@@ -51,7 +51,6 @@ CardRights.defaultProps = {
   tags: [],
   color: '',
   sectionClass: '',
-  id: 0,
   getActiveTags: () => {},
 };
 

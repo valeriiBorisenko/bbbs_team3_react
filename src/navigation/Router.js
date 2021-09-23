@@ -56,15 +56,7 @@ function Router() {
 
       <Route exact path={RIGHTS_URL} component={Rights} />
 
-      <Route
-        path={RIGHTS_ARTICLE_URL}
-        render={({ match, location }) => (
-          <RightsArticle
-            id={match.params.id}
-            getActiveTags={location.getActiveTags}
-          />
-        )}
-      />
+      <Route path={RIGHTS_ARTICLE_URL} component={RightsArticle} />
 
       <Route exact path={MOVIES_URL} component={Movies} />
 
@@ -72,12 +64,7 @@ function Router() {
 
       <Route exact path={CATALOG_URL} component={Catalog} />
 
-      <Route
-        path={CATALOG_ITEM_URL}
-        render={({ match }) => (
-          <CatalogArticle articleId={match.params.articleId} />
-        )}
-      />
+      <Route path={CATALOG_ITEM_URL} component={CatalogArticle} />
 
       <Route exact path={VIDEO_URL} component={Video} />
 

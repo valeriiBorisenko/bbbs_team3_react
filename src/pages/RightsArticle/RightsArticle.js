@@ -1,7 +1,7 @@
 import './RightsArticle.scss';
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
+import { useLocation, useParams } from 'react-router-dom';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -12,8 +12,10 @@ import { getRightsArticle } from '../../api/rights-page';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { RIGHTS_URL } from '../../config/routes';
 
-function RightsArticle({ id, getActiveTags }) {
-  // useScrollToTop();
+function RightsArticle() {
+  const { articleId } = useParams();
+  const location = useLocation();
+  const getTags = location.getActiveTags ?? (() => '');
 
   const [articleData, setArticleData] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -43,7 +45,7 @@ function RightsArticle({ id, getActiveTags }) {
         text={articleData.nextArticle.title}
         href={{
           pathname: `/rights/${articleData?.nextArticle?.id}`,
-          getActiveTags,
+          getActiveTags: getTags,
         }}
         sectionClass="article__next-article-link"
       />
@@ -77,8 +79,8 @@ function RightsArticle({ id, getActiveTags }) {
   useEffect(() => {
     setIsLoadingPage(true);
 
-    if (isLoadingPage && id) {
-      getRightsArticle({ id, tags: getActiveTags() })
+    if (isLoadingPage && articleId && location) {
+      getRightsArticle({ id: articleId, tags: getTags() })
         .then((res) => setArticleData(res))
         .catch(() => setIsPageError(true))
         .finally(() => {
@@ -86,10 +88,10 @@ function RightsArticle({ id, getActiveTags }) {
         });
     }
 
-    if (!isLoadingPage && id) {
+    if (!isLoadingPage && articleId && location) {
       getRightsArticle({
         id: articleData.nextArticle?.id,
-        tags: getActiveTags(),
+        tags: getTags(),
       })
         .then((res) => setArticleData(res))
         .catch(() => setIsPageError(true))
@@ -97,30 +99,17 @@ function RightsArticle({ id, getActiveTags }) {
           setIsLoadingPage(false);
         });
     }
-
-    // Хард Код для демо
-    window.scrollTo({ top: 0 });
-  }, [id]);
+  }, [articleId, location]);
 
   return (
     <BasePage
-      headTitle={articleData?.title}
-      headDescription={articleData?.description}
+      headTitle={articleData?.title ?? 'Право'}
+      headDescription={articleData?.description ?? 'Право'}
       isHeaderTransparentOnTop
     >
       {isLoadingPage ? <Loader isNested /> : renderMainContent()}
     </BasePage>
   );
 }
-
-RightsArticle.propTypes = {
-  id: PropTypes.number,
-  getActiveTags: PropTypes.func,
-};
-
-RightsArticle.defaultProps = {
-  id: null,
-  getActiveTags: () => {},
-};
 
 export default RightsArticle;
