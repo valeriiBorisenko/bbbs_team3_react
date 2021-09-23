@@ -39,11 +39,6 @@ function Header() {
     currentAnonymousCity = getLocalStorageItem();
   }
 
-  const handleUserButtonClick = () => {
-    if (currentUser) history.push(PROFILE_URL);
-    else openPopupLogin();
-  };
-
   // сохранённый в localStorage город анонимуса
   const userCity = currentUser?.city ?? currentAnonymousCity;
 
@@ -54,6 +49,12 @@ function Header() {
       setUserCityName(currentCity?.name);
     }
   }, [cities, userCity]);
+
+  // клик по иконке человечка
+  const handleUserButtonClick = () => {
+    if (currentUser) history.push(PROFILE_URL);
+    else openPopupLogin();
+  };
 
   // меню бургер
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -73,7 +74,7 @@ function Header() {
     }
   };
 
-  // Состояние поиска
+  // состояние поиска
   const [isOpenSearch, setIsOpenSearch] = useState(false);
 
   // состояния хедера
@@ -83,16 +84,11 @@ function Header() {
 
   const detectHeaderOnTop = () => {
     if (window.scrollY === 0) setIsHeaderOnTop(true);
-    else setIsHeaderOnTop(false);
+    else if (window.scrollY > 0 && isHeaderOnTop) setIsHeaderOnTop(false);
   };
 
-  const debouncedDetectHeaderOnTop = useDebounce(
-    detectHeaderOnTop,
-    delayDebounceHeader
-  );
-
   const detectScrollUp = () => {
-    debouncedDetectHeaderOnTop();
+    detectHeaderOnTop();
 
     const currentScrollPos = window.pageYOffset;
     // если prevScrollPos больше currentScrollPos значит мы скролим наверх
@@ -109,14 +105,21 @@ function Header() {
     prevScrollPos = currentScrollPos;
   };
 
+  const debouncedDetectScrollUp = useDebounce(
+    detectScrollUp,
+    delayDebounceHeader
+  );
+
   useEffect(() => {
-    window.addEventListener('scroll', detectScrollUp);
-    return () => window.removeEventListener('scroll', detectScrollUp);
+    window.addEventListener('scroll', debouncedDetectScrollUp);
+    return () => window.removeEventListener('scroll', debouncedDetectScrollUp);
   }, []);
 
   const classNamesHeader = [
     'header',
-    isHeaderOnTop && !isOpenSearch ? 'header_transparent' : '',
+    isOpenSearch || (!isHeaderOnTop && isHeaderActive)
+      ? 'header_solid-background'
+      : '',
     isMobileMenuOpen ? 'header_displayed' : '',
     !isHeaderActive && !isOpenSearch ? 'header__on-scroll-up' : '',
   ]
