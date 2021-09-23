@@ -20,7 +20,7 @@ function getRightsTags() {
 }
 
 // получение Статьи для страницы Права Детей
-function getRightsArticle({ id, tags }) {
+function getRightsArticle({ id, tags = '' }) {
   return axios
     .get(`${baseURL}${apiUrl}/rights/${id}/`, {
       params: { tags },

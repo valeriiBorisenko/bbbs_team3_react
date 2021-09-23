@@ -7,7 +7,6 @@ const useDebounce = (callback, delay) =>
       if (timer) {
         clearTimeout(timer);
       }
-
       timer = setTimeout(() => {
         callback(...args);
       }, delay);

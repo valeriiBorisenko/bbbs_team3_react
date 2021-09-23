@@ -7,19 +7,12 @@ import {
   CurrentUserContext,
   PopupsContext,
 } from '../../contexts';
-import {
-  useAuth,
-  useClickOutside,
-  useDebounce,
-  useLocalStorage,
-} from '../../hooks';
+import { useAuth, useClickOutside, useLocalStorage } from '../../hooks';
 import { AFISHA_URL, PLACES_URL, PROFILE_URL } from '../../config/routes';
 import { localStUserCity } from '../../config/constants';
 import NavBar from '../NavBar/NavBar';
 import { UserMenuButton } from '../utils';
 import './Header.scss';
-
-const delayDebounceHeader = 100;
 
 function Header({ isTransparentOnTop }) {
   const history = useHistory();
@@ -106,14 +99,9 @@ function Header({ isTransparentOnTop }) {
     prevScrollPos = currentScrollPos;
   };
 
-  const debouncedDetectScrollUp = useDebounce(
-    detectScrollUp,
-    delayDebounceHeader
-  );
-
   useEffect(() => {
-    window.addEventListener('scroll', debouncedDetectScrollUp);
-    return () => window.removeEventListener('scroll', debouncedDetectScrollUp);
+    window.addEventListener('scroll', detectScrollUp);
+    return () => window.removeEventListener('scroll', detectScrollUp);
   }, []);
 
   const classNamesHeader = [
