@@ -14,6 +14,8 @@ import NavBar from '../NavBar/NavBar';
 import { UserMenuButton } from '../utils';
 import './Header.scss';
 
+const onScrollUpDelay = 100;
+
 function Header({ isTransparentOnTop }) {
   const history = useHistory();
   const { pathname } = useLocation();
@@ -106,7 +108,7 @@ function Header({ isTransparentOnTop }) {
     }
     debounceTimer = setTimeout(() => {
       detectScrollUp();
-    }, 100);
+    }, onScrollUpDelay);
   };
 
   useEffect(() => {
