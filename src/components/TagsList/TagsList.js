@@ -1,6 +1,6 @@
-import './TagsList.scss';
 import PropTypes from 'prop-types';
-import { PseudoButtonTag } from '../utils/index';
+import { PseudoButtonTag } from '../utils';
+import './TagsList.scss';
 
 const centeringFiltersMaxLength = 3;
 

@@ -1,4 +1,3 @@
-import './ProfileForm.scss';
 import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
@@ -9,6 +8,7 @@ import getServerErrors from '../../utils/form-errors';
 import { staticImageUrl } from '../../config/config';
 import { regExpImages } from '../../config/constants';
 import { Button, ButtonRound, Caption, Card, Input, Rating } from '../utils';
+import './ProfileForm.scss';
 
 const {
   rateCaptionText,

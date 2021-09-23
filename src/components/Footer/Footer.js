@@ -1,5 +1,5 @@
-import './Footer.scss';
 import React from 'react';
+import texts from './locales/RU';
 import {
   ABOUT_US_TITLE,
   ABOUT_US_URL,
@@ -16,10 +16,10 @@ import {
   STORIES_TITLE,
   STORIES_URL,
 } from '../../config/routes';
-import texts from './locales/RU';
 import { socialLinks } from '../../utils/external-links';
 import footerLogoPath from '../../assets/footer-logo.svg';
 import { NavItem } from '../utils';
+import './Footer.scss';
 
 function Footer() {
   return (

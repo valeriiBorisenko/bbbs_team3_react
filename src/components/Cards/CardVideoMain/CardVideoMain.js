@@ -1,14 +1,14 @@
-import './CardVideoMain.scss';
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { PopupsContext } from '../../../contexts/index';
-import { Card, TitleH2, Caption } from '../../utils/index';
-import { formatDuration, changeCaseOfFirstLetter } from '../../../utils/utils';
+import { PopupsContext } from '../../../contexts';
+import { Caption, Card, TitleH2 } from '../../utils';
+import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
 import { staticImageUrl } from '../../../config/config';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
+import './CardVideoMain.scss';
 
 function CardVideoMain({ data: { title, info, link, image, duration } }) {
   const { openPopupVideo } = useContext(PopupsContext);
@@ -23,13 +23,34 @@ function CardVideoMain({ data: { title, info, link, image, duration } }) {
       duration,
     });
     openPopupVideo();
-    // записать дату в локал, ключ вынести в константы
   };
 
   const { imagePreview } = parserLinkYoutube(link);
 
+  return (
+    <div className="card-container card-container_type_main-video">
+      <Card sectionClass="card-video-main" color="yellow">
+        <div className="card-video-main__title-wrap">
+          <TitleH2
+            sectionClass="card-video-main__title"
+            title={changeCaseOfFirstLetter(title)}
+          />
+          <Caption
+            sectionClass="card-video-main__info"
+            title={changeCaseOfFirstLetter(info)}
+          />
+        </div>
+        {link && renderVideoPlayback(texts.linkText)}
+      </Card>
+
+      <Card sectionClass="card-video-main__video">
+        {renderVideoPlayback(renderPreview())}
+      </Card>
+    </div>
+  );
+
   // Рендерим верхную часть с фоткой и props.children из компонета выше
-  const renderPrewiew = () => {
+  function renderPreview() {
     let durationString = '';
 
     if (duration) {
@@ -51,39 +72,19 @@ function CardVideoMain({ data: { title, info, link, image, duration } }) {
         </span>
       </>
     );
-  };
+  }
 
-  const renderVideoPlayback = (childrenElem) => (
-    <button
-      className="link card-video-main__button"
-      type="button"
-      onClick={handleClick}
-    >
-      {childrenElem}
-    </button>
-  );
-
-  return (
-    <div className="card-container card-container_type_main-video">
-      <Card sectionClass="card-video-main" color="yellow">
-        <div className="card-video-main__title-wrap">
-          <TitleH2
-            sectionClass="card-video-main__title"
-            title={changeCaseOfFirstLetter(title)}
-          />
-          <Caption
-            sectionClass="card-video-main__info"
-            title={changeCaseOfFirstLetter(info)}
-          />
-        </div>
-        {link && renderVideoPlayback(texts.linkText)}
-      </Card>
-
-      <Card sectionClass="card-video-main__video">
-        {renderVideoPlayback(renderPrewiew())}
-      </Card>
-    </div>
-  );
+  function renderVideoPlayback(childrenElem) {
+    return (
+      <button
+        className="link card-video-main__button"
+        type="button"
+        onClick={handleClick}
+      >
+        {childrenElem}
+      </button>
+    );
+  }
 }
 
 CardVideoMain.propTypes = {

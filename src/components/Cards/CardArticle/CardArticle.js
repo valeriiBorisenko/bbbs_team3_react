@@ -1,9 +1,9 @@
-import './CardArticle.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
-import { TitleH2, Card, Caption } from '../../utils/index';
+import { Caption, Card, TitleH2 } from '../../utils';
+import './CardArticle.scss';
 
 function CardArticle({
   data: { title, info, annotation, image, articleUrl },

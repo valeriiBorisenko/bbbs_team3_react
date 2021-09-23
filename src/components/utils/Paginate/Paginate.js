@@ -1,12 +1,12 @@
 import './Paginate.scss';
 import ReactPaginate from 'react-paginate';
 import PropTypes from 'prop-types';
-import { useScrollToTop } from '../../../hooks/index';
+import { useScrollToTop } from '../../../hooks';
 
 const Paginate = (props) => {
   const { pageCount, sectionClass, value, onChange } = props;
 
-  useScrollToTop(value);
+  useScrollToTop([value]);
 
   return (
     <ReactPaginate

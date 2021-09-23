@@ -1,4 +1,3 @@
-import './PopupLogin.scss';
 import { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -13,6 +12,7 @@ import { recoverPassword } from '../../../api/user';
 import Popup from '../Popup/Popup';
 import { Button, Input, TitleH2 } from '../../utils';
 import animationSuccess from '../../../assets/animation/ill_popup_recommend-success.json';
+import './PopupLogin.scss';
 
 const {
   title,
@@ -142,60 +142,6 @@ function PopupLogin({ isOpen, onClose }) {
     .join(' ')
     .trim();
 
-  const formAuth = () => (
-    <form
-      className={classNameAuth}
-      onSubmit={(evt) => handleSubmit(evt)}
-      noValidate
-    >
-      <TitleH2 sectionClass="popup__title_type_sign-in" title={title} />
-      <p className="paragraph popup__sign-in">{firstParagraph}</p>
-      <p className="paragraph popup__sign-in">{secondParagraph}</p>
-
-      <Input
-        id="loginUsernameInput"
-        sectionClass="popup__input"
-        type="text"
-        name="username"
-        placeholder={loginPlaceholder}
-        onChange={handleChange}
-        value={values?.username}
-        error={errors?.username}
-        maxLength={validationSettings.username.maxLength}
-        required
-      />
-
-      <Input
-        id="loginPasswordInput"
-        sectionClass="popup__input"
-        type="password"
-        name="password"
-        placeholder={passwordPlaceholder}
-        onChange={handleChange}
-        value={values?.password}
-        error={errors?.password}
-        minLength={validationSettings.password.minLength}
-        required
-      />
-
-      <button
-        className="popup__forgot-password"
-        type="button"
-        onClick={handleClickForgotPassword}
-      >
-        {forgotButtonText}
-      </button>
-      <span className="form-error-message">{errorsString}</span>
-      <Button
-        sectionClass="popup__button_type_sign-in"
-        color="blue"
-        title={submitButtonText}
-        isDisabled={!isValid}
-        isSubmittable
-      />
-    </form>
-  );
-
   const classForgotPassword = [
     'popup__form',
     'popup__form_type_email',
@@ -204,63 +150,12 @@ function PopupLogin({ isOpen, onClose }) {
     .join(' ')
     .trim();
 
-  const formForgotPassword = () => (
-    <form
-      className={classForgotPassword}
-      onSubmit={(evt) => handleSubmitForgotPassword(evt)}
-      noValidate
-    >
-      <TitleH2
-        sectionClass="popup__title_type_sign-in"
-        title={titleForgotForm}
-      />
-      <p className="paragraph popup__sign-in">{paragraphForgotForm}</p>
-
-      <Input
-        id="loginUseremailInput"
-        sectionClass="popup__input"
-        type="email"
-        name="email"
-        placeholder={emailPlaceholder}
-        onChange={handleChange}
-        value={values?.email}
-        error={errors?.email}
-        required
-      />
-      <button
-        className="popup__forgot-password"
-        type="button"
-        onClick={handleClickForgotPassword}
-      >
-        {backButtonText}
-      </button>
-      <span className="form-error-message">{errorsString}</span>
-      <Button
-        sectionClass="popup__button_type_sign-in"
-        color="blue"
-        title={submitButtonTextForgot}
-        isDisabled={!isValid}
-        isSubmittable
-      />
-    </form>
-  );
-
-  const className = [
+  const classNameSuccess = [
     'popup__login-container_success',
     `${isSuccess ? 'popup__login-container_success_opened' : ''}`,
   ]
     .join(' ')
     .trim();
-
-  const containerAnimationSuccessLogin = () => (
-    <div className={className}>
-      <div
-        ref={animationContainer}
-        className="popup__login-container_success-animation"
-      />
-      <TitleH2 title={successMessage} />
-    </div>
-  );
 
   return (
     <Popup
@@ -269,11 +164,122 @@ function PopupLogin({ isOpen, onClose }) {
       isOpen={isOpen}
       onClose={closePopup}
     >
-      {formAuth()}
-      {formForgotPassword()}
-      {containerAnimationSuccessLogin()}
+      {renderFormAuth()}
+      {renderFormForgotPassword()}
+      {renderSuccessLoginContainer()}
     </Popup>
   );
+
+  function renderFormAuth() {
+    return (
+      <form
+        className={classNameAuth}
+        onSubmit={(evt) => handleSubmit(evt)}
+        noValidate
+      >
+        <TitleH2 sectionClass="popup__title_type_sign-in" title={title} />
+        <p className="paragraph popup__sign-in">{firstParagraph}</p>
+        <p className="paragraph popup__sign-in">{secondParagraph}</p>
+
+        <Input
+          id="loginUsernameInput"
+          sectionClass="popup__input"
+          type="text"
+          name="username"
+          placeholder={loginPlaceholder}
+          onChange={handleChange}
+          value={values?.username}
+          error={errors?.username}
+          maxLength={validationSettings.username.maxLength}
+          required
+        />
+
+        <Input
+          id="loginPasswordInput"
+          sectionClass="popup__input"
+          type="password"
+          name="password"
+          placeholder={passwordPlaceholder}
+          onChange={handleChange}
+          value={values?.password}
+          error={errors?.password}
+          minLength={validationSettings.password.minLength}
+          required
+        />
+
+        <button
+          className="popup__forgot-password"
+          type="button"
+          onClick={handleClickForgotPassword}
+        >
+          {forgotButtonText}
+        </button>
+        <span className="form-error-message">{errorsString}</span>
+        <Button
+          sectionClass="popup__button_type_sign-in"
+          color="blue"
+          title={submitButtonText}
+          isDisabled={!isValid}
+          isSubmittable
+        />
+      </form>
+    );
+  }
+
+  function renderFormForgotPassword() {
+    return (
+      <form
+        className={classForgotPassword}
+        onSubmit={(evt) => handleSubmitForgotPassword(evt)}
+        noValidate
+      >
+        <TitleH2
+          sectionClass="popup__title_type_sign-in"
+          title={titleForgotForm}
+        />
+        <p className="paragraph popup__sign-in">{paragraphForgotForm}</p>
+
+        <Input
+          id="loginUseremailInput"
+          sectionClass="popup__input"
+          type="email"
+          name="email"
+          placeholder={emailPlaceholder}
+          onChange={handleChange}
+          value={values?.email}
+          error={errors?.email}
+          required
+        />
+        <button
+          className="popup__forgot-password"
+          type="button"
+          onClick={handleClickForgotPassword}
+        >
+          {backButtonText}
+        </button>
+        <span className="form-error-message">{errorsString}</span>
+        <Button
+          sectionClass="popup__button_type_sign-in"
+          color="blue"
+          title={submitButtonTextForgot}
+          isDisabled={!isValid}
+          isSubmittable
+        />
+      </form>
+    );
+  }
+
+  function renderSuccessLoginContainer() {
+    return (
+      <div className={classNameSuccess}>
+        <div
+          ref={animationContainer}
+          className="popup__login-container_success-animation"
+        />
+        <TitleH2 title={successMessage} />
+      </div>
+    );
+  }
 }
 
 PopupLogin.propTypes = {

@@ -1,4 +1,3 @@
-import './ProfileDiary.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
@@ -7,7 +6,8 @@ import captions from '../../utils/rating-captions';
 import { staticImageUrl } from '../../config/config';
 import defaultImage from '../../assets/icon-logo-no-text.svg';
 import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationContainer';
-import { Card, TitleH2, Rating, Caption, Button } from '../utils/index';
+import { Button, Caption, Card, Rating, TitleH2 } from '../utils';
+import './ProfileDiary.scss';
 
 function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
   const { image, place, description, mark, date, sentToCurator } = data;

@@ -1,7 +1,7 @@
-import './PopupPlace.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
+import './PopupPlace.scss';
 
 import { COLORS, localStChosenPlace } from '../../../config/constants';
 import CardPlace from '../../Cards/CardPlace/CardPlace';

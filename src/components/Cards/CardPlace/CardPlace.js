@@ -1,10 +1,10 @@
-import './CardPlace.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import { PLACES_TITLE } from '../../../config/routes';
-import { Rubric, TitleH2, Card, Caption } from '../../utils';
+import { Caption, Card, Rubric, TitleH2 } from '../../utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
+import './CardPlace.scss';
 
 function CardPlace({
   data: {
@@ -45,11 +45,13 @@ function CardPlace({
     .trim();
 
   const types = activityTypes
-    ? activityTypes.reduce((obj, { id, name }) => {
-        // eslint-disable-next-line no-param-reassign
-        obj[id] = name;
-        return obj;
-      }, {})
+    ? activityTypes.reduce(
+        (obj, { id, name }) => ({
+          ...obj,
+          [id]: name,
+        }),
+        {}
+      )
     : null;
 
   const info = chosen
@@ -57,19 +59,6 @@ function CardPlace({
         activityTypes ? types[activityType] : activityTypeDefault
       } отдых`
     : '';
-
-  const renderImage = () => {
-    if ((chosen && isBig) || isMainPage) {
-      return (
-        <img
-          src={`${staticImageUrl}/${image}`}
-          alt={title}
-          className={imageClassNames}
-        />
-      );
-    }
-    return null;
-  };
 
   return (
     <article className={`card-container ${sectionClass}`}>
@@ -104,6 +93,19 @@ function CardPlace({
       <CardAnnotation info={info} description={description} isMain={isBig} />
     </article>
   );
+
+  function renderImage() {
+    if ((chosen && isBig) || isMainPage) {
+      return (
+        <img
+          src={`${staticImageUrl}/${image}`}
+          alt={title}
+          className={imageClassNames}
+        />
+      );
+    }
+    return null;
+  }
 }
 
 CardPlace.propTypes = {

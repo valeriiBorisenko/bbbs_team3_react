@@ -6,8 +6,10 @@ import PopupAboutEvent from './PopupAboutEvent/PopupAboutEvent';
 import PopupCities from './PopupCities/PopupCities';
 import PopupError from './PopupError/PopupError';
 import PopupVideo from './PopupVideo/PopupVideo';
-import PopupInfoTooltip from './PopupInfoTooltip/PopupInfoTooltip';
 import PopupPhoto from './PopupPhoto/PopupPhoto';
+import PopupArticle from './PopupArticle/PopupArticle';
+import PopupBook from './PopupBook/PopupBook';
+import PopupPlace from './PopupPlace/PopupPlace';
 
 export {
   PopupConfirmation,
@@ -18,6 +20,8 @@ export {
   PopupCities,
   PopupError,
   PopupVideo,
-  PopupInfoTooltip,
   PopupPhoto,
+  PopupArticle,
+  PopupBook,
+  PopupPlace,
 };

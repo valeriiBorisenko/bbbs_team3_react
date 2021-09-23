@@ -1,9 +1,9 @@
-import './CardCatalog.scss';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { TitleH2 } from '../../utils/index';
+import { TitleH2 } from '../../utils';
 import CardFigure from '../CardFigure/CardFigure';
 import { staticImageUrl } from '../../../config/config';
+import './CardCatalog.scss';
 
 function CardCatalog({ data: { id, title, image }, shape, sectionClass }) {
   const link = `/catalog/${id}`;

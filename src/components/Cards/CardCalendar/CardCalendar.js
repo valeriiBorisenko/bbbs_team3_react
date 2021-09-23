@@ -1,4 +1,3 @@
-import './CardCalendar.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import {
@@ -7,9 +6,10 @@ import {
   formatPhoneNumber,
   formatWordCase,
 } from '../../../utils/utils';
-import { Button, ButtonDots } from '../../utils/index';
+import { Button, ButtonDots } from '../../utils';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
+import './CardCalendar.scss';
 
 function CardCalendar({
   cardData,
@@ -62,43 +62,6 @@ function CardCalendar({
   ]
     .join(' ')
     .trim();
-
-  const renderPhone = () => (
-    <a
-      className={`calendar__phone ${
-        canceled ? 'calendar__phone_canceled' : ''
-      }`}
-      href={`tel:${phoneNumber}`}
-    >
-      {formatPhoneNumber(phoneNumber)}
-    </a>
-  );
-
-  const renderSubmitZone = () => {
-    if (canceled)
-      return <p className="calendar__text-canceled">{eventCanceled}</p>;
-    return (
-      <>
-        <Button
-          title={buttonTitle}
-          titleSelected={buttonTitleSelected}
-          color="blue"
-          isDisabled={isDisabled}
-          onClick={changeStateOfEvent}
-          isBooked={booked}
-        />
-        <p className="calendar__place-left">
-          {/* если запись закрыта, то карточка не должна быть выделенной */}
-          {(isDisabled && buttonTitleDisabled) ||
-            (!booked &&
-              `${remainSeatsText} ${remainSeats} ${formatWordCase(
-                remainSeats
-              )}`)}
-        </p>
-        <ButtonDots handleClick={prepareDataForAboutEventPopup} />
-      </>
-    );
-  };
 
   return (
     <article className={classNames}>
@@ -171,6 +134,46 @@ function CardCalendar({
       </div>
     </article>
   );
+
+  function renderPhone() {
+    return (
+      <a
+        className={`calendar__phone ${
+          canceled ? 'calendar__phone_canceled' : ''
+        }`}
+        href={`tel:${phoneNumber}`}
+      >
+        {formatPhoneNumber(phoneNumber)}
+      </a>
+    );
+  }
+
+  function renderSubmitZone() {
+    if (canceled)
+      return <p className="calendar__text-canceled">{eventCanceled}</p>;
+
+    return (
+      <>
+        <Button
+          title={buttonTitle}
+          titleSelected={buttonTitleSelected}
+          color="blue"
+          isDisabled={isDisabled}
+          onClick={changeStateOfEvent}
+          isBooked={booked}
+        />
+        <p className="calendar__place-left">
+          {/* если запись закрыта, то карточка не должна быть выделенной */}
+          {(isDisabled && buttonTitleDisabled) ||
+            (!booked &&
+              `${remainSeatsText} ${remainSeats} ${formatWordCase(
+                remainSeats
+              )}`)}
+        </p>
+        <ButtonDots handleClick={prepareDataForAboutEventPopup} />
+      </>
+    );
+  }
 }
 
 CardCalendar.propTypes = {

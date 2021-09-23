@@ -19,8 +19,12 @@
     transition: .3s ease;
   }
 
-  &__arrow path {
-    transition: .3s ease;
+  &__arrow {
+    flex-shrink: 0;
+
+    & path {
+      transition: .3s ease;
+    }
   }
 
   &:hover {
@@ -46,6 +50,17 @@
     &__arrow {
       width: 20px;
       height: 20px;
+    }
+  }
+}
+
+@include atMobile {
+  .next-article-link {
+
+    &__text {
+      font-size: 19px;
+      line-height: 1.21;
+      margin-right: 25px;
     }
   }
 }

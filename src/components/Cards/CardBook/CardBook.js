@@ -1,7 +1,7 @@
-import './CardBook.scss';
 import PropTypes from 'prop-types';
-import { Card, TitleH2 } from '../../utils/index';
+import { Card, TitleH2 } from '../../utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
+import './CardBook.scss';
 
 function CardBook({
   data: { title, author, year, type, annotation },

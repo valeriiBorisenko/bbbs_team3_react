@@ -1,6 +1,6 @@
-import './PopupPhoto.scss';
 import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
+import './PopupPhoto.scss';
 
 function PopupPhoto({ isOpen, onClose, currentPhoto }) {
   return (

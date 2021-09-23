@@ -1,9 +1,9 @@
-import './PopupDeleteDiary.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import Popup from '../Popup/Popup';
-import { TitleH2, Button } from '../../utils/index';
+import { Button, TitleH2 } from '../../utils';
+import './PopupDeleteDiary.scss';
 
 function PopupDeleteDiary({ isOpen, onClose, onCardDelete, cardData }) {
   const { place, date } = cardData;

@@ -11,7 +11,7 @@ import {
   Loader,
   NoDataNotificationBox,
   TitleH3,
-} from '../utils/index';
+} from '../utils';
 import { COLORS, ERROR_MESSAGES, FIGURES } from '../../config/constants';
 import './ReadAndWatchSection.scss';
 
@@ -96,6 +96,23 @@ function ReadAndWatchSection({
     }
   }
 
+  return (
+    <section className="readwatch__section">
+      <div className="readwatch__container">
+        <LinkableHeading
+          title={sectionTitle}
+          path={path}
+          titleSectionClass="readwatch__heading"
+          linkSectionClass="readwatch__heading-link"
+          Component={TitleH3}
+        />
+      </div>
+      <div className={`readwatch__slider-container ${sectionClass}`}>
+        {renderSliderSection()}
+      </div>
+    </section>
+  );
+
   function renderCardsForSlider() {
     if (sectionData) {
       return sectionData.map((item, i) => (
@@ -165,23 +182,6 @@ function ReadAndWatchSection({
 
     return <Loader isNested />;
   }
-
-  return (
-    <section className="readwatch__section">
-      <div className="readwatch__container">
-        <LinkableHeading
-          title={sectionTitle}
-          path={path}
-          titleSectionClass="readwatch__heading"
-          linkSectionClass="readwatch__heading-link"
-          Component={TitleH3}
-        />
-      </div>
-      <div className={`readwatch__slider-container ${sectionClass}`}>
-        {renderSliderSection()}
-      </div>
-    </section>
-  );
 }
 
 ReadAndWatchSection.propTypes = {

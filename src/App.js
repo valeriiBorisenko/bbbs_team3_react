@@ -7,27 +7,26 @@ import Loader from './components/utils/Loader/Loader';
 // попапы
 import {
   PopupAboutEvent,
+  PopupArticle,
+  PopupBook,
   PopupCities,
   PopupConfirmation,
   PopupError,
-  PopupInfoTooltip,
   PopupLogin,
+  PopupPlace,
   PopupRecommendSuccess,
   PopupSuccessfully,
   PopupVideo,
-} from './components/Popups/index';
+} from './components/Popups';
 // логины, авторизация
 import {
   CitiesContext,
   CurrentUserContext,
   ErrorsContext,
   PopupsContext,
-} from './contexts/index';
+} from './contexts';
 // хуки
-import { useAuth, useCities } from './hooks/index';
-import PopupBook from './components/Popups/PopupBook/PopupBook';
-import PopupPlace from './components/Popups/PopupPlace/PopupPlace';
-import PopupArticle from './components/Popups/PopupArticle/PopupArticle';
+import { useAuth, useCities } from './hooks';
 
 function App() {
   const { pathname } = useLocation();
@@ -43,7 +42,6 @@ function App() {
   const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
     useState(false);
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
   const [isPlacePopupOpen, setIsPlacePopupOpen] = useState(false);
   const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
@@ -56,15 +54,10 @@ function App() {
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupRecommendSuccessOpen(false);
-    setIsInfoTooltipOpen(false);
     setIsVideoPopupOpen(false);
     setIsBookPopupOpen(false);
     setIsPlacePopupOpen(false);
     setIsArticlePopupOpen(false);
-  }
-
-  function openPopupInfoTooltip() {
-    setIsInfoTooltipOpen(true);
   }
 
   function openPopupConfirmation() {
@@ -141,7 +134,6 @@ function App() {
     openPopupLogin,
     openPopupRecommendSuccess,
     openPopupVideo,
-    openPopupInfoTooltip,
     openPopupBook,
     openPopupPlace,
     openPopupArticle,
@@ -245,10 +237,6 @@ function App() {
                 />
                 <PopupArticle
                   isOpen={isArticlePopupOpen}
-                  onClose={closeAllPopups}
-                />
-                <PopupInfoTooltip
-                  isOpen={isInfoTooltipOpen}
                   onClose={closeAllPopups}
                 />
               </div>
