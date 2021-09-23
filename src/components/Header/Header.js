@@ -99,9 +99,19 @@ function Header({ isTransparentOnTop }) {
     prevScrollPos = currentScrollPos;
   };
 
+  let debounceTimer;
+  const debouncedScrollUp = () => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+    debounceTimer = setTimeout(() => {
+      detectScrollUp();
+    }, 100);
+  };
+
   useEffect(() => {
-    window.addEventListener('scroll', detectScrollUp);
-    return () => window.removeEventListener('scroll', detectScrollUp);
+    window.addEventListener('scroll', debouncedScrollUp);
+    return () => window.removeEventListener('scroll', debouncedScrollUp);
   }, []);
 
   const classNamesHeader = [
