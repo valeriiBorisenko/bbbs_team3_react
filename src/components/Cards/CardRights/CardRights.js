@@ -4,16 +4,23 @@ import { Rubric } from '../../utils/index';
 import CardFigure from '../CardFigure/CardFigure';
 import './CardRights.scss';
 
-function CardRights({ title, tags, shape, color, sectionClass, id, onClick }) {
+function CardRights({
+  title,
+  tags,
+  shape,
+  color,
+  sectionClass,
+  id,
+  getActiveTags,
+}) {
   return (
     <div className={`rights-card ${sectionClass}`}>
       <Link
         to={{
           pathname: `/rights/${id}`,
-          state: { fromRightsPage: true, activeTags: onClick() },
+          state: { fromRightsPage: true, activeTags: getActiveTags() },
         }}
         className="rights-card__link"
-        onClick={onClick}
       >
         <CardFigure shape={shape} title={title} color={color}>
           <div className="rights-card__block">
@@ -38,7 +45,7 @@ CardRights.propTypes = {
   color: PropTypes.string,
   sectionClass: PropTypes.string,
   id: PropTypes.number.isRequired,
-  onClick: PropTypes.func,
+  getActiveTags: PropTypes.func,
 };
 
 CardRights.defaultProps = {
@@ -46,7 +53,7 @@ CardRights.defaultProps = {
   tags: [],
   color: '',
   sectionClass: '',
-  onClick: () => {},
+  getActiveTags: () => {},
 };
 
 export default CardRights;

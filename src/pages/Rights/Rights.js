@@ -263,7 +263,7 @@ const Rights = () => {
               shape={FIGURES[i % FIGURES.length]}
               color={COLORS[i % COLORS.length]}
               id={item?.id}
-              onClick={getActiveTags}
+              getActiveTags={getActiveTags}
             />
           ))}
         </CardsSectionWithLines>
