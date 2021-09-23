@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import {
   CitiesContext,
@@ -20,7 +21,7 @@ import './Header.scss';
 
 const delayDebounceHeader = 100;
 
-function Header() {
+function Header({ isTransparentOnTop }) {
   const history = useHistory();
   const { pathname } = useLocation();
 
@@ -88,7 +89,7 @@ function Header() {
   };
 
   const detectScrollUp = () => {
-    detectHeaderOnTop();
+    if (isTransparentOnTop) detectHeaderOnTop();
 
     const currentScrollPos = window.pageYOffset;
     // если prevScrollPos больше currentScrollPos значит мы скролим наверх
@@ -117,8 +118,8 @@ function Header() {
 
   const classNamesHeader = [
     'header',
-    isOpenSearch || (!isHeaderOnTop && isHeaderActive)
-      ? 'header_solid-background'
+    isTransparentOnTop && isHeaderOnTop && !isOpenSearch
+      ? 'header_transparent'
       : '',
     isMobileMenuOpen ? 'header_displayed' : '',
     !isHeaderActive && !isOpenSearch ? 'header__on-scroll-up' : '',
@@ -180,5 +181,13 @@ function Header() {
     return null;
   }
 }
+
+Header.propTypes = {
+  isTransparentOnTop: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  isTransparentOnTop: false,
+};
 
 export default Header;

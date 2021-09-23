@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
 import {
-  PageWithTransparentHeader,
-  Loader,
   AnimatedPageContainer,
+  BasePage,
+  Loader,
   NextArticleLink,
 } from './index';
 import { getRightsArticle } from '../../api/rights-page';
@@ -103,12 +103,13 @@ function RightsArticle({ id, getActiveTags }) {
   }, [id]);
 
   return (
-    <PageWithTransparentHeader
+    <BasePage
       headTitle={articleData?.title}
       headDescription={articleData?.description}
+      isHeaderTransparentOnTop
     >
       {isLoadingPage ? <Loader isNested /> : renderMainContent()}
-    </PageWithTransparentHeader>
+    </BasePage>
   );
 }
 

@@ -4,7 +4,14 @@ import { useScrollToTop } from '../hooks/index';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 
-function BasePage({ children, headTitle, headDescription, scrollUpDeps }) {
+function BasePage({
+  children,
+  headTitle,
+  headDescription,
+  scrollUpDeps,
+  isNoFooter,
+  isHeaderTransparentOnTop,
+}) {
   useScrollToTop(scrollUpDeps);
 
   return (
@@ -13,9 +20,9 @@ function BasePage({ children, headTitle, headDescription, scrollUpDeps }) {
         <title>{headTitle}</title>
         <meta name="description" content={headDescription} />
       </Helmet>
-      <Header />
+      <Header isTransparentOnTop={isHeaderTransparentOnTop} />
       <main className="main">{children}</main>
-      <Footer />
+      {!isNoFooter && <Footer />}
     </>
   );
 }
@@ -25,11 +32,15 @@ BasePage.propTypes = {
   headTitle: PropTypes.string.isRequired,
   headDescription: PropTypes.string.isRequired,
   scrollUpDeps: PropTypes.arrayOf(PropTypes.any),
+  isNoFooter: PropTypes.bool,
+  isHeaderTransparentOnTop: PropTypes.bool,
 };
 
 BasePage.defaultProps = {
   children: null,
   scrollUpDeps: [],
+  isNoFooter: false,
+  isHeaderTransparentOnTop: false,
 };
 
 export default BasePage;
