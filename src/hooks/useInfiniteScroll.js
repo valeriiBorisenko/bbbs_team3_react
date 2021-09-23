@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 
+// хук используется для подгрузки данных и других манипуляций при появлении childRef в parentRef
 const useInfiniteScroll = (
   parentRef,
   childRef,

@@ -1,20 +1,20 @@
-import { useState, useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { PopupsContext, ErrorsContext } from '../contexts/index';
+import { ErrorsContext, PopupsContext } from '../contexts/index';
 import AuthApi from '../api/auth';
 import { getUserData } from '../api/user';
 import { MAIN_PAGE_URL } from '../config/routes';
 import {
-  setLocalStorageData,
+  clearLocalStorage,
   getLocalStorageData,
   removeLocalStorageData,
-  clearLocalStorage,
+  setLocalStorageData,
 } from './useLocalStorage';
 import {
+  ERROR_CODES,
+  ERROR_MESSAGES,
   jwt,
   jwtRefresh,
-  ERROR_MESSAGES,
-  ERROR_CODES,
 } from '../config/constants';
 
 const useAuth = (setCurrentUser) => {
@@ -57,6 +57,8 @@ const useAuth = (setCurrentUser) => {
             .then((userData) => setCurrentUser(userData))
             .then(() => popups.closePopupLogin())
             .catch((err) => handleError(err));
+        } else {
+          throw new Error(generalErrorMessage.title);
         }
       })
       .catch((err) => handleError(err)); // авторизация (работа с сервером) закончилась ошибкой
