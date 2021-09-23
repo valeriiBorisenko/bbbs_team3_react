@@ -1,6 +1,6 @@
 import './AboutUs.scss';
 import React from 'react';
-import aboutUsTexts from '../../locales/about-us-page-RU';
+import aboutUsTexts from './locales/RU';
 import {
   BasePage,
   Blockquote,
@@ -55,17 +55,7 @@ function AboutUs() {
         />
 
         <div className="about__cards">
-          {React.Children.toArray(
-            cards.map((item) => (
-              <CardAbout
-                title={item?.title}
-                text={item?.text}
-                linkText={item?.linkText}
-                href={item?.href}
-                color={item?.color}
-              />
-            ))
-          )}
+          {React.Children.toArray(cards.map((item) => <CardAbout {...item} />))}
         </div>
       </section>
     </BasePage>
