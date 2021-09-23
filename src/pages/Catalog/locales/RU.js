@@ -1,4 +1,4 @@
-import { CATALOG_TITLE, MAIN_PAGE_TITLE } from '../config/routes';
+import { CATALOG_TITLE, MAIN_PAGE_TITLE } from '../../../config/routes';
 
 const catalogPageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${CATALOG_TITLE}`,
