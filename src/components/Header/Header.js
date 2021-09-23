@@ -1,23 +1,22 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-import './Header.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 import {
   CitiesContext,
   CurrentUserContext,
   PopupsContext,
-} from '../../contexts/index';
-import texts from './locales/RU';
-import { useAuth, useClickOutside, useLocalStorage } from '../../hooks/index';
+} from '../../contexts';
+import { useAuth, useClickOutside, useLocalStorage } from '../../hooks';
 import { AFISHA_URL, PLACES_URL, PROFILE_URL } from '../../config/routes';
 import { localStUserCity } from '../../config/constants';
 import NavBar from '../NavBar/NavBar';
-import { UserMenuButton } from '../utils/index';
+import { UserMenuButton } from '../utils';
+import './Header.scss';
 
-const headerWindowOffsetY = 200;
+const onScrollUpDelay = 100;
 
-function Header({ isTransparent }) {
+function Header({ isTransparentOnTop }) {
   const history = useHistory();
   const { pathname } = useLocation();
 
@@ -28,14 +27,6 @@ function Header({ isTransparent }) {
 
   const { handleLogout } = useAuth(updateUser, closeAllPopups);
 
-  function handleUserButtonClick() {
-    if (currentUser) {
-      history.push(PROFILE_URL);
-    } else {
-      openPopupLogin();
-    }
-  }
-
   const [userCityName, setUserCityName] = useState('');
   let currentAnonymousCity;
 
@@ -45,7 +36,7 @@ function Header({ isTransparent }) {
   }
 
   // сохранённый в localStorage город анонимуса
-  const userCity = currentUser?.city || currentAnonymousCity;
+  const userCity = currentUser?.city ?? currentAnonymousCity;
 
   // определение города пользователя, используется в кнопках
   useEffect(() => {
@@ -54,6 +45,12 @@ function Header({ isTransparent }) {
       setUserCityName(currentCity?.name);
     }
   }, [cities, userCity]);
+
+  // клик по иконке человечка
+  const handleUserButtonClick = () => {
+    if (currentUser) history.push(PROFILE_URL);
+    else openPopupLogin();
+  };
 
   // меню бургер
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -73,36 +70,55 @@ function Header({ isTransparent }) {
     }
   };
 
-  // Состояние поиска
+  // состояние поиска
   const [isOpenSearch, setIsOpenSearch] = useState(false);
 
-  // липкий хедер
+  // состояния хедера
   const [isHeaderActive, setIsHeaderActive] = useState(true);
+  const [isHeaderOnTop, setIsHeaderOnTop] = useState(true);
   let prevScrollPos = 0;
 
-  useEffect(() => {
-    window.addEventListener('scroll', () => {
-      const currentScrollPos = window.pageYOffset;
-      // если prevScrollPos больше currentScrollPos значит мы скролим наверх
-      if (prevScrollPos > currentScrollPos) {
-        setIsHeaderActive(true);
-      } else {
-        setIsHeaderActive(false);
-        setIsMobileMenuOpen(false);
-      }
+  const detectHeaderOnTop = () => {
+    if (window.scrollY === 0) setIsHeaderOnTop(true);
+    else if (window.scrollY > 0 && isHeaderOnTop) setIsHeaderOnTop(false);
+  };
 
-      if (currentScrollPos === 0) {
-        setIsHeaderActive(true);
-      }
-      prevScrollPos = currentScrollPos;
-    });
+  const detectScrollUp = () => {
+    if (isTransparentOnTop) detectHeaderOnTop();
+
+    const currentScrollPos = window.pageYOffset;
+    // если prevScrollPos больше currentScrollPos значит мы скролим наверх
+    if (prevScrollPos > currentScrollPos) {
+      setIsHeaderActive(true);
+    } else {
+      setIsHeaderActive(false);
+      setIsMobileMenuOpen(false);
+    }
+
+    if (currentScrollPos === 0) {
+      setIsHeaderActive(true);
+    }
+    prevScrollPos = currentScrollPos;
+  };
+
+  let debounceTimer;
+  const debouncedScrollUp = () => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+    debounceTimer = setTimeout(() => {
+      detectScrollUp();
+    }, onScrollUpDelay);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', debouncedScrollUp);
+    return () => window.removeEventListener('scroll', debouncedScrollUp);
   }, []);
 
   const classNamesHeader = [
     'header',
-    isTransparent &&
-    !isOpenSearch &&
-    !(window.pageYOffset > headerWindowOffsetY)
+    isTransparentOnTop && isHeaderOnTop && !isOpenSearch
       ? 'header_transparent'
       : '',
     isMobileMenuOpen ? 'header_displayed' : '',
@@ -112,6 +128,7 @@ function Header({ isTransparent }) {
     .trim();
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <header
       className={classNamesHeader}
       ref={headerRef}
@@ -131,26 +148,9 @@ function Header({ isTransparent }) {
           setIsOpenSearch={setIsOpenSearch}
         />
 
-        {pathname === PROFILE_URL && (
-          <div className="header__user-info">
-            <UserMenuButton
-              title={
-                userCityName
-                  ? `${userCityName}. ${texts.changeCity}`
-                  : texts.changeCityDefault
-              }
-              sectionClass="mobile-link"
-              handleClick={openPopupCities}
-            />
-            <UserMenuButton
-              title={texts.logoutText}
-              sectionClass="mobile-link"
-              handleClick={handleLogout}
-            />
-          </div>
-        )}
-
-        {(pathname === AFISHA_URL || pathname === PLACES_URL) && (
+        {(pathname === AFISHA_URL ||
+          pathname === PLACES_URL ||
+          pathname === PROFILE_URL) && (
           <div className="header__user-info">
             <UserMenuButton
               title={
@@ -161,19 +161,33 @@ function Header({ isTransparent }) {
               handleClick={openPopupCities}
               sectionClass="mobile-link"
             />
+            {renderExitButton()}
           </div>
         )}
       </div>
     </header>
   );
+
+  function renderExitButton() {
+    if (pathname === PROFILE_URL) {
+      return (
+        <UserMenuButton
+          title={texts.logoutText}
+          sectionClass="mobile-link"
+          handleClick={handleLogout}
+        />
+      );
+    }
+    return null;
+  }
 }
 
 Header.propTypes = {
-  isTransparent: PropTypes.bool,
+  isTransparentOnTop: PropTypes.bool,
 };
 
 Header.defaultProps = {
-  isTransparent: false,
+  isTransparentOnTop: false,
 };
 
 export default Header;

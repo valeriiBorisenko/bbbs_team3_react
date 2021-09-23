@@ -1,4 +1,3 @@
-import './NavBar.scss';
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
@@ -24,7 +23,8 @@ import {
 import { socialLinks } from '../../utils/external-links';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import Search from '../Search/Search';
-import { NavItem, UserIconButton, UserMenuButton } from '../utils/index';
+import { NavItem, UserIconButton, UserMenuButton } from '../utils';
+import './NavBar.scss';
 
 function NavBar({
   isMobileMenuOpen,

@@ -7,18 +7,18 @@
   top: 0;
   left: 0;
   padding: 47px 75px 15px;
-  background-color: $background;
-  transition: 0.4s linear;
+  background-color: rgba($background, 1);
+  transition: 0.3s ease-out;
   z-index: 10;
 
   &_transparent {
-    background-color: transparent;
+    background-color: rgba($background, 0);
   }
 
   @include atDesktop1279 {
     &_displayed {
       background-color: $white;
-      border-radius: 0px 0px 30px 30px;
+      border-radius: 0 0 30px 30px;
     }
   }
 }

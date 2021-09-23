@@ -1,9 +1,8 @@
-import React from 'react';
-import './CardRights.scss';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Rubric } from '../../utils/index';
 import CardFigure from '../CardFigure/CardFigure';
+import './CardRights.scss';
 
 function CardRights({
   title,
@@ -17,7 +16,10 @@ function CardRights({
   return (
     <div className={`rights-card ${sectionClass}`}>
       <Link
-        to={{ pathname: `/rights/${id}`, getActiveTags }}
+        to={{
+          pathname: `/rights/${id}`,
+          state: { fromRightsPage: true, activeTags: getActiveTags() },
+        }}
         className="rights-card__link"
       >
         <CardFigure shape={shape} title={title} color={color}>
@@ -42,7 +44,7 @@ CardRights.propTypes = {
   tags: PropTypes.arrayOf(Array),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
-  id: PropTypes.number,
+  id: PropTypes.number.isRequired,
   getActiveTags: PropTypes.func,
 };
 
@@ -51,7 +53,6 @@ CardRights.defaultProps = {
   tags: [],
   color: '',
   sectionClass: '',
-  id: 0,
   getActiveTags: () => {},
 };
 

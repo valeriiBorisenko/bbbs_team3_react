@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import rightsPageTexts from '../../locales/rights-page-RU';
 import './Rights.scss';
 import { ErrorsContext, PopupsContext } from '../../contexts';
@@ -31,6 +31,11 @@ const PAGE_SIZE_PAGINATE = {
   small: 4,
   medium: 12,
   big: 16,
+};
+
+const maxScreenWidth = {
+  small: '1399px',
+  large: '1640px',
 };
 
 const { headTitle, headDescription, title, textStubNoData } = rightsPageTexts;
@@ -78,56 +83,6 @@ const Rights = () => {
     return null;
   };
 
-  // Фильтры страницы
-  const renderTagsContainer = () => {
-    if (articles && !isLoadingPage) {
-      return (
-        <TagsList
-          filterList={categories}
-          name="rights"
-          handleClick={changeCategory}
-        />
-      );
-    }
-    return null;
-  };
-
-  // Карточки с видео страницы
-  const renderCards = () => (
-    <>
-      <CardsSectionWithLines
-        pageCount={pageCount}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-        isLoading={isLoadingPaginate}
-        dataLength={articles.length}
-        pageSize={pageSize}
-      >
-        {articles.map((item, i) => (
-          <CardRights
-            getActiveTags={getActiveTags}
-            key={item?.id}
-            sectionClass="cards-section__item scale-in"
-            title={item?.title}
-            tags={item?.tags}
-            shape={FIGURES[i % FIGURES.length]}
-            color={COLORS[i % COLORS.length]}
-            id={item?.id}
-          />
-        ))}
-      </CardsSectionWithLines>
-    </>
-  );
-
-  // Контент страницы
-  const renderMainContent = () => {
-    if ((!articles && !isLoadingPage) || (!categories && !isLoadingPage)) {
-      return <AnimatedPageContainer titleText={textStubNoData} />;
-    }
-
-    return isFiltersUsed ? <Loader isPaginate /> : renderCards();
-  };
-
   // Функция обработки запроса АПИ с карточками
   const getArticlesData = (activeCategories) => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
@@ -145,10 +100,7 @@ const Rights = () => {
       .then((results) => setArticles(results))
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -226,8 +178,12 @@ const Rights = () => {
 
   // Резайз пагинации при первой загрузке
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small})`
+    );
+    const largeQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.large})`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -271,6 +227,58 @@ const Rights = () => {
       </section>
     </BasePage>
   );
+
+  // Фильтры страницы
+  function renderTagsContainer() {
+    if (articles && !isLoadingPage) {
+      return (
+        <TagsList
+          filterList={categories}
+          name="rights"
+          handleClick={changeCategory}
+        />
+      );
+    }
+    return null;
+  }
+
+  // Карточки
+  function renderCards() {
+    return (
+      <>
+        <CardsSectionWithLines
+          pageCount={pageCount}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          isLoading={isLoadingPaginate}
+          dataLength={articles.length}
+          pageSize={pageSize}
+        >
+          {articles.map((item, i) => (
+            <CardRights
+              key={item?.id}
+              sectionClass="cards-section__item scale-in"
+              title={item?.title}
+              tags={item?.tags}
+              shape={FIGURES[i % FIGURES.length]}
+              color={COLORS[i % COLORS.length]}
+              id={item?.id}
+              getActiveTags={getActiveTags}
+            />
+          ))}
+        </CardsSectionWithLines>
+      </>
+    );
+  }
+
+  // Контент страницы
+  function renderMainContent() {
+    if ((!articles && !isLoadingPage) || (!categories && !isLoadingPage)) {
+      return <AnimatedPageContainer titleText={textStubNoData} />;
+    }
+
+    return isFiltersUsed ? <Loader isPaginate /> : renderCards();
+  }
 };
 
 export default Rights;

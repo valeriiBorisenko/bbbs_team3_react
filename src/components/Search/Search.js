@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import texts from './locales/RU';
@@ -28,6 +28,8 @@ function Search({
   const [searchResults, setSearchResults] = useState([]);
   const [isVoidSearch, setIsVoidSearch] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
+
+  const inputRef = useRef(null);
 
   const getPathName = (url, id) => {
     if (`/${url}` === RIGHTS_URL) return `/${url}/${id}`;
@@ -84,6 +86,8 @@ function Search({
 
   useEffect(() => {
     if (isOpenSearch) setIsMobileMenuOpen(false);
+    // автофокус при открытии поиска
+    if (isOpenSearch && inputRef && inputRef.current) inputRef.current.focus();
   }, [isOpenSearch]);
 
   return (
@@ -100,6 +104,7 @@ function Search({
         <div className="search__container-input">
           <div className="search__input-wrap">
             <input
+              ref={inputRef}
               type="text"
               name="search"
               placeholder=""

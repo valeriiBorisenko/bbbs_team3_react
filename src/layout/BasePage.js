@@ -4,8 +4,18 @@ import { useScrollToTop } from '../hooks/index';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 
-function BasePage({ children, headTitle, headDescription, scrollUpDeps }) {
+function BasePage({
+  children,
+  headTitle,
+  headDescription,
+  scrollUpDeps,
+  isNoFooter,
+  isHeaderTransparentOnTop,
+  sectionClassMain,
+}) {
   useScrollToTop(scrollUpDeps);
+
+  const classNamesMain = ['main', sectionClassMain].join(' ').trim();
 
   return (
     <>
@@ -13,9 +23,9 @@ function BasePage({ children, headTitle, headDescription, scrollUpDeps }) {
         <title>{headTitle}</title>
         <meta name="description" content={headDescription} />
       </Helmet>
-      <Header />
-      <main className="main">{children}</main>
-      <Footer />
+      <Header isTransparentOnTop={isHeaderTransparentOnTop} />
+      <main className={classNamesMain}>{children}</main>
+      {!isNoFooter && <Footer />}
     </>
   );
 }
@@ -25,11 +35,17 @@ BasePage.propTypes = {
   headTitle: PropTypes.string.isRequired,
   headDescription: PropTypes.string.isRequired,
   scrollUpDeps: PropTypes.arrayOf(PropTypes.any),
+  isNoFooter: PropTypes.bool,
+  isHeaderTransparentOnTop: PropTypes.bool,
+  sectionClassMain: PropTypes.string,
 };
 
 BasePage.defaultProps = {
   children: null,
   scrollUpDeps: [],
+  isNoFooter: false,
+  isHeaderTransparentOnTop: false,
+  sectionClassMain: '',
 };
 
 export default BasePage;

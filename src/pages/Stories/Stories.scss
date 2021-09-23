@@ -161,10 +161,6 @@
     border-radius: 30px;
     transition: .3s ease;
 
-    &_disabled-events {
-      pointer-events: none;
-    }
-
     &:hover {
       cursor: zoom-in;
       box-shadow: -12px 0 20px -12px rgba($black, 0.3), 12px 0 20px -12px rgba($black, 0.3);
