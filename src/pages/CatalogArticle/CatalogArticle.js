@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import getCatalogArticlePageData from '../../api/catalog-article-page';
 import catalogArticlePageTexts from '../../locales/catalog-article-page-RU';
+import { useScrollToTop } from '../../hooks';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { CATALOG_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
@@ -18,6 +19,8 @@ import './CatalogArticle.scss';
 function CatalogArticle() {
   const { articleId } = useParams();
 
+  useScrollToTop([articleId]);
+
   const { headTitle, headDescription } = catalogArticlePageTexts;
   const [catalogArticlePageData, setCatalogArticlePageData] = useState();
   const [isLoadingPage, setIsLoadingPage] = useState(true);
@@ -25,6 +28,7 @@ function CatalogArticle() {
   const [isPageError, setIsPageError] = useState(false);
 
   useEffect(() => {
+    setIsLoadingPage(true);
     getCatalogArticlePageData({ articleId })
       .then((data) => {
         setCatalogArticlePageData(data);
@@ -35,6 +39,16 @@ function CatalogArticle() {
       });
   }, [articleId]);
   const nextPageLink = `/catalog/${catalogArticlePageData?.nextArticle?.id}`;
+
+  if (isLoadingPage) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      {renderPage()}
+    </BasePage>
+  );
 
   function renderPage() {
     if (isPageError) {
@@ -50,21 +64,21 @@ function CatalogArticle() {
     return (
       <div className="article page__section">
         <TitleH1
-          title={catalogArticlePageData.title}
+          title={catalogArticlePageData?.title}
           sectionClass="article__main-title"
         />
         <p className="article__description section-title">
-          {catalogArticlePageData.description}
+          {catalogArticlePageData?.description}
         </p>
         <figure className="article__figure">
           <img
-            src={`${staticImageUrl}/${catalogArticlePageData.image}`}
-            alt={catalogArticlePageData.title}
+            src={`${staticImageUrl}/${catalogArticlePageData?.image}`}
+            alt={catalogArticlePageData?.title}
             className="article__image"
           />
-          {catalogArticlePageData.imageCaption ? (
+          {catalogArticlePageData?.imageCaption ? (
             <figcaption className="caption article__figcaption">
-              {catalogArticlePageData.imageCaption}
+              {catalogArticlePageData?.imageCaption}
             </figcaption>
           ) : (
             ''
@@ -72,10 +86,10 @@ function CatalogArticle() {
         </figure>
         <div className="article__container">
           <ReactMarkdown className="article__markdown">
-            {catalogArticlePageData.body}
+            {catalogArticlePageData?.body}
           </ReactMarkdown>
 
-          {catalogArticlePageData.nextArticle && (
+          {catalogArticlePageData?.nextArticle && (
             <NextArticleLink
               text={catalogArticlePageData.nextArticle.title}
               href={nextPageLink}
@@ -86,16 +100,6 @@ function CatalogArticle() {
       </div>
     );
   }
-
-  if (isLoadingPage) {
-    return <Loader isCentered />;
-  }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {renderPage()}
-    </BasePage>
-  );
 }
 
 export default CatalogArticle;

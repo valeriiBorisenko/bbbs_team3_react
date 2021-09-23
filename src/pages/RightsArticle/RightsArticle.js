@@ -69,7 +69,7 @@ function RightsArticle() {
     return (
       <>
         {renderLeadBlock()}
-        <div className="article page-section">
+        <div className="article page__section">
           <div className="article__container">
             {renderHtmlBlock()}
             {renderNextPageBlock()}
@@ -87,7 +87,7 @@ function RightsArticle() {
             {articleData?.title}
           </h1>
           <p className="section-title article-lead__text">
-            {articleData?.text}
+            {articleData?.description}
           </p>
         </div>
       </section>
