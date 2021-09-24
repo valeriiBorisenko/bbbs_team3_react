@@ -7,7 +7,7 @@ import { useDebounce, useFormWithValidation } from '../../hooks';
 import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import search from '../../api/search';
 import { CATALOG_URL, RIGHTS_URL, STORIES_URL } from '../../config/routes';
-import { CitiesContext, CurrentUserContext } from '../../contexts';
+import { CurrentUserContext } from '../../contexts';
 import { DELAY_DEBOUNCE, localStUserCity } from '../../config/constants';
 import './Search.scss';
 
@@ -18,11 +18,10 @@ function Search({
   setIsMobileMenuOpen,
 }) {
   const { currentUser } = useContext(CurrentUserContext);
-  const { defaultCity } = useContext(CitiesContext);
 
-  // приоритет города у авторизованного, затем у выбранного на странице Куда пойти и затем уже по умолчанию
+  // приоритет города у авторизованного, затем у выбранного на странице Куда пойти
   const currentAnonymousCity = getLocalStorageData(localStUserCity);
-  const userCity = currentUser?.city ?? currentAnonymousCity ?? defaultCity?.id;
+  const userCity = currentUser?.city ?? currentAnonymousCity;
 
   const { values, handleChange, resetForm } = useFormWithValidation();
   const [searchResults, setSearchResults] = useState([]);
@@ -60,7 +59,10 @@ function Search({
   };
 
   const handleSearchRequest = async () => {
-    const currentRequest = search({ text: values.search, city: userCity });
+    const searchParams = userCity
+      ? { text: values.search, city: userCity }
+      : { text: values.search };
+    const currentRequest = search(searchParams);
     const { count, results } = await currentRequest;
     setSearchResults(results);
     setIsLoadingSearch(false);
