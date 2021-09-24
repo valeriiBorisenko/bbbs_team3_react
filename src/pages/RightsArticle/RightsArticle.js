@@ -51,17 +51,13 @@ function RightsArticle() {
     }
   }, [articleId]);
 
-  if (isLoadingPage) {
-    return <Loader isCentered />;
-  }
-
   return (
     <BasePage
       headTitle={articleData?.title ?? headTitle}
       headDescription={articleData?.description ?? headDescription}
       isHeaderTransparentOnTop
     >
-      {renderMainContent()}
+      {isLoadingPage ? <Loader isPaginate /> : renderMainContent()}
     </BasePage>
   );
 

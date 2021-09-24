@@ -45,17 +45,13 @@ function CatalogArticle() {
     }
   }, [articleId]);
 
-  if (isLoadingPage) {
-    return <Loader isCentered />;
-  }
-
   return (
     <BasePage
       headTitle={catalogArticlePageData?.title ?? headTitle}
       headDescription={catalogArticlePageData?.description ?? headDescription}
       scrollUpDeps={[articleId]}
     >
-      {renderPage()}
+      {isLoadingPage ? <Loader isPaginate /> : renderPage()}
     </BasePage>
   );
 
