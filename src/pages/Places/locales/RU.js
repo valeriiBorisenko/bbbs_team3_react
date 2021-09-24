@@ -1,4 +1,4 @@
-import { MAIN_PAGE_TITLE, PLACES_TITLE } from '../config/routes';
+import { MAIN_PAGE_TITLE, PLACES_TITLE } from '../../../config/routes';
 
 const placesPageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${PLACES_TITLE}`,

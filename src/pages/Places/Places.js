@@ -1,7 +1,6 @@
-import './Places.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import placesPageTexts from '../../locales/places-page-RU';
+import placesPageTexts from './locales/RU';
 import { ageFilters, PAGE_SIZE_PAGINATE } from './constants';
 import {
   CurrentUserContext,
@@ -9,6 +8,7 @@ import {
   PopupsContext,
 } from '../../contexts';
 import { useActivityTypes, useDebounce, useLocalStorage } from '../../hooks';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
 import {
   ALL_CATEGORIES,
   COLORS,
@@ -26,6 +26,12 @@ import {
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
+  getChosenPlace,
+  getPlace,
+  getPlaces,
+  getPlacesTags,
+} from '../../api/places-page';
+import {
   AnimatedPageContainer,
   BasePage,
   CardPlace,
@@ -36,13 +42,7 @@ import {
   TagsList,
   TitleH1,
 } from './index';
-import {
-  getChosenPlace,
-  getPlace,
-  getPlaces,
-  getPlacesTags,
-} from '../../api/places-page';
-import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import './Places.scss';
 
 const {
   headTitle,
@@ -52,6 +52,8 @@ const {
   paragraphNoContent,
   mentorTag,
 } = placesPageTexts;
+
+const smallQueryWidth = '1024px';
 
 function Places() {
   const { state } = useLocation();
@@ -100,14 +102,11 @@ function Places() {
 
   // Резайз пагинации при первой загрузке
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1024px)');
-    const largeQuery = window.matchMedia('(max-width: 1279px)');
+    const smallQuery = window.matchMedia(`(max-width: ${smallQueryWidth})`);
 
     const listener = () => {
       if (smallQuery.matches) {
         setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else if (largeQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
         setPageSize(PAGE_SIZE_PAGINATE.big);
       }
@@ -115,11 +114,9 @@ function Places() {
     listener();
 
     smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
 
     return () => {
       smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
     };
   }, []);
 
@@ -240,10 +237,7 @@ function Places() {
       })
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -395,19 +389,33 @@ function Places() {
     }
   }, [state]);
 
-  // функции рендера
-  const renderAnimatedContainer = () => (
-    <>
-      {!isCityChanging ? (
-        <>
-          <AnimatedPageContainer titleText={textStubNoData} />
-          {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
-        </>
-      ) : (
-        <Loader isPaginate />
-      )}
-    </>
+  if (!places) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="places page__section fade-in">
+        {renderPageContent()}
+      </section>
+    </BasePage>
   );
+
+  // функции рендера
+  function renderAnimatedContainer() {
+    return (
+      <>
+        {!isCityChanging ? (
+          <>
+            <AnimatedPageContainer titleText={textStubNoData} />
+            {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
+          </>
+        ) : (
+          <Loader isPaginate />
+        )}
+      </>
+    );
+  }
 
   function renderPagination() {
     if (pageCount > 1) {
@@ -423,7 +431,7 @@ function Places() {
     return null;
   }
 
-  const renderPlaces = () => {
+  function renderPlaces() {
     if (isChosenCardHidden && places?.length === 0) {
       return (
         <NoDataNotificationBox
@@ -468,9 +476,9 @@ function Places() {
       );
     }
     return null;
-  };
+  }
 
-  const renderPageContent = () => {
+  function renderPageContent() {
     if (isPageError) {
       return (
         <AnimatedPageContainer
@@ -506,19 +514,7 @@ function Places() {
         )}
       </>
     );
-  };
-
-  if (!places) {
-    return <Loader isCentered />;
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="places page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
-  );
 }
 
 export default Places;
