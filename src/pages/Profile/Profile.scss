@@ -16,7 +16,7 @@
     width: fit-content;
     text-align: center;
     color: $lightBlack;
-    
+
 
     &_shifted {
       transform: translateX(-100px);
@@ -41,7 +41,7 @@
 
   &__scroll-anchor {
     position: absolute;
-    top: -55px;
+    top: -50px;
     left: 0;
     width: 1px;
     height: 1px;
@@ -68,7 +68,7 @@
     & .button-round {
       margin-right: 15px;
     }
-  
+
     &::after {
       content: 'Добавить встречу';
       white-space: nowrap;
@@ -141,12 +141,16 @@
 
 @include atDesktop1380 {
   .profile {
-      &__scroll-anchor {
-      top: 0;
-    }
-
     &__archive-button {
       font-size: 18px;
+    }
+  }
+}
+
+@include atDesktop1279 {
+  .profile {
+    &__scroll-anchor {
+      top: 0;
     }
   }
 }
