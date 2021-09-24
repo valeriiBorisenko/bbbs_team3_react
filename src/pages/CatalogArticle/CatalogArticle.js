@@ -26,21 +26,24 @@ function CatalogArticle() {
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
+  const nextPageLink = `/catalog/${catalogArticlePageData?.nextArticle?.id}`;
+
   useEffect(() => {
     setIsLoadingPage(true);
-    getCatalogArticlePageData({ articleId })
-      .then((data) => {
-        setCatalogArticlePageData(data);
-      })
-      .catch((err) => {
-        if (err.status === ERROR_CODES.notFound) history.push(NOT_FOUND_URL);
-        else setIsPageError(true);
-      })
-      .finally(() => {
-        setIsLoadingPage(false);
-      });
+    if (articleId) {
+      getCatalogArticlePageData({ articleId })
+        .then((data) => {
+          setCatalogArticlePageData(data);
+        })
+        .catch((err) => {
+          if (err.status === ERROR_CODES.notFound) history.push(NOT_FOUND_URL);
+          else setIsPageError(true);
+        })
+        .finally(() => {
+          setIsLoadingPage(false);
+        });
+    }
   }, [articleId]);
-  const nextPageLink = `/catalog/${catalogArticlePageData?.nextArticle?.id}`;
 
   if (isLoadingPage) {
     return <Loader isCentered />;
@@ -48,8 +51,8 @@ function CatalogArticle() {
 
   return (
     <BasePage
-      headTitle={headTitle}
-      headDescription={headDescription}
+      headTitle={catalogArticlePageData?.title ?? headTitle}
+      headDescription={catalogArticlePageData?.description ?? headDescription}
       scrollUpDeps={[articleId]}
     >
       {renderPage()}
@@ -82,12 +85,10 @@ function CatalogArticle() {
             alt={catalogArticlePageData?.title}
             className="article__image scale-in"
           />
-          {catalogArticlePageData?.imageCaption ? (
+          {catalogArticlePageData?.imageCaption && (
             <figcaption className="caption article__figcaption">
-              {catalogArticlePageData?.imageCaption}
+              {catalogArticlePageData.imageCaption}
             </figcaption>
-          ) : (
-            ''
           )}
         </figure>
         <div className="article__container">
