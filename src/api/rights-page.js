@@ -26,7 +26,7 @@ function getRightsArticle({ id, tags = '' }) {
       params: { tags },
     })
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 export { getRightsData, getRightsTags, getRightsArticle };
