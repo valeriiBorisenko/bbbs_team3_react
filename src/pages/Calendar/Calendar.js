@@ -41,8 +41,8 @@ export const PAGE_SIZE_PAGINATE = {
   big: 12,
 };
 
-const smallQueryWidth = '1024px';
-const mediumQueryWidth = '1440px';
+const smallQueryWidth = 1024;
+const mediumQueryWidth = 1440;
 
 function Calendar() {
   const { currentUser } = useContext(CurrentUserContext);
@@ -79,8 +79,8 @@ function Calendar() {
 
   // определение размера страницы
   useEffect(() => {
-    const small = window.matchMedia(`(max-width: ${smallQueryWidth})`);
-    const medium = window.matchMedia(`(max-width: ${mediumQueryWidth})`);
+    const small = window.matchMedia(`(max-width: ${smallQueryWidth}px)`);
+    const medium = window.matchMedia(`(max-width: ${mediumQueryWidth}px)`);
 
     const listener = () => {
       if (small.matches) {

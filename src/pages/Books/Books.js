@@ -38,8 +38,8 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-const smallQueryWidth = '1216px';
-const largeQueryWidth = '1640px';
+const smallQueryWidth = 1216;
+const largeQueryWidth = 1640;
 
 const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
@@ -179,8 +179,8 @@ function Books() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia(`(max-width: ${smallQueryWidth})`);
-    const largeQuery = window.matchMedia(`(max-width: ${largeQueryWidth})`);
+    const smallQuery = window.matchMedia(`(max-width: ${smallQueryWidth}px)`);
+    const largeQuery = window.matchMedia(`(max-width: ${largeQueryWidth}px)`);
 
     const listener = () => {
       if (smallQuery.matches) {

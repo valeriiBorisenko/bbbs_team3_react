@@ -1,4 +1,4 @@
-import { MAIN_PAGE_TITLE, RIGHTS_TITLE } from '../config/routes';
+import { MAIN_PAGE_TITLE, RIGHTS_TITLE } from '../../../config/routes';
 
 const rightsPageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${RIGHTS_TITLE}`,

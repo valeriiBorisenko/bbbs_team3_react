@@ -19,8 +19,8 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-const smallQueryWidth = '1399px';
-const largeQueryWidth = '1640px';
+const smallQueryWidth = 1399;
+const largeQueryWidth = 1640;
 
 const { headTitle, headDescription, title, subtitle, textStubNoData } =
   catalogPageTexts;
@@ -62,8 +62,8 @@ function Catalog() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia(`(max-width: ${smallQueryWidth})`);
-    const largeQuery = window.matchMedia(`(max-width: ${largeQueryWidth})`);
+    const smallQuery = window.matchMedia(`(max-width: ${smallQueryWidth}px)`);
+    const largeQuery = window.matchMedia(`(max-width: ${largeQueryWidth}px)`);
 
     const listener = () => {
       if (smallQuery.matches) {
