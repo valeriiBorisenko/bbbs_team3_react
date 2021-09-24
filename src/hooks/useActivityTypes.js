@@ -10,6 +10,14 @@ const useActivityTypes = () => {
   const errors = useContext(ErrorsContext);
 
   const [activityTypes, setActivityTypes] = useState(null);
+  // для карточек Куда пойти
+  const activityTypesSimplified = activityTypes?.reduce(
+    (obj, { id, name }) => ({
+      ...obj,
+      [id]: name,
+    }),
+    {}
+  );
 
   useEffect(() => {
     getActivityTypes()
@@ -20,7 +28,7 @@ const useActivityTypes = () => {
       });
   }, []);
 
-  return activityTypes;
+  return { activityTypes, activityTypesSimplified };
 };
 
 export default useActivityTypes;

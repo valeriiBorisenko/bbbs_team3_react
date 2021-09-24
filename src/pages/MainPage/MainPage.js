@@ -41,7 +41,7 @@ function MainPage() {
   const [isCityChanging, setIsCityChanging] = useState(false);
   const [isPageError, setIsPageError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const activityTypes = useActivityTypes();
+  const { activityTypesSimplified } = useActivityTypes();
 
   // запись/отписка на мероприятия
   const { handleEventBooking, selectedEvent } = useEventBooking();
@@ -150,7 +150,7 @@ function MainPage() {
           key={mainPageData?.place?.id}
           data={mainPageData?.place}
           sectionClass="card-container_type_main-article scale-in"
-          activityTypes={activityTypes}
+          activityTypesSimplified={activityTypesSimplified}
           isBig
           isMainPage
         />

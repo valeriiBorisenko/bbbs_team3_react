@@ -61,7 +61,7 @@ function Places() {
   const { state } = useLocation();
   const searchPlaceId = state?.id;
 
-  const activityTypes = useActivityTypes();
+  const { activityTypes, activityTypesSimplified } = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
   const { openPopupCities, openPopupError, openPopupPlace } =
@@ -453,7 +453,7 @@ function Places() {
               <CardPlace
                 key={chosenPlace?.id}
                 data={chosenPlace}
-                activityTypes={activityTypes}
+                activityTypesSimplified={activityTypesSimplified}
                 sectionClass="card-container_type_main-article scale-in"
                 isBig
               />
@@ -466,7 +466,7 @@ function Places() {
                 <CardPlace
                   key={place?.id}
                   data={place}
-                  activityTypes={activityTypes}
+                  activityTypesSimplified={activityTypesSimplified}
                   color={COLORS[(i + 1) % COLORS.length]}
                   sectionClass="card-container_type_article scale-in"
                 />

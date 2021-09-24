@@ -18,7 +18,7 @@ function CardPlace({
     age,
     activityType,
   },
-  activityTypes,
+  activityTypesSimplified,
   color,
   sectionClass,
   isBig,
@@ -44,19 +44,11 @@ function CardPlace({
     .join(' ')
     .trim();
 
-  const types = activityTypes
-    ? activityTypes.reduce(
-        (obj, { id, name }) => ({
-          ...obj,
-          [id]: name,
-        }),
-        {}
-      )
-    : null;
-
   const info = chosen
     ? `${sexType}, ${age} лет, ${
-        activityTypes ? types[activityType] : activityTypeDefault
+        activityTypesSimplified
+          ? activityTypesSimplified[activityType]
+          : activityTypeDefault
       } отдых`
     : '';
 
@@ -119,7 +111,7 @@ CardPlace.propTypes = {
   gender: PropTypes.string,
   age: PropTypes.number,
   activityType: PropTypes.number,
-  activityTypes: PropTypes.arrayOf(PropTypes.object),
+  activityTypesSimplified: PropTypes.objectOf(PropTypes.any),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
   isBig: PropTypes.bool,
@@ -137,7 +129,7 @@ CardPlace.defaultProps = {
   gender: 'male',
   age: 18,
   activityType: 1,
-  activityTypes: [],
+  activityTypesSimplified: {},
   color: 'white',
   isBig: false,
   sectionClass: '',
