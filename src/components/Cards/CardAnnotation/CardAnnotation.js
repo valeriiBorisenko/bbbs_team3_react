@@ -1,7 +1,7 @@
-import './CardAnnotation.scss';
 import PropTypes from 'prop-types';
-import { Card } from '../../utils/index';
+import { Card } from '../../utils';
 import CardAnnotationContainer from './CardAnnotationContainer';
+import './CardAnnotation.scss';
 
 function CardAnnotation({ info, description, isMain, sectionClass }) {
   const classNames = [
@@ -12,6 +12,7 @@ function CardAnnotation({ info, description, isMain, sectionClass }) {
   ]
     .join(' ')
     .trim();
+
   return (
     <Card sectionClass={classNames}>
       <CardAnnotationContainer caption={info}>

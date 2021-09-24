@@ -1,17 +1,16 @@
-import './PopupError.scss';
 import PropTypes from 'prop-types';
 import { useContext, useEffect } from 'react';
 import Popup from '../Popup/Popup';
-import { Button, TitleH2 } from '../../utils/index';
+import { Button, TitleH2 } from '../../utils';
 import { ErrorsContext } from '../../../contexts';
+import './PopupError.scss';
 
 function PopupError({ isOpen, onClose }) {
-  const { serverError, clearError } = useContext(ErrorsContext);
+  const { serverError } = useContext(ErrorsContext);
 
   const closeOnEsc = (evt) => {
     if (evt.key === 'Escape') {
       onClose();
-      clearError();
     }
   };
 

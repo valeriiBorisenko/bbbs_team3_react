@@ -1,14 +1,14 @@
-import './CardFilm.scss';
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
-import { PopupsContext } from '../../../contexts/index';
-import { TitleH2, Card, Caption, Rubric } from '../../utils/index';
+import { PopupsContext } from '../../../contexts';
+import { Caption, Card, Rubric, TitleH2 } from '../../utils';
 import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
+import './CardFilm.scss';
 
 function CardFilm({
   data: { image, title, info, link, tags, duration },
@@ -18,7 +18,6 @@ function CardFilm({
   const { openPopupVideo } = useContext(PopupsContext);
   // Пробрасываем данные в попап
   const handleClick = () => {
-    // записать дату в локал, ключ вынести в константы
     setLocalStorageData(localStChosenVideo, {
       image,
       title,
@@ -32,8 +31,33 @@ function CardFilm({
 
   const { imagePreview } = parserLinkYoutube(link);
 
+  return (
+    <Card sectionClass={`card-film ${sectionClass}`}>
+      <div className="card-film__video">
+        {renderVideoPlayback(renderPreview())}
+      </div>
+
+      <div className="card-film__video-info">
+        <div className="card-film__title-wrap">
+          <TitleH2
+            sectionClass="card-film__title"
+            title={changeCaseOfFirstLetter(title)}
+          />
+          <Caption
+            sectionClass="card-film__info"
+            title={changeCaseOfFirstLetter(info)}
+          />
+        </div>
+        {link &&
+          renderVideoPlayback(
+            isVideo ? texts.linkTextVideo : texts.linkTextMovie
+          )}
+      </div>
+    </Card>
+  );
+
   // Рендерим верхную часть с фоткой
-  const renderPrewiew = () => {
+  function renderPreview() {
     let durationString = '';
 
     if (duration) {
@@ -65,43 +89,20 @@ function CardFilm({
         )}
       </>
     );
-  };
+  }
 
-  const renderVideoPlayback = (childrenElem) => (
-    <button
-      className="link card-film__button"
-      type="button"
-      onClick={handleClick}
-      draggable="false"
-    >
-      {childrenElem}
-    </button>
-  );
-
-  return (
-    <Card sectionClass={`card-film ${sectionClass}`}>
-      <div className="card-film__video">
-        {renderVideoPlayback(renderPrewiew())}
-      </div>
-
-      <div className="card-film__video-info">
-        <div className="card-film__title-wrap">
-          <TitleH2
-            sectionClass="card-film__title"
-            title={changeCaseOfFirstLetter(title)}
-          />
-          <Caption
-            sectionClass="card-film__info"
-            title={changeCaseOfFirstLetter(info)}
-          />
-        </div>
-        {link &&
-          renderVideoPlayback(
-            isVideo ? texts.linkTextVideo : texts.linkTextMovie
-          )}
-      </div>
-    </Card>
-  );
+  function renderVideoPlayback(childrenElem) {
+    return (
+      <button
+        className="link card-film__button"
+        type="button"
+        onClick={handleClick}
+        draggable="false"
+      >
+        {childrenElem}
+      </button>
+    );
+  }
 }
 
 CardFilm.propTypes = {

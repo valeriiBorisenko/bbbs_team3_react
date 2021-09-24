@@ -32,7 +32,6 @@
   }
 
   &__date-container {
-    box-sizing: border-box;
     display: grid;
     grid-template-columns: 1fr 100px;
     grid-template-rows: 346px;
@@ -74,6 +73,7 @@
     font-size: 14px;
     line-height: 1.4;
     text-align: right;
+    letter-spacing: 0.2px;
   }
 
   &__day {
@@ -81,6 +81,7 @@
     font-family: $protoGrotesk;
     font-size: 60px;
     text-align: right;
+    letter-spacing: 0.2px;
   }
 
   &__actions {
@@ -175,6 +176,7 @@
       position: absolute;
       top: 30px;
       right: 15px;
+      grid-column: 1;
     }
 
     &__weekday {

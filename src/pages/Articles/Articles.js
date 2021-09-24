@@ -1,20 +1,31 @@
-import './Articles.scss';
-import { useEffect, useState } from 'react';
-import articlesPageTexts from '../../locales/articles-page-RU';
-import { COLORS, ERROR_MESSAGES } from '../../config/constants';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import articlesPageTexts from './locales/RU';
 import {
-  BasePage,
-  TitleH1,
-  CardArticle,
-  Paginate,
+  COLORS,
+  ERROR_MESSAGES,
+  localStChosenArticle,
+} from '../../config/constants';
+import {
   AnimatedPageContainer,
+  BasePage,
+  CardArticle,
   Loader,
+  Paginate,
+  TitleH1,
 } from './index';
-import getArticlesPageData from '../../api/articles-page';
+import { getArticle, getArticlesPageData } from '../../api/articles-page';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import { PopupsContext } from '../../contexts';
+import './Articles.scss';
 
 const PAGE_SIZE_PAGINATE = {
   small: 8,
   big: 12,
+};
+
+const maxScreenWidth = {
+  small: 1024,
 };
 
 const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
@@ -31,7 +42,11 @@ function Articles() {
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
-  function getPageData() {
+  const { state } = useLocation();
+  const searchArticleId = state?.id;
+  const { openPopupArticle } = useContext(PopupsContext);
+
+  const getPageData = () => {
     const offset = pageSize * pageNumber;
     const fixedPageSize =
       pageNumber === 0 && mainArticle ? pageSize + 1 : pageSize;
@@ -49,7 +64,19 @@ function Articles() {
       .finally(() => {
         setIsLoadingPaginate(false);
       });
-  }
+  };
+
+  // Открытие попапа при переходе из поиска
+  useEffect(() => {
+    if (state) {
+      getArticle(searchArticleId)
+        .then((res) => {
+          setLocalStorageData(localStChosenArticle, res);
+          openPopupArticle();
+        })
+        .catch(() => setIsPageError(true));
+    }
+  }, [state]);
 
   // пагинация
   useEffect(() => {
@@ -87,7 +114,9 @@ function Articles() {
   }, [pageSize]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1024px)');
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -105,7 +134,38 @@ function Articles() {
     };
   }, []);
 
-  // отрисовка заглушки
+  if (isLoadingPage) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      {!articlesPageData && !isLoadingPage
+        ? renderAnimatedContainer()
+        : renderPageContent()}
+    </BasePage>
+  );
+
+  function renderPageContent() {
+    if (isPageError) {
+      return (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      );
+    }
+
+    return (
+      <section className="articles page__section">
+        <TitleH1 title={title} sectionClass="fade-in" />
+
+        {isLoadingPaginate ? <Loader isPaginate /> : renderCards()}
+
+        {renderPagination()}
+      </section>
+    );
+  }
+
   function renderAnimatedContainer() {
     if (isPageError) {
       return (
@@ -153,30 +213,6 @@ function Articles() {
       </>
     );
   }
-
-  function renderPageContent() {
-    return (
-      <section className="articles page__section">
-        <TitleH1 title={title} sectionClass="fade-in" />
-
-        {isLoadingPaginate ? <Loader isNested /> : renderCards()}
-
-        {renderPagination()}
-      </section>
-    );
-  }
-
-  if (isLoadingPage) {
-    return <Loader isCentered />;
-  }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {!articlesPageData && !isLoadingPage
-        ? renderAnimatedContainer()
-        : renderPageContent()}
-    </BasePage>
-  );
 }
 
 export default Articles;

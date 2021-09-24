@@ -1,15 +1,15 @@
-import './CardCalendar.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import {
-  formatDate,
-  formatWordCase,
   changeCaseOfFirstLetter,
+  formatDate,
   formatPhoneNumber,
+  formatWordCase,
 } from '../../../utils/utils';
-import { ButtonDots, Button } from '../../utils/index';
+import { Button, ButtonDots } from '../../utils';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
+import './CardCalendar.scss';
 
 function CardCalendar({
   cardData,
@@ -22,6 +22,7 @@ function CardCalendar({
     buttonTitleSelected,
     buttonTitleDisabled,
     remainSeatsText,
+    eventCanceled,
   } = texts;
 
   const {
@@ -56,72 +57,123 @@ function CardCalendar({
   const classNames = [
     'calendar',
     booked ? 'calendar_selected' : '',
+    canceled ? 'calendar_canceled' : '',
     sectionClass,
   ]
     .join(' ')
     .trim();
 
-  const renderPhone = () => (
-    <a className="calendar__phone" href={`tel:${phoneNumber}`}>
-      {formatPhoneNumber(phoneNumber)}
-    </a>
-  );
-
   return (
     <article className={classNames}>
       <div className="calendar__caption">
         <div className="calendar__info">
-          <p className="calendar__type">
+          <p
+            className={`calendar__type ${
+              canceled ? 'calendar__type_canceled' : ''
+            }`}
+          >
             {changeCaseOfFirstLetter(tags?.name)}
           </p>
-          <p className="calendar__weekday">
+          <p
+            className={`calendar__weekday ${
+              canceled ? 'calendar__weekday_canceled' : ''
+            }`}
+          >
             {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
           </p>
         </div>
         <div className="calendar__about">
-          <h2 className="section-title calendar__title">{title}</h2>
-          <p className="calendar__date">{startDateParts.day}</p>
+          <h2
+            className={`section-title calendar__title ${
+              canceled ? 'calendar__title_canceled' : ''
+            }`}
+          >
+            {title}
+          </h2>
+          <p
+            className={`calendar__date ${
+              canceled ? 'calendar__date_canceled' : ''
+            }`}
+          >
+            {startDateParts.day}
+          </p>
         </div>
       </div>
       <div className="calendar__meetup">
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
-            <p className="calendar__time">
+            <p
+              className={`calendar__time ${
+                canceled ? 'calendar__time_canceled' : ''
+              }`}
+            >
               {`${startDateParts.hour}:${startDateParts.minutes}–${endDayParts.hour}:${endDayParts.minutes}`}
             </p>
           </li>
           <li className="calendar__info-item">
-            <p className="calendar__place">{address}</p>
+            <p
+              className={`calendar__place ${
+                canceled ? 'calendar__place_canceled' : ''
+              }`}
+            >
+              {address}
+            </p>
           </li>
           <li className="calendar__info-item">
-            <p className="calendar__contact">
+            <p
+              className={`calendar__contact ${
+                canceled ? 'calendar__contact_canceled' : ''
+              }`}
+            >
               {`${contact}, `}
               {renderPhone()}
             </p>
           </li>
         </ul>
-        <div className="calendar__submit">
-          <Button
-            title={buttonTitle}
-            titleSelected={buttonTitleSelected}
-            color="blue"
-            isDisabled={isDisabled}
-            onClick={changeStateOfEvent}
-            isBooked={booked}
-          />
-          <p className="calendar__place-left">
-            {/* если запись закрыта, то карточка не должна быть выделенной */}
-            {(isDisabled && buttonTitleDisabled) ||
-              (!booked &&
-                `${remainSeatsText} ${remainSeats} ${formatWordCase(
-                  remainSeats
-                )}`)}
-          </p>
-          <ButtonDots handleClick={prepareDataForAboutEventPopup} />
-        </div>
+        <div className="calendar__submit">{renderSubmitZone()}</div>
       </div>
     </article>
   );
+
+  function renderPhone() {
+    return (
+      <a
+        className={`calendar__phone ${
+          canceled ? 'calendar__phone_canceled' : ''
+        }`}
+        href={`tel:${phoneNumber}`}
+      >
+        {formatPhoneNumber(phoneNumber)}
+      </a>
+    );
+  }
+
+  function renderSubmitZone() {
+    if (canceled)
+      return <p className="calendar__text-canceled">{eventCanceled}</p>;
+
+    return (
+      <>
+        <Button
+          title={buttonTitle}
+          titleSelected={buttonTitleSelected}
+          color="blue"
+          isDisabled={isDisabled}
+          onClick={changeStateOfEvent}
+          isBooked={booked}
+        />
+        <p className="calendar__place-left">
+          {/* если запись закрыта, то карточка не должна быть выделенной */}
+          {(isDisabled && buttonTitleDisabled) ||
+            (!booked &&
+              `${remainSeatsText} ${remainSeats} ${formatWordCase(
+                remainSeats
+              )}`)}
+        </p>
+        <ButtonDots handleClick={prepareDataForAboutEventPopup} />
+      </>
+    );
+  }
 }
 
 CardCalendar.propTypes = {

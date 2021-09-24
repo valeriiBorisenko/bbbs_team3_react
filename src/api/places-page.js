@@ -49,10 +49,19 @@ function getActivityTypes() {
     .catch((err) => Promise.reject(err?.response));
 }
 
+// получение одного места
+function getPlace(id) {
+  return axios
+    .get(`${baseURL}${apiUrl}/places/${id}`)
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+}
+
 export {
   getPlacesTags,
   getPlaces,
   postPlace,
   getActivityTypes,
   getChosenPlace,
+  getPlace,
 };

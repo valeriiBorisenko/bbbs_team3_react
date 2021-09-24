@@ -1,10 +1,10 @@
-import './CardQuestion.scss';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { QUESTIONS_URL } from '../../../config/routes';
-import { Rubric, TitleH2, Card, ButtonRound } from '../../utils/index';
+import { ButtonRound, Card, Rubric, TitleH2 } from '../../utils';
+import './CardQuestion.scss';
 
 const animationTransition = 300;
 
@@ -19,7 +19,7 @@ function CardQuestion({
   const [isAnimated, setIsAnimated] = useState(false);
   const ref = useRef();
 
-  function handleClickButton() {
+  const handleClickButton = () => {
     if (isQuestionsPage) {
       if (isOpened) {
         setIsAnimated(false);
@@ -33,7 +33,7 @@ function CardQuestion({
         }, animationTransition);
       }
     }
-  }
+  };
 
   const getDynamicStyle = () => {
     if (ref && ref.current && isOpened) {
@@ -67,31 +67,6 @@ function CardQuestion({
       setIsAnimated(true);
     }
   }, [ref.current]);
-
-  const renderTitleWrap = (childElement) => {
-    if (isQuestionsPage)
-      return (
-        <div
-          className="card-question__title-wrap"
-          onClick={handleClickButton}
-          onKeyPress={handleClickButton}
-          role="button"
-          tabIndex="0"
-          aria-label={texts.labelText}
-        >
-          {childElement}
-        </div>
-      );
-    return (
-      <Link
-        to={href}
-        className="card-question__title-wrap"
-        onClick={handleClickButton}
-      >
-        {childElement}
-      </Link>
-    );
-  };
 
   return (
     <Card sectionClass={`card-question ${sectionClass}`}>
@@ -135,6 +110,32 @@ function CardQuestion({
       )}
     </Card>
   );
+
+  function renderTitleWrap(childElement) {
+    if (isQuestionsPage)
+      return (
+        <div
+          className="card-question__title-wrap"
+          onClick={handleClickButton}
+          onKeyPress={handleClickButton}
+          role="button"
+          tabIndex="0"
+          aria-label={texts.labelText}
+        >
+          {childElement}
+        </div>
+      );
+
+    return (
+      <Link
+        to={href}
+        className="card-question__title-wrap"
+        onClick={handleClickButton}
+      >
+        {childElement}
+      </Link>
+    );
+  }
 }
 
 CardQuestion.propTypes = {

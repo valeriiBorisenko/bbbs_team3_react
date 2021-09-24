@@ -8,6 +8,7 @@ import useActivityTypes from './useActivityTypes';
 import { useLocalStorage } from './useLocalStorage';
 import useEventBooking from './useEventBooking';
 import useFormWithValidation from './useFormWithValidation';
+import useInfiniteScroll from './useInfiniteScroll';
 
 export {
   useClickOutside,
@@ -20,4 +21,5 @@ export {
   useLocalStorage,
   useEventBooking,
   useFormWithValidation,
+  useInfiniteScroll,
 };

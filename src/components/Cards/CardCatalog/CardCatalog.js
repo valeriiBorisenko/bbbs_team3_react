@@ -1,9 +1,9 @@
-import './CardCatalog.scss';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { TitleH2 } from '../../utils/index';
+import { TitleH2 } from '../../utils';
 import CardFigure from '../CardFigure/CardFigure';
 import { staticImageUrl } from '../../../config/config';
+import './CardCatalog.scss';
 
 function CardCatalog({ data: { id, title, image }, shape, sectionClass }) {
   const link = `/catalog/${id}`;
@@ -33,7 +33,7 @@ function CardCatalog({ data: { id, title, image }, shape, sectionClass }) {
 CardCatalog.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   title: PropTypes.string,
-  shape: PropTypes.string,
+  shape: PropTypes.string.isRequired,
   image: PropTypes.string,
   sectionClass: PropTypes.string,
 };
@@ -41,7 +41,6 @@ CardCatalog.propTypes = {
 CardCatalog.defaultProps = {
   data: {},
   title: '',
-  shape: 'square',
   image: '',
   sectionClass: '',
 };

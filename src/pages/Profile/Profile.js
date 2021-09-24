@@ -1,18 +1,17 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import './Profile.scss';
-import profilePageTexts from '../../locales/profile-page-RU';
-import { PopupsContext, ErrorsContext } from '../../contexts/index';
-import { useEventBooking } from '../../hooks/index';
+import profilePageTexts from './locales/RU';
+import { ErrorsContext, PopupsContext } from '../../contexts';
+import { useEventBooking } from '../../hooks';
 import {
-  getProfileDiariesData,
   createDiary,
-  editDiary,
   deleteDiary,
+  editDiary,
+  getProfileDiariesData,
   shareDiary,
 } from '../../api/profile-page';
 import {
-  getBookedEvents,
   getArchiveOfBookedEvents,
+  getBookedEvents,
 } from '../../api/event-participants';
 import {
   DELAY_RENDER,
@@ -20,18 +19,20 @@ import {
   ERROR_MESSAGES,
 } from '../../config/constants';
 import {
+  AnimatedPageContainer,
   BasePage,
-  ProfileEventCard,
-  TitleH2,
-  ProfileForm,
-  ProfileDiary,
-  PopupDeleteDiary,
   ButtonRound,
   Loader,
+  Paginate,
+  PopupDeleteDiary,
+  ProfileDiary,
+  ProfileEventCard,
+  ProfileForm,
   ScrollableContainer,
+  TitleH2,
   UserMenuButton,
-  AnimatedPageContainer,
 } from './index';
+import './Profile.scss';
 
 const {
   headTitle,
@@ -45,13 +46,19 @@ const {
   eventsTitleNoResultsArchive,
 } = profilePageTexts;
 
+const { unauthorized, badRequest } = ERROR_CODES;
+
+const diariesPerPageCount = 10;
+const eventsLimit = 10;
+
 function Profile() {
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
-  const { setError } = useContext(ErrorsContext);
-  const { unauthorized, badRequest } = ERROR_CODES;
+  const { serverError, setError } = useContext(ErrorsContext);
 
-  const [events, setEvents] = useState(null);
-  const [archivedEvents, setArchivedEvents] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [archivedEvents, setArchivedEvents] = useState([]);
+  const [eventsOffset, setEventsOffset] = useState(0);
+
   const [diaries, setDiaries] = useState(null);
   const [isArchiveOpen, setIsArchiveOpen] = useState(false);
 
@@ -63,50 +70,72 @@ function Profile() {
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
 
-  const getArchiveOfEvents = () => {
-    getArchiveOfBookedEvents()
-      .then((eventsData) => {
-        setArchivedEvents(eventsData);
-      })
-      .catch(() => {
-        setError({
-          title: ERROR_MESSAGES.generalErrorMessage.title,
-          button: ERROR_MESSAGES.generalErrorMessage.button,
-        });
-        openPopupError();
-      })
-      .finally(() => setIsLoadingEvents(false));
+  const titleH1Current = events.length > 0 ? eventsTitle : eventsTitleNoResults;
+  const titleH1Archive =
+    archivedEvents.length > 0
+      ? eventsTitleArchive
+      : eventsTitleNoResultsArchive;
+
+  // пагинация
+  const [pageCount, setPageCount] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+
+  const getArchiveOfEvents = ({ limit, offset }) => {
+    if (offset <= archivedEvents.length) {
+      getArchiveOfBookedEvents({ limit, offset })
+        .then((eventsData) => {
+          setArchivedEvents((prevEvents) => [...prevEvents, ...eventsData]);
+          setEventsOffset((prevOffset) => prevOffset + limit);
+        })
+        .catch(() => {
+          setError(ERROR_MESSAGES.generalErrorMessage);
+          openPopupError();
+        })
+        .finally(() => setIsLoadingEvents(false));
+    }
   };
 
-  const getCurrentBookedEvents = () => {
-    getBookedEvents()
-      .then((eventsData) => {
-        const sortedEvents = eventsData
-          .sort((a, b) => {
-            const date1 = new Date(a?.event?.startAt);
-            const date2 = new Date(b?.event?.startAt);
-            return date1 - date2;
-          })
-          .map(({ event }) => {
+  const getCurrentBookedEvents = ({ limit, offset }) => {
+    if (offset <= events.length) {
+      getBookedEvents({ limit, offset })
+        .then((eventsData) => {
+          const updatedEvents = eventsData.map(({ event }) => {
             const updatedEvent = event;
             updatedEvent.booked = true;
             return updatedEvent;
           });
-        setEvents(sortedEvents);
+          setEvents((prevEvents) => [...prevEvents, ...updatedEvents]);
+          setEventsOffset((prevOffset) => prevOffset + limit);
+        })
+        .catch(() => {
+          setError(ERROR_MESSAGES.generalErrorMessage);
+          openPopupError();
+        })
+        .finally(() => setIsLoadingEvents(false));
+    }
+  };
+
+  const getDiaries = () => {
+    const offset = diariesPerPageCount * pageIndex;
+
+    getProfileDiariesData({ limit: diariesPerPageCount, offset })
+      .then(({ results, count }) => {
+        setDiaries(results);
+        setPageCount(Math.ceil(count / diariesPerPageCount));
       })
       .catch(() => setIsPageError(true))
-      .finally(() => setIsLoadingEvents(false));
+      .finally(() => setIsLoadingPaginate(false));
   };
 
   useEffect(() => {
-    getCurrentBookedEvents();
+    getCurrentBookedEvents({ limit: eventsLimit, offset: eventsOffset });
   }, []);
 
   useEffect(() => {
-    getProfileDiariesData()
-      .then(setDiaries)
-      .catch(() => setIsPageError(true));
-  }, []);
+    setIsLoadingPaginate(true);
+    getDiaries();
+  }, [pageIndex]);
 
   // отписка от ивентов
   const { selectedEvent } = useEventBooking();
@@ -130,15 +159,19 @@ function Profile() {
   };
 
   const openArchiveOfEvents = () => {
+    setEvents([]);
+    setEventsOffset(0);
     setIsArchiveOpen(true);
     setIsLoadingEvents(true);
-    getArchiveOfEvents();
+    getArchiveOfEvents({ limit: eventsLimit, offset: 0 });
   };
 
   const openCurrentEvents = () => {
+    setArchivedEvents([]);
+    setEventsOffset(0);
     setIsArchiveOpen(false);
     setIsLoadingEvents(true);
-    getCurrentBookedEvents();
+    getCurrentBookedEvents({ limit: eventsLimit, offset: 0 });
   };
 
   // работа с формой
@@ -238,10 +271,7 @@ function Profile() {
         closeDeleteDiaryPopup();
       })
       .catch(() => {
-        setError({
-          title: ERROR_MESSAGES.generalErrorMessage.title,
-          button: ERROR_MESSAGES.generalErrorMessage.button,
-        });
+        setError(ERROR_MESSAGES.generalErrorMessage);
         openPopupError();
       });
   };
@@ -258,25 +288,33 @@ function Profile() {
         );
       })
       .catch(() => {
-        setError({
-          title: ERROR_MESSAGES.generalErrorMessage.title,
-          button: ERROR_MESSAGES.generalErrorMessage.button,
-        });
+        setError(ERROR_MESSAGES.generalErrorMessage);
         openPopupError();
       });
   };
 
-  // функции рендера
-  const titleH1Current =
-    events?.length > 0 ? eventsTitle : eventsTitleNoResults;
-  const titleH1Archive =
-    archivedEvents?.length > 0
-      ? eventsTitleArchive
-      : eventsTitleNoResultsArchive;
+  if (!events.length && !diaries) {
+    return <Loader isCentered />;
+  }
 
-  const renderEventCards = () => {
+  return (
+    <>
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
+        <section className="profile fade-in">{renderPageContent()}</section>
+      </BasePage>
+      <PopupDeleteDiary
+        isOpen={isDeleteDiaryPopupOpen}
+        cardData={selectedDiary}
+        onClose={closeDeleteDiaryPopup}
+        onCardDelete={handleDeleteDiary}
+      />
+    </>
+  );
+
+  // функции рендера
+  function renderEventCards() {
     const renderingEvents = isArchiveOpen ? archivedEvents : events;
-    if (renderingEvents && renderingEvents?.length > 0) {
+    if (renderingEvents.length > 0) {
       return (
         <>
           {renderingEvents.map((item) => (
@@ -291,9 +329,9 @@ function Profile() {
       );
     }
     return null;
-  };
+  }
 
-  const renderAddDiaryButton = () => {
+  function renderAddDiaryButton() {
     if (!isFormOpen && diaries && diaries.length > 0) {
       return (
         <button
@@ -306,9 +344,9 @@ function Profile() {
       );
     }
     return null;
-  };
+  }
 
-  const renderDiaryForm = () => {
+  function renderDiaryForm() {
     if (isFormOpen || (diaries && diaries.length === 0)) {
       return (
         <div className="profile__form-container">
@@ -327,9 +365,10 @@ function Profile() {
       );
     }
     return null;
-  };
+  }
 
-  const renderDiaries = () => {
+  function renderDiaries() {
+    if (isLoadingPaginate) return <Loader isPaginate />;
     if (diaries && diaries.length > 0) {
       return (
         <>
@@ -347,9 +386,9 @@ function Profile() {
       );
     }
     return null;
-  };
+  }
 
-  const renderPageContent = () => {
+  function renderPageContent() {
     if (isPageError) {
       return (
         <AnimatedPageContainer
@@ -377,7 +416,25 @@ function Profile() {
                   title={isArchiveOpen ? titleH1Archive : titleH1Current}
                 />
               </div>
-              <ScrollableContainer sectionClass="profile__events" step={3}>
+              <ScrollableContainer
+                sectionClass="profile__events"
+                step={3}
+                onScrollCallback={() => {
+                  if (!serverError) {
+                    if (isArchiveOpen) {
+                      getArchiveOfEvents({
+                        limit: eventsLimit,
+                        offset: eventsOffset,
+                      });
+                    } else {
+                      getCurrentBookedEvents({
+                        limit: eventsLimit,
+                        offset: eventsOffset,
+                      });
+                    }
+                  }
+                }}
+              >
                 {renderEventCards()}
               </ScrollableContainer>
             </>
@@ -394,29 +451,20 @@ function Profile() {
             {renderDiaryForm()}
 
             {renderDiaries()}
+
+            {pageCount > 1 && (
+              <Paginate
+                sectionClass="cards-section__pagination"
+                pageCount={pageCount}
+                value={pageIndex}
+                onChange={setPageIndex}
+              />
+            )}
           </div>
         </div>
       </>
     );
-  };
-
-  if (!events && !diaries) {
-    return <Loader isCentered />;
   }
-
-  return (
-    <>
-      <BasePage headTitle={headTitle} headDescription={headDescription}>
-        <section className="profile fade-in">{renderPageContent()}</section>
-      </BasePage>
-      <PopupDeleteDiary
-        isOpen={isDeleteDiaryPopupOpen}
-        cardData={selectedDiary}
-        onClose={closeDeleteDiaryPopup}
-        onCardDelete={handleDeleteDiary}
-      />
-    </>
-  );
 }
 
 export default Profile;

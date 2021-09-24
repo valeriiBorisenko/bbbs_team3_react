@@ -1,20 +1,19 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import './ReadAndWatchSection.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
 import {
-  PAGES_TO_LOAD,
-  INDEX_ERROR_FOR_PENULTIMATE_PAGE,
   INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX,
+  INDEX_ERROR_FOR_PENULTIMATE_PAGE,
+  PAGES_TO_LOAD,
 } from './constants';
 import {
-  TitleH3,
   LinkableHeading,
-  NoDataNotificationBox,
   Loader,
-} from '../utils/index';
-import { FIGURES, COLORS, ERROR_MESSAGES } from '../../config/constants';
+  NoDataNotificationBox,
+  TitleH3,
+} from '../utils';
+import { COLORS, ERROR_MESSAGES, FIGURES } from '../../config/constants';
+import './ReadAndWatchSection.scss';
 
 function ReadAndWatchSection({
   pageSize,
@@ -97,9 +96,26 @@ function ReadAndWatchSection({
     }
   }
 
+  return (
+    <section className="readwatch__section">
+      <div className="readwatch__container">
+        <LinkableHeading
+          title={sectionTitle}
+          path={path}
+          titleSectionClass="readwatch__heading"
+          linkSectionClass="readwatch__heading-link"
+          Component={TitleH3}
+        />
+      </div>
+      <div className={`readwatch__slider-container ${sectionClass}`}>
+        {renderSliderSection()}
+      </div>
+    </section>
+  );
+
   function renderCardsForSlider() {
     if (sectionData) {
-      const cardArray = sectionData.map((item, i) => (
+      return sectionData.map((item, i) => (
         <CardTemplateComponent
           key={`${sectionTitle}-${item?.id}`}
           sectionClass="cards-section__item"
@@ -115,8 +131,6 @@ function ReadAndWatchSection({
           {...item}
         />
       ));
-
-      return cardArray;
     }
     return [];
   }
@@ -149,6 +163,7 @@ function ReadAndWatchSection({
       return (
         <Carousel
           ref={ref}
+          className="readwatch__carousel"
           transitionMs={transitionDelay}
           pagination={false}
           outerSpacing={0}
@@ -158,6 +173,7 @@ function ReadAndWatchSection({
           showEmptySlots
           onNextEnd={slideNextHandler}
           onPrevEnd={slideBackHandler}
+          enableMouseSwipe={false}
         >
           {renderCardsForSlider()}
         </Carousel>
@@ -166,23 +182,6 @@ function ReadAndWatchSection({
 
     return <Loader isNested />;
   }
-
-  return (
-    <section className="readwatch__section">
-      <div className="readwatch__container">
-        <LinkableHeading
-          title={sectionTitle}
-          path={path}
-          titleSectionClass="readwatch__heading"
-          linkSectionClass="readwatch__heading-link"
-          Component={TitleH3}
-        />
-      </div>
-      <div className={`readwatch__slider-container ${sectionClass}`}>
-        {renderSliderSection()}
-      </div>
-    </section>
-  );
 }
 
 ReadAndWatchSection.propTypes = {

@@ -1,9 +1,8 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import './DropDownSelect.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { useClickOutside } from '../../../hooks/index';
+import { useClickOutside } from '../../../hooks';
 
 function DropDownSelect({
   placeholder,

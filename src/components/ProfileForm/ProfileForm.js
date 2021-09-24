@@ -1,20 +1,14 @@
-import './ProfileForm.scss';
-import { useState, useEffect, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { ErrorsContext } from '../../contexts/index';
-import { useFormWithValidation } from '../../hooks/index';
+import { ErrorsContext } from '../../contexts';
+import { useFormWithValidation } from '../../hooks';
 import captions from '../../utils/rating-captions';
+import getServerErrors from '../../utils/form-errors';
 import { staticImageUrl } from '../../config/config';
 import { regExpImages } from '../../config/constants';
-import {
-  Card,
-  Input,
-  Caption,
-  Rating,
-  Button,
-  ButtonRound,
-} from '../utils/index';
+import { Button, ButtonRound, Caption, Card, Input, Rating } from '../utils';
+import './ProfileForm.scss';
 
 const {
   rateCaptionText,
@@ -52,12 +46,7 @@ function ProfileForm({
 
   const { serverError, clearError } = useContext(ErrorsContext);
 
-  const errorsString = serverError
-    ? Object.values(serverError)
-        .map((err) => err)
-        .join(' ')
-        .trim()
-    : '';
+  const errorsString = serverError ? getServerErrors(serverError) : '';
 
   const [caption, setCaption] = useState(rateCaptionText);
   const [userImage, setUserImage] = useState(null);

@@ -9,6 +9,7 @@
     "axios": "^0.21.1",
     "get-youtube-id": "^1.0.1",
     "lottie-web": "^5.7.11",
+    "lvovich": "^1.0.16",
     "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
@@ -30,9 +31,7 @@
     "eject": "react-scripts eject",
     "prettier": "prettier --write src/**/*.js",
     "lint": "eslint --debug src/",
-    "lint:fix": "eslint --debug src/ --fix",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "lint:fix": "eslint --debug src/ --fix"
   },
   "husky": {
     "hooks": {
@@ -64,7 +63,6 @@
     ]
   },
   "devDependencies": {
-    "axios-mock-adapter": "^1.19.0",
     "eslint": "^7.26.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -73,7 +71,6 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "gh-pages": "^3.2.3",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "prettier": "2.3.0"

@@ -1,6 +1,6 @@
-import './CardAbout.scss';
 import PropTypes from 'prop-types';
-import { TitleH2 } from '../../utils/index';
+import { TitleH2 } from '../../utils';
+import './CardAbout.scss';
 
 function CardAbout({ title, text, color, linkText, href }) {
   return (

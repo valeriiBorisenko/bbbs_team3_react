@@ -18,6 +18,7 @@ function Popup({
       onClose();
     }
   };
+
   return (
     <div
       className={`popup popup_type_${type} ${isOpen ? 'popup_opened' : ''} `}

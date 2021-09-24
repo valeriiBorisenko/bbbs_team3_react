@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { apiUrl, baseURL } from '../config/config';
 
-function getProfileDiariesData() {
+function getProfileDiariesData({ limit, offset }) {
   return axios
-    .get(`${baseURL}${apiUrl}/profile/diaries/`)
-    .then((response) => response.data.results)
+    .get(`${baseURL}${apiUrl}/profile/diaries/`, {
+      params: { limit, offset },
+    })
+    .then((response) => response.data)
     .catch((err) => Promise.reject(err?.response));
 }
 

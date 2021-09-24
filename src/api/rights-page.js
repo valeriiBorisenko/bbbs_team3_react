@@ -20,11 +20,13 @@ function getRightsTags() {
 }
 
 // получение Статьи для страницы Права Детей
-function getRightsArticle(id) {
+function getRightsArticle({ id, tags = '' }) {
   return axios
-    .get(`${baseURL}${apiUrl}/rights/${id}`)
+    .get(`${baseURL}${apiUrl}/rights/${id}/`, {
+      params: { tags },
+    })
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 export { getRightsData, getRightsTags, getRightsArticle };

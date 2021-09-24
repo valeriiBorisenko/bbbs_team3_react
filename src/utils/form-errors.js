@@ -1,5 +1,11 @@
 const getServerErrors = (serverErrorObj) => {
-  if (!serverErrorObj) {
+  if (
+    !(
+      typeof serverErrorObj === 'object' &&
+      !Array.isArray(serverErrorObj) &&
+      serverErrorObj !== null
+    )
+  ) {
     throw Error('Invalid input');
   }
 

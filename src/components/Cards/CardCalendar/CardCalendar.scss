@@ -19,14 +19,26 @@
     background-color: $lightBlue;
   }
 
+  &_canceled {
+    background-color: $backgroundError;
+  }
+
   &__title {
     margin: 0 15px 0 0;
     max-width: 320px;
+
+    &_canceled {
+      color: $lightGray;
+    }
   }
 
   &__weekday {
     margin: 0;
     text-transform: lowercase;
+
+    &_canceled {
+      color: $lightGray;
+    }
   }
 
   &__buttons {
@@ -59,11 +71,11 @@
   &__info-item {
     padding: 10px 0;
     border-bottom: 1px solid $lightGray;
-  
+
     &:first-of-type {
       padding-top: 0;
     }
-  
+
     &:last-of-type {
       padding-bottom: 0;
       border: none;
@@ -73,13 +85,17 @@
   &__type {
     margin: 0;
     color: $darkGray;
+
+    &_canceled {
+      color: $lightGray;
+    }
   }
 
   &__description {
     margin-top: 30px;
     max-height: 175px;
     height: 100%;
-    
+
     > div {
       min-height: 175px;
     }
@@ -92,10 +108,9 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 1.4;
-    color: $black;
     padding: 10px 15px 0 0;
     color: $lightBlack;
-  
+
     &:first-of-type {
       padding-top: 0;
     }
@@ -106,11 +121,19 @@
     font-size: 100px;
     line-height: 1;
     margin: 0;
+
+    &_canceled {
+      color: $lightGray;
+    }
   }
 
   &__time {
     margin: 0;
     color: $lightBlack;
+
+    &_canceled {
+      color: $lightGray;
+    }
   }
 
   &__info {
@@ -131,6 +154,10 @@
     -webkit-box-orient: vertical;
     line-clamp: 2;
     box-orient: vertical;
+
+    &_canceled {
+      color: $lightGray;
+    }
   }
 
   &__back {
@@ -150,11 +177,19 @@
     -webkit-box-orient: vertical;
     line-clamp: 2;
     box-orient: vertical;
+
+    &_canceled {
+      color: $lightGray;
+    }
   }
 
   &__phone {
     color: $blue;
     text-decoration: none;
+
+    &_canceled {
+      color: $lightGray;
+    }
 
     &:hover {
       text-decoration: underline;
@@ -163,9 +198,20 @@
 
   &__submit {
     margin-top: 30px;
+    min-height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  &__text-canceled {
+    margin: 0;
+    font-family: $protoGrotesk;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.27;
+    letter-spacing: 0.2px;
+    color: $error;
   }
 
   &__place-left {
@@ -225,6 +271,15 @@
         min-height: 170px;
       }
     }
+
+    &__submit {
+      min-height: 40px;
+    }
+
+    &__text-canceled {
+      font-size: 12px;
+      line-height: 1.42;
+    }
   }
 }
 
@@ -249,6 +304,7 @@
         margin-bottom: 20px;
       }
     }
+
     &__image-done {
       background-size: 260px 106px;
       width: 260px;

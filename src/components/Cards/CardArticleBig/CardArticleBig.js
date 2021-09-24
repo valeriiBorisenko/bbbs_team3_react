@@ -1,7 +1,7 @@
-import './CardArticleBig.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { Card, TitleH3 } from '../../utils/index';
+import { Card, TitleH3 } from '../../utils';
+import './CardArticleBig.scss';
 
 function CardArticleBig({ title, color, articleUrl }) {
   return (

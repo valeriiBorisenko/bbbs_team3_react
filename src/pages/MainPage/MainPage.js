@@ -1,29 +1,29 @@
-import './MainPage.scss';
 import { Link } from 'react-router-dom';
-import { useState, useContext, useEffect } from 'react';
-import mainPageTexts from '../../locales/main-page-RU';
-import { CurrentUserContext, PopupsContext } from '../../contexts/index';
-import { useEventBooking, useActivityTypes } from '../../hooks/index';
+import { useContext, useEffect, useState } from 'react';
+import mainPageTexts from './locales/RU';
+import { CurrentUserContext, PopupsContext } from '../../contexts';
+import { useActivityTypes, useEventBooking } from '../../hooks';
 import { QUESTIONS_URL, STORIES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { ERROR_MESSAGES } from '../../config/constants';
 import { randomizeArray } from '../../utils/utils';
 import getMainPageData from '../../api/main-page';
 import {
-  BasePage,
-  Loader,
-  Card,
-  CardStub,
-  CardCalendar,
-  CardPlace,
-  CardArticleBig,
-  CardFilm,
-  CardVideoMain,
-  Widget,
-  CardQuestion,
-  CardAnimatedPlug,
   AnimatedPageContainer,
+  BasePage,
+  Card,
+  CardAnimatedPlug,
+  CardArticleBig,
+  CardCalendar,
+  CardFilm,
+  CardPlace,
+  CardQuestion,
+  CardStub,
+  CardVideoMain,
+  Loader,
+  Widget,
 } from './index';
+import './MainPage.scss';
 
 // количество отображаемых карточек с фильмами и вопросами
 const MOVIES_COUNT = 4;
@@ -41,7 +41,7 @@ function MainPage() {
   const [isCityChanging, setIsCityChanging] = useState(false);
   const [isPageError, setIsPageError] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const activityTypes = useActivityTypes();
+  const { activityTypesSimplified } = useActivityTypes();
 
   // запись/отписка на мероприятия
   const { handleEventBooking, selectedEvent } = useEventBooking();
@@ -53,12 +53,12 @@ function MainPage() {
   }, [selectedEvent]);
 
   // запрос даты главной страницы при загрузке и при смене города
-  function getMainPageDataOnLoad() {
+  const getMainPageDataOnLoad = () => {
     getMainPageData()
       .then((data) => setMainPageData(data))
       .catch(() => setIsPageError(true))
       .finally(() => setIsCityChanging(false));
-  }
+  };
 
   useEffect(() => {
     if (currentUser) {
@@ -82,6 +82,18 @@ function MainPage() {
   if (!mainPageData && !isPageError) {
     return <Loader isCentered />;
   }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      {isPageError ? (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      ) : (
+        renderPageContent()
+      )}
+    </BasePage>
+  );
 
   function renderEventsBlock() {
     // карточка ивента
@@ -108,7 +120,10 @@ function MainPage() {
           sectionClass="lead__media scale-in"
           key={mainPageData?.history?.id}
         >
-          <Link to={STORIES_URL} className="lead__link">
+          <Link
+            to={`${STORIES_URL}/${mainPageData?.history?.id}`}
+            className="lead__link"
+          >
             {mainPageData?.history?.title}
           </Link>
           <img
@@ -135,7 +150,7 @@ function MainPage() {
           key={mainPageData?.place?.id}
           data={mainPageData?.place}
           sectionClass="card-container_type_main-article scale-in"
-          activityTypes={activityTypes}
+          activityTypesSimplified={activityTypesSimplified}
           isBig
           isMainPage
         />
@@ -240,18 +255,6 @@ function MainPage() {
       </>
     );
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {isPageError ? (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      ) : (
-        renderPageContent()
-      )}
-    </BasePage>
-  );
 }
 
 export default MainPage;

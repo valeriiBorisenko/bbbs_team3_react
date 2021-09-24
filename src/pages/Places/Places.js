@@ -1,48 +1,48 @@
-import './Places.scss';
-import { useEffect, useState, useContext } from 'react';
-import placesPageTexts from '../../locales/places-page-RU';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import placesPageTexts from './locales/RU';
 import { ageFilters, PAGE_SIZE_PAGINATE } from './constants';
 import {
   CurrentUserContext,
-  PopupsContext,
   ErrorsContext,
-} from '../../contexts/index';
+  PopupsContext,
+} from '../../contexts';
+import { useActivityTypes, useDebounce, useLocalStorage } from '../../hooks';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
 import {
-  useDebounce,
-  useActivityTypes,
-  useLocalStorage,
-} from '../../hooks/index';
-import {
-  COLORS,
   ALL_CATEGORIES,
+  COLORS,
   DELAY_DEBOUNCE,
   DELAY_RENDER,
-  localStUserCity,
   ERROR_MESSAGES,
+  localStChosenPlace,
+  localStUserCity,
 } from '../../config/constants';
 import {
+  deselectAllTags,
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
-  deselectAllTags,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
-  BasePage,
-  TitleH1,
-  CardPlace,
-  PlacesRecommend,
-  AnimatedPageContainer,
-  Loader,
-  TagsList,
-  NoDataNotificationBox,
-  Paginate,
-} from './index';
-import {
+  getChosenPlace,
+  getPlace,
   getPlaces,
   getPlacesTags,
-  getChosenPlace,
 } from '../../api/places-page';
+import {
+  AnimatedPageContainer,
+  BasePage,
+  CardPlace,
+  Loader,
+  NoDataNotificationBox,
+  Paginate,
+  PlacesRecommend,
+  TagsList,
+  TitleH1,
+} from './index';
+import './Places.scss';
 
 const {
   headTitle,
@@ -53,11 +53,19 @@ const {
   mentorTag,
 } = placesPageTexts;
 
+const maxScreenWidth = {
+  small: 1024,
+};
+
 function Places() {
-  const activityTypes = useActivityTypes();
+  const { state } = useLocation();
+  const searchPlaceId = state?.id;
+
+  const { activityTypes, activityTypesSimplified } = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
-  const { openPopupCities, openPopupError } = useContext(PopupsContext);
+  const { openPopupCities, openPopupError, openPopupPlace } =
+    useContext(PopupsContext);
   const { setError } = useContext(ErrorsContext);
 
   const getLocalStorageItem = useLocalStorage(localStUserCity);
@@ -96,14 +104,13 @@ function Places() {
 
   // Резайз пагинации при первой загрузке
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1024px)');
-    const largeQuery = window.matchMedia('(max-width: 1279px)');
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {
         setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else if (largeQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
         setPageSize(PAGE_SIZE_PAGINATE.big);
       }
@@ -111,11 +118,9 @@ function Places() {
     listener();
 
     smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
 
     return () => {
       smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
     };
   }, []);
 
@@ -236,10 +241,7 @@ function Places() {
       })
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -380,21 +382,44 @@ function Places() {
         openPopupCities();
       }, DELAY_RENDER);
     }
-  }, []);
+
+    if (state && userCity) {
+      getPlace(searchPlaceId)
+        .then((res) => {
+          setLocalStorageData(localStChosenPlace, res);
+          openPopupPlace();
+        })
+        .catch(() => setIsPageError(true));
+    }
+  }, [state]);
+
+  if (!places) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="places page__section fade-in">
+        {renderPageContent()}
+      </section>
+    </BasePage>
+  );
 
   // функции рендера
-  const renderAnimatedContainer = () => (
-    <>
-      {!isCityChanging ? (
-        <>
-          <AnimatedPageContainer titleText={textStubNoData} />
-          {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
-        </>
-      ) : (
-        <Loader isNested />
-      )}
-    </>
-  );
+  function renderAnimatedContainer() {
+    return (
+      <>
+        {!isCityChanging ? (
+          <>
+            <AnimatedPageContainer titleText={textStubNoData} />
+            {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
+          </>
+        ) : (
+          <Loader isPaginate />
+        )}
+      </>
+    );
+  }
 
   function renderPagination() {
     if (pageCount > 1) {
@@ -410,7 +435,7 @@ function Places() {
     return null;
   }
 
-  const renderPlaces = () => {
+  function renderPlaces() {
     if (isChosenCardHidden && places?.length === 0) {
       return (
         <NoDataNotificationBox
@@ -428,7 +453,7 @@ function Places() {
               <CardPlace
                 key={chosenPlace?.id}
                 data={chosenPlace}
-                activityTypes={activityTypes}
+                activityTypesSimplified={activityTypesSimplified}
                 sectionClass="card-container_type_main-article scale-in"
                 isBig
               />
@@ -441,23 +466,23 @@ function Places() {
                 <CardPlace
                   key={place?.id}
                   data={place}
-                  activityTypes={activityTypes}
+                  activityTypesSimplified={activityTypesSimplified}
                   color={COLORS[(i + 1) % COLORS.length]}
                   sectionClass="card-container_type_article scale-in"
                 />
               ))}
             </section>
           ) : (
-            <Loader isNested />
+            <Loader isPaginate />
           )}
           {renderPagination()}
         </>
       );
     }
     return null;
-  };
+  }
 
-  const renderPageContent = () => {
+  function renderPageContent() {
     if (isPageError) {
       return (
         <AnimatedPageContainer
@@ -486,26 +511,14 @@ function Places() {
             />
             {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
 
-            {!isLoadingFilters ? renderPlaces() : <Loader isNested />}
+            {!isLoadingFilters ? renderPlaces() : <Loader isPaginate />}
           </>
         ) : (
-          <Loader isNested />
+          <Loader isPaginate />
         )}
       </>
     );
-  };
-
-  if (!places) {
-    return <Loader isCentered />;
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="places page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
-  );
 }
 
 export default Places;

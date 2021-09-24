@@ -27,4 +27,17 @@ function postQuestion(question) {
     .catch((err) => Promise.reject(err?.response));
 }
 
-export { getQuestionsPageData, getQuestionsPageTags, postQuestion };
+// получение одного вопроса
+function getQuestion(id) {
+  return axios
+    .get(`${baseURL}${apiUrl}/questions/${id}`)
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+}
+
+export {
+  getQuestionsPageData,
+  getQuestionsPageTags,
+  postQuestion,
+  getQuestion,
+};

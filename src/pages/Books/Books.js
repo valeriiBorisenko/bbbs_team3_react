@@ -1,29 +1,36 @@
-import './Books.scss';
 import { useContext, useEffect, useState } from 'react';
-import booksPageTexts from '../../locales/books-page-RU';
-import { useDebounce } from '../../hooks/index';
-import { getBooksPageData, getBooksPageFilter } from '../../api/books-page';
+import { useLocation } from 'react-router-dom';
+import booksPageTexts from './locales/RU';
+import { useDebounce } from '../../hooks';
 import {
+  getBook,
+  getBooksPageData,
+  getBooksPageFilter,
+} from '../../api/books-page';
+import {
+  AnimatedPageContainer,
   BasePage,
-  TitleH1,
   CardBook,
   Loader,
-  AnimatedPageContainer,
+  Paginate,
   TagsList,
+  TitleH1,
 } from './index';
-import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
+  localStChosenBook,
 } from '../../config/constants';
 import {
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
 } from '../../utils/filter-tags';
 import { ErrorsContext, PopupsContext } from '../../contexts';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import './Books.scss';
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 8,
@@ -31,11 +38,19 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
+const maxScreenWidth = {
+  small: 1216,
+  medium: 1640,
+};
+
 const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
 function Books() {
   const { setError } = useContext(ErrorsContext);
-  const { openPopupError } = useContext(PopupsContext);
+  const { openPopupError, openPopupBook } = useContext(PopupsContext);
+
+  const { state } = useLocation();
+  const searchBookId = state?.id;
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(true);
@@ -78,10 +93,7 @@ function Books() {
       .then((results) => setBooksPageData(results))
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -134,6 +146,18 @@ function Books() {
     }
   };
 
+  // Откртие попапа при переходе из поиска
+  useEffect(() => {
+    if (state) {
+      getBook(searchBookId)
+        .then((res) => {
+          setLocalStorageData(localStChosenBook, res);
+          openPopupBook();
+        })
+        .catch(() => setIsPageError(true));
+    }
+  }, [state]);
+
   /// Фильтрация с делэем
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePaginate = useDebounce(getBooksData, DELAY_DEBOUNCE);
@@ -157,8 +181,12 @@ function Books() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1216px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
+    const largeQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.medium}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -179,41 +207,20 @@ function Books() {
     };
   }, []);
 
-  // контейнер заглушки
-  function renderAnimatedContainer() {
-    return <AnimatedPageContainer titleText={textStubNoData} />;
+  // глобальный лоадер
+  if (isLoading) {
+    return <Loader isCentered />;
   }
 
-  // контейнер с книгами
-  const renderBooksContainer = () => {
-    if (!booksPageData && !isLoading) {
-      return renderAnimatedContainer();
-    }
-    return (
-      <>
-        {isLoadingPaginate ? (
-          <Loader isNested />
-        ) : (
-          <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
-            {booksPageData.map((books) => (
-              <CardBook key={books.id} data={books} sectionClass="scale-in" />
-            ))}
-          </ul>
-        )}
-        {pageCount > 1 && (
-          <Paginate
-            sectionClass="cards-section__pagination"
-            pageCount={pageCount}
-            value={pageNumber}
-            onChange={setPageNumber}
-          />
-        )}
-      </>
-    );
-  };
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="books page__section fade-in">
+        {renderPageContent()}
+      </section>
+    </BasePage>
+  );
 
-  // главная функция рендеринга
-  const renderPageContent = () => {
+  function renderPageContent() {
     if (isPageError) {
       return (
         <AnimatedPageContainer
@@ -235,23 +242,42 @@ function Books() {
         )}
 
         {/* рендерим книги */}
-        {isFiltersUsed ? <Loader isNested /> : renderBooksContainer()}
+        {isFiltersUsed ? <Loader isPaginate /> : renderBooksContainer()}
       </>
     );
-  };
-
-  // глобальный лоадер
-  if (isLoading) {
-    return <Loader isCentered />;
   }
 
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="books page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
-  );
+  function renderBooksContainer() {
+    if (!booksPageData && !isLoading) {
+      return renderAnimatedContainer();
+    }
+    return (
+      <>
+        {isLoadingPaginate ? (
+          <Loader isPaginate />
+        ) : (
+          <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
+            {booksPageData.map((books) => (
+              <CardBook key={books.id} data={books} sectionClass="scale-in" />
+            ))}
+          </ul>
+        )}
+        {pageCount > 1 && (
+          <Paginate
+            sectionClass="cards-section__pagination"
+            pageCount={pageCount}
+            value={pageNumber}
+            onChange={setPageNumber}
+          />
+        )}
+      </>
+    );
+  }
+
+  // контейнер заглушки
+  function renderAnimatedContainer() {
+    return <AnimatedPageContainer titleText={textStubNoData} />;
+  }
 }
 
 export default Books;

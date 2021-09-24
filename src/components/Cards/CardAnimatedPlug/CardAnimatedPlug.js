@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
-import './CardAnimatedPlug.scss';
 import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
 import animation from '../../../assets/animation/ill_popup_recommend-success.json';
-import { Card } from '../../utils/index';
+import { Card } from '../../utils';
+import './CardAnimatedPlug.scss';
 
 function CardAnimatedPlug({ text, sectionClass }) {
   const animationContainer = useRef(null);

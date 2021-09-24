@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './App.scss';
 import { HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
@@ -6,25 +6,27 @@ import Router from './navigation/Router';
 import Loader from './components/utils/Loader/Loader';
 // попапы
 import {
-  PopupConfirmation,
-  PopupSuccessfully,
   PopupAboutEvent,
-  PopupError,
+  PopupArticle,
+  PopupBook,
   PopupCities,
+  PopupConfirmation,
+  PopupError,
   PopupLogin,
+  PopupPlace,
   PopupRecommendSuccess,
+  PopupSuccessfully,
   PopupVideo,
-  PopupInfoTooltip,
-} from './components/Popups/index';
+} from './components/Popups';
 // логины, авторизация
 import {
-  CurrentUserContext,
   CitiesContext,
-  PopupsContext,
+  CurrentUserContext,
   ErrorsContext,
-} from './contexts/index';
+  PopupsContext,
+} from './contexts';
 // хуки
-import { useCities, useAuth } from './hooks/index';
+import { useAuth, useCities } from './hooks';
 
 function App() {
   const { pathname } = useLocation();
@@ -40,7 +42,9 @@ function App() {
   const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
     useState(false);
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
+  const [isPlacePopupOpen, setIsPlacePopupOpen] = useState(false);
+  const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
 
   const [isWithoutRegister, setIsWithoutRegister] = useState(false);
 
@@ -50,12 +54,10 @@ function App() {
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupRecommendSuccessOpen(false);
-    setIsInfoTooltipOpen(false);
     setIsVideoPopupOpen(false);
-  }
-
-  function openPopupInfoTooltip() {
-    setIsInfoTooltipOpen(true);
+    setIsBookPopupOpen(false);
+    setIsPlacePopupOpen(false);
+    setIsArticlePopupOpen(false);
   }
 
   function openPopupConfirmation() {
@@ -108,6 +110,18 @@ function App() {
     setIsVideoPopupOpen(true);
   }
 
+  function openPopupBook() {
+    setIsBookPopupOpen(true);
+  }
+
+  function openPopupPlace() {
+    setIsPlacePopupOpen(true);
+  }
+
+  function openPopupArticle() {
+    setIsArticlePopupOpen(true);
+  }
+
   // контекст попапов
   const popupsContextValue = {
     closeAllPopups,
@@ -120,7 +134,9 @@ function App() {
     openPopupLogin,
     openPopupRecommendSuccess,
     openPopupVideo,
-    openPopupInfoTooltip,
+    openPopupBook,
+    openPopupPlace,
+    openPopupArticle,
   };
 
   // текущий юзер/контекст
@@ -156,11 +172,12 @@ function App() {
     checkToken();
   }, []);
 
-  // закрытие всех попапов при смене страницы
+  // закрытие всех попапов при смене страницы, очистка ошибок
   useEffect(() => {
     closeAllPopups();
     closePopupError();
     closePopupCities();
+    clearError();
   }, [pathname]);
 
   // эффект закрытия модалок по Escape
@@ -213,8 +230,13 @@ function App() {
                   isOpen={isVideoPopupOpen}
                   onClose={closeAllPopups}
                 />
-                <PopupInfoTooltip
-                  isOpen={isInfoTooltipOpen}
+                <PopupBook isOpen={isBookPopupOpen} onClose={closeAllPopups} />
+                <PopupPlace
+                  isOpen={isPlacePopupOpen}
+                  onClose={closeAllPopups}
+                />
+                <PopupArticle
+                  isOpen={isArticlePopupOpen}
                   onClose={closeAllPopups}
                 />
               </div>

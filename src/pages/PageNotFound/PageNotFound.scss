@@ -1,9 +1,12 @@
 @import './styles/utils.scss';
 
+.main__not-found {
+  justify-content: center;
+}
+
 .page-not-found-title {
   margin: 0;
   margin-bottom: 30px;
-
   font-family: 'Proto Grotesk Web Light';
   font-style: normal;
   font-weight: 300;

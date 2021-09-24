@@ -86,26 +86,6 @@ export const formatWordCase = (remainSeats) => {
   return 'мест';
 };
 
-export const questionForm = {
-  beforeSubmit: {
-    title:
-      'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список',
-    titleClass: '',
-    formVisibilityClass: '',
-  },
-  successSubmit: {
-    title:
-      'Спасибо! Мы приняли ваш вопрос. Ваш вопрос опубликуют, как только он пройдет проверку и модератор даст на него ответ!',
-    titleClass: 'add-question__title_success',
-    formVisibilityClass: 'question-form_invisible',
-  },
-  errorSubmit: {
-    title:
-      'Произошла ошибка при отправке вашего вопроса! Попробуйте повторить позже или обратиться в службу поддержки!',
-    titleClass: 'add-question__title_error',
-  },
-};
-
 // меняет в слове первую букву на заглавную
 export const changeCaseOfFirstLetter = (str) => {
   if (!str) return str;
@@ -133,7 +113,7 @@ export const randomizeArray = (arr, size) => {
 };
 
 export const formatPhoneNumber = (phoneNum) => {
-  if (phoneNum.length === 12) {
+  if (phoneNum?.length === 12) {
     const str1 = phoneNum.slice(0, 2);
     const str2 = phoneNum.slice(2, 5);
     const str3 = phoneNum.slice(5, 8);

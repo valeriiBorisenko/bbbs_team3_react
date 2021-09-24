@@ -3,7 +3,7 @@ import CardRights from '../../components/Cards/CardRights/CardRights';
 import CardsSectionWithLines from '../../components/CardsSectionWithLines/CardsSectionWithLines';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import TagsList from '../../components/TagsList/TagsList';
-import { TitleH1, Loader } from '../../components/utils/index';
+import { Loader, TitleH1 } from '../../components/utils';
 
 export {
   BasePage,
