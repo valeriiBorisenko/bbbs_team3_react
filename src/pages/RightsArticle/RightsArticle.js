@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+import rightsArticlePageTexts from './locales/RU';
 import { useScrollToTop } from '../../hooks';
 import { getRightsArticle } from '../../api/rights-page';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
@@ -12,6 +13,8 @@ import {
   NextArticleLink,
 } from './index';
 import './RightsArticle.scss';
+
+const { headTitle, headDescription, stubButtonText } = rightsArticlePageTexts;
 
 function RightsArticle() {
   const { articleId } = useParams();
@@ -48,13 +51,17 @@ function RightsArticle() {
     }
   }, [articleId]);
 
+  if (isLoadingPage) {
+    return <Loader isCentered />;
+  }
+
   return (
     <BasePage
-      headTitle={articleData?.title ?? 'Право'}
-      headDescription={articleData?.description ?? 'Право'}
+      headTitle={articleData?.title ?? headTitle}
+      headDescription={articleData?.description ?? headDescription}
       isHeaderTransparentOnTop
     >
-      {isLoadingPage ? <Loader isNested /> : renderMainContent()}
+      {renderMainContent()}
     </BasePage>
   );
 
@@ -64,7 +71,7 @@ function RightsArticle() {
         <AnimatedPageContainer
           titleText={ERROR_MESSAGES.generalErrorMessage.title}
           urlBack={RIGHTS_URL}
-          buttonText="Вернуться назад"
+          buttonText={stubButtonText}
           staticPage
         />
       );
@@ -73,7 +80,7 @@ function RightsArticle() {
     return (
       <>
         {renderLeadBlock()}
-        <div className="article page__section">
+        <div className="article page__section fade-in">
           <div className="article__container">
             {renderHtmlBlock()}
             {renderNextPageBlock()}
@@ -85,7 +92,7 @@ function RightsArticle() {
 
   function renderLeadBlock() {
     return (
-      <section className="article-lead">
+      <section className="article-lead fade-in">
         <div className="article-lead__content">
           <h1 className="chapter-title article-lead__title">
             {articleData?.title}

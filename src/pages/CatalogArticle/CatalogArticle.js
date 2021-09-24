@@ -15,12 +15,12 @@ import {
 } from './index';
 import './CatalogArticle.scss';
 
+const { headTitle, headDescription, stubButtonText } = catalogArticlePageTexts;
+
 function CatalogArticle() {
   const { articleId } = useParams();
   const history = useHistory();
 
-  const { headTitle, headDescription, stubButtonText } =
-    catalogArticlePageTexts;
   const [catalogArticlePageData, setCatalogArticlePageData] = useState();
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
