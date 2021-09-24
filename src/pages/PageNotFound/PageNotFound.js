@@ -1,6 +1,6 @@
-import './PageNotFound.scss';
-import page404Texts from '../../locales/404-page-RU';
+import page404Texts from './locales/RU';
 import { AnimatedPageContainer, BasePage } from './index';
+import './PageNotFound.scss';
 
 const { headTitle, headDescription, animatedContainerText } = page404Texts;
 
