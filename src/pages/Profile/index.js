@@ -5,13 +5,13 @@ import ProfileDiary from '../../components/ProfileDiary/ProfileDiary';
 import PopupDeleteDiary from '../../components/Popups/PopupDeleteDiary/PopupDeleteDiary';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import {
-  TitleH2,
   ButtonRound,
   Loader,
-  ScrollableContainer,
-  UserMenuButton,
   Paginate,
-} from '../../components/utils/index';
+  ScrollableContainer,
+  TitleH2,
+  UserMenuButton,
+} from '../../components/utils';
 
 export {
   BasePage,
