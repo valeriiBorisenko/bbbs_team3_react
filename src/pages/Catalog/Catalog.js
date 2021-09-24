@@ -9,7 +9,7 @@ import {
   TitleH1,
   TitleH2,
 } from './index';
-import getCatalogPageData from '../../api/catalog-page';
+import { getCatalogPageData } from '../../api/catalog-page';
 import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
 import './Catalog.scss';
 

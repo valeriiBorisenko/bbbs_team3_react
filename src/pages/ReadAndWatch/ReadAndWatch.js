@@ -22,7 +22,7 @@ import {
 } from './constants';
 import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWatchSection';
 // АПИ
-import getCatalogPageData from '../../api/catalog-page';
+import { getCatalogPageData } from '../../api/catalog-page';
 import { getVideoPageData } from '../../api/video-page';
 import { getArticlesPageData } from '../../api/articles-page';
 import { getMoviesPageData } from '../../api/movies-page';
