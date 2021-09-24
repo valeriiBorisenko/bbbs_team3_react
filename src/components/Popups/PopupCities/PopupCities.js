@@ -53,10 +53,7 @@ function PopupCities({ isOpen, onClose }) {
           onClose();
         })
         .catch(() => {
-          setError({
-            title: ERROR_MESSAGES.citiesErrorMessage.title,
-            button: ERROR_MESSAGES.citiesErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.citiesErrorMessage);
           openPopupError();
         });
     } else {
