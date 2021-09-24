@@ -1,7 +1,6 @@
-import './Movies.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import moviesPageTexts from '../../locales/movies-page-RU';
+import moviesPageTexts from './locales/RU';
 import { ErrorsContext, PopupsContext } from '../../contexts';
 import { useDebounce } from '../../hooks';
 import {
@@ -32,13 +31,16 @@ import {
   selectOneTag,
 } from '../../utils/filter-tags';
 import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import './Movies.scss';
 
 const PAGE_SIZE_PAGINATE = {
-  mobile: 8,
-  tablet: 8,
+  small: 8,
   medium: 12,
   big: 16,
 };
+
+const smallQueryWidth = '1216px';
+const largeQueryWidth = '1451px';
 
 const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 
@@ -88,10 +90,7 @@ function Movies() {
       .then((results) => setMoviesPageData(results))
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -179,15 +178,12 @@ function Movies() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const mobileQuery = window.matchMedia('(max-width: 900px)');
-    const smallQuery = window.matchMedia('(max-width: 1216px)');
-    const largeQuery = window.matchMedia('(max-width: 1451px)');
+    const smallQuery = window.matchMedia(`(max-width: ${smallQueryWidth})`);
+    const largeQuery = window.matchMedia(`(max-width: ${largeQueryWidth})`);
 
     const listener = () => {
-      if (mobileQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.mobile);
-      } else if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.tablet);
+      if (smallQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.small);
       } else if (largeQuery.matches) {
         setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
@@ -195,16 +191,28 @@ function Movies() {
       }
     };
     listener();
-    mobileQuery.addEventListener('change', listener);
+
     smallQuery.addEventListener('change', listener);
     largeQuery.addEventListener('change', listener);
 
     return () => {
-      mobileQuery.removeEventListener('change', listener);
       smallQuery.removeEventListener('change', listener);
       largeQuery.removeEventListener('change', listener);
     };
   }, []);
+
+  // глобальный лоадер
+  if (isLoading) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="movies page__section fade-in">
+        {renderPageContent()}
+      </section>
+    </BasePage>
+  );
 
   // контейнер заглушки
   function renderAnimatedContainer() {
@@ -212,7 +220,7 @@ function Movies() {
   }
 
   // контейнер с фильмами
-  const renderMoviesContainer = () => {
+  function renderMoviesContainer() {
     if (!moviesPageData && !isLoading) {
       return renderAnimatedContainer();
     }
@@ -241,9 +249,10 @@ function Movies() {
         )}
       </>
     );
-  };
+  }
+
   // главная функция рендеринга
-  const renderPageContent = () => {
+  function renderPageContent() {
     if (isPageError) {
       return (
         <AnimatedPageContainer
@@ -268,20 +277,7 @@ function Movies() {
         {isFiltersUsed ? <Loader isPaginate /> : renderMoviesContainer()}
       </>
     );
-  };
-
-  // глобальный лоадер
-  if (isLoading) {
-    return <Loader isCentered />;
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="movies page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
-  );
 }
 
 export default Movies;
