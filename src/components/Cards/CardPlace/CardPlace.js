@@ -1,10 +1,10 @@
-import './CardPlace.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import { PLACES_TITLE } from '../../../config/routes';
-import { Rubric, TitleH2, Card, Caption } from '../../utils';
+import { Caption, Card, Rubric, TitleH2 } from '../../utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
+import './CardPlace.scss';
 
 function CardPlace({
   data: {
@@ -18,7 +18,7 @@ function CardPlace({
     age,
     activityType,
   },
-  activityTypes,
+  activityTypesSimplified,
   color,
   sectionClass,
   isBig,
@@ -44,32 +44,13 @@ function CardPlace({
     .join(' ')
     .trim();
 
-  const types = activityTypes
-    ? activityTypes.reduce((obj, { id, name }) => {
-        // eslint-disable-next-line no-param-reassign
-        obj[id] = name;
-        return obj;
-      }, {})
-    : null;
-
   const info = chosen
     ? `${sexType}, ${age} лет, ${
-        activityTypes ? types[activityType] : activityTypeDefault
+        activityTypesSimplified
+          ? activityTypesSimplified[activityType]
+          : activityTypeDefault
       } отдых`
     : '';
-
-  const renderImage = () => {
-    if ((chosen && isBig) || isMainPage) {
-      return (
-        <img
-          src={`${staticImageUrl}/${image}`}
-          alt={title}
-          className={imageClassNames}
-        />
-      );
-    }
-    return null;
-  };
 
   return (
     <article className={`card-container ${sectionClass}`}>
@@ -104,6 +85,19 @@ function CardPlace({
       <CardAnnotation info={info} description={description} isMain={isBig} />
     </article>
   );
+
+  function renderImage() {
+    if ((chosen && isBig) || isMainPage) {
+      return (
+        <img
+          src={`${staticImageUrl}/${image}`}
+          alt={title}
+          className={imageClassNames}
+        />
+      );
+    }
+    return null;
+  }
 }
 
 CardPlace.propTypes = {
@@ -117,7 +111,7 @@ CardPlace.propTypes = {
   gender: PropTypes.string,
   age: PropTypes.number,
   activityType: PropTypes.number,
-  activityTypes: PropTypes.arrayOf(PropTypes.object),
+  activityTypesSimplified: PropTypes.objectOf(PropTypes.any),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
   isBig: PropTypes.bool,
@@ -135,7 +129,7 @@ CardPlace.defaultProps = {
   gender: 'male',
   age: 18,
   activityType: 1,
-  activityTypes: [],
+  activityTypesSimplified: {},
   color: 'white',
   isBig: false,
   sectionClass: '',

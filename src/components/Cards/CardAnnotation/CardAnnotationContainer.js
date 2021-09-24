@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Caption, ModificatedScrollbars } from '../../utils/index';
+import { Caption, ModificatedScrollbars } from '../../utils';
 
 function CardAnnotationContainer({ caption, children }) {
   const classNamesDesc = [
@@ -8,6 +8,7 @@ function CardAnnotationContainer({ caption, children }) {
   ]
     .join(' ')
     .trim();
+
   return (
     <ModificatedScrollbars horizontalScrollClass="scroll-thumb">
       {caption && (

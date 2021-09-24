@@ -7,9 +7,9 @@ import {
   formatWordCase,
 } from '../../../utils/utils';
 import Popup from '../Popup/Popup';
-import { Button, ModificatedScrollbars, TitleH2 } from '../../utils/index';
+import { Button, ModificatedScrollbars, TitleH2 } from '../../utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
-import { useEventBooking } from '../../../hooks/index';
+import { useEventBooking } from '../../../hooks';
 import { localStAfishaEvent } from '../../../config/constants';
 
 function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
@@ -32,12 +32,6 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
     // передаем карточку и сообщаем функции, что запись без подтверждения
     handleEventBooking(card, true);
   }
-
-  const renderPhone = () => (
-    <a className="calendar__phone" href={`tel:${card?.phoneNumber}`}>
-      {formatPhoneNumber(card?.phoneNumber)}
-    </a>
-  );
 
   return (
     <Popup
@@ -115,6 +109,14 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
       )}
     </Popup>
   );
+
+  function renderPhone() {
+    return (
+      <a className="calendar__phone" href={`tel:${card?.phoneNumber}`}>
+        {formatPhoneNumber(card?.phoneNumber)}
+      </a>
+    );
+  }
 }
 
 PopupAboutEvent.propTypes = {

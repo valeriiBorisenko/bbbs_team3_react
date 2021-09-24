@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../../contexts';
 import texts from './locales/RU';
 import {
   ABOUT_US_TITLE,
@@ -134,46 +134,7 @@ function NavBar({
         </ul>
       </div>
 
-      {currentUser && (
-        <div
-          className={`menu__user-info ${
-            !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
-          }`}
-        >
-          <UserMenuButton
-            title={
-              userCityName
-                ? `${userCityName}. ${texts.changeCity}`
-                : texts.changeCityDefault
-            }
-            handleClick={onCityChangeClick}
-            sectionClass="mobile-link"
-          />
-          <UserMenuButton
-            title={texts.logoutText}
-            sectionClass="mobile-link"
-            handleClick={onLogout}
-          />
-        </div>
-      )}
-
-      {!currentUser && pathname === PLACES_URL && (
-        <div
-          className={`menu__user-info ${
-            !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
-          }`}
-        >
-          <UserMenuButton
-            title={
-              userCityName
-                ? `${userCityName}. ${texts.changeCity}`
-                : texts.changeCityDefault
-            }
-            handleClick={onCityChangeClick}
-            sectionClass="mobile-link menu__user-info_center"
-          />
-        </div>
-      )}
+      {renderUserMenuButtons()}
 
       <button
         onClick={onBurgerButtonClick}
@@ -206,6 +167,41 @@ function NavBar({
       </ul>
     </nav>
   );
+
+  function renderLogoutButton() {
+    return (
+      <UserMenuButton
+        title={texts.logoutText}
+        sectionClass="mobile-link"
+        handleClick={onLogout}
+      />
+    );
+  }
+
+  function renderUserMenuButtons() {
+    return (
+      <div
+        className={`menu__user-info ${
+          !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
+        }`}
+      >
+        <UserMenuButton
+          title={
+            userCityName
+              ? `${userCityName}. ${texts.changeCity}`
+              : texts.changeCityDefault
+          }
+          handleClick={onCityChangeClick}
+          sectionClass={`mobile-link ${
+            !currentUser && pathname === PLACES_URL
+              ? 'menu__user-info_center'
+              : ''
+          }`}
+        />
+        {currentUser && renderLogoutButton()}
+      </div>
+    );
+  }
 }
 
 NavBar.propTypes = {

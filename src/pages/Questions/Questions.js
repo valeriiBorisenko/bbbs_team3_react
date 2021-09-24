@@ -1,7 +1,6 @@
-import './Questions.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import questionsPageTexts from '../../locales/questions-page-RU';
+import questionsPageTexts from './locales/RU';
 import {
   CurrentUserContext,
   ErrorsContext,
@@ -14,13 +13,20 @@ import {
   ERROR_CODES,
   ERROR_MESSAGES,
 } from '../../config/constants';
-import { changeCaseOfFirstLetter, questionForm } from '../../utils/utils';
+import { changeCaseOfFirstLetter } from '../../utils/utils';
+import questionForm from '../../utils/question-form';
 import {
   deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
 } from '../../utils/filter-tags';
 import getServerErrors from '../../utils/form-errors';
+import {
+  getQuestion,
+  getQuestionsPageData,
+  getQuestionsPageTags,
+  postQuestion,
+} from '../../api/questions-page';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -33,12 +39,7 @@ import {
   TitleH1,
   TitleH2,
 } from './index';
-import {
-  getQuestion,
-  getQuestionsPageData,
-  getQuestionsPageTags,
-  postQuestion,
-} from '../../api/questions-page';
+import './Questions.scss';
 
 const {
   headTitle,
@@ -168,10 +169,7 @@ function Questions() {
       })
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -203,10 +201,6 @@ function Questions() {
     if (isFiltersUsed) {
       debounceFiltration();
     }
-
-    return () => {
-      setIsChosenQuestionVisible(false);
-    };
   }, [isFiltersUsed]);
 
   // пагинация
@@ -266,58 +260,77 @@ function Questions() {
       .finally(() => setIsLoadingPage(false));
   }, [searchQuestionId]);
 
+  // глобальный лоадер
+  if ((!questionsPageData || !categories) && !isPageError) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="questions-page page__section fade-in">
+        {renderPageContent()}
+      </section>
+    </BasePage>
+  );
+
   // рендеринг
   // заглушка, если нет даты или ошибка
-  const renderAnimatedContainer = () => (
-    <AnimatedPageContainer
-      titleText={
-        isPageError ? ERROR_MESSAGES.generalErrorMessage.title : textStubNoData
-      }
-    />
-  );
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
+  }
 
   // форма вопросов
-  const renderQuestionForm = () => (
-    <>
-      <section className="add-question fade-in">
-        <TitleH2
-          sectionClass={`add-question__title ${questionFormState.titleClass}`}
-          title={questionFormState.title}
-        />
-        <form
-          className={`question-form ${questionFormState.formVisibilityClass}`}
-          onSubmit={(evt) => handleSubmit(evt)}
-          noValidate
-        >
-          <fieldset className="question-form__add-question">
-            <Input
-              id="questionsFormInput"
-              type="text"
-              name="question"
-              placeholder={formPlaceholder}
-              onChange={handleChange}
-              value={values?.question}
-              minLength={validationSettings.question.minLength}
-              maxLength={validationSettings.question.maxLength}
-              required
-              error={errors?.question}
-              sectionClass="input__question-form"
-            />
-            <Button
-              title={formSubmitButton}
-              color="black"
-              sectionClass="question-form__button"
-              isSubmittable
-              isDisabled={!isValid}
-            />
-          </fieldset>
-          <span className="form-error-message">{errorsString}</span>
-        </form>
-      </section>
-    </>
-  );
+  function renderQuestionForm() {
+    return (
+      <>
+        <section className="add-question fade-in">
+          <TitleH2
+            sectionClass={`add-question__title ${questionFormState.titleClass}`}
+            title={questionFormState.title}
+          />
+          <form
+            className={`question-form ${questionFormState.formVisibilityClass}`}
+            onSubmit={(evt) => handleSubmit(evt)}
+            noValidate
+          >
+            <fieldset className="question-form__add-question">
+              <Input
+                id="questionsFormInput"
+                type="text"
+                name="question"
+                placeholder={formPlaceholder}
+                onChange={handleChange}
+                value={values?.question}
+                minLength={validationSettings.question.minLength}
+                maxLength={validationSettings.question.maxLength}
+                required
+                error={errors?.question}
+                sectionClass="input__question-form"
+              />
+              <Button
+                title={formSubmitButton}
+                color="black"
+                sectionClass="question-form__button"
+                isSubmittable
+                isDisabled={!isValid}
+              />
+            </fieldset>
+            <span className="form-error-message">{errorsString}</span>
+          </form>
+        </section>
+      </>
+    );
+  }
 
-  const renderChosenQuestion = () => {
+  function renderChosenQuestion() {
     if (isChosenQuestionVisible && mainQuestion) {
       return (
         <li className="questions__list-item fade-in">
@@ -332,29 +345,31 @@ function Questions() {
     }
 
     return null;
-  };
+  }
 
-  const renderQuestionsContainer = () => (
-    <>
-      <ul className="questions">
-        {renderChosenQuestion()}
-        {questionsPageData.map((question) => (
-          <li
-            className="questions__list-item slide-bottom-up"
-            key={question?.id}
-          >
-            <CardQuestion
-              data={question}
-              sectionClass="card__questions_type_questions-page"
-              isQuestionsPage
-            />
-          </li>
-        ))}
-      </ul>
-    </>
-  );
+  function renderQuestionsContainer() {
+    return (
+      <>
+        <ul className="questions">
+          {renderChosenQuestion()}
+          {questionsPageData.map((question) => (
+            <li
+              className="questions__list-item slide-bottom-up"
+              key={question?.id}
+            >
+              <CardQuestion
+                data={question}
+                sectionClass="card__questions_type_questions-page"
+                isQuestionsPage
+              />
+            </li>
+          ))}
+        </ul>
+      </>
+    );
+  }
 
-  const renderQuestionsWithPaginate = () => {
+  function renderQuestionsWithPaginate() {
     if (isFiltersUsed) {
       return <Loader isPaginate />;
     }
@@ -372,10 +387,10 @@ function Questions() {
         )}
       </>
     );
-  };
+  }
 
   // главная функция рендеринга
-  const renderPageContent = () => {
+  function renderPageContent() {
     if (questionsPageData?.length > 0) {
       return (
         <>
@@ -403,20 +418,7 @@ function Questions() {
     }
 
     return null;
-  };
-
-  // глобальный лоадер
-  if ((!questionsPageData || !categories) && !isPageError) {
-    return <Loader isCentered />;
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="questions-page page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
-  );
 }
 
 export default Questions;

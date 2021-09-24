@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useParams } from 'react-router-dom';
-import getCatalogArticlePageData from '../../api/catalog-article-page';
-import catalogArticlePageTexts from '../../locales/catalog-article-page-RU';
-import { useScrollToTop } from '../../hooks';
-import { ERROR_MESSAGES } from '../../config/constants';
-import { CATALOG_URL } from '../../config/routes';
+import { useHistory, useParams } from 'react-router-dom';
+import { getCatalogArticlePageData } from '../../api/catalog-page';
+import catalogArticlePageTexts from './locales/RU';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
+import { CATALOG_URL, NOT_FOUND_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import {
   AnimatedPageContainer,
@@ -18,34 +17,44 @@ import './CatalogArticle.scss';
 
 function CatalogArticle() {
   const { articleId } = useParams();
+  const history = useHistory();
 
-  useScrollToTop([articleId]);
-
-  const { headTitle, headDescription } = catalogArticlePageTexts;
+  const { headTitle, headDescription, stubButtonText } =
+    catalogArticlePageTexts;
   const [catalogArticlePageData, setCatalogArticlePageData] = useState();
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
+  const nextPageLink = `/catalog/${catalogArticlePageData?.nextArticle?.id}`;
+
   useEffect(() => {
     setIsLoadingPage(true);
-    getCatalogArticlePageData({ articleId })
-      .then((data) => {
-        setCatalogArticlePageData(data);
-      })
-      .catch(() => setIsPageError(true))
-      .finally(() => {
-        setIsLoadingPage(false);
-      });
+    if (articleId) {
+      getCatalogArticlePageData({ articleId })
+        .then((data) => {
+          setCatalogArticlePageData(data);
+        })
+        .catch((err) => {
+          if (err.status === ERROR_CODES.notFound) history.push(NOT_FOUND_URL);
+          else setIsPageError(true);
+        })
+        .finally(() => {
+          setIsLoadingPage(false);
+        });
+    }
   }, [articleId]);
-  const nextPageLink = `/catalog/${catalogArticlePageData?.nextArticle?.id}`;
 
   if (isLoadingPage) {
     return <Loader isCentered />;
   }
 
   return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
+    <BasePage
+      headTitle={catalogArticlePageData?.title ?? headTitle}
+      headDescription={catalogArticlePageData?.description ?? headDescription}
+      scrollUpDeps={[articleId]}
+    >
       {renderPage()}
     </BasePage>
   );
@@ -56,13 +65,13 @@ function CatalogArticle() {
         <AnimatedPageContainer
           titleText={ERROR_MESSAGES.generalErrorMessage.title}
           urlBack={CATALOG_URL}
-          buttonText="Вернуться назад"
+          buttonText={stubButtonText}
           staticPage
         />
       );
     }
     return (
-      <div className="article page__section">
+      <div className="article page__section fade-in">
         <TitleH1
           title={catalogArticlePageData?.title}
           sectionClass="article__main-title"
@@ -74,14 +83,12 @@ function CatalogArticle() {
           <img
             src={`${staticImageUrl}/${catalogArticlePageData?.image}`}
             alt={catalogArticlePageData?.title}
-            className="article__image"
+            className="article__image scale-in"
           />
-          {catalogArticlePageData?.imageCaption ? (
+          {catalogArticlePageData?.imageCaption && (
             <figcaption className="caption article__figcaption">
-              {catalogArticlePageData?.imageCaption}
+              {catalogArticlePageData.imageCaption}
             </figcaption>
-          ) : (
-            ''
           )}
         </figure>
         <div className="article__container">

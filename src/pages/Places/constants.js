@@ -1,4 +1,4 @@
-import placesPageTexts from '../../locales/places-page-RU';
+import placesPageTexts from './locales/RU';
 
 const { ageFilterNames } = placesPageTexts;
 
@@ -27,6 +27,5 @@ export const ageFilters = [
 
 export const PAGE_SIZE_PAGINATE = {
   small: 8,
-  medium: 12,
   big: 12,
 };

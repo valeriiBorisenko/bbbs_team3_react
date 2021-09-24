@@ -1,14 +1,13 @@
-import './PopupArticle.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
-
 import { COLORS, localStChosenArticle } from '../../../config/constants';
 import {
   getLocalStorageData,
   removeLocalStorageData,
 } from '../../../hooks/useLocalStorage';
 import CardArticle from '../../Cards/CardArticle/CardArticle';
+import './PopupArticle.scss';
 
 const PopupArticle = ({ isOpen, onClose }) => {
   const article = getLocalStorageData(localStChosenArticle) || {};

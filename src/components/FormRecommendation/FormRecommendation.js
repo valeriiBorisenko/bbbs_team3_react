@@ -1,4 +1,3 @@
-import './FormRecommendation.scss';
 import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
@@ -7,6 +6,7 @@ import { regExpImages } from '../../config/constants';
 import { useFormWithValidation } from '../../hooks';
 import getServerErrors from '../../utils/form-errors';
 import { Button, ButtonRound, DropDownSelect, Input } from '../utils';
+import './FormRecommendation.scss';
 
 const {
   titlePlaceholder,
@@ -41,12 +41,13 @@ const validationSettings = {
 };
 
 const animationDelay = 600;
+const maxTabletWidth = '900px';
 
 function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
   const [textAreaPlaceholder, setTextAreaPlaceholder] = useState('');
 
   useEffect(() => {
-    const tablet = window.matchMedia('(max-width: 900px)');
+    const tablet = window.matchMedia(`(max-width: ${maxTabletWidth})`);
 
     const listener = () => {
       if (tablet.matches) setTextAreaPlaceholder(descPlaceholderMobile);

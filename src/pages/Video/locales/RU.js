@@ -1,4 +1,4 @@
-import { MAIN_PAGE_TITLE, VIDEO_TITLE } from '../config/routes';
+import { MAIN_PAGE_TITLE, VIDEO_TITLE } from '../../../config/routes';
 
 const videoPageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${VIDEO_TITLE}`,

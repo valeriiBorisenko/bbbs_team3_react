@@ -1,10 +1,10 @@
-import './ProfileEventCard.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 import { formatDate } from '../../../utils/utils';
-import { Card } from '../../utils/index';
+import { Card } from '../../utils';
+import './ProfileEventCard.scss';
 
 function ProfileEventCard({ data, onOpen, sectionClass }) {
   const startDay = formatDate(data?.startAt);

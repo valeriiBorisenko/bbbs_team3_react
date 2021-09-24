@@ -1,4 +1,4 @@
-import { MAIN_PAGE_TITLE, PROFILE_TITLE } from '../config/routes';
+import { MAIN_PAGE_TITLE, PROFILE_TITLE } from '../../../config/routes';
 
 const profilePageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${PROFILE_TITLE}`,

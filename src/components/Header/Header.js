@@ -21,11 +21,10 @@ function Header({ isTransparentOnTop }) {
   const { pathname } = useLocation();
 
   const { currentUser, updateUser } = useContext(CurrentUserContext);
-  const { openPopupCities, openPopupLogin, closeAllPopups } =
-    useContext(PopupsContext);
+  const { openPopupCities, openPopupLogin } = useContext(PopupsContext);
   const { cities } = useContext(CitiesContext);
 
-  const { handleLogout } = useAuth(updateUser, closeAllPopups);
+  const { handleLogout } = useAuth(updateUser);
 
   const [userCityName, setUserCityName] = useState('');
   let currentAnonymousCity;

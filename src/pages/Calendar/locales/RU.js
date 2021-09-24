@@ -1,4 +1,4 @@
-import { AFISHA_TITLE, MAIN_PAGE_TITLE } from '../config/routes';
+import { AFISHA_TITLE, MAIN_PAGE_TITLE } from '../../../config/routes';
 
 const calendarPageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${AFISHA_TITLE}`,

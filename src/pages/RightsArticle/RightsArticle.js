@@ -1,21 +1,22 @@
-import './RightsArticle.scss';
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useScrollToTop } from '../../hooks';
+import { getRightsArticle } from '../../api/rights-page';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
+import { NOT_FOUND_URL, RIGHTS_URL } from '../../config/routes';
 import {
   AnimatedPageContainer,
   BasePage,
   Loader,
   NextArticleLink,
 } from './index';
-import { getRightsArticle } from '../../api/rights-page';
-import { ERROR_MESSAGES } from '../../config/constants';
-import { RIGHTS_URL } from '../../config/routes';
+import './RightsArticle.scss';
 
 function RightsArticle() {
   const { articleId } = useParams();
   const { state } = useLocation();
+  const history = useHistory();
 
   useScrollToTop([articleId]);
 
@@ -27,7 +28,10 @@ function RightsArticle() {
   const getArticleData = ({ id, tags }) => {
     getRightsArticle({ id, tags })
       .then((res) => setArticleData(res))
-      .catch(() => setIsPageError(true))
+      .catch((err) => {
+        if (err.status === ERROR_CODES.notFound) history.push(NOT_FOUND_URL);
+        else setIsPageError(true);
+      })
       .finally(() => {
         setIsLoadingPage(false);
       });

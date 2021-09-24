@@ -1,4 +1,4 @@
-import { MAIN_PAGE_TITLE, QUESTIONS_TITLE } from '../config/routes';
+import { MAIN_PAGE_TITLE, QUESTIONS_TITLE } from '../../../config/routes';
 
 const questionsPageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${QUESTIONS_TITLE}`,
@@ -8,7 +8,6 @@ const questionsPageTexts = {
     'В данный момент страница вопросов пуста. Возвращайтесь позже!',
   formPlaceholder: 'Введите вопрос',
   formSubmitButton: 'Отправить',
-  loadMoreButton: 'Загрузить еще',
 };
 
 export default questionsPageTexts;

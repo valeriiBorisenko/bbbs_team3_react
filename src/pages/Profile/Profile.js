@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import './Profile.scss';
-import profilePageTexts from '../../locales/profile-page-RU';
+import profilePageTexts from './locales/RU';
 import { ErrorsContext, PopupsContext } from '../../contexts';
 import { useEventBooking } from '../../hooks';
 import {
@@ -33,6 +32,7 @@ import {
   TitleH2,
   UserMenuButton,
 } from './index';
+import './Profile.scss';
 
 const {
   headTitle,

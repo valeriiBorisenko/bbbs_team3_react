@@ -1,11 +1,11 @@
-import './PopupRecommendSuccess.scss';
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
 import animationRecommendSuccess from '../../../assets/animation/ill_popup_recommend-success.json';
 import texts from './locales/RU';
 import Popup from '../Popup/Popup';
-import { Button } from '../../utils/index';
+import { Button } from '../../utils';
+import './PopupRecommendSuccess.scss';
 
 function PopupRecommendSuccess({ isOpen, onClose }) {
   const animationContainer = useRef(null);

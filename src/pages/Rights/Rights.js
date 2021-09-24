@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import rightsPageTexts from '../../locales/rights-page-RU';
-import './Rights.scss';
+import rightsPageTexts from './locales/RU';
 import { ErrorsContext, PopupsContext } from '../../contexts';
 import { useDebounce } from '../../hooks';
 import {
@@ -26,6 +25,7 @@ import {
   TagsList,
   TitleH1,
 } from './index';
+import './Rights.scss';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -34,8 +34,8 @@ const PAGE_SIZE_PAGINATE = {
 };
 
 const maxScreenWidth = {
-  small: '1399px',
-  large: '1640px',
+  small: 1399,
+  medium: 1640,
 };
 
 const { headTitle, headDescription, title, textStubNoData } = rightsPageTexts;
@@ -179,10 +179,10 @@ const Rights = () => {
   // Резайз пагинации при первой загрузке
   useEffect(() => {
     const smallQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.small})`
+      `(max-width: ${maxScreenWidth.small}px)`
     );
     const largeQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.large})`
+      `(max-width: ${maxScreenWidth.medium}px)`
     );
 
     const listener = () => {

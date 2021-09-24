@@ -2,24 +2,24 @@ import { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import {
-  CurrentUserContext,
   CitiesContext,
+  CurrentUserContext,
   ErrorsContext,
   PopupsContext,
-} from '../../../contexts/index';
+} from '../../../contexts';
 import { updateUserProfile } from '../../../api/user';
 import {
-  localStUserCity,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
+  localStUserCity,
 } from '../../../config/constants';
 import {
   dispatchLocalStorageEvent,
   getLocalStorageData,
 } from '../../../hooks/useLocalStorage';
-import { useDebounce } from '../../../hooks/index';
+import { useDebounce } from '../../../hooks';
 import Popup from '../Popup/Popup';
-import { TitleH2, ModificatedScrollbars } from '../../utils/index';
+import { ModificatedScrollbars, TitleH2 } from '../../utils';
 import './PopupCities.scss';
 
 function PopupCities({ isOpen, onClose }) {
@@ -53,10 +53,7 @@ function PopupCities({ isOpen, onClose }) {
           onClose();
         })
         .catch(() => {
-          setError({
-            title: ERROR_MESSAGES.citiesErrorMessage.title,
-            button: ERROR_MESSAGES.citiesErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.citiesErrorMessage);
           openPopupError();
         });
     } else {
@@ -74,21 +71,6 @@ function PopupCities({ isOpen, onClose }) {
       return () => window.removeEventListener('keyup', closePopupOnEsc);
     }
   }, [defaultCity]);
-
-  const renderCityItem = (city) => (
-    <li className="cities__list-item" key={city?.id}>
-      <button
-        className={`cities__city ${
-          currentUserCity === city?.id ? 'cities__city_current' : ''
-        }`}
-        type="button"
-        value={city?.id}
-        onClick={(evt) => debounceSubmitCity(evt)}
-      >
-        {city?.name}
-      </button>
-    </li>
-  );
 
   return (
     <Popup
@@ -119,6 +101,23 @@ function PopupCities({ isOpen, onClose }) {
       </div>
     </Popup>
   );
+
+  function renderCityItem(city) {
+    return (
+      <li className="cities__list-item" key={city?.id}>
+        <button
+          className={`cities__city ${
+            currentUserCity === city?.id ? 'cities__city_current' : ''
+          }`}
+          type="button"
+          value={city?.id}
+          onClick={(evt) => debounceSubmitCity(evt)}
+        >
+          {city?.name}
+        </button>
+      </li>
+    );
+  }
 }
 
 PopupCities.propTypes = {

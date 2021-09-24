@@ -1,17 +1,15 @@
 import './SearchButton.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { useContext } from 'react';
-// import { PopupsContext } from '../../../contexts/index';
+import texts from './locales/RU';
 
 function SearchButton({ handleClickButton }) {
-  // const { openPopupInfoTooltip } = useContext(PopupsContext);
   return (
     <button
       className="search-button search__button"
       type="button"
-      aria-label="Поиск"
-      title="Поиск"
+      aria-label={texts.ariaLabelText}
+      title={texts.ariaLabelText}
       onClick={handleClickButton}
     />
   );

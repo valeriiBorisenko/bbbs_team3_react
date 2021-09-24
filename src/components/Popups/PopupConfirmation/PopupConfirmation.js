@@ -1,12 +1,12 @@
-import './PopupConfirmation.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
-import { useEventBooking } from '../../../hooks/index';
+import { useEventBooking } from '../../../hooks';
 import { localStAfishaEvent } from '../../../config/constants';
 import Popup from '../Popup/Popup';
-import { Button, TitleH2 } from '../../utils/index';
+import { Button, TitleH2 } from '../../utils';
+import './PopupConfirmation.scss';
 
 function PopupConfirmation({ isOpen, onClose }) {
   const { registerOnEvent } = useEventBooking();

@@ -1,7 +1,7 @@
-import './PopupPlace.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
+import './PopupPlace.scss';
 
 import { COLORS, localStChosenPlace } from '../../../config/constants';
 import CardPlace from '../../Cards/CardPlace/CardPlace';
@@ -12,7 +12,7 @@ import {
 } from '../../../hooks/useLocalStorage';
 
 const PopupPlace = ({ isOpen, onClose }) => {
-  const activityTypes = useActivityTypes();
+  const { activityTypesSimplified } = useActivityTypes();
   const place = getLocalStorageData(localStChosenPlace) || {};
 
   const getRandomColor = (max) => Math.floor(Math.random() * max);
@@ -33,7 +33,7 @@ const PopupPlace = ({ isOpen, onClose }) => {
     >
       <CardPlace
         data={place}
-        activityTypes={activityTypes}
+        activityTypesSimplified={activityTypesSimplified}
         color={COLORS[getRandomColor(COLORS.length)]}
         sectionClass="card-container_type_article scale-in"
       />

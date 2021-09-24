@@ -1,6 +1,5 @@
-import './Catalog.scss';
 import { useEffect, useState } from 'react';
-import catalogPageTexts from '../../locales/catalog-page-RU';
+import catalogPageTexts from './locales/RU';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -10,13 +9,19 @@ import {
   TitleH1,
   TitleH2,
 } from './index';
-import getCatalogPageData from '../../api/catalog-page';
+import { getCatalogPageData } from '../../api/catalog-page';
 import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
+import './Catalog.scss';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
   medium: 9,
   big: 16,
+};
+
+const maxScreenWidth = {
+  small: 1399,
+  medium: 1640,
 };
 
 const { headTitle, headDescription, title, subtitle, textStubNoData } =
@@ -59,8 +64,12 @@ function Catalog() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
+    const largeQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.medium}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -81,6 +90,16 @@ function Catalog() {
       largeQuery.removeEventListener('change', listener);
     };
   }, []);
+
+  if (isLoadingPage) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      {renderPageContent()}
+    </BasePage>
+  );
 
   function renderCards() {
     return (
@@ -124,16 +143,6 @@ function Catalog() {
       </section>
     );
   }
-
-  if (isLoadingPage) {
-    return <Loader isCentered />;
-  }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {renderPageContent()}
-    </BasePage>
-  );
 }
 
 export default Catalog;

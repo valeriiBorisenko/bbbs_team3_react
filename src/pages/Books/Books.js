@@ -1,7 +1,6 @@
-import './Books.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import booksPageTexts from '../../locales/books-page-RU';
+import booksPageTexts from './locales/RU';
 import { useDebounce } from '../../hooks';
 import {
   getBook,
@@ -17,7 +16,6 @@ import {
   TagsList,
   TitleH1,
 } from './index';
-
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
   ALL_CATEGORIES,
@@ -32,11 +30,17 @@ import {
 } from '../../utils/filter-tags';
 import { ErrorsContext, PopupsContext } from '../../contexts';
 import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import './Books.scss';
 
 const PAGE_SIZE_PAGINATE = {
   mobile: 8,
   medium: 12,
   big: 16,
+};
+
+const maxScreenWidth = {
+  small: 1216,
+  medium: 1640,
 };
 
 const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
@@ -89,10 +93,7 @@ function Books() {
       .then((results) => setBooksPageData(results))
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -180,8 +181,12 @@ function Books() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1216px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
+    const largeQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.medium}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -202,41 +207,20 @@ function Books() {
     };
   }, []);
 
-  // контейнер заглушки
-  function renderAnimatedContainer() {
-    return <AnimatedPageContainer titleText={textStubNoData} />;
+  // глобальный лоадер
+  if (isLoading) {
+    return <Loader isCentered />;
   }
 
-  // контейнер с книгами
-  const renderBooksContainer = () => {
-    if (!booksPageData && !isLoading) {
-      return renderAnimatedContainer();
-    }
-    return (
-      <>
-        {isLoadingPaginate ? (
-          <Loader isPaginate />
-        ) : (
-          <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
-            {booksPageData.map((books) => (
-              <CardBook key={books.id} data={books} sectionClass="scale-in" />
-            ))}
-          </ul>
-        )}
-        {pageCount > 1 && (
-          <Paginate
-            sectionClass="cards-section__pagination"
-            pageCount={pageCount}
-            value={pageNumber}
-            onChange={setPageNumber}
-          />
-        )}
-      </>
-    );
-  };
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="books page__section fade-in">
+        {renderPageContent()}
+      </section>
+    </BasePage>
+  );
 
-  // главная функция рендеринга
-  const renderPageContent = () => {
+  function renderPageContent() {
     if (isPageError) {
       return (
         <AnimatedPageContainer
@@ -261,20 +245,39 @@ function Books() {
         {isFiltersUsed ? <Loader isPaginate /> : renderBooksContainer()}
       </>
     );
-  };
-
-  // глобальный лоадер
-  if (isLoading) {
-    return <Loader isCentered />;
   }
 
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="books page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
-  );
+  function renderBooksContainer() {
+    if (!booksPageData && !isLoading) {
+      return renderAnimatedContainer();
+    }
+    return (
+      <>
+        {isLoadingPaginate ? (
+          <Loader isPaginate />
+        ) : (
+          <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
+            {booksPageData.map((books) => (
+              <CardBook key={books.id} data={books} sectionClass="scale-in" />
+            ))}
+          </ul>
+        )}
+        {pageCount > 1 && (
+          <Paginate
+            sectionClass="cards-section__pagination"
+            pageCount={pageCount}
+            value={pageNumber}
+            onChange={setPageNumber}
+          />
+        )}
+      </>
+    );
+  }
+
+  // контейнер заглушки
+  function renderAnimatedContainer() {
+    return <AnimatedPageContainer titleText={textStubNoData} />;
+  }
 }
 
 export default Books;

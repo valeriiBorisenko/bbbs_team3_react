@@ -1,5 +1,5 @@
-import { bbbsLinks } from '../utils/external-links';
-import { ABOUT_US_TITLE, MAIN_PAGE_TITLE } from '../config/routes';
+import { bbbsLinks } from '../../../utils/external-links';
+import { ABOUT_US_TITLE, MAIN_PAGE_TITLE } from '../../../config/routes';
 
 const aboutUsTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${ABOUT_US_TITLE}`,

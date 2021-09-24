@@ -1,4 +1,4 @@
-import { BOOKS_TITLE, MAIN_PAGE_TITLE } from '../config/routes';
+import { BOOKS_TITLE, MAIN_PAGE_TITLE } from '../../../config/routes';
 
 const booksPageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${BOOKS_TITLE}`,

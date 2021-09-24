@@ -17,7 +17,7 @@ import {
   RightsArticle,
   Stories,
   Video,
-} from '../pages/index';
+} from '../pages';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import {
   ABOUT_US_URL,

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Rubric } from '../../utils/index';
+import { Rubric } from '../../utils';
 import CardFigure from '../CardFigure/CardFigure';
 import './CardRights.scss';
 

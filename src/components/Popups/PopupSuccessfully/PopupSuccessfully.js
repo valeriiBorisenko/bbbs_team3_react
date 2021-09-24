@@ -1,6 +1,5 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import './PopupSuccessfully.scss';
 import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
 import animationSuccess from '../../../assets/animation/ill_popup_success.json';
@@ -10,7 +9,8 @@ import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 import Popup from '../Popup/Popup';
-import { TitleH2, Button } from '../../utils/index';
+import { Button, TitleH2 } from '../../utils';
+import './PopupSuccessfully.scss';
 
 const { popupTitle, paragraph, buttonTextCalendarPage, buttonTextDefault } =
   texts;

@@ -4,6 +4,7 @@ import './NextArticleLink.scss';
 
 function NextArticleLink({ text, href, sectionClass, onClick }) {
   const classNames = ['next-article-link', sectionClass].join(' ').trim();
+
   return (
     <Link className={classNames} to={href} onClick={onClick}>
       <span className="next-article-link__text">{text}</span>

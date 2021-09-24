@@ -1,4 +1,3 @@
-import './PopupBook.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
@@ -8,6 +7,7 @@ import {
   removeLocalStorageData,
 } from '../../../hooks/useLocalStorage';
 import { localStChosenBook } from '../../../config/constants';
+import './PopupBook.scss';
 
 const PopupBook = ({ isOpen, onClose }) => {
   const book = getLocalStorageData(localStChosenBook) || {};

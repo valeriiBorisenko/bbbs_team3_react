@@ -1,4 +1,4 @@
-import { NOT_FOUND_TITLE } from '../config/routes';
+import { NOT_FOUND_TITLE } from '../../../config/routes';
 
 const page404Texts = {
   headTitle: NOT_FOUND_TITLE,
