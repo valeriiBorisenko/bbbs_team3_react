@@ -93,7 +93,11 @@ function Search({
   }, [isOpenSearch]);
 
   return (
-    <form className="search" name="search-form">
+    <form
+      className="search"
+      name="search-form"
+      onSubmit={(evt) => evt.preventDefault()}
+    >
       <SearchButton
         isOpenSearch={isOpenSearch}
         handleClickButton={handleClickButton}

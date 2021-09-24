@@ -31,7 +31,7 @@
     "eject": "react-scripts eject",
     "prettier": "prettier --write src/**/*.js",
     "lint": "eslint --debug src/",
-    "lint:fix": "eslint --debug src/ --fix",
+    "lint:fix": "eslint --debug src/ --fix"
   },
   "husky": {
     "hooks": {
