@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
-import './CardsSectionWithLines.scss';
 import { useEffect, useState } from 'react';
-import { Paginate, Loader } from '../utils/index';
+import { Loader, Paginate } from '../utils';
 import renderThoseDamnedLines from '../../utils/render-lines';
+import './CardsSectionWithLines.scss';
+
+const maxTabletWidth = 900;
 
 function CardsSectionWithLines({
   pageCount,
@@ -17,7 +19,7 @@ function CardsSectionWithLines({
   const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
-    const tablet = window.matchMedia('(max-width: 900px)');
+    const tablet = window.matchMedia(`(max-width: ${maxTabletWidth}px)`);
 
     const listener = () => {
       if (tablet.matches) setIsTablet(true);
@@ -35,7 +37,7 @@ function CardsSectionWithLines({
   return (
     <>
       {isLoading ? (
-        <Loader isNested />
+        <Loader isPaginate />
       ) : (
         <>
           <section className={`cards-section ${sectionClass}`}>

@@ -49,6 +49,14 @@
   &_small-grid {
     margin: 72px auto;
   }
+
+  &_paginate {
+    min-height: 60vh;
+
+    & .spinner__container {
+      margin: 150px auto;
+    }
+  }
 }
 
 @include atDesktop1199 {
@@ -64,6 +72,22 @@
     &_small-grid {
       margin: 81px auto;
     }
+
+    &_paginate {
+      min-height: 35vh;
+
+      & .spinner__container {
+        margin: 100px auto;
+      }
+    }
+  }
+}
+
+@include atTabletL {
+  .spinner {
+    &_small-grid {
+      margin: 25px auto;
+    }
   }
 }
 
@@ -72,9 +96,13 @@
     &_nested {
       margin: 50px auto;
     }
+  }
+}
 
-    &_small-grid {
-      margin: 25px auto;
+@include atMobileL {
+  .spinner {
+    &_paginate {
+      min-height: 80vh;
     }
   }
 }
@@ -105,6 +133,7 @@
   top: 65px;
   animation-delay: -0.42s;
 }
+
 //
 .spinner__circle_4 {
   left: 65px;
@@ -117,6 +146,7 @@
   top: 5px;
   animation-delay: -0.17s;
 }
+
 //
 .spinner__circle_2 {
   right: 12px;
@@ -129,6 +159,7 @@
   bottom: 35px;
   animation-delay: -0.5s;
 }
+
 //
 .spinner__circle_3 {
   right: 33px;
@@ -141,6 +172,7 @@
   bottom: 14px;
   animation-delay: -0.58s;
 }
+
 //
 .spinner__circle_8 {
   left: 12px;
@@ -153,6 +185,7 @@
   top: 35px;
   animation-delay: 0s;
 }
+
 //
 .spinner__circle_9 {
   left: 33px;

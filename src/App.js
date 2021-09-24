@@ -1,33 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './App.scss';
 import { HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import Router from './navigation/Router';
-import { MOVIES_URL, VIDEO_URL } from './config/routes';
-import { localStChosenVideo } from './config/constants';
 import Loader from './components/utils/Loader/Loader';
 // попапы
 import {
-  PopupConfirmation,
-  PopupSuccessfully,
   PopupAboutEvent,
-  PopupError,
+  PopupArticle,
+  PopupBook,
   PopupCities,
+  PopupConfirmation,
+  PopupError,
   PopupLogin,
+  PopupPlace,
   PopupRecommendSuccess,
+  PopupSuccessfully,
   PopupVideo,
-  PopupInfoTooltip,
-} from './components/Popups/index';
+} from './components/Popups';
 // логины, авторизация
 import {
-  CurrentUserContext,
   CitiesContext,
-  PopupsContext,
+  CurrentUserContext,
   ErrorsContext,
-} from './contexts/index';
+  PopupsContext,
+} from './contexts';
 // хуки
-import { useCities, useAuth } from './hooks/index';
-import { removeLocalStorageData } from './hooks/useLocalStorage';
+import { useAuth, useCities } from './hooks';
 
 function App() {
   const { pathname } = useLocation();
@@ -43,7 +42,9 @@ function App() {
   const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
     useState(false);
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
+  const [isPlacePopupOpen, setIsPlacePopupOpen] = useState(false);
+  const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
 
   const [isWithoutRegister, setIsWithoutRegister] = useState(false);
 
@@ -53,11 +54,10 @@ function App() {
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsPopupRecommendSuccessOpen(false);
-    setIsInfoTooltipOpen(false);
-  }
-
-  function openPopupInfoTooltip() {
-    setIsInfoTooltipOpen(true);
+    setIsVideoPopupOpen(false);
+    setIsBookPopupOpen(false);
+    setIsPlacePopupOpen(false);
+    setIsArticlePopupOpen(false);
   }
 
   function openPopupConfirmation() {
@@ -110,22 +110,61 @@ function App() {
     setIsVideoPopupOpen(true);
   }
 
-  function closePopupVideo() {
-    removeLocalStorageData(localStChosenVideo);
-    setIsVideoPopupOpen(false);
+  function openPopupBook() {
+    setIsBookPopupOpen(true);
   }
+
+  function openPopupPlace() {
+    setIsPlacePopupOpen(true);
+  }
+
+  function openPopupArticle() {
+    setIsArticlePopupOpen(true);
+  }
+
+  // контекст попапов
+  const popupsContextValue = {
+    closeAllPopups,
+    closePopupLogin,
+    openPopupConfirmation,
+    openPopupSuccessfully,
+    openPopupAboutEvent,
+    openPopupError,
+    openPopupCities,
+    openPopupLogin,
+    openPopupRecommendSuccess,
+    openPopupVideo,
+    openPopupBook,
+    openPopupPlace,
+    openPopupArticle,
+  };
 
   // текущий юзер/контекст
   const [currentUser, setCurrentUser] = useState(null);
   const updateUser = (value) => setCurrentUser(value);
 
+  const currentUserContextValue = useMemo(
+    () => ({ currentUser, updateUser }),
+    [currentUser]
+  );
+
   // список городов/контекст
   const { cities, defaultCity } = useCities();
 
-  // серверные ошибки контекст
+  const citiesContextValue = useMemo(
+    () => ({ cities, defaultCity }),
+    [cities, defaultCity]
+  );
+
+  // серверные ошибки/контекст
   const [serverError, setServerError] = useState(null);
   const setError = (value) => setServerError(value);
   const clearError = () => setServerError(null);
+
+  const errorsContextValue = useMemo(
+    () => ({ serverError, setError, clearError }),
+    [serverError]
+  );
 
   const { isCheckingToken, checkToken } = useAuth(updateUser);
 
@@ -133,15 +172,12 @@ function App() {
     checkToken();
   }, []);
 
-  // закрытие всех попапов при смене страницы
+  // закрытие всех попапов при смене страницы, очистка ошибок
   useEffect(() => {
-    // без проверки попап с видео не откроется при редиректе
-    if (pathname !== MOVIES_URL && pathname !== VIDEO_URL) {
-      closePopupVideo();
-    }
     closeAllPopups();
     closePopupError();
     closePopupCities();
+    clearError();
   }, [pathname]);
 
   // эффект закрытия модалок по Escape
@@ -149,37 +185,16 @@ function App() {
     window.addEventListener('keyup', (evt) => {
       if (evt.key === 'Escape') {
         closeAllPopups();
-        closePopupVideo();
       }
     });
   }, []);
 
-  useEffect(() => {
-    window.addEventListener('redirectToPageAndOpenPopup', openPopupVideo);
-    return () =>
-      window.removeEventListener('redirectToPageAndOpenPopup', openPopupVideo);
-  }, []);
-
   return (
     <HelmetProvider>
-      <CitiesContext.Provider value={{ cities, defaultCity }}>
-        <CurrentUserContext.Provider value={{ currentUser, updateUser }}>
-          <ErrorsContext.Provider value={{ serverError, setError, clearError }}>
-            <PopupsContext.Provider
-              value={{
-                closeAllPopups,
-                closePopupLogin,
-                openPopupConfirmation,
-                openPopupSuccessfully,
-                openPopupAboutEvent,
-                openPopupError,
-                openPopupCities,
-                openPopupLogin,
-                openPopupRecommendSuccess,
-                openPopupVideo,
-                openPopupInfoTooltip,
-              }}
-            >
+      <CitiesContext.Provider value={citiesContextValue}>
+        <CurrentUserContext.Provider value={currentUserContextValue}>
+          <ErrorsContext.Provider value={errorsContextValue}>
+            <PopupsContext.Provider value={popupsContextValue}>
               <div className="page">
                 {!isCheckingToken ? <Router /> : <Loader isCentered />}
                 <PopupConfirmation
@@ -213,10 +228,15 @@ function App() {
                 />
                 <PopupVideo
                   isOpen={isVideoPopupOpen}
-                  onClose={closePopupVideo}
+                  onClose={closeAllPopups}
                 />
-                <PopupInfoTooltip
-                  isOpen={isInfoTooltipOpen}
+                <PopupBook isOpen={isBookPopupOpen} onClose={closeAllPopups} />
+                <PopupPlace
+                  isOpen={isPlacePopupOpen}
+                  onClose={closeAllPopups}
+                />
+                <PopupArticle
+                  isOpen={isArticlePopupOpen}
                   onClose={closeAllPopups}
                 />
               </div>

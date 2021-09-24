@@ -2,8 +2,8 @@ import { months, weekdays } from '../config/constants';
 
 // форматирует секунды в часы, минуты и секунды, принимает на вход number
 export const formatDuration = (duration) => {
-  const hours = parseInt(duration / (60 * 60), 10);
-  const minutes = parseInt((duration / 60) % 60, 10);
+  const hours = Math.floor(duration / (60 * 60));
+  const minutes = Math.floor((duration / 60) % 60);
   const seconds = duration % 60;
   const format = (value) => (value < 10 ? `0${value}` : `${value}`);
 
@@ -18,8 +18,9 @@ export const formatDuration = (duration) => {
 export const formatDate = (date) => {
   const parsedDate = new Date(date);
   let day = parsedDate.getDate();
+  let month = parsedDate.getMonth() + 1;
   const weekdayName = weekdays[parsedDate.getDay()];
-  const monthName = months[parsedDate.getMonth() + 1]; // потому что months начинается с 1, а не 0
+  const monthName = months[parsedDate.getMonth()];
   const hour = String(parsedDate.getHours());
   const year = String(parsedDate.getFullYear());
   let minutes = parsedDate.getMinutes();
@@ -32,9 +33,14 @@ export const formatDate = (date) => {
     day = `0${day}`;
   }
 
+  if (month < 10) {
+    month = `0${month}`;
+  }
+
   return {
     year,
     day,
+    month,
     weekdayName,
     monthName,
     hour,
@@ -80,26 +86,6 @@ export const formatWordCase = (remainSeats) => {
   return 'мест';
 };
 
-export const questionForm = {
-  beforeSubmit: {
-    title:
-      'Если вы не нашли ответ на свой вопрос — напишите нам, и мы включим его в список',
-    titleClass: '',
-    formVisibilityClass: '',
-  },
-  successSubmit: {
-    title:
-      'Спасибо! Мы приняли ваш вопрос. Ваш вопрос опубликуют, как только он пройдет проверку и модератор даст на него ответ!',
-    titleClass: 'add-question__title_success',
-    formVisibilityClass: 'question-form_invisible',
-  },
-  errorSubmit: {
-    title:
-      'Произошла ошибка при отправке вашего вопроса! Попробуйте повторить позже или обратиться в службу поддержки!',
-    titleClass: 'add-question__title_error',
-  },
-};
-
 // меняет в слове первую букву на заглавную
 export const changeCaseOfFirstLetter = (str) => {
   if (!str) return str;
@@ -109,8 +95,11 @@ export const changeCaseOfFirstLetter = (str) => {
 
 // управление падежами месяцев
 export const formatMonthsGenitiveCase = (month) => {
-  if (month === 'март' || month === 'август') return `${month}а`;
-  return `${month.slice(0, -1)}я`;
+  if (month) {
+    if (month === 'март' || month === 'август') return `${month}а`;
+    return `${month.slice(0, -1)}я`;
+  }
+  return month;
 };
 
 export const randomizeArray = (arr, size) => {
@@ -121,4 +110,16 @@ export const randomizeArray = (arr, size) => {
     );
   }
   return arr;
+};
+
+export const formatPhoneNumber = (phoneNum) => {
+  if (phoneNum?.length === 12) {
+    const str1 = phoneNum.slice(0, 2);
+    const str2 = phoneNum.slice(2, 5);
+    const str3 = phoneNum.slice(5, 8);
+    const str4 = phoneNum.slice(8, 10);
+    const str5 = phoneNum.slice(10, 12);
+    return `${str1} ${str2} ${str3}-${str4}-${str5}`;
+  }
+  return phoneNum;
 };

@@ -1,0 +1,174 @@
+@import './styles/utils.scss';
+
+.search {
+  display: flex;
+
+  &__options {
+    display: none;
+    width: 100%;
+    margin-left: 10px;
+
+    &_visible {
+      display: block;
+    }
+  }
+
+  &__container-input {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__input-wrap {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  @keyframes animate-border-from-l-to-r {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  &__input-border {
+    display: block;
+    width: 0;
+    height: 1px;
+    background-color: $black;
+    animation: animate-border-from-l-to-r .5s ease-out forwards;
+  }
+
+  &__close-button {
+    background-image: url('../../assets/popup_close.svg');
+    width: 20px;
+    height: 20px;
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-position: center;
+    outline: none;
+    border: none;
+    color: $blue;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0;
+    animation: fade-in .5s ease-out .4s forwards;
+  }
+
+
+  &__input {
+    width: calc(100% - 3px); //для единой границы при наличии скроллбара
+    border: none;
+    outline: none;
+    background-color: transparent;
+
+    &::placeholder {
+      color: $lightGray;
+    }
+  }
+
+  &__content_type_ask {
+    margin: 44px 0 0 0;
+    font-family: $protoGrotesk;
+    font-size: 44px;
+    color: $lightGray;
+    opacity: 0;
+    animation: fade-in .5s ease-out .3s forwards;
+  }
+
+  &__content_type_void {
+    margin: 44px 0 0 0;
+    font-family: $protoGrotesk;
+    font-size: 23px;
+    color: $black;
+    opacity: 0;
+    animation: fade-in .5s ease-out .3s forwards;
+  }
+
+  &__option-list {
+    margin-top: 44px;
+    padding: 0;
+    list-style-type: none;
+    max-height: 75vh;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgba($lightGray, .6) transparent;
+    &::-webkit-scrollbar {
+      width: 3px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($lightGray, .6);
+      border-radius: 5px;
+    }
+  }
+
+  &__option-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 0.5px solid $lightGray;
+    overflow: hidden;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  &__link {
+    display: inline-block;
+    margin: 0;
+  }
+
+  &__title-link {
+    display: inline-block;
+    max-width: 670px;
+    margin: 0 10px 10px 0;
+    text-decoration: none;
+    transition: .3s ease;
+
+    &:hover {
+      color: $blue;
+    }
+  }
+
+  @include atDesktop1279 {
+    &__options {
+      margin: 0;
+      position: absolute;
+      top: 40px;
+      left: 0;
+    }
+
+    &__option-list {
+      margin-top: 30px;
+      max-height: 70vh;
+    }
+  }
+
+  @include atDesktop1024 {
+    &__option-item {
+      margin-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    &__title-link {
+      margin-bottom: 5px;
+    }
+  }
+
+  @include atMobile {
+    &__content_type_ask {
+      margin: 22px 0 0 0;
+      font-size: 28px;
+    }
+
+    &__content_type_void {
+      margin: 22px 0 0 0;
+    }
+  }
+}

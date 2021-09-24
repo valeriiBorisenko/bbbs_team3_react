@@ -20,6 +20,7 @@
 
   &__container {
     display: flex;
+    width: 100%;
     padding: 50px 100px;
     border-radius: 30px;
     background-color: $white;
@@ -33,13 +34,13 @@
     transition: .3s ease-out;
 
     &_type_sign-in {
-      width: 770px;
+      max-width: 770px;
       overflow: hidden;
     }
 
     &_type_calendar {
       min-height: 670px;
-      width: 770px;
+      max-width: 770px;
     }
 
     &_type_confirm-diary {
@@ -48,11 +49,6 @@
       max-width: 470px;
       max-height: 238px;
       padding: 30px;
-    }
-
-    &_type_video {
-      transform: rotateX(80deg) scale(1);
-      transition: .5s ease-out;
     }
   }
 
@@ -96,7 +92,14 @@
   outline: none;
   border: none;
   color: $blue;
-  cursor: pointer;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &_type_video {
+    top: 10px;
+  }
 }
 
 .popup__title {
@@ -122,8 +125,13 @@
 @include atDesktop1024 {
   .popup__container {
     padding: 50px;
-    width: 570px;
-    min-height: 470px;
+    max-width: 570px;
+    margin: 0 15px;
+
+    &_type_calendar {
+      margin: 0 60px;
+      min-height: 470px;
+    }
 
     &_type_confirm-diary {
       width: 100%;
@@ -135,14 +143,26 @@
   }
 }
 
+@include atTabletL {
+  .popup__close {
+    &_type_video {
+      right: 5px;
+    }
+  }
+}
+
 @include atMobileL {
   .popup__close {
     top: 15px;
     right: 15px;
+
+    &_type_video {
+      top: 5px;
+      right: 5px;
+    }
   }
 
   .popup__container {
-    width: 450px;
     padding: 60px 15px 30px;
 
     &_type_sign-in {
@@ -157,10 +177,12 @@
 
 @include atMobile {
   .popup__container {
-    width: 290px;
-
     &_type_cities {
       max-width: 320px;
+    }
+
+    &_type_calendar {
+      margin: 0 15px;
     }
   }
 }

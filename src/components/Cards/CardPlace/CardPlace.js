@@ -1,11 +1,10 @@
-import './CardPlace.scss';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { PLACES_URL } from '../../../config/routes';
 import { staticImageUrl } from '../../../config/config';
-import { Rubric, TitleH2, Card, Caption } from '../../utils';
+import { PLACES_TITLE } from '../../../config/routes';
+import { Caption, Card, Rubric, TitleH2 } from '../../utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
+import './CardPlace.scss';
 
 function CardPlace({
   data: {
@@ -19,7 +18,7 @@ function CardPlace({
     age,
     activityType,
   },
-  activityTypes,
+  activityTypesSimplified,
   color,
   sectionClass,
   isBig,
@@ -32,60 +31,40 @@ function CardPlace({
     chosenTagText,
     activityTypeDefault,
   } = texts;
+
   const cardColor = isBig ? 'yellow' : color;
   const cardSize = isBig ? 'card-place_main' : '';
-  const sex = gender === 'male' ? genderMale : genderFemale;
+  const sexType = gender === 'male' ? genderMale : genderFemale;
 
-  const types = activityTypes
-    ? activityTypes.reduce((obj, { id, name }) => {
-        // eslint-disable-next-line no-param-reassign
-        obj[id] = name;
-        return obj;
-      }, {})
-    : null;
+  const imageClassNames = [
+    'card-place__image',
+    'card-place__image_type_article',
+    link ? '' : 'card-place__image_big',
+  ]
+    .join(' ')
+    .trim();
 
-  const renderImage = () => {
-    if (isMainPage) {
-      return (
-        <Link
-          to={PLACES_URL}
-          className="card-place__link-wrap card-place__link-wrap_content_article-img"
-        >
-          <img
-            src={`${staticImageUrl}/${image}`}
-            alt={title}
-            className="card-place__image"
-          />
-        </Link>
-      );
-    }
-    if (!isMainPage && chosen && isBig) {
-      return (
-        <img
-          src={`${staticImageUrl}/${image}`}
-          alt={title}
-          className="card-place__image card-place__image_type_article"
-        />
-      );
-    }
-    return null;
-  };
+  const info = chosen
+    ? `${sexType}, ${age} лет, ${
+        activityTypesSimplified
+          ? activityTypesSimplified[activityType]
+          : activityTypeDefault
+      } отдых`
+    : '';
 
   return (
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass={`card-place ${cardSize}`} color={cardColor}>
-        {chosen && (
+        {isMainPage && (
+          <Rubric title={PLACES_TITLE} sectionClass="card-place__rubric" />
+        )}
+
+        {chosen && !isMainPage && (
           <Rubric title={chosenTagText} sectionClass="card-place__rubric" />
         )}
 
         <div className="card-place__title-wrap">
-          {isMainPage ? (
-            <Link to={PLACES_URL} className="card-place__link-wrap">
-              <TitleH2 sectionClass="card-place__title" title={title} />
-            </Link>
-          ) : (
-            <TitleH2 sectionClass="card-place__title" title={title} />
-          )}
+          <TitleH2 sectionClass="card-place__title" title={title} />
           <Caption sectionClass="card-place__address" title={address} />
         </div>
 
@@ -103,15 +82,22 @@ function CardPlace({
         )}
       </Card>
 
-      <CardAnnotation
-        info={`${sex}, ${age} лет, ${
-          activityTypes ? types[activityType] : activityTypeDefault
-        } отдых`}
-        description={description}
-        isMain={isBig}
-      />
+      <CardAnnotation info={info} description={description} isMain={isBig} />
     </article>
   );
+
+  function renderImage() {
+    if ((chosen && isBig) || isMainPage) {
+      return (
+        <img
+          src={`${staticImageUrl}/${image}`}
+          alt={title}
+          className={imageClassNames}
+        />
+      );
+    }
+    return null;
+  }
 }
 
 CardPlace.propTypes = {
@@ -125,7 +111,7 @@ CardPlace.propTypes = {
   gender: PropTypes.string,
   age: PropTypes.number,
   activityType: PropTypes.number,
-  activityTypes: PropTypes.arrayOf(PropTypes.object),
+  activityTypesSimplified: PropTypes.objectOf(PropTypes.any),
   color: PropTypes.string,
   sectionClass: PropTypes.string,
   isBig: PropTypes.bool,
@@ -143,7 +129,7 @@ CardPlace.defaultProps = {
   gender: 'male',
   age: 18,
   activityType: 1,
-  activityTypes: [],
+  activityTypesSimplified: {},
   color: 'white',
   isBig: false,
   sectionClass: '',

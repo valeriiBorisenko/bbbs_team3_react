@@ -1,29 +1,36 @@
-import './Calendar.scss';
-import { useEffect, useState, useContext } from 'react';
-import calendarPageTexts from '../../locales/calendar-page-RU';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import calendarPageTexts from './locales/RU';
 import {
-  ErrorsContext,
   CurrentUserContext,
+  ErrorsContext,
   PopupsContext,
-} from '../../contexts/index';
+} from '../../contexts';
+import { useDebounce, useEventBooking } from '../../hooks';
 import {
-  useScrollToTop,
-  useDebounce,
-  useEventBooking,
-} from '../../hooks/index';
-import { months, DELAY_DEBOUNCE, ERROR_MESSAGES } from '../../config/constants';
+  DELAY_DEBOUNCE,
+  ERROR_MESSAGES,
+  localStAfishaEvent,
+  months,
+} from '../../config/constants';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { getCalendarPageData, getActiveMonthTags } from '../../api/afisha-page';
 import {
-  BasePage,
-  TitleH1,
-  CardCalendar,
+  getActiveMonthTags,
+  getCalendarItem,
+  getCalendarPageData,
+} from '../../api/afisha-page';
+import {
   AnimatedPageContainer,
+  BasePage,
+  CardCalendar,
   Loader,
-  TagsList,
   Paginate,
+  TagsList,
+  TitleH1,
 } from './index';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import './Calendar.scss';
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
 
@@ -34,13 +41,17 @@ export const PAGE_SIZE_PAGINATE = {
   big: 12,
 };
 
-function Calendar() {
-  useScrollToTop();
+const maxScreenWidth = {
+  small: 1024,
+  medium: 1440,
+};
 
+function Calendar() {
   const { currentUser } = useContext(CurrentUserContext);
   const { openPopupLogin, openPopupAboutEvent, openPopupError } =
     useContext(PopupsContext);
   const { setError } = useContext(ErrorsContext);
+  const { state } = useLocation();
 
   // переход между фильтрами/страницами пагинации, лоадер
   const [isLoading, setIsLoading] = useState(false);
@@ -70,8 +81,8 @@ function Calendar() {
 
   // определение размера страницы
   useEffect(() => {
-    const small = window.matchMedia('(max-width: 1024px)');
-    const medium = window.matchMedia('(max-width: 1440px)');
+    const small = window.matchMedia(`(max-width: ${maxScreenWidth.small}px)`);
+    const medium = window.matchMedia(`(max-width: ${maxScreenWidth.medium}px)`);
 
     const listener = () => {
       if (small.matches) {
@@ -109,7 +120,6 @@ function Calendar() {
   }
 
   // общая функция загрузки ивентов
-  // в будущем упростить эту функцию
   function getPageData({ offset, activeFilters }) {
     getCalendarPageData({
       limit: pageSize,
@@ -123,10 +133,7 @@ function Calendar() {
       })
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -138,6 +145,18 @@ function Calendar() {
         setIsLoadingPaginate(false);
       });
   }
+
+  // Открытие попапа при переходе из поиска
+  useEffect(() => {
+    if (state) {
+      getCalendarItem(state.id)
+        .then((res) => {
+          setLocalStorageData(localStAfishaEvent, res);
+          openPopupAboutEvent();
+        })
+        .catch(() => setIsPageError(true));
+    }
+  }, [state]);
 
   // загрузка страницы палендаря при старте либо показ попапа логина
   useEffect(() => {
@@ -159,7 +178,7 @@ function Calendar() {
       getActiveMonthTags()
         .then((monthsTags) => {
           const customFilters = monthsTags.map((tag) => {
-            const filterName = changeCaseOfFirstLetter(months[tag]);
+            const filterName = changeCaseOfFirstLetter(months[tag - 1]); // бэк считает с 1, у нас массив с 0
             return {
               isActive: false,
               name: filterName,
@@ -196,7 +215,6 @@ function Calendar() {
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   // эффект фильтрации
   useEffect(() => {
-    // в дальнейшем надо изменить количество секунд
     if (isFiltersUsed) {
       setIsLoading(true);
       debounceFiltration();
@@ -239,13 +257,26 @@ function Calendar() {
     }
   }, [selectedEvent]);
 
+  // глобальный лоадер при первой загрузке пока ждем ивенты и фильтры
+  if ((!calendarPageData || !filters) && !isPageError) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="calendar-page page__section fade-in">
+        {renderPageContent()}
+      </section>
+    </BasePage>
+  );
+
   // рендеринг
   // отрисовка заглушки, если ивентов нет
   function returnAnimatedContainer() {
     return (
       <>
         {isGlobalLoader ? (
-          <Loader isNested />
+          <Loader isPaginate />
         ) : (
           <AnimatedPageContainer titleText={textStubNoData} />
         )}
@@ -255,7 +286,7 @@ function Calendar() {
 
   // отрисовка карточек ивентов
   function renderEventCardsContainer() {
-    const cards = calendarPageData.map((cardData) => (
+    return calendarPageData.map((cardData) => (
       <CardCalendar
         key={cardData.id}
         cardData={cardData}
@@ -264,7 +295,6 @@ function Calendar() {
         sectionClass="scale-in"
       />
     ));
-    return cards;
   }
 
   // фильтры
@@ -307,7 +337,7 @@ function Calendar() {
         <>
           {/* лоадер смены городов */}
           {isGlobalLoader ? (
-            <Loader isNested />
+            <Loader isPaginate />
           ) : (
             <>
               <TitleH1 title={title} sectionClass="calendar-page__title" />
@@ -316,12 +346,12 @@ function Calendar() {
 
                 {/* лоадер смены фильтров */}
                 {isLoading ? (
-                  <Loader isNested />
+                  <Loader isPaginate />
                 ) : (
                   <>
                     {/* лоадер переключения пагинации */}
                     {isLoadingPaginate ? (
-                      <Loader isNested />
+                      <Loader isPaginate />
                     ) : (
                       <div className="calendar-page__grid">
                         {renderEventCardsContainer()}
@@ -344,19 +374,6 @@ function Calendar() {
 
     return null;
   }
-
-  // глобальный лоадер при первой загрузке пока ждем ивенты и фильтры
-  if ((!calendarPageData || !filters) && !isPageError) {
-    return <Loader isCentered />;
-  }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="calendar-page page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
-  );
 }
 
 export default Calendar;

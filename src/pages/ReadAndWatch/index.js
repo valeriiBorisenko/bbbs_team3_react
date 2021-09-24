@@ -1,5 +1,5 @@
 import BasePage from '../../layout/BasePage';
-import { Loader } from '../../components/utils/index';
+import { Loader } from '../../components/utils';
 // карточки
 import CardCatalog from '../../components/Cards/CardCatalog/CardCatalog';
 import CardArticle from '../../components/Cards/CardArticle/CardArticle';

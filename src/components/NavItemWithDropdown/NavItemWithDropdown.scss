@@ -24,8 +24,7 @@
   }
 }
 
-@include atDesktop1380 {
-  
+@include atDesktop1279 {
   .menu__dropdown-item {
     &:hover .menu__dropdown-list{
       display: none;

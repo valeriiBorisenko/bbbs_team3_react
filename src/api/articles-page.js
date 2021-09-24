@@ -10,4 +10,12 @@ function getArticlesPageData({ limit, offset }) {
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-export default getArticlesPageData;
+// получение одного книги
+function getArticle(id) {
+  return axios
+    .get(`${baseURL}${apiUrl}/articles/${id}`)
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+}
+
+export { getArticlesPageData, getArticle };

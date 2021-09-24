@@ -18,6 +18,7 @@ function Popup({
       onClose();
     }
   };
+
   return (
     <div
       className={`popup popup_type_${type} ${isOpen ? 'popup_opened' : ''} `}
@@ -28,7 +29,7 @@ function Popup({
       >
         {!withoutCloseButton && (
           <button
-            className="popup__close"
+            className={`popup__close popup__close_type_${typeContainer}`}
             type="button"
             aria-label={texts.closeButtonLabel}
             onClick={onClose}

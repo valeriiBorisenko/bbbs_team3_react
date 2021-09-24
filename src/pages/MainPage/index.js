@@ -8,7 +8,7 @@ import CardVideoMain from '../../components/Cards/CardVideoMain/CardVideoMain';
 import CardQuestion from '../../components/Cards/CardQuestion/CardQuestion';
 import CardAnimatedPlug from '../../components/Cards/CardAnimatedPlug/CardAnimatedPlug';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
-import { Widget, Card, Loader } from '../../components/utils/index';
+import { Card, Loader, Widget } from '../../components/utils';
 
 export {
   BasePage,

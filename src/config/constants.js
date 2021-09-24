@@ -9,7 +9,6 @@ export const weekdays = [
 ];
 
 export const months = [
-  '', // специально, т.к у бекенда с номера 1 начинается расчет месяцев
   'январь',
   'февраль',
   'март',
@@ -56,13 +55,17 @@ export const DEFAULT_CITY = 'Москва';
 
 export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif|bmp)$/i;
 
-export const DELAY_DEBOUNCE = 1500;
+export const DELAY_DEBOUNCE = 400;
 export const DELAY_RENDER = 100;
 
 export const localStUserCity = 'userCity';
 export const localStAfishaEvent = 'afishaEvent';
 export const jwt = 'jwt';
+export const jwtRefresh = 'jwtRefresh';
 export const localStChosenVideo = 'chosenVideo';
+export const localStChosenBook = 'chosenBook';
+export const localStChosenPlace = 'chosenPlace';
+export const localStChosenArticle = 'chosenArticle';
 
 export const ERROR_MESSAGES = {
   generalErrorMessage: {
@@ -90,4 +93,5 @@ export const ERROR_MESSAGES = {
 export const ERROR_CODES = {
   badRequest: 400,
   unauthorized: 401,
+  notFound: 404,
 };

@@ -1,18 +1,26 @@
 import './SearchButton.scss';
-import { useContext } from 'react';
-import { PopupsContext } from '../../../contexts/index';
+import React from 'react';
+import PropTypes from 'prop-types';
+import texts from './locales/RU';
 
-function SearchButton() {
-  const { openPopupInfoTooltip } = useContext(PopupsContext);
+function SearchButton({ handleClickButton }) {
   return (
     <button
       className="search-button search__button"
       type="button"
-      aria-label="Поиск"
-      title="Поиск"
-      onClick={() => openPopupInfoTooltip()}
+      aria-label={texts.ariaLabelText}
+      title={texts.ariaLabelText}
+      onClick={handleClickButton}
     />
   );
 }
+
+SearchButton.propTypes = {
+  handleClickButton: PropTypes.func,
+};
+
+SearchButton.defaultProps = {
+  handleClickButton: () => {},
+};
 
 export default SearchButton;

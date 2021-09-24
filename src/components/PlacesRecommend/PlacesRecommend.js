@@ -1,11 +1,11 @@
-import './PlacesRecommend.scss';
-import { useState, useRef, useContext } from 'react';
+import { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { PopupsContext, ErrorsContext } from '../../contexts/index';
+import { ErrorsContext, PopupsContext } from '../../contexts';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
+import './PlacesRecommend.scss';
 
 function PlacesRecommend({ sectionClass, activityTypes }) {
   const { openPopupRecommendSuccess } = useContext(PopupsContext);

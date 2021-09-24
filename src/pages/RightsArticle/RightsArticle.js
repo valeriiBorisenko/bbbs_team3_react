@@ -1,78 +1,73 @@
-import './RightsArticle.scss';
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import {
-  PageWithTransparentHeader,
-  Loader,
-  TitleH2,
-  AnimatedPageContainer,
-} from './index';
+import ReactMarkdown from 'react-markdown';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import rightsArticlePageTexts from './locales/RU';
+import { useScrollToTop } from '../../hooks';
 import { getRightsArticle } from '../../api/rights-page';
-import { useScrollToTop } from '../../hooks/index';
-import { ERROR_MESSAGES } from '../../config/constants';
-import { RIGHTS_URL } from '../../config/routes';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
+import { NOT_FOUND_URL, RIGHTS_URL } from '../../config/routes';
+import {
+  AnimatedPageContainer,
+  BasePage,
+  Loader,
+  NextArticleLink,
+} from './index';
+import './RightsArticle.scss';
 
-function RightsArticle({ id }) {
-  useScrollToTop();
+const { headTitle, headDescription, stubButtonText } = rightsArticlePageTexts;
+
+function RightsArticle() {
+  const { articleId } = useParams();
+  const { state } = useLocation();
+  const history = useHistory();
+
+  useScrollToTop([articleId]);
 
   const [articleData, setArticleData] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
-  // ХардКод пока не понятно как узнавать ID следующей статьи
-  const [nextId, setNextId] = useState(Number(id) + 1);
-
-  const changeClick = () => {
-    setIsLoadingPage(true);
-    setNextId(nextId + 1);
+  const getArticleData = ({ id, tags }) => {
+    getRightsArticle({ id, tags })
+      .then((res) => setArticleData(res))
+      .catch((err) => {
+        if (err.status === ERROR_CODES.notFound) history.push(NOT_FOUND_URL);
+        else setIsPageError(true);
+      })
+      .finally(() => {
+        setIsLoadingPage(false);
+      });
   };
 
-  const renderLeadBlock = () => (
-    <section className="article-lead">
-      <div className="article-lead__content">
-        <h1 className="chapter-title article-lead__title">
-          {articleData?.title}
-        </h1>
-        <p className="section-title article-lead__text">{articleData?.text}</p>
-      </div>
-    </section>
+  useEffect(() => {
+    if (articleId) {
+      setIsLoadingPage(true);
+      if (state?.fromRightsPage) {
+        getArticleData({ id: articleId, tags: state.activeTags });
+      } else {
+        getArticleData({ id: articleId, tags: '' });
+      }
+    }
+  }, [articleId]);
+
+  return (
+    <BasePage
+      headTitle={articleData?.title ?? headTitle}
+      headDescription={articleData?.description ?? headDescription}
+      isHeaderTransparentOnTop
+    >
+      {isLoadingPage ? <Loader isPaginate /> : renderMainContent()}
+    </BasePage>
   );
 
-  const renderHtmlBlock = () => (
-    <div
-      className="page__section"
-      dangerouslySetInnerHTML={{
-        __html: articleData?.rawHtml,
-      }}
-    />
-  );
-
-  const rendenNextPageBlock = () => (
-    <section className="next-page">
-      <div className="next-page__img-wrap">
-        <img src="#" alt="Льготы детей на жилье" className="next-page__img" />
-      </div>
-      <Link
-        to={`/rights/${nextId}`}
-        onClick={changeClick}
-        className="next-page__link"
-        target="_self"
-      >
-        <TitleH2 sectionClass="next-page__title" title="Следующая статья" />
-        <div className="next-page__arrow-icon" />
-      </Link>
-    </section>
-  );
-
-  const renderMainContent = () => {
+  function renderMainContent() {
     if (isPageError) {
       return (
         <AnimatedPageContainer
           titleText={ERROR_MESSAGES.generalErrorMessage.title}
           urlBack={RIGHTS_URL}
-          buttonText="Вернуться назад"
+          buttonText={stubButtonText}
           staticPage
         />
       );
@@ -81,51 +76,59 @@ function RightsArticle({ id }) {
     return (
       <>
         {renderLeadBlock()}
-        {renderHtmlBlock()}
-        {rendenNextPageBlock()}
+        <div className="article page__section fade-in">
+          <div className="article__container">
+            {renderHtmlBlock()}
+            {renderNextPageBlock()}
+          </div>
+        </div>
       </>
     );
-  };
+  }
 
-  useEffect(() => {
-    if (isLoadingPage && id) {
-      getRightsArticle(id)
-        .then((res) => setArticleData(res))
-        .catch(() => setIsPageError(true))
-        .finally(() => {
-          setIsLoadingPage(false);
-        });
+  function renderLeadBlock() {
+    return (
+      <section className="article-lead fade-in">
+        <div className="article-lead__content">
+          <h1 className="chapter-title article-lead__title">
+            {articleData?.title}
+          </h1>
+          <p className="section-title article-lead__text">
+            {articleData?.description}
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  function renderHtmlBlock() {
+    return (
+      <ReactMarkdown className="article__markdown">
+        {articleData?.body}
+      </ReactMarkdown>
+    );
+  }
+
+  function renderNextPageBlock() {
+    if (articleData && articleData.nextArticle) {
+      // если пришли со страницы Прав, то передаём активные теги в линку
+      const link = state?.fromRightsPage
+        ? {
+            pathname: `/rights/${articleData?.nextArticle?.id}`,
+            state: { fromRightsPage: true, activeTags: state.activeTags },
+          }
+        : `/rights/${articleData?.nextArticle?.id}`;
+
+      return (
+        <NextArticleLink
+          text={articleData.nextArticle.title}
+          href={link}
+          sectionClass="article__next-article-link"
+        />
+      );
     }
-
-    if (!isLoadingPage && id) {
-      getRightsArticle(nextId)
-        .then((res) => setArticleData(res))
-        .catch(() => setIsPageError(true))
-        .finally(() => {
-          setIsLoadingPage(false);
-        });
-    }
-
-    // Хард Код для демо
-    window.scrollTo({ top: 0 });
-  }, [id, nextId]);
-
-  return (
-    <PageWithTransparentHeader
-      headTitle={articleData?.title}
-      headDescription={articleData?.description}
-    >
-      {isLoadingPage ? <Loader isNested /> : renderMainContent()}
-    </PageWithTransparentHeader>
-  );
+    return null;
+  }
 }
-
-RightsArticle.propTypes = {
-  id: PropTypes.number,
-};
-
-RightsArticle.defaultProps = {
-  id: null,
-};
 
 export default RightsArticle;

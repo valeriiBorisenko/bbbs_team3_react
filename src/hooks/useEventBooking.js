@@ -1,12 +1,13 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
-  makeEventRegistration,
   cancelEventRegistration,
+  makeEventRegistration,
 } from '../api/event-participants';
-import { ErrorsContext, PopupsContext } from '../contexts/index';
+import { ErrorsContext, PopupsContext } from '../contexts';
 import { getLocalStorageData } from './useLocalStorage';
-import { localStAfishaEvent, ERROR_MESSAGES } from '../config/constants';
+import { ERROR_MESSAGES, localStAfishaEvent } from '../config/constants';
 
+// хук отслеживает события записи и отписки от ивента
 const useEventBooking = () => {
   const {
     openPopupSuccessfully,
@@ -18,6 +19,7 @@ const useEventBooking = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { setError } = useContext(ErrorsContext);
 
+  // события отписки и регистрации на мероприятие
   const setRegisterEvent = () => {
     const register = new Event('registerEvent');
     window.dispatchEvent(register);
@@ -28,6 +30,9 @@ const useEventBooking = () => {
     window.dispatchEvent(cancel);
   };
 
+  // объект кладётся в localStorage при клике на карточку на странице
+  // обработчики событий берут объект произошедшего события из localStorage и меняют им свойство booked
+  // затем этот объект передается на страницу для отрисовки
   const listenCancel = () => {
     const newEvent = getLocalStorageData(localStAfishaEvent);
     newEvent.booked = false;
@@ -49,15 +54,13 @@ const useEventBooking = () => {
     };
   }, []);
 
+  // функции-утилиты, запускающие события, их используют компоненты
   const registerOnEvent = (card) => {
     makeEventRegistration({ event: card.id })
       .then(() => setRegisterEvent())
       .then(() => openPopupSuccessfully())
       .catch(() => {
-        setError({
-          title: ERROR_MESSAGES.eventAddErrorMessage.title,
-          button: ERROR_MESSAGES.eventAddErrorMessage.button,
-        });
+        setError(ERROR_MESSAGES.eventAddErrorMessage);
         openPopupError();
       });
   };
@@ -67,10 +70,7 @@ const useEventBooking = () => {
       .then(() => setCancelRegisterEvent())
       .then(() => closeAllPopups())
       .catch(() => {
-        setError({
-          title: ERROR_MESSAGES.eventCancelErrorMessage.title,
-          button: ERROR_MESSAGES.eventCancelErrorMessage.button,
-        });
+        setError(ERROR_MESSAGES.eventCancelErrorMessage);
         openPopupError();
       });
   };

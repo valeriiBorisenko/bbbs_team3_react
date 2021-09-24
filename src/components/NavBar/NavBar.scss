@@ -70,8 +70,6 @@
 }
 
 .menu__button-item {
-  transition: 0.15s ease-in;
-
   &:first-of-type {
     padding-right: 20px;
   }
@@ -91,7 +89,7 @@
 .menu_state_search {
   display: grid;
   grid-template-columns: 260px 1fr;
-  grid-template-rows: 600px;
+  grid-template-rows: 100vh;
   justify-items: start;
   align-items: start;
 
@@ -117,6 +115,16 @@
 }
 
 @include atDesktop1380 {
+  .menu__list-item {
+    margin-right: 20px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}
+
+@include atDesktop1279 {
   .menu {
     display: grid;
     grid-template-columns: 60px 1fr 40px;
@@ -181,8 +189,9 @@
     align-self: center;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     cursor: pointer;
+    justify-self: end;
   }
 
   .menu__burger-line {
@@ -287,7 +296,7 @@
   // меню для поиска
   .menu_state_search {
     grid-template-columns: 60px 1fr 40px;
-    grid-template-rows: 30px 500px;
+    grid-template-rows: 30px calc(100vh - 30px);
     justify-items: center;
     position: relative;
 
@@ -307,7 +316,6 @@
 
     & .menu__search-options {
       grid-column: 1 / 4;
-      grid-row: 2;
       justify-self: start;
     }
   }

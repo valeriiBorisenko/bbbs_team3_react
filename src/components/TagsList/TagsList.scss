@@ -41,18 +41,6 @@
       pointer-events: none;
     }
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -1px;
-      width: 40px;
-      height: 100%;
-      background: linear-gradient(90deg, $background 0%, rgba(255, 255, 255, 0) 100%);
-      z-index: 1;
-      pointer-events: none;
-    }
-
     &__list {
       flex-wrap: nowrap;
       overflow-x: scroll;

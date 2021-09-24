@@ -1,11 +1,11 @@
-import './AnimatedPageContainer.scss';
 import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Lottie from 'lottie-web';
 import texts from './locales/RU';
 import animation404 from '../../assets/animation/Illustration_404.json';
-import { TitleH2 } from '../utils/index';
+import { TitleH2 } from '../utils';
+import './AnimatedPageContainer.scss';
 
 function AnimatedPageContainer({
   is404,

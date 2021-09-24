@@ -1,31 +1,31 @@
-import React, { useState, useEffect, useContext } from 'react';
-import rightsPageTexts from '../../locales/rights-page-RU';
-import './Rights.scss';
+import { useContext, useEffect, useState } from 'react';
+import rightsPageTexts from './locales/RU';
+import { ErrorsContext, PopupsContext } from '../../contexts';
+import { useDebounce } from '../../hooks';
 import {
   ALL_CATEGORIES,
-  FIGURES,
   COLORS,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
+  FIGURES,
 } from '../../config/constants';
 import {
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
 } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
 import { getRightsData, getRightsTags } from '../../api/rights-page';
 import {
+  AnimatedPageContainer,
   BasePage,
-  Loader,
-  TitleH1,
   CardRights,
   CardsSectionWithLines,
-  AnimatedPageContainer,
+  Loader,
   TagsList,
+  TitleH1,
 } from './index';
-import { ErrorsContext, PopupsContext } from '../../contexts';
+import './Rights.scss';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
@@ -33,11 +33,14 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
+const maxScreenWidth = {
+  small: 1399,
+  medium: 1640,
+};
+
 const { headTitle, headDescription, title, textStubNoData } = rightsPageTexts;
 
 const Rights = () => {
-  useScrollToTop();
-
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 
@@ -69,55 +72,6 @@ const Rights = () => {
     setIsFiltersUsed(true);
   };
 
-  // Фильтры страницы
-  const renderTagsContainer = () => {
-    if (articles && !isLoadingPage) {
-      return (
-        <TagsList
-          filterList={categories}
-          name="rights"
-          handleClick={changeCategory}
-        />
-      );
-    }
-    return null;
-  };
-
-  // Карточки с видео страницы
-  const renderCards = () => (
-    <>
-      <CardsSectionWithLines
-        pageCount={pageCount}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-        isLoading={isLoadingPaginate}
-        dataLength={articles.length}
-        pageSize={pageSize}
-      >
-        {articles.map((item, i) => (
-          <CardRights
-            key={item?.id}
-            sectionClass="cards-section__item scale-in"
-            title={item?.title}
-            tags={item?.tags}
-            shape={FIGURES[i % FIGURES.length]}
-            color={COLORS[i % COLORS.length]}
-            id={item?.id}
-          />
-        ))}
-      </CardsSectionWithLines>
-    </>
-  );
-
-  // Контент страницы
-  const renderMainContent = () => {
-    if ((!articles && !isLoadingPage) || (!categories && !isLoadingPage)) {
-      return <AnimatedPageContainer titleText={textStubNoData} />;
-    }
-
-    return isFiltersUsed ? <Loader isNested /> : renderCards();
-  };
-
   // Сортировка значений Тэгов для АПИ
   const getActiveTags = () => {
     if (categories) {
@@ -146,10 +100,7 @@ const Rights = () => {
       .then((results) => setArticles(results))
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -227,8 +178,12 @@ const Rights = () => {
 
   // Резайз пагинации при первой загрузке
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1399px)');
-    const largeQuery = window.matchMedia('(max-width: 1640px)');
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
+    const largeQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.medium}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -272,6 +227,58 @@ const Rights = () => {
       </section>
     </BasePage>
   );
+
+  // Фильтры страницы
+  function renderTagsContainer() {
+    if (articles && !isLoadingPage) {
+      return (
+        <TagsList
+          filterList={categories}
+          name="rights"
+          handleClick={changeCategory}
+        />
+      );
+    }
+    return null;
+  }
+
+  // Карточки
+  function renderCards() {
+    return (
+      <>
+        <CardsSectionWithLines
+          pageCount={pageCount}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          isLoading={isLoadingPaginate}
+          dataLength={articles.length}
+          pageSize={pageSize}
+        >
+          {articles.map((item, i) => (
+            <CardRights
+              key={item?.id}
+              sectionClass="cards-section__item scale-in"
+              title={item?.title}
+              tags={item?.tags}
+              shape={FIGURES[i % FIGURES.length]}
+              color={COLORS[i % COLORS.length]}
+              id={item?.id}
+              getActiveTags={getActiveTags}
+            />
+          ))}
+        </CardsSectionWithLines>
+      </>
+    );
+  }
+
+  // Контент страницы
+  function renderMainContent() {
+    if ((!articles && !isLoadingPage) || (!categories && !isLoadingPage)) {
+      return <AnimatedPageContainer titleText={textStubNoData} />;
+    }
+
+    return isFiltersUsed ? <Loader isPaginate /> : renderCards();
+  }
 };
 
 export default Rights;

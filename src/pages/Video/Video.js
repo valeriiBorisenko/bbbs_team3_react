@@ -1,42 +1,62 @@
-import React, { useContext, useEffect, useState } from 'react';
-import './Video.scss';
-import videoPageTexts from '../../locales/video-page-RU';
-import {
-  BasePage,
-  Loader,
-  TitleH1,
-  Paginate,
-  CardVideoMain,
-  CardFilm,
-  AnimatedPageContainer,
-  TagsList,
-} from './index';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import videoPageTexts from './locales/RU';
 import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
+  localStChosenVideo,
 } from '../../config/constants';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
 import {
+  CurrentUserContext,
+  ErrorsContext,
+  PopupsContext,
+} from '../../contexts';
+import { useDebounce } from '../../hooks';
+import {
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
 } from '../../utils/filter-tags';
-import { getVideoPageTags, getVideoPageData } from '../../api/video-page';
+import {
+  getVideo,
+  getVideoPageData,
+  getVideoPageTags,
+} from '../../api/video-page';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
-import { ErrorsContext, PopupsContext } from '../../contexts';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import {
+  AnimatedPageContainer,
+  BasePage,
+  CardFilm,
+  CardVideoMain,
+  Loader,
+  Paginate,
+  TagsList,
+  TitleH1,
+} from './index';
+import './Video.scss';
 
 const PAGE_SIZE_PAGINATE = {
-  small: 4,
+  small: 8,
   medium: 12,
   big: 16,
+};
+
+const maxScreenWidth = {
+  small: 1023,
+  medium: 1450,
 };
 
 const { headTitle, headDescription, title, resourceGroupTag, textStubNoData } =
   videoPageTexts;
 
 const Video = () => {
-  useScrollToTop();
+  // работа с открытием попапа видое при переходе из поиска
+  const { state } = useLocation();
+  const { openPopupVideo } = useContext(PopupsContext);
+
+  const { currentUser } = useContext(CurrentUserContext);
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
 
@@ -72,23 +92,41 @@ const Video = () => {
   };
 
   // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Ресурсная группа"
-  const defineCategories = (tags, resourceGroup) => {
+  const defineCategories = (tags) => {
     const categoriesArray = tags.map((tag) => ({
       filter: tag?.slug.toLowerCase(),
       name: changeCaseOfFirstLetter(tag?.name),
       isActive: false,
     }));
-    if (resourceGroup) {
-      return [
-        { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-        { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
-        ...categoriesArray,
-      ];
-    }
-    return [
+
+    let isResourceGroup = false;
+
+    const tagsWithoutResorceGroup = [
       { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
       ...categoriesArray,
     ];
+
+    const tagsWithResourseGroup = [
+      { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
+      { filter: resourceGroupTag, name: resourceGroupTag, isActive: false },
+      ...categoriesArray,
+    ];
+
+    if (currentUser) {
+      getVideoPageData({
+        resource_group: true,
+      })
+        .then((resourceGroupData) => {
+          isResourceGroup = resourceGroupData.count > 0;
+
+          if (isResourceGroup) {
+            setCategories(tagsWithResourseGroup);
+          }
+        })
+        .catch(() => setIsPageError(true));
+    }
+
+    setCategories(tagsWithoutResorceGroup);
   };
 
   // Сортировка значений Тэгов для АПИ
@@ -138,10 +176,7 @@ const Video = () => {
       })
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -173,9 +208,7 @@ const Video = () => {
           setVideo(videoData);
           setPageCount(Math.ceil(count / pageSize));
         }
-
-        const isResourceGroup = videoData.some((item) => item?.resourceGroup);
-        setCategories(defineCategories(tags, isResourceGroup));
+        defineCategories(tags);
       })
       .catch(() => setIsPageError(true))
       .finally(() => {
@@ -212,12 +245,24 @@ const Video = () => {
     }
   }, [isFiltersUsed]);
 
+  // Откртие попапа при переходе из поиска
+  useEffect(() => {
+    if (state) {
+      getVideo(state.id)
+        .then((res) => {
+          setLocalStorageData(localStChosenVideo, res);
+          openPopupVideo();
+        })
+        .catch(() => setIsPageError(true));
+    }
+  }, [state]);
+
   // Загрузка страницы, динамическая пагинация, динамический ресайз
   useEffect(() => {
     if (pageSize) {
       getFirstPageData();
     }
-  }, [pageSize]);
+  }, [pageSize, currentUser]);
 
   useEffect(() => {
     if (!isLoadingPage && !isFiltersUsed) {
@@ -236,8 +281,12 @@ const Video = () => {
 
   // Резайз пагинации
   useEffect(() => {
-    const smallQuery = window.matchMedia('(max-width: 1023px)');
-    const largeQuery = window.matchMedia('(max-width: 1450px)');
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
+    const largeQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.medium}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {
@@ -259,20 +308,48 @@ const Video = () => {
     };
   }, []);
 
-  // рендеры
-  const renderTagsContainer = () => (
-    <TagsList
-      filterList={categories}
-      name="video"
-      handleClick={changeCategory}
-    />
+  // Лоадер при загрузке страницы
+  if (isLoadingPage) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      {isPageError ? (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      ) : (
+        <>
+          <section className="lead page__section">
+            <TitleH1 title={title} sectionClass="video__title" />
+            {categories?.length > 0 && !isLoadingPage && renderTagsContainer()}
+          </section>
+
+          {renderMainContent()}
+        </>
+      )}
+    </BasePage>
   );
 
+  // рендеры
+  function renderTagsContainer() {
+    return (
+      <TagsList
+        filterList={categories}
+        name="video"
+        handleClick={changeCategory}
+      />
+    );
+  }
+
   // Загрузка карточек при нажатии на пагинацию
-  const loadingContentPagination = () =>
-    isLoadingPaginate ? (
-      <Loader isNested />
-    ) : (
+  function loadingContentPagination() {
+    if (isLoadingPaginate) {
+      return <Loader isPaginate />;
+    }
+
+    return (
       <>
         {mainVideo && isShowMainCard && !pageNumber && (
           <section className="video__main-card page__section scale-in">
@@ -283,14 +360,20 @@ const Video = () => {
         <section className="video__cards-grid page__section">
           {video &&
             video.map((item) => (
-              <CardFilm key={item?.id} data={item} sectionClass="scale-in" />
+              <CardFilm
+                key={item?.id}
+                data={item}
+                sectionClass="scale-in"
+                isVideo
+              />
             ))}
         </section>
       </>
     );
+  }
 
   // Контент страницы
-  const renderMainContent = () => {
+  function renderMainContent() {
     if (!video && !categories) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
@@ -298,7 +381,7 @@ const Video = () => {
     return (
       <>
         {isFiltersUsed ? (
-          <Loader isNested />
+          <Loader isPaginate />
         ) : (
           <>
             {loadingContentPagination()}
@@ -317,31 +400,7 @@ const Video = () => {
         )}
       </>
     );
-  };
-
-  // Лоадер при загрузке страницы
-  if (isLoadingPage) {
-    return <Loader isCentered />;
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {isPageError ? (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      ) : (
-        <>
-          <section className="lead page__section">
-            <TitleH1 title={title} sectionClass="video__title" />
-            {categories?.length > 1 && !isLoadingPage && renderTagsContainer()}
-          </section>
-
-          {renderMainContent()}
-        </>
-      )}
-    </BasePage>
-  );
 };
 
 export default Video;

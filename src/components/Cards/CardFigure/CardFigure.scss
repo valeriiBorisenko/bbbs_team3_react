@@ -9,7 +9,7 @@
   overflow: hidden;
   width: 100%;
   object-fit: cover;
-  padding: 10px;
+  padding: 0 55px;
 
   &_color_yellow {
     background-color: $yellow;
@@ -37,5 +37,17 @@
 
   &_form_arch {
     border-radius: 300px 300px 3px 3px;
+  }
+}
+
+@include atDesktop1440 {
+  .card-figure {
+    padding: 0 30px;
+  }
+}
+
+@include atDesktop1024 {
+  .card-figure {
+    padding: 0 20px;
   }
 }

@@ -8,6 +8,11 @@
   text-decoration: none;
   letter-spacing: 0.2px;
   color: $blue;
+  transition: .3s ease;
+
+  &:hover{
+    color: $darkBlue;
+  }
 }
 
 .link_type_test {

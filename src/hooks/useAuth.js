@@ -1,15 +1,21 @@
-import { useState, useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { PopupsContext, ErrorsContext } from '../contexts/index';
+import { ErrorsContext, PopupsContext } from '../contexts/index';
 import AuthApi from '../api/auth';
 import { getUserData } from '../api/user';
 import { MAIN_PAGE_URL } from '../config/routes';
 import {
-  setLocalStorageData,
-  getLocalStorageData,
   clearLocalStorage,
+  getLocalStorageData,
+  removeLocalStorageData,
+  setLocalStorageData,
 } from './useLocalStorage';
-import { jwt, ERROR_MESSAGES, ERROR_CODES } from '../config/constants';
+import {
+  ERROR_CODES,
+  ERROR_MESSAGES,
+  jwt,
+  jwtRefresh,
+} from '../config/constants';
 
 const useAuth = (setCurrentUser) => {
   const { generalErrorMessage } = ERROR_MESSAGES;
@@ -46,31 +52,58 @@ const useAuth = (setCurrentUser) => {
         if (refresh && access) {
           AuthApi.setAuth(access);
           setLocalStorageData(jwt, access);
+          setLocalStorageData(jwtRefresh, refresh);
           getUserData()
             .then((userData) => setCurrentUser(userData))
             .then(() => popups.closePopupLogin())
             .catch((err) => handleError(err));
+        } else {
+          throw new Error(generalErrorMessage.title);
         }
       })
       .catch((err) => handleError(err)); // авторизация (работа с сервером) закончилась ошибкой
   };
 
+  const handleTokenError = () => {
+    removeLocalStorageData(jwt);
+    removeLocalStorageData(jwtRefresh);
+    setIsCheckingToken(false);
+  };
+
+  const checkRefreshToken = (refresh) => {
+    AuthApi.refreshToken({ refresh })
+      .then(({ access }) => {
+        AuthApi.setAuth(access);
+        setLocalStorageData(jwt, access);
+        getUserData()
+          .then((userData) => setCurrentUser(userData))
+          .catch((err) => handleError(err))
+          .finally(() => setIsCheckingToken(false));
+      })
+      .catch(() => handleTokenError());
+  };
+
   const checkToken = () => {
     const token = getLocalStorageData(jwt);
+    const refreshToken = getLocalStorageData(jwtRefresh);
     if (token) {
       AuthApi.setAuth(token);
       getUserData()
-        .then((userData) => setCurrentUser(userData))
-        .then(() => setIsCheckingToken(false))
-        .catch(() => {
-          errors.setError({
-            title: generalErrorMessage.title,
-            button: generalErrorMessage.button,
-          });
-          popups.openPopupError();
-        }); // при получении userData возникла проблема
+        .then((userData) => {
+          setCurrentUser(userData);
+          setIsCheckingToken(false);
+        })
+        .catch((err) => {
+          // токен просрочен
+          AuthApi.clearAuth();
+          if (err?.status === unauthorized && refreshToken) {
+            checkRefreshToken(refreshToken);
+          } else {
+            handleTokenError();
+          }
+        });
     } else {
-      setIsCheckingToken(false);
+      handleTokenError();
     }
   };
 

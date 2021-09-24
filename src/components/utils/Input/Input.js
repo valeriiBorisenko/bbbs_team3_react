@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import './Input.scss';
 import PropTypes from 'prop-types';
 
@@ -37,7 +36,6 @@ function Input({
         <textarea
           id={id}
           className={classNamesTextarea}
-          type={type}
           name={name}
           placeholder={errorMessage || placeholder}
           onFocus={onFocus}
@@ -45,7 +43,6 @@ function Input({
           value={value}
           maxLength={maxLength}
           minLength={minLength}
-          pattern={pattern}
           required={required}
         />
         {error && <span className="input__error-message">{error}</span>}
@@ -86,10 +83,10 @@ Input.propTypes = {
   isTextarea: PropTypes.bool,
   onChange: PropTypes.func,
   required: PropTypes.bool,
-  max: PropTypes.string,
-  min: PropTypes.string,
-  maxLength: PropTypes.string,
-  minLength: PropTypes.string,
+  max: PropTypes.number,
+  min: PropTypes.number,
+  maxLength: PropTypes.number,
+  minLength: PropTypes.number,
   pattern: PropTypes.string,
   error: PropTypes.string,
   onFocus: PropTypes.func,

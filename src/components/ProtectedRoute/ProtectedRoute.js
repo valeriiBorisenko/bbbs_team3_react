@@ -1,8 +1,7 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { CurrentUserContext } from '../../contexts/index';
+import { CurrentUserContext } from '../../contexts';
 
 function ProtectedRoute({ component: Component, ...props }) {
   const { currentUser } = useContext(CurrentUserContext);

@@ -1,18 +1,17 @@
 import './Widget.scss';
 import PropTypes from 'prop-types';
+import texts from './locales/RU';
 
 function Widget({ link, title }) {
   return (
-    <div>
+    <div className="widget">
       <iframe
-        className="widget-facebook"
+        className="widget__iframe"
         title={title}
         src={link}
         allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-      >
-        Если вы видите этот текст - ваш браузер случайно обрезал наш виджет
-        Facebook.
-      </iframe>
+      />
+      <p className="widget__stub">{texts.textStub}</p>
     </div>
   );
 }

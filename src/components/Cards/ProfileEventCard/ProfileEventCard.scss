@@ -17,32 +17,42 @@
   }
 
   &__card {
+    position: relative;
     width: 100%;
     height: 100%;
     padding: 30px;
+
+    &_canceled {
+      background-color: $backgroundError;
+    }
   }
 
-  &__date {
-    display: flex;
-    margin-bottom: 10px;
+  &__text-canceled {
+    position: absolute;
+    top: 10px;
+    left: 30px;
+    margin: 0;
+    width: fit-content;
+    font-family: $protoGrotesk;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 1.42;
+    letter-spacing: 0.2px;
+    color: $error;
   }
 
   &__day {
-    margin-right: 10px;
+    margin: 0 0 10px 0;
     font-family: $protoGrotesk;
     font-style: normal;
     font-weight: 300;
     font-size: 44px;
-    line-height: 1.13;  
-  }
+    line-height: 1.13;
+    text-align: left;
 
-  &__month {
-    font-family: $ptRootUI;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 1.36;
-    letter-spacing: 0.2px;
+    &_canceled {
+      color: $lightGray;
+    }
   }
 
   &__title {
@@ -64,10 +74,14 @@
     -webkit-box-orient: vertical;
     line-clamp: 2;
     box-orient: vertical;
+
+    &_canceled {
+      color: $lightGray;
+    }
   }
 }
 
-@include atTablet {
+@include atTabletL {
   .profile-event-card {
     max-width: 205px;
     max-height: 108px;
@@ -76,19 +90,22 @@
       padding: 15px;
     }
 
+    &__text-canceled {
+      top: 1px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+    }
+
     &__day {
       font-size: 37px;
       line-height: 1.05;
-    }
-
-    &__month {
-      font-size: 12px;
-      line-height: 1.2;
+      margin-bottom: 5px;
     }
 
     &__title {
       font-size: 12px;
-      line-height: 1.2;
+      line-height: 1.4;
     }
   }
 }

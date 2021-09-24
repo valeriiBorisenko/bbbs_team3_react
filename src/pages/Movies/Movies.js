@@ -1,16 +1,21 @@
-import './Movies.scss';
-import { useEffect, useState, useContext } from 'react';
-import moviesPageTexts from '../../locales/movies-page-RU';
-import { useScrollToTop, useDebounce } from '../../hooks/index';
-import { getMoviesPageData, getMoviesPageFilter } from '../../api/movies-page';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import moviesPageTexts from './locales/RU';
+import { ErrorsContext, PopupsContext } from '../../contexts';
+import { useDebounce } from '../../hooks';
 import {
-  BasePage,
-  TitleH1,
-  CardFilm,
-  CardAnnotation,
-  Loader,
+  getMovie,
+  getMoviesPageData,
+  getMoviesPageFilter,
+} from '../../api/movies-page';
+import {
   AnimatedPageContainer,
+  BasePage,
+  CardAnnotation,
+  CardFilm,
+  Loader,
   TagsList,
+  TitleH1,
 } from './index';
 import Paginate from '../../components/utils/Paginate/Paginate';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
@@ -18,28 +23,33 @@ import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
+  localStChosenVideo,
 } from '../../config/constants';
 import {
+  deselectOneTag,
   handleCheckboxBehavior,
   selectOneTag,
-  deselectOneTag,
 } from '../../utils/filter-tags';
-import { ErrorsContext, PopupsContext } from '../../contexts/index';
+import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import './Movies.scss';
 
 const PAGE_SIZE_PAGINATE = {
-  mobile: 2,
-  tablet: 4,
+  small: 8,
   medium: 12,
   big: 16,
+};
+
+const maxScreenWidth = {
+  small: 1216,
+  medium: 1451,
 };
 
 const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 
 function Movies() {
-  useScrollToTop();
-
+  const { state } = useLocation();
   const { setError } = useContext(ErrorsContext);
-  const { openPopupError } = useContext(PopupsContext);
+  const { openPopupError, openPopupVideo } = useContext(PopupsContext);
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(true);
@@ -82,10 +92,7 @@ function Movies() {
       .then((results) => setMoviesPageData(results))
       .catch(() => {
         if (isFiltersUsed) {
-          setError({
-            title: ERROR_MESSAGES.filterErrorMessage.title,
-            button: ERROR_MESSAGES.filterErrorMessage.button,
-          });
+          setError(ERROR_MESSAGES.filterErrorMessage);
           openPopupError();
         } else {
           setIsPageError(true);
@@ -138,6 +145,18 @@ function Movies() {
     }
   };
 
+  // Откртие попапа при переходе из поиска
+  useEffect(() => {
+    if (state) {
+      getMovie(state.id)
+        .then((res) => {
+          setLocalStorageData(localStChosenVideo, res);
+          openPopupVideo();
+        })
+        .catch(() => setIsPageError(true));
+    }
+  }, [state]);
+
   /// Фильтрация с делэем
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePaginate = useDebounce(getMoviesData, DELAY_DEBOUNCE);
@@ -161,15 +180,16 @@ function Movies() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const mobileQuery = window.matchMedia('(max-width: 900px)');
-    const smallQuery = window.matchMedia('(max-width: 1216px)');
-    const largeQuery = window.matchMedia('(max-width: 1451px)');
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
+    const largeQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.medium}px)`
+    );
 
     const listener = () => {
-      if (mobileQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.mobile);
-      } else if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.tablet);
+      if (smallQuery.matches) {
+        setPageSize(PAGE_SIZE_PAGINATE.small);
       } else if (largeQuery.matches) {
         setPageSize(PAGE_SIZE_PAGINATE.medium);
       } else {
@@ -177,16 +197,28 @@ function Movies() {
       }
     };
     listener();
-    mobileQuery.addEventListener('change', listener);
+
     smallQuery.addEventListener('change', listener);
     largeQuery.addEventListener('change', listener);
 
     return () => {
-      mobileQuery.removeEventListener('change', listener);
       smallQuery.removeEventListener('change', listener);
       largeQuery.removeEventListener('change', listener);
     };
   }, []);
+
+  // глобальный лоадер
+  if (isLoading) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="movies page__section fade-in">
+        {renderPageContent()}
+      </section>
+    </BasePage>
+  );
 
   // контейнер заглушки
   function renderAnimatedContainer() {
@@ -194,14 +226,14 @@ function Movies() {
   }
 
   // контейнер с фильмами
-  const renderMoviesContainer = () => {
+  function renderMoviesContainer() {
     if (!moviesPageData && !isLoading) {
       return renderAnimatedContainer();
     }
     return (
       <>
         {isLoadingPaginate ? (
-          <Loader isNested />
+          <Loader isPaginate />
         ) : (
           <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
             {moviesPageData.map((movie) => (
@@ -223,9 +255,10 @@ function Movies() {
         )}
       </>
     );
-  };
+  }
+
   // главная функция рендеринга
-  const renderPageContent = () => {
+  function renderPageContent() {
     if (isPageError) {
       return (
         <AnimatedPageContainer
@@ -247,23 +280,10 @@ function Movies() {
         )}
 
         {/* рендерим фильмы */}
-        {isFiltersUsed ? <Loader isNested /> : renderMoviesContainer()}
+        {isFiltersUsed ? <Loader isPaginate /> : renderMoviesContainer()}
       </>
     );
-  };
-
-  // глобальный лоадер
-  if (isLoading) {
-    return <Loader isCentered />;
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="movies page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
-  );
 }
 
 export default Movies;

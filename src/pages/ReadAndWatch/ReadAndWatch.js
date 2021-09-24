@@ -1,33 +1,33 @@
-import { useState, useEffect } from 'react';
-import './ReadAndWatch.scss';
-import readAndWatchPageTexts from '../../locales/read-and-watch-page-RU';
+import { useEffect, useState } from 'react';
+import readAndWatchPageTexts from './locales/read-and-watch-page-RU';
 import {
   BasePage,
-  CardCatalog,
   CardArticle,
-  CardFilm,
   CardBook,
+  CardCatalog,
+  CardFilm,
 } from './index';
 import {
-  CATALOG_URL,
   ARTICLES_URL,
+  BOOKS_URL,
+  CATALOG_URL,
   MOVIES_URL,
   VIDEO_URL,
-  BOOKS_URL,
 } from '../../config/routes';
 import {
-  RAW_DELAY_SLIDER_TRANSITION,
-  RAW_SLIDER_PADDINGS,
-  RAW_SLIDER_BREAKPOINTS,
   ELEMS_PER_SLIDE,
+  RAW_DELAY_SLIDER_TRANSITION,
+  RAW_SLIDER_BREAKPOINTS,
+  RAW_SLIDER_PADDINGS,
 } from './constants';
 import ReadAndWatchSection from '../../components/ReadAndWatchSection/ReadAndWatchSection';
 // АПИ
-import getCatalogPageDatа from '../../api/catalog-page';
+import { getCatalogPageData } from '../../api/catalog-page';
 import { getVideoPageData } from '../../api/video-page';
-import getArticlesPageData from '../../api/articles-page';
+import { getArticlesPageData } from '../../api/articles-page';
 import { getMoviesPageData } from '../../api/movies-page';
 import { getBooksPageData } from '../../api/books-page';
+import './ReadAndWatch.scss';
 
 // константы страницы
 const { headTitle, headDescription, pageTitles, paragraphNoContent } =
@@ -73,6 +73,14 @@ function ReadAndWatch() {
     };
   }, []);
 
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="readwatch-page page__section fade-in">
+        {pageSize && renderUniqueSliderSections()}
+      </section>
+    </BasePage>
+  );
+
   function renderUniqueSliderSections() {
     return (
       <>
@@ -82,11 +90,11 @@ function ReadAndWatch() {
           transitionDelay={RAW_DELAY_SLIDER_TRANSITION}
           paragraphNoContentText={paragraphNoContent}
           pageSize={pageSize}
-          getDataFromApi={getCatalogPageDatа}
+          getDataFromApi={getCatalogPageData}
           CardTemplateComponent={CardCatalog}
           path={CATALOG_URL}
           sectionTitle={catalogTitle}
-          sectionClass="readwatch__slider-container_el_catalog"
+          sectionClass="readwatch-page__slider-container_el_catalog"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -98,7 +106,8 @@ function ReadAndWatch() {
           CardTemplateComponent={CardFilm}
           path={VIDEO_URL}
           sectionTitle={videosTitle}
-          sectionClass="readwatch__slider-container_el_video"
+          sectionClass="readwatch-page__slider-container_el_video"
+          isVideo
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -110,7 +119,7 @@ function ReadAndWatch() {
           CardTemplateComponent={CardArticle}
           path={ARTICLES_URL}
           sectionTitle={articlesTitle}
-          sectionClass="readwatch__slider-container_el_articles"
+          sectionClass="readwatch-page__slider-container_el_articles"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -122,7 +131,7 @@ function ReadAndWatch() {
           CardTemplateComponent={CardFilm}
           path={MOVIES_URL}
           sectionTitle={moviesTitle}
-          sectionClass="readwatch__slider-container_el_movies"
+          sectionClass="readwatch-page__slider-container_el_movies"
         />
         <ReadAndWatchSection
           breakpoints={RAW_SLIDER_BREAKPOINTS}
@@ -134,19 +143,11 @@ function ReadAndWatch() {
           CardTemplateComponent={CardBook}
           path={BOOKS_URL}
           sectionTitle={booksTitle}
-          sectionClass="readwatch__slider-container_el_books"
+          sectionClass="readwatch-page__slider-container_el_books"
         />
       </>
     );
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="readwatch-page page__section fade-in">
-        {pageSize && renderUniqueSliderSections()}
-      </section>
-    </BasePage>
-  );
 }
 
 export default ReadAndWatch;

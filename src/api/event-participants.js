@@ -18,16 +18,20 @@ function cancelEventRegistration(eventId) {
 }
 
 // получение списка всех мероприятий на которые записан юзер
-function getBookedEvents() {
+function getBookedEvents({ limit, offset }) {
   return axios
-    .get(`${baseURL}${apiUrl}/afisha/event-participants/`)
+    .get(`${baseURL}${apiUrl}/afisha/event-participants/`, {
+      params: { limit, offset },
+    })
     .then((response) => response.data.results)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }
 
-function getArchiveOfBookedEvents() {
+function getArchiveOfBookedEvents({ limit, offset }) {
   return axios
-    .get(`${baseURL}${apiUrl}/afisha/event-participants/archive/`)
+    .get(`${baseURL}${apiUrl}/afisha/event-participants/archive/`, {
+      params: { limit, offset },
+    })
     .then((response) => response.data.results)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }

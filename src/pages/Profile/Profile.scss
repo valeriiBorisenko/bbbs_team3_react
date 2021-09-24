@@ -16,7 +16,11 @@
     width: fit-content;
     text-align: center;
     color: $lightBlack;
-    transform: translateX(-100px);
+
+
+    &_shifted {
+      transform: translateX(-100px);
+    }
   }
 
   &__archive-button {
@@ -37,7 +41,7 @@
 
   &__scroll-anchor {
     position: absolute;
-    top: -55px;
+    top: -50px;
     left: 0;
     width: 1px;
     height: 1px;
@@ -56,7 +60,15 @@
   &__button-add-diary {
     display: flex;
     align-items: center;
-  
+    padding: 0;
+    border: none;
+    background-color: rgba(255, 255, 255, 0);
+    margin-bottom: 50px;
+
+    & .button-round {
+      margin-right: 15px;
+    }
+
     &::after {
       content: 'Добавить встречу';
       white-space: nowrap;
@@ -66,13 +78,14 @@
       font-size: 15px;
       line-height: 1.27;
       letter-spacing: 0.2px;
-      margin-left: 68px;
-      pointer-events: none;
     }
-  
+
     &:hover {
       cursor: pointer;
-      background-color: $lightBlue;
+
+      & .button-round {
+        background-color: $lightBlue;
+      }
     }
   }
 
@@ -110,30 +123,34 @@
 @include atDesktop1440 {
   .profile {
     &__events {
-      margin-left: -135px;
-      margin-right: -135px;
+      margin-left: -127px;
+      margin-right: -127px;
     }
   }
 
   .profile-event-card {
     &:first-of-type {
-      margin-left: 135px;
+      margin-left: 127px;
     }
 
     &:last-of-type {
-      margin-right: 135px;
+      margin-right: 127px;
     }
   }
 }
 
 @include atDesktop1380 {
   .profile {
-      &__scroll-anchor {
-      top: 0;
-    }
-
     &__archive-button {
       font-size: 18px;
+    }
+  }
+}
+
+@include atDesktop1279 {
+  .profile {
+    &__scroll-anchor {
+      top: 0;
     }
   }
 }
@@ -158,7 +175,7 @@
       margin-bottom: 10px;
     }
 
-    &__title {
+    &__title_shifted {
       transform: translateX(0);
     }
   }
@@ -168,7 +185,6 @@
   .profile {
     &__button-add-diary {
       &::after {
-        margin-left: 55px;
         font-size: 12px;
         line-height: 1.41;
       }
@@ -180,11 +196,9 @@
   }
 }
 
-@include atTablet {
+@include atTabletL {
   .profile {
     &__events {
-      margin-right: -60px;
-      margin-left: -60px;
       margin-bottom: 15px;
     }
 
@@ -202,6 +216,23 @@
 
     &__form-container {
       margin-bottom: 20px;
+    }
+
+    &__button-add-diary {
+      margin-bottom: 20px;
+    }
+  }
+
+  .profile-event-card {
+    margin-right: 20px;
+  }
+}
+
+@include atTablet {
+  .profile {
+    &__events {
+      margin-right: -60px;
+      margin-left: -60px;
     }
   }
 

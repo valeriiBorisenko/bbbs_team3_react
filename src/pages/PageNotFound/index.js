@@ -1,4 +1,4 @@
-import PageNoFooter from '../../layout/PageNoFooter';
+import BasePage from '../../layout/BasePage';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 
-export { PageNoFooter, AnimatedPageContainer };
+export { BasePage, AnimatedPageContainer };

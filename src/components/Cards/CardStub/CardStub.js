@@ -1,7 +1,7 @@
-import './CardStub.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { Card, LogoBlue, TitleH2 } from '../../utils/index';
+import { Card, LogoBlue, TitleH2 } from '../../utils';
+import './CardStub.scss';
 
 function CardStub({ sectionClass }) {
   return (

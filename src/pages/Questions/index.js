@@ -3,12 +3,13 @@ import CardQuestion from '../../components/Cards/CardQuestion/CardQuestion';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import TagsList from '../../components/TagsList/TagsList';
 import {
-  TitleH2,
-  TitleH1,
-  Loader,
-  Input,
   Button,
-} from '../../components/utils/index';
+  Input,
+  Loader,
+  Paginate,
+  TitleH1,
+  TitleH2,
+} from '../../components/utils';
 
 export {
   BasePage,
@@ -20,4 +21,5 @@ export {
   Loader,
   AnimatedPageContainer,
   TagsList,
+  Paginate,
 };

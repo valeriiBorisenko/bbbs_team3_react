@@ -16,6 +16,7 @@
 .pseudo-button {
   box-sizing: border-box;
   user-select: none;
+  border: 1px solid $black;
 
   &:hover {
     background-color: $lightGray;

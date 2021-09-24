@@ -1,5 +1,6 @@
 import './UserIconButton.scss';
 import PropTypes from 'prop-types';
+import { PROFILE_TITLE } from '../../../config/routes';
 
 function UserIconButton({ sectionClass, isAuthorized, handleClick }) {
   const classNames = [
@@ -14,8 +15,8 @@ function UserIconButton({ sectionClass, isAuthorized, handleClick }) {
     <button
       className={classNames}
       type="button"
-      aria-label="Личный кабинет"
-      title="Личный кабинет"
+      aria-label={PROFILE_TITLE}
+      title={PROFILE_TITLE}
       onClick={handleClick}
     />
   );

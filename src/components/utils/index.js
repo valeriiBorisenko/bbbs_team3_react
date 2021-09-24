@@ -25,6 +25,7 @@ import TitleH3 from './TitleH3/TitleH3';
 import UserIconButton from './UserIconButton/UserIconButton';
 import UserMenuButton from './UserMenuButton/UserMenuButton';
 import Widget from './Widget/Widget';
+import NextArticleLink from './NextArticleLink/NextArticleLink';
 
 export {
   Blockquote,
@@ -54,4 +55,5 @@ export {
   UserIconButton,
   UserMenuButton,
   Widget,
+  NextArticleLink,
 };
