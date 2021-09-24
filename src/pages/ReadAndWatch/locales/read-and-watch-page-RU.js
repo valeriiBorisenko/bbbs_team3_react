@@ -6,7 +6,7 @@ import {
   MOVIES_TITLE,
   READ_AND_WATCH_TITLE,
   VIDEO_TITLE,
-} from '../config/routes';
+} from '../../../config/routes';
 
 const readAndWatchPageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | ${READ_AND_WATCH_TITLE}`,

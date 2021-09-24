@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import './ReadAndWatch.scss';
-import readAndWatchPageTexts from '../../locales/read-and-watch-page-RU';
+import readAndWatchPageTexts from './locales/read-and-watch-page-RU';
 import {
   BasePage,
   CardArticle,
@@ -28,6 +27,7 @@ import { getVideoPageData } from '../../api/video-page';
 import { getArticlesPageData } from '../../api/articles-page';
 import { getMoviesPageData } from '../../api/movies-page';
 import { getBooksPageData } from '../../api/books-page';
+import './ReadAndWatch.scss';
 
 // константы страницы
 const { headTitle, headDescription, pageTitles, paragraphNoContent } =
@@ -72,6 +72,14 @@ function ReadAndWatch() {
       querySizeL.removeEventListener('change', listener);
     };
   }, []);
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <section className="readwatch-page page__section fade-in">
+        {pageSize && renderUniqueSliderSections()}
+      </section>
+    </BasePage>
+  );
 
   function renderUniqueSliderSections() {
     return (
@@ -140,14 +148,6 @@ function ReadAndWatch() {
       </>
     );
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="readwatch-page page__section fade-in">
-        {pageSize && renderUniqueSliderSections()}
-      </section>
-    </BasePage>
-  );
 }
 
 export default ReadAndWatch;
