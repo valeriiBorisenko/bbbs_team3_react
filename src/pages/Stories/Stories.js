@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import Carousel from 'react-elastic-carousel';
 import { useHistory, useParams } from 'react-router-dom';
 import { inclineFirstname } from 'lvovich';
-import storiesPageTexts from '../../locales/stories-page-RU';
+import storiesPageTexts from './locales/RU';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { CurrentUserContext } from '../../contexts';
 import { staticImageUrl } from '../../config/config';
@@ -32,8 +32,8 @@ const carouselItemPaddings = {
 };
 
 const maxScreenWidth = {
-  tablet: '1100px',
-  mobile: '706px',
+  small: 706,
+  medium: 1100,
 };
 
 const tagsLimit = 10;
@@ -121,8 +121,8 @@ function Stories() {
 
   // динамические падинги для фото слайдера
   useEffect(() => {
-    const tablet = window.matchMedia(`(max-width: ${maxScreenWidth.tablet})`);
-    const mobile = window.matchMedia(`(max-width: ${maxScreenWidth.mobile})`);
+    const tablet = window.matchMedia(`(max-width: ${maxScreenWidth.medium}px)`);
+    const mobile = window.matchMedia(`(max-width: ${maxScreenWidth.small}px)`);
 
     const listenWindowWidth = () => {
       if (mobile.matches)

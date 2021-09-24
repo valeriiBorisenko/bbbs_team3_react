@@ -1,4 +1,4 @@
-import { MAIN_PAGE_TITLE } from '../config/routes';
+import { MAIN_PAGE_TITLE } from '../../../config/routes';
 
 const storiesPageTexts = {
   headTitle: `${MAIN_PAGE_TITLE} | Истории дружбы`,
