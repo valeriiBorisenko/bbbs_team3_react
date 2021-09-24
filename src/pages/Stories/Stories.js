@@ -81,7 +81,7 @@ function Stories() {
 
   const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
   const nextPageLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
-  const pairTitle = storiesTags.find((tag) => tag.filter === currentStory?.id);
+  const pairTitle = `${currentStory?.mentor?.firstName} и ${currentStory?.child}`;
   const togetherSince = formatDate(currentStory?.togetherSince);
 
   const handleFilters = (inputValue) => {
@@ -259,12 +259,9 @@ function Stories() {
         <img
           className="stories__main-photo scale-in"
           src={`${staticImageUrl}/${currentStory?.image}`}
-          alt={pairTitle?.name}
+          alt={pairTitle}
         />
-        <TitleH2
-          title={pairTitle?.name}
-          sectionClass="stories__pair-title fade-in"
-        />
+        <TitleH2 title={pairTitle} sectionClass="stories__pair-title fade-in" />
         <Caption
           title={`Вместе с ${formatMonthsGenitiveCase(
             togetherSince?.monthName
@@ -312,7 +309,7 @@ function Stories() {
       <div className="stories__tags-carousel fade-in">
         <span className="stories__scroll-anchor" ref={scrollAnchorRef} />
         <ScrollableContainer
-          step={3}
+          step={5}
           useButtons
           disableMouseDrag
           onScrollCallback={() =>
