@@ -1,9 +1,8 @@
-import './MainPage.scss';
 import { Link } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import mainPageTexts from '../../locales/main-page-RU';
-import { CurrentUserContext, PopupsContext } from '../../contexts/index';
-import { useActivityTypes, useEventBooking } from '../../hooks/index';
+import mainPageTexts from './locales/RU';
+import { CurrentUserContext, PopupsContext } from '../../contexts';
+import { useActivityTypes, useEventBooking } from '../../hooks';
 import { QUESTIONS_URL, STORIES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { ERROR_MESSAGES } from '../../config/constants';
@@ -24,6 +23,7 @@ import {
   Loader,
   Widget,
 } from './index';
+import './MainPage.scss';
 
 // количество отображаемых карточек с фильмами и вопросами
 const MOVIES_COUNT = 4;
@@ -53,12 +53,12 @@ function MainPage() {
   }, [selectedEvent]);
 
   // запрос даты главной страницы при загрузке и при смене города
-  function getMainPageDataOnLoad() {
+  const getMainPageDataOnLoad = () => {
     getMainPageData()
       .then((data) => setMainPageData(data))
       .catch(() => setIsPageError(true))
       .finally(() => setIsCityChanging(false));
-  }
+  };
 
   useEffect(() => {
     if (currentUser) {
@@ -82,6 +82,18 @@ function MainPage() {
   if (!mainPageData && !isPageError) {
     return <Loader isCentered />;
   }
+
+  return (
+    <BasePage headTitle={headTitle} headDescription={headDescription}>
+      {isPageError ? (
+        <AnimatedPageContainer
+          titleText={ERROR_MESSAGES.generalErrorMessage.title}
+        />
+      ) : (
+        renderPageContent()
+      )}
+    </BasePage>
+  );
 
   function renderEventsBlock() {
     // карточка ивента
@@ -243,18 +255,6 @@ function MainPage() {
       </>
     );
   }
-
-  return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {isPageError ? (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      ) : (
-        renderPageContent()
-      )}
-    </BasePage>
-  );
 }
 
 export default MainPage;
