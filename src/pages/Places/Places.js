@@ -53,7 +53,9 @@ const {
   mentorTag,
 } = placesPageTexts;
 
-const smallQueryWidth = 1024;
+const maxScreenWidth = {
+  small: 1024,
+};
 
 function Places() {
   const { state } = useLocation();
@@ -102,7 +104,9 @@ function Places() {
 
   // Резайз пагинации при первой загрузке
   useEffect(() => {
-    const smallQuery = window.matchMedia(`(max-width: ${smallQueryWidth}px)`);
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {

@@ -39,8 +39,10 @@ const PAGE_SIZE_PAGINATE = {
   big: 16,
 };
 
-const smallQueryWidth = 1216;
-const largeQueryWidth = 1451;
+const maxScreenWidth = {
+  small: 1216,
+  medium: 1451,
+};
 
 const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
 
@@ -178,8 +180,12 @@ function Movies() {
   }, [pageSize, pageNumber]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia(`(max-width: ${smallQueryWidth}px)`);
-    const largeQuery = window.matchMedia(`(max-width: ${largeQueryWidth}px)`);
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
+    const largeQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.medium}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {

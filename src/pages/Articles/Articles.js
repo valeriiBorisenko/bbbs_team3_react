@@ -24,7 +24,9 @@ const PAGE_SIZE_PAGINATE = {
   big: 12,
 };
 
-const smallQueryWidth = 1024;
+const maxScreenWidth = {
+  small: 1024,
+};
 
 const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
 
@@ -112,7 +114,9 @@ function Articles() {
   }, [pageSize]);
 
   useEffect(() => {
-    const smallQuery = window.matchMedia(`(max-width: ${smallQueryWidth}px)`);
+    const smallQuery = window.matchMedia(
+      `(max-width: ${maxScreenWidth.small}px)`
+    );
 
     const listener = () => {
       if (smallQuery.matches) {
