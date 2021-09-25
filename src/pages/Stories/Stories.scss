@@ -109,7 +109,8 @@
       }
 
       & .rec-swipable {
-        transform: translateX(-400px);
+        // сдвиг по X = ширина контейнера карточки - ((ширина страницы - ширина контейнера карточки) / 2)
+        transform: translateX(calc(-900px + ((1920px - 900px) / 2)));
       }
 
       & > .rec-arrow {
@@ -228,13 +229,13 @@
   }
 }
 
-// ниже адаптив под разные экраны
 @media screen and (max-width: 1919px) {
   .stories {
     &__photo-carousel {
       & > .rec-carousel {
         & .rec-swipable {
-          transform: translateX(calc(-808px + (-400 - -808) * ((100vw - 1101px) / (1920 - 1101))));
+          // сдвиг по X = -ширина контейнера карточки + ((ширина страницы - ширина контейнера карточки) / 2) - небольшая погрешность на десктопе
+          transform: translateX(calc(-900px + ((100vw - 900px) / 2) - 7px));
         }
       }
     }
@@ -245,18 +246,6 @@
   .stories {
     &__photo-carousel-container {
       margin: 80px -135px;
-    }
-  }
-}
-
-@media screen and (max-width: 1101px) {
-  .stories {
-    &__photo-carousel {
-      & > .rec-carousel {
-        & .rec-swipable {
-          transform: translateX(-808px);
-        }
-      }
     }
   }
 }
@@ -356,7 +345,8 @@
     &__photo-carousel {
       & > .rec-carousel {
         & .rec-swipable {
-          transform: translateX(-358px);
+          // сдвиг по X = -ширина контейнера карточки + ((ширина страницы - ширина контейнера карточки) / 2)
+          transform: translateX(calc(-600px + ((100vw - 600px) / 2)));
         }
 
         & > .rec-arrow {
@@ -399,18 +389,6 @@
   }
 }
 
-@media screen and (max-width: 1099px) {
-  .stories {
-    &__photo-carousel {
-      & > .rec-carousel {
-        & .rec-swipable {
-          transform: translateX(calc(-555px + (-358 - -555) * ((100vw - 706px) / (1100 - 706))));
-        }
-      }
-    }
-  }
-}
-
 @include atTablet {
   .stories {
     &__tags-carousel {
@@ -431,18 +409,6 @@
   }
 }
 
-@media screen and (max-width: 707px) {
-  .stories {
-    &__photo-carousel {
-      & > .rec-carousel {
-        & .rec-swipable {
-          transform: translateX(-555px);
-        }
-      }
-    }
-  }
-}
-
 @media screen and (max-width: 706px) {
   .stories {
     &__carousel-image {
@@ -457,19 +423,8 @@
     &__photo-carousel {
       & > .rec-carousel {
         & .rec-swipable {
-          transform: translateX(-68px);
-        }
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 705px) {
-  .stories {
-    &__photo-carousel {
-      & > .rec-carousel {
-        & .rec-swipable {
-          transform: translateX(calc(-245px + (-68 - -245) * ((100vw - 354px) / (706 - 354))));
+          // сдвиг по X = -ширина контейнера карточки + ((ширина страницы - ширина контейнера карточки) / 2)
+          transform: translateX(calc(-275px + ((100vw - 275px) / 2)));
         }
       }
     }
@@ -496,18 +451,6 @@
 
     &__photo-carousel-container {
       margin: 50px -15px;
-    }
-  }
-}
-
-@media screen and (max-width: 354px) {
-  .stories {
-    &__photo-carousel {
-      & > .rec-carousel {
-        & .rec-swipable {
-          transform: translateX(-245px);
-        }
-      }
     }
   }
 }
