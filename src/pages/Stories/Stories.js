@@ -66,6 +66,19 @@ function Stories() {
     setIsPopupPhotoOpen(false);
   };
 
+  const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
+  const mentorName = currentStory?.mentor?.firstName ?? '';
+  const childName = currentStory?.child ?? '';
+  const pairTitle = `${mentorName} и ${childName}`;
+
+  const togetherSinceDate = formatDate(currentStory?.togetherSince);
+  const togetherSinceText = `Вместе с ${formatMonthsGenitiveCase(
+    togetherSinceDate?.monthName
+  )} ${togetherSinceDate?.year} года`;
+
+  const emailText = `написать ${inclineFirstname(mentorName, 'dative')}`;
+  const nextArticleLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
+
   const photoCarouselRef = useRef(null);
   const [carouselItemPadding, setCarouselItemPaddings] = useState(
     carouselItemPaddings.desktop
@@ -78,11 +91,6 @@ function Stories() {
     });
     openPhotoPopup();
   };
-
-  const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
-  const nextPageLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
-  const pairTitle = `${currentStory?.mentor?.firstName} и ${currentStory?.child}`;
-  const togetherSince = formatDate(currentStory?.togetherSince);
 
   const handleFilters = (inputValue) => {
     handleRadioBehavior(setStoriesTags, { inputValue, isChecked: true });
@@ -236,13 +244,13 @@ function Stories() {
           <>
             {renderUpperBlock()}
 
-            <ReactMarkdown className="stories__markdown fade-in">
+            <ReactMarkdown className="markdown stories__markdown fade-in">
               {currentStory?.uperBody}
             </ReactMarkdown>
 
             {renderPhotosCarousel()}
 
-            <ReactMarkdown className="stories__markdown stories__markdown_last fade-in">
+            <ReactMarkdown className="markdown stories__markdown stories__markdown_last fade-in">
               {currentStory?.lowerBody}
             </ReactMarkdown>
 
@@ -263,12 +271,10 @@ function Stories() {
         />
         <TitleH2 title={pairTitle} sectionClass="stories__pair-title fade-in" />
         <Caption
-          title={`Вместе с ${formatMonthsGenitiveCase(
-            togetherSince?.monthName
-          )} ${togetherSince?.year} года`}
+          title={togetherSinceText}
           sectionClass="stories__caption fade-in"
         />
-        <p className="stories__subtitle stories__subtitle_block fade-in">
+        <p className="stories__subtitle stories__subtitle_last fade-in">
           {currentStory?.description}
         </p>
       </>
@@ -285,17 +291,14 @@ function Stories() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {`написать ${inclineFirstname(
-              currentStory.mentor.firstName,
-              'dative'
-            )}`}
+            {emailText}
           </a>
         )}
 
         {currentStory?.nextArticle && (
           <NextArticleLink
             text={currentStory.nextArticle.title}
-            href={nextPageLink}
+            href={nextArticleLink}
             onClick={fetchTagsOnNextLink}
             sectionClass="stories__link_next"
           />

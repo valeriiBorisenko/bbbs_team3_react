@@ -37,6 +37,11 @@
   }
 }
 
+.rights__markdown {
+  margin: 50px auto 0;
+  max-width: 770px;
+}
+
 
 @include atDesktop1440 {
   .article-lead {
@@ -75,6 +80,11 @@
     &__content {
       max-width: 570px;
     }
+  }
+
+  .rights__markdown {
+    margin-top: 30px;
+    max-width: 570px;
   }
 }
 

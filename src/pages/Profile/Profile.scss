@@ -41,7 +41,7 @@
 
   &__scroll-anchor {
     position: absolute;
-    top: -50px;
+    top: -48px;
     left: 0;
     width: 1px;
     height: 1px;
@@ -150,7 +150,7 @@
 @include atDesktop1279 {
   .profile {
     &__scroll-anchor {
-      top: 0;
+      top: 7px;
     }
   }
 }
@@ -220,6 +220,11 @@
 
     &__button-add-diary {
       margin-bottom: 20px;
+    }
+
+
+    &__scroll-anchor {
+      top: 2px;
     }
   }
 

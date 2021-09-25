@@ -29,7 +29,10 @@ import {
   TagsList,
   TitleH1,
 } from './index';
-import { setLocalStorageData } from '../../hooks/useLocalStorage';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../hooks/useLocalStorage';
 import './Calendar.scss';
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
@@ -246,7 +249,8 @@ function Calendar() {
   }, [pageIndex]);
 
   // подписка/отписка от ивентов
-  const { handleEventBooking, selectedEvent } = useEventBooking();
+  const { handleEventBooking, selectedEvent, isWaitingResponse } =
+    useEventBooking();
   useEffect(() => {
     if (selectedEvent) {
       setCalendarPageData(() =>
@@ -293,6 +297,12 @@ function Calendar() {
         onEventSignUpClick={handleEventBooking}
         onEventDescriptionClick={openPopupAboutEvent}
         sectionClass="scale-in"
+        isWaitingResponse={isWaitingResponse}
+        loadingEventId={
+          isWaitingResponse
+            ? getLocalStorageData(localStAfishaEvent)?.id
+            : undefined
+        }
       />
     ));
   }

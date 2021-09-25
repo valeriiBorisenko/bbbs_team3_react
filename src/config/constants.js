@@ -55,7 +55,7 @@ export const DEFAULT_CITY = 'Москва';
 
 export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif|bmp)$/i;
 
-export const DELAY_DEBOUNCE = 400;
+export const DELAY_DEBOUNCE = 300;
 export const DELAY_RENDER = 100;
 
 export const localStUserCity = 'userCity';

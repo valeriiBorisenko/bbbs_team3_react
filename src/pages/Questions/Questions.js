@@ -48,6 +48,7 @@ const {
   textStubNoData,
   formPlaceholder,
   formSubmitButton,
+  formSubmitButtonLoading,
 } = questionsPageTexts;
 
 const validationSettings = {
@@ -68,6 +69,7 @@ function Questions() {
 
   const { unauthorized, badRequest } = ERROR_CODES;
   const [isPageError, setIsPageError] = useState(false);
+  const [isWaitingResponse, setIsWaitingResponse] = useState(false);
 
   const errorsString = serverError ? getServerErrors(serverError) : '';
 
@@ -121,13 +123,15 @@ function Questions() {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     const { question } = values;
+    setIsWaitingResponse(true);
     postQuestion({ title: question })
       .then(() => setFormState(false))
       .catch((err) => {
         if (err?.status === badRequest || err?.status === unauthorized)
           setError(err?.data);
         else setFormState(true);
-      });
+      })
+      .finally(() => setIsWaitingResponse(false));
   };
 
   // хэндлер клика по фильтру
@@ -316,11 +320,13 @@ function Questions() {
                 sectionClass="input__question-form"
               />
               <Button
-                title={formSubmitButton}
+                title={
+                  isWaitingResponse ? formSubmitButtonLoading : formSubmitButton
+                }
                 color="black"
                 sectionClass="question-form__button"
                 isSubmittable
-                isDisabled={!isValid}
+                isDisabled={isWaitingResponse || !isValid}
               />
             </fieldset>
             <span className="form-error-message">{errorsString}</span>

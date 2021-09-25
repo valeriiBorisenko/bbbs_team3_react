@@ -55,12 +55,13 @@ function Profile() {
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
   const { serverError, setError } = useContext(ErrorsContext);
 
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
   const [events, setEvents] = useState([]);
   const [archivedEvents, setArchivedEvents] = useState([]);
   const [eventsOffset, setEventsOffset] = useState(0);
 
   const [diaries, setDiaries] = useState(null);
-  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
+  const [isWaitingResponse, setIsWaitingResponse] = useState(false);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -69,6 +70,9 @@ function Profile() {
 
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
+
+  // якорь для скролла при работе с дневниками
+  const scrollAnchorRef = useRef(null);
 
   const titleH1Current = events.length > 0 ? eventsTitle : eventsTitleNoResults;
   const titleH1Archive =
@@ -132,11 +136,6 @@ function Profile() {
     getCurrentBookedEvents({ limit: eventsLimit, offset: eventsOffset });
   }, []);
 
-  useEffect(() => {
-    setIsLoadingPaginate(true);
-    getDiaries();
-  }, [pageIndex]);
-
   // отписка от ивентов
   const { selectedEvent } = useEventBooking();
 
@@ -175,7 +174,6 @@ function Profile() {
   };
 
   // работа с формой
-  const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
     scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -227,7 +225,8 @@ function Profile() {
         setDiaries((prevDiaries) => [newDiary, ...prevDiaries]);
         closeForm();
       })
-      .catch((err) => handleErrorOnFormSubmit(err));
+      .catch((err) => handleErrorOnFormSubmit(err))
+      .finally(() => setIsWaitingResponse(false));
   };
 
   const handleEditDiary = (data) => {
@@ -240,10 +239,12 @@ function Profile() {
         );
         closeForm();
       })
-      .catch((err) => handleErrorOnFormSubmit(err));
+      .catch((err) => handleErrorOnFormSubmit(err))
+      .finally(() => setIsWaitingResponse(false));
   };
 
   const handleSubmitDiary = (data) => {
+    setIsWaitingResponse(true);
     if (isEditMode) handleEditDiary(data);
     else handleCreateDiary(data);
   };
@@ -261,25 +262,31 @@ function Profile() {
   };
 
   const handleDeleteDiary = (diary) => {
-    deleteDiary(diary?.id, diary)
+    setIsWaitingResponse(true);
+    deleteDiary(diary?.id)
       .then(() => {
         setDiaries((prevDiaries) =>
           prevDiaries.filter((prevDiary) =>
             prevDiary?.id === diary?.id ? null : prevDiary
           )
         );
-        closeDeleteDiaryPopup();
       })
       .catch(() => {
         setError(ERROR_MESSAGES.generalErrorMessage);
         openPopupError();
+      })
+      .finally(() => {
+        setIsWaitingResponse(false);
+        closeDeleteDiaryPopup();
       });
   };
 
-  const handleShareDiary = (diaryId) => {
-    shareDiary(diaryId)
+  const handleShareDiary = (sharedDiary) => {
+    setIsWaitingResponse(true);
+    setSelectedDiary(sharedDiary);
+    shareDiary(sharedDiary?.id)
       .then(() => {
-        const newDiary = diaries.find((diary) => diary?.id === diaryId);
+        const newDiary = diaries.find((diary) => diary?.id === sharedDiary?.id);
         newDiary.sentToCurator = true;
         setDiaries((prevDiaries) =>
           prevDiaries.map((diary) =>
@@ -290,8 +297,20 @@ function Profile() {
       .catch(() => {
         setError(ERROR_MESSAGES.generalErrorMessage);
         openPopupError();
-      });
+      })
+      .finally(() => setIsWaitingResponse(false));
   };
+
+  // эффект при переключении страниц пагинации
+  useEffect(() => {
+    if (scrollAnchorRef && scrollAnchorRef.current) {
+      scrollAnchorRef.current.scrollIntoView();
+    }
+
+    if (isFormOpen) closeForm();
+    setIsLoadingPaginate(true);
+    getDiaries();
+  }, [pageIndex]);
 
   if (!events.length && !diaries) {
     return <Loader isCentered />;
@@ -307,6 +326,7 @@ function Profile() {
         cardData={selectedDiary}
         onClose={closeDeleteDiaryPopup}
         onCardDelete={handleDeleteDiary}
+        isWaitingResponse={isWaitingResponse && isDeleteDiaryPopupOpen}
       />
     </>
   );
@@ -360,6 +380,7 @@ function Profile() {
             data={formDataToEdit}
             onClose={closeForm}
             onSubmit={handleSubmitDiary}
+            isWaitingResponse={isWaitingResponse}
           />
         </div>
       );
@@ -369,6 +390,7 @@ function Profile() {
 
   function renderDiaries() {
     if (isLoadingPaginate) return <Loader isPaginate />;
+
     if (diaries && diaries.length > 0) {
       return (
         <>
@@ -380,6 +402,8 @@ function Profile() {
               onDelete={openDeleteDiaryPopup}
               onShare={handleShareDiary}
               sectionClass="scale-in"
+              selectedDiaryId={selectedDiary?.id}
+              isWaitingResponse={isWaitingResponse && !isDeleteDiaryPopupOpen}
             />
           ))}
         </>
@@ -416,27 +440,29 @@ function Profile() {
                   title={isArchiveOpen ? titleH1Archive : titleH1Current}
                 />
               </div>
-              <ScrollableContainer
-                sectionClass="profile__events"
-                step={3}
-                onScrollCallback={() => {
-                  if (!serverError) {
-                    if (isArchiveOpen) {
-                      getArchiveOfEvents({
-                        limit: eventsLimit,
-                        offset: eventsOffset,
-                      });
-                    } else {
-                      getCurrentBookedEvents({
-                        limit: eventsLimit,
-                        offset: eventsOffset,
-                      });
+              {(events.length > 0 || archivedEvents.length > 0) && (
+                <ScrollableContainer
+                  sectionClass="profile__events"
+                  step={3}
+                  onScrollCallback={() => {
+                    if (!serverError) {
+                      if (isArchiveOpen) {
+                        getArchiveOfEvents({
+                          limit: eventsLimit,
+                          offset: eventsOffset,
+                        });
+                      } else {
+                        getCurrentBookedEvents({
+                          limit: eventsLimit,
+                          offset: eventsOffset,
+                        });
+                      }
                     }
-                  }
-                }}
-              >
-                {renderEventCards()}
-              </ScrollableContainer>
+                  }}
+                >
+                  {renderEventCards()}
+                </ScrollableContainer>
+              )}
             </>
           ) : (
             <Loader isSmallGrid />
@@ -458,6 +484,7 @@ function Profile() {
                 pageCount={pageCount}
                 value={pageIndex}
                 onChange={setPageIndex}
+                dontUseScrollUp
               />
             )}
           </div>

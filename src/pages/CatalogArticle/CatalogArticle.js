@@ -88,7 +88,7 @@ function CatalogArticle() {
           )}
         </figure>
         <div className="article__container">
-          <ReactMarkdown className="article__markdown">
+          <ReactMarkdown className="markdown article__markdown">
             {catalogArticlePageData?.body}
           </ReactMarkdown>
 

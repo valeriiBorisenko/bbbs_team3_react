@@ -103,7 +103,7 @@ function RightsArticle() {
 
   function renderHtmlBlock() {
     return (
-      <ReactMarkdown className="article__markdown">
+      <ReactMarkdown className="markdown rights__markdown">
         {articleData?.body}
       </ReactMarkdown>
     );
