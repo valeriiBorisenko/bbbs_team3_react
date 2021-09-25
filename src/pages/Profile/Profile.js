@@ -55,12 +55,13 @@ function Profile() {
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
   const { serverError, setError } = useContext(ErrorsContext);
 
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
   const [events, setEvents] = useState([]);
   const [archivedEvents, setArchivedEvents] = useState([]);
   const [eventsOffset, setEventsOffset] = useState(0);
 
   const [diaries, setDiaries] = useState(null);
-  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
+  const [isWaitingResponse, setIsWaitingResponse] = useState(false);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -224,7 +225,8 @@ function Profile() {
         setDiaries((prevDiaries) => [newDiary, ...prevDiaries]);
         closeForm();
       })
-      .catch((err) => handleErrorOnFormSubmit(err));
+      .catch((err) => handleErrorOnFormSubmit(err))
+      .finally(() => setIsWaitingResponse(false));
   };
 
   const handleEditDiary = (data) => {
@@ -237,10 +239,12 @@ function Profile() {
         );
         closeForm();
       })
-      .catch((err) => handleErrorOnFormSubmit(err));
+      .catch((err) => handleErrorOnFormSubmit(err))
+      .finally(() => setIsWaitingResponse(false));
   };
 
   const handleSubmitDiary = (data) => {
+    setIsWaitingResponse(true);
     if (isEditMode) handleEditDiary(data);
     else handleCreateDiary(data);
   };
@@ -258,6 +262,7 @@ function Profile() {
   };
 
   const handleDeleteDiary = (diary) => {
+    setIsWaitingResponse(true);
     deleteDiary(diary?.id, diary)
       .then(() => {
         setDiaries((prevDiaries) =>
@@ -265,11 +270,14 @@ function Profile() {
             prevDiary?.id === diary?.id ? null : prevDiary
           )
         );
-        closeDeleteDiaryPopup();
       })
       .catch(() => {
         setError(ERROR_MESSAGES.generalErrorMessage);
         openPopupError();
+      })
+      .finally(() => {
+        setIsWaitingResponse(false);
+        closeDeleteDiaryPopup();
       });
   };
 
@@ -315,6 +323,7 @@ function Profile() {
         cardData={selectedDiary}
         onClose={closeDeleteDiaryPopup}
         onCardDelete={handleDeleteDiary}
+        isWaitingResponse={isWaitingResponse}
       />
     </>
   );
@@ -368,6 +377,7 @@ function Profile() {
             data={formDataToEdit}
             onClose={closeForm}
             onSubmit={handleSubmitDiary}
+            isWaitingResponse={isWaitingResponse}
           />
         </div>
       );
