@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types';
+import { useCloseOnEscape } from '../../../hooks';
 import Popup from '../Popup/Popup';
 import './PopupPhoto.scss';
 
 function PopupPhoto({ isOpen, onClose, currentPhoto }) {
+  useCloseOnEscape(isOpen, onClose);
+
   return (
     <Popup isOpen={isOpen} onClose={onClose} type="photo" typeContainer="photo">
       <figure className="popup__photo-figure">

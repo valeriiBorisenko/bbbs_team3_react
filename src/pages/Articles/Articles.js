@@ -1,22 +1,17 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import articlesPageTexts from './locales/RU';
-import {
-  COLORS,
-  ERROR_MESSAGES,
-  localStChosenArticle,
-} from '../../config/constants';
+import { COLORS, ERROR_MESSAGES } from '../../config/constants';
 import {
   AnimatedPageContainer,
   BasePage,
   CardArticle,
   Loader,
   Paginate,
+  PopupArticle,
   TitleH1,
 } from './index';
 import { getArticle, getArticlesPageData } from '../../api/articles-page';
-import { setLocalStorageData } from '../../hooks/useLocalStorage';
-import { PopupsContext } from '../../contexts';
 import './Articles.scss';
 
 const PAGE_SIZE_PAGINATE = {
@@ -39,12 +34,12 @@ function Articles() {
   const [mainArticle, setMainCard] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
-  // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
+  const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
 
   const { state } = useLocation();
   const searchArticleId = state?.id;
-  const { openPopupArticle } = useContext(PopupsContext);
+  const [searchedArticle, setSearchedArticle] = useState({});
 
   const getPageData = () => {
     const offset = pageSize * pageNumber;
@@ -66,12 +61,20 @@ function Articles() {
       });
   };
 
+  const openPopupArticle = () => {
+    setIsArticlePopupOpen(true);
+  };
+
+  const closePopupArticle = () => {
+    setIsArticlePopupOpen(false);
+  };
+
   // Открытие попапа при переходе из поиска
   useEffect(() => {
     if (state) {
       getArticle(searchArticleId)
-        .then((res) => {
-          setLocalStorageData(localStChosenArticle, res);
+        .then((article) => {
+          setSearchedArticle(article);
           openPopupArticle();
         })
         .catch(() => setIsPageError(true));
@@ -139,11 +142,18 @@ function Articles() {
   }
 
   return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      {!articlesPageData && !isLoadingPage
-        ? renderAnimatedContainer()
-        : renderPageContent()}
-    </BasePage>
+    <>
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
+        {!articlesPageData && !isLoadingPage
+          ? renderAnimatedContainer()
+          : renderPageContent()}
+      </BasePage>
+      <PopupArticle
+        isOpen={isArticlePopupOpen}
+        onClose={closePopupArticle}
+        article={searchedArticle}
+      />
+    </>
   );
 
   function renderPageContent() {

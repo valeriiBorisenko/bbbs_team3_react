@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { useCloseOnEscape } from '../../../hooks';
 import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import Popup from '../Popup/Popup';
 import { Button, TitleH2 } from '../../utils';
@@ -12,6 +13,8 @@ function PopupDeleteDiary({
   cardData,
   isWaitingResponse,
 }) {
+  useCloseOnEscape(isOpen, onClose);
+
   const { place, date } = cardData;
   const day = formatDate(date);
   const month = formatMonthsGenitiveCase(day?.monthName);

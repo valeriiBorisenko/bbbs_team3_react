@@ -7,14 +7,10 @@ import Loader from './components/utils/Loader/Loader';
 // попапы
 import {
   PopupAboutEvent,
-  PopupArticle,
-  PopupBook,
   PopupCities,
   PopupConfirmation,
   PopupError,
   PopupLogin,
-  PopupPlace,
-  PopupRecommendSuccess,
   PopupSuccessfully,
   PopupVideo,
 } from './components/Popups';
@@ -39,25 +35,15 @@ function App() {
   const [isPopupErrorOpen, setIsPopupErrorOpen] = useState(false);
   const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
   const [isPopupCitiesOpen, setIsPopupCitiesOpen] = useState(false);
-  const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
-    useState(false);
   const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
-  const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
-  const [isPlacePopupOpen, setIsPlacePopupOpen] = useState(false);
-  const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
-
   const [isWithoutRegister, setIsWithoutRegister] = useState(false);
 
-  // управление попапами (открыть/закрыть)
+  // управление общими попапами (открыть/закрыть)
   function closeAllPopups() {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
-    setIsPopupRecommendSuccessOpen(false);
     setIsVideoPopupOpen(false);
-    setIsBookPopupOpen(false);
-    setIsPlacePopupOpen(false);
-    setIsArticlePopupOpen(false);
   }
 
   function openPopupConfirmation() {
@@ -102,24 +88,8 @@ function App() {
     setIsPopupLoginOpen(false);
   }
 
-  function openPopupRecommendSuccess() {
-    setIsPopupRecommendSuccessOpen(true);
-  }
-
   function openPopupVideo() {
     setIsVideoPopupOpen(true);
-  }
-
-  function openPopupBook() {
-    setIsBookPopupOpen(true);
-  }
-
-  function openPopupPlace() {
-    setIsPlacePopupOpen(true);
-  }
-
-  function openPopupArticle() {
-    setIsArticlePopupOpen(true);
   }
 
   // контекст попапов
@@ -132,11 +102,7 @@ function App() {
     openPopupError,
     openPopupCities,
     openPopupLogin,
-    openPopupRecommendSuccess,
     openPopupVideo,
-    openPopupBook,
-    openPopupPlace,
-    openPopupArticle,
   };
 
   // текущий юзер/контекст
@@ -222,21 +188,8 @@ function App() {
                   isOpen={isPopupErrorOpen}
                   onClose={closePopupError}
                 />
-                <PopupRecommendSuccess
-                  isOpen={isPopupRecommendSuccessOpen}
-                  onClose={closeAllPopups}
-                />
                 <PopupVideo
                   isOpen={isVideoPopupOpen}
-                  onClose={closeAllPopups}
-                />
-                <PopupBook isOpen={isBookPopupOpen} onClose={closeAllPopups} />
-                <PopupPlace
-                  isOpen={isPlacePopupOpen}
-                  onClose={closeAllPopups}
-                />
-                <PopupArticle
-                  isOpen={isArticlePopupOpen}
                   onClose={closeAllPopups}
                 />
               </div>

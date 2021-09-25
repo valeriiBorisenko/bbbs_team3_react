@@ -1,14 +1,13 @@
 import { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { ErrorsContext, PopupsContext } from '../../contexts';
+import { ErrorsContext } from '../../contexts';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
 import './PlacesRecommend.scss';
 
-function PlacesRecommend({ sectionClass, activityTypes }) {
-  const { openPopupRecommendSuccess } = useContext(PopupsContext);
+function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
   const { setError } = useContext(ErrorsContext);
   const { generalErrorMessage } = ERROR_MESSAGES;
   const { unauthorized, badRequest } = ERROR_CODES;
@@ -48,7 +47,7 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
     setIsWaitingResponse(true);
     postPlace(createFormData(data))
       .then(() => {
-        openPopupRecommendSuccess(true);
+        openSuccessPopup();
         closeForm();
       })
       .catch((err) => {
@@ -109,11 +108,13 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
 PlacesRecommend.propTypes = {
   activityTypes: PropTypes.arrayOf(PropTypes.object),
   sectionClass: PropTypes.string,
+  openSuccessPopup: PropTypes.func,
 };
 
 PlacesRecommend.defaultProps = {
   activityTypes: [],
   sectionClass: '',
+  openSuccessPopup: () => {},
 };
 
 export default PlacesRecommend;

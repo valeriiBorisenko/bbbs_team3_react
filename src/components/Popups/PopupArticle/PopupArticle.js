@@ -1,23 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useCloseOnEscape } from '../../../hooks';
 import Popup from '../Popup/Popup';
-import { COLORS, localStChosenArticle } from '../../../config/constants';
-import {
-  getLocalStorageData,
-  removeLocalStorageData,
-} from '../../../hooks/useLocalStorage';
+import { COLORS } from '../../../config/constants';
 import CardArticle from '../../Cards/CardArticle/CardArticle';
 import './PopupArticle.scss';
 
-const PopupArticle = ({ isOpen, onClose }) => {
-  const article = getLocalStorageData(localStChosenArticle) || {};
-
+const PopupArticle = ({ isOpen, onClose, article }) => {
   const getRandomColor = (max) => Math.floor(Math.random() * max);
 
-  const closePopup = () => {
-    removeLocalStorageData(localStChosenArticle);
-    onClose();
-  };
+  useCloseOnEscape(isOpen, onClose);
 
   return (
     <Popup
@@ -25,7 +17,7 @@ const PopupArticle = ({ isOpen, onClose }) => {
       typeContainer="article"
       sectionClass="popup__container_article"
       isOpen={isOpen}
-      onClose={closePopup}
+      onClose={onClose}
       withoutCloseButton
     >
       <CardArticle
@@ -40,6 +32,7 @@ const PopupArticle = ({ isOpen, onClose }) => {
 PopupArticle.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
+  article: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 PopupArticle.defaultProps = {
