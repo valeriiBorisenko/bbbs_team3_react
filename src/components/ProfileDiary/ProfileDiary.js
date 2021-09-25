@@ -9,12 +9,21 @@ import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationConta
 import { Button, Caption, Card, Rating, TitleH2 } from '../utils';
 import './ProfileDiary.scss';
 
-function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
+function ProfileDiary({
+  data,
+  onEdit,
+  onDelete,
+  onShare,
+  sectionClass,
+  selectedDiaryId,
+  isWaitingResponse,
+}) {
   const { image, place, description, mark, date, sentToCurator, hasCurator } =
     data;
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
+  const isSendingToCurator = isWaitingResponse && selectedDiaryId === data?.id;
 
   useEffect(() => {
     setCaption(captions[mark]);
@@ -30,7 +39,7 @@ function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
 
   const handleShareButtonClick = () => {
     if (!sentToCurator) {
-      onShare(data?.id);
+      onShare(data);
     }
   };
 
@@ -86,11 +95,18 @@ function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
             {hasCurator && (
               <Button
                 title={
-                  sentToCurator ? texts.buttonTextShared : texts.buttonShareText
+                  isSendingToCurator
+                    ? texts.buttonTextSharing
+                    : `${
+                        sentToCurator
+                          ? texts.buttonTextShared
+                          : texts.buttonShareText
+                      }`
                 }
                 color="gray-borderless"
                 sectionClass={classNamesSendToCuratorButton}
                 onClick={handleShareButtonClick}
+                isDisabled={isSendingToCurator}
               />
             )}
             <Button
@@ -118,6 +134,8 @@ ProfileDiary.propTypes = {
   onDelete: PropTypes.func,
   onShare: PropTypes.func,
   sectionClass: PropTypes.string,
+  selectedDiaryId: PropTypes.number,
+  isWaitingResponse: PropTypes.bool,
 };
 
 ProfileDiary.defaultProps = {
@@ -126,6 +144,8 @@ ProfileDiary.defaultProps = {
   onDelete: () => {},
   onShare: () => {},
   sectionClass: '',
+  selectedDiaryId: undefined,
+  isWaitingResponse: false,
 };
 
 export default ProfileDiary;

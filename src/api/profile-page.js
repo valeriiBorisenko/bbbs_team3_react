@@ -31,9 +31,9 @@ function editDiary(diaryId, data) {
 }
 
 // удалить дневник
-function deleteDiary(diaryId, data) {
+function deleteDiary(diaryId) {
   return axios
-    .delete(`${baseURL}${apiUrl}/profile/diaries/${diaryId}/`, data)
+    .delete(`${baseURL}${apiUrl}/profile/diaries/${diaryId}/`)
     .then((response) => response.data)
     .catch((err) => Promise.reject(err?.response));
 }
@@ -46,10 +46,19 @@ function shareDiary(diaryId) {
     .catch((err) => Promise.reject(err?.response));
 }
 
+// получить дневник по id
+function getDiaryById(diaryId) {
+  return axios
+    .get(`${baseURL}${apiUrl}/profile/diaries/${diaryId}/`)
+    .then((response) => response.data)
+    .catch((err) => Promise.reject(err?.response));
+}
+
 export {
   getProfileDiariesData,
   createDiary,
   editDiary,
   deleteDiary,
   shareDiary,
+  getDiaryById,
 };

@@ -263,7 +263,7 @@ function Profile() {
 
   const handleDeleteDiary = (diary) => {
     setIsWaitingResponse(true);
-    deleteDiary(diary?.id, diary)
+    deleteDiary(diary?.id)
       .then(() => {
         setDiaries((prevDiaries) =>
           prevDiaries.filter((prevDiary) =>
@@ -281,10 +281,12 @@ function Profile() {
       });
   };
 
-  const handleShareDiary = (diaryId) => {
-    shareDiary(diaryId)
+  const handleShareDiary = (sharedDiary) => {
+    setIsWaitingResponse(true);
+    setSelectedDiary(sharedDiary);
+    shareDiary(sharedDiary?.id)
       .then(() => {
-        const newDiary = diaries.find((diary) => diary?.id === diaryId);
+        const newDiary = diaries.find((diary) => diary?.id === sharedDiary?.id);
         newDiary.sentToCurator = true;
         setDiaries((prevDiaries) =>
           prevDiaries.map((diary) =>
@@ -295,7 +297,8 @@ function Profile() {
       .catch(() => {
         setError(ERROR_MESSAGES.generalErrorMessage);
         openPopupError();
-      });
+      })
+      .finally(() => setIsWaitingResponse(false));
   };
 
   // эффект при переключении страниц пагинации
@@ -323,7 +326,7 @@ function Profile() {
         cardData={selectedDiary}
         onClose={closeDeleteDiaryPopup}
         onCardDelete={handleDeleteDiary}
-        isWaitingResponse={isWaitingResponse}
+        isWaitingResponse={isWaitingResponse && isDeleteDiaryPopupOpen}
       />
     </>
   );
@@ -399,6 +402,8 @@ function Profile() {
               onDelete={openDeleteDiaryPopup}
               onShare={handleShareDiary}
               sectionClass="scale-in"
+              selectedDiaryId={selectedDiary?.id}
+              isWaitingResponse={isWaitingResponse && !isDeleteDiaryPopupOpen}
             />
           ))}
         </>
