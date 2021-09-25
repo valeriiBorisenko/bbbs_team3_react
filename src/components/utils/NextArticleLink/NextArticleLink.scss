@@ -7,6 +7,7 @@
   max-width: 770px;
   color: $blue;
   text-decoration: none;
+  margin-top: 85px;
 
   &__text {
     font-family: $protoGrotesk;
@@ -42,6 +43,8 @@
 
 @include atDesktop1024 {
   .next-article-link {
+    margin-top: 50px;
+
     &__text {
       font-size: 19px;
       line-height: 1.21;
@@ -56,6 +59,7 @@
 
 @include atMobile {
   .next-article-link {
+    margin-top: 35px;
 
     &__text {
       font-size: 19px;

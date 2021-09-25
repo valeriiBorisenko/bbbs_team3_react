@@ -48,10 +48,6 @@
   width: 100%;
 }
 
-.article__next-article-link {
-  margin-top: 85px;
-}
-
 @include atDesktop1440 {
   .article__main-title {
     max-width: 855px;
@@ -98,10 +94,6 @@
   .article__container {
     max-width: 570px;
   }
-
-  .article__next-article-link {
-    margin-top: 50px;
-  }
 }
 
 @include atMobile {
@@ -119,9 +111,5 @@
 
   .article__figure {
     margin-top: 20px;
-  }
-
-  .article__next-article-link {
-    margin-top: 35px;
   }
 }
