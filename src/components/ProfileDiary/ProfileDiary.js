@@ -10,7 +10,8 @@ import { Button, Caption, Card, Rating, TitleH2 } from '../utils';
 import './ProfileDiary.scss';
 
 function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
-  const { image, place, description, mark, date, sentToCurator } = data;
+  const { image, place, description, mark, date, sentToCurator, hasCurator } =
+    data;
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
@@ -32,6 +33,14 @@ function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
       onShare(data?.id);
     }
   };
+
+  const classNamesSendToCuratorButton = [
+    'profile-diary__button',
+    'profile-diary__button_curator',
+    sentToCurator ? 'profile-diary__button_curator-shared' : '',
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <div className={`card-container profile-diary ${sectionClass}`}>
@@ -74,16 +83,16 @@ function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
             />
           </div>
           <div className="profile-diary__action-elements">
-            <Button
-              title={
-                sentToCurator ? texts.buttonTextShared : texts.buttonShareText
-              }
-              color="gray-borderless"
-              sectionClass={`profile-diary__button ${
-                sentToCurator ? 'profile-diary__button_shared' : ''
-              }`}
-              onClick={handleShareButtonClick}
-            />
+            {hasCurator && (
+              <Button
+                title={
+                  sentToCurator ? texts.buttonTextShared : texts.buttonShareText
+                }
+                color="gray-borderless"
+                sectionClass={classNamesSendToCuratorButton}
+                onClick={handleShareButtonClick}
+              />
+            )}
             <Button
               title={texts.buttonEditText}
               color="gray-borderless"
