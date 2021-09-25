@@ -8,6 +8,7 @@ const questionsPageTexts = {
     'В данный момент страница вопросов пуста. Возвращайтесь позже!',
   formPlaceholder: 'Введите вопрос',
   formSubmitButton: 'Отправить',
+  formSubmitButtonLoading: 'Отправка...',
 };
 
 export default questionsPageTexts;
