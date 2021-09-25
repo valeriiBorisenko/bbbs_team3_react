@@ -14,6 +14,7 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   const { unauthorized, badRequest } = ERROR_CODES;
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isWaitingResponse, setIsWaitingResponse] = useState(false);
 
   const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
@@ -44,6 +45,7 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   };
 
   const handleFormSubmit = (data) => {
+    setIsWaitingResponse(true);
     postPlace(createFormData(data))
       .then(() => {
         openPopupRecommendSuccess(true);
@@ -56,7 +58,8 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
           setError({
             message: generalErrorMessage.title,
           });
-      });
+      })
+      .finally(() => setIsWaitingResponse(false));
   };
 
   const classNames = [
@@ -95,6 +98,7 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
             isOpen={isFormOpen}
             onSubmit={handleFormSubmit}
             activityTypes={activityTypes}
+            isWaitingResponse={isWaitingResponse}
           />
         </div>
       </section>
