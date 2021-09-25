@@ -17,8 +17,7 @@ import {
   STORIES_URL,
 } from '../../config/routes';
 import { socialLinks } from '../../utils/external-links';
-import footerLogoPath from '../../assets/footer-logo.svg';
-import { NavItem } from '../utils';
+import { Logo, NavItem } from '../utils';
 import './Footer.scss';
 
 function Footer() {
@@ -30,11 +29,7 @@ function Footer() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img
-          className="footer__logo-image"
-          src={footerLogoPath}
-          alt={texts.logoAlt}
-        />
+        <Logo isWhite sectionClass="footer__logo-image" />
       </a>
       <a
         className="button footer__button"

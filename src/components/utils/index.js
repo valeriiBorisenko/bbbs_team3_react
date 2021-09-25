@@ -9,7 +9,7 @@ import DropDownSelect from './DropDownSelect/DropDownSelect';
 import Input from './Input/Input';
 import LinkableHeading from './LinkableHeading/LinkableHeading';
 import Loader from './Loader/Loader';
-import LogoBlue from './LogoBlue/LogoBlue';
+import Logo from './Logo/Logo';
 import NavItem from './NavItem/NavItem';
 import ModificatedScrollbars from './ModificatedScrollbars/ModificatedScrollbars';
 import NoDataNotificationBox from './NoDataNotificationBox/NoDataNotificationBox';
@@ -39,7 +39,7 @@ export {
   Input,
   LinkableHeading,
   Loader,
-  LogoBlue,
+  Logo,
   NavItem,
   ModificatedScrollbars,
   NoDataNotificationBox,
