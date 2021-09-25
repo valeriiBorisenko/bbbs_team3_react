@@ -14,7 +14,7 @@ function ProtectedRoute({ component: Component, ...props }) {
 }
 
 ProtectedRoute.propTypes = {
-  component: PropTypes.func.isRequired,
+  component: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
 };
 
 export default ProtectedRoute;

@@ -6,6 +6,7 @@ import {
   formatPhoneNumber,
   formatWordCase,
 } from '../../../utils/utils';
+import '../../Cards/CardCalendar/CardCalendar.scss';
 import Popup from '../Popup/Popup';
 import { Button, ModificatedScrollbars, TitleH2 } from '../../utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';

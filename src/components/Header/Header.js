@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
@@ -110,7 +110,7 @@ function Header({ isTransparentOnTop }) {
     }, onScrollUpDelay);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.addEventListener('scroll', debouncedScrollUp);
     return () => window.removeEventListener('scroll', debouncedScrollUp);
   }, []);

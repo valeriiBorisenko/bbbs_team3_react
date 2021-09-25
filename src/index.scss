@@ -3,12 +3,18 @@
 
 @import './styles/blocks/body';
 
+// глобальные стили библиотек
+@import './styles/blocks/react-elastic-carousel';
+@import './styles/blocks/react-markdown';
+
+// анимации
 @import './styles/blocks/fade-in';
 @import './styles/blocks/scale-in';
 @import './styles/blocks/slide-in';
 @import './styles/blocks/slide-bottom-up';
 @import './styles/blocks/image-scale';
 
+// общие блоки
 @import './styles/blocks/card-pagination';
 @import './styles/blocks/card-container';
 @import './styles/blocks/cards-grid';
