@@ -21,9 +21,9 @@ import {
   VIDEO_URL,
 } from '../config/routes';
 import { Loader } from '../components/utils';
+import MainPage from '../pages/MainPage/MainPage';
 
 // ленивая загрузка страниц
-const MainPage = lazy(() => import('../pages/MainPage/MainPage'));
 const AboutUs = lazy(() => import('../pages/AboutUs/AboutUs'));
 const Calendar = lazy(() => import('../pages/Calendar/Calendar'));
 const Questions = lazy(() => import('../pages/Questions/Questions'));
