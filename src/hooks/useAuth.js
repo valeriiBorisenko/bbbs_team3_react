@@ -22,6 +22,8 @@ const useAuth = (setCurrentUser) => {
   const { unauthorized, badRequest } = ERROR_CODES;
 
   const [isCheckingToken, setIsCheckingToken] = useState(true);
+  // для попапа логина
+  const [isWaitingResponse, setIsWaitingResponse] = useState(false);
 
   // не деструктурируется, на момент чтения undefined
   const popups = useContext(PopupsContext);
@@ -46,6 +48,7 @@ const useAuth = (setCurrentUser) => {
   };
 
   const handleLogin = (loginData) => {
+    setIsWaitingResponse(true);
     AuthApi.authorize(loginData)
       .then((token) => {
         const { access, refresh } = token;
@@ -56,12 +59,14 @@ const useAuth = (setCurrentUser) => {
           getUserData()
             .then((userData) => setCurrentUser(userData))
             .then(() => popups.closePopupLogin())
-            .catch((err) => handleError(err));
+            .catch((err) => handleError(err))
+            .finally(() => setIsWaitingResponse(false));
         } else {
           throw new Error(generalErrorMessage.title);
         }
       })
-      .catch((err) => handleError(err)); // авторизация (работа с сервером) закончилась ошибкой
+      .catch((err) => handleError(err)) // авторизация (работа с сервером) закончилась ошибкой
+      .finally(() => setIsWaitingResponse(false));
   };
 
   const handleTokenError = () => {
@@ -83,6 +88,7 @@ const useAuth = (setCurrentUser) => {
       .catch(() => handleTokenError());
   };
 
+  // происходит фоном
   const checkToken = () => {
     const token = getLocalStorageData(jwt);
     const refreshToken = getLocalStorageData(jwtRefresh);
@@ -109,6 +115,7 @@ const useAuth = (setCurrentUser) => {
 
   return {
     isCheckingToken,
+    isWaitingResponse,
     handleLogout,
     handleLogin,
     checkToken,
