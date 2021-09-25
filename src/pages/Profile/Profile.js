@@ -416,27 +416,29 @@ function Profile() {
                   title={isArchiveOpen ? titleH1Archive : titleH1Current}
                 />
               </div>
-              <ScrollableContainer
-                sectionClass="profile__events"
-                step={3}
-                onScrollCallback={() => {
-                  if (!serverError) {
-                    if (isArchiveOpen) {
-                      getArchiveOfEvents({
-                        limit: eventsLimit,
-                        offset: eventsOffset,
-                      });
-                    } else {
-                      getCurrentBookedEvents({
-                        limit: eventsLimit,
-                        offset: eventsOffset,
-                      });
+              {(events.length > 0 || archivedEvents.length > 0) && (
+                <ScrollableContainer
+                  sectionClass="profile__events"
+                  step={3}
+                  onScrollCallback={() => {
+                    if (!serverError) {
+                      if (isArchiveOpen) {
+                        getArchiveOfEvents({
+                          limit: eventsLimit,
+                          offset: eventsOffset,
+                        });
+                      } else {
+                        getCurrentBookedEvents({
+                          limit: eventsLimit,
+                          offset: eventsOffset,
+                        });
+                      }
                     }
-                  }
-                }}
-              >
-                {renderEventCards()}
-              </ScrollableContainer>
+                  }}
+                >
+                  {renderEventCards()}
+                </ScrollableContainer>
+              )}
             </>
           ) : (
             <Loader isSmallGrid />
