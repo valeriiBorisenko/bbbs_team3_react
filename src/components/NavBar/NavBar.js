@@ -179,28 +179,29 @@ function NavBar({
   }
 
   function renderUserMenuButtons() {
-    return (
-      <div
-        className={`menu__user-info ${
-          !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
-        }`}
-      >
-        <UserMenuButton
-          title={
-            userCityName
-              ? `${userCityName}. ${texts.changeCity}`
-              : texts.changeCityDefault
-          }
-          handleClick={onCityChangeClick}
-          sectionClass={`mobile-link ${
-            !currentUser && pathname === PLACES_URL
-              ? 'menu__user-info_center'
-              : ''
+    if (currentUser || pathname === PLACES_URL) {
+      return (
+        <div
+          className={`menu__user-info ${
+            !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
           }`}
-        />
-        {currentUser && renderLogoutButton()}
-      </div>
-    );
+        >
+          <UserMenuButton
+            title={
+              userCityName
+                ? `${userCityName}. ${texts.changeCity}`
+                : texts.changeCityDefault
+            }
+            handleClick={onCityChangeClick}
+            sectionClass={`mobile-link ${
+              !currentUser ? 'menu__user-info_center' : ''
+            }`}
+          />
+          {currentUser && renderLogoutButton()}
+        </div>
+      );
+    }
+    return null;
   }
 }
 
