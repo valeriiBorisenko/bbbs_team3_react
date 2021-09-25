@@ -70,6 +70,9 @@ function Profile() {
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
 
+  // якорь для скролла при работе с дневниками
+  const scrollAnchorRef = useRef(null);
+
   const titleH1Current = events.length > 0 ? eventsTitle : eventsTitleNoResults;
   const titleH1Archive =
     archivedEvents.length > 0
@@ -132,11 +135,6 @@ function Profile() {
     getCurrentBookedEvents({ limit: eventsLimit, offset: eventsOffset });
   }, []);
 
-  useEffect(() => {
-    setIsLoadingPaginate(true);
-    getDiaries();
-  }, [pageIndex]);
-
   // отписка от ивентов
   const { selectedEvent } = useEventBooking();
 
@@ -175,7 +173,6 @@ function Profile() {
   };
 
   // работа с формой
-  const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
     scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -293,6 +290,17 @@ function Profile() {
       });
   };
 
+  // эффект при переключении страниц пагинации
+  useEffect(() => {
+    if (scrollAnchorRef && scrollAnchorRef.current) {
+      scrollAnchorRef.current.scrollIntoView();
+    }
+
+    if (isFormOpen) closeForm();
+    setIsLoadingPaginate(true);
+    getDiaries();
+  }, [pageIndex]);
+
   if (!events.length && !diaries) {
     return <Loader isCentered />;
   }
@@ -369,6 +377,7 @@ function Profile() {
 
   function renderDiaries() {
     if (isLoadingPaginate) return <Loader isPaginate />;
+
     if (diaries && diaries.length > 0) {
       return (
         <>
@@ -460,6 +469,7 @@ function Profile() {
                 pageCount={pageCount}
                 value={pageIndex}
                 onChange={setPageIndex}
+                dontUseScrollUp
               />
             )}
           </div>
