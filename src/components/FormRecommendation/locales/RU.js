@@ -11,6 +11,7 @@ const texts = {
     'Комментарий* Поделитесь впечатлениями о проведенном времени',
   descPlaceholderMobile: 'Комментарий*',
   buttonText: 'Отправить',
+  buttonTextLoading: 'Отправка...',
   addPhotoBtnDefault: 'Добавить фото',
   addPhotoBtnChange: 'Изменить',
   addPhotoAdded: 'Фото добавлено',

@@ -6,6 +6,7 @@ import {
   formatPhoneNumber,
   formatWordCase,
 } from '../../../utils/utils';
+import '../../Cards/CardCalendar/CardCalendar.scss';
 import Popup from '../Popup/Popup';
 import { Button, ModificatedScrollbars, TitleH2 } from '../../utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
@@ -18,14 +19,18 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
     buttonTitleSelected,
     buttonTitleDisabled,
     remainSeatsText,
+    buttonCancelLoading,
+    buttonTitleLoading,
   } = texts;
 
-  const { handleEventBooking } = useEventBooking();
+  const { handleEventBooking, isWaitingResponse } = useEventBooking();
   const card = getLocalStorageData(localStAfishaEvent);
 
   const startDateParts = formatDate(card?.startAt);
   const endDayParts = formatDate(card?.endAt);
   const isDisabled = card?.remainSeats < 1 && !card?.booked;
+  const isCanceling = isWaitingResponse && card?.booked;
+  const isRegistering = isWaitingResponse && !card?.booked;
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -88,12 +93,14 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
               <div className="calendar__submit">
                 <Button
                   color="blue"
-                  title={buttonTitle}
-                  titleSelected={buttonTitleSelected}
+                  title={isRegistering ? buttonTitleLoading : buttonTitle}
+                  titleSelected={
+                    isCanceling ? buttonCancelLoading : buttonTitleSelected
+                  }
                   sectionClass="button_action_confirm"
                   isSubmittable
                   isBooked={card?.booked}
-                  isDisabled={isDisabled}
+                  isDisabled={isCanceling || isRegistering || isDisabled}
                 />
                 <p className="calendar__place-left">
                   {(isDisabled && buttonTitleDisabled) ||

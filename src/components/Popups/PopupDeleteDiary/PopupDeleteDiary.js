@@ -1,11 +1,20 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { useCloseOnEscape } from '../../../hooks';
 import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import Popup from '../Popup/Popup';
 import { Button, TitleH2 } from '../../utils';
 import './PopupDeleteDiary.scss';
 
-function PopupDeleteDiary({ isOpen, onClose, onCardDelete, cardData }) {
+function PopupDeleteDiary({
+  isOpen,
+  onClose,
+  onCardDelete,
+  cardData,
+  isWaitingResponse,
+}) {
+  useCloseOnEscape(isOpen, onClose);
+
   const { place, date } = cardData;
   const day = formatDate(date);
   const month = formatMonthsGenitiveCase(day?.monthName);
@@ -35,7 +44,12 @@ function PopupDeleteDiary({ isOpen, onClose, onCardDelete, cardData }) {
           <Button
             color="gray"
             sectionClass="popup-diary__button"
-            title={texts.submitButtonText}
+            title={
+              isWaitingResponse
+                ? texts.loadingButtonText
+                : texts.submitButtonText
+            }
+            isDisabled={isWaitingResponse}
             isSubmittable
           />
           <Button
@@ -55,6 +69,7 @@ PopupDeleteDiary.propTypes = {
   onClose: PropTypes.func,
   onCardDelete: PropTypes.func,
   cardData: PropTypes.objectOf(PropTypes.any),
+  isWaitingResponse: PropTypes.bool,
 };
 
 PopupDeleteDiary.defaultProps = {
@@ -62,6 +77,7 @@ PopupDeleteDiary.defaultProps = {
   onClose: () => {},
   onCardDelete: () => {},
   cardData: {},
+  isWaitingResponse: false,
 };
 
 export default PopupDeleteDiary;

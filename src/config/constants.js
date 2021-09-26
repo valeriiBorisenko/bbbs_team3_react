@@ -55,7 +55,7 @@ export const DEFAULT_CITY = 'Москва';
 
 export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif|bmp)$/i;
 
-export const DELAY_DEBOUNCE = 400;
+export const DELAY_DEBOUNCE = 300;
 export const DELAY_RENDER = 100;
 
 export const localStUserCity = 'userCity';
@@ -63,9 +63,6 @@ export const localStAfishaEvent = 'afishaEvent';
 export const jwt = 'jwt';
 export const jwtRefresh = 'jwtRefresh';
 export const localStChosenVideo = 'chosenVideo';
-export const localStChosenBook = 'chosenBook';
-export const localStChosenPlace = 'chosenPlace';
-export const localStChosenArticle = 'chosenArticle';
 
 export const ERROR_MESSAGES = {
   generalErrorMessage: {

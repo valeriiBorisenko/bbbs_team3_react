@@ -1,15 +1,5 @@
 @import './styles/utils.scss';
 
-/* глобальная отмена стандартных ховеров стрелок из библиотеки */
-.rec.rec-arrow.rec-arrow-right:hover,
-.rec.rec-arrow.rec-arrow-right:focus,
-.rec.rec-arrow.rec-arrow-left:hover,
-.rec.rec-arrow.rec-arrow-left:focus {
-  color: transparent;
-  background-color: transparent;
-  box-shadow: none;
-}
-
 .readwatch {
   &__section {
     position: relative;

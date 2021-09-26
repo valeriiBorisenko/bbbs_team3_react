@@ -8,14 +8,12 @@ import {
   PopupsContext,
 } from '../../contexts';
 import { useActivityTypes, useDebounce, useLocalStorage } from '../../hooks';
-import { setLocalStorageData } from '../../hooks/useLocalStorage';
 import {
   ALL_CATEGORIES,
   COLORS,
   DELAY_DEBOUNCE,
   DELAY_RENDER,
   ERROR_MESSAGES,
-  localStChosenPlace,
   localStUserCity,
 } from '../../config/constants';
 import {
@@ -39,10 +37,12 @@ import {
   NoDataNotificationBox,
   Paginate,
   PlacesRecommend,
+  PopupPlace,
   TagsList,
   TitleH1,
 } from './index';
 import './Places.scss';
+import { PopupRecommendSuccess } from '../../components/Popups';
 
 const {
   headTitle,
@@ -60,12 +60,12 @@ const maxScreenWidth = {
 function Places() {
   const { state } = useLocation();
   const searchPlaceId = state?.id;
+  const [searchedPlace, setSearchedPlace] = useState({});
 
   const { activityTypes, activityTypesSimplified } = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
-  const { openPopupCities, openPopupError, openPopupPlace } =
-    useContext(PopupsContext);
+  const { openPopupCities, openPopupError } = useContext(PopupsContext);
   const { setError } = useContext(ErrorsContext);
 
   const getLocalStorageItem = useLocalStorage(localStUserCity);
@@ -96,6 +96,27 @@ function Places() {
   // категории фильтрации
   const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
   const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
+
+  // попапы страницы
+  const [isPlacePopupOpen, setIsPlacePopupOpen] = useState(false);
+  const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
+    useState(false);
+
+  const openPopupPlace = () => {
+    setIsPlacePopupOpen(true);
+  };
+
+  const closePopupPlace = () => {
+    setIsPlacePopupOpen(false);
+  };
+
+  const openPopupRecommendSuccess = () => {
+    setIsPopupRecommendSuccessOpen(true);
+  };
+
+  const closePopupRecommendSuccess = () => {
+    setIsPopupRecommendSuccessOpen(false);
+  };
 
   // Стейты для пагинации
   const [pageSize, setPageSize] = useState(null);
@@ -385,8 +406,8 @@ function Places() {
 
     if (state && userCity) {
       getPlace(searchPlaceId)
-        .then((res) => {
-          setLocalStorageData(localStChosenPlace, res);
+        .then((place) => {
+          setSearchedPlace(place);
           openPopupPlace();
         })
         .catch(() => setIsPageError(true));
@@ -398,11 +419,23 @@ function Places() {
   }
 
   return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="places page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
+    <>
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
+        <section className="places page__section fade-in">
+          {renderPageContent()}
+        </section>
+      </BasePage>
+      <PopupPlace
+        isOpen={isPlacePopupOpen}
+        onClose={closePopupPlace}
+        place={searchedPlace}
+        activityTypesSimplified={activityTypesSimplified}
+      />
+      <PopupRecommendSuccess
+        isOpen={isPopupRecommendSuccessOpen}
+        onClose={closePopupRecommendSuccess}
+      />
+    </>
   );
 
   // функции рендера
@@ -509,7 +542,12 @@ function Places() {
               handleClick={changeAge}
               sectionClass="places__tags"
             />
-            {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
+            {currentUser && (
+              <PlacesRecommend
+                activityTypes={activityTypes}
+                openSuccessPopup={openPopupRecommendSuccess}
+              />
+            )}
 
             {!isLoadingFilters ? renderPlaces() : <Loader isPaginate />}
           </>

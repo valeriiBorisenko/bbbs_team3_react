@@ -106,13 +106,17 @@
   }
 
   &_color_gray-borderless {
-    border-color: transparent;
+    border-color: rgba($white, 0);
     color: $lightGray;
     padding: 0;
     height: auto;
 
     &:hover {
       color: $blue;
+    }
+
+    &:disabled {
+      border-color: rgba($white, 0);
     }
   }
 

@@ -99,7 +99,7 @@
 
   &__rate {
     pointer-events: none;
-    
+
     &:hover {
       cursor: default;
     }
@@ -107,15 +107,15 @@
 
   &__ratings-text {
     margin-left: 15px;
-  
+
     &_type_good {
       color: $green;
     }
-  
+
     &_type_neutral {
       color: $lightGray;
     }
-  
+
     &_type_bad {
       color: $error;
     }
@@ -130,16 +130,16 @@
   &__button {
     margin-right: 30px;
     transition: .3s ease;
-  
+
     &:first-of-type {
       margin-left: 10px;
     }
-  
+
     &:last-of-type {
       margin-right: 0;
     }
 
-    &_shared {
+    &_curator-shared {
       color: $black;
       pointer-events: none;
     }
@@ -227,14 +227,18 @@
     &__button {
       margin: 0;
       justify-self: start;
-  
+
       &:first-of-type {
-        grid-column: 1 / -1;
-        margin: 0 auto 10px 0;
+        margin-left: 0;
       }
-  
+
       &:last-of-type {
         justify-self: end;
+      }
+
+      &_curator {
+        grid-column: 1 / -1;
+        margin-bottom: 10px;
       }
     }
   }

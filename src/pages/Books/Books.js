@@ -13,6 +13,7 @@ import {
   CardBook,
   Loader,
   Paginate,
+  PopupBook,
   TagsList,
   TitleH1,
 } from './index';
@@ -21,7 +22,6 @@ import {
   ALL_CATEGORIES,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
-  localStChosenBook,
 } from '../../config/constants';
 import {
   deselectOneTag,
@@ -29,7 +29,6 @@ import {
   selectOneTag,
 } from '../../utils/filter-tags';
 import { ErrorsContext, PopupsContext } from '../../contexts';
-import { setLocalStorageData } from '../../hooks/useLocalStorage';
 import './Books.scss';
 
 const PAGE_SIZE_PAGINATE = {
@@ -47,10 +46,11 @@ const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
 function Books() {
   const { setError } = useContext(ErrorsContext);
-  const { openPopupError, openPopupBook } = useContext(PopupsContext);
+  const { openPopupError } = useContext(PopupsContext);
 
   const { state } = useLocation();
   const searchBookId = state?.id;
+  const [searchedBook, setSearchedBook] = useState({});
 
   // Загрузка данных
   const [isLoading, setIsLoading] = useState(true);
@@ -66,6 +66,15 @@ function Books() {
   const [pageNumber, setPageNumber] = useState(0);
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
+  const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
+
+  const openPopupBook = () => {
+    setIsBookPopupOpen(true);
+  };
+
+  const closePopupBook = () => {
+    setIsBookPopupOpen(false);
+  };
 
   const getActiveTags = () => {
     if (categories) {
@@ -150,8 +159,8 @@ function Books() {
   useEffect(() => {
     if (state) {
       getBook(searchBookId)
-        .then((res) => {
-          setLocalStorageData(localStChosenBook, res);
+        .then((book) => {
+          setSearchedBook(book);
           openPopupBook();
         })
         .catch(() => setIsPageError(true));
@@ -213,11 +222,18 @@ function Books() {
   }
 
   return (
-    <BasePage headTitle={headTitle} headDescription={headDescription}>
-      <section className="books page__section fade-in">
-        {renderPageContent()}
-      </section>
-    </BasePage>
+    <>
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
+        <section className="books page__section fade-in">
+          {renderPageContent()}
+        </section>
+      </BasePage>
+      <PopupBook
+        isOpen={isBookPopupOpen}
+        onClose={closePopupBook}
+        book={searchedBook}
+      />
+    </>
   );
 
   function renderPageContent() {

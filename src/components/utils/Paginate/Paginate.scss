@@ -79,6 +79,20 @@
   }
 }
 
+.cards-section {
+  &__pagination {
+    padding-top: 80px;
+    height: 50px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+
+    &_no-padding {
+      padding-top: 0;
+    }
+  }
+}
+
 .pagination__element.selected {
   pointer-events: none;
 }
@@ -139,10 +153,34 @@ a[aria-label="Previous page"] {
       width: 20px;
       height: 20px;
       margin: 0 0 0 25px;
-  
+
       &_type_previous {
         margin: 0 25px 0 0;
       }
     }
   }
+
+  .cards-section {
+    &__pagination {
+      padding-top: 60px;
+      height: 38px;
+
+      &_no-padding {
+        padding-top: 30px;
+      }
+    }
+  }
 }
+
+@include atTablet {
+  .cards-section {
+    &__pagination {
+      padding-top: 30px;
+
+      &_no-padding {
+        padding-top: 0;
+      }
+    }
+  }
+}
+

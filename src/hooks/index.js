@@ -9,6 +9,7 @@ import { useLocalStorage } from './useLocalStorage';
 import useEventBooking from './useEventBooking';
 import useFormWithValidation from './useFormWithValidation';
 import useInfiniteScroll from './useInfiniteScroll';
+import useCloseOnEscape from './useCloseOnEscape';
 
 export {
   useClickOutside,
@@ -22,4 +23,5 @@ export {
   useEventBooking,
   useFormWithValidation,
   useInfiniteScroll,
+  useCloseOnEscape,
 };

@@ -9,11 +9,21 @@ import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationConta
 import { Button, Caption, Card, Rating, TitleH2 } from '../utils';
 import './ProfileDiary.scss';
 
-function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
-  const { image, place, description, mark, date, sentToCurator } = data;
+function ProfileDiary({
+  data,
+  onEdit,
+  onDelete,
+  onShare,
+  sectionClass,
+  selectedDiaryId,
+  isWaitingResponse,
+}) {
+  const { image, place, description, mark, date, sentToCurator, hasCurator } =
+    data;
 
   const eventDay = formatDate(date);
   const [caption, setCaption] = useState('');
+  const isSendingToCurator = isWaitingResponse && selectedDiaryId === data?.id;
 
   useEffect(() => {
     setCaption(captions[mark]);
@@ -29,9 +39,17 @@ function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
 
   const handleShareButtonClick = () => {
     if (!sentToCurator) {
-      onShare(data?.id);
+      onShare(data);
     }
   };
+
+  const classNamesSendToCuratorButton = [
+    'profile-diary__button',
+    'profile-diary__button_curator',
+    sentToCurator ? 'profile-diary__button_curator-shared' : '',
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <div className={`card-container profile-diary ${sectionClass}`}>
@@ -74,16 +92,23 @@ function ProfileDiary({ data, onEdit, onDelete, onShare, sectionClass }) {
             />
           </div>
           <div className="profile-diary__action-elements">
-            <Button
-              title={
-                sentToCurator ? texts.buttonTextShared : texts.buttonShareText
-              }
-              color="gray-borderless"
-              sectionClass={`profile-diary__button ${
-                sentToCurator ? 'profile-diary__button_shared' : ''
-              }`}
-              onClick={handleShareButtonClick}
-            />
+            {hasCurator && (
+              <Button
+                title={
+                  isSendingToCurator
+                    ? texts.buttonTextSharing
+                    : `${
+                        sentToCurator
+                          ? texts.buttonTextShared
+                          : texts.buttonShareText
+                      }`
+                }
+                color="gray-borderless"
+                sectionClass={classNamesSendToCuratorButton}
+                onClick={handleShareButtonClick}
+                isDisabled={isSendingToCurator}
+              />
+            )}
             <Button
               title={texts.buttonEditText}
               color="gray-borderless"
@@ -109,6 +134,8 @@ ProfileDiary.propTypes = {
   onDelete: PropTypes.func,
   onShare: PropTypes.func,
   sectionClass: PropTypes.string,
+  selectedDiaryId: PropTypes.number,
+  isWaitingResponse: PropTypes.bool,
 };
 
 ProfileDiary.defaultProps = {
@@ -117,6 +144,8 @@ ProfileDiary.defaultProps = {
   onDelete: () => {},
   onShare: () => {},
   sectionClass: '',
+  selectedDiaryId: undefined,
+  isWaitingResponse: false,
 };
 
 export default ProfileDiary;

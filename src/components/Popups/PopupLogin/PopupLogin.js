@@ -27,6 +27,8 @@ const {
   emailPlaceholder,
   backButtonText,
   submitButtonTextForgot,
+  loadingButtonTextLogin,
+  loadingButtonTextForgot,
 } = texts;
 
 const validationSettings = {
@@ -46,6 +48,7 @@ function PopupLogin({ isOpen, onClose }) {
 
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isRecoveringPassword, setIsRecoveringPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
   const animationContainer = useRef(null);
@@ -62,7 +65,7 @@ function PopupLogin({ isOpen, onClose }) {
 
   const errorsString = serverError ? getServerErrors(serverError) : '';
 
-  const { handleLogin } = useAuth(updateUser);
+  const { handleLogin, isWaitingResponse } = useAuth(updateUser);
 
   function handleClickForgotPassword() {
     setIsForgotPassword(!isForgotPassword);
@@ -87,6 +90,7 @@ function PopupLogin({ isOpen, onClose }) {
   }
 
   function handleSubmitForgotPassword(evt) {
+    setIsRecoveringPassword(true);
     evt.preventDefault();
     recoverPassword(values)
       .then((res) => {
@@ -96,7 +100,8 @@ function PopupLogin({ isOpen, onClose }) {
         setIsSuccess(true);
         setTimeout(successForgotPassword, 6000);
       })
-      .catch(handleError);
+      .catch(handleError)
+      .finally(() => setIsRecoveringPassword(false));
   }
 
   //! аварийный перевод на главную, если не хочешь логиниться
@@ -218,8 +223,8 @@ function PopupLogin({ isOpen, onClose }) {
         <Button
           sectionClass="popup__button_type_sign-in"
           color="blue"
-          title={submitButtonText}
-          isDisabled={!isValid}
+          title={isWaitingResponse ? loadingButtonTextLogin : submitButtonText}
+          isDisabled={isWaitingResponse || !isValid}
           isSubmittable
         />
       </form>
@@ -261,8 +266,12 @@ function PopupLogin({ isOpen, onClose }) {
         <Button
           sectionClass="popup__button_type_sign-in"
           color="blue"
-          title={submitButtonTextForgot}
-          isDisabled={!isValid}
+          title={
+            isRecoveringPassword
+              ? loadingButtonTextForgot
+              : submitButtonTextForgot
+          }
+          isDisabled={isRecoveringPassword || !isValid}
           isSubmittable
         />
       </form>

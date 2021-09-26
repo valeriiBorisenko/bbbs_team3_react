@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import Lottie from 'lottie-web';
 import animationRecommendSuccess from '../../../assets/animation/ill_popup_recommend-success.json';
 import texts from './locales/RU';
+import { useCloseOnEscape } from '../../../hooks';
 import Popup from '../Popup/Popup';
 import { Button } from '../../utils';
 import './PopupRecommendSuccess.scss';
 
 function PopupRecommendSuccess({ isOpen, onClose }) {
+  useCloseOnEscape(isOpen, onClose);
+
   const animationContainer = useRef(null);
 
   useEffect(() => {

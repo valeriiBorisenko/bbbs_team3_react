@@ -76,8 +76,8 @@ function RightsArticle() {
     return (
       <>
         {renderLeadBlock()}
-        <div className="article page__section fade-in">
-          <div className="article__container">
+        <div className="rights-article page__section fade-in">
+          <div className="rights-article__container">
             {renderHtmlBlock()}
             {renderNextPageBlock()}
           </div>
@@ -103,7 +103,7 @@ function RightsArticle() {
 
   function renderHtmlBlock() {
     return (
-      <ReactMarkdown className="article__markdown">
+      <ReactMarkdown className="markdown rights-article__markdown">
         {articleData?.body}
       </ReactMarkdown>
     );
@@ -120,11 +120,7 @@ function RightsArticle() {
         : `/rights/${articleData?.nextArticle?.id}`;
 
       return (
-        <NextArticleLink
-          text={articleData.nextArticle.title}
-          href={link}
-          sectionClass="article__next-article-link"
-        />
+        <NextArticleLink text={articleData.nextArticle.title} href={link} />
       );
     }
     return null;
