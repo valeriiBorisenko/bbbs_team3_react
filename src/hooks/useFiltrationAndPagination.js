@@ -13,7 +13,9 @@ import {
   selectOneTag,
 } from '../utils/filter-tags';
 
-// apiFilterName - { filterName: name }
+// для календаря свои фильтры
+// куда пойти - главная карточка + больше фильтров
+// статьи и видео - главная карточка
 
 const useFiltrationAndPagination = ({
   apiGetDataCallback,
@@ -90,28 +92,39 @@ const useFiltrationAndPagination = ({
   // хэндлер клика по фильтру
   const changeFilter = (inputValue, isChecked) => {
     if (inputValue === ALL_CATEGORIES) {
+      // кнопка "Все", откат на 1 страницу
       selectOneTag(setFilters, ALL_CATEGORIES);
     } else {
       handleCheckboxBehavior(setFilters, { inputValue, isChecked });
       deselectOneTag(setFilters, ALL_CATEGORIES);
     }
+    setPageIndex(0);
     setIsFiltersUsed(true);
   };
 
   // функция-фильтратор с использованием АПИ
+  // eslint-disable-next-line consistent-return
   const handleFiltration = () => {
     if (filters && isFiltersUsed) {
       const activeCategories = getActiveFilters();
 
-      if (activeCategories.length === 0) {
+      if (!activeCategories) {
         selectOneTag(setFilters, ALL_CATEGORIES);
       }
+
       getData();
     }
   };
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePaginate = useDebounce(getData, DELAY_DEBOUNCE);
+
+  const changePageIndex = (value) => {
+    if (value !== pageIndex) {
+      setPageIndex(value);
+      setIsPaginationUsed(true);
+    }
+  };
 
   // Первая отрисовка страницы
   useEffect(() => {
@@ -124,7 +137,7 @@ const useFiltrationAndPagination = ({
   // Переход по пагинации, страница уже загружена
   useEffect(() => {
     if (!isPageLoading && !isFiltersUsed) {
-      setIsPaginationUsed(true);
+      console.log('pagination used');
       debouncePaginate();
     }
   }, [pageSize, pageIndex]);
@@ -132,6 +145,7 @@ const useFiltrationAndPagination = ({
   // Фильтры, страница уже загружена
   useEffect(() => {
     if (!isPageLoading && isFiltersUsed) {
+      console.log('filters used');
       debounceFiltration();
     }
   }, [isFiltersUsed]);
@@ -144,7 +158,7 @@ const useFiltrationAndPagination = ({
     isPaginationUsed,
     totalPages,
     pageIndex,
-    setPageIndex,
+    changePageIndex,
     changeFilter,
   };
 };

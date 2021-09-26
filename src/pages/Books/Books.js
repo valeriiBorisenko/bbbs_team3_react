@@ -34,26 +34,11 @@ const MAX_SCREEN_WIDTH = {
 const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
 function Books() {
-  // const { setError } = useContext(ErrorsContext);
-  // const { openPopupError } = useContext(PopupsContext);
-
   const { state } = useLocation();
   const searchBookId = state?.id;
   const [searchedBook, setSearchedBook] = useState({});
 
-  // Загрузка данных
-  // const [isLoading, setIsLoading] = useState(true);
-  // const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
-  // Стейты с данными Книг, Теги
-  // const [booksPageData, setBooksPageData] = useState(null);
-  // const [categories, setCategories] = useState(null);
-  // флаг применения фильтров
-  // const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-  // Стейты для пагинации
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
-  // const [pageCount, setPageCount] = useState(0);
-  // const [pageNumber, setPageNumber] = useState(0);
-  // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
   const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
 
@@ -65,7 +50,8 @@ function Books() {
     setIsBookPopupOpen(false);
   };
 
-  const FiltersAndPaginationSettings = {
+  // фильтрация и пагинация
+  const filtersAndPaginationSettings = {
     apiGetDataCallback: getBooksPageData,
     apiGetFiltersCallback: getBooksPageFilter,
     apiFilterName: 'types',
@@ -81,88 +67,9 @@ function Books() {
     isPaginationUsed,
     totalPages,
     pageIndex,
-    setPageIndex,
+    changePageIndex,
     changeFilter,
-  } = useFiltrationAndPagination(FiltersAndPaginationSettings);
-
-  // const getActiveTags = () => {
-  //   if (categories) {
-  //     return categories
-  //       .filter((filter) => filter.isActive && filter.filter !== ALL_CATEGORIES)
-  //       .map((filter) => filter.filter)
-  //       .join(',');
-  //   }
-  //   return null;
-  // };
-
-  // const getBooksData = (activeCategories) => {
-  //   const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
-  //   const activeTags = activeCategories || getActiveTags();
-  //
-  //   getBooksPageData({
-  //     limit: pageSize,
-  //     offset,
-  //     types: activeTags,
-  //   })
-  //     .then(({ results, count }) => {
-  //       setPageCount(Math.ceil(count / pageSize));
-  //       return results;
-  //     })
-  //     .then((results) => setBooksPageData(results))
-  //     .catch(() => {
-  //       if (isFiltersUsed) {
-  //         setError(ERROR_MESSAGES.filterErrorMessage);
-  //         openPopupError();
-  //       } else {
-  //         setIsPageError(true);
-  //       }
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //       setIsLoadingPaginate(false);
-  //       setIsFiltersUsed(false);
-  //     });
-  // };
-
-  // const getBooksFilter = () => {
-  //   getBooksPageFilter()
-  //     .then((tags) => {
-  //       const categoriesArr = tags.map((tag) => ({
-  //         filter: tag?.slug.toLowerCase(),
-  //         name: changeCaseOfFirstLetter(tag?.name),
-  //         isActive: false,
-  //       }));
-  //
-  //       setCategories([
-  //         { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-  //         ...categoriesArr,
-  //       ]);
-  //     })
-  //     .catch(() => setIsPageError(true));
-  // };
-
-  // хэндлер клика по фильтру КАТЕГОРИЯ
-  // const changeCategory = (inputValue, isChecked) => {
-  //   if (inputValue === ALL_CATEGORIES) {
-  //     selectOneTag(setCategories, ALL_CATEGORIES);
-  //   } else {
-  //     handleCheckboxBehavior(setCategories, { inputValue, isChecked });
-  //     deselectOneTag(setCategories, ALL_CATEGORIES);
-  //   }
-  //   setIsFiltersUsed(true);
-  // };
-
-  // функция-фильтратор с использованием АПИ
-  // const handleFiltration = () => {
-  //   if (categories && isFiltersUsed) {
-  //     const activeCategories = getActiveTags();
-  //
-  //     if (activeCategories.length === 0) {
-  //       selectOneTag(setCategories, ALL_CATEGORIES);
-  //     }
-  //     getBooksData(activeCategories);
-  //   }
-  // };
+  } = useFiltrationAndPagination(filtersAndPaginationSettings);
 
   // Откртие попапа при переходе из поиска
   useEffect(() => {
@@ -175,28 +82,6 @@ function Books() {
         .catch(() => setIsPageError(true));
     }
   }, [state]);
-
-  /// Фильтрация с делэем
-  // const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
-  // const debouncePaginate = useDebounce(getBooksData, DELAY_DEBOUNCE);
-  // useEffect(() => {
-  //   if (isFiltersUsed) {
-  //     debounceFiltration();
-  //   }
-  // }, [isFiltersUsed]);
-
-  // Первая отрисовка страницы + переход по страницам пагинации
-  // useEffect(() => {
-  //   if (isLoading && pageSize) {
-  //     getBooksData();
-  //     getBooksFilter();
-  //   }
-  //
-  //   if (!isLoading && !isFiltersUsed) {
-  //     setIsLoadingPaginate(true);
-  //     debouncePaginate();
-  //   }
-  // }, [pageSize, pageNumber]);
 
   // глобальный лоадер
   if (isPageLoading) {
@@ -230,25 +115,31 @@ function Books() {
       <>
         <TitleH1 title={title} sectionClass="books__title" />
 
-        {/* рендер фильтров */}
-        {filters?.length > 1 && (
-          <TagsList
-            filterList={filters}
-            name="tag"
-            handleClick={changeFilter}
-          />
-        )}
+        {renderFilters()}
 
-        {/* рендерим книги */}
         {isFiltersUsed ? <Loader isPaginate /> : renderBooksContainer()}
       </>
     );
   }
 
+  function renderFilters() {
+    if (filters?.length > 1) {
+      return (
+        <TagsList
+          filterList={filters}
+          name="books"
+          handleClick={changeFilter}
+        />
+      );
+    }
+    return null;
+  }
+
   function renderBooksContainer() {
-    if (!dataToRender && !isPageLoading) {
+    if (!dataToRender.length && !isPageLoading) {
       return renderAnimatedContainer();
     }
+
     return (
       <>
         {isPaginationUsed ? (
@@ -265,14 +156,14 @@ function Books() {
             sectionClass="cards-section__pagination"
             pageCount={totalPages}
             value={pageIndex}
-            onChange={setPageIndex}
+            onChange={changePageIndex}
           />
         )}
       </>
     );
   }
 
-  // контейнер заглушки
+  // контейнер заглушки, если нет данных
   function renderAnimatedContainer() {
     return <AnimatedPageContainer titleText={textStubNoData} />;
   }
