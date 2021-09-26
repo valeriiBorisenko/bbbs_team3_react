@@ -39,19 +39,7 @@ function Movies() {
   const { state } = useLocation();
   const { openPopupVideo } = useContext(PopupsContext);
 
-  // Загрузка данных
-  // const [isLoading, setIsLoading] = useState(true);
-  // const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
-  // Стейты с данными Фильмов, Теги
-  // const [moviesPageData, setMoviesPageData] = useState(null);
-  // const [categories, setCategories] = useState(null);
-  // флаг применения фильтров
-  // const [isFiltersUsed, setIsFiltersUsed] = useState(false);
-  // Стейты для пагинации
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
-  // const [pageCount, setPageCount] = useState(0);
-  // const [pageNumber, setPageNumber] = useState(0);
-  // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
   // фильтрация и пагинация
