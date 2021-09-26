@@ -51,6 +51,8 @@ export const FIGURES = [
 ];
 
 export const ALL_CATEGORIES = 'Все';
+export const ALL_CATEGORIES_TAG = 'Все';
+export const RESOURCE_GROUP_TAG = 'Ресурсная группа';
 export const DEFAULT_CITY = 'Москва';
 
 export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif|bmp)$/i;

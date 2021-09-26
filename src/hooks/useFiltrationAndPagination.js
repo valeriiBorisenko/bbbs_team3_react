@@ -13,9 +13,7 @@ import {
   selectOneTag,
 } from '../utils/filter-tags';
 
-// для календаря свои фильтры
-// куда пойти - главная карточка + больше фильтров
-// статьи и видео - главная карточка
+// хук фильтрации/пагинации для большинства страниц проекта
 
 const useFiltrationAndPagination = ({
   apiGetDataCallback,
