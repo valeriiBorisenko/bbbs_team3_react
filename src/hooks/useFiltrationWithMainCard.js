@@ -153,17 +153,25 @@ const useFiltrationAndPagination = ({
   // eslint-disable-next-line consistent-return
   function handleFiltration() {
     if (filters && isFiltersUsed) {
-      const { activeFilters, isResourceGroupSelected } = getActiveFilters();
+      const activeTags = getActiveFilters();
 
-      if (!activeFilters && !isResourceGroupSelected) {
-        selectOneTag(setFilters, ALL_CATEGORIES);
-        getData({ isFiltersActive: false });
-      } else {
+      if (
+        isVideoPage &&
+        (activeTags.activeFilters || activeTags.isResourceGroupSelected)
+      ) {
         const params = {
-          [apiFilterNames.tags]: activeFilters,
-          [apiFilterNames.resourceGroup]: isResourceGroupSelected,
+          [apiFilterNames.tags]: activeTags.activeFilters,
+          [apiFilterNames.resourceGroup]: activeTags.isResourceGroupSelected,
         };
         getData({ isFiltersActive: true, params });
+      } else if (!isVideoPage && activeTags.activeFilters) {
+        const params = {
+          [apiFilterNames.tags]: activeTags.activeFilters,
+        };
+        getData({ isFiltersActive: true, params });
+      } else {
+        selectOneTag(setFilters, ALL_CATEGORIES);
+        getData({ isFiltersActive: false });
       }
     }
   }
@@ -292,13 +300,13 @@ const useFiltrationAndPagination = ({
     }
   }
 
-  // обработка главной карточки для страниц Video и Articles
+  // обработка главной карточки
   function handleMainCard({ results, count }) {
     const pinnedFullSizeCard = results.find((item) => item?.pinnedFullSize);
     if (pinnedFullSizeCard) {
       setMainCard(pinnedFullSizeCard);
       setIsMainCardShown(true);
-      setDataToRender(() => results.filter((item) => !item?.pinnedFullSize));
+      setDataToRender(results.filter((item) => !item?.pinnedFullSize));
       setTotalPages(Math.ceil((count - 1) / pageSize));
     } else {
       if (results.length > pageSize) {
