@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import catalogPageTexts from './locales/RU';
+import { getCatalogPageData } from '../../api/catalog-page';
+import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
+import { usePageWidth } from '../../hooks';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -9,18 +12,16 @@ import {
   TitleH1,
   TitleH2,
 } from './index';
-import { getCatalogPageData } from '../../api/catalog-page';
-import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
 import './Catalog.scss';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
   medium: 9,
-  big: 16,
+  default: 16,
 };
 
-const maxScreenWidth = {
-  small: 1399,
+const MAX_SCREEN_WIDTH = {
+  small: 1400,
   medium: 1640,
 };
 
@@ -28,7 +29,7 @@ const { headTitle, headDescription, title, subtitle, textStubNoData } =
   catalogPageTexts;
 
 function Catalog() {
-  const [pageSize, setPageSize] = useState(null);
+  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -62,34 +63,6 @@ function Catalog() {
       setIsLoadingPaginate(true);
     }
   }, [pageSize, pageNumber]);
-
-  useEffect(() => {
-    const smallQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.small}px)`
-    );
-    const largeQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.medium}px)`
-    );
-
-    const listener = () => {
-      if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else if (largeQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.medium);
-      } else {
-        setPageSize(PAGE_SIZE_PAGINATE.big);
-      }
-    };
-    listener();
-
-    smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
-
-    return () => {
-      smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
-    };
-  }, []);
 
   if (isLoadingPage) {
     return <Loader isCentered />;

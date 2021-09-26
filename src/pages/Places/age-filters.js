@@ -2,7 +2,7 @@ import placesPageTexts from './locales/RU';
 
 const { ageFilterNames } = placesPageTexts;
 
-export const ageFilters = [
+const ageFilters = [
   {
     filter: ageFilterNames[0].filter,
     name: ageFilterNames[0].name,
@@ -25,7 +25,4 @@ export const ageFilters = [
   },
 ];
 
-export const PAGE_SIZE_PAGINATE = {
-  small: 8,
-  big: 12,
-};
+export default ageFilters;

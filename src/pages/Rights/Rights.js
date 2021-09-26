@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import rightsPageTexts from './locales/RU';
 import { ErrorsContext, PopupsContext } from '../../contexts';
-import { useDebounce } from '../../hooks';
 import {
   ALL_CATEGORIES,
   COLORS,
@@ -9,6 +8,7 @@ import {
   ERROR_MESSAGES,
   FIGURES,
 } from '../../config/constants';
+import { useDebounce, usePageWidth } from '../../hooks';
 import {
   deselectOneTag,
   handleCheckboxBehavior,
@@ -30,11 +30,11 @@ import './Rights.scss';
 const PAGE_SIZE_PAGINATE = {
   small: 4,
   medium: 12,
-  big: 16,
+  default: 16,
 };
 
-const maxScreenWidth = {
-  small: 1399,
+const MAX_SCREEN_WIDTH = {
+  small: 1400,
   medium: 1640,
 };
 
@@ -45,7 +45,7 @@ const Rights = () => {
   const { openPopupError } = useContext(PopupsContext);
 
   // Стейты для пагинации
-  const [pageSize, setPageSize] = useState(null);
+  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -175,35 +175,6 @@ const Rights = () => {
       debouncePaginate();
     }
   }, [pageSize, pageNumber]);
-
-  // Резайз пагинации при первой загрузке
-  useEffect(() => {
-    const smallQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.small}px)`
-    );
-    const largeQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.medium}px)`
-    );
-
-    const listener = () => {
-      if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else if (largeQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.medium);
-      } else {
-        setPageSize(PAGE_SIZE_PAGINATE.big);
-      }
-    };
-    listener();
-
-    smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
-
-    return () => {
-      smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
-    };
-  }, []);
 
   // Лоадер при загрузке страницы
   if (isLoadingPage) {

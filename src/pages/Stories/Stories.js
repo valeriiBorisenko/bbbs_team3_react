@@ -4,13 +4,14 @@ import Carousel from 'react-elastic-carousel';
 import { useHistory, useParams } from 'react-router-dom';
 import { inclineFirstname } from 'lvovich';
 import storiesPageTexts from './locales/RU';
-import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { CurrentUserContext } from '../../contexts';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { staticImageUrl } from '../../config/config';
 import { NOT_FOUND_URL, STORIES_URL } from '../../config/routes';
-import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
+import { usePageWidth } from '../../hooks';
 import { formatDate, formatMonthsGenitiveCase } from '../../utils/utils';
 import { handleRadioBehavior } from '../../utils/filter-tags';
+import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -25,13 +26,13 @@ import {
 } from './index';
 import './Stories.scss';
 
-const carouselItemPaddings = {
-  desktop: [0, 65],
-  tablet: [0, 15],
-  mobile: [0, 7.5],
+const CAROUSEL_ITEM_PADDINGS = {
+  default: [0, 65],
+  medium: [0, 15],
+  small: [0, 7.5],
 };
 
-const maxScreenWidth = {
+const MAX_SCREEN_WIDTH = {
   small: 706,
   medium: 1100,
 };
@@ -80,8 +81,9 @@ function Stories() {
   const nextArticleLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
 
   const photoCarouselRef = useRef(null);
-  const [carouselItemPadding, setCarouselItemPaddings] = useState(
-    carouselItemPaddings.desktop
+  const carouselItemPadding = usePageWidth(
+    MAX_SCREEN_WIDTH,
+    CAROUSEL_ITEM_PADDINGS
   );
 
   const openFullPhoto = (imageSrc, caption) => {
@@ -126,31 +128,6 @@ function Stories() {
       fetchTags({ limit: tagsLimit, offset: tagsOffset });
     }
   };
-
-  // динамические падинги для фото слайдера
-  useEffect(() => {
-    const tablet = window.matchMedia(`(max-width: ${maxScreenWidth.medium}px)`);
-    const mobile = window.matchMedia(`(max-width: ${maxScreenWidth.small}px)`);
-
-    const listenWindowWidth = () => {
-      if (mobile.matches)
-        return setCarouselItemPaddings(carouselItemPaddings.mobile);
-
-      if (tablet.matches)
-        return setCarouselItemPaddings(carouselItemPaddings.tablet);
-
-      return setCarouselItemPaddings(carouselItemPaddings.desktop);
-    };
-    listenWindowWidth();
-
-    mobile.addEventListener('change', listenWindowWidth);
-    tablet.addEventListener('change', listenWindowWidth);
-
-    return () => {
-      mobile.removeEventListener('change', listenWindowWidth);
-      tablet.removeEventListener('change', listenWindowWidth);
-    };
-  }, []);
 
   // получение списка всех историй
   useEffect(() => {

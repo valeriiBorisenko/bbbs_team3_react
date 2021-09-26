@@ -1,6 +1,11 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import profilePageTexts from './locales/RU';
 import { ErrorsContext, PopupsContext } from '../../contexts';
+import {
+  DELAY_RENDER,
+  ERROR_CODES,
+  ERROR_MESSAGES,
+} from '../../config/constants';
 import { useEventBooking } from '../../hooks';
 import {
   createDiary,
@@ -13,11 +18,6 @@ import {
   getArchiveOfBookedEvents,
   getBookedEvents,
 } from '../../api/event-participants';
-import {
-  DELAY_RENDER,
-  ERROR_CODES,
-  ERROR_MESSAGES,
-} from '../../config/constants';
 import {
   AnimatedPageContainer,
   BasePage,

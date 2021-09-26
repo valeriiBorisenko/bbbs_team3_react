@@ -6,13 +6,17 @@ import {
   ErrorsContext,
   PopupsContext,
 } from '../../contexts';
-import { useDebounce, useEventBooking } from '../../hooks';
 import {
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
   localStAfishaEvent,
   months,
 } from '../../config/constants';
+import { useDebounce, useEventBooking, usePageWidth } from '../../hooks';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../hooks/useLocalStorage';
 import { handleRadioBehavior } from '../../utils/filter-tags';
 import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
@@ -29,22 +33,19 @@ import {
   TagsList,
   TitleH1,
 } from './index';
-import {
-  getLocalStorageData,
-  setLocalStorageData,
-} from '../../hooks/useLocalStorage';
 import './Calendar.scss';
 
 const { headTitle, headDescription, title, textStubNoData } = calendarPageTexts;
 
 const INITIAL_PAGE_INDEX = 0;
-export const PAGE_SIZE_PAGINATE = {
+
+const PAGE_SIZE_PAGINATE = {
   small: 6,
   medium: 8,
-  big: 12,
+  default: 12,
 };
 
-const maxScreenWidth = {
+const MAX_SCREEN_WIDTH = {
   small: 1024,
   medium: 1440,
 };
@@ -74,41 +75,13 @@ function Calendar() {
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
 
   // Стейты для пагинации
-  const [pageSize, setPageSize] = useState(null);
+  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   const [totalPages, setTotalPages] = useState(null);
   const [pageIndex, setPageIndex] = useState(INITIAL_PAGE_INDEX);
   const [isFirstRender, setIsFirstRender] = useState(true);
 
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
-
-  // определение размера страницы
-  useEffect(() => {
-    const small = window.matchMedia(`(max-width: ${maxScreenWidth.small}px)`);
-    const medium = window.matchMedia(`(max-width: ${maxScreenWidth.medium}px)`);
-
-    const listener = () => {
-      if (small.matches) {
-        // 320px-1024px по 6 элементов на странице
-        setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else if (medium.matches) {
-        // 1024px-1440px по 8 элементов на странице
-        setPageSize(PAGE_SIZE_PAGINATE.medium);
-      } else {
-        // больше 1440px по 12 элементов на странице
-        setPageSize(PAGE_SIZE_PAGINATE.big);
-      }
-    };
-    listener();
-
-    small.addEventListener('change', listener);
-    medium.addEventListener('change', listener);
-
-    return () => {
-      small.removeEventListener('change', listener);
-      medium.removeEventListener('change', listener);
-    };
-  }, []);
 
   // нужно ли рисовать фильтры (если месяц всего 1 - не рисуем)
   const areThereEventsMoreForOneMonth = calendarPageData?.length > 0;

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import rightsArticlePageTexts from './locales/RU';
-import { useScrollToTop } from '../../hooks';
-import { getRightsArticle } from '../../api/rights-page';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { NOT_FOUND_URL, RIGHTS_URL } from '../../config/routes';
+import { useScrollToTop } from '../../hooks';
+import { getRightsArticle } from '../../api/rights-page';
 import {
   AnimatedPageContainer,
   BasePage,

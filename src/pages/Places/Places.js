@@ -1,13 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import placesPageTexts from './locales/RU';
-import { ageFilters, PAGE_SIZE_PAGINATE } from './constants';
 import {
   CurrentUserContext,
   ErrorsContext,
   PopupsContext,
 } from '../../contexts';
-import { useActivityTypes, useDebounce, useLocalStorage } from '../../hooks';
 import {
   ALL_CATEGORIES,
   COLORS,
@@ -16,6 +14,13 @@ import {
   ERROR_MESSAGES,
   localStUserCity,
 } from '../../config/constants';
+import ageFilters from './age-filters';
+import {
+  useActivityTypes,
+  useDebounce,
+  useLocalStorage,
+  usePageWidth,
+} from '../../hooks';
 import {
   deselectAllTags,
   deselectOneTag,
@@ -38,11 +43,11 @@ import {
   Paginate,
   PlacesRecommend,
   PopupPlace,
+  PopupRecommendSuccess,
   TagsList,
   TitleH1,
 } from './index';
 import './Places.scss';
-import { PopupRecommendSuccess } from '../../components/Popups';
 
 const {
   headTitle,
@@ -53,7 +58,12 @@ const {
   mentorTag,
 } = placesPageTexts;
 
-const maxScreenWidth = {
+const PAGE_SIZE_PAGINATE = {
+  small: 8,
+  default: 12,
+};
+
+const MAX_SCREEN_WIDTH = {
   small: 1024,
 };
 
@@ -119,31 +129,9 @@ function Places() {
   };
 
   // Стейты для пагинации
-  const [pageSize, setPageSize] = useState(null);
+  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
-
-  // Резайз пагинации при первой загрузке
-  useEffect(() => {
-    const smallQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.small}px)`
-    );
-
-    const listener = () => {
-      if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else {
-        setPageSize(PAGE_SIZE_PAGINATE.big);
-      }
-    };
-    listener();
-
-    smallQuery.addEventListener('change', listener);
-
-    return () => {
-      smallQuery.removeEventListener('change', listener);
-    };
-  }, []);
 
   // хэндлер клика по фильтру КАТЕГОРИИ
   const changeCategory = (inputValue, isChecked) => {

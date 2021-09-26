@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import articlesPageTexts from './locales/RU';
 import { COLORS, ERROR_MESSAGES } from '../../config/constants';
+import { usePageWidth } from '../../hooks';
+import { getArticle, getArticlesPageData } from '../../api/articles-page';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -11,22 +13,20 @@ import {
   PopupArticle,
   TitleH1,
 } from './index';
-import { getArticle, getArticlesPageData } from '../../api/articles-page';
 import './Articles.scss';
 
 const PAGE_SIZE_PAGINATE = {
   small: 8,
-  big: 12,
+  default: 12,
 };
 
-const maxScreenWidth = {
+const MAX_SCREEN_WIDTH = {
   small: 1024,
 };
 
 const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
 
 function Articles() {
-  const [pageSize, setPageSize] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -40,6 +40,8 @@ function Articles() {
   const { state } = useLocation();
   const searchArticleId = state?.id;
   const [searchedArticle, setSearchedArticle] = useState({});
+
+  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
 
   const getPageData = () => {
     const offset = pageSize * pageNumber;
@@ -115,27 +117,6 @@ function Articles() {
         });
     }
   }, [pageSize]);
-
-  useEffect(() => {
-    const smallQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.small}px)`
-    );
-
-    const listener = () => {
-      if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else {
-        setPageSize(PAGE_SIZE_PAGINATE.big);
-      }
-    };
-    listener();
-
-    smallQuery.addEventListener('change', listener);
-
-    return () => {
-      smallQuery.removeEventListener('change', listener);
-    };
-  }, []);
 
   if (isLoadingPage) {
     return <Loader isCentered />;

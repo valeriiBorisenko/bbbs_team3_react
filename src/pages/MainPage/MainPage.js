@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import mainPageTexts from './locales/RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts';
-import { useActivityTypes, useEventBooking } from '../../hooks';
 import { QUESTIONS_URL, STORIES_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
 import { ERROR_MESSAGES, localStAfishaEvent } from '../../config/constants';
+import { useActivityTypes, useEventBooking } from '../../hooks';
+import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import { randomizeArray } from '../../utils/utils';
 import getMainPageData from '../../api/main-page';
 import {
@@ -24,7 +25,6 @@ import {
   Widget,
 } from './index';
 import './MainPage.scss';
-import { getLocalStorageData } from '../../hooks/useLocalStorage';
 
 // количество отображаемых карточек с фильмами и вопросами
 const MOVIES_COUNT = 4;

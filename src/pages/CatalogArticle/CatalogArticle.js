@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useHistory, useParams } from 'react-router-dom';
-import { getCatalogArticlePageData } from '../../api/catalog-page';
 import catalogArticlePageTexts from './locales/RU';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { CATALOG_URL, NOT_FOUND_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
+import { getCatalogArticlePageData } from '../../api/catalog-page';
 import {
   AnimatedPageContainer,
   BasePage,
