@@ -135,6 +135,21 @@ function Books() {
     return null;
   }
 
+  function renderPagination() {
+    if (totalPages > 1) {
+      return (
+        <Paginate
+          sectionClass="cards-section__pagination"
+          pageCount={totalPages}
+          value={pageIndex}
+          onChange={changePageIndex}
+        />
+      );
+    }
+
+    return null;
+  }
+
   function renderBooksContainer() {
     if (!dataToRender.length && !isPageLoading) {
       return renderAnimatedContainer();
@@ -147,18 +162,14 @@ function Books() {
         ) : (
           <ul className="books__cards cards-grid cards-grid_content_small-cards fade-in">
             {dataToRender.map((books) => (
-              <CardBook key={books.id} data={books} sectionClass="scale-in" />
+              <li className="scale-in" key={books.id}>
+                <CardBook data={books} />
+              </li>
             ))}
           </ul>
         )}
-        {totalPages > 1 && (
-          <Paginate
-            sectionClass="cards-section__pagination"
-            pageCount={totalPages}
-            value={pageIndex}
-            onChange={changePageIndex}
-          />
-        )}
+
+        {renderPagination()}
       </>
     );
   }

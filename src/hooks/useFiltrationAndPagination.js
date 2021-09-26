@@ -98,7 +98,9 @@ const useFiltrationAndPagination = ({
       handleCheckboxBehavior(setFilters, { inputValue, isChecked });
       deselectOneTag(setFilters, ALL_CATEGORIES);
     }
+    // сбрасываем пагинацию
     setPageIndex(0);
+    // ставим флажок фильтров
     setIsFiltersUsed(true);
   };
 
