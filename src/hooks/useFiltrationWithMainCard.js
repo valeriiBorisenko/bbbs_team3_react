@@ -297,6 +297,7 @@ const useFiltrationAndPagination = ({
   }) {
     if (
       isVideoPage &&
+      activeTags &&
       (activeTags.activeFilters || activeTags.isResourceGroupSelected)
     ) {
       // на видео странице выбран любой из фильтров
@@ -305,7 +306,7 @@ const useFiltrationAndPagination = ({
         [apiFilterNames.resourceGroup]: activeTags.isResourceGroupSelected,
       };
       apiCallback({ isFiltersActive: true, params });
-    } else if (!isVideoPage && activeTags.activeFilters) {
+    } else if (!isVideoPage && activeTags && activeTags.activeFilters) {
       const params = {
         [apiFilterNames.tags]: activeTags.activeFilters,
       };
