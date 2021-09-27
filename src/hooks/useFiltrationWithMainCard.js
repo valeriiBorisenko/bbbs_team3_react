@@ -52,7 +52,11 @@ const useFiltrationAndPagination = ({
   // Первая отрисовка страницы
   useEffect(() => {
     if (isPageLoading && pageSize) {
-      firstPageRender();
+      if (apiGetFiltersCallback) {
+        firstPageRender();
+      } else {
+        firstPageRenderNoFilters();
+      }
     }
   }, [pageSize, isPageLoading]);
 
@@ -227,6 +231,13 @@ const useFiltrationAndPagination = ({
         handleMainCard({ results, count });
         defineFilters(tags);
       })
+      .catch(() => setIsPageError(true))
+      .finally(() => setIsPageLoading(false));
+  }
+
+  function firstPageRenderNoFilters() {
+    apiGetDataCallback({ limit: pageSize + 1 })
+      .then(({ results, count }) => handleMainCard({ results, count }))
       .catch(() => setIsPageError(true))
       .finally(() => setIsPageLoading(false));
   }

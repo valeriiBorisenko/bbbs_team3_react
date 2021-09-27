@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import articlesPageTexts from './locales/RU';
 import { COLORS, ERROR_MESSAGES } from '../../config/constants';
-import { usePageWidth } from '../../hooks';
+import { useFiltrationWithMainCard, usePageWidth } from '../../hooks';
 import { getArticle, getArticlesPageData } from '../../api/articles-page';
 import {
   AnimatedPageContainer,
@@ -27,41 +27,14 @@ const MAX_SCREEN_WIDTH = {
 const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
 
 function Articles() {
-  const [pageCount, setPageCount] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
-
-  const [articlesPageData, setArticlesPageData] = useState(null);
-  const [mainArticle, setMainCard] = useState(null);
-  const [isLoadingPage, setIsLoadingPage] = useState(true);
-  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
-  const [isPageError, setIsPageError] = useState(false);
-  const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
-
   const { state } = useLocation();
   const searchArticleId = state?.id;
   const [searchedArticle, setSearchedArticle] = useState({});
 
+  const [isPageError, setIsPageError] = useState(false);
+  const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
+
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
-
-  const getPageData = () => {
-    const offset = pageSize * pageNumber;
-    const fixedPageSize =
-      pageNumber === 0 && mainArticle ? pageSize + 1 : pageSize;
-    const fixedOffset = pageNumber > 0 && mainArticle ? offset + 1 : offset;
-
-    getArticlesPageData({ limit: fixedPageSize, offset: fixedOffset })
-      .then(({ results }) => {
-        if (pageNumber === 0 && mainArticle) {
-          setArticlesPageData(() =>
-            results.filter((item) => !item?.pinnedFullSize)
-          );
-        } else setArticlesPageData(results);
-      })
-      .catch(() => setIsPageError(true))
-      .finally(() => {
-        setIsLoadingPaginate(false);
-      });
-  };
 
   const openPopupArticle = () => {
     setIsArticlePopupOpen(true);
@@ -70,6 +43,25 @@ function Articles() {
   const closePopupArticle = () => {
     setIsArticlePopupOpen(false);
   };
+
+  // фильтрация и пагинация
+  const filtersAndPaginationSettings = {
+    apiGetDataCallback: getArticlesPageData,
+    pageSize,
+    setIsPageError,
+  };
+
+  const {
+    dataToRender,
+    mainCard,
+    isMainCard,
+    isMainCardShown,
+    isPageLoading,
+    isPaginationUsed,
+    totalPages,
+    pageIndex,
+    changePageIndex,
+  } = useFiltrationWithMainCard(filtersAndPaginationSettings);
 
   // Открытие попапа при переходе из поиска
   useEffect(() => {
@@ -83,49 +75,14 @@ function Articles() {
     }
   }, [state]);
 
-  // пагинация
-  useEffect(() => {
-    if (!isLoadingPage) {
-      setIsLoadingPaginate(true);
-      getPageData();
-    }
-  }, [pageNumber]);
-
-  useEffect(() => {
-    if (pageSize) {
-      getArticlesPageData({ limit: pageSize + 1 })
-        .then(({ results, count }) => {
-          const articlesData = results;
-          const mainCard = articlesData.find((item) => item?.pinnedFullSize);
-          setMainCard(mainCard);
-          if (mainCard) {
-            setArticlesPageData(() =>
-              articlesData.filter((item) => !item?.pinnedFullSize)
-            );
-            setPageCount(Math.ceil((count - 1) / pageSize));
-          } else {
-            articlesData.pop();
-            setArticlesPageData(articlesData);
-            setPageCount(Math.ceil(count / pageSize));
-          }
-        })
-        .catch(() => {
-          setIsPageError(true);
-        })
-        .finally(() => {
-          setIsLoadingPage(false);
-        });
-    }
-  }, [pageSize]);
-
-  if (isLoadingPage) {
+  if (isPageLoading) {
     return <Loader isCentered />;
   }
 
   return (
     <>
       <BasePage headTitle={headTitle} headDescription={headDescription}>
-        {!articlesPageData && !isLoadingPage
+        {!dataToRender.length && !isMainCard && !isPageLoading
           ? renderAnimatedContainer()
           : renderPageContent()}
       </BasePage>
@@ -150,7 +107,7 @@ function Articles() {
       <section className="articles page__section">
         <TitleH1 title={title} sectionClass="fade-in" />
 
-        {isLoadingPaginate ? <Loader isPaginate /> : renderCards()}
+        {isPaginationUsed ? <Loader isPaginate /> : renderCards()}
 
         {renderPagination()}
       </section>
@@ -158,24 +115,17 @@ function Articles() {
   }
 
   function renderAnimatedContainer() {
-    if (isPageError) {
-      return (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      );
-    }
     return <AnimatedPageContainer titleText={textStubNoData} />;
   }
 
   function renderPagination() {
-    if (pageCount > 1) {
+    if (totalPages > 1) {
       return (
         <Paginate
           sectionClass="cards-section__pagination"
-          pageCount={pageCount}
-          value={pageNumber}
-          onChange={setPageNumber}
+          pageCount={totalPages}
+          value={pageIndex}
+          onChange={changePageIndex}
         />
       );
     }
@@ -185,14 +135,14 @@ function Articles() {
   function renderCards() {
     return (
       <>
-        {mainArticle && !pageNumber && (
+        {isMainCardShown && (
           <section className="articles__main scale-in">
-            <CardArticle data={mainArticle} isMain />
+            <CardArticle data={mainCard} isMain />
           </section>
         )}
 
         <section className="articles__cards-grid">
-          {articlesPageData.map((item, i) => (
+          {dataToRender.map((item, i) => (
             <CardArticle
               key={item?.id}
               color={COLORS[(i + 1) % COLORS.length]}

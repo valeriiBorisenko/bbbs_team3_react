@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import videoPageTexts from './locales/RU';
 import { ERROR_MESSAGES, localStChosenVideo } from '../../config/constants';
 import { CurrentUserContext, PopupsContext } from '../../contexts';
-import { usePageWidth } from '../../hooks';
+import { useFiltrationWithMainCard, usePageWidth } from '../../hooks';
 import {
   getVideo,
   getVideoPageData,
@@ -21,7 +21,6 @@ import {
   TitleH1,
 } from './index';
 import './Video.scss';
-import useFiltrationWithMainCard from '../../hooks/useFiltrationWithMainCard';
 
 const PAGE_SIZE_PAGINATE = {
   small: 8,

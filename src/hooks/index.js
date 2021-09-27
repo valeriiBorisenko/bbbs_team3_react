@@ -11,6 +11,7 @@ import useFormWithValidation from './useFormWithValidation';
 import useInfiniteScroll from './useInfiniteScroll';
 import useCloseOnEscape from './useCloseOnEscape';
 import useFiltrationAndPagination from './useFiltrationAndPagination';
+import useFiltrationWithMainCard from './useFiltrationWithMainCard';
 import usePageWidth from './usePageWidth';
 
 export {
@@ -27,5 +28,6 @@ export {
   useInfiniteScroll,
   useCloseOnEscape,
   useFiltrationAndPagination,
+  useFiltrationWithMainCard,
   usePageWidth,
 };
