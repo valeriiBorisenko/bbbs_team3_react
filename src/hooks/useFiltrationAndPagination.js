@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ErrorsContext, PopupsContext } from '../contexts';
 import {
   ALL_CATEGORIES,
+  ALL_CATEGORIES_TAG,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
 } from '../config/constants';
@@ -18,9 +19,9 @@ import {
 const useFiltrationAndPagination = ({
   apiGetDataCallback,
   apiGetFiltersCallback,
-  apiFilterName,
+  apiFilterNames,
   pageSize,
-  pageErrorSetter,
+  setIsPageError,
 }) => {
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
@@ -35,110 +36,26 @@ const useFiltrationAndPagination = ({
   const [totalPages, setTotalPages] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
 
-  const getActiveFilters = () => {
-    if (filters) {
-      return filters
-        .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES)
-        .map((f) => f.filter)
-        .join(',');
-    }
-    return null;
-  };
-
-  // работа с API
-  const getFilters = () => {
-    apiGetFiltersCallback()
-      .then((tags) => {
-        const filtersArray = tags.map((tag) => ({
-          filter: tag?.slug.toLowerCase(),
-          name: changeCaseOfFirstLetter(tag?.name),
-          isActive: false,
-        }));
-
-        setFilters([
-          { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
-          ...filtersArray,
-        ]);
-      })
-      .catch(() => pageErrorSetter(true));
-  };
-
-  const getData = () => {
-    const tags = { [apiFilterName]: getActiveFilters() };
-    const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
-
-    apiGetDataCallback({ limit: pageSize, offset, ...tags })
-      .then(({ results, count }) => {
-        setTotalPages(Math.ceil(count / pageSize));
-        setDataToRender(results);
-      })
-      .catch(() => {
-        if (isFiltersUsed) {
-          setError(ERROR_MESSAGES.filterErrorMessage);
-          openPopupError();
-        } else {
-          pageErrorSetter(true);
-        }
-      })
-      .finally(() => {
-        setIsPageLoading(false);
-        setIsPaginationUsed(false);
-        setIsFiltersUsed(false);
-      });
-  };
-
-  // хэндлер клика по фильтру
-  const changeFilter = (inputValue, isChecked) => {
-    if (inputValue === ALL_CATEGORIES) {
-      // кнопка "Все", откат на 1 страницу
-      selectOneTag(setFilters, ALL_CATEGORIES);
-    } else {
-      handleCheckboxBehavior(setFilters, { inputValue, isChecked });
-      deselectOneTag(setFilters, ALL_CATEGORIES);
-    }
-    // сбрасываем пагинацию
-    setPageIndex(0);
-    // ставим флажок фильтров
-    setIsFiltersUsed(true);
-  };
-
-  // функция-фильтратор с использованием АПИ
-  // eslint-disable-next-line consistent-return
-  const handleFiltration = () => {
-    if (filters && isFiltersUsed) {
-      const activeCategories = getActiveFilters();
-
-      if (!activeCategories) {
-        selectOneTag(setFilters, ALL_CATEGORIES);
-      }
-
-      getData();
-    }
-  };
-
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePaginate = useDebounce(getData, DELAY_DEBOUNCE);
-
-  const changePageIndex = (value) => {
-    if (value !== pageIndex) {
-      setPageIndex(value);
-      setIsPaginationUsed(true);
-    }
-  };
 
   // Первая отрисовка страницы
   useEffect(() => {
     if (isPageLoading && pageSize) {
-      getData();
-      getFilters();
+      firstPageRender();
     }
   }, [pageSize]);
 
   // Переход по пагинации, страница уже загружена
   useEffect(() => {
     if (!isPageLoading && !isFiltersUsed) {
-      console.log('pagination used');
-      debouncePaginate();
+      const activeFilters = getActiveFilters();
+
+      defineParamsAndGetData({
+        activeTags: activeFilters,
+        apiCallback: debouncePaginate,
+        isFilters: false,
+      });
     }
   }, [pageSize, pageIndex]);
 
@@ -161,6 +78,117 @@ const useFiltrationAndPagination = ({
     changePageIndex,
     changeFilter,
   };
+
+  // ПАГИНАЦИЯ
+  function changePageIndex(value) {
+    if (value !== pageIndex) {
+      setPageIndex(value);
+      setIsPaginationUsed(true);
+    }
+  }
+
+  // ФИЛЬТРЫ
+  function getActiveFilters() {
+    if (filters) {
+      return filters
+        .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES)
+        .map((f) => f.filter)
+        .join(',');
+    }
+    return null;
+  }
+
+  // хэндлер клика по фильтру
+  function changeFilter(inputValue, isChecked) {
+    if (inputValue === ALL_CATEGORIES) {
+      // кнопка "Все", откат на 1 страницу
+      selectOneTag(setFilters, ALL_CATEGORIES);
+    } else {
+      handleCheckboxBehavior(setFilters, { inputValue, isChecked });
+      deselectOneTag(setFilters, ALL_CATEGORIES);
+    }
+    // сбрасываем пагинацию
+    setPageIndex(0);
+    // ставим флажок фильтров
+    setIsFiltersUsed(true);
+  }
+
+  // функция-фильтратор
+  // eslint-disable-next-line consistent-return
+  function handleFiltration() {
+    if (filters && isFiltersUsed) {
+      const activeFilters = getActiveFilters();
+
+      defineParamsAndGetData({
+        activeTags: activeFilters,
+        apiCallback: getData,
+        isFilters: true,
+      });
+    }
+  }
+
+  function defineFilters(tags) {
+    const filtersArray = tags.map((tag) => ({
+      filter: tag?.slug.toLowerCase(),
+      name: changeCaseOfFirstLetter(tag?.name),
+      isActive: false,
+    }));
+
+    return setFilters([
+      { filter: ALL_CATEGORIES_TAG, name: ALL_CATEGORIES_TAG, isActive: true },
+      ...filtersArray,
+    ]);
+  }
+
+  // РАБОТА С API
+  function getData({ params }) {
+    // const tags = { [apiFilterNames.tags]: getActiveFilters() };
+    const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
+
+    apiGetDataCallback({ limit: pageSize, offset, ...params })
+      .then(({ results, count }) => {
+        setTotalPages(Math.ceil(count / pageSize));
+        setDataToRender(results);
+      })
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError(ERROR_MESSAGES.filterErrorMessage);
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
+      })
+      .finally(() => {
+        setIsPaginationUsed(false);
+        setIsFiltersUsed(false);
+      });
+  }
+
+  function firstPageRender() {
+    Promise.all([
+      apiGetFiltersCallback(),
+      apiGetDataCallback({ limit: pageSize }),
+    ])
+      .then(([tags, { results, count }]) => {
+        setTotalPages(Math.ceil(count / pageSize));
+        defineFilters(tags);
+        setDataToRender(results);
+      })
+      .catch(() => setIsPageError(true))
+      .finally(() => setIsPageLoading(false));
+  }
+
+  function defineParamsAndGetData({ activeTags, apiCallback, isFilters }) {
+    if (activeTags) {
+      const params = {
+        [apiFilterNames.tags]: activeTags,
+      };
+      apiCallback({ params });
+    } else {
+      if (isFilters) selectOneTag(setFilters, ALL_CATEGORIES);
+      apiCallback({});
+    }
+  }
 };
 
 export default useFiltrationAndPagination;

@@ -46,9 +46,11 @@ function Movies() {
   const filtersAndPaginationSettings = {
     apiGetDataCallback: getMoviesPageData,
     apiGetFiltersCallback: getMoviesPageFilter,
-    apiFilterName: 'tags',
+    apiFilterNames: {
+      tags: 'tags',
+    },
     pageSize,
-    pageErrorSetter: setIsPageError,
+    setIsPageError,
   };
 
   const {

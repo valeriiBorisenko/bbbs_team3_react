@@ -54,9 +54,11 @@ function Books() {
   const filtersAndPaginationSettings = {
     apiGetDataCallback: getBooksPageData,
     apiGetFiltersCallback: getBooksPageFilter,
-    apiFilterName: 'types',
+    apiFilterNames: {
+      tags: 'types',
+    },
     pageSize,
-    pageErrorSetter: setIsPageError,
+    setIsPageError,
   };
 
   const {

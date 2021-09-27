@@ -96,6 +96,15 @@ const useFiltrationAndPagination = ({
     changeFilter,
   };
 
+  // РАБОТА С ПАГИНАЦИЕЙ
+  function changePageIndex(value) {
+    if (value !== pageIndex) {
+      setPageIndex(value);
+      setIsPaginationUsed(true);
+      setIsMainCardShown(false);
+    }
+  }
+
   // РАБОТА С ФИЛЬТРАМИ
   function getActiveFilters() {
     let activeFilters;
@@ -130,28 +139,6 @@ const useFiltrationAndPagination = ({
     return null;
   }
 
-  function defineParamsAndGetData({ activeTags, apiCallback, isFilters }) {
-    if (
-      isVideoPage &&
-      (activeTags.activeFilters || activeTags.isResourceGroupSelected)
-    ) {
-      // на видео странице выбран любой из фильтров
-      const params = {
-        [apiFilterNames.tags]: activeTags.activeFilters,
-        [apiFilterNames.resourceGroup]: activeTags.isResourceGroupSelected,
-      };
-      apiCallback({ isFiltersActive: true, params });
-    } else if (!isVideoPage && activeTags.activeFilters) {
-      const params = {
-        [apiFilterNames.tags]: activeTags.activeFilters,
-      };
-      apiCallback({ isFiltersActive: true, params });
-    } else {
-      if (isFilters) selectOneTag(setFilters, ALL_CATEGORIES);
-      apiCallback({ isFiltersActive: false });
-    }
-  }
-
   // хэндлер клика по фильтру
   function changeFilter(inputValue, isChecked) {
     if (inputValue === ALL_CATEGORIES) {
@@ -180,15 +167,6 @@ const useFiltrationAndPagination = ({
         apiCallback: getData,
         isFilters: true,
       });
-    }
-  }
-
-  // РАБОТА С ПАГИНАЦИЕЙ
-  function changePageIndex(value) {
-    if (value !== pageIndex) {
-      setPageIndex(value);
-      setIsPaginationUsed(true);
-      setIsMainCardShown(false);
     }
   }
 
@@ -300,6 +278,28 @@ const useFiltrationAndPagination = ({
       }
     } else {
       setFilters(defaultTags);
+    }
+  }
+
+  function defineParamsAndGetData({ activeTags, apiCallback, isFilters }) {
+    if (
+      isVideoPage &&
+      (activeTags.activeFilters || activeTags.isResourceGroupSelected)
+    ) {
+      // на видео странице выбран любой из фильтров
+      const params = {
+        [apiFilterNames.tags]: activeTags.activeFilters,
+        [apiFilterNames.resourceGroup]: activeTags.isResourceGroupSelected,
+      };
+      apiCallback({ isFiltersActive: true, params });
+    } else if (!isVideoPage && activeTags.activeFilters) {
+      const params = {
+        [apiFilterNames.tags]: activeTags.activeFilters,
+      };
+      apiCallback({ isFiltersActive: true, params });
+    } else {
+      if (isFilters) selectOneTag(setFilters, ALL_CATEGORIES);
+      apiCallback({ isFiltersActive: false });
     }
   }
 
