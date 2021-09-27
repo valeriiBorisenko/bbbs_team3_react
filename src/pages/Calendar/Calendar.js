@@ -50,6 +50,7 @@ function Calendar() {
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   // стейт для работы с мероприятиями
   const [calendarPageData, setCalendarPageData] = useState(null);
+  // флаг смены города - нужно снова загружать данные
   const [isCityChanged, setIsCityChanged] = useState(false);
   // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);

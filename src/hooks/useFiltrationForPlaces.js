@@ -4,6 +4,7 @@ import {
   ALL_CATEGORIES_TAG,
   CHOSEN_BY_MENTOR_TAG,
   DELAY_DEBOUNCE,
+  ERROR_MESSAGES,
 } from '../config/constants';
 import useDebounce from './useDebounce';
 import { changeCaseOfFirstLetter } from '../utils/utils';
@@ -19,17 +20,6 @@ import ageFiltersArray from '../utils/age-filters';
 // много логики из-за главной карточки и неизвестности её появления
 // в отличие от страниц Articles и Video она может и не быть в первой выдаче
 
-// первый рендер
-// если карточка в первой выдаче, то фильтруем карточку, limit + 1 при пагинации
-// иначе отрезаем 1 карточку для ровной сетки, limit + 0 при пагинации
-
-// при фильтрации на ВСЕ или при пагинации на 1 стр. БЕЗ ФИЛЬТРОВ
-// если в первой выдаче, то всегда фильтруем карточку, limit + 1
-// иначе грузим только по размеру страницы, limit + 0 при пагинации
-
-// если карточки вообще нет
-// первый рендер - отрезаем 1 карточку, потом грузим только по размеру страницы
-
 const useFiltrationForPlaces = ({
   apiGetDataCallback,
   apiGetFiltersCallback,
@@ -39,9 +29,7 @@ const useFiltrationForPlaces = ({
   pageSize,
   setIsPageError,
 }) => {
-  // eslint-disable-next-line no-unused-vars
   const { setError } = useContext(ErrorsContext);
-  // eslint-disable-next-line no-unused-vars
   const { openPopupError } = useContext(PopupsContext);
   // данные
   const [dataToRender, setDataToRender] = useState([]);
@@ -51,26 +39,24 @@ const useFiltrationForPlaces = ({
   // главная карточка
   const [mainCard, setMainCard] = useState({});
   const [isMainCardShown, setIsMainCardShown] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [isMainCardInFirstResponse, setIsMainCardInFirstResponse] =
     useState(false);
-  const isMainCard = !!Object.keys(mainCard).length;
+  const isMainCard = !!mainCard.chosen;
 
   // лоадеры, флаги
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isPaginationUsed, setIsPaginationUsed] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isNoFilteredResults, setIsNoFilteredResults] = useState(false);
+  const [isFormRecommendationShown, setIsFormRecommendationShown] =
+    useState(true);
+
   // пагинация
   const [totalPages, setTotalPages] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePaginate = useDebounce(getData, DELAY_DEBOUNCE);
-
-  // console.log({ mainCard });
-  // console.log(isMainCard);
-  // console.log({ isMainCardInFirstResponse });
-  // console.log({ dataToRender });
 
   // Первая отрисовка страницы
   useEffect(() => {
@@ -112,19 +98,32 @@ const useFiltrationForPlaces = ({
     isPageLoading,
     isFiltersUsed,
     isPaginationUsed,
+    isNoFilteredResults,
+    isFormRecommendationShown,
     totalPages,
     pageIndex,
     changePageIndex,
     changeFilter,
     changeAgeFilter,
+    resetStatesAndGetNewData,
   };
+
+  function resetStatesAndGetNewData() {
+    setMainCard({});
+    setIsMainCardShown(false);
+    setIsMainCardInFirstResponse(false);
+    setIsNoFilteredResults(false);
+    setIsFormRecommendationShown(true);
+    firstPageRender();
+  }
 
   // РАБОТА С ПАГИНАЦИЕЙ
   function changePageIndex(value) {
     if (value !== pageIndex) {
       setPageIndex(value);
       setIsPaginationUsed(true);
-      setIsMainCardShown(false);
+      if (isMainCard && isMainCardShown) setIsMainCardShown(false);
+      if (isFormRecommendationShown) setIsFormRecommendationShown(false);
     }
   }
 
@@ -191,6 +190,9 @@ const useFiltrationForPlaces = ({
   // eslint-disable-next-line consistent-return
   function handleFiltration() {
     if (filters && isFiltersUsed) {
+      if (isNoFilteredResults) setIsNoFilteredResults(false);
+      if (isFormRecommendationShown) setIsFormRecommendationShown(false);
+
       const { activeFilters, activeAges, isChosenByMentorFlag } =
         getActiveFilters();
 
@@ -208,49 +210,71 @@ const useFiltrationForPlaces = ({
   function getData({ isFiltersActive, params }) {
     // isFiltersUsed учитывает кнопку ВСЕ
     // isFiltersActive - только активные
-    // const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
+    const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
 
-    console.log({ isFiltersActive });
-    console.log(params);
-    setIsFiltersUsed(false);
+    const fixedLimit =
+      pageIndex === 0 &&
+      isMainCard &&
+      isMainCardInFirstResponse &&
+      !isFiltersActive
+        ? pageSize + 1 // кнопка ВСЕ и пагинация на 1 страницу, когда есть карточка
+        : pageSize;
 
-    // большая карточка всегда будет в первой выдаче
-    // const fixedLimit =
-    //   pageIndex === 0 && isMainCard && !isFiltersActive
-    //     ? pageSize + 1
-    //     : pageSize;
-    //
-    // const fixedOffset =
-    //   pageIndex > 0 && isMainCard && !isFiltersActive ? offset + 1 : offset;
+    const fixedOffset =
+      pageIndex > 0 &&
+      isMainCard &&
+      isMainCardInFirstResponse &&
+      !isFiltersActive
+        ? offset + 1
+        : offset;
 
-    // apiGetDataCallback({
-    //   limit: fixedLimit,
-    //   offset: fixedOffset,
-    //   ...params,
-    // })
-    //   .then(({ results, count }) => {
-    //     if (isMainCard && !isFiltersActive) {
-    //       setTotalPages(Math.ceil((count - 1) / pageSize));
-    //     } else {
-    //       setTotalPages(Math.ceil(count / pageSize));
-    //     }
-    //
-    //     if (pageIndex === 0 && isMainCard && !isFiltersActive) {
-    //       setIsMainCardShown(true);
-    //     } else setDataToRender(results);
-    //   })
-    //   .catch(() => {
-    //     if (isFiltersUsed) {
-    //       setError(ERROR_MESSAGES.filterErrorMessage);
-    //       openPopupError();
-    //     } else {
-    //       setIsPageError(true);
-    //     }
-    //   })
-    //   .finally(() => {
-    //     setIsPaginationUsed(false);
-    //     setIsFiltersUsed(false);
-    //   });
+    apiGetDataCallback({
+      limit: fixedLimit,
+      offset: fixedOffset,
+      city: userCity,
+      ...params,
+    })
+      .then(({ results, count }) => {
+        if (results.length === 0) {
+          setIsNoFilteredResults(true);
+        }
+
+        if (isMainCard && isMainCardInFirstResponse && !isFiltersActive) {
+          // при пагинации без фильтров на всех страницах
+          // если карточка есть и она в 1 выдаче, то исключаем её из учёта
+          setTotalPages(Math.ceil((count - 1) / pageSize));
+        } else {
+          setTotalPages(Math.ceil(count / pageSize));
+        }
+
+        if (pageIndex === 0 && isMainCard && !isFiltersActive) {
+          // вернулись на 1 страницу без фильтров и при карточке
+          if (isMainCardInFirstResponse) {
+            // карточка есть в 1 выдаче - фильтруем
+            setDataToRender(() =>
+              results.filter((card) => card.id !== mainCard.id)
+            );
+          } else {
+            setDataToRender(results);
+          }
+          setIsMainCardShown(true);
+          setIsFormRecommendationShown(true);
+        } else {
+          setDataToRender(results);
+        }
+      })
+      .catch(() => {
+        if (isFiltersUsed) {
+          setError(ERROR_MESSAGES.filterErrorMessage);
+          openPopupError();
+        } else {
+          setIsPageError(true);
+        }
+      })
+      .finally(() => {
+        setIsPaginationUsed(false);
+        setIsFiltersUsed(false);
+      });
   }
 
   function firstPageRender() {
@@ -324,14 +348,14 @@ const useFiltrationForPlaces = ({
       );
       setDataToRender(filteredCards);
       setTotalPages(Math.ceil((totalCards - 1) / pageSize));
-    } else if (isChosenCard && cards.length > pageSize) {
-      // не в первой выдаче, но она всё-таки есть
-      // подрезаем 1 карточку для ровной сетки
-      setDataToRender(cards.slice(0, -1));
-      setTotalPages(Math.ceil(totalCards / pageSize));
     } else {
-      // главной карточки нет
-      setDataToRender(cards);
+      if (cards.length > pageSize) {
+        // главной карточки нет или она не в 1 выдаче
+        // подрезаем 1 карточку для ровной сетки
+        setDataToRender(cards.slice(0, -1));
+      } else {
+        setDataToRender(cards);
+      }
       setTotalPages(Math.ceil(totalCards / pageSize));
     }
   }
@@ -345,7 +369,7 @@ const useFiltrationForPlaces = ({
   }) {
     if (activeFilters || activeAges || isChosenByMentorFlag) {
       // собираем все возможные фильтры
-      const params = { city: userCity };
+      const params = {};
       if (activeFilters) {
         params[apiFilterNames.tags] = activeFilters;
       }

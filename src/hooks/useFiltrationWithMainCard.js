@@ -35,7 +35,7 @@ const useFiltrationWithMainCard = ({
   // главная карточка
   const [mainCard, setMainCard] = useState({});
   const [isMainCardShown, setIsMainCardShown] = useState(false);
-  const isMainCard = !!Object.keys(mainCard).length;
+  const isMainCard = !!mainCard.pinnedFullSize;
 
   // лоадеры, флаги
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
@@ -104,7 +104,7 @@ const useFiltrationWithMainCard = ({
     if (value !== pageIndex) {
       setPageIndex(value);
       setIsPaginationUsed(true);
-      setIsMainCardShown(false);
+      if (isMainCard && isMainCardShown) setIsMainCardShown(false);
     }
   }
 
@@ -320,11 +320,11 @@ const useFiltrationWithMainCard = ({
 
   // обработка главной карточки
   function handleMainCard({ results, count }) {
-    const pinnedFullSizeCard = results.find((item) => item?.pinnedFullSize);
+    const pinnedFullSizeCard = results.find((item) => item.pinnedFullSize);
     if (pinnedFullSizeCard) {
       setMainCard(pinnedFullSizeCard);
       setIsMainCardShown(true);
-      setDataToRender(results.filter((item) => !item?.pinnedFullSize));
+      setDataToRender(results.filter((item) => !item.pinnedFullSize));
       // не учитываем первую карточку в остальной выдаче
       setTotalPages(Math.ceil((count - 1) / pageSize));
     } else {
