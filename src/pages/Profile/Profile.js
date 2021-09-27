@@ -6,7 +6,7 @@ import {
   ERROR_CODES,
   ERROR_MESSAGES,
 } from '../../config/constants';
-import { useEventBooking } from '../../hooks';
+import { useEventBooking, useFiltrationAndPagination } from '../../hooks';
 import {
   createDiary,
   deleteDiary,
@@ -60,7 +60,8 @@ function Profile() {
   const [archivedEvents, setArchivedEvents] = useState([]);
   const [eventsOffset, setEventsOffset] = useState(0);
 
-  const [diaries, setDiaries] = useState(null);
+  const [diaries, setDiaries] = useState([]);
+
   const [isWaitingResponse, setIsWaitingResponse] = useState(false);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -81,9 +82,24 @@ function Profile() {
       : eventsTitleNoResultsArchive;
 
   // пагинация
-  const [pageCount, setPageCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+  const filtersAndPaginationSettings = {
+    apiGetDataCallback: getProfileDiariesData,
+    pageSize: diariesPerPageCount,
+    setIsPageError,
+  };
+
+  const {
+    dataToRender,
+    isPageLoading,
+    isPaginationUsed,
+    totalPages,
+    pageIndex,
+    changePageIndex,
+  } = useFiltrationAndPagination(filtersAndPaginationSettings);
+
+  useEffect(() => {
+    setDiaries(dataToRender);
+  }, [dataToRender]);
 
   const getArchiveOfEvents = ({ limit, offset }) => {
     if (offset <= archivedEvents.length) {
@@ -118,18 +134,6 @@ function Profile() {
         })
         .finally(() => setIsLoadingEvents(false));
     }
-  };
-
-  const getDiaries = () => {
-    const offset = diariesPerPageCount * pageIndex;
-
-    getProfileDiariesData({ limit: diariesPerPageCount, offset })
-      .then(({ results, count }) => {
-        setDiaries(results);
-        setPageCount(Math.ceil(count / diariesPerPageCount));
-      })
-      .catch(() => setIsPageError(true))
-      .finally(() => setIsLoadingPaginate(false));
   };
 
   useEffect(() => {
@@ -306,13 +310,10 @@ function Profile() {
     if (scrollAnchorRef && scrollAnchorRef.current) {
       scrollAnchorRef.current.scrollIntoView();
     }
-
     if (isFormOpen) closeForm();
-    setIsLoadingPaginate(true);
-    getDiaries();
   }, [pageIndex]);
 
-  if (!events.length && !diaries) {
+  if (!events.length && !diaries.length) {
     return <Loader isCentered />;
   }
 
@@ -367,7 +368,7 @@ function Profile() {
   }
 
   function renderDiaryForm() {
-    if (isFormOpen || (diaries && diaries.length === 0)) {
+    if (isFormOpen || (diaries && diaries.length === 0 && !isPageLoading)) {
       return (
         <div className="profile__form-container">
           {!isEditMode && (
@@ -389,7 +390,7 @@ function Profile() {
   }
 
   function renderDiaries() {
-    if (isLoadingPaginate) return <Loader isPaginate />;
+    if (isPaginationUsed) return <Loader isPaginate />;
 
     if (diaries && diaries.length > 0) {
       return (
@@ -478,12 +479,12 @@ function Profile() {
 
             {renderDiaries()}
 
-            {pageCount > 1 && (
+            {totalPages > 1 && (
               <Paginate
                 sectionClass="cards-section__pagination"
-                pageCount={pageCount}
+                pageCount={totalPages}
                 value={pageIndex}
-                onChange={setPageIndex}
+                onChange={changePageIndex}
                 dontUseScrollUp
               />
             )}
