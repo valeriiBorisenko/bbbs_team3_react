@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { CurrentUserContext, ErrorsContext, PopupsContext } from '../contexts';
 import {
-  ALL_CATEGORIES,
   ALL_CATEGORIES_TAG,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
@@ -114,7 +113,7 @@ const useFiltrationWithMainCard = ({
     let activeFilters;
     if (isVideoPage) {
       const activeTags = filters.filter(
-        (f) => f.isActive && f.filter !== ALL_CATEGORIES
+        (f) => f.isActive && f.filter !== ALL_CATEGORIES_TAG
       );
 
       const isResourceGroupSelected = activeTags.some(
@@ -135,7 +134,7 @@ const useFiltrationWithMainCard = ({
 
     if (filters.length) {
       activeFilters = filters
-        .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES)
+        .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES_TAG)
         .map((f) => f.filter)
         .join(',');
       return { activeFilters };
@@ -145,14 +144,14 @@ const useFiltrationWithMainCard = ({
 
   // хэндлер клика по фильтру
   function changeFilter(inputValue, isChecked) {
-    if (inputValue === ALL_CATEGORIES) {
+    if (inputValue === ALL_CATEGORIES_TAG) {
       // нажата кнопка "Все"
-      selectOneTag(setFilters, ALL_CATEGORIES);
+      selectOneTag(setFilters, ALL_CATEGORIES_TAG);
       if (isMainCard) setIsMainCardShown(true);
     } else {
       handleCheckboxBehavior(setFilters, { inputValue, isChecked });
-      deselectOneTag(setFilters, ALL_CATEGORIES);
-      setIsMainCardShown(false);
+      deselectOneTag(setFilters, ALL_CATEGORIES_TAG);
+      if (isMainCard && isMainCardShown) setIsMainCardShown(false);
     }
     // сбрасываем пагинацию
     setPageIndex(0);
@@ -314,7 +313,7 @@ const useFiltrationWithMainCard = ({
       };
       apiCallback({ isFiltersActive: true, params });
     } else {
-      if (isFiltersCallback) selectOneTag(setFilters, ALL_CATEGORIES);
+      if (isFiltersCallback) selectOneTag(setFilters, ALL_CATEGORIES_TAG);
       apiCallback({ isFiltersActive: false });
     }
   }

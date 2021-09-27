@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { ErrorsContext, PopupsContext } from '../contexts';
 import {
-  ALL_CATEGORIES,
   ALL_CATEGORIES_TAG,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
@@ -97,7 +96,7 @@ const useFiltrationAndPagination = ({
   function getActiveFilters() {
     if (filters.length) {
       return filters
-        .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES)
+        .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES_TAG)
         .map((f) => f.filter)
         .join(',');
     }
@@ -106,12 +105,12 @@ const useFiltrationAndPagination = ({
 
   // хэндлер клика по фильтру
   function changeFilter(inputValue, isChecked) {
-    if (inputValue === ALL_CATEGORIES) {
+    if (inputValue === ALL_CATEGORIES_TAG) {
       // кнопка "Все", откат на 1 страницу
-      selectOneTag(setFilters, ALL_CATEGORIES);
+      selectOneTag(setFilters, ALL_CATEGORIES_TAG);
     } else {
       handleCheckboxBehavior(setFilters, { inputValue, isChecked });
-      deselectOneTag(setFilters, ALL_CATEGORIES);
+      deselectOneTag(setFilters, ALL_CATEGORIES_TAG);
     }
     // сбрасываем пагинацию
     setPageIndex(0);
@@ -216,7 +215,7 @@ const useFiltrationAndPagination = ({
       };
       apiCallback({ params });
     } else {
-      if (isFiltersCallback) selectOneTag(setFilters, ALL_CATEGORIES);
+      if (isFiltersCallback) selectOneTag(setFilters, ALL_CATEGORIES_TAG);
       apiCallback({});
     }
   }

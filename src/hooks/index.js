@@ -12,6 +12,7 @@ import useInfiniteScroll from './useInfiniteScroll';
 import useCloseOnEscape from './useCloseOnEscape';
 import useFiltrationAndPagination from './useFiltrationAndPagination';
 import useFiltrationWithMainCard from './useFiltrationWithMainCard';
+import useFiltrationForPlaces from './useFiltrationForPlaces';
 import usePageWidth from './usePageWidth';
 
 export {
@@ -29,5 +30,6 @@ export {
   useCloseOnEscape,
   useFiltrationAndPagination,
   useFiltrationWithMainCard,
+  useFiltrationForPlaces,
   usePageWidth,
 };

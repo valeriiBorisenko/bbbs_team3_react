@@ -1,33 +1,19 @@
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import placesPageTexts from './locales/RU';
+import { CurrentUserContext, PopupsContext } from '../../contexts';
 import {
-  CurrentUserContext,
-  ErrorsContext,
-  PopupsContext,
-} from '../../contexts';
-import {
-  ALL_CATEGORIES,
   COLORS,
-  DELAY_DEBOUNCE,
   DELAY_RENDER,
   ERROR_MESSAGES,
   localStUserCity,
 } from '../../config/constants';
-import ageFilters from './age-filters';
 import {
   useActivityTypes,
-  useDebounce,
+  useFiltrationForPlaces,
   useLocalStorage,
   usePageWidth,
 } from '../../hooks';
-import {
-  deselectAllTags,
-  deselectOneTag,
-  handleCheckboxBehavior,
-  selectOneTag,
-} from '../../utils/filter-tags';
-import { changeCaseOfFirstLetter } from '../../utils/utils';
 import {
   getChosenPlace,
   getPlace,
@@ -55,7 +41,6 @@ const {
   title,
   textStubNoData,
   paragraphNoContent,
-  mentorTag,
 } = placesPageTexts;
 
 const PAGE_SIZE_PAGINATE = {
@@ -75,8 +60,7 @@ function Places() {
   const { activityTypes, activityTypesSimplified } = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
-  const { openPopupCities, openPopupError } = useContext(PopupsContext);
-  const { setError } = useContext(ErrorsContext);
+  const { openPopupCities } = useContext(PopupsContext);
 
   const getLocalStorageItem = useLocalStorage(localStUserCity);
 
@@ -85,27 +69,27 @@ function Places() {
   const userCity = currentUser?.city ?? currentAnonymousCity;
 
   // места из API
-  const [places, setPlaces] = useState(null);
-  const [chosenPlace, setChosenPlace] = useState(null);
-  const [isChosenOnPageOne, setIsChosenOnPageOne] = useState(false);
+  // const [places, setPlaces] = useState(null);
+  // const [chosenPlace, setChosenPlace] = useState(null);
+  // const [isChosenOnPageOne, setIsChosenOnPageOne] = useState(false);
   const [isPageError, setIsPageError] = useState(false);
 
-  const [isLoadingPage, setIsLoadingPage] = useState(true);
+  // const [isLoadingPage, setIsLoadingPage] = useState(true);
   // переход между фильтрами, лоадер
-  const [isLoadingFilters, setIsLoadingFilters] = useState(false);
+  // const [isLoadingFilters, setIsLoadingFilters] = useState(false);
   // переход пагинаций без фильтров, лоадер
-  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+  // const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
   // переход между городами, лоадер
-  const [isCityChanging, setIsCityChanging] = useState(false);
+  // const [isCityChanging, setIsCityChanging] = useState(false);
   // триггер фильтра для useEffect
-  const [isFiltersUsed, setIsFiltersUsed] = useState(false);
+  // const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   // видна ли главная карточка
-  const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
+  // const [isChosenCardHidden, setIsChosenCardHidden] = useState(false);
   // стейт для определения первой отрисовки страницы (нужен при отсутствии данных)
-  const [isFirstRender, setIsFirstRender] = useState(false);
+  // const [isFirstRender, setIsFirstRender] = useState(false);
   // категории фильтрации
-  const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
-  const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
+  // const [ages, setAges] = useState(ageFilters); // состояние кнопок фильтра возраста
+  // const [categories, setCategories] = useState([]); // состояние кнопок фильтра категорий
 
   // попапы страницы
   const [isPlacePopupOpen, setIsPlacePopupOpen] = useState(false);
@@ -130,11 +114,43 @@ function Places() {
 
   // Стейты для пагинации
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
-  const [pageCount, setPageCount] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
+  /// const [pageCount, setPageCount] = useState(0);
+  // const [pageNumber, setPageNumber] = useState(0);
+
+  // фильтрация и пагинация
+  const filtersAndPaginationSettings = {
+    apiGetDataCallback: getPlaces,
+    apiGetFiltersCallback: getPlacesTags,
+    apiGetMainCardCallback: getChosenPlace,
+    apiFilterNames: {
+      tags: 'tags',
+      chosen: 'chosen',
+      ageRestriction: 'age_restriction',
+    },
+    userCity,
+    pageSize,
+    setIsPageError,
+  };
+
+  const {
+    dataToRender,
+    filters,
+    ageFilters,
+    mainCard,
+    isMainCard,
+    isMainCardShown,
+    isPageLoading,
+    isFiltersUsed,
+    isPaginationUsed,
+    totalPages,
+    pageIndex,
+    changePageIndex,
+    changeFilter,
+    changeAgeFilter,
+  } = useFiltrationForPlaces(filtersAndPaginationSettings);
 
   // хэндлер клика по фильтру КАТЕГОРИИ
-  const changeCategory = (inputValue, isChecked) => {
+  /* const changeCategory = (inputValue, isChecked) => {
     if (inputValue === ALL_CATEGORIES) {
       selectOneTag(setCategories, ALL_CATEGORIES);
       deselectAllTags(setAges);
@@ -143,16 +159,16 @@ function Places() {
       deselectOneTag(setCategories, ALL_CATEGORIES);
     }
     setIsFiltersUsed(true);
-  };
+  }; */
 
   // хэндлер клика по фильтру ВОЗРАСТ
-  const changeAge = (inputValue, isChecked) => {
+  /* const changeAge = (inputValue, isChecked) => {
     handleCheckboxBehavior(setAges, { inputValue, isChecked });
     setIsFiltersUsed(true);
-  };
+  }; */
 
   // функция, определяющая теги категорий в зависимости от того, есть ли рубрика "Выбор наставника"
-  const defineCategories = (tags, chosenPlaceData) => {
+  /* const defineCategories = (tags, chosenPlaceData) => {
     const categoriesArray = tags.map((tag) => ({
       filter: tag?.slug.toLowerCase(),
       name: changeCaseOfFirstLetter(tag?.name),
@@ -169,10 +185,10 @@ function Places() {
       { filter: ALL_CATEGORIES, name: ALL_CATEGORIES, isActive: true },
       ...categoriesArray,
     ];
-  };
+  }; */
 
   // restOfPlaces - массив без главной карточки
-  const definePlaces = (placesData, isFiltered, mainCard) => {
+  /* const definePlaces = (placesData, isFiltered, mainCard) => {
     const chosenCard = mainCard || chosenPlace;
     let restOfPlaces = placesData;
 
@@ -191,9 +207,9 @@ function Places() {
       }
     }
     return { restOfPlaces };
-  };
+  }; */
 
-  const defineActiveTags = () => {
+  /* const defineActiveTags = () => {
     const activeCategories = categories.filter(
       (category) => category.isActive && category.filter !== ALL_CATEGORIES
     );
@@ -218,10 +234,10 @@ function Places() {
       activeAges,
       isMentorFlag,
     };
-  };
+  }; */
 
   // запрос отфильтрованного массива карточек
-  const getFilteredPlaces = (params, isFiltersActive) => {
+  /* const getFilteredPlaces = (params, isFiltersActive) => {
     const offset = isFiltersUsed ? 0 : pageSize * pageNumber;
 
     const fixedPageSize =
@@ -261,10 +277,10 @@ function Places() {
         setIsLoadingPaginate(false);
         setIsFiltersUsed(false);
       });
-  };
+  }; */
 
   // функция-фильтратор
-  const handleFiltration = () => {
+  /* const handleFiltration = () => {
     setIsFirstRender(false);
 
     const { activeCategories, activeTags, activeAges, isMentorFlag } =
@@ -308,9 +324,9 @@ function Places() {
         true
       );
     }
-  };
+  }; */
 
-  const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
+  /* const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePagination = useDebounce(getFilteredPlaces, DELAY_DEBOUNCE);
   // запуск фильтрации
   useEffect(() => {
@@ -342,10 +358,10 @@ function Places() {
 
       setIsLoadingPaginate(true);
     }
-  }, [pageNumber]);
+  }, [pageNumber]); */
 
   // Promise.all нужен для формирования тега "Выбор наставников" по метке на карточках
-  useEffect(() => {
+  /* useEffect(() => {
     if (userCity && pageSize) {
       window.scroll({ top: 0 });
       setIsFirstRender(true);
@@ -383,7 +399,7 @@ function Places() {
         .catch(() => setIsPageError(true))
         .finally(() => setIsCityChanging(false));
     }
-  }, [userCity, pageSize]);
+  }, [userCity, pageSize]); */
 
   useEffect(() => {
     if (!userCity) {
@@ -402,7 +418,7 @@ function Places() {
     }
   }, [state]);
 
-  if (!places) {
+  if (isPageLoading) {
     return <Loader isCentered />;
   }
 
@@ -430,26 +446,20 @@ function Places() {
   function renderAnimatedContainer() {
     return (
       <>
-        {!isCityChanging ? (
-          <>
-            <AnimatedPageContainer titleText={textStubNoData} />
-            {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
-          </>
-        ) : (
-          <Loader isPaginate />
-        )}
+        <AnimatedPageContainer titleText={textStubNoData} />
+        {currentUser && <PlacesRecommend activityTypes={activityTypes} />}
       </>
     );
   }
 
   function renderPagination() {
-    if (pageCount > 1) {
+    if (totalPages > 1) {
       return (
         <Paginate
           sectionClass="cards-section__pagination"
-          pageCount={pageCount}
-          value={pageNumber}
-          onChange={setPageNumber}
+          pageCount={totalPages}
+          value={pageIndex}
+          onChange={changePageIndex}
         />
       );
     }
@@ -457,7 +467,7 @@ function Places() {
   }
 
   function renderPlaces() {
-    if (isChosenCardHidden && places?.length === 0) {
+    if (!isMainCardShown && dataToRender.length === 0) {
       return (
         <NoDataNotificationBox
           text={paragraphNoContent}
@@ -466,14 +476,14 @@ function Places() {
       );
     }
 
-    if (chosenPlace || places?.length > 0) {
+    if (isMainCard || dataToRender.length > 0) {
       return (
         <>
-          {chosenPlace && !isChosenCardHidden && !isLoadingPaginate && (
+          {isMainCard && isMainCardShown && (
             <section className="places__main">
               <CardPlace
-                key={chosenPlace?.id}
-                data={chosenPlace}
+                key={mainCard?.id}
+                data={mainCard}
                 activityTypesSimplified={activityTypesSimplified}
                 sectionClass="card-container_type_main-article scale-in"
                 isBig
@@ -481,9 +491,9 @@ function Places() {
             </section>
           )}
 
-          {!isLoadingPaginate ? (
+          {!isPaginationUsed ? (
             <section className="places__cards-grid">
-              {places.map((place, i) => (
+              {dataToRender.map((place, i) => (
                 <CardPlace
                   key={place?.id}
                   data={place}
@@ -511,37 +521,32 @@ function Places() {
         />
       );
     }
-    if (isFirstRender && !chosenPlace && places?.length === 0) {
+    if (!isMainCard && dataToRender.length === 0) {
       return renderAnimatedContainer();
     }
     return (
       <>
         <TitleH1 title={title} sectionClass="places__title" />
-        {!isCityChanging ? (
-          <>
-            <TagsList
-              filterList={categories}
-              name="categories"
-              handleClick={changeCategory}
-            />
-            <TagsList
-              filterList={ages}
-              name="ages"
-              handleClick={changeAge}
-              sectionClass="places__tags"
-            />
-            {currentUser && (
-              <PlacesRecommend
-                activityTypes={activityTypes}
-                openSuccessPopup={openPopupRecommendSuccess}
-              />
-            )}
 
-            {!isLoadingFilters ? renderPlaces() : <Loader isPaginate />}
-          </>
-        ) : (
-          <Loader isPaginate />
+        <TagsList
+          filterList={filters}
+          name="categories"
+          handleClick={changeFilter}
+        />
+        <TagsList
+          filterList={ageFilters}
+          name="ages"
+          handleClick={changeAgeFilter}
+          sectionClass="places__tags"
+        />
+        {currentUser && (
+          <PlacesRecommend
+            activityTypes={activityTypes}
+            openSuccessPopup={openPopupRecommendSuccess}
+          />
         )}
+
+        {!isFiltersUsed ? renderPlaces() : <Loader isPaginate />}
       </>
     );
   }

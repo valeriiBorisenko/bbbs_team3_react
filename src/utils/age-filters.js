@@ -1,8 +1,8 @@
-import placesPageTexts from './locales/RU';
+import placesPageTexts from '../pages/Places/locales/RU';
 
 const { ageFilterNames } = placesPageTexts;
 
-const ageFilters = [
+const ageFiltersArray = [
   {
     filter: ageFilterNames[0].filter,
     name: ageFilterNames[0].name,
@@ -25,4 +25,4 @@ const ageFilters = [
   },
 ];
 
-export default ageFilters;
+export default ageFiltersArray;
