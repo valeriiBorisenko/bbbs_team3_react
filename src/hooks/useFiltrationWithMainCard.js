@@ -52,11 +52,8 @@ const useFiltrationAndPagination = ({
   // Первая отрисовка страницы
   useEffect(() => {
     if (isPageLoading && pageSize) {
-      if (apiGetFiltersCallback) {
-        firstPageRender();
-      } else {
-        firstPageRenderNoFilters();
-      }
+      if (apiGetFiltersCallback) firstPageRender();
+      else firstPageRenderNoFilters();
     }
   }, [pageSize, isPageLoading]);
 

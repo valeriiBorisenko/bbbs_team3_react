@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import catalogPageTexts from './locales/RU';
 import { getCatalogPageData } from '../../api/catalog-page';
 import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
-import { usePageWidth } from '../../hooks';
+import { useFiltrationAndPagination, usePageWidth } from '../../hooks';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -30,41 +30,26 @@ const { headTitle, headDescription, title, subtitle, textStubNoData } =
 
 function Catalog() {
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
-  const [pageCount, setPageCount] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
-
-  const [catalogPageData, setCatalogPageData] = useState([]);
-  const [isLoadingPage, setIsLoadingPage] = useState(true);
-  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
-  function getPageData() {
-    const offset = pageSize * pageNumber;
+  // пагинация
+  const filtersAndPaginationSettings = {
+    apiGetDataCallback: getCatalogPageData,
+    pageSize,
+    setIsPageError,
+  };
 
-    getCatalogPageData({ limit: pageSize, offset })
-      .then(({ results, count }) => {
-        setCatalogPageData(results);
-        setPageCount(Math.ceil(count / pageSize));
-      })
-      .catch(() => setIsPageError(true))
-      .finally(() => {
-        setIsLoadingPaginate(false);
-        setIsLoadingPage(false);
-      });
-  }
+  const {
+    dataToRender,
+    isPageLoading,
+    isPaginationUsed,
+    totalPages,
+    pageIndex,
+    changePageIndex,
+  } = useFiltrationAndPagination(filtersAndPaginationSettings);
 
-  useEffect(() => {
-    if (pageSize) {
-      getPageData();
-    }
-
-    if (!isLoadingPage) {
-      setIsLoadingPaginate(true);
-    }
-  }, [pageSize, pageNumber]);
-
-  if (isLoadingPage) {
+  if (isPageLoading) {
     return <Loader isCentered />;
   }
 
@@ -77,14 +62,14 @@ function Catalog() {
   function renderCards() {
     return (
       <CardsSectionWithLines
-        pageCount={pageCount}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-        isLoading={isLoadingPaginate}
-        dataLength={catalogPageData.length}
+        pageCount={totalPages}
+        pageNumber={pageIndex}
+        setPageNumber={changePageIndex}
+        isLoading={isPaginationUsed}
+        dataLength={dataToRender.length}
         pageSize={pageSize}
       >
-        {catalogPageData.map((item, i) => (
+        {dataToRender.map((item, i) => (
           <CardCatalog
             sectionClass="cards-section__item scale-in"
             key={item?.id}
@@ -104,7 +89,7 @@ function Catalog() {
         />
       );
     }
-    if (!catalogPageData && !isLoadingPage && !isPageError) {
+    if (!dataToRender.length && !isPageLoading && !isPageError) {
       return <AnimatedPageContainer titleText={textStubNoData} />;
     }
 
