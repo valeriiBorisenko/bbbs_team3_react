@@ -1,10 +1,12 @@
 @import './styles/utils.scss';
 
 .pagination {
+  position: relative;
   display: flex;
   justify-content: center;
   width: 100%;
   padding: 0;
+  z-index: 7;
 
   &__element {
     list-style: none;
