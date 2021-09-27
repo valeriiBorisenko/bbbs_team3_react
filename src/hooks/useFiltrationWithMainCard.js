@@ -45,6 +45,7 @@ const useFiltrationAndPagination = ({
   // пагинация
   const [totalPages, setTotalPages] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
+  const isNoFilters = !apiGetFiltersCallback;
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePaginate = useDebounce(getData, DELAY_DEBOUNCE);
@@ -52,8 +53,8 @@ const useFiltrationAndPagination = ({
   // Первая отрисовка страницы
   useEffect(() => {
     if (isPageLoading && pageSize) {
-      if (apiGetFiltersCallback) firstPageRender();
-      else firstPageRenderNoFilters();
+      if (isNoFilters) firstPageRenderNoFilters();
+      else firstPageRender();
     }
   }, [pageSize, isPageLoading]);
 
@@ -70,7 +71,7 @@ const useFiltrationAndPagination = ({
       defineParamsAndGetData({
         activeTags,
         apiCallback: debouncePaginate,
-        isFilters: false,
+        isFiltersCallback: false,
       });
     }
   }, [pageSize, pageIndex]);
@@ -130,7 +131,7 @@ const useFiltrationAndPagination = ({
       return { activeFilters, isResourceGroupSelected };
     }
 
-    if (filters) {
+    if (filters.length) {
       activeFilters = filters
         .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES)
         .map((f) => f.filter)
@@ -166,7 +167,7 @@ const useFiltrationAndPagination = ({
       defineParamsAndGetData({
         activeTags,
         apiCallback: getData,
-        isFilters: true,
+        isFiltersCallback: true,
       });
     }
   }
@@ -289,7 +290,11 @@ const useFiltrationAndPagination = ({
     }
   }
 
-  function defineParamsAndGetData({ activeTags, apiCallback, isFilters }) {
+  function defineParamsAndGetData({
+    activeTags,
+    apiCallback,
+    isFiltersCallback,
+  }) {
     if (
       isVideoPage &&
       (activeTags.activeFilters || activeTags.isResourceGroupSelected)
@@ -306,7 +311,7 @@ const useFiltrationAndPagination = ({
       };
       apiCallback({ isFiltersActive: true, params });
     } else {
-      if (isFilters) selectOneTag(setFilters, ALL_CATEGORIES);
+      if (isFiltersCallback) selectOneTag(setFilters, ALL_CATEGORIES);
       apiCallback({ isFiltersActive: false });
     }
   }

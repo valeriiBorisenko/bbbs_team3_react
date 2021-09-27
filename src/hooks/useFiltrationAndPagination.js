@@ -35,6 +35,7 @@ const useFiltrationAndPagination = ({
   // пагинация
   const [totalPages, setTotalPages] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
+  const isNoFilters = !apiGetFiltersCallback;
 
   const debounceFiltration = useDebounce(handleFiltration, DELAY_DEBOUNCE);
   const debouncePaginate = useDebounce(getData, DELAY_DEBOUNCE);
@@ -42,8 +43,8 @@ const useFiltrationAndPagination = ({
   // Первая отрисовка страницы
   useEffect(() => {
     if (isPageLoading && pageSize) {
-      if (apiGetFiltersCallback) firstPageRender();
-      else firstPageRenderNoFilters();
+      if (isNoFilters) firstPageRenderNoFilters();
+      else firstPageRender();
     }
   }, [pageSize]);
 
@@ -55,7 +56,7 @@ const useFiltrationAndPagination = ({
       defineParamsAndGetData({
         activeTags: activeFilters,
         apiCallback: debouncePaginate,
-        isFilters: false,
+        isFiltersCallback: false,
       });
     }
   }, [pageSize, pageIndex]);
@@ -90,7 +91,7 @@ const useFiltrationAndPagination = ({
 
   // ФИЛЬТРЫ
   function getActiveFilters() {
-    if (filters) {
+    if (filters.length) {
       return filters
         .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES)
         .map((f) => f.filter)
@@ -123,7 +124,7 @@ const useFiltrationAndPagination = ({
       defineParamsAndGetData({
         activeTags: activeFilters,
         apiCallback: getData,
-        isFilters: true,
+        isFiltersCallback: true,
       });
     }
   }
@@ -189,14 +190,18 @@ const useFiltrationAndPagination = ({
       .finally(() => setIsPageLoading(false));
   }
 
-  function defineParamsAndGetData({ activeTags, apiCallback, isFilters }) {
+  function defineParamsAndGetData({
+    activeTags,
+    apiCallback,
+    isFiltersCallback,
+  }) {
     if (activeTags) {
       const params = {
         [apiFilterNames.tags]: activeTags,
       };
       apiCallback({ params });
     } else {
-      if (isFilters) selectOneTag(setFilters, ALL_CATEGORIES);
+      if (isFiltersCallback) selectOneTag(setFilters, ALL_CATEGORIES);
       apiCallback({});
     }
   }
