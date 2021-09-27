@@ -56,7 +56,7 @@ const useFiltrationAndPagination = ({
     }
   }, [pageSize, isPageLoading]);
 
-  // перезапуск страницы, если залогинился/разлогинился (для Видео)
+  // перезапуск страницы, если залогинился/разлогинился, т.к. есть отличия в выдаче
   useEffect(() => {
     setIsPageLoading(true);
   }, [currentUser]);
@@ -64,15 +64,13 @@ const useFiltrationAndPagination = ({
   // Переход по пагинации, страница уже загружена
   useEffect(() => {
     if (!isPageLoading && !isFiltersUsed) {
-      const { activeFilters, isResourceGroupSelected } = getActiveFilters();
+      const activeTags = getActiveFilters();
 
-      if (activeFilters || isResourceGroupSelected) {
-        const params = {
-          [apiFilterNames.tags]: activeFilters,
-          [apiFilterNames.resourceGroup]: isResourceGroupSelected,
-        };
-        debouncePaginate({ isFiltersActive: true, params });
-      } else debouncePaginate({ isFiltersActive: false });
+      defineParamsAndGetData({
+        activeTags,
+        apiCallback: debouncePaginate,
+        isFilters: false,
+      });
     }
   }, [pageSize, pageIndex]);
 
@@ -132,10 +130,32 @@ const useFiltrationAndPagination = ({
     return null;
   }
 
+  function defineParamsAndGetData({ activeTags, apiCallback, isFilters }) {
+    if (
+      isVideoPage &&
+      (activeTags.activeFilters || activeTags.isResourceGroupSelected)
+    ) {
+      // на видео странице выбран любой из фильтров
+      const params = {
+        [apiFilterNames.tags]: activeTags.activeFilters,
+        [apiFilterNames.resourceGroup]: activeTags.isResourceGroupSelected,
+      };
+      apiCallback({ isFiltersActive: true, params });
+    } else if (!isVideoPage && activeTags.activeFilters) {
+      const params = {
+        [apiFilterNames.tags]: activeTags.activeFilters,
+      };
+      apiCallback({ isFiltersActive: true, params });
+    } else {
+      if (isFilters) selectOneTag(setFilters, ALL_CATEGORIES);
+      apiCallback({ isFiltersActive: false });
+    }
+  }
+
   // хэндлер клика по фильтру
   function changeFilter(inputValue, isChecked) {
     if (inputValue === ALL_CATEGORIES) {
-      // кнопка "Все", откат на 1 страницу
+      // нажата кнопка "Все"
       selectOneTag(setFilters, ALL_CATEGORIES);
       if (isMainCard) setIsMainCardShown(true);
     } else {
@@ -155,24 +175,11 @@ const useFiltrationAndPagination = ({
     if (filters && isFiltersUsed) {
       const activeTags = getActiveFilters();
 
-      if (
-        isVideoPage &&
-        (activeTags.activeFilters || activeTags.isResourceGroupSelected)
-      ) {
-        const params = {
-          [apiFilterNames.tags]: activeTags.activeFilters,
-          [apiFilterNames.resourceGroup]: activeTags.isResourceGroupSelected,
-        };
-        getData({ isFiltersActive: true, params });
-      } else if (!isVideoPage && activeTags.activeFilters) {
-        const params = {
-          [apiFilterNames.tags]: activeTags.activeFilters,
-        };
-        getData({ isFiltersActive: true, params });
-      } else {
-        selectOneTag(setFilters, ALL_CATEGORIES);
-        getData({ isFiltersActive: false });
-      }
+      defineParamsAndGetData({
+        activeTags,
+        apiCallback: getData,
+        isFilters: true,
+      });
     }
   }
 
@@ -206,12 +213,10 @@ const useFiltrationAndPagination = ({
       ...params,
     })
       .then(({ results, count }) => {
-        if (isFiltersUsed) {
-          if (isMainCard && !isFiltersActive) {
-            setTotalPages(Math.ceil((count - 1) / pageSize));
-          } else {
-            setTotalPages(Math.ceil(count / pageSize));
-          }
+        if (isMainCard && !isFiltersActive) {
+          setTotalPages(Math.ceil((count - 1) / pageSize));
+        } else {
+          setTotalPages(Math.ceil(count / pageSize));
         }
 
         if (pageIndex === 0 && isMainCard && !isFiltersActive) {
@@ -245,9 +250,7 @@ const useFiltrationAndPagination = ({
         defineFilters(tags);
       })
       .catch(() => setIsPageError(true))
-      .finally(() => {
-        setIsPageLoading(false);
-      });
+      .finally(() => setIsPageLoading(false));
   }
 
   // обработка пришедших с сервера фильтров
@@ -264,20 +267,6 @@ const useFiltrationAndPagination = ({
     ];
 
     if (isVideoPage) {
-      const tagsWithResourceGroup = [
-        {
-          filter: ALL_CATEGORIES_TAG,
-          name: ALL_CATEGORIES_TAG,
-          isActive: true,
-        },
-        {
-          filter: RESOURCE_GROUP_TAG,
-          name: RESOURCE_GROUP_TAG,
-          isActive: false,
-        },
-        ...filtersArray,
-      ];
-
       if (currentUser) {
         // проверка хоть на 1 видео из ресурсной группы
         apiGetDataCallback({
@@ -286,6 +275,20 @@ const useFiltrationAndPagination = ({
         })
           .then((resourceGroupData) => {
             if (resourceGroupData.count > 0) {
+              const tagsWithResourceGroup = [
+                {
+                  filter: ALL_CATEGORIES_TAG,
+                  name: ALL_CATEGORIES_TAG,
+                  isActive: true,
+                },
+                {
+                  filter: RESOURCE_GROUP_TAG,
+                  name: RESOURCE_GROUP_TAG,
+                  isActive: false,
+                },
+                ...filtersArray,
+              ];
+
               setFilters(tagsWithResourceGroup);
             } else {
               setFilters(defaultTags);
@@ -307,6 +310,7 @@ const useFiltrationAndPagination = ({
       setMainCard(pinnedFullSizeCard);
       setIsMainCardShown(true);
       setDataToRender(results.filter((item) => !item?.pinnedFullSize));
+      // не учитываем первую карточку в остальной выдаче
       setTotalPages(Math.ceil((count - 1) / pageSize));
     } else {
       if (results.length > pageSize) {
