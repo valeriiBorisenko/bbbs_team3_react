@@ -79,6 +79,7 @@ const useFiltrationAndPagination = ({
     pageIndex,
     changePageIndex,
     changeFilter,
+    getActiveFilters,
   };
 
   // ПАГИНАЦИЯ

@@ -44,9 +44,12 @@ function RightsArticle() {
     if (articleId) {
       setIsLoadingPage(true);
       if (state?.fromRightsPage) {
-        getArticleData({ id: articleId, tags: state.activeTags });
+        const params = state.activeTags
+          ? { id: articleId, tags: state.activeTags }
+          : { id: articleId };
+        getArticleData(params);
       } else {
-        getArticleData({ id: articleId, tags: '' });
+        getArticleData({ id: articleId });
       }
     }
   }, [articleId]);
