@@ -5,6 +5,7 @@ import {
   ALL_CATEGORIES_TAG,
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
+  months,
 } from '../config/constants';
 import useDebounce from './useDebounce';
 import { changeCaseOfFirstLetter } from '../utils/utils';
@@ -22,6 +23,7 @@ const useFiltrationAndPagination = ({
   apiFilterNames,
   pageSize,
   setIsPageError,
+  isCalendarPage, // особое формирование списка фильтров и отложенная загрузка
 }) => {
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
@@ -42,7 +44,8 @@ const useFiltrationAndPagination = ({
 
   // Первая отрисовка страницы
   useEffect(() => {
-    if (isPageLoading && pageSize) {
+    // отложенная загрузка для календаря
+    if (isPageLoading && pageSize && !isCalendarPage) {
       if (isNoFilters) firstPageRenderNoFilters();
       else firstPageRender();
     }
@@ -64,7 +67,6 @@ const useFiltrationAndPagination = ({
   // Фильтры, страница уже загружена
   useEffect(() => {
     if (!isPageLoading && isFiltersUsed) {
-      console.log('filters used');
       debounceFiltration();
     }
   }, [isFiltersUsed]);
@@ -80,6 +82,7 @@ const useFiltrationAndPagination = ({
     changePageIndex,
     changeFilter,
     getActiveFilters,
+    firstPageRender, // для управления повторной загрузкой на страницах
   };
 
   // ПАГИНАЦИЯ
@@ -131,11 +134,23 @@ const useFiltrationAndPagination = ({
   }
 
   function defineFilters(tags) {
-    const filtersArray = tags.map((tag) => ({
-      filter: tag?.slug.toLowerCase(),
-      name: changeCaseOfFirstLetter(tag?.name),
-      isActive: false,
-    }));
+    let filtersArray;
+    if (isCalendarPage) {
+      filtersArray = tags.map((tag) => {
+        const filterName = changeCaseOfFirstLetter(months[tag - 1]); // бэк считает с 1, у нас массив с 0
+        return {
+          filter: tag,
+          name: filterName,
+          isActive: false,
+        };
+      });
+    } else {
+      filtersArray = tags.map((tag) => ({
+        filter: tag?.slug.toLowerCase(),
+        name: changeCaseOfFirstLetter(tag?.name),
+        isActive: false,
+      }));
+    }
 
     return setFilters([
       { filter: ALL_CATEGORIES_TAG, name: ALL_CATEGORIES_TAG, isActive: true },
@@ -145,7 +160,6 @@ const useFiltrationAndPagination = ({
 
   // РАБОТА С API
   function getData({ params }) {
-    // const tags = { [apiFilterNames.tags]: getActiveFilters() };
     const offset = isFiltersUsed ? 0 : pageSize * pageIndex;
 
     apiGetDataCallback({ limit: pageSize, offset, ...params })

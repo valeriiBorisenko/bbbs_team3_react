@@ -18,7 +18,7 @@ import {
 // хук для фильтров/пагинации на страницах Video и Articles
 // он сложнее и требует доп. условий
 
-const useFiltrationAndPagination = ({
+const useFiltrationWithMainCard = ({
   apiGetDataCallback,
   apiGetFiltersCallback,
   apiFilterNames,
@@ -337,4 +337,4 @@ const useFiltrationAndPagination = ({
   }
 };
 
-export default useFiltrationAndPagination;
+export default useFiltrationWithMainCard;
