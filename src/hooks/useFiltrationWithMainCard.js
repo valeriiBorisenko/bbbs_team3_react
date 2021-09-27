@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { ErrorsContext, PopupsContext } from '../contexts';
+import { CurrentUserContext, ErrorsContext, PopupsContext } from '../contexts';
 import {
   ALL_CATEGORIES,
   ALL_CATEGORIES_TAG,
@@ -25,10 +25,10 @@ const useFiltrationWithMainCard = ({
   pageSize,
   setIsPageError,
   isVideoPage,
-  currentUser,
 }) => {
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
+  const currentUser = useContext(CurrentUserContext);
   // данные
   const [dataToRender, setDataToRender] = useState([]);
   const [filters, setFilters] = useState([]);
@@ -59,9 +59,11 @@ const useFiltrationWithMainCard = ({
   }, [pageSize, isPageLoading]);
 
   // перезапуск страницы, если залогинился/разлогинился, т.к. есть отличия в выдаче
-  useEffect(() => {
-    setIsPageLoading(true);
-  }, [currentUser]);
+  if (isVideoPage) {
+    useEffect(() => {
+      setIsPageLoading(true);
+    }, [currentUser]);
+  }
 
   // Переход по пагинации, страница уже загружена
   useEffect(() => {

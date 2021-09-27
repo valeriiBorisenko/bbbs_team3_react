@@ -51,7 +51,7 @@ function Calendar() {
   // стейт для работы с мероприятиями
   const [calendarPageData, setCalendarPageData] = useState(null);
   const [isCityChanged, setIsCityChanged] = useState(false);
-  // Стейт ошибки
+  // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
   // фильтрация и пагинация

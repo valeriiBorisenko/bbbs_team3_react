@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import videoPageTexts from './locales/RU';
 import { ERROR_MESSAGES, localStChosenVideo } from '../../config/constants';
-import { CurrentUserContext, PopupsContext } from '../../contexts';
+import { PopupsContext } from '../../contexts';
 import { useFiltrationWithMainCard, usePageWidth } from '../../hooks';
 import {
   getVideo,
@@ -39,10 +39,9 @@ const Video = () => {
   // работа с открытием попапа видое при переходе из поиска
   const { state } = useLocation();
   const { openPopupVideo } = useContext(PopupsContext);
-
-  const { currentUser } = useContext(CurrentUserContext);
-
+  // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
   // фильтрация и пагинация
@@ -56,7 +55,6 @@ const Video = () => {
     pageSize,
     setIsPageError,
     isVideoPage: true,
-    currentUser,
   };
 
   const {
