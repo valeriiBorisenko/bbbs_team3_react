@@ -60,10 +60,10 @@ const useFiltrationForPlaces = ({
 
   // Первая отрисовка страницы
   useEffect(() => {
-    if (isPageLoading && pageSize) {
+    if (isPageLoading && pageSize && userCity) {
       firstPageRender();
     }
-  }, [pageSize, isPageLoading]);
+  }, [pageSize, isPageLoading, userCity]);
 
   // Переход по пагинации, страница уже загружена
   useEffect(() => {

@@ -90,6 +90,7 @@ function MainPage() {
       {isPageError ? (
         <AnimatedPageContainer
           titleText={ERROR_MESSAGES.generalErrorMessage.title}
+          isNoButton
         />
       ) : (
         renderPageContent()

@@ -68,7 +68,8 @@ export const localStChosenVideo = 'chosenVideo';
 
 export const ERROR_MESSAGES = {
   generalErrorMessage: {
-    title: 'При передаче данных произошла ошибка. Повторите попытку позже.',
+    title:
+      'При передаче данных произошла ошибка. Повторите попытку позже или перезагрузите страницу.',
     button: 'Вернуться',
   },
   eventAddErrorMessage: {
