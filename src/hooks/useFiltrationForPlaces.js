@@ -190,7 +190,6 @@ const useFiltrationForPlaces = ({
   // eslint-disable-next-line consistent-return
   function handleFiltration() {
     if (filters && isFiltersUsed) {
-      if (isNoFilteredResults) setIsNoFilteredResults(false);
       if (isFormRecommendationShown) setIsFormRecommendationShown(false);
 
       const { activeFilters, activeAges, isChosenByMentorFlag } =
@@ -236,31 +235,34 @@ const useFiltrationForPlaces = ({
     })
       .then(({ results, count }) => {
         if (results.length === 0) {
+          // показывать нечего
           setIsNoFilteredResults(true);
-        }
-
-        if (isMainCard && isMainCardInFirstResponse && !isFiltersActive) {
-          // при пагинации без фильтров на всех страницах
-          // если карточка есть и она в 1 выдаче, то исключаем её из учёта
-          setTotalPages(Math.ceil((count - 1) / pageSize));
+          setDataToRender([]);
         } else {
-          setTotalPages(Math.ceil(count / pageSize));
-        }
+          if (isMainCard && isMainCardInFirstResponse && !isFiltersActive) {
+            // при пагинации без фильтров на всех страницах
+            // если карточка есть и она в 1 выдаче, то исключаем её из учёта
+            setTotalPages(Math.ceil((count - 1) / pageSize));
+          } else {
+            setTotalPages(Math.ceil(count / pageSize));
+          }
 
-        if (pageIndex === 0 && isMainCard && !isFiltersActive) {
-          // вернулись на 1 страницу без фильтров и при карточке
-          if (isMainCardInFirstResponse) {
-            // карточка есть в 1 выдаче - фильтруем
-            setDataToRender(() =>
-              results.filter((card) => card.id !== mainCard.id)
-            );
+          if (pageIndex === 0 && isMainCard && !isFiltersActive) {
+            // вернулись на 1 страницу без фильтров и при карточке
+            if (isMainCardInFirstResponse) {
+              // карточка есть в 1 выдаче - фильтруем
+              setDataToRender(() =>
+                results.filter((card) => card.id !== mainCard.id)
+              );
+            } else {
+              setDataToRender(results);
+            }
+            setIsMainCardShown(true);
+            setIsFormRecommendationShown(true);
           } else {
             setDataToRender(results);
           }
-          setIsMainCardShown(true);
-          setIsFormRecommendationShown(true);
-        } else {
-          setDataToRender(results);
+          if (isNoFilteredResults) setIsNoFilteredResults(false);
         }
       })
       .catch(() => {
@@ -291,9 +293,24 @@ const useFiltrationForPlaces = ({
           setMainCard(chosenByMentorCard);
           setIsMainCardShown(true);
         }
-        // т.к. стейты не успевают обновиться, то передаем напрямую
-        definePlaces({ chosenByMentorCard, cards: results, totalCards: count });
-        defineFilters({ tags, isChosenPlace: chosenByMentorCard?.chosen });
+
+        if (results.length > 0) {
+          // т.к. стейты не успевают обновиться, то передаем напрямую
+          definePlaces({
+            chosenByMentorCard,
+            cards: results,
+            totalCards: count,
+          });
+        } else {
+          setDataToRender([]);
+        }
+
+        if (tags.length > 0) {
+          // т.к. стейты не успевают обновиться, то передаем напрямую
+          defineFilters({ tags, isChosenPlace: chosenByMentorCard?.chosen });
+        } else {
+          setFilters([]);
+        }
       })
       .catch(() => setIsPageError(true))
       .finally(() => setIsPageLoading(false));

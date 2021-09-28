@@ -184,7 +184,23 @@ function Places() {
     </>
   );
 
-  // функции рендера
+  function renderPageContent() {
+    // ошибка или нет ивентов для города вообще и не фильтровали
+    if (
+      isPageError ||
+      (!isMainCard && dataToRender.length === 0 && !isNoFilteredResults)
+    ) {
+      return renderAnimatedContainer();
+    }
+
+    return (
+      <>
+        <TitleH1 title={title} sectionClass="places__title fade-in" />
+        {renderFiltersAndCards()}
+      </>
+    );
+  }
+
   function renderAnimatedContainer() {
     return (
       <>
@@ -202,18 +218,24 @@ function Places() {
     );
   }
 
-  function renderPagination() {
-    if (totalPages > 1) {
-      return (
-        <Paginate
-          sectionClass="cards-section__pagination"
-          pageCount={totalPages}
-          value={pageIndex}
-          onChange={changePageIndex}
-        />
-      );
+  function renderFiltersAndCards() {
+    if (isCityChanged) {
+      return <Loader isPaginate />;
     }
-    return null;
+
+    return (
+      <>
+        {renderFilters()}
+        {renderAgeFilters()}
+        {currentUser && isFormRecommendationShown && !isFiltersUsed && (
+          <PlacesRecommend
+            activityTypes={activityTypes}
+            openSuccessPopup={openPopupRecommendSuccess}
+          />
+        )}
+        {isFiltersUsed ? <Loader isPaginate /> : renderPlaces()}
+      </>
+    );
   }
 
   function renderPlaces() {
@@ -264,6 +286,20 @@ function Places() {
     return null;
   }
 
+  function renderPagination() {
+    if (totalPages > 1) {
+      return (
+        <Paginate
+          sectionClass="cards-section__pagination"
+          pageCount={totalPages}
+          value={pageIndex}
+          onChange={changePageIndex}
+        />
+      );
+    }
+    return null;
+  }
+
   function renderFilters() {
     // если фильтров больше 1 с учётом кнопки ВСЕ
     if (filters.length > 2) {
@@ -287,43 +323,6 @@ function Places() {
         handleClick={changeAgeFilter}
         sectionClass="places__tags fade-in"
       />
-    );
-  }
-
-  function renderFiltersAndCards() {
-    if (isCityChanged) {
-      return <Loader isPaginate />;
-    }
-
-    return (
-      <>
-        {renderFilters()}
-        {renderAgeFilters()}
-        {currentUser && isFormRecommendationShown && !isFiltersUsed && (
-          <PlacesRecommend
-            activityTypes={activityTypes}
-            openSuccessPopup={openPopupRecommendSuccess}
-          />
-        )}
-        {isFiltersUsed ? <Loader isPaginate /> : renderPlaces()}
-      </>
-    );
-  }
-
-  function renderPageContent() {
-    // ошибка или нет ивентов для города вообще и ничего не фильтровали
-    if (
-      isPageError ||
-      (!isMainCard && dataToRender.length === 0 && !isNoFilteredResults)
-    ) {
-      return renderAnimatedContainer();
-    }
-
-    return (
-      <>
-        <TitleH1 title={title} sectionClass="places__title fade-in" />
-        {renderFiltersAndCards()}
-      </>
     );
   }
 }
