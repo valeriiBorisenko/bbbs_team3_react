@@ -66,7 +66,13 @@
     border: none;
     outline: none;
     padding: 0;
+    color: $black;
     transition: .3s ease;
+
+    &:disabled:hover {
+      cursor: default;
+      color: $black;
+    }
 
     &:hover {
       cursor: pointer;

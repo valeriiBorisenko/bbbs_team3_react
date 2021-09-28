@@ -4,13 +4,14 @@ import Carousel from 'react-elastic-carousel';
 import { useHistory, useParams } from 'react-router-dom';
 import { inclineFirstname } from 'lvovich';
 import storiesPageTexts from './locales/RU';
-import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { CurrentUserContext } from '../../contexts';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { staticImageUrl } from '../../config/config';
 import { NOT_FOUND_URL, STORIES_URL } from '../../config/routes';
-import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
+import { usePageWidth } from '../../hooks';
 import { formatDate, formatMonthsGenitiveCase } from '../../utils/utils';
 import { handleRadioBehavior } from '../../utils/filter-tags';
+import { getStoriesPageTags, getStoryById } from '../../api/stories-page';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -25,13 +26,13 @@ import {
 } from './index';
 import './Stories.scss';
 
-const carouselItemPaddings = {
-  desktop: [0, 65],
-  tablet: [0, 15],
-  mobile: [0, 7.5],
+const CAROUSEL_ITEM_PADDINGS = {
+  default: [0, 65],
+  medium: [0, 15],
+  small: [0, 7.5],
 };
 
-const maxScreenWidth = {
+const MAX_SCREEN_WIDTH = {
   small: 706,
   medium: 1100,
 };
@@ -54,7 +55,7 @@ function Stories() {
   const [storiesTags, setStoriesTags] = useState([]);
   const [tagsOffset, setTagsOffset] = useState(0);
 
-  const [currentStory, setCurrentStory] = useState(null);
+  const [currentStory, setCurrentStory] = useState({});
   const [isPopupPhotoOpen, setIsPopupPhotoOpen] = useState(false);
   const [currentPhoto, setCurrentPhoto] = useState({});
 
@@ -67,21 +68,22 @@ function Stories() {
   };
 
   const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
-  const mentorName = currentStory?.mentor?.firstName ?? '';
-  const childName = currentStory?.child ?? '';
+  const mentorName = currentStory.mentor?.firstName ?? '';
+  const childName = currentStory.child ?? '';
   const pairTitle = `${mentorName} и ${childName}`;
 
-  const togetherSinceDate = formatDate(currentStory?.togetherSince);
+  const togetherSinceDate = formatDate(currentStory.togetherSince);
   const togetherSinceText = `Вместе с ${formatMonthsGenitiveCase(
     togetherSinceDate?.monthName
   )} ${togetherSinceDate?.year} года`;
 
   const emailText = `написать ${inclineFirstname(mentorName, 'dative')}`;
-  const nextArticleLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
+  const nextArticleLink = `${STORIES_URL}/${currentStory.nextArticle?.id}`;
 
   const photoCarouselRef = useRef(null);
-  const [carouselItemPadding, setCarouselItemPaddings] = useState(
-    carouselItemPaddings.desktop
+  const carouselItemPadding = usePageWidth(
+    MAX_SCREEN_WIDTH,
+    CAROUSEL_ITEM_PADDINGS
   );
 
   const openFullPhoto = (imageSrc, caption) => {
@@ -126,31 +128,6 @@ function Stories() {
       fetchTags({ limit: tagsLimit, offset: tagsOffset });
     }
   };
-
-  // динамические падинги для фото слайдера
-  useEffect(() => {
-    const tablet = window.matchMedia(`(max-width: ${maxScreenWidth.medium}px)`);
-    const mobile = window.matchMedia(`(max-width: ${maxScreenWidth.small}px)`);
-
-    const listenWindowWidth = () => {
-      if (mobile.matches)
-        return setCarouselItemPaddings(carouselItemPaddings.mobile);
-
-      if (tablet.matches)
-        return setCarouselItemPaddings(carouselItemPaddings.tablet);
-
-      return setCarouselItemPaddings(carouselItemPaddings.desktop);
-    };
-    listenWindowWidth();
-
-    mobile.addEventListener('change', listenWindowWidth);
-    tablet.addEventListener('change', listenWindowWidth);
-
-    return () => {
-      mobile.removeEventListener('change', listenWindowWidth);
-      tablet.removeEventListener('change', listenWindowWidth);
-    };
-  }, []);
 
   // получение списка всех историй
   useEffect(() => {
@@ -219,16 +196,8 @@ function Stories() {
 
   // функции рендера
   function renderPageContent() {
-    if (isPageError) {
-      return (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      );
-    }
-
-    if (!storiesTags.length && !currentStory) {
-      return <AnimatedPageContainer titleText={textStubNoData} />;
+    if (isPageError || !storiesTags.length) {
+      return renderAnimatedContainer();
     }
 
     return (
@@ -245,13 +214,13 @@ function Stories() {
             {renderUpperBlock()}
 
             <ReactMarkdown className="markdown stories__markdown fade-in">
-              {currentStory?.uperBody}
+              {currentStory.uperBody}
             </ReactMarkdown>
 
             {renderPhotosCarousel()}
 
             <ReactMarkdown className="markdown stories__markdown stories__markdown_last fade-in">
-              {currentStory?.lowerBody}
+              {currentStory.lowerBody}
             </ReactMarkdown>
 
             {renderLinksBlock()}
@@ -261,12 +230,25 @@ function Stories() {
     );
   }
 
+  // заглушка
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
+  }
+
   function renderUpperBlock() {
     return (
       <>
         <img
           className="stories__main-photo scale-in"
-          src={`${staticImageUrl}/${currentStory?.image}`}
+          src={`${staticImageUrl}/${currentStory.image}`}
           alt={pairTitle}
         />
         <TitleH2 title={pairTitle} sectionClass="stories__pair-title fade-in" />
@@ -275,7 +257,7 @@ function Stories() {
           sectionClass="stories__caption fade-in"
         />
         <p className="stories__subtitle stories__subtitle_last fade-in">
-          {currentStory?.description}
+          {currentStory.description}
         </p>
       </>
     );
@@ -284,7 +266,7 @@ function Stories() {
   function renderLinksBlock() {
     return (
       <div className="stories__links fade-in">
-        {currentUser && currentStory?.mentor?.email && (
+        {currentUser && currentStory.mentor?.email && (
           <a
             className="link stories__link"
             href={`mailto:${currentStory.mentor.email}`}
@@ -295,7 +277,7 @@ function Stories() {
           </a>
         )}
 
-        {currentStory?.nextArticle && (
+        {currentStory.nextArticle && (
           <NextArticleLink
             text={currentStory.nextArticle.title}
             href={nextArticleLink}
@@ -353,7 +335,7 @@ function Stories() {
             enableMouseSwipe={false}
           >
             <div aria-hidden className="stories__carousel-image" />
-            {currentStory?.images?.map((image, idx) => (
+            {currentStory.images?.map((image, idx) => (
               <div
                 key={image.id}
                 className="stories__carousel-image-wrap"

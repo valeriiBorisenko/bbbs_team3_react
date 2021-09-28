@@ -50,7 +50,9 @@ export const FIGURES = [
   'circle',
 ];
 
-export const ALL_CATEGORIES = 'Все';
+export const ALL_CATEGORIES_TAG = 'Все';
+export const RESOURCE_GROUP_TAG = 'Ресурсная группа';
+export const CHOSEN_BY_MENTOR_TAG = 'Выбор наставников';
 export const DEFAULT_CITY = 'Москва';
 
 export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif|bmp)$/i;
@@ -66,7 +68,8 @@ export const localStChosenVideo = 'chosenVideo';
 
 export const ERROR_MESSAGES = {
   generalErrorMessage: {
-    title: 'При передаче данных произошла ошибка. Повторите попытку позже.',
+    title:
+      'При передаче данных произошла ошибка. Повторите попытку позже или перезагрузите страницу.',
     button: 'Вернуться',
   },
   eventAddErrorMessage: {

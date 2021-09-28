@@ -1,5 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import catalogPageTexts from './locales/RU';
+import { getCatalogPageData } from '../../api/catalog-page';
+import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
+import { useFiltrationAndPagination, usePageWidth } from '../../hooks';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -9,18 +12,16 @@ import {
   TitleH1,
   TitleH2,
 } from './index';
-import { getCatalogPageData } from '../../api/catalog-page';
-import { ERROR_MESSAGES, FIGURES } from '../../config/constants';
 import './Catalog.scss';
 
 const PAGE_SIZE_PAGINATE = {
   small: 4,
   medium: 9,
-  big: 16,
+  default: 16,
 };
 
-const maxScreenWidth = {
-  small: 1399,
+const MAX_SCREEN_WIDTH = {
+  small: 1400,
   medium: 1640,
 };
 
@@ -28,70 +29,27 @@ const { headTitle, headDescription, title, subtitle, textStubNoData } =
   catalogPageTexts;
 
 function Catalog() {
-  const [pageSize, setPageSize] = useState(null);
-  const [pageCount, setPageCount] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
-
-  const [catalogPageData, setCatalogPageData] = useState([]);
-  const [isLoadingPage, setIsLoadingPage] = useState(true);
-  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
-  function getPageData() {
-    const offset = pageSize * pageNumber;
+  // пагинация
+  const filtersAndPaginationSettings = {
+    apiGetDataCallback: getCatalogPageData,
+    pageSize,
+    setIsPageError,
+  };
 
-    getCatalogPageData({ limit: pageSize, offset })
-      .then(({ results, count }) => {
-        setCatalogPageData(results);
-        setPageCount(Math.ceil(count / pageSize));
-      })
-      .catch(() => setIsPageError(true))
-      .finally(() => {
-        setIsLoadingPaginate(false);
-        setIsLoadingPage(false);
-      });
-  }
+  const {
+    dataToRender,
+    isPageLoading,
+    isPaginationUsed,
+    totalPages,
+    pageIndex,
+    changePageIndex,
+  } = useFiltrationAndPagination(filtersAndPaginationSettings);
 
-  useEffect(() => {
-    if (pageSize) {
-      getPageData();
-    }
-
-    if (!isLoadingPage) {
-      setIsLoadingPaginate(true);
-    }
-  }, [pageSize, pageNumber]);
-
-  useEffect(() => {
-    const smallQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.small}px)`
-    );
-    const largeQuery = window.matchMedia(
-      `(max-width: ${maxScreenWidth.medium}px)`
-    );
-
-    const listener = () => {
-      if (smallQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.small);
-      } else if (largeQuery.matches) {
-        setPageSize(PAGE_SIZE_PAGINATE.medium);
-      } else {
-        setPageSize(PAGE_SIZE_PAGINATE.big);
-      }
-    };
-    listener();
-
-    smallQuery.addEventListener('change', listener);
-    largeQuery.addEventListener('change', listener);
-
-    return () => {
-      smallQuery.removeEventListener('change', listener);
-      largeQuery.removeEventListener('change', listener);
-    };
-  }, []);
-
-  if (isLoadingPage) {
+  if (isPageLoading) {
     return <Loader isCentered />;
   }
 
@@ -101,38 +59,9 @@ function Catalog() {
     </BasePage>
   );
 
-  function renderCards() {
-    return (
-      <CardsSectionWithLines
-        pageCount={pageCount}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-        isLoading={isLoadingPaginate}
-        dataLength={catalogPageData.length}
-        pageSize={pageSize}
-      >
-        {catalogPageData.map((item, i) => (
-          <CardCatalog
-            sectionClass="cards-section__item scale-in"
-            key={item?.id}
-            data={item}
-            shape={FIGURES[i % FIGURES.length]}
-          />
-        ))}
-      </CardsSectionWithLines>
-    );
-  }
-
   function renderPageContent() {
-    if (isPageError) {
-      return (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      );
-    }
-    if (!catalogPageData && !isLoadingPage && !isPageError) {
-      return <AnimatedPageContainer titleText={textStubNoData} />;
+    if (isPageError || !dataToRender.length) {
+      return renderAnimatedContainer();
     }
 
     return (
@@ -141,6 +70,41 @@ function Catalog() {
         <TitleH2 sectionClass="catalog__subtitle" title={subtitle} />
         {renderCards()}
       </section>
+    );
+  }
+
+  // заглушка
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
+  }
+
+  function renderCards() {
+    return (
+      <CardsSectionWithLines
+        pageCount={totalPages}
+        pageNumber={pageIndex}
+        setPageNumber={changePageIndex}
+        isLoading={isPaginationUsed}
+        dataLength={dataToRender.length}
+        pageSize={pageSize}
+      >
+        {dataToRender.map((item, i) => (
+          <CardCatalog
+            sectionClass="cards-section__item scale-in"
+            key={item?.id}
+            data={item}
+            shape={FIGURES[i % FIGURES.length]}
+          />
+        ))}
+      </CardsSectionWithLines>
     );
   }
 }

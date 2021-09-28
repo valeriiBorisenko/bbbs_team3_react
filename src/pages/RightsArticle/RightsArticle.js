@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import rightsArticlePageTexts from './locales/RU';
-import { useScrollToTop } from '../../hooks';
-import { getRightsArticle } from '../../api/rights-page';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { NOT_FOUND_URL, RIGHTS_URL } from '../../config/routes';
+import { useScrollToTop } from '../../hooks';
+import { getRightsArticle } from '../../api/rights-page';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -23,7 +23,7 @@ function RightsArticle() {
 
   useScrollToTop([articleId]);
 
-  const [articleData, setArticleData] = useState(null);
+  const [articleData, setArticleData] = useState({});
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
@@ -44,17 +44,20 @@ function RightsArticle() {
     if (articleId) {
       setIsLoadingPage(true);
       if (state?.fromRightsPage) {
-        getArticleData({ id: articleId, tags: state.activeTags });
+        const params = state.activeTags
+          ? { id: articleId, tags: state.activeTags }
+          : { id: articleId };
+        getArticleData(params);
       } else {
-        getArticleData({ id: articleId, tags: '' });
+        getArticleData({ id: articleId });
       }
     }
   }, [articleId]);
 
   return (
     <BasePage
-      headTitle={articleData?.title ?? headTitle}
-      headDescription={articleData?.description ?? headDescription}
+      headTitle={articleData.title ?? headTitle}
+      headDescription={articleData.description ?? headDescription}
       isHeaderTransparentOnTop
     >
       {isLoadingPage ? <Loader isPaginate /> : renderMainContent()}
@@ -91,10 +94,10 @@ function RightsArticle() {
       <section className="article-lead fade-in">
         <div className="article-lead__content">
           <h1 className="chapter-title article-lead__title">
-            {articleData?.title}
+            {articleData.title}
           </h1>
           <p className="section-title article-lead__text">
-            {articleData?.description}
+            {articleData.description}
           </p>
         </div>
       </section>
@@ -104,7 +107,7 @@ function RightsArticle() {
   function renderHtmlBlock() {
     return (
       <ReactMarkdown className="markdown rights-article__markdown">
-        {articleData?.body}
+        {articleData.body}
       </ReactMarkdown>
     );
   }
@@ -114,10 +117,10 @@ function RightsArticle() {
       // если пришли со страницы Прав, то передаём активные теги в линку
       const link = state?.fromRightsPage
         ? {
-            pathname: `/rights/${articleData?.nextArticle?.id}`,
+            pathname: `/rights/${articleData.nextArticle.id}`,
             state: { fromRightsPage: true, activeTags: state.activeTags },
           }
-        : `/rights/${articleData?.nextArticle?.id}`;
+        : `/rights/${articleData.nextArticle.id}`;
 
       return (
         <NextArticleLink text={articleData.nextArticle.title} href={link} />

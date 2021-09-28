@@ -3,7 +3,7 @@ import CardPlace from '../../components/Cards/CardPlace/CardPlace';
 import PlacesRecommend from '../../components/PlacesRecommend/PlacesRecommend';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import TagsList from '../../components/TagsList/TagsList';
-import { PopupPlace } from '../../components/Popups';
+import { PopupPlace, PopupRecommendSuccess } from '../../components/Popups';
 import {
   Loader,
   NoDataNotificationBox,
@@ -22,4 +22,5 @@ export {
   NoDataNotificationBox,
   Paginate,
   PopupPlace,
+  PopupRecommendSuccess,
 };

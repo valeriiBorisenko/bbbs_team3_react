@@ -70,9 +70,11 @@ const useAuth = (setCurrentUser) => {
   };
 
   const handleTokenError = () => {
+    AuthApi.clearAuth();
     removeLocalStorageData(jwt);
     removeLocalStorageData(jwtRefresh);
     setIsCheckingToken(false);
+    setCurrentUser(null);
   };
 
   const checkRefreshToken = (refresh) => {
@@ -82,7 +84,7 @@ const useAuth = (setCurrentUser) => {
         setLocalStorageData(jwt, access);
         getUserData()
           .then((userData) => setCurrentUser(userData))
-          .catch((err) => handleError(err))
+          .catch(() => handleTokenError())
           .finally(() => setIsCheckingToken(false));
       })
       .catch(() => handleTokenError());
@@ -108,6 +110,8 @@ const useAuth = (setCurrentUser) => {
             handleTokenError();
           }
         });
+    } else if (refreshToken) {
+      checkRefreshToken(refreshToken);
     } else {
       handleTokenError();
     }

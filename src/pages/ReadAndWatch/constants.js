@@ -1,15 +1,17 @@
-// Страница "Read and watch" (RAW)
 export const RAW_DELAY_SLIDER_TRANSITION = 1250;
 export const RAW_SLIDER_PADDINGS = [0, 15, 0, 15];
-export const RAW_SLIDER_BREAKPOINTS = {
-  S: 700,
-  M: 1120,
-  L: 1440,
-  XL: 1441,
+
+export const MAX_SCREEN_WIDTH = {
+  small: 700,
+  medium: 1120,
+  big: 1440,
+  large: 1441,
 };
-export const ELEMS_PER_SLIDE = {
-  one: 1,
-  two: 2,
-  three: 3,
-  four: 4,
+
+// кол-во элементов в слайдере
+export const PAGE_SIZE_PAGINATE = {
+  small: 1,
+  medium: 2,
+  big: 3,
+  default: 4,
 };
