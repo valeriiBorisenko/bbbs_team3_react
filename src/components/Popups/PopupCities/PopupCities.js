@@ -112,6 +112,7 @@ function PopupCities({ isOpen, onClose }) {
           type="button"
           value={city?.id}
           onClick={(evt) => debounceSubmitCity(evt)}
+          disabled={currentUserCity === city?.id}
         >
           {city?.name}
         </button>
