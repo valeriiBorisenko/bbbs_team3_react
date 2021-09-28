@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { Card, LogoBlue, TitleH2 } from '../../utils';
+import { Card, Logo, TitleH2 } from '../../utils';
 import './CardStub.scss';
 
 function CardStub({ sectionClass }) {
@@ -13,7 +13,7 @@ function CardStub({ sectionClass }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <LogoBlue />
+          <Logo />
         </a>
       </div>
       <div className="stub__content">

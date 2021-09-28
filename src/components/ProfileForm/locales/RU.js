@@ -10,6 +10,7 @@ const texts = {
   buttonDeleteText: 'Удалить',
   buttonCancelText: 'Отмена',
   buttonSaveText: 'Сохранить',
+  buttonLoadingText: 'Сохранение...',
 };
 
 export default texts;

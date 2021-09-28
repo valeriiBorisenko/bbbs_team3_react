@@ -15,7 +15,8 @@
 
 .stub__logo {
   display: block;
-  width: 252px;
+  width: 100%;
+  max-width: 252px;
 }
 
 .stub__content {

@@ -3,7 +3,12 @@ import CardFilm from '../../components/Cards/CardFilm/CardFilm';
 import CardAnnotation from '../../components/Cards/CardAnnotation/CardAnnotation';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import TagsList from '../../components/TagsList/TagsList';
-import { Loader, PseudoButtonTag, TitleH1 } from '../../components/utils';
+import {
+  Loader,
+  Paginate,
+  PseudoButtonTag,
+  TitleH1,
+} from '../../components/utils';
 
 export {
   BasePage,
@@ -14,4 +19,5 @@ export {
   Loader,
   AnimatedPageContainer,
   TagsList,
+  Paginate,
 };

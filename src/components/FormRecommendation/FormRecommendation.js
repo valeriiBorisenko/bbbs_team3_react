@@ -23,6 +23,7 @@ const {
   addPhotoBtnDefault,
   addPhotoBtnChange,
   addPhotoAdded,
+  buttonTextLoading,
 } = texts;
 
 const validationSettings = {
@@ -41,13 +42,18 @@ const validationSettings = {
 };
 
 const animationDelay = 600;
-const maxTabletWidth = '900px';
+const maxTabletWidth = 900;
 
-function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
+function FormRecommendation({
+  isOpen,
+  onSubmit,
+  activityTypes,
+  isWaitingResponse,
+}) {
   const [textAreaPlaceholder, setTextAreaPlaceholder] = useState('');
 
   useEffect(() => {
-    const tablet = window.matchMedia(`(max-width: ${maxTabletWidth})`);
+    const tablet = window.matchMedia(`(max-width: ${maxTabletWidth}px)`);
 
     const listener = () => {
       if (tablet.matches) setTextAreaPlaceholder(descPlaceholderMobile);
@@ -293,9 +299,9 @@ function FormRecommendation({ isOpen, onSubmit, activityTypes }) {
             </div>
 
             <Button
-              title={buttonText}
+              title={isWaitingResponse ? buttonTextLoading : buttonText}
               color="blue"
-              isDisabled={!isValid}
+              isDisabled={isWaitingResponse || !isValid}
               isSubmittable
             />
           </div>
@@ -309,12 +315,14 @@ FormRecommendation.propTypes = {
   activityTypes: PropTypes.arrayOf(PropTypes.object),
   isOpen: PropTypes.bool,
   onSubmit: PropTypes.func,
+  isWaitingResponse: PropTypes.bool,
 };
 
 FormRecommendation.defaultProps = {
   activityTypes: [],
   isOpen: false,
   onSubmit: () => {},
+  isWaitingResponse: false,
 };
 
 export default FormRecommendation;

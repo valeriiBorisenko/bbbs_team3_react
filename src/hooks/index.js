@@ -9,6 +9,11 @@ import { useLocalStorage } from './useLocalStorage';
 import useEventBooking from './useEventBooking';
 import useFormWithValidation from './useFormWithValidation';
 import useInfiniteScroll from './useInfiniteScroll';
+import useCloseOnEscape from './useCloseOnEscape';
+import useFiltrationAndPagination from './useFiltrationAndPagination';
+import useFiltrationWithMainCard from './useFiltrationWithMainCard';
+import useFiltrationForPlaces from './useFiltrationForPlaces';
+import usePageWidth from './usePageWidth';
 
 export {
   useClickOutside,
@@ -22,4 +27,9 @@ export {
   useEventBooking,
   useFormWithValidation,
   useInfiniteScroll,
+  useCloseOnEscape,
+  useFiltrationAndPagination,
+  useFiltrationWithMainCard,
+  useFiltrationForPlaces,
+  usePageWidth,
 };

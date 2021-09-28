@@ -16,6 +16,8 @@ function CardCalendar({
   onEventSignUpClick,
   onEventDescriptionClick,
   sectionClass,
+  isWaitingResponse,
+  loadingEventId,
 }) {
   const {
     buttonTitle,
@@ -23,9 +25,11 @@ function CardCalendar({
     buttonTitleDisabled,
     remainSeatsText,
     eventCanceled,
+    buttonCancelLoading,
   } = texts;
 
   const {
+    id,
     booked,
     tags,
     title,
@@ -43,6 +47,7 @@ function CardCalendar({
 
   // будет ли заблокирована кнопка
   const isDisabled = (remainSeats < 1 && !booked) || canceled;
+  const isCanceling = isWaitingResponse && booked && loadingEventId === id;
 
   function changeStateOfEvent() {
     setLocalStorageData(localStAfishaEvent, cardData);
@@ -156,9 +161,11 @@ function CardCalendar({
       <>
         <Button
           title={buttonTitle}
-          titleSelected={buttonTitleSelected}
+          titleSelected={
+            isCanceling ? buttonCancelLoading : buttonTitleSelected
+          }
           color="blue"
-          isDisabled={isDisabled}
+          isDisabled={isCanceling || isDisabled}
           onClick={changeStateOfEvent}
           isBooked={booked}
         />
@@ -181,6 +188,8 @@ CardCalendar.propTypes = {
   onEventSignUpClick: PropTypes.func,
   onEventDescriptionClick: PropTypes.func,
   sectionClass: PropTypes.string,
+  isWaitingResponse: PropTypes.bool,
+  loadingEventId: PropTypes.number,
 };
 
 CardCalendar.defaultProps = {
@@ -188,6 +197,8 @@ CardCalendar.defaultProps = {
   onEventSignUpClick: () => {},
   onEventDescriptionClick: () => {},
   sectionClass: '',
+  isWaitingResponse: false,
+  loadingEventId: undefined,
 };
 
 export default CardCalendar;

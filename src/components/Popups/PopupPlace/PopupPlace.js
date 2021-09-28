@@ -1,26 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useCloseOnEscape } from '../../../hooks';
+import { COLORS } from '../../../config/constants';
 import Popup from '../Popup/Popup';
+import CardPlace from '../../Cards/CardPlace/CardPlace';
 import './PopupPlace.scss';
 
-import { COLORS, localStChosenPlace } from '../../../config/constants';
-import CardPlace from '../../Cards/CardPlace/CardPlace';
-import { useActivityTypes } from '../../../hooks';
-import {
-  getLocalStorageData,
-  removeLocalStorageData,
-} from '../../../hooks/useLocalStorage';
-
-const PopupPlace = ({ isOpen, onClose }) => {
-  const { activityTypesSimplified } = useActivityTypes();
-  const place = getLocalStorageData(localStChosenPlace) || {};
-
+const PopupPlace = ({ isOpen, onClose, place, activityTypesSimplified }) => {
   const getRandomColor = (max) => Math.floor(Math.random() * max);
 
-  const closePopup = () => {
-    removeLocalStorageData(localStChosenPlace);
-    onClose();
-  };
+  useCloseOnEscape(isOpen, onClose);
 
   return (
     <Popup
@@ -28,7 +17,7 @@ const PopupPlace = ({ isOpen, onClose }) => {
       typeContainer="place"
       sectionClass="popup__container_place"
       isOpen={isOpen}
-      onClose={closePopup}
+      onClose={onClose}
       withoutCloseButton
     >
       <CardPlace
@@ -44,6 +33,8 @@ const PopupPlace = ({ isOpen, onClose }) => {
 PopupPlace.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
+  place: PropTypes.objectOf(PropTypes.any).isRequired,
+  activityTypesSimplified: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 PopupPlace.defaultProps = {

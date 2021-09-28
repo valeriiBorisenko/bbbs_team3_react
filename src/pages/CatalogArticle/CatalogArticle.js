@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useHistory, useParams } from 'react-router-dom';
-import { getCatalogArticlePageData } from '../../api/catalog-page';
 import catalogArticlePageTexts from './locales/RU';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import { CATALOG_URL, NOT_FOUND_URL } from '../../config/routes';
 import { staticImageUrl } from '../../config/config';
+import { getCatalogArticlePageData } from '../../api/catalog-page';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -21,7 +21,7 @@ function CatalogArticle() {
   const { articleId } = useParams();
   const history = useHistory();
 
-  const [catalogArticlePageData, setCatalogArticlePageData] = useState();
+  const [catalogArticlePageData, setCatalogArticlePageData] = useState({});
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
@@ -69,30 +69,30 @@ function CatalogArticle() {
     return (
       <div className="article page__section fade-in">
         <TitleH1
-          title={catalogArticlePageData?.title}
+          title={catalogArticlePageData.title}
           sectionClass="article__main-title"
         />
         <p className="article__description section-title">
-          {catalogArticlePageData?.description}
+          {catalogArticlePageData.description}
         </p>
         <figure className="article__figure">
           <img
-            src={`${staticImageUrl}/${catalogArticlePageData?.image}`}
-            alt={catalogArticlePageData?.title}
+            src={`${staticImageUrl}/${catalogArticlePageData.image}`}
+            alt={catalogArticlePageData.title}
             className="article__image scale-in"
           />
-          {catalogArticlePageData?.imageCaption && (
+          {catalogArticlePageData.imageCaption && (
             <figcaption className="caption article__figcaption">
               {catalogArticlePageData.imageCaption}
             </figcaption>
           )}
         </figure>
         <div className="article__container">
-          <ReactMarkdown className="article__markdown">
-            {catalogArticlePageData?.body}
+          <ReactMarkdown className="markdown article__markdown">
+            {catalogArticlePageData.body}
           </ReactMarkdown>
 
-          {catalogArticlePageData?.nextArticle && (
+          {catalogArticlePageData.nextArticle && (
             <NextArticleLink
               text={catalogArticlePageData.nextArticle.title}
               href={nextPageLink}

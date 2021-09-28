@@ -6,7 +6,7 @@ import {
   Card,
   CardAbout,
   CardFigure,
-  LogoBlue,
+  Logo,
   TitleH3,
 } from './index';
 import './AboutUs.scss';
@@ -33,7 +33,7 @@ function AboutUs() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <LogoBlue />
+          <Logo />
         </a>
 
         <div className="about__us">

@@ -9,7 +9,7 @@ import { Button, TitleH2 } from '../../utils';
 import './PopupConfirmation.scss';
 
 function PopupConfirmation({ isOpen, onClose }) {
-  const { registerOnEvent } = useEventBooking();
+  const { registerOnEvent, isWaitingResponse } = useEventBooking();
   const card = getLocalStorageData(localStAfishaEvent);
 
   const startDay = formatDate(card?.startAt);
@@ -45,8 +45,13 @@ function PopupConfirmation({ isOpen, onClose }) {
         <div className="popup__buttons_type_calendar">
           <Button
             color="blue"
-            title={texts.submitButtonText}
+            title={
+              isWaitingResponse
+                ? texts.submitButtonTextLoading
+                : texts.submitButtonText
+            }
             sectionClass="popup__button_type_calendar"
+            isDisabled={isWaitingResponse}
             isSubmittable
           />
           <Button

@@ -12,11 +12,8 @@
   flex-shrink: 0;
 }
 
-.footer__logo-image {
-  max-width: 415px;
-}
-
 .footer__logo {
+  display: block;
   max-width: 415px;
   max-height: 76px;
 }

@@ -28,7 +28,7 @@ function ReadAndWatchSection({
   paragraphNoContentText,
   sectionClass,
 }) {
-  const { S, M, L, XL } = breakpoints;
+  const { small, medium, big, large } = breakpoints;
   const ref = useRef();
 
   // индекс страницы
@@ -41,10 +41,10 @@ function ReadAndWatchSection({
   const [isSectionError, setIsSectionError] = useState(false);
 
   const breakPoints = [
-    { width: S, itemsToShow: pageSize, itemsToScroll: pageSize },
-    { width: M, itemsToShow: pageSize, itemsToScroll: pageSize },
-    { width: L, itemsToShow: pageSize, itemsToScroll: pageSize },
-    { width: XL, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: small, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: medium, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: big, itemsToShow: pageSize, itemsToScroll: pageSize },
+    { width: large, itemsToShow: pageSize, itemsToScroll: pageSize },
   ];
 
   function addNewData() {

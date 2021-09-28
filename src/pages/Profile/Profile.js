@@ -1,7 +1,12 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import profilePageTexts from './locales/RU';
 import { ErrorsContext, PopupsContext } from '../../contexts';
-import { useEventBooking } from '../../hooks';
+import {
+  DELAY_RENDER,
+  ERROR_CODES,
+  ERROR_MESSAGES,
+} from '../../config/constants';
+import { useEventBooking, useFiltrationAndPagination } from '../../hooks';
 import {
   createDiary,
   deleteDiary,
@@ -13,11 +18,6 @@ import {
   getArchiveOfBookedEvents,
   getBookedEvents,
 } from '../../api/event-participants';
-import {
-  DELAY_RENDER,
-  ERROR_CODES,
-  ERROR_MESSAGES,
-} from '../../config/constants';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -55,12 +55,16 @@ function Profile() {
   const { openPopupAboutEvent, openPopupError } = useContext(PopupsContext);
   const { serverError, setError } = useContext(ErrorsContext);
 
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
   const [events, setEvents] = useState([]);
   const [archivedEvents, setArchivedEvents] = useState([]);
   const [eventsOffset, setEventsOffset] = useState(0);
 
-  const [diaries, setDiaries] = useState(null);
-  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
+  const [diaries, setDiaries] = useState([]);
+  // удаление дневника
+  const [selectedDiary, setSelectedDiary] = useState({});
+
+  const [isWaitingResponse, setIsWaitingResponse] = useState(false);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -70,6 +74,9 @@ function Profile() {
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [isPageError, setIsPageError] = useState(false);
 
+  // якорь для скролла при работе с дневниками
+  const scrollAnchorRef = useRef(null);
+
   const titleH1Current = events.length > 0 ? eventsTitle : eventsTitleNoResults;
   const titleH1Archive =
     archivedEvents.length > 0
@@ -77,11 +84,72 @@ function Profile() {
       : eventsTitleNoResultsArchive;
 
   // пагинация
-  const [pageCount, setPageCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [isLoadingPaginate, setIsLoadingPaginate] = useState(false);
+  const filtersAndPaginationSettings = {
+    apiGetDataCallback: getProfileDiariesData,
+    pageSize: diariesPerPageCount,
+    setIsPageError,
+  };
 
-  const getArchiveOfEvents = ({ limit, offset }) => {
+  const {
+    dataToRender,
+    isPageLoading,
+    isPaginationUsed,
+    totalPages,
+    pageIndex,
+    changePageIndex,
+  } = useFiltrationAndPagination(filtersAndPaginationSettings);
+
+  useEffect(() => {
+    setDiaries(dataToRender);
+  }, [dataToRender]);
+
+  useEffect(() => {
+    getCurrentBookedEvents({ limit: eventsLimit, offset: eventsOffset });
+  }, []);
+
+  // отписка от ивентов
+  const { selectedEvent } = useEventBooking();
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setEvents((prevEvents) =>
+        prevEvents.filter((event) =>
+          event?.id === selectedEvent?.id ? null : event
+        )
+      );
+    }
+  }, [selectedEvent]);
+
+  // эффект при переключении страниц пагинации
+  useEffect(() => {
+    if (scrollAnchorRef && scrollAnchorRef.current) {
+      scrollAnchorRef.current.scrollIntoView();
+    }
+    if (isFormOpen) closeForm();
+  }, [pageIndex]);
+
+  if (!events.length && !diaries.length) {
+    return <Loader isCentered />;
+  }
+
+  return (
+    <>
+      <BasePage headTitle={headTitle} headDescription={headDescription}>
+        <section className="profile fade-in">{renderPageContent()}</section>
+      </BasePage>
+      <PopupDeleteDiary
+        isOpen={isDeleteDiaryPopupOpen}
+        cardData={selectedDiary}
+        onClose={closeDeleteDiaryPopup}
+        onCardDelete={handleDeleteDiary}
+        isWaitingResponse={isWaitingResponse && isDeleteDiaryPopupOpen}
+      />
+    </>
+  );
+
+  // функционал
+  // КАРТОЧКИ ИВЕНТОВ
+  function getArchiveOfEvents({ limit, offset }) {
     if (offset <= archivedEvents.length) {
       getArchiveOfBookedEvents({ limit, offset })
         .then((eventsData) => {
@@ -94,9 +162,9 @@ function Profile() {
         })
         .finally(() => setIsLoadingEvents(false));
     }
-  };
+  }
 
-  const getCurrentBookedEvents = ({ limit, offset }) => {
+  function getCurrentBookedEvents({ limit, offset }) {
     if (offset <= events.length) {
       getBookedEvents({ limit, offset })
         .then((eventsData) => {
@@ -114,85 +182,49 @@ function Profile() {
         })
         .finally(() => setIsLoadingEvents(false));
     }
-  };
+  }
 
-  const getDiaries = () => {
-    const offset = diariesPerPageCount * pageIndex;
-
-    getProfileDiariesData({ limit: diariesPerPageCount, offset })
-      .then(({ results, count }) => {
-        setDiaries(results);
-        setPageCount(Math.ceil(count / diariesPerPageCount));
-      })
-      .catch(() => setIsPageError(true))
-      .finally(() => setIsLoadingPaginate(false));
-  };
-
-  useEffect(() => {
-    getCurrentBookedEvents({ limit: eventsLimit, offset: eventsOffset });
-  }, []);
-
-  useEffect(() => {
-    setIsLoadingPaginate(true);
-    getDiaries();
-  }, [pageIndex]);
-
-  // отписка от ивентов
-  const { selectedEvent } = useEventBooking();
-
-  useEffect(() => {
-    if (selectedEvent) {
-      setEvents((prevEvents) =>
-        prevEvents.filter((event) =>
-          event?.id === selectedEvent?.id ? null : event
-        )
-      );
-    }
-  }, [selectedEvent]);
-
-  // работа с карточками мероприятий календаря
-  const openEventCard = () => {
+  function openEventCard() {
     if (isArchiveOpen) {
       // без записи на ивент
       openPopupAboutEvent(true);
     } else openPopupAboutEvent();
-  };
+  }
 
-  const openArchiveOfEvents = () => {
+  function openArchiveOfEvents() {
     setEvents([]);
     setEventsOffset(0);
     setIsArchiveOpen(true);
     setIsLoadingEvents(true);
     getArchiveOfEvents({ limit: eventsLimit, offset: 0 });
-  };
+  }
 
-  const openCurrentEvents = () => {
+  function openCurrentEvents() {
     setArchivedEvents([]);
     setEventsOffset(0);
     setIsArchiveOpen(false);
     setIsLoadingEvents(true);
     getCurrentBookedEvents({ limit: eventsLimit, offset: 0 });
-  };
+  }
 
-  // работа с формой
-  const scrollAnchorRef = useRef(null);
-  const scrollToForm = () => {
+  // ФОРМА И ДНЕВНИКИ
+  function scrollToForm() {
     scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
+  }
 
-  const openForm = (data) => {
+  function openForm(data) {
     if (!data) setIsEditMode(false);
     setIsFormOpen(true);
     scrollToForm();
-  };
+  }
 
-  const closeForm = () => {
+  function closeForm() {
     setIsFormOpen(false);
     setIsEditMode(false);
     setFormDataToEdit(null);
-  };
+  }
 
-  const handleEditMode = (data) => {
+  function handleEditMode(data) {
     setIsFormOpen(false);
     //! небольшая задержка перед ререндером
     setTimeout(() => {
@@ -200,9 +232,9 @@ function Profile() {
       setFormDataToEdit(data);
       openForm(data);
     }, DELAY_RENDER);
-  };
+  }
 
-  const createFormData = (data) => {
+  function createFormData(data) {
     const formData = new FormData();
     if (data) {
       if (data.id) formData.append('id', data.id);
@@ -213,24 +245,25 @@ function Profile() {
       formData.append('mark', data.mark);
     }
     return formData;
-  };
+  }
 
-  const handleErrorOnFormSubmit = (err) => {
+  function handleErrorOnFormSubmit(err) {
     if (err?.status === badRequest || err?.status === unauthorized) {
       setError(err?.data);
     } else openPopupError();
-  };
+  }
 
-  const handleCreateDiary = (data) => {
+  function handleCreateDiary(data) {
     createDiary(createFormData(data))
       .then((newDiary) => {
         setDiaries((prevDiaries) => [newDiary, ...prevDiaries]);
         closeForm();
       })
-      .catch((err) => handleErrorOnFormSubmit(err));
-  };
+      .catch((err) => handleErrorOnFormSubmit(err))
+      .finally(() => setIsWaitingResponse(false));
+  }
 
-  const handleEditDiary = (data) => {
+  function handleEditDiary(data) {
     editDiary(data?.id, createFormData(data))
       .then((newDiary) => {
         setDiaries((prevDiaries) =>
@@ -240,46 +273,22 @@ function Profile() {
         );
         closeForm();
       })
-      .catch((err) => handleErrorOnFormSubmit(err));
-  };
+      .catch((err) => handleErrorOnFormSubmit(err))
+      .finally(() => setIsWaitingResponse(false));
+  }
 
-  const handleSubmitDiary = (data) => {
+  function handleSubmitDiary(data) {
+    setIsWaitingResponse(true);
     if (isEditMode) handleEditDiary(data);
     else handleCreateDiary(data);
-  };
+  }
 
-  // удаление дневника
-  const [selectedDiary, setSelectedDiary] = useState({});
-
-  const openDeleteDiaryPopup = (diary) => {
-    setIsDeleteDiaryPopupOpen(true);
-    setSelectedDiary(diary);
-  };
-
-  const closeDeleteDiaryPopup = () => {
-    setIsDeleteDiaryPopupOpen(false);
-  };
-
-  const handleDeleteDiary = (diary) => {
-    deleteDiary(diary?.id, diary)
+  function handleShareDiary(sharedDiary) {
+    setIsWaitingResponse(true);
+    setSelectedDiary(sharedDiary);
+    shareDiary(sharedDiary?.id)
       .then(() => {
-        setDiaries((prevDiaries) =>
-          prevDiaries.filter((prevDiary) =>
-            prevDiary?.id === diary?.id ? null : prevDiary
-          )
-        );
-        closeDeleteDiaryPopup();
-      })
-      .catch(() => {
-        setError(ERROR_MESSAGES.generalErrorMessage);
-        openPopupError();
-      });
-  };
-
-  const handleShareDiary = (diaryId) => {
-    shareDiary(diaryId)
-      .then(() => {
-        const newDiary = diaries.find((diary) => diary?.id === diaryId);
+        const newDiary = diaries.find((diary) => diary?.id === sharedDiary?.id);
         newDiary.sentToCurator = true;
         setDiaries((prevDiaries) =>
           prevDiaries.map((diary) =>
@@ -290,28 +299,41 @@ function Profile() {
       .catch(() => {
         setError(ERROR_MESSAGES.generalErrorMessage);
         openPopupError();
-      });
-  };
-
-  if (!events.length && !diaries) {
-    return <Loader isCentered />;
+      })
+      .finally(() => setIsWaitingResponse(false));
   }
 
-  return (
-    <>
-      <BasePage headTitle={headTitle} headDescription={headDescription}>
-        <section className="profile fade-in">{renderPageContent()}</section>
-      </BasePage>
-      <PopupDeleteDiary
-        isOpen={isDeleteDiaryPopupOpen}
-        cardData={selectedDiary}
-        onClose={closeDeleteDiaryPopup}
-        onCardDelete={handleDeleteDiary}
-      />
-    </>
-  );
+  // УДАЛЕНИЕ ДНЕВНИКА
+  function openDeleteDiaryPopup(diary) {
+    setIsDeleteDiaryPopupOpen(true);
+    setSelectedDiary(diary);
+  }
 
-  // функции рендера
+  function closeDeleteDiaryPopup() {
+    setIsDeleteDiaryPopupOpen(false);
+  }
+
+  function handleDeleteDiary(diary) {
+    setIsWaitingResponse(true);
+    deleteDiary(diary?.id)
+      .then(() => {
+        setDiaries((prevDiaries) =>
+          prevDiaries.filter((prevDiary) =>
+            prevDiary?.id === diary?.id ? null : prevDiary
+          )
+        );
+      })
+      .catch(() => {
+        setError(ERROR_MESSAGES.generalErrorMessage);
+        openPopupError();
+      })
+      .finally(() => {
+        setIsWaitingResponse(false);
+        closeDeleteDiaryPopup();
+      });
+  }
+
+  // РЕНДЕРИНГ
   function renderEventCards() {
     const renderingEvents = isArchiveOpen ? archivedEvents : events;
     if (renderingEvents.length > 0) {
@@ -347,7 +369,7 @@ function Profile() {
   }
 
   function renderDiaryForm() {
-    if (isFormOpen || (diaries && diaries.length === 0)) {
+    if (isFormOpen || (diaries && diaries.length === 0 && !isPageLoading)) {
       return (
         <div className="profile__form-container">
           {!isEditMode && (
@@ -360,6 +382,7 @@ function Profile() {
             data={formDataToEdit}
             onClose={closeForm}
             onSubmit={handleSubmitDiary}
+            isWaitingResponse={isWaitingResponse}
           />
         </div>
       );
@@ -368,7 +391,8 @@ function Profile() {
   }
 
   function renderDiaries() {
-    if (isLoadingPaginate) return <Loader isPaginate />;
+    if (isPaginationUsed) return <Loader isPaginate />;
+
     if (diaries && diaries.length > 0) {
       return (
         <>
@@ -380,6 +404,8 @@ function Profile() {
               onDelete={openDeleteDiaryPopup}
               onShare={handleShareDiary}
               sectionClass="scale-in"
+              selectedDiaryId={selectedDiary?.id}
+              isWaitingResponse={isWaitingResponse && !isDeleteDiaryPopupOpen}
             />
           ))}
         </>
@@ -416,27 +442,29 @@ function Profile() {
                   title={isArchiveOpen ? titleH1Archive : titleH1Current}
                 />
               </div>
-              <ScrollableContainer
-                sectionClass="profile__events"
-                step={3}
-                onScrollCallback={() => {
-                  if (!serverError) {
-                    if (isArchiveOpen) {
-                      getArchiveOfEvents({
-                        limit: eventsLimit,
-                        offset: eventsOffset,
-                      });
-                    } else {
-                      getCurrentBookedEvents({
-                        limit: eventsLimit,
-                        offset: eventsOffset,
-                      });
+              {(events.length > 0 || archivedEvents.length > 0) && (
+                <ScrollableContainer
+                  sectionClass="profile__events"
+                  step={3}
+                  onScrollCallback={() => {
+                    if (!serverError) {
+                      if (isArchiveOpen) {
+                        getArchiveOfEvents({
+                          limit: eventsLimit,
+                          offset: eventsOffset,
+                        });
+                      } else {
+                        getCurrentBookedEvents({
+                          limit: eventsLimit,
+                          offset: eventsOffset,
+                        });
+                      }
                     }
-                  }
-                }}
-              >
-                {renderEventCards()}
-              </ScrollableContainer>
+                  }}
+                >
+                  {renderEventCards()}
+                </ScrollableContainer>
+              )}
             </>
           ) : (
             <Loader isSmallGrid />
@@ -452,12 +480,13 @@ function Profile() {
 
             {renderDiaries()}
 
-            {pageCount > 1 && (
+            {totalPages > 1 && (
               <Paginate
                 sectionClass="cards-section__pagination"
-                pageCount={pageCount}
+                pageCount={totalPages}
                 value={pageIndex}
-                onChange={setPageIndex}
+                onChange={changePageIndex}
+                dontUseScrollUp
               />
             )}
           </div>

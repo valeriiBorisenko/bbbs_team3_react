@@ -17,6 +17,7 @@ const useEventBooking = () => {
   } = useContext(PopupsContext);
 
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isWaitingResponse, setIsWaitingResponse] = useState(false);
   const { setError } = useContext(ErrorsContext);
 
   // события отписки и регистрации на мероприятие
@@ -56,23 +57,28 @@ const useEventBooking = () => {
 
   // функции-утилиты, запускающие события, их используют компоненты
   const registerOnEvent = (card) => {
+    setIsWaitingResponse(true);
     makeEventRegistration({ event: card.id })
       .then(() => setRegisterEvent())
+      .then(() => closeAllPopups())
       .then(() => openPopupSuccessfully())
       .catch(() => {
         setError(ERROR_MESSAGES.eventAddErrorMessage);
         openPopupError();
-      });
+      })
+      .finally(() => setIsWaitingResponse(false));
   };
 
   const cancelRegistration = (card) => {
+    setIsWaitingResponse(true);
     cancelEventRegistration(card.id)
       .then(() => setCancelRegisterEvent())
       .then(() => closeAllPopups())
       .catch(() => {
         setError(ERROR_MESSAGES.eventCancelErrorMessage);
         openPopupError();
-      });
+      })
+      .finally(() => setIsWaitingResponse(false));
   };
 
   const handleEventBooking = (card, noConfirm) => {
@@ -80,7 +86,6 @@ const useEventBooking = () => {
       // мы записаны на ивент, надо отписаться
       cancelRegistration(card);
     } else if (noConfirm) {
-      closeAllPopups();
       registerOnEvent(card);
     } else {
       // мы НЕ записаны на ивент
@@ -89,7 +94,12 @@ const useEventBooking = () => {
     }
   };
 
-  return { handleEventBooking, registerOnEvent, selectedEvent };
+  return {
+    handleEventBooking,
+    registerOnEvent,
+    selectedEvent,
+    isWaitingResponse,
+  };
 };
 
 export default useEventBooking;

@@ -20,6 +20,7 @@ const {
   buttonDeleteText,
   buttonCancelText,
   buttonSaveText,
+  buttonLoadingText,
 } = texts;
 
 const validationSettings = {
@@ -39,6 +40,7 @@ function ProfileForm({
   isOpen,
   onClose,
   onSubmit,
+  isWaitingResponse,
 }) {
   const classNames = ['card-container', 'profile-form', sectionClass]
     .join(' ')
@@ -249,9 +251,13 @@ function ProfileForm({
                   onClick={handleCloseForm}
                 />
                 <Button
-                  title={`${isEditMode ? buttonSaveText : buttonAddText}`}
+                  title={
+                    isWaitingResponse
+                      ? buttonLoadingText
+                      : `${isEditMode ? buttonSaveText : buttonAddText}`
+                  }
                   sectionClass="profile-form__button_el_add"
-                  isDisabled={!isValid}
+                  isDisabled={isWaitingResponse || !isValid}
                   isSubmittable
                 />
               </div>
@@ -270,6 +276,7 @@ ProfileForm.propTypes = {
   isOpen: PropTypes.bool,
   isEditMode: PropTypes.bool,
   onSubmit: PropTypes.func,
+  isWaitingResponse: PropTypes.bool,
 };
 
 ProfileForm.defaultProps = {
@@ -279,6 +286,7 @@ ProfileForm.defaultProps = {
   isOpen: false,
   isEditMode: false,
   onSubmit: () => {},
+  isWaitingResponse: false,
 };
 
 export default ProfileForm;

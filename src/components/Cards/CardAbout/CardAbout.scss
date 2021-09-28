@@ -50,6 +50,12 @@
   align-self: center;
 }
 
+@include atDesktop1380 {
+  .card-about__paragraph {
+    font-size: 15px;
+  }
+}
+
 @include atDesktop1024 {
   .card-about {
     max-width: 570px;

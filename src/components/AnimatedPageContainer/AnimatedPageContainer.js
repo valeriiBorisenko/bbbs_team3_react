@@ -13,6 +13,7 @@ function AnimatedPageContainer({
   buttonText,
   staticPage,
   urlBack,
+  isNoButton,
 }) {
   const animationContainer = useRef();
 
@@ -31,12 +32,14 @@ function AnimatedPageContainer({
       <div ref={animationContainer} className="animated-section__animation" />
       {is404 && <h1 className="page-not-found-title">{texts.title404}</h1>}
       <TitleH2 title={titleText} sectionClass="animated-section__subtitle" />
-      <Link
-        className="button animated-section__link button_color_blue"
-        to={staticPage ? `${urlBack}` : '/'}
-      >
-        {buttonText}
-      </Link>
+      {!isNoButton && (
+        <Link
+          className="button animated-section__link button_color_blue"
+          to={staticPage ? `${urlBack}` : '/'}
+        >
+          {buttonText}
+        </Link>
+      )}
     </div>
   );
 }
@@ -47,6 +50,7 @@ AnimatedPageContainer.propTypes = {
   buttonText: PropTypes.string,
   staticPage: PropTypes.bool,
   urlBack: PropTypes.string,
+  isNoButton: PropTypes.bool,
 };
 
 AnimatedPageContainer.defaultProps = {
@@ -55,6 +59,7 @@ AnimatedPageContainer.defaultProps = {
   buttonText: texts.buttonText,
   staticPage: false,
   urlBack: '',
+  isNoButton: false,
 };
 
 export default AnimatedPageContainer;

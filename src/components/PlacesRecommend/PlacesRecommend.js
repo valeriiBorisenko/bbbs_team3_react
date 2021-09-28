@@ -1,19 +1,19 @@
 import { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { ErrorsContext, PopupsContext } from '../../contexts';
+import { ErrorsContext } from '../../contexts';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
 import './PlacesRecommend.scss';
 
-function PlacesRecommend({ sectionClass, activityTypes }) {
-  const { openPopupRecommendSuccess } = useContext(PopupsContext);
+function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
   const { setError } = useContext(ErrorsContext);
   const { generalErrorMessage } = ERROR_MESSAGES;
   const { unauthorized, badRequest } = ERROR_CODES;
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isWaitingResponse, setIsWaitingResponse] = useState(false);
 
   const scrollAnchorRef = useRef(null);
   const scrollToForm = () => {
@@ -44,9 +44,10 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
   };
 
   const handleFormSubmit = (data) => {
+    setIsWaitingResponse(true);
     postPlace(createFormData(data))
       .then(() => {
-        openPopupRecommendSuccess(true);
+        openSuccessPopup();
         closeForm();
       })
       .catch((err) => {
@@ -56,7 +57,8 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
           setError({
             message: generalErrorMessage.title,
           });
-      });
+      })
+      .finally(() => setIsWaitingResponse(false));
   };
 
   const classNames = [
@@ -95,6 +97,7 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
             isOpen={isFormOpen}
             onSubmit={handleFormSubmit}
             activityTypes={activityTypes}
+            isWaitingResponse={isWaitingResponse}
           />
         </div>
       </section>
@@ -105,11 +108,13 @@ function PlacesRecommend({ sectionClass, activityTypes }) {
 PlacesRecommend.propTypes = {
   activityTypes: PropTypes.arrayOf(PropTypes.object),
   sectionClass: PropTypes.string,
+  openSuccessPopup: PropTypes.func,
 };
 
 PlacesRecommend.defaultProps = {
   activityTypes: [],
   sectionClass: '',
+  openSuccessPopup: () => {},
 };
 
 export default PlacesRecommend;
