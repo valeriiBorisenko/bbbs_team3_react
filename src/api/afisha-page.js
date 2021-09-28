@@ -20,11 +20,11 @@ function getActiveMonthTags() {
 }
 
 // получение одного события
-function getCalendarItem(id) {
+function getEventById(id) {
   return axios
     .get(`${baseURL}${apiUrl}/afisha/events/${id}/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
-export { getCalendarPageData, getActiveMonthTags, getCalendarItem };
+export { getCalendarPageData, getActiveMonthTags, getEventById };

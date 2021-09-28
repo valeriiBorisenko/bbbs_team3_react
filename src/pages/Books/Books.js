@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import booksPageTexts from './locales/RU';
-import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
-import { BOOKS_URL, NOT_FOUND_URL } from '../../config/routes';
-import { useFiltrationAndPagination, usePageWidth } from '../../hooks';
+import { ERROR_MESSAGES } from '../../config/constants';
+import { BOOKS_URL } from '../../config/routes';
+import {
+  useFiltrationAndPagination,
+  usePageWidth,
+  useSingleCardAtDynamicRoute,
+} from '../../hooks';
 import {
   getBookById,
   getBooksPageData,
@@ -36,15 +40,17 @@ const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
 function Books() {
   const { bookId } = useParams();
-  const history = useHistory();
-  // стейт для одиночной книги (при переходе по id)
-  const [singleBook, setSingleBook] = useState(null);
-  // чтобы показать книгу, нужно её ещё загрузить
-  const isSingleBookShown = !!(singleBook && bookId);
+
   // определяет размер страницы при ресайзе
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
+
+  const { singleCard, isSingleCardShown } = useSingleCardAtDynamicRoute({
+    apiCallback: getBookById,
+    dynamicParam: bookId,
+    setIsPageError,
+  });
 
   // фильтрация и пагинация
   const filtersAndPaginationSettings = {
@@ -55,7 +61,7 @@ function Books() {
     },
     pageSize,
     setIsPageError,
-    startByFlag: !!bookId, // скрипты выполнятся, только если нет запроса книги по id
+    dontStartWhileTrue: !!bookId, // скрипты выполнятся, только если нет запроса книги по id
   };
 
   const {
@@ -70,30 +76,18 @@ function Books() {
     changeFilter,
   } = useFiltrationAndPagination(filtersAndPaginationSettings);
 
-  useEffect(() => {
-    if (bookId) {
-      getBookById(bookId)
-        .then(setSingleBook)
-        .catch((err) => {
-          if (err.status === ERROR_CODES.notFound) history.push(NOT_FOUND_URL);
-          else setIsPageError(true);
-        });
-    }
-  }, [bookId]);
-
-  // глобальный лоадер
-  if (isPageLoading) {
-    return <Loader isCentered />;
-  }
-
-  // есть переход по id, но книга ещё не загружена
-  if (bookId && !isSingleBookShown) {
+  // обычная загрузка или есть переход по id, но книга ещё не загружена
+  if (isPageLoading || (bookId && !isSingleCardShown)) {
     return <Loader isCentered />;
   }
 
   return (
     <>
-      <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <BasePage
+        headTitle={headTitle}
+        headDescription={headDescription}
+        scrollUpDeps={[bookId]}
+      >
         <section className="books page__section fade-in">
           {renderPageContent()}
         </section>
@@ -129,13 +123,13 @@ function Books() {
   }
 
   function renderMainContent() {
-    if (isSingleBookShown) {
+    if (isSingleCardShown) {
       return (
         <div className="books__single-book-container">
-          <CardBook data={singleBook} onlyCover sectionClass="scale-in" />
+          <CardBook data={singleCard} onlyCover sectionClass="scale-in" />
 
           <p className="paragraph books__paragraph fade-in">
-            {singleBook.annotation}
+            {singleCard.annotation}
           </p>
 
           <NextArticleLink

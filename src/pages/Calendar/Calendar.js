@@ -14,8 +14,8 @@ import {
 } from '../../hooks/useLocalStorage';
 import {
   getActiveMonthTags,
-  getCalendarItem,
   getCalendarPageData,
+  getEventById,
 } from '../../api/afisha-page';
 import {
   AnimatedPageContainer,
@@ -46,8 +46,6 @@ function Calendar() {
   const { openPopupLogin, openPopupAboutEvent } = useContext(PopupsContext);
   const { state } = useLocation();
 
-  console.log(!!currentUser);
-
   // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   // стейт для работы с мероприятиями
@@ -67,7 +65,6 @@ function Calendar() {
     pageSize,
     setIsPageError,
     isCalendarPage: true,
-    startByFlag: !currentUser, // отложенная загрузка скриптов до авторизации
   };
 
   const {
@@ -87,8 +84,10 @@ function Calendar() {
   useEffect(() => {
     if (!currentUser) {
       openPopupLogin();
+    } else if (isPageLoading && pageSize) {
+      firstPageRender();
     }
-  }, [currentUser]);
+  }, [currentUser, pageSize]);
 
   // обновление стейта данных для работы
   useEffect(() => {
@@ -108,7 +107,7 @@ function Calendar() {
   // Открытие попапа при переходе из поиска
   useEffect(() => {
     if (state) {
-      getCalendarItem(state.id)
+      getEventById(state.id)
         .then((res) => {
           setLocalStorageData(localStAfishaEvent, res);
           openPopupAboutEvent();
@@ -130,7 +129,7 @@ function Calendar() {
     }
   }, [selectedEvent]);
 
-  // глобальный лоадер при первой загрузке страницы
+  // глобальный лоадер при первой загрузке страницы или пока незалогинен
   if (isPageLoading || !currentUser) {
     return <Loader isCentered />;
   }

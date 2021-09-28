@@ -22,8 +22,8 @@ const useFiltrationAndPagination = ({
   apiFilterNames,
   pageSize,
   setIsPageError,
-  isCalendarPage, // особое формирование списка фильтров
-  startByFlag, // данные загружаются по какому-либо флагу, он воспринимается как булева, по умолчанию false
+  isCalendarPage, // особое формирование списка фильтров и своя первая загрузка
+  dontStartWhileTrue, // данные НЕ загружаются, если условие true, по умолчанию воспринимается как false
 }) => {
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
@@ -34,7 +34,7 @@ const useFiltrationAndPagination = ({
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isPaginationUsed, setIsPaginationUsed] = useState(false);
   // по факту запускает всю цепочку скриптов
-  const [isPageLoading, setIsPageLoading] = useState(!startByFlag);
+  const [isPageLoading, setIsPageLoading] = useState(!dontStartWhileTrue);
   // пагинация
   const [totalPages, setTotalPages] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
@@ -45,7 +45,7 @@ const useFiltrationAndPagination = ({
 
   // Первая отрисовка страницы
   useEffect(() => {
-    if (isPageLoading && pageSize && !startByFlag) {
+    if (isPageLoading && pageSize && !isCalendarPage && !dontStartWhileTrue) {
       if (isNoFilters) firstPageRenderNoFilters();
       else firstPageRender();
     }
@@ -53,7 +53,7 @@ const useFiltrationAndPagination = ({
 
   // Переход по пагинации, страница уже загружена
   useEffect(() => {
-    if (!isPageLoading && !isFiltersUsed && !startByFlag) {
+    if (!isPageLoading && !isFiltersUsed && !dontStartWhileTrue) {
       const activeFilters = getActiveFilters();
 
       defineParamsAndGetData({
@@ -73,10 +73,10 @@ const useFiltrationAndPagination = ({
 
   // слушатель разрешения запуска скриптов
   useEffect(() => {
-    if (!startByFlag) {
+    if (!dontStartWhileTrue) {
       setIsPageLoading(true);
     }
-  }, [startByFlag]);
+  }, [dontStartWhileTrue]);
 
   return {
     dataToRender,

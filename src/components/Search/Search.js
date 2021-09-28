@@ -36,10 +36,12 @@ function Search({
   const inputRef = useRef(null);
 
   const getPathName = (url, id) => {
+    // переходы на страницы с попапами либо вопроса
     if (`/${url}` === AFISHA_URL) return `/${url}`;
     if (`/${url}` === MOVIES_URL) return `/${url}`;
     if (`/${url}` === VIDEO_URL) return `/${url}`;
     if (`/${url}` === QUESTIONS_URL) return `/${url}`;
+    // остальные страницы имеют динамические роуты
     return `/${url}/${id}`;
   };
 

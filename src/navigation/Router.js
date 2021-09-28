@@ -4,19 +4,23 @@ import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import {
   ABOUT_US_URL,
   AFISHA_URL,
+  ARTICLES_ID_PARAM,
   ARTICLES_URL,
+  BOOKS_ID_PARAM,
   BOOKS_URL,
   CATALOG_ITEM_URL,
   CATALOG_URL,
   MAIN_PAGE_URL,
   MOVIES_URL,
   NOT_FOUND_URL,
+  PLACES_ID_PARAM,
   PLACES_URL,
   PROFILE_URL,
   QUESTIONS_URL,
   READ_AND_WATCH_URL,
   RIGHTS_ARTICLE_URL,
   RIGHTS_URL,
+  STORIES_ID_PARAM,
   STORIES_URL,
   VIDEO_URL,
 } from '../config/routes';
@@ -59,7 +63,7 @@ function Router() {
 
         <ProtectedRoute exact path={PROFILE_URL} component={Profile} />
 
-        <Route exact path={PLACES_URL} component={Places} />
+        <Route path={`${PLACES_URL}/${PLACES_ID_PARAM}?`} component={Places} />
 
         <Route exact path={RIGHTS_URL} component={Rights} />
 
@@ -75,11 +79,17 @@ function Router() {
 
         <Route exact path={VIDEO_URL} component={Video} />
 
-        <Route path={`${BOOKS_URL}/:bookId?`} component={Books} />
+        <Route path={`${BOOKS_URL}/${BOOKS_ID_PARAM}?`} component={Books} />
 
-        <Route exact path={ARTICLES_URL} component={Articles} />
+        <Route
+          path={`${ARTICLES_URL}/${ARTICLES_ID_PARAM}?`}
+          component={Articles}
+        />
 
-        <Route path={`${STORIES_URL}/:storyId?`} component={Stories} />
+        <Route
+          path={`${STORIES_URL}/${STORIES_ID_PARAM}?`}
+          component={Stories}
+        />
 
         <Route path={NOT_FOUND_URL} component={PageNotFound} />
       </Switch>
