@@ -61,6 +61,8 @@ function Profile() {
   const [eventsOffset, setEventsOffset] = useState(0);
 
   const [diaries, setDiaries] = useState([]);
+  // удаление дневника
+  const [selectedDiary, setSelectedDiary] = useState({});
 
   const [isWaitingResponse, setIsWaitingResponse] = useState(false);
 
@@ -101,41 +103,6 @@ function Profile() {
     setDiaries(dataToRender);
   }, [dataToRender]);
 
-  const getArchiveOfEvents = ({ limit, offset }) => {
-    if (offset <= archivedEvents.length) {
-      getArchiveOfBookedEvents({ limit, offset })
-        .then((eventsData) => {
-          setArchivedEvents((prevEvents) => [...prevEvents, ...eventsData]);
-          setEventsOffset((prevOffset) => prevOffset + limit);
-        })
-        .catch(() => {
-          setError(ERROR_MESSAGES.generalErrorMessage);
-          openPopupError();
-        })
-        .finally(() => setIsLoadingEvents(false));
-    }
-  };
-
-  const getCurrentBookedEvents = ({ limit, offset }) => {
-    if (offset <= events.length) {
-      getBookedEvents({ limit, offset })
-        .then((eventsData) => {
-          const updatedEvents = eventsData.map(({ event }) => {
-            const updatedEvent = event;
-            updatedEvent.booked = true;
-            return updatedEvent;
-          });
-          setEvents((prevEvents) => [...prevEvents, ...updatedEvents]);
-          setEventsOffset((prevOffset) => prevOffset + limit);
-        })
-        .catch(() => {
-          setError(ERROR_MESSAGES.generalErrorMessage);
-          openPopupError();
-        })
-        .finally(() => setIsLoadingEvents(false));
-    }
-  };
-
   useEffect(() => {
     getCurrentBookedEvents({ limit: eventsLimit, offset: eventsOffset });
   }, []);
@@ -152,158 +119,6 @@ function Profile() {
       );
     }
   }, [selectedEvent]);
-
-  // работа с карточками мероприятий календаря
-  const openEventCard = () => {
-    if (isArchiveOpen) {
-      // без записи на ивент
-      openPopupAboutEvent(true);
-    } else openPopupAboutEvent();
-  };
-
-  const openArchiveOfEvents = () => {
-    setEvents([]);
-    setEventsOffset(0);
-    setIsArchiveOpen(true);
-    setIsLoadingEvents(true);
-    getArchiveOfEvents({ limit: eventsLimit, offset: 0 });
-  };
-
-  const openCurrentEvents = () => {
-    setArchivedEvents([]);
-    setEventsOffset(0);
-    setIsArchiveOpen(false);
-    setIsLoadingEvents(true);
-    getCurrentBookedEvents({ limit: eventsLimit, offset: 0 });
-  };
-
-  // работа с формой
-  const scrollToForm = () => {
-    scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const openForm = (data) => {
-    if (!data) setIsEditMode(false);
-    setIsFormOpen(true);
-    scrollToForm();
-  };
-
-  const closeForm = () => {
-    setIsFormOpen(false);
-    setIsEditMode(false);
-    setFormDataToEdit(null);
-  };
-
-  const handleEditMode = (data) => {
-    setIsFormOpen(false);
-    //! небольшая задержка перед ререндером
-    setTimeout(() => {
-      setIsEditMode(true);
-      setFormDataToEdit(data);
-      openForm(data);
-    }, DELAY_RENDER);
-  };
-
-  const createFormData = (data) => {
-    const formData = new FormData();
-    if (data) {
-      if (data.id) formData.append('id', data.id);
-      if (data.image) formData.append('image', data.image);
-      formData.append('date', data.date);
-      formData.append('place', data.place);
-      formData.append('description', data.description);
-      formData.append('mark', data.mark);
-    }
-    return formData;
-  };
-
-  const handleErrorOnFormSubmit = (err) => {
-    if (err?.status === badRequest || err?.status === unauthorized) {
-      setError(err?.data);
-    } else openPopupError();
-  };
-
-  const handleCreateDiary = (data) => {
-    createDiary(createFormData(data))
-      .then((newDiary) => {
-        setDiaries((prevDiaries) => [newDiary, ...prevDiaries]);
-        closeForm();
-      })
-      .catch((err) => handleErrorOnFormSubmit(err))
-      .finally(() => setIsWaitingResponse(false));
-  };
-
-  const handleEditDiary = (data) => {
-    editDiary(data?.id, createFormData(data))
-      .then((newDiary) => {
-        setDiaries((prevDiaries) =>
-          prevDiaries.map((diary) =>
-            diary?.id === newDiary?.id ? newDiary : diary
-          )
-        );
-        closeForm();
-      })
-      .catch((err) => handleErrorOnFormSubmit(err))
-      .finally(() => setIsWaitingResponse(false));
-  };
-
-  const handleSubmitDiary = (data) => {
-    setIsWaitingResponse(true);
-    if (isEditMode) handleEditDiary(data);
-    else handleCreateDiary(data);
-  };
-
-  // удаление дневника
-  const [selectedDiary, setSelectedDiary] = useState({});
-
-  const openDeleteDiaryPopup = (diary) => {
-    setIsDeleteDiaryPopupOpen(true);
-    setSelectedDiary(diary);
-  };
-
-  const closeDeleteDiaryPopup = () => {
-    setIsDeleteDiaryPopupOpen(false);
-  };
-
-  const handleDeleteDiary = (diary) => {
-    setIsWaitingResponse(true);
-    deleteDiary(diary?.id)
-      .then(() => {
-        setDiaries((prevDiaries) =>
-          prevDiaries.filter((prevDiary) =>
-            prevDiary?.id === diary?.id ? null : prevDiary
-          )
-        );
-      })
-      .catch(() => {
-        setError(ERROR_MESSAGES.generalErrorMessage);
-        openPopupError();
-      })
-      .finally(() => {
-        setIsWaitingResponse(false);
-        closeDeleteDiaryPopup();
-      });
-  };
-
-  const handleShareDiary = (sharedDiary) => {
-    setIsWaitingResponse(true);
-    setSelectedDiary(sharedDiary);
-    shareDiary(sharedDiary?.id)
-      .then(() => {
-        const newDiary = diaries.find((diary) => diary?.id === sharedDiary?.id);
-        newDiary.sentToCurator = true;
-        setDiaries((prevDiaries) =>
-          prevDiaries.map((diary) =>
-            diary?.id === newDiary?.id ? newDiary : diary
-          )
-        );
-      })
-      .catch(() => {
-        setError(ERROR_MESSAGES.generalErrorMessage);
-        openPopupError();
-      })
-      .finally(() => setIsWaitingResponse(false));
-  };
 
   // эффект при переключении страниц пагинации
   useEffect(() => {
@@ -332,7 +147,193 @@ function Profile() {
     </>
   );
 
-  // функции рендера
+  // функционал
+  // КАРТОЧКИ ИВЕНТОВ
+  function getArchiveOfEvents({ limit, offset }) {
+    if (offset <= archivedEvents.length) {
+      getArchiveOfBookedEvents({ limit, offset })
+        .then((eventsData) => {
+          setArchivedEvents((prevEvents) => [...prevEvents, ...eventsData]);
+          setEventsOffset((prevOffset) => prevOffset + limit);
+        })
+        .catch(() => {
+          setError(ERROR_MESSAGES.generalErrorMessage);
+          openPopupError();
+        })
+        .finally(() => setIsLoadingEvents(false));
+    }
+  }
+
+  function getCurrentBookedEvents({ limit, offset }) {
+    if (offset <= events.length) {
+      getBookedEvents({ limit, offset })
+        .then((eventsData) => {
+          const updatedEvents = eventsData.map(({ event }) => {
+            const updatedEvent = event;
+            updatedEvent.booked = true;
+            return updatedEvent;
+          });
+          setEvents((prevEvents) => [...prevEvents, ...updatedEvents]);
+          setEventsOffset((prevOffset) => prevOffset + limit);
+        })
+        .catch(() => {
+          setError(ERROR_MESSAGES.generalErrorMessage);
+          openPopupError();
+        })
+        .finally(() => setIsLoadingEvents(false));
+    }
+  }
+
+  function openEventCard() {
+    if (isArchiveOpen) {
+      // без записи на ивент
+      openPopupAboutEvent(true);
+    } else openPopupAboutEvent();
+  }
+
+  function openArchiveOfEvents() {
+    setEvents([]);
+    setEventsOffset(0);
+    setIsArchiveOpen(true);
+    setIsLoadingEvents(true);
+    getArchiveOfEvents({ limit: eventsLimit, offset: 0 });
+  }
+
+  function openCurrentEvents() {
+    setArchivedEvents([]);
+    setEventsOffset(0);
+    setIsArchiveOpen(false);
+    setIsLoadingEvents(true);
+    getCurrentBookedEvents({ limit: eventsLimit, offset: 0 });
+  }
+
+  // ФОРМА И ДНЕВНИКИ
+  function scrollToForm() {
+    scrollAnchorRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function openForm(data) {
+    if (!data) setIsEditMode(false);
+    setIsFormOpen(true);
+    scrollToForm();
+  }
+
+  function closeForm() {
+    setIsFormOpen(false);
+    setIsEditMode(false);
+    setFormDataToEdit(null);
+  }
+
+  function handleEditMode(data) {
+    setIsFormOpen(false);
+    //! небольшая задержка перед ререндером
+    setTimeout(() => {
+      setIsEditMode(true);
+      setFormDataToEdit(data);
+      openForm(data);
+    }, DELAY_RENDER);
+  }
+
+  function createFormData(data) {
+    const formData = new FormData();
+    if (data) {
+      if (data.id) formData.append('id', data.id);
+      if (data.image) formData.append('image', data.image);
+      formData.append('date', data.date);
+      formData.append('place', data.place);
+      formData.append('description', data.description);
+      formData.append('mark', data.mark);
+    }
+    return formData;
+  }
+
+  function handleErrorOnFormSubmit(err) {
+    if (err?.status === badRequest || err?.status === unauthorized) {
+      setError(err?.data);
+    } else openPopupError();
+  }
+
+  function handleCreateDiary(data) {
+    createDiary(createFormData(data))
+      .then((newDiary) => {
+        setDiaries((prevDiaries) => [newDiary, ...prevDiaries]);
+        closeForm();
+      })
+      .catch((err) => handleErrorOnFormSubmit(err))
+      .finally(() => setIsWaitingResponse(false));
+  }
+
+  function handleEditDiary(data) {
+    editDiary(data?.id, createFormData(data))
+      .then((newDiary) => {
+        setDiaries((prevDiaries) =>
+          prevDiaries.map((diary) =>
+            diary?.id === newDiary?.id ? newDiary : diary
+          )
+        );
+        closeForm();
+      })
+      .catch((err) => handleErrorOnFormSubmit(err))
+      .finally(() => setIsWaitingResponse(false));
+  }
+
+  function handleSubmitDiary(data) {
+    setIsWaitingResponse(true);
+    if (isEditMode) handleEditDiary(data);
+    else handleCreateDiary(data);
+  }
+
+  function handleShareDiary(sharedDiary) {
+    setIsWaitingResponse(true);
+    setSelectedDiary(sharedDiary);
+    shareDiary(sharedDiary?.id)
+      .then(() => {
+        const newDiary = diaries.find((diary) => diary?.id === sharedDiary?.id);
+        newDiary.sentToCurator = true;
+        setDiaries((prevDiaries) =>
+          prevDiaries.map((diary) =>
+            diary?.id === newDiary?.id ? newDiary : diary
+          )
+        );
+      })
+      .catch(() => {
+        setError(ERROR_MESSAGES.generalErrorMessage);
+        openPopupError();
+      })
+      .finally(() => setIsWaitingResponse(false));
+  }
+
+  // УДАЛЕНИЕ ДНЕВНИКА
+  function openDeleteDiaryPopup(diary) {
+    setIsDeleteDiaryPopupOpen(true);
+    setSelectedDiary(diary);
+  }
+
+  function closeDeleteDiaryPopup() {
+    setIsDeleteDiaryPopupOpen(false);
+  }
+
+  function handleDeleteDiary(diary) {
+    setIsWaitingResponse(true);
+    deleteDiary(diary?.id)
+      .then(() => {
+        setDiaries((prevDiaries) =>
+          prevDiaries.filter((prevDiary) =>
+            prevDiary?.id === diary?.id ? null : prevDiary
+          )
+        );
+      })
+      .catch(() => {
+        setError(ERROR_MESSAGES.generalErrorMessage);
+        openPopupError();
+      })
+      .finally(() => {
+        setIsWaitingResponse(false);
+        closeDeleteDiaryPopup();
+      });
+  }
+
+  // РЕНДЕРИНГ
   function renderEventCards() {
     const renderingEvents = isArchiveOpen ? archivedEvents : events;
     if (renderingEvents.length > 0) {

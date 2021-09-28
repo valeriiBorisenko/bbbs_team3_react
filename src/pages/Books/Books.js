@@ -106,12 +106,8 @@ function Books() {
   );
 
   function renderPageContent() {
-    if (isPageError) {
-      return (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      );
+    if (isPageError || !dataToRender.length) {
+      return renderAnimatedContainer();
     }
     return (
       <>
@@ -124,8 +120,22 @@ function Books() {
     );
   }
 
+  // заглушка
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
+  }
+
   function renderFilters() {
-    if (filters?.length > 1) {
+    // учитываем кнопку ВСЕ
+    if (filters.length > 2) {
       return (
         <TagsList
           filterList={filters}
@@ -137,26 +147,7 @@ function Books() {
     return null;
   }
 
-  function renderPagination() {
-    if (totalPages > 1) {
-      return (
-        <Paginate
-          sectionClass="cards-section__pagination"
-          pageCount={totalPages}
-          value={pageIndex}
-          onChange={changePageIndex}
-        />
-      );
-    }
-
-    return null;
-  }
-
   function renderBooksContainer() {
-    if (!dataToRender.length && !isPageLoading) {
-      return renderAnimatedContainer();
-    }
-
     return (
       <>
         {isPaginationUsed ? (
@@ -176,9 +167,19 @@ function Books() {
     );
   }
 
-  // контейнер заглушки, если нет данных
-  function renderAnimatedContainer() {
-    return <AnimatedPageContainer titleText={textStubNoData} />;
+  function renderPagination() {
+    if (totalPages > 1) {
+      return (
+        <Paginate
+          sectionClass="cards-section__pagination"
+          pageCount={totalPages}
+          value={pageIndex}
+          onChange={changePageIndex}
+        />
+      );
+    }
+
+    return null;
   }
 }
 

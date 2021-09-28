@@ -55,7 +55,7 @@ function Stories() {
   const [storiesTags, setStoriesTags] = useState([]);
   const [tagsOffset, setTagsOffset] = useState(0);
 
-  const [currentStory, setCurrentStory] = useState(null);
+  const [currentStory, setCurrentStory] = useState({});
   const [isPopupPhotoOpen, setIsPopupPhotoOpen] = useState(false);
   const [currentPhoto, setCurrentPhoto] = useState({});
 
@@ -68,17 +68,17 @@ function Stories() {
   };
 
   const currentStoryId = +(storyId ?? storiesTags[0]?.filter);
-  const mentorName = currentStory?.mentor?.firstName ?? '';
-  const childName = currentStory?.child ?? '';
+  const mentorName = currentStory.mentor?.firstName ?? '';
+  const childName = currentStory.child ?? '';
   const pairTitle = `${mentorName} и ${childName}`;
 
-  const togetherSinceDate = formatDate(currentStory?.togetherSince);
+  const togetherSinceDate = formatDate(currentStory.togetherSince);
   const togetherSinceText = `Вместе с ${formatMonthsGenitiveCase(
     togetherSinceDate?.monthName
   )} ${togetherSinceDate?.year} года`;
 
   const emailText = `написать ${inclineFirstname(mentorName, 'dative')}`;
-  const nextArticleLink = `${STORIES_URL}/${currentStory?.nextArticle?.id}`;
+  const nextArticleLink = `${STORIES_URL}/${currentStory.nextArticle?.id}`;
 
   const photoCarouselRef = useRef(null);
   const carouselItemPadding = usePageWidth(
@@ -196,16 +196,8 @@ function Stories() {
 
   // функции рендера
   function renderPageContent() {
-    if (isPageError) {
-      return (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      );
-    }
-
-    if (!storiesTags.length && !currentStory) {
-      return <AnimatedPageContainer titleText={textStubNoData} />;
+    if (isPageError || !storiesTags.length) {
+      return renderAnimatedContainer();
     }
 
     return (
@@ -222,13 +214,13 @@ function Stories() {
             {renderUpperBlock()}
 
             <ReactMarkdown className="markdown stories__markdown fade-in">
-              {currentStory?.uperBody}
+              {currentStory.uperBody}
             </ReactMarkdown>
 
             {renderPhotosCarousel()}
 
             <ReactMarkdown className="markdown stories__markdown stories__markdown_last fade-in">
-              {currentStory?.lowerBody}
+              {currentStory.lowerBody}
             </ReactMarkdown>
 
             {renderLinksBlock()}
@@ -238,12 +230,25 @@ function Stories() {
     );
   }
 
+  // заглушка
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
+  }
+
   function renderUpperBlock() {
     return (
       <>
         <img
           className="stories__main-photo scale-in"
-          src={`${staticImageUrl}/${currentStory?.image}`}
+          src={`${staticImageUrl}/${currentStory.image}`}
           alt={pairTitle}
         />
         <TitleH2 title={pairTitle} sectionClass="stories__pair-title fade-in" />
@@ -252,7 +257,7 @@ function Stories() {
           sectionClass="stories__caption fade-in"
         />
         <p className="stories__subtitle stories__subtitle_last fade-in">
-          {currentStory?.description}
+          {currentStory.description}
         </p>
       </>
     );
@@ -261,7 +266,7 @@ function Stories() {
   function renderLinksBlock() {
     return (
       <div className="stories__links fade-in">
-        {currentUser && currentStory?.mentor?.email && (
+        {currentUser && currentStory.mentor?.email && (
           <a
             className="link stories__link"
             href={`mailto:${currentStory.mentor.email}`}
@@ -272,7 +277,7 @@ function Stories() {
           </a>
         )}
 
-        {currentStory?.nextArticle && (
+        {currentStory.nextArticle && (
           <NextArticleLink
             text={currentStory.nextArticle.title}
             href={nextArticleLink}
@@ -330,7 +335,7 @@ function Stories() {
             enableMouseSwipe={false}
           >
             <div aria-hidden className="stories__carousel-image" />
-            {currentStory?.images?.map((image, idx) => (
+            {currentStory.images?.map((image, idx) => (
               <div
                 key={image.id}
                 className="stories__carousel-image-wrap"

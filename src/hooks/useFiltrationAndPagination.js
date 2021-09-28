@@ -14,7 +14,7 @@ import {
   selectOneTag,
 } from '../utils/filter-tags';
 
-// хук фильтрации/пагинации для большинства страниц проекта
+// обычный хук фильтрации/пагинации для большинства страниц проекта
 
 const useFiltrationAndPagination = ({
   apiGetDataCallback,
@@ -56,7 +56,7 @@ const useFiltrationAndPagination = ({
       const activeFilters = getActiveFilters();
 
       defineParamsAndGetData({
-        activeTags: activeFilters,
+        activeFilters,
         apiCallback: debouncePaginate,
         isFiltersCallback: false,
       });
@@ -94,13 +94,10 @@ const useFiltrationAndPagination = ({
 
   // ФИЛЬТРЫ
   function getActiveFilters() {
-    if (filters.length) {
-      return filters
-        .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES_TAG)
-        .map((f) => f.filter)
-        .join(',');
-    }
-    return null;
+    return filters
+      .filter((f) => f.isActive && f.filter !== ALL_CATEGORIES_TAG)
+      .map((f) => f.filter)
+      .join(',');
   }
 
   // хэндлер клика по фильтру
@@ -121,11 +118,11 @@ const useFiltrationAndPagination = ({
   // функция-фильтратор
   // eslint-disable-next-line consistent-return
   function handleFiltration() {
-    if (filters && isFiltersUsed) {
+    if (filters.length && isFiltersUsed) {
       const activeFilters = getActiveFilters();
 
       defineParamsAndGetData({
-        activeTags: activeFilters,
+        activeFilters,
         apiCallback: getData,
         isFiltersCallback: true,
       });
@@ -163,8 +160,12 @@ const useFiltrationAndPagination = ({
 
     apiGetDataCallback({ limit: pageSize, offset, ...params })
       .then(({ results, count }) => {
-        setTotalPages(Math.ceil(count / pageSize));
-        setDataToRender(results);
+        if (results.length > 0) {
+          setDataToRender(results);
+          setTotalPages(Math.ceil(count / pageSize));
+        } else {
+          setDataToRender([]);
+        }
       })
       .catch(() => {
         if (isFiltersUsed) {
@@ -186,9 +187,18 @@ const useFiltrationAndPagination = ({
       apiGetDataCallback({ limit: pageSize }),
     ])
       .then(([tags, { results, count }]) => {
-        setTotalPages(Math.ceil(count / pageSize));
-        defineFilters(tags);
-        setDataToRender(results);
+        if (tags.length > 0) {
+          defineFilters(tags);
+        } else {
+          setFilters([]);
+        }
+
+        if (results.length > 0) {
+          setDataToRender(results);
+          setTotalPages(Math.ceil(count / pageSize));
+        } else {
+          setDataToRender([]);
+        }
       })
       .catch(() => setIsPageError(true))
       .finally(() => setIsPageLoading(false));
@@ -197,21 +207,25 @@ const useFiltrationAndPagination = ({
   function firstPageRenderNoFilters() {
     apiGetDataCallback({ limit: pageSize })
       .then(({ results, count }) => {
-        setTotalPages(Math.ceil(count / pageSize));
-        setDataToRender(results);
+        if (results.length > 0) {
+          setDataToRender(results);
+          setTotalPages(Math.ceil(count / pageSize));
+        } else {
+          setDataToRender([]);
+        }
       })
       .catch(() => setIsPageError(true))
       .finally(() => setIsPageLoading(false));
   }
 
   function defineParamsAndGetData({
-    activeTags,
+    activeFilters,
     apiCallback,
     isFiltersCallback,
   }) {
-    if (activeTags) {
+    if (activeFilters) {
       const params = {
-        [apiFilterNames.tags]: activeTags,
+        [apiFilterNames.tags]: activeFilters,
       };
       apiCallback({ params });
     } else {

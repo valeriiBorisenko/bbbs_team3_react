@@ -64,24 +64,35 @@ const Rights = () => {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="rights page__section fade-in">
-        {isPageError ? (
-          <AnimatedPageContainer
-            titleText={ERROR_MESSAGES.generalErrorMessage.title}
-          />
+        {isPageError || !dataToRender.length ? (
+          renderAnimatedContainer()
         ) : (
           <>
             <TitleH1 title={title} sectionClass="rights__title" />
-            {renderTagsContainer()}
-            {renderMainContent()}
+            {renderFilters()}
+            {renderCards()}
           </>
         )}
       </section>
     </BasePage>
   );
 
-  // Фильтры страницы
-  function renderTagsContainer() {
-    if (filters?.length > 1) {
+  // заглушка
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
+  }
+
+  function renderFilters() {
+    // учитываем кнопку ВСЕ
+    if (filters?.length > 2) {
       return (
         <TagsList
           filterList={filters}
@@ -93,8 +104,11 @@ const Rights = () => {
     return null;
   }
 
-  // Карточки
   function renderCards() {
+    if (isFiltersUsed) {
+      return <Loader isPaginate />;
+    }
+
     return (
       <>
         <CardsSectionWithLines
@@ -120,15 +134,6 @@ const Rights = () => {
         </CardsSectionWithLines>
       </>
     );
-  }
-
-  // Контент страницы
-  function renderMainContent() {
-    if (!dataToRender.length && !isPageLoading) {
-      return <AnimatedPageContainer titleText={textStubNoData} />;
-    }
-
-    return isFiltersUsed ? <Loader isPaginate /> : renderCards();
   }
 };
 

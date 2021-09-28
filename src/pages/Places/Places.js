@@ -188,7 +188,7 @@ function Places() {
     // ошибка или нет ивентов для города вообще и не фильтровали
     if (
       isPageError ||
-      (!isMainCard && dataToRender.length === 0 && !isNoFilteredResults)
+      (!isMainCard && !dataToRender.length && !isNoFilteredResults)
     ) {
       return renderAnimatedContainer();
     }

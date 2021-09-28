@@ -100,6 +100,7 @@ function Calendar() {
     if (currentUser && !isPageLoading) {
       setIsCityChanged(true);
       firstPageRender();
+      window.scrollTo({ top: 0 });
     }
   }, [currentUser?.city]);
 
@@ -141,7 +142,27 @@ function Calendar() {
     </BasePage>
   );
 
-  // рендеринг
+  function renderPageContent() {
+    // залогинен и (ошибка или нет ивентов для города вообще)
+    if (currentUser && (isPageError || !calendarPageData?.length)) {
+      return isCityChanged ? <Loader isPaginate /> : renderAnimatedContainer();
+    }
+
+    // залогинен и есть ивенты
+    if (currentUser) {
+      return (
+        <>
+          <TitleH1 title={title} sectionClass="calendar-page__title" />
+          <div className="calendar-page__container">
+            {isCityChanged ? <Loader isPaginate /> : renderFiltersAndCards()}
+          </div>
+        </>
+      );
+    }
+
+    return null;
+  }
+
   // отрисовка заглушки
   function renderAnimatedContainer() {
     return (
@@ -153,6 +174,37 @@ function Calendar() {
         }
       />
     );
+  }
+
+  function renderFiltersAndCards() {
+    return (
+      <>
+        {renderFilters()}
+
+        {isFiltersUsed ? (
+          <Loader isPaginate />
+        ) : (
+          <>
+            {renderEventCardsContainer()}
+            {renderPagination()}
+          </>
+        )}
+      </>
+    );
+  }
+
+  function renderFilters() {
+    // учитываем кнопку ВСЕ
+    if (filters.length > 2) {
+      return (
+        <TagsList
+          filterList={filters}
+          name="month"
+          handleClick={changeFilter}
+        />
+      );
+    }
+    return null;
   }
 
   // отрисовка карточек ивентов
@@ -182,22 +234,6 @@ function Calendar() {
     );
   }
 
-  // фильтры
-  function renderFilters() {
-    // если месяца больше 1 с учётом кнопки ВСЕ
-    if (filters.length > 2) {
-      return (
-        <TagsList
-          filterList={filters}
-          name="month"
-          handleClick={changeFilter}
-        />
-      );
-    }
-    return null;
-  }
-
-  // блок пагинации
   function renderPagination() {
     if (totalPages > 1) {
       return (
@@ -209,45 +245,6 @@ function Calendar() {
         />
       );
     }
-    return null;
-  }
-
-  function renderFiltersAndCards() {
-    return (
-      <>
-        {renderFilters()}
-
-        {isFiltersUsed ? (
-          <Loader isPaginate />
-        ) : (
-          <>
-            {renderEventCardsContainer()}
-            {renderPagination()}
-          </>
-        )}
-      </>
-    );
-  }
-
-  // главная функция рендера
-  function renderPageContent() {
-    // залогинен и (ошибка или нет ивентов для города вообще)
-    if (currentUser && (isPageError || calendarPageData?.length === 0)) {
-      return renderAnimatedContainer();
-    }
-
-    // залогинен и есть ивенты
-    if (currentUser) {
-      return (
-        <>
-          <TitleH1 title={title} sectionClass="calendar-page__title" />
-          <div className="calendar-page__container">
-            {isCityChanged ? <Loader isPaginate /> : renderFiltersAndCards()}
-          </div>
-        </>
-      );
-    }
-
     return null;
   }
 }

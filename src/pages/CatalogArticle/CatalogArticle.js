@@ -21,7 +21,7 @@ function CatalogArticle() {
   const { articleId } = useParams();
   const history = useHistory();
 
-  const [catalogArticlePageData, setCatalogArticlePageData] = useState();
+  const [catalogArticlePageData, setCatalogArticlePageData] = useState({});
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   // Стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
@@ -69,19 +69,19 @@ function CatalogArticle() {
     return (
       <div className="article page__section fade-in">
         <TitleH1
-          title={catalogArticlePageData?.title}
+          title={catalogArticlePageData.title}
           sectionClass="article__main-title"
         />
         <p className="article__description section-title">
-          {catalogArticlePageData?.description}
+          {catalogArticlePageData.description}
         </p>
         <figure className="article__figure">
           <img
-            src={`${staticImageUrl}/${catalogArticlePageData?.image}`}
-            alt={catalogArticlePageData?.title}
+            src={`${staticImageUrl}/${catalogArticlePageData.image}`}
+            alt={catalogArticlePageData.title}
             className="article__image scale-in"
           />
-          {catalogArticlePageData?.imageCaption && (
+          {catalogArticlePageData.imageCaption && (
             <figcaption className="caption article__figcaption">
               {catalogArticlePageData.imageCaption}
             </figcaption>
@@ -89,10 +89,10 @@ function CatalogArticle() {
         </figure>
         <div className="article__container">
           <ReactMarkdown className="markdown article__markdown">
-            {catalogArticlePageData?.body}
+            {catalogArticlePageData.body}
           </ReactMarkdown>
 
-          {catalogArticlePageData?.nextArticle && (
+          {catalogArticlePageData.nextArticle && (
             <NextArticleLink
               text={catalogArticlePageData.nextArticle.title}
               href={nextPageLink}

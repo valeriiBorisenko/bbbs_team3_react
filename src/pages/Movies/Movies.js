@@ -92,13 +92,10 @@ function Movies() {
 
   // главная функция рендеринга
   function renderPageContent() {
-    if (isPageError) {
-      return (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      );
+    if (isPageError || !dataToRender.length) {
+      return renderAnimatedContainer();
     }
+
     return (
       <>
         <TitleH1 title={title} sectionClass="movies__title" />
@@ -110,8 +107,21 @@ function Movies() {
     );
   }
 
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
+  }
+
   function renderFilters() {
-    if (filters?.length > 1) {
+    // учитывается кнопка ВСЕ
+    if (filters.length > 2) {
       return (
         <TagsList
           filterList={filters}
@@ -123,30 +133,8 @@ function Movies() {
     return null;
   }
 
-  // контейнер заглушки
-  function renderAnimatedContainer() {
-    return <AnimatedPageContainer titleText={textStubNoData} />;
-  }
-
-  function renderPaginate() {
-    if (totalPages > 1) {
-      return (
-        <Paginate
-          sectionClass="cards-section__pagination"
-          pageCount={totalPages}
-          value={pageIndex}
-          onChange={changePageIndex}
-        />
-      );
-    }
-    return null;
-  }
-
   // контейнер с фильмами
   function renderMoviesContainer() {
-    if (!dataToRender.length && !isPageLoading) {
-      return renderAnimatedContainer();
-    }
     return (
       <>
         {isPaginationUsed ? (
@@ -165,6 +153,20 @@ function Movies() {
         {renderPaginate()}
       </>
     );
+  }
+
+  function renderPaginate() {
+    if (totalPages > 1) {
+      return (
+        <Paginate
+          sectionClass="cards-section__pagination"
+          pageCount={totalPages}
+          value={pageIndex}
+          onChange={changePageIndex}
+        />
+      );
+    }
+    return null;
   }
 }
 

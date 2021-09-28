@@ -59,6 +59,33 @@ function Catalog() {
     </BasePage>
   );
 
+  function renderPageContent() {
+    if (isPageError || !dataToRender.length) {
+      return renderAnimatedContainer();
+    }
+
+    return (
+      <section className="catalog page__section fade-in">
+        <TitleH1 sectionClass="catalog__title" title={title} />
+        <TitleH2 sectionClass="catalog__subtitle" title={subtitle} />
+        {renderCards()}
+      </section>
+    );
+  }
+
+  // заглушка
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
+  }
+
   function renderCards() {
     return (
       <CardsSectionWithLines
@@ -78,27 +105,6 @@ function Catalog() {
           />
         ))}
       </CardsSectionWithLines>
-    );
-  }
-
-  function renderPageContent() {
-    if (isPageError) {
-      return (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      );
-    }
-    if (!dataToRender.length && !isPageLoading && !isPageError) {
-      return <AnimatedPageContainer titleText={textStubNoData} />;
-    }
-
-    return (
-      <section className="catalog page__section fade-in">
-        <TitleH1 sectionClass="catalog__title" title={title} />
-        <TitleH2 sectionClass="catalog__subtitle" title={subtitle} />
-        {renderCards()}
-      </section>
     );
   }
 }

@@ -82,9 +82,7 @@ function Articles() {
   return (
     <>
       <BasePage headTitle={headTitle} headDescription={headDescription}>
-        {!dataToRender.length && !isMainCard && !isPageLoading
-          ? renderAnimatedContainer()
-          : renderPageContent()}
+        {renderPageContent()}
       </BasePage>
       <PopupArticle
         isOpen={isArticlePopupOpen}
@@ -95,12 +93,8 @@ function Articles() {
   );
 
   function renderPageContent() {
-    if (isPageError) {
-      return (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      );
+    if (isPageError || (!dataToRender.length && !isMainCard)) {
+      return renderAnimatedContainer();
     }
 
     return (
@@ -114,22 +108,17 @@ function Articles() {
     );
   }
 
+  // заглушка
   function renderAnimatedContainer() {
-    return <AnimatedPageContainer titleText={textStubNoData} />;
-  }
-
-  function renderPagination() {
-    if (totalPages > 1) {
-      return (
-        <Paginate
-          sectionClass="cards-section__pagination"
-          pageCount={totalPages}
-          value={pageIndex}
-          onChange={changePageIndex}
-        />
-      );
-    }
-    return null;
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
   }
 
   function renderCards() {
@@ -153,6 +142,20 @@ function Articles() {
         </section>
       </>
     );
+  }
+
+  function renderPagination() {
+    if (totalPages > 1) {
+      return (
+        <Paginate
+          sectionClass="cards-section__pagination"
+          pageCount={totalPages}
+          value={pageIndex}
+          onChange={changePageIndex}
+        />
+      );
+    }
+    return null;
   }
 }
 

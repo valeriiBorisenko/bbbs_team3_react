@@ -178,8 +178,25 @@ function Questions() {
     </BasePage>
   );
 
-  // рендеринг
-  // заглушка, если нет даты или ошибка
+  function renderPageContent() {
+    if (isPageError || !filteredDataToRender.length) {
+      return renderAnimatedContainer();
+    }
+
+    return (
+      <>
+        <TitleH1 title={title} sectionClass="questions__title" />
+
+        {renderFilters()}
+
+        {renderQuestionsWithPaginate()}
+
+        {currentUser && renderQuestionForm()}
+      </>
+    );
+  }
+
+  // заглушка
   function renderAnimatedContainer() {
     return (
       <AnimatedPageContainer
@@ -190,6 +207,76 @@ function Questions() {
         }
       />
     );
+  }
+
+  function renderFilters() {
+    // учитываем кнопку ВСЕ
+    if (filters.length > 2) {
+      return (
+        <TagsList filterList={filters} name="tag" handleClick={changeFilter} />
+      );
+    }
+    return null;
+  }
+
+  function renderQuestionsWithPaginate() {
+    if (isFiltersUsed) {
+      return <Loader isPaginate />;
+    }
+
+    return (
+      <>
+        {isPaginationUsed ? <Loader isPaginate /> : renderQuestionsContainer()}
+
+        {totalPages > 1 && (
+          <Paginate
+            sectionClass="cards-section__pagination"
+            pageCount={totalPages}
+            value={pageIndex}
+            onChange={changePageIndex}
+          />
+        )}
+      </>
+    );
+  }
+
+  function renderQuestionsContainer() {
+    return (
+      <>
+        <ul className="questions">
+          {renderMainQuestion()}
+          {filteredDataToRender.map((question) => (
+            <li
+              className="questions__list-item slide-bottom-up"
+              key={question?.id}
+            >
+              <CardQuestion
+                data={question}
+                sectionClass="card__questions_type_questions-page"
+                isQuestionsPage
+              />
+            </li>
+          ))}
+        </ul>
+      </>
+    );
+  }
+
+  function renderMainQuestion() {
+    if (isMainQuestionVisible && mainQuestion) {
+      return (
+        <li className="questions__list-item fade-in">
+          <CardQuestion
+            data={mainQuestion}
+            sectionClass="card__questions_type_questions-page"
+            isQuestionsPage
+            isOpenByDefault
+          />
+        </li>
+      );
+    }
+
+    return null;
   }
 
   // форма вопросов
@@ -235,97 +322,6 @@ function Questions() {
         </section>
       </>
     );
-  }
-
-  function renderMainQuestion() {
-    if (isMainQuestionVisible && mainQuestion) {
-      return (
-        <li className="questions__list-item fade-in">
-          <CardQuestion
-            data={mainQuestion}
-            sectionClass="card__questions_type_questions-page"
-            isQuestionsPage
-            isOpenByDefault
-          />
-        </li>
-      );
-    }
-
-    return null;
-  }
-
-  function renderQuestionsContainer() {
-    return (
-      <>
-        <ul className="questions">
-          {renderMainQuestion()}
-          {filteredDataToRender.map((question) => (
-            <li
-              className="questions__list-item slide-bottom-up"
-              key={question?.id}
-            >
-              <CardQuestion
-                data={question}
-                sectionClass="card__questions_type_questions-page"
-                isQuestionsPage
-              />
-            </li>
-          ))}
-        </ul>
-      </>
-    );
-  }
-
-  function renderQuestionsWithPaginate() {
-    if (isFiltersUsed) {
-      return <Loader isPaginate />;
-    }
-
-    return (
-      <>
-        {isPaginationUsed ? <Loader isPaginate /> : renderQuestionsContainer()}
-
-        {totalPages > 1 && (
-          <Paginate
-            sectionClass="cards-section__pagination"
-            pageCount={totalPages}
-            value={pageIndex}
-            onChange={changePageIndex}
-          />
-        )}
-      </>
-    );
-  }
-
-  // главная функция рендеринга
-  function renderPageContent() {
-    if (filteredDataToRender.length) {
-      return (
-        <>
-          <TitleH1 title={title} sectionClass="questions__title" />
-
-          {filters?.length > 1 && (
-            <TagsList
-              filterList={filters}
-              name="tag"
-              handleClick={changeFilter}
-            />
-          )}
-
-          {renderQuestionsWithPaginate()}
-
-          {currentUser && renderQuestionForm()}
-        </>
-      );
-    }
-
-    // залогинен и нет вопросов, покажем заглушку
-    const isDataForPage = filteredDataToRender.length > 1;
-    if (isPageError || !isDataForPage) {
-      return renderAnimatedContainer();
-    }
-
-    return null;
   }
 }
 
