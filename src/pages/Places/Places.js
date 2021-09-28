@@ -301,7 +301,7 @@ function Places() {
   }
 
   function renderFilters() {
-    // если фильтров больше 1 с учётом кнопки ВСЕ
+    // учитываем также кннопку ВСЕ
     if (filters.length > 2) {
       return (
         <TagsList

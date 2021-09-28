@@ -16,6 +16,7 @@ import {
   CardFilm,
   CardVideoMain,
   Loader,
+  NoDataNotificationBox,
   Paginate,
   TagsList,
   TitleH1,
@@ -33,7 +34,13 @@ const MAX_SCREEN_WIDTH = {
   medium: 1450,
 };
 
-const { headTitle, headDescription, title, textStubNoData } = videoPageTexts;
+const {
+  headTitle,
+  headDescription,
+  title,
+  textStubNoData,
+  paragraphNoContent,
+} = videoPageTexts;
 
 const Video = () => {
   // работа с открытием попапа видое при переходе из поиска
@@ -66,6 +73,7 @@ const Video = () => {
     isPageLoading,
     isFiltersUsed,
     isPaginationUsed,
+    isNoFilteredResults,
     totalPages,
     pageIndex,
     changePageIndex,
@@ -96,15 +104,10 @@ const Video = () => {
   );
 
   function renderPageContent() {
-    if (isPageError) {
-      return (
-        <AnimatedPageContainer
-          titleText={ERROR_MESSAGES.generalErrorMessage.title}
-        />
-      );
-    }
-
-    if (!dataToRender.length && !isMainCard && !isPageLoading) {
+    if (
+      isPageError ||
+      (!dataToRender.length && !isMainCard && !isPageLoading)
+    ) {
       return renderAnimatedContainer();
     }
 
@@ -120,8 +123,22 @@ const Video = () => {
     );
   }
 
+  // контейнер заглушки
+  function renderAnimatedContainer() {
+    return (
+      <AnimatedPageContainer
+        titleText={
+          isPageError
+            ? ERROR_MESSAGES.generalErrorMessage.title
+            : textStubNoData
+        }
+      />
+    );
+  }
+
   function renderFilters() {
-    if (filters?.length > 1) {
+    // учитываем также кннопку ВСЕ
+    if (filters.length > 2) {
       return (
         <TagsList
           filterList={filters}
@@ -133,28 +150,17 @@ const Video = () => {
     return null;
   }
 
-  // контейнер заглушки
-  function renderAnimatedContainer() {
-    return <AnimatedPageContainer titleText={textStubNoData} />;
-  }
-
-  function renderPaginate() {
-    if (totalPages > 1) {
+  function renderCardsContainer() {
+    if (isNoFilteredResults) {
       return (
-        <section className="video__cards-paginate">
-          <Paginate
-            sectionClass="cards-section__pagination "
-            pageCount={totalPages}
-            value={pageIndex}
-            onChange={changePageIndex}
-          />
-        </section>
+        <NoDataNotificationBox
+          text={paragraphNoContent}
+          isAnimated
+          sectionClass="no-data-text_padding-top"
+        />
       );
     }
-    return null;
-  }
 
-  function renderCardsContainer() {
     return (
       <>
         {isPaginationUsed ? <Loader isPaginate /> : renderCards()}
@@ -184,6 +190,22 @@ const Video = () => {
         </section>
       </>
     );
+  }
+
+  function renderPaginate() {
+    if (totalPages > 1) {
+      return (
+        <section className="video__cards-paginate">
+          <Paginate
+            sectionClass="cards-section__pagination "
+            pageCount={totalPages}
+            value={pageIndex}
+            onChange={changePageIndex}
+          />
+        </section>
+      );
+    }
+    return null;
   }
 };
 

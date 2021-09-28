@@ -189,7 +189,7 @@ const useFiltrationForPlaces = ({
   // функция-фильтратор
   // eslint-disable-next-line consistent-return
   function handleFiltration() {
-    if (filters && isFiltersUsed) {
+    if (filters.length && isFiltersUsed) {
       if (isFormRecommendationShown) setIsFormRecommendationShown(false);
 
       const { activeFilters, activeAges, isChosenByMentorFlag } =
@@ -343,7 +343,9 @@ const useFiltrationForPlaces = ({
         },
         ...filtersArray,
       ]);
-    } else setFilters(defaultTags);
+    } else {
+      setFilters(defaultTags);
+    }
   }
 
   // обработка главной карточки в первом рендере
