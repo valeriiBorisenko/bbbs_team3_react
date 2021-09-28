@@ -20,11 +20,11 @@ function getBooksPageFilter() {
 }
 
 // получение одного книги
-function getBook(id) {
+function getBookById(id) {
   return axios
-    .get(`${baseURL}${apiUrl}/books/${id}`)
+    .get(`${baseURL}${apiUrl}/books/${id}/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
-export { getBooksPageData, getBooksPageFilter, getBook };
+export { getBooksPageData, getBooksPageFilter, getBookById };

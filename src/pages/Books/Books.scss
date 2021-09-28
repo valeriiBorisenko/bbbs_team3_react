@@ -10,6 +10,20 @@
     margin: 0;
     list-style-type: none;
   }
+
+  &__single-book-container {
+    max-width: 770px;
+    margin: 80px auto 0;
+
+    & .card-container {
+      max-width: 420px;
+      margin-bottom: 30px;
+    }
+  }
+
+  &__paragraph {
+    margin: 0 auto;
+  }
 }
 
 @include atDesktop1024 {
@@ -21,6 +35,11 @@
     &__cards {
       padding-top: 50px;
     }
+
+    &__single-book-container {
+      max-width: 570px;
+      margin-top: 50px;
+    }
   }
 }
 
@@ -28,6 +47,10 @@
   .books {
     &__cards {
       padding-top: 30px;
+    }
+
+    &__single-book-container {
+      margin-top: 30px;
     }
   }
 }

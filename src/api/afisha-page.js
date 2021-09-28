@@ -22,7 +22,7 @@ function getActiveMonthTags() {
 // получение одного события
 function getCalendarItem(id) {
   return axios
-    .get(`${baseURL}${apiUrl}/afisha/events/${id}`)
+    .get(`${baseURL}${apiUrl}/afisha/events/${id}/`)
     .then((response) => response.data)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }

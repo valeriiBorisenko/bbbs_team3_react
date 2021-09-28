@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import booksPageTexts from './locales/RU';
-import { ERROR_MESSAGES } from '../../config/constants';
+import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
+import { BOOKS_URL, NOT_FOUND_URL } from '../../config/routes';
 import { useFiltrationAndPagination, usePageWidth } from '../../hooks';
 import {
-  getBook,
+  getBookById,
   getBooksPageData,
   getBooksPageFilter,
 } from '../../api/books-page';
@@ -13,8 +14,8 @@ import {
   BasePage,
   CardBook,
   Loader,
+  NextArticleLink,
   Paginate,
-  PopupBook,
   TagsList,
   TitleH1,
 } from './index';
@@ -34,21 +35,16 @@ const MAX_SCREEN_WIDTH = {
 const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
 function Books() {
-  const { state } = useLocation();
-  const searchBookId = state?.id;
-  const [searchedBook, setSearchedBook] = useState({});
-
+  const { bookId } = useParams();
+  const history = useHistory();
+  // стейт для одиночной книги (при переходе по id)
+  const [singleBook, setSingleBook] = useState(null);
+  // чтобы показать книгу, нужно её ещё загрузить
+  const isSingleBookShown = !!(singleBook && bookId);
+  // определяет размер страницы при ресайзе
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
-  const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
-
-  const openPopupBook = () => {
-    setIsBookPopupOpen(true);
-  };
-
-  const closePopupBook = () => {
-    setIsBookPopupOpen(false);
-  };
 
   // фильтрация и пагинация
   const filtersAndPaginationSettings = {
@@ -59,6 +55,7 @@ function Books() {
     },
     pageSize,
     setIsPageError,
+    startByFlag: !!bookId, // скрипты выполнятся, только если нет запроса книги по id
   };
 
   const {
@@ -73,20 +70,24 @@ function Books() {
     changeFilter,
   } = useFiltrationAndPagination(filtersAndPaginationSettings);
 
-  // Откртие попапа при переходе из поиска
   useEffect(() => {
-    if (state) {
-      getBook(searchBookId)
-        .then((book) => {
-          setSearchedBook(book);
-          openPopupBook();
-        })
-        .catch(() => setIsPageError(true));
+    if (bookId) {
+      getBookById(bookId)
+        .then(setSingleBook)
+        .catch((err) => {
+          if (err.status === ERROR_CODES.notFound) history.push(NOT_FOUND_URL);
+          else setIsPageError(true);
+        });
     }
-  }, [state]);
+  }, [bookId]);
 
   // глобальный лоадер
   if (isPageLoading) {
+    return <Loader isCentered />;
+  }
+
+  // есть переход по id, но книга ещё не загружена
+  if (bookId && !isSingleBookShown) {
     return <Loader isCentered />;
   }
 
@@ -97,25 +98,19 @@ function Books() {
           {renderPageContent()}
         </section>
       </BasePage>
-      <PopupBook
-        isOpen={isBookPopupOpen}
-        onClose={closePopupBook}
-        book={searchedBook}
-      />
     </>
   );
 
   function renderPageContent() {
-    if (isPageError || !dataToRender.length) {
+    // ошибка или (нет данных и при этом это не динамический роут)
+    if (isPageError || (!dataToRender.length && !bookId)) {
       return renderAnimatedContainer();
     }
+
     return (
       <>
         <TitleH1 title={title} sectionClass="books__title" />
-
-        {renderFilters()}
-
-        {isFiltersUsed ? <Loader isPaginate /> : renderBooksContainer()}
+        {renderMainContent()}
       </>
     );
   }
@@ -130,6 +125,32 @@ function Books() {
             : textStubNoData
         }
       />
+    );
+  }
+
+  function renderMainContent() {
+    if (isSingleBookShown) {
+      return (
+        <div className="books__single-book-container">
+          <CardBook data={singleBook} onlyCover sectionClass="scale-in" />
+
+          <p className="paragraph books__paragraph fade-in">
+            {singleBook.annotation}
+          </p>
+
+          <NextArticleLink
+            text={`Все ${title.toLowerCase()}`}
+            href={BOOKS_URL}
+          />
+        </div>
+      );
+    }
+
+    return (
+      <>
+        {renderFilters()}
+        {isFiltersUsed ? <Loader isPaginate /> : renderBooksContainer()}
+      </>
     );
   }
 

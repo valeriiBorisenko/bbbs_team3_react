@@ -75,7 +75,7 @@ function Router() {
 
         <Route exact path={VIDEO_URL} component={Video} />
 
-        <Route exact path={BOOKS_URL} component={Books} />
+        <Route path={`${BOOKS_URL}/:bookId?`} component={Books} />
 
         <Route exact path={ARTICLES_URL} component={Articles} />
 

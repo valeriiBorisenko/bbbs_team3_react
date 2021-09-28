@@ -13,7 +13,7 @@ function getCatalogPageData({ limit, offset }) {
 
 function getCatalogArticlePageData({ articleId } = {}) {
   return axios
-    .get(`${baseURL}${apiUrl}/catalog/${articleId}`)
+    .get(`${baseURL}${apiUrl}/catalog/${articleId}/`)
     .then((response) => response.data)
     .catch((err) => Promise.reject(err?.response));
 }

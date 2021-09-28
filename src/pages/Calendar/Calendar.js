@@ -46,6 +46,8 @@ function Calendar() {
   const { openPopupLogin, openPopupAboutEvent } = useContext(PopupsContext);
   const { state } = useLocation();
 
+  console.log(!!currentUser);
+
   // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   // стейт для работы с мероприятиями
@@ -65,6 +67,7 @@ function Calendar() {
     pageSize,
     setIsPageError,
     isCalendarPage: true,
+    startByFlag: !currentUser, // отложенная загрузка скриптов до авторизации
   };
 
   const {
@@ -84,10 +87,8 @@ function Calendar() {
   useEffect(() => {
     if (!currentUser) {
       openPopupLogin();
-    } else if (isPageLoading && pageSize) {
-      firstPageRender();
     }
-  }, [currentUser, pageSize]);
+  }, [currentUser]);
 
   // обновление стейта данных для работы
   useEffect(() => {
@@ -130,7 +131,7 @@ function Calendar() {
   }, [selectedEvent]);
 
   // глобальный лоадер при первой загрузке страницы
-  if (isPageLoading) {
+  if (isPageLoading || !currentUser) {
     return <Loader isCentered />;
   }
 

@@ -30,7 +30,7 @@ function postQuestion(question) {
 // получение одного вопроса
 function getQuestion(id) {
   return axios
-    .get(`${baseURL}${apiUrl}/questions/${id}`)
+    .get(`${baseURL}${apiUrl}/questions/${id}/`)
     .then((response) => response.data)
     .catch((err) => Promise.reject(new Error(`${err.message}`)));
 }

@@ -6,6 +6,7 @@ import './CardBook.scss';
 function CardBook({
   data: { title, author, year, type, annotation },
   sectionClass,
+  onlyCover,
 }) {
   const backgroundColor = { backgroundColor: type?.color };
 
@@ -21,7 +22,7 @@ function CardBook({
           </div>
         </div>
       </Card>
-      <CardAnnotation description={annotation} />
+      {!onlyCover && <CardAnnotation description={annotation} />}
     </article>
   );
 }
@@ -33,6 +34,7 @@ CardBook.propTypes = {
   year: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   annotation: PropTypes.string,
   sectionClass: PropTypes.string,
+  onlyCover: PropTypes.bool,
 };
 
 CardBook.defaultProps = {
@@ -43,6 +45,7 @@ CardBook.defaultProps = {
   year: '',
   annotation: '',
   sectionClass: '',
+  onlyCover: false,
 };
 
 export default CardBook;
