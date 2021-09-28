@@ -17,8 +17,9 @@ import {
 import ageFiltersArray from '../utils/age-filters';
 
 // хук для фильтров/пагинации на странице Places
-// много логики из-за главной карточки и неизвестности её появления
-// в отличие от страниц Articles и Video она может и не быть в первой выдаче
+// частично повторяет хук useFiltrationWithMainCard, но
+// в отличие от страниц Articles и Video главная карточка может и не быть в первой выдаче
+// из-за этого больше условий и проверок
 
 const useFiltrationForPlaces = ({
   apiGetDataCallback,
@@ -234,10 +235,15 @@ const useFiltrationForPlaces = ({
       ...params,
     })
       .then(({ results, count }) => {
-        if (results.length === 0) {
+        if (results.length === 0 && count === 0) {
           // показывать нечего
           setIsNoFilteredResults(true);
           setDataToRender([]);
+        } else if (results.length === 0 && count > 0) {
+          // если count > 0 при пустом массиве, значит мы забегаем вперед по офсету
+          // откатываемся на предыдущую страницу
+          // возможно при ресайзах экрана
+          setPageIndex(pageIndex - 1);
         } else {
           if (isMainCard && isMainCardInFirstResponse && !isFiltersActive) {
             // при пагинации без фильтров на всех страницах

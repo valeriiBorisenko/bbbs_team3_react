@@ -191,10 +191,15 @@ const useFiltrationWithMainCard = ({
       ...params,
     })
       .then(({ results, count }) => {
-        if (results.length === 0) {
+        if (results.length === 0 && count === 0) {
           // показывать нечего
           setIsNoFilteredResults(true);
           setDataToRender([]);
+        } else if (results.length === 0 && count > 0) {
+          // если count > 0 при пустом массиве, значит мы забегаем вперед по офсету
+          // откатываемся на предыдущую страницу
+          // возможно при ресайзах экрана
+          setPageIndex(pageIndex - 1);
         } else {
           if (isMainCard && !isFiltersActive) {
             // при пагинации без фильтров на всех страницах

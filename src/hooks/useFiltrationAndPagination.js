@@ -163,6 +163,11 @@ const useFiltrationAndPagination = ({
         if (results.length > 0) {
           setDataToRender(results);
           setTotalPages(Math.ceil(count / pageSize));
+        } else if (results.length === 0 && count > 0) {
+          // если count > 0 при пустом массиве, значит мы забегаем вперед по офсету
+          // откатываемся на предыдущую страницу
+          // возможно при ресайзах экрана
+          setPageIndex(pageIndex - 1);
         } else {
           setDataToRender([]);
         }
