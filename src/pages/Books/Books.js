@@ -16,6 +16,7 @@ import {
 import {
   AnimatedPageContainer,
   BasePage,
+  Card,
   CardBook,
   Loader,
   NextArticleLink,
@@ -126,12 +127,12 @@ function Books() {
   function renderMainContent() {
     if (isSingleCardShown) {
       return (
-        <div className="books__single-book-container">
+        <div className="books__single-book-container scale-in">
           <CardBook data={singleCard} isOnlyCover sectionClass="scale-in" />
 
-          <p className="paragraph books__paragraph fade-in">
-            {singleCard.annotation}
-          </p>
+          <Card sectionClass="books__single-book-paragraph">
+            <p className="paragraph">{singleCard.annotation}</p>
+          </Card>
 
           <NextArticleLink
             text={`Все ${title.toLowerCase()}`}

@@ -76,7 +76,7 @@ CardArticle.propTypes = {
   image: PropTypes.string,
   articleUrl: PropTypes.string,
   annotation: PropTypes.string,
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   isMain: PropTypes.bool,
   sectionClass: PropTypes.string,
 };
@@ -89,6 +89,7 @@ CardArticle.defaultProps = {
   articleUrl: '',
   annotation: '',
   isMain: false,
+  color: 'white',
   sectionClass: '',
 };
 
