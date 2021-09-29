@@ -108,6 +108,13 @@ const useFiltrationAndPagination = ({
       .join(',');
   }
 
+  function setFiltersAndResetPagination() {
+    // сбрасываем пагинацию
+    setPageIndex(0);
+    // ставим флажок фильтров
+    setIsFiltersUsed(true);
+  }
+
   // хэндлер клика по фильтру
   function changeFilter(inputValue, isChecked) {
     if (inputValue === ALL_CATEGORIES_TAG) {
@@ -117,16 +124,12 @@ const useFiltrationAndPagination = ({
       );
       if (!isAllAlreadyActive) {
         selectOneTag(setFilters, ALL_CATEGORIES_TAG);
-        // сбрасываем пагинацию
-        setPageIndex(0);
-        // ставим флажок фильтров
-        setIsFiltersUsed(true);
+        setFiltersAndResetPagination();
       }
     } else {
       handleCheckboxBehavior(setFilters, { inputValue, isChecked });
       deselectOneTag(setFilters, ALL_CATEGORIES_TAG);
-      setPageIndex(0);
-      setIsFiltersUsed(true);
+      setFiltersAndResetPagination();
     }
   }
 

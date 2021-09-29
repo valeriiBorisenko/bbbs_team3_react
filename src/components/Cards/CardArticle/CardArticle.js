@@ -43,12 +43,14 @@ function CardArticle({
 
         {isMain && (
           <div className="article-card__link-wrap article-card__link-wrap_content_article-img">
-            <img
-              draggable="false"
-              src={`${staticImageUrl}/${image}`}
-              alt={title}
-              className="article-card__image"
-            />
+            {image && (
+              <img
+                draggable="false"
+                src={`${staticImageUrl}/${image}`}
+                alt={title}
+                className="article-card__image"
+              />
+            )}
           </div>
         )}
 

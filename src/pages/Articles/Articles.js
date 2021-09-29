@@ -1,16 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import articlesPageTexts from './locales/RU';
 import { COLORS, ERROR_MESSAGES } from '../../config/constants';
-import { useFiltrationWithMainCard, usePageWidth } from '../../hooks';
-import { getArticle, getArticlesPageData } from '../../api/articles-page';
+import { ARTICLES_URL } from '../../config/routes';
+import {
+  useFiltrationWithMainCard,
+  usePageWidth,
+  useSingleCardAtDynamicRoute,
+} from '../../hooks';
+import { getArticleById, getArticlesPageData } from '../../api/articles-page';
 import {
   AnimatedPageContainer,
   BasePage,
+  Card,
   CardArticle,
   Loader,
+  NextArticleLink,
   Paginate,
-  PopupArticle,
   TitleH1,
 } from './index';
 import './Articles.scss';
@@ -27,28 +33,26 @@ const MAX_SCREEN_WIDTH = {
 const { headTitle, headDescription, title, textStubNoData } = articlesPageTexts;
 
 function Articles() {
-  const { state } = useLocation();
-  const searchArticleId = state?.id;
-  const [searchedArticle, setSearchedArticle] = useState({});
+  const { articleId } = useParams();
 
-  const [isPageError, setIsPageError] = useState(false);
-  const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
-
+  // определяет размер страницы при ресайзе
   const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  // стейт ошибки
+  const [isPageError, setIsPageError] = useState(false);
 
-  const openPopupArticle = () => {
-    setIsArticlePopupOpen(true);
-  };
-
-  const closePopupArticle = () => {
-    setIsArticlePopupOpen(false);
-  };
+  // одиночная карточка при переходе по динамическому маршруту
+  const { singleCard, isSingleCardShown } = useSingleCardAtDynamicRoute({
+    apiCallback: getArticleById,
+    dynamicParam: articleId,
+    setIsPageError,
+  });
 
   // фильтрация и пагинация
   const filtersAndPaginationSettings = {
     apiGetDataCallback: getArticlesPageData,
     pageSize,
     setIsPageError,
+    dontStartWhileTrue: !!articleId, // скрипты выполнятся, только если нет запроса по id
   };
 
   const {
@@ -63,19 +67,8 @@ function Articles() {
     changePageIndex,
   } = useFiltrationWithMainCard(filtersAndPaginationSettings);
 
-  // Открытие попапа при переходе из поиска
-  useEffect(() => {
-    if (state) {
-      getArticle(searchArticleId)
-        .then((article) => {
-          setSearchedArticle(article);
-          openPopupArticle();
-        })
-        .catch(() => setIsPageError(true));
-    }
-  }, [state]);
-
-  if (isPageLoading) {
+  // обычная загрузка или есть переход по id, но статья ещё не загружена
+  if (isPageLoading || (articleId && !isSingleCardShown)) {
     return <Loader isCentered />;
   }
 
@@ -84,16 +77,12 @@ function Articles() {
       <BasePage headTitle={headTitle} headDescription={headDescription}>
         {renderPageContent()}
       </BasePage>
-      <PopupArticle
-        isOpen={isArticlePopupOpen}
-        onClose={closePopupArticle}
-        article={searchedArticle}
-      />
     </>
   );
 
   function renderPageContent() {
-    if (isPageError || (!dataToRender.length && !isMainCard)) {
+    // ошибка или (нет данных и при этом это не динамический роут)
+    if (isPageError || (!dataToRender.length && !isMainCard && !articleId)) {
       return renderAnimatedContainer();
     }
 
@@ -101,9 +90,7 @@ function Articles() {
       <section className="articles page__section">
         <TitleH1 title={title} sectionClass="fade-in" />
 
-        {isPaginationUsed ? <Loader isPaginate /> : renderCards()}
-
-        {renderPagination()}
+        {renderCardsContainer()}
       </section>
     );
   }
@@ -121,7 +108,37 @@ function Articles() {
     );
   }
 
+  function renderCardsContainer() {
+    if (isSingleCardShown) {
+      return (
+        <div className="articles__single-card-container">
+          <CardArticle data={singleCard} isMain sectionClass="scale-in" />
+
+          <Card sectionClass="articles__single-card-paragraph">
+            <p className="paragraph">{singleCard.annotation}</p>
+          </Card>
+
+          <NextArticleLink
+            text={`Все ${title.toLowerCase()}`}
+            href={ARTICLES_URL}
+          />
+        </div>
+      );
+    }
+
+    return (
+      <>
+        {renderCards()}
+        {renderPagination()}
+      </>
+    );
+  }
+
   function renderCards() {
+    if (isPaginationUsed) {
+      return <Loader isPaginate />;
+    }
+
     return (
       <>
         {isMainCardShown && (

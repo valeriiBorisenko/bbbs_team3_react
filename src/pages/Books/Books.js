@@ -46,6 +46,7 @@ function Books() {
   // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
+  // одиночная карточка при переходе по динамическому маршруту
   const { singleCard, isSingleCardShown } = useSingleCardAtDynamicRoute({
     apiCallback: getBookById,
     dynamicParam: bookId,
@@ -126,7 +127,7 @@ function Books() {
     if (isSingleCardShown) {
       return (
         <div className="books__single-book-container">
-          <CardBook data={singleCard} onlyCover sectionClass="scale-in" />
+          <CardBook data={singleCard} isOnlyCover sectionClass="scale-in" />
 
           <p className="paragraph books__paragraph fade-in">
             {singleCard.annotation}

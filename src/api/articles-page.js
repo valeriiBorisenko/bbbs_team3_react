@@ -10,11 +10,11 @@ function getArticlesPageData({ limit, offset }) {
     .catch((err) => Promise.reject(err?.response));
 }
 
-function getArticle(id) {
+function getArticleById(id) {
   return axios
     .get(`${baseURL}${apiUrl}/articles/${id}/`)
     .then((response) => response.data)
     .catch((err) => Promise.reject(err?.response));
 }
 
-export { getArticlesPageData, getArticle };
+export { getArticlesPageData, getArticleById };

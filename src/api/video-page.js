@@ -24,11 +24,11 @@ function getVideoPageTags() {
 }
 
 // получение одного видео
-function getVideo(id) {
+function getVideoById(id) {
   return axios
-    .get(`${baseURL}${apiUrl}/videos/${id}`)
+    .get(`${baseURL}${apiUrl}/videos/${id}/`)
     .then((response) => response.data)
     .catch((err) => Promise.reject(err?.response));
 }
 
-export { getVideoPageTags, getVideoPageData, getVideo };
+export { getVideoPageTags, getVideoPageData, getVideoById };

@@ -5,7 +5,7 @@ import { ERROR_MESSAGES, localStChosenVideo } from '../../config/constants';
 import { PopupsContext } from '../../contexts';
 import { useFiltrationWithMainCard, usePageWidth } from '../../hooks';
 import {
-  getVideo,
+  getVideoById,
   getVideoPageData,
   getVideoPageTags,
 } from '../../api/video-page';
@@ -83,7 +83,7 @@ const Video = () => {
   // Откртие попапа при переходе из поиска
   useEffect(() => {
     if (state) {
-      getVideo(state.id)
+      getVideoById(state.id)
         .then((res) => {
           setLocalStorageData(localStChosenVideo, res);
           openPopupVideo();

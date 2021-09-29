@@ -26,10 +26,15 @@ const useFiltrationWithMainCard = ({
   pageSize,
   setIsPageError,
   isVideoPage,
+  dontStartWhileTrue, // данные НЕ загружаются, если условие true, по умолчанию воспринимается как false
 }) => {
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
-  const currentUser = useContext(CurrentUserContext);
+  let user;
+  if (isVideoPage) {
+    user = useContext(CurrentUserContext);
+  }
+
   // данные
   const [dataToRender, setDataToRender] = useState([]);
   const [filters, setFilters] = useState([]);
@@ -42,8 +47,10 @@ const useFiltrationWithMainCard = ({
   // лоадеры, флаги
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isPaginationUsed, setIsPaginationUsed] = useState(false);
-  const [isPageLoading, setIsPageLoading] = useState(true);
   const [isNoFilteredResults, setIsNoFilteredResults] = useState(false);
+  // по факту запускает всю цепочку скриптов
+  const [isPageLoading, setIsPageLoading] = useState(!dontStartWhileTrue);
+
   // пагинация
   const [totalPages, setTotalPages] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
@@ -54,22 +61,15 @@ const useFiltrationWithMainCard = ({
 
   // Первая отрисовка страницы
   useEffect(() => {
-    if (isPageLoading && pageSize) {
+    if (isPageLoading && pageSize && !dontStartWhileTrue) {
       if (isNoFilters) firstPageRenderNoFilters();
       else firstPageRender();
     }
   }, [pageSize, isPageLoading]);
 
-  // перезапуск страницы, если залогинился/разлогинился, т.к. есть отличия в выдаче
-  if (isVideoPage) {
-    useEffect(() => {
-      setIsPageLoading(true);
-    }, [currentUser]);
-  }
-
   // Переход по пагинации, страница уже загружена
   useEffect(() => {
-    if (!isPageLoading && !isFiltersUsed) {
+    if (!isPageLoading && !isFiltersUsed && !dontStartWhileTrue) {
       const activeFilters = getActiveFilters();
 
       defineParamsAndGetData({
@@ -86,6 +86,20 @@ const useFiltrationWithMainCard = ({
       debounceFiltration();
     }
   }, [isFiltersUsed]);
+
+  // слушатель разрешения запуска скриптов
+  useEffect(() => {
+    if (!dontStartWhileTrue) {
+      setIsPageLoading(true);
+    }
+  }, [dontStartWhileTrue]);
+
+  // перезапуск в связи с авторизацией/выходом - меняется контент
+  useEffect(() => {
+    if (isVideoPage && !dontStartWhileTrue && !isPageLoading) {
+      setIsPageLoading(true);
+    }
+  }, [user]);
 
   return {
     dataToRender,
@@ -139,21 +153,31 @@ const useFiltrationWithMainCard = ({
     return { activeFilters };
   }
 
-  // хэндлер клика по фильтру
-  function changeFilter(inputValue, isChecked) {
-    if (inputValue === ALL_CATEGORIES_TAG) {
-      // нажата кнопка "Все"
-      selectOneTag(setFilters, ALL_CATEGORIES_TAG);
-      if (isMainCard) setIsMainCardShown(true);
-    } else {
-      handleCheckboxBehavior(setFilters, { inputValue, isChecked });
-      deselectOneTag(setFilters, ALL_CATEGORIES_TAG);
-      if (isMainCard && isMainCardShown) setIsMainCardShown(false);
-    }
+  function setFiltersAndResetPagination() {
     // сбрасываем пагинацию
     setPageIndex(0);
     // ставим флажок фильтров
     setIsFiltersUsed(true);
+  }
+
+  // хэндлер клика по фильтру
+  function changeFilter(inputValue, isChecked) {
+    if (inputValue === ALL_CATEGORIES_TAG) {
+      // кнопка "Все", если она уже нажата, то ничего не делаем
+      const isAllAlreadyActive = filters.some(
+        (f) => f.isActive && f.filter === ALL_CATEGORIES_TAG
+      );
+      if (!isAllAlreadyActive) {
+        selectOneTag(setFilters, ALL_CATEGORIES_TAG);
+        if (isMainCard) setIsMainCardShown(true);
+        setFiltersAndResetPagination();
+      }
+    } else {
+      handleCheckboxBehavior(setFilters, { inputValue, isChecked });
+      deselectOneTag(setFilters, ALL_CATEGORIES_TAG);
+      if (isMainCard && isMainCardShown) setIsMainCardShown(false);
+      setFiltersAndResetPagination();
+    }
   }
 
   // функция-фильтратор
@@ -283,7 +307,7 @@ const useFiltrationWithMainCard = ({
       ...filtersArray,
     ];
 
-    if (isVideoPage && currentUser) {
+    if (isVideoPage && user?.currentUser) {
       // проверка хоть на 1 видео из ресурсной группы
       apiGetDataCallback({
         limit: 1,
