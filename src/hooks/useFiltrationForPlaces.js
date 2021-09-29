@@ -29,6 +29,7 @@ const useFiltrationForPlaces = ({
   userCity,
   pageSize,
   setIsPageError,
+  dontStartWhileTrue, // данные НЕ загружаются, если условие true, по умолчанию воспринимается как false
 }) => {
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
@@ -47,10 +48,11 @@ const useFiltrationForPlaces = ({
   // лоадеры, флаги
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isPaginationUsed, setIsPaginationUsed] = useState(false);
-  const [isPageLoading, setIsPageLoading] = useState(true);
   const [isNoFilteredResults, setIsNoFilteredResults] = useState(false);
   const [isFormRecommendationShown, setIsFormRecommendationShown] =
     useState(true);
+  // по факту запускает всю цепочку скриптов
+  const [isPageLoading, setIsPageLoading] = useState(!dontStartWhileTrue);
 
   // пагинация
   const [totalPages, setTotalPages] = useState(0);
@@ -61,14 +63,14 @@ const useFiltrationForPlaces = ({
 
   // Первая отрисовка страницы
   useEffect(() => {
-    if (isPageLoading && pageSize && userCity) {
+    if (isPageLoading && pageSize && userCity && !dontStartWhileTrue) {
       firstPageRender();
     }
   }, [pageSize, isPageLoading, userCity]);
 
   // Переход по пагинации, страница уже загружена
   useEffect(() => {
-    if (!isPageLoading && !isFiltersUsed) {
+    if (!isPageLoading && !isFiltersUsed && !dontStartWhileTrue) {
       const { activeFilters, activeAges, isChosenByMentorFlag } =
         getActiveFilters();
 
@@ -88,6 +90,13 @@ const useFiltrationForPlaces = ({
       debounceFiltration();
     }
   }, [isFiltersUsed]);
+
+  // слушатель разрешения запуска скриптов
+  useEffect(() => {
+    if (!dontStartWhileTrue) {
+      setIsPageLoading(true);
+    }
+  }, [dontStartWhileTrue]);
 
   return {
     dataToRender,
@@ -159,22 +168,35 @@ const useFiltrationForPlaces = ({
     };
   }
 
-  // хэндлер клика по фильтру
-  function changeFilter(inputValue, isChecked) {
-    if (inputValue === ALL_CATEGORIES_TAG) {
-      // нажата кнопка "Все"
-      selectOneTag(setFilters, ALL_CATEGORIES_TAG);
-      deselectAllTags(setAgeFilters);
-      if (isMainCard) setIsMainCardShown(true);
-    } else {
-      handleCheckboxBehavior(setFilters, { inputValue, isChecked });
-      deselectOneTag(setFilters, ALL_CATEGORIES_TAG);
-      if (isMainCard && isMainCardShown) setIsMainCardShown(false);
-    }
+  function setFiltersAndResetPagination() {
     // сбрасываем пагинацию
     setPageIndex(0);
     // ставим флажок фильтров
     setIsFiltersUsed(true);
+  }
+
+  // хэндлер клика по фильтру
+  function changeFilter(inputValue, isChecked) {
+    if (inputValue === ALL_CATEGORIES_TAG) {
+      // кнопка "Все", если она уже нажата без фильтров возраста, то ничего не делаем
+      const isAllAlreadyActive = filters.some(
+        (f) => f.isActive && f.filter === ALL_CATEGORIES_TAG
+      );
+      const isAnyAgeFilters = ageFilters.some((f) => f.isActive);
+      if (isAllAlreadyActive && !isAnyAgeFilters) {
+        // ничего не делаем
+      } else {
+        selectOneTag(setFilters, ALL_CATEGORIES_TAG);
+        deselectAllTags(setAgeFilters);
+        if (isMainCard) setIsMainCardShown(true);
+        setFiltersAndResetPagination();
+      }
+    } else {
+      handleCheckboxBehavior(setFilters, { inputValue, isChecked });
+      deselectOneTag(setFilters, ALL_CATEGORIES_TAG);
+      if (isMainCard && isMainCardShown) setIsMainCardShown(false);
+      setFiltersAndResetPagination();
+    }
   }
 
   // хэндлер клика по фильтру ВОЗРАСТ

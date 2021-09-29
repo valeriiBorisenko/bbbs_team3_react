@@ -11,7 +11,7 @@ function getQuestionsPageData({ limit, offset, tags }) {
     .catch((err) => Promise.reject(err?.response));
 }
 
-// получить тагсы (список фильтров)
+// получить список фильтров
 function getQuestionsPageTags() {
   return axios
     .get(`${baseURL}${apiUrl}/questions/tags/`)
@@ -28,7 +28,7 @@ function postQuestion(question) {
 }
 
 // получение одного вопроса
-function getQuestion(id) {
+function getQuestionById(id) {
   return axios
     .get(`${baseURL}${apiUrl}/questions/${id}/`)
     .then((response) => response.data)
@@ -39,5 +39,5 @@ export {
   getQuestionsPageData,
   getQuestionsPageTags,
   postQuestion,
-  getQuestion,
+  getQuestionById,
 };

@@ -20,11 +20,11 @@ function getMoviesPageFilter() {
 }
 
 // получение одного видео
-function getMovie(id) {
+function getMovieById(id) {
   return axios
-    .get(`${baseURL}${apiUrl}/movies/${id}`)
+    .get(`${baseURL}${apiUrl}/movies/${id}/`)
     .then((response) => response.data)
     .catch((err) => Promise.reject(err?.response));
 }
 
-export { getMoviesPageData, getMoviesPageFilter, getMovie };
+export { getMoviesPageData, getMoviesPageFilter, getMovieById };

@@ -7,7 +7,7 @@ import { useFiltrationAndPagination, useFormWithValidation } from '../../hooks';
 import questionForm from '../../utils/question-form';
 import getServerErrors from '../../utils/form-errors';
 import {
-  getQuestion,
+  getQuestionById,
   getQuestionsPageData,
   getQuestionsPageTags,
   postQuestion,
@@ -131,7 +131,7 @@ function Questions() {
   // эффекты рулят показом главного вопроса
   useEffect(() => {
     if (searchQuestionId) {
-      getQuestion(searchQuestionId)
+      getQuestionById(searchQuestionId)
         .then((question) => {
           setIsMainQuestionVisible(true);
           setMainQuestion(question);

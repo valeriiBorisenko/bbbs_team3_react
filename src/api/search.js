@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { apiUrl, baseURL } from '../config/config';
 
-const search = ({ text = '', city }) =>
+const search = ({ text, city }) =>
   axios
     .get(`${baseURL}${apiUrl}/search/`, {
       params: { text, city },

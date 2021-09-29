@@ -27,13 +27,8 @@ function Header({ isTransparentOnTop }) {
   const { handleLogout } = useAuth(updateUser);
 
   const [userCityName, setUserCityName] = useState('');
-  let currentAnonymousCity;
-
-  if (pathname === PLACES_URL) {
-    const getLocalStorageItem = useLocalStorage(localStUserCity);
-    currentAnonymousCity = getLocalStorageItem();
-  }
-
+  const getLocalStorageItem = useLocalStorage(localStUserCity);
+  const currentAnonymousCity = getLocalStorageItem();
   // сохранённый в localStorage город анонимуса
   const userCity = currentUser?.city ?? currentAnonymousCity;
 

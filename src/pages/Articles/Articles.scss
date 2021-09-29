@@ -33,6 +33,7 @@
 @include atDesktop1199 {
   .articles {
     &__single-card-container {
+      max-width: 570px;
       margin: 80px auto 0;
 
       & .card-container {

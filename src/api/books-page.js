@@ -19,7 +19,7 @@ function getBooksPageFilter() {
     .catch((err) => Promise.reject(err?.response));
 }
 
-// получение одного книги
+// получение одной книги
 function getBookById(id) {
   return axios
     .get(`${baseURL}${apiUrl}/books/${id}/`)

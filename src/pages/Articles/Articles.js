@@ -111,8 +111,8 @@ function Articles() {
   function renderCardsContainer() {
     if (isSingleCardShown) {
       return (
-        <div className="articles__single-card-container">
-          <CardArticle data={singleCard} isMain sectionClass="scale-in" />
+        <div className="articles__single-card-container scale-in">
+          <CardArticle data={singleCard} isMain />
 
           <Card sectionClass="articles__single-card-paragraph">
             <p className="paragraph">{singleCard.annotation}</p>
