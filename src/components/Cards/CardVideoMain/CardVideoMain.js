@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { PopupsContext } from '../../../contexts';
@@ -10,11 +10,17 @@ import { localStChosenVideo } from '../../../config/constants';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
 import './CardVideoMain.scss';
 
-function CardVideoMain({ data: { title, info, link, image, duration } }) {
+const mobileWidth = '767px';
+
+function CardVideoMain({ data: { id, title, info, link, image, duration } }) {
   const { openPopupVideo } = useContext(PopupsContext);
+  const { frameSrc } = parserLinkYoutube(link);
+
+  const [isMobile, setIsMobile] = useState(false);
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
 
   // Пробрасываем данные в попап
-  const handleClick = () => {
+  const openPopupVideoOnClick = () => {
     setLocalStorageData(localStChosenVideo, {
       title,
       info,
@@ -25,7 +31,27 @@ function CardVideoMain({ data: { title, info, link, image, duration } }) {
     openPopupVideo();
   };
 
-  const { imagePreview } = parserLinkYoutube(link);
+  // на мобильном разрешении видео проиграывается сразу в карточке
+  const playVideoOnClick = () => {
+    setIsPlayingVideo(true);
+  };
+
+  // Следит за шириной экрана и записывает в стейт
+  useEffect(() => {
+    const mobile = window.matchMedia(`(max-width: ${mobileWidth})`);
+
+    const listener = () => {
+      if (mobile.matches) setIsMobile(true);
+      else setIsMobile(false);
+    };
+    listener();
+
+    mobile.addEventListener('change', listener);
+
+    return () => {
+      mobile.removeEventListener('change', listener);
+    };
+  }, []);
 
   return (
     <div className="card-container card-container_type_main-video">
@@ -40,12 +66,18 @@ function CardVideoMain({ data: { title, info, link, image, duration } }) {
             title={changeCaseOfFirstLetter(info)}
           />
         </div>
-        {link && renderVideoPlayback(texts.linkText)}
+        {link && (
+          <button
+            className="link"
+            type="button"
+            onClick={isMobile ? playVideoOnClick : openPopupVideoOnClick}
+          >
+            {texts.linkText}
+          </button>
+        )}
       </Card>
 
-      <Card sectionClass="card-video-main__video">
-        {renderVideoPlayback(renderPreview())}
-      </Card>
+      <Card sectionClass="card-video-main__video">{renderVideoPlayback()}</Card>
     </div>
   );
 
@@ -62,9 +94,11 @@ function CardVideoMain({ data: { title, info, link, image, duration } }) {
     return (
       <>
         <img
-          src={`${staticImageUrl}/${image}` || imagePreview}
+          src={`${staticImageUrl}/${image}`}
           alt={`${texts.imageAlt}: ${title}`}
-          className="card-video-main__image image-scale"
+          className={`card-video-main__image ${
+            isPlayingVideo ? 'card-video-main__image_at-back' : ''
+          } image-scale`}
         />
 
         <span className="card-video-main__duration paragraph">
@@ -74,14 +108,39 @@ function CardVideoMain({ data: { title, info, link, image, duration } }) {
     );
   }
 
-  function renderVideoPlayback(childrenElem) {
+  function renderVideoPlayback() {
+    if (isMobile) {
+      return (
+        <button
+          className="card-video-main__button"
+          type="button"
+          onClick={playVideoOnClick}
+          draggable="false"
+        >
+          {renderPreview()}
+          {isPlayingVideo && (
+            <iframe
+              title={title}
+              id={`player-card-film-${id}`}
+              className="card-film__iframe"
+              src={`${frameSrc}?autoplay=1`}
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              seamless
+            />
+          )}
+        </button>
+      );
+    }
+
     return (
       <button
-        className="link card-video-main__button"
+        className="card-video-main__button"
         type="button"
-        onClick={handleClick}
+        onClick={openPopupVideoOnClick}
       >
-        {childrenElem}
+        {renderPreview()}
       </button>
     );
   }
