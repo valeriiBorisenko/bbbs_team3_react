@@ -7,6 +7,6 @@ const search = ({ text = '', city }) =>
       params: { text, city },
     })
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 
 export default search;

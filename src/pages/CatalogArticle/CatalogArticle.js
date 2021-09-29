@@ -31,7 +31,7 @@ function CatalogArticle() {
   useEffect(() => {
     setIsLoadingPage(true);
     if (articleId) {
-      getCatalogArticlePageData({ articleId })
+      getCatalogArticlePageData(articleId)
         .then((data) => {
           setCatalogArticlePageData(data);
         })

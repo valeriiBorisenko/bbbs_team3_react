@@ -8,7 +8,7 @@ function getCalendarPageData({ limit, offset, months }) {
       params: { limit, offset, months },
     })
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 // получить тегсы-месяцы (список фильтров)
@@ -16,7 +16,7 @@ function getActiveMonthTags() {
   return axios
     .get(`${baseURL}${apiUrl}/afisha/events/months/`)
     .then((response) => response.data.months)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 // получение одного события

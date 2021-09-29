@@ -6,7 +6,7 @@ function getMainPageData() {
   return axios
     .get(`${baseURL}${apiUrl}/main/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 export default getMainPageData;
