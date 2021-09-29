@@ -37,9 +37,7 @@ function CardFilm({
   };
 
   // на мобильном разрешении видео проиграывается сразу в карточке
-  const playVideoOnClick = () => {
-    setIsPlayingVideo(true);
-  };
+  const playVideoOnClick = () => setIsPlayingVideo(true);
 
   // Следит за шириной экрана и записывает в стейт
   useEffect(() => {

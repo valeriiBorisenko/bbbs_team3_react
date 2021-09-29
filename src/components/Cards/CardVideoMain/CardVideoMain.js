@@ -32,9 +32,7 @@ function CardVideoMain({ data: { id, title, info, link, image, duration } }) {
   };
 
   // на мобильном разрешении видео проиграывается сразу в карточке
-  const playVideoOnClick = () => {
-    setIsPlayingVideo(true);
-  };
+  const playVideoOnClick = () => setIsPlayingVideo(true);
 
   // Следит за шириной экрана и записывает в стейт
   useEffect(() => {
@@ -81,7 +79,6 @@ function CardVideoMain({ data: { id, title, info, link, image, duration } }) {
     </div>
   );
 
-  // Рендерим верхную часть с фоткой и props.children из компонета выше
   function renderPreview() {
     let durationString = '';
 
@@ -101,9 +98,11 @@ function CardVideoMain({ data: { id, title, info, link, image, duration } }) {
           } image-scale`}
         />
 
-        <span className="card-video-main__duration paragraph">
-          {durationString}
-        </span>
+        {!isPlayingVideo && (
+          <span className="card-video-main__duration paragraph">
+            {durationString}
+          </span>
+        )}
       </>
     );
   }
