@@ -54,7 +54,10 @@
 
 .card-video-main__video {
   width: 100%;
+  max-height: 675px;
   overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background-color: $yellow;
 
   > .card-video-main__button {
     width: 100%;
