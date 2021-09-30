@@ -81,10 +81,7 @@ function Stories() {
   const nextArticleLink = `${STORIES_URL}/${currentStory.nextArticle?.id}`;
 
   const photoCarouselRef = useRef(null);
-  const carouselItemPadding = usePageWidth(
-    MAX_SCREEN_WIDTH,
-    CAROUSEL_ITEM_PADDINGS
-  );
+  const { pageSize } = usePageWidth(MAX_SCREEN_WIDTH, CAROUSEL_ITEM_PADDINGS);
 
   const openFullPhoto = (imageSrc, caption) => {
     setCurrentPhoto({
@@ -330,7 +327,7 @@ function Stories() {
             itemsToScroll={1}
             itemsToShow={3}
             initialActiveIndex={0}
-            itemPadding={carouselItemPadding}
+            itemPadding={pageSize}
             pagination={false}
             enableMouseSwipe={false}
           >

@@ -47,7 +47,7 @@ function Calendar() {
   const { state } = useLocation();
 
   // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
-  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  const { pageSize } = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   // стейт для работы с мероприятиями
   const [calendarPageData, setCalendarPageData] = useState(null);
   // флаг смены города - нужно снова загружать данные
