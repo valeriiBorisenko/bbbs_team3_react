@@ -24,6 +24,8 @@ import {
 } from '../../config/constants';
 import './Search.scss';
 
+const SearchMaxLength = 200;
+
 function Search({
   isOpenSearch,
   setIsOpenSearch,
@@ -138,6 +140,7 @@ function Search({
               type="text"
               name="search"
               placeholder=""
+              maxLength={SearchMaxLength}
               className="search__input paragraph"
               autoComplete="off"
               onChange={handleChange}
