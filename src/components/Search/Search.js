@@ -12,8 +12,16 @@ import {
   QUESTIONS_URL,
   VIDEO_URL,
 } from '../../config/routes';
-import { CurrentUserContext } from '../../contexts';
-import { DELAY_DEBOUNCE, localStUserCity } from '../../config/constants';
+import {
+  CurrentUserContext,
+  ErrorsContext,
+  PopupsContext,
+} from '../../contexts';
+import {
+  DELAY_DEBOUNCE,
+  ERROR_MESSAGES,
+  localStUserCity,
+} from '../../config/constants';
 import './Search.scss';
 
 function Search({
@@ -23,6 +31,8 @@ function Search({
   setIsMobileMenuOpen,
 }) {
   const { currentUser } = useContext(CurrentUserContext);
+  const { setError } = useContext(ErrorsContext);
+  const { openPopupError } = useContext(PopupsContext);
 
   // приоритет города у авторизованного, затем у выбранного на странице Куда пойти
   const currentAnonymousCity = getLocalStorageData(localStUserCity);
@@ -68,6 +78,8 @@ function Search({
 
   const handleSearchRequest = async () => {
     try {
+      throw new Error();
+      // eslint-disable-next-line no-unreachable
       const searchParams = userCity
         ? { text: values.search, city: userCity }
         : { text: values.search };
@@ -76,8 +88,10 @@ function Search({
       setSearchResults(results);
       setIsLoadingSearch(false);
       return count === 0 ? setIsVoidSearch(true) : setIsVoidSearch(false);
-    } catch (err) {
-      return console.log(err);
+    } catch {
+      setIsLoadingSearch(false);
+      setError(ERROR_MESSAGES.generalErrorMessage);
+      return openPopupError();
     }
   };
 

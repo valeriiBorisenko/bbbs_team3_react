@@ -18,7 +18,6 @@ import {
 } from '../config/constants';
 
 const useAuth = (setCurrentUser) => {
-  const { generalErrorMessage } = ERROR_MESSAGES;
   const { unauthorized, badRequest } = ERROR_CODES;
 
   const [isCheckingToken, setIsCheckingToken] = useState(true);
@@ -34,10 +33,7 @@ const useAuth = (setCurrentUser) => {
   const handleError = (err) => {
     if (err?.status === badRequest || err?.status === unauthorized)
       errors.setError(err?.data);
-    else
-      errors.setError({
-        message: generalErrorMessage.title,
-      });
+    else errors.setError(ERROR_MESSAGES.generalErrorMessage);
   };
 
   const handleLogout = () => {
@@ -62,7 +58,7 @@ const useAuth = (setCurrentUser) => {
             .catch((err) => handleError(err))
             .finally(() => setIsWaitingResponse(false));
         } else {
-          throw new Error(generalErrorMessage.title);
+          throw new Error(ERROR_MESSAGES.generalErrorMessage.title);
         }
       })
       .catch((err) => handleError(err)) // авторизация (работа с сервером) закончилась ошибкой
