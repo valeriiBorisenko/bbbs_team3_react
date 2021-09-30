@@ -26,6 +26,7 @@ import UserIconButton from './UserIconButton/UserIconButton';
 import UserMenuButton from './UserMenuButton/UserMenuButton';
 import Widget from './Widget/Widget';
 import NextArticleLink from './NextArticleLink/NextArticleLink';
+import IconEye from './IconEye/IconEye';
 
 export {
   Blockquote,
@@ -56,4 +57,5 @@ export {
   UserMenuButton,
   Widget,
   NextArticleLink,
+  IconEye,
 };

@@ -6,6 +6,8 @@ const texts = {
     'Пожалуйста, введите логин и пароль из письма. Если вам не приходило письмо, свяжитесь с вашим куратором.',
   loginPlaceholder: 'Логин',
   passwordPlaceholder: 'Пароль',
+  showPasswordButton: 'Показать пароль',
+  hidePasswordButton: 'Скрыть пароль',
   forgotButtonText: 'Забыли пароль?',
   submitButtonText: 'Войти',
   loadingButtonTextLogin: 'Вход...',
