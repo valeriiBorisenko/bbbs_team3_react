@@ -33,7 +33,10 @@ const useAuth = (setCurrentUser) => {
   const handleError = (err) => {
     if (err?.status === badRequest || err?.status === unauthorized)
       errors.setError(err?.data);
-    else errors.setError(ERROR_MESSAGES.generalErrorMessage);
+    else
+      errors.setError({
+        message: ERROR_MESSAGES.generalErrorMessage.title,
+      });
   };
 
   const handleLogout = () => {

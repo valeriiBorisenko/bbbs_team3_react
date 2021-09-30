@@ -78,8 +78,6 @@ function Search({
 
   const handleSearchRequest = async () => {
     try {
-      throw new Error();
-      // eslint-disable-next-line no-unreachable
       const searchParams = userCity
         ? { text: values.search, city: userCity }
         : { text: values.search };
