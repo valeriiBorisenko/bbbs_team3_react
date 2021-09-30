@@ -34,7 +34,8 @@ function Articles() {
   const [isPageError, setIsPageError] = useState(false);
   const [isArticlePopupOpen, setIsArticlePopupOpen] = useState(false);
 
-  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
+  const { pageSize } = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
 
   const openPopupArticle = () => {
     setIsArticlePopupOpen(true);

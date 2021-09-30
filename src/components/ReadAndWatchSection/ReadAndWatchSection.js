@@ -20,6 +20,7 @@ function ReadAndWatchSection({
   getDataFromApi,
   CardTemplateComponent,
   isVideo,
+  isSmallQuery,
   path,
   sectionTitle,
   breakpoints,
@@ -128,6 +129,7 @@ function ReadAndWatchSection({
           color={COLORS[(i + 1) % COLORS.length]}
           // для секции с Видео
           isVideo={isVideo}
+          isMobile={isSmallQuery}
           {...item}
         />
       ));
@@ -196,11 +198,13 @@ ReadAndWatchSection.propTypes = {
   paragraphNoContentText: PropTypes.string.isRequired,
   sectionClass: PropTypes.string,
   isVideo: PropTypes.bool,
+  isSmallQuery: PropTypes.bool,
 };
 
 ReadAndWatchSection.defaultProps = {
   sectionClass: '',
   isVideo: false,
+  isSmallQuery: false,
 };
 
 export default ReadAndWatchSection;

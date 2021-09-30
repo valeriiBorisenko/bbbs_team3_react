@@ -10,17 +10,14 @@ import { localStChosenVideo } from '../../../config/constants';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
 import './CardFilm.scss';
 
-const mobileWidth = '767px';
-
 function CardFilm({
   data: { id, image, title, info, link, tags, duration },
   sectionClass,
   isVideo,
+  isMobile,
 }) {
   const { openPopupVideo } = useContext(PopupsContext);
   const { frameSrc } = parserLinkYoutube(link);
-
-  const [isMobile, setIsMobile] = useState(false);
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
 
   // Пробрасываем данные в попап
@@ -39,22 +36,11 @@ function CardFilm({
   // на мобильном разрешении видео проиграывается сразу в карточке
   const playVideoOnClick = () => setIsPlayingVideo(true);
 
-  // Следит за шириной экрана и записывает в стейт
   useEffect(() => {
-    const mobile = window.matchMedia(`(max-width: ${mobileWidth})`);
-
-    const listener = () => {
-      if (mobile.matches) setIsMobile(true);
-      else setIsMobile(false);
-    };
-    listener();
-
-    mobile.addEventListener('change', listener);
-
-    return () => {
-      mobile.removeEventListener('change', listener);
-    };
-  }, []);
+    if (!isMobile) {
+      if (isPlayingVideo) setIsPlayingVideo(false);
+    }
+  }, [isMobile]);
 
   return (
     <Card sectionClass={`card-film ${sectionClass}`}>
@@ -180,6 +166,7 @@ CardFilm.propTypes = {
   duration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sectionClass: PropTypes.string,
   isVideo: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
 
 CardFilm.defaultProps = {
@@ -192,6 +179,7 @@ CardFilm.defaultProps = {
   duration: '',
   sectionClass: '',
   isVideo: false,
+  isMobile: false,
 };
 
 export default CardFilm;

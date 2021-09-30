@@ -10,13 +10,13 @@ import { localStChosenVideo } from '../../../config/constants';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
 import './CardVideoMain.scss';
 
-const mobileWidth = '767px';
-
-function CardVideoMain({ data: { id, title, info, link, image, duration } }) {
+function CardVideoMain({
+  data: { id, title, info, link, image, duration },
+  isMobile,
+}) {
   const { openPopupVideo } = useContext(PopupsContext);
   const { frameSrc } = parserLinkYoutube(link);
 
-  const [isMobile, setIsMobile] = useState(false);
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
 
   // Пробрасываем данные в попап
@@ -34,22 +34,11 @@ function CardVideoMain({ data: { id, title, info, link, image, duration } }) {
   // на мобильном разрешении видео проиграывается сразу в карточке
   const playVideoOnClick = () => setIsPlayingVideo(true);
 
-  // Следит за шириной экрана и записывает в стейт
   useEffect(() => {
-    const mobile = window.matchMedia(`(max-width: ${mobileWidth})`);
-
-    const listener = () => {
-      if (mobile.matches) setIsMobile(true);
-      else setIsMobile(false);
-    };
-    listener();
-
-    mobile.addEventListener('change', listener);
-
-    return () => {
-      mobile.removeEventListener('change', listener);
-    };
-  }, []);
+    if (!isMobile) {
+      if (isPlayingVideo) setIsPlayingVideo(false);
+    }
+  }, [isMobile]);
 
   return (
     <div className="card-container card-container_type_main-video">
@@ -147,10 +136,12 @@ function CardVideoMain({ data: { id, title, info, link, image, duration } }) {
 
 CardVideoMain.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
+  isMobile: PropTypes.bool,
 };
 
 CardVideoMain.defaultProps = {
   data: {},
+  isMobile: false,
 };
 
 export default CardVideoMain;

@@ -81,7 +81,8 @@
   aspect-ratio: 16 / 9;
 
   &_at-back {
-    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
   }
 }
 

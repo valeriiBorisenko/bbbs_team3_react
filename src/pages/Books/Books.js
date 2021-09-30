@@ -38,7 +38,8 @@ function Books() {
   const searchBookId = state?.id;
   const [searchedBook, setSearchedBook] = useState({});
 
-  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
+  const { pageSize } = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   const [isPageError, setIsPageError] = useState(false);
   const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
 

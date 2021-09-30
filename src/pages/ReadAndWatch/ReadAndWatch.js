@@ -37,7 +37,10 @@ const { catalogTitle, articlesTitle, moviesTitle, videosTitle, booksTitle } =
 
 function ReadAndWatch() {
   // определяет сколько объектов показывать в ряду
-  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  const { pageSize, isSmallQuery } = usePageWidth(
+    MAX_SCREEN_WIDTH,
+    PAGE_SIZE_PAGINATE
+  );
 
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
@@ -74,6 +77,7 @@ function ReadAndWatch() {
           sectionTitle={videosTitle}
           sectionClass="readwatch-page__slider-element"
           isVideo
+          isSmallQuery={isSmallQuery}
         />
         <ReadAndWatchSection
           breakpoints={MAX_SCREEN_WIDTH}
@@ -98,6 +102,7 @@ function ReadAndWatch() {
           path={MOVIES_URL}
           sectionTitle={moviesTitle}
           sectionClass="readwatch-page__slider-element"
+          isSmallQuery={isSmallQuery}
         />
         <ReadAndWatchSection
           breakpoints={MAX_SCREEN_WIDTH}

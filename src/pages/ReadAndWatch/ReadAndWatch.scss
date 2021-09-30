@@ -8,6 +8,10 @@
 
   &__slider-element {
     min-height: 310px;
+
+    & .card-catalog__image-wrap {
+      max-width: 100%;
+    }
   }
 }
 
