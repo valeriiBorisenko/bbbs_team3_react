@@ -6,6 +6,12 @@
   min-height: 169px;
   justify-content: space-between;
   padding: 30px;
+
+  & .link {
+    background-color: rgba($white, 0);
+    outline: 0;
+    border: 0;
+  }
 }
 
 .card-video-main__title-wrap {
@@ -54,7 +60,10 @@
 
 .card-video-main__video {
   width: 100%;
+  max-height: 675px;
   overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background-color: $yellow;
 
   > .card-video-main__button {
     width: 100%;
@@ -69,6 +78,12 @@
   object-fit: cover;
   cursor: pointer;
   max-height: 675px;
+  aspect-ratio: 16 / 9;
+
+  &_at-back {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 .card-video-main__duration {
@@ -132,6 +147,14 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  .card-video-main__image {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+  }
+}
 
 @include atMobile {
   .card-video-main__video {

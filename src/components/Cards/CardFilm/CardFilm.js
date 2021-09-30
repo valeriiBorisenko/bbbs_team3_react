@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { PopupsContext } from '../../../contexts';
 import { Caption, Card, Rubric, TitleH2 } from '../../utils';
 import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
@@ -11,13 +11,17 @@ import parserLinkYoutube from '../../../utils/parser-link-youtube';
 import './CardFilm.scss';
 
 function CardFilm({
-  data: { image, title, info, link, tags, duration },
+  data: { id, image, title, info, link, tags, duration },
   sectionClass,
   isVideo,
+  isMobile,
 }) {
   const { openPopupVideo } = useContext(PopupsContext);
+  const { frameSrc } = parserLinkYoutube(link);
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+
   // Пробрасываем данные в попап
-  const handleClick = () => {
+  const openPopupVideoOnClick = () => {
     setLocalStorageData(localStChosenVideo, {
       image,
       title,
@@ -29,13 +33,18 @@ function CardFilm({
     openPopupVideo();
   };
 
-  const { imagePreview } = parserLinkYoutube(link);
+  // на мобильном разрешении видео проиграывается сразу в карточке
+  const playVideoOnClick = () => setIsPlayingVideo(true);
+
+  useEffect(() => {
+    if (!isMobile) {
+      if (isPlayingVideo) setIsPlayingVideo(false);
+    }
+  }, [isMobile]);
 
   return (
     <Card sectionClass={`card-film ${sectionClass}`}>
-      <div className="card-film__video">
-        {renderVideoPlayback(renderPreview())}
-      </div>
+      <div className="card-film__video">{renderVideoPlayback()}</div>
 
       <div className="card-film__video-info">
         <div className="card-film__title-wrap">
@@ -48,10 +57,16 @@ function CardFilm({
             title={changeCaseOfFirstLetter(info)}
           />
         </div>
-        {link &&
-          renderVideoPlayback(
-            isVideo ? texts.linkTextVideo : texts.linkTextMovie
-          )}
+        {link && (
+          <button
+            className="link"
+            type="button"
+            onClick={isMobile ? playVideoOnClick : openPopupVideoOnClick}
+            draggable="false"
+          >
+            {isVideo ? texts.linkTextVideo : texts.linkTextMovie}
+          </button>
+        )}
       </div>
     </Card>
   );
@@ -70,38 +85,74 @@ function CardFilm({
       <>
         <img
           draggable="false"
-          src={`${staticImageUrl}/${image}` || imagePreview}
+          src={`${staticImageUrl}/${image}`}
           alt={`${texts.altText} ${title}`}
-          className="card-film__preview image-scale"
+          className={`card-film__preview ${
+            isPlayingVideo ? 'card-film__preview_at-back' : ''
+          } image-scale`}
         />
-        {duration ? (
-          <span className="card-film__duration paragraph">
-            {durationString}
-          </span>
-        ) : (
-          <ul className="card-film__rubric-list">
-            {tags.map((tag) => (
-              <li key={tag.id}>
-                <Rubric title={tag.name} sectionClass="card-film__rubric" />
-              </li>
-            ))}
-          </ul>
-        )}
+        {renderDurationOrTags(durationString)}
       </>
     );
   }
 
-  function renderVideoPlayback(childrenElem) {
+  function renderVideoPlayback() {
+    if (isMobile) {
+      return (
+        <button
+          className="card-film__button"
+          type="button"
+          onClick={playVideoOnClick}
+          draggable="false"
+        >
+          {renderPreview()}
+          {isPlayingVideo && (
+            <iframe
+              title={title}
+              id={`player-card-film-${id}`}
+              className="card-film__iframe"
+              src={`${frameSrc}?autoplay=1`}
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              seamless
+            />
+          )}
+        </button>
+      );
+    }
+
     return (
       <button
-        className="link card-film__button"
+        className="card-film__button"
         type="button"
-        onClick={handleClick}
+        onClick={openPopupVideoOnClick}
         draggable="false"
       >
-        {childrenElem}
+        {renderPreview()}
       </button>
     );
+  }
+
+  function renderDurationOrTags(durationString) {
+    if (!isPlayingVideo && duration) {
+      return (
+        <span className="card-film__duration paragraph">{durationString}</span>
+      );
+    }
+
+    if (!isPlayingVideo) {
+      return (
+        <ul className="card-film__rubric-list">
+          {tags.map((tag) => (
+            <li key={tag.id}>
+              <Rubric title={tag.name} sectionClass="card-film__rubric" />
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    return null;
   }
 }
 
@@ -115,6 +166,7 @@ CardFilm.propTypes = {
   duration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sectionClass: PropTypes.string,
   isVideo: PropTypes.bool,
+  isMobile: PropTypes.bool,
 };
 
 CardFilm.defaultProps = {
@@ -127,6 +179,7 @@ CardFilm.defaultProps = {
   duration: '',
   sectionClass: '',
   isVideo: false,
+  isMobile: false,
 };
 
 export default CardFilm;

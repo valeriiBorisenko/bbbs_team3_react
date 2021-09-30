@@ -207,6 +207,7 @@
       }
 
       & p {
+        font-family: $protoGrotesk;
         box-sizing: border-box;
         max-width: 1170px;
         font-size: 44px;
@@ -318,6 +319,13 @@
 
     &__photo-carousel-container {
       margin: 50px -127px;
+    }
+
+    &__carousel-image-wrap {
+      &:hover {
+        cursor: zoom-in;
+        box-shadow: none;
+      }
     }
 
     &__carousel-image {

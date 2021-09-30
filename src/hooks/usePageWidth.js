@@ -10,6 +10,9 @@ import { useLayoutEffect, useState } from 'react';
 const usePageWidth = (maxWindowWidths, pageSizeSettings) => {
   if (maxWindowWidths && pageSizeSettings) {
     const [pageSize, setPageSize] = useState(null);
+    const [isSmallQuery, setIsSmallQuery] = useState(false);
+    const [isMediumQuery, setIsMediumQuery] = useState(false);
+    const [isBigQuery, setIsBigQuery] = useState(false);
 
     useLayoutEffect(() => {
       let smallQuery;
@@ -33,12 +36,24 @@ const usePageWidth = (maxWindowWidths, pageSizeSettings) => {
       const listener = () => {
         if (smallQuery && smallQuery.matches) {
           setPageSize(pageSizeSettings.small);
+          setIsSmallQuery(true);
+          setIsMediumQuery(false);
+          setIsBigQuery(false);
         } else if (mediumQuery && mediumQuery.matches) {
           setPageSize(pageSizeSettings.medium);
+          setIsMediumQuery(true);
+          setIsSmallQuery(false);
+          setIsBigQuery(false);
         } else if (bigQuery && bigQuery.matches) {
           setPageSize(pageSizeSettings.big);
+          setIsBigQuery(true);
+          setIsSmallQuery(false);
+          setIsMediumQuery(false);
         } else {
           setPageSize(pageSizeSettings.default);
+          setIsSmallQuery(false);
+          setIsMediumQuery(false);
+          setIsBigQuery(false);
         }
       };
       listener();
@@ -70,7 +85,7 @@ const usePageWidth = (maxWindowWidths, pageSizeSettings) => {
       };
     }, []);
 
-    return pageSize;
+    return { pageSize, isSmallQuery, isMediumQuery, isBigQuery };
   }
 };
 

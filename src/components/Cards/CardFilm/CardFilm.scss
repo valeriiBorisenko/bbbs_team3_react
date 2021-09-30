@@ -16,9 +16,20 @@
 .card-film__preview {
   display: block;
   width: 100%;
-  height: 236px;
   object-fit: cover;
+  aspect-ratio: 16 / 9;
   cursor: pointer;
+
+  &_at-back {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.card-film__iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
 }
 
 .card-film__duration {
@@ -68,6 +79,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  & .link {
+    background-color: rgba($white, 0);
+    border: none;
+    outline: none;
+  }
 }
 
 .card-film__title-wrap {
@@ -101,13 +118,16 @@
 }
 
 .card-film__button {
+  position: relative;
+  aspect-ratio: 16 / 9;
   display: block;
   width: 100%;
   margin: 0 auto;
   padding: 0;
   border: none;
   outline: none;
-  background-color: transparent;
+  overflow: hidden;
+  background-color: rgba($white, 0);
 
   &:hover {
     cursor: pointer;
@@ -115,10 +135,6 @@
 }
 
 @include atDesktop1440 {
-  .card-film__preview {
-    height: 208px;
-  }
-
   .card-film__duration {
     &_position_main-video {
       bottom: 8px;
@@ -143,12 +159,17 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  .card-film__preview {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+  }
+}
+
 @include atMobile {
   .card-film {
     max-width: 450px;
-  }
-
-  .card-film__preview {
-    height: 163px;
   }
 }
