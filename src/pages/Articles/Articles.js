@@ -36,7 +36,7 @@ function Articles() {
   const { articleId } = useParams();
 
   // определяет размер страницы при ресайзе
-   const { pageSize } = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  const { pageSize } = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
