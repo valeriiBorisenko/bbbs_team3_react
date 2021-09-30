@@ -8,7 +8,7 @@ function getRightsData({ limit, offset, tags }) {
       params: { tags, limit, offset },
     })
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 // получение категорий прав (список фильтров)
@@ -16,7 +16,7 @@ function getRightsTags() {
   return axios
     .get(`${baseURL}${apiUrl}/rights/tags/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 // получение Статьи для страницы Права Детей

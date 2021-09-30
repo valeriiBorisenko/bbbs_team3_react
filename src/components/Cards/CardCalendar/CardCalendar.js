@@ -18,6 +18,7 @@ function CardCalendar({
   sectionClass,
   isWaitingResponse,
   loadingEventId,
+  isDescription,
 }) {
   const {
     buttonTitle,
@@ -135,6 +136,13 @@ function CardCalendar({
             </p>
           </li>
         </ul>
+        {isDescription && (
+          <div className="calendar__description">
+            <p className="paragraph calendar__desc-paragraph">
+              {cardData?.description}
+            </p>
+          </div>
+        )}
         <div className="calendar__submit">{renderSubmitZone()}</div>
       </div>
     </article>
@@ -190,6 +198,7 @@ CardCalendar.propTypes = {
   sectionClass: PropTypes.string,
   isWaitingResponse: PropTypes.bool,
   loadingEventId: PropTypes.number,
+  isDescription: PropTypes.bool,
 };
 
 CardCalendar.defaultProps = {
@@ -199,6 +208,7 @@ CardCalendar.defaultProps = {
   sectionClass: '',
   isWaitingResponse: false,
   loadingEventId: undefined,
+  isDescription: false,
 };
 
 export default CardCalendar;

@@ -16,6 +16,11 @@ export const BOOKS_URL = '/books';
 export const STORIES_URL = '/stories';
 export const NOT_FOUND_URL = '/*';
 
+export const PLACES_ID_PARAM = ':placeId';
+export const ARTICLES_ID_PARAM = ':articleId';
+export const BOOKS_ID_PARAM = ':bookId';
+export const STORIES_ID_PARAM = ':storyId';
+
 export const MAIN_PAGE_TITLE = 'наставники.про';
 export const AFISHA_TITLE = 'Календарь';
 export const ABOUT_US_TITLE = 'О проекте';

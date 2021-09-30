@@ -22,7 +22,8 @@ const useFiltrationAndPagination = ({
   apiFilterNames,
   pageSize,
   setIsPageError,
-  isCalendarPage, // особое формирование списка фильтров и отложенная загрузка
+  isCalendarPage, // особое формирование списка фильтров и своя первая загрузка
+  dontStartWhileTrue, // данные НЕ загружаются, если условие true, по умолчанию воспринимается как false
 }) => {
   const { setError } = useContext(ErrorsContext);
   const { openPopupError } = useContext(PopupsContext);
@@ -32,7 +33,8 @@ const useFiltrationAndPagination = ({
   // лоадеры, флаги
   const [isFiltersUsed, setIsFiltersUsed] = useState(false);
   const [isPaginationUsed, setIsPaginationUsed] = useState(false);
-  const [isPageLoading, setIsPageLoading] = useState(true);
+  // по факту запускает всю цепочку скриптов
+  const [isPageLoading, setIsPageLoading] = useState(!dontStartWhileTrue);
   // пагинация
   const [totalPages, setTotalPages] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
@@ -43,16 +45,15 @@ const useFiltrationAndPagination = ({
 
   // Первая отрисовка страницы
   useEffect(() => {
-    // отложенная загрузка для календаря
-    if (isPageLoading && pageSize && !isCalendarPage) {
+    if (isPageLoading && pageSize && !isCalendarPage && !dontStartWhileTrue) {
       if (isNoFilters) firstPageRenderNoFilters();
       else firstPageRender();
     }
-  }, [pageSize]);
+  }, [pageSize, isPageLoading]);
 
   // Переход по пагинации, страница уже загружена
   useEffect(() => {
-    if (!isPageLoading && !isFiltersUsed) {
+    if (!isPageLoading && !isFiltersUsed && !dontStartWhileTrue) {
       const activeFilters = getActiveFilters();
 
       defineParamsAndGetData({
@@ -70,6 +71,13 @@ const useFiltrationAndPagination = ({
     }
   }, [isFiltersUsed]);
 
+  // слушатель разрешения запуска скриптов
+  useEffect(() => {
+    if (!dontStartWhileTrue) {
+      setIsPageLoading(true);
+    }
+  }, [dontStartWhileTrue]);
+
   return {
     dataToRender,
     filters,
@@ -81,7 +89,7 @@ const useFiltrationAndPagination = ({
     changePageIndex,
     changeFilter,
     getActiveFilters,
-    firstPageRender, // для управления повторной загрузкой на страницах
+    firstPageRender, // для повторной загрузки всех данных (при смене города, например)
   };
 
   // ПАГИНАЦИЯ
@@ -100,19 +108,29 @@ const useFiltrationAndPagination = ({
       .join(',');
   }
 
-  // хэндлер клика по фильтру
-  function changeFilter(inputValue, isChecked) {
-    if (inputValue === ALL_CATEGORIES_TAG) {
-      // кнопка "Все", откат на 1 страницу
-      selectOneTag(setFilters, ALL_CATEGORIES_TAG);
-    } else {
-      handleCheckboxBehavior(setFilters, { inputValue, isChecked });
-      deselectOneTag(setFilters, ALL_CATEGORIES_TAG);
-    }
+  function setFiltersAndResetPagination() {
     // сбрасываем пагинацию
     setPageIndex(0);
     // ставим флажок фильтров
     setIsFiltersUsed(true);
+  }
+
+  // хэндлер клика по фильтру
+  function changeFilter(inputValue, isChecked) {
+    if (inputValue === ALL_CATEGORIES_TAG) {
+      // кнопка "Все", если она уже нажата, то ничего не делаем
+      const isAllAlreadyActive = filters.some(
+        (f) => f.isActive && f.filter === ALL_CATEGORIES_TAG
+      );
+      if (!isAllAlreadyActive) {
+        selectOneTag(setFilters, ALL_CATEGORIES_TAG);
+        setFiltersAndResetPagination();
+      }
+    } else {
+      handleCheckboxBehavior(setFilters, { inputValue, isChecked });
+      deselectOneTag(setFilters, ALL_CATEGORIES_TAG);
+      setFiltersAndResetPagination();
+    }
   }
 
   // функция-фильтратор

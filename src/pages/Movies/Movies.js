@@ -6,7 +6,7 @@ import { ERROR_MESSAGES, localStChosenVideo } from '../../config/constants';
 import { useFiltrationAndPagination, usePageWidth } from '../../hooks';
 import { setLocalStorageData } from '../../hooks/useLocalStorage';
 import {
-  getMovie,
+  getMovieById,
   getMoviesPageData,
   getMoviesPageFilter,
 } from '../../api/movies-page';
@@ -75,7 +75,7 @@ function Movies() {
   // Откртие попапа при переходе из поиска
   useEffect(() => {
     if (state) {
-      getMovie(state.id)
+      getMovieById(state.id)
         .then((res) => {
           setLocalStorageData(localStChosenVideo, res);
           openPopupVideo();

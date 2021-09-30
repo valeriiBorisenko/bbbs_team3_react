@@ -6,7 +6,7 @@
   padding: 37px 30px 15px;
   overflow: hidden;
 
-  &_main { 
+  &_main {
     padding: 47px 30px 30px;
   }
 
@@ -74,13 +74,17 @@
 
 @include atDesktop1199 {
   .card-place {
+    &_main {
+      min-height: 236px;
+    }
+
     &__image {
       height: 346px;
-    
+
       &_type_article {
         margin-top: 62px;
       }
-    
+
       &_big {
         height: 380px;
       }
@@ -95,6 +99,7 @@
 
     &_main {
       padding: 37px 15px 15px;
+      min-height: 190px;
     }
 
     &__image {
@@ -113,6 +118,10 @@
 
 @include atMobile {
   .card-place {
+    &_main {
+      min-height: 167px;
+    }
+
     &__image {
       height: 142px;
 

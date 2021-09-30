@@ -1,20 +1,26 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import booksPageTexts from './locales/RU';
 import { ERROR_MESSAGES } from '../../config/constants';
-import { useFiltrationAndPagination, usePageWidth } from '../../hooks';
+import { BOOKS_URL } from '../../config/routes';
 import {
-  getBook,
+  useFiltrationAndPagination,
+  usePageWidth,
+  useSingleCardAtDynamicRoute,
+} from '../../hooks';
+import {
+  getBookById,
   getBooksPageData,
   getBooksPageFilter,
 } from '../../api/books-page';
 import {
   AnimatedPageContainer,
   BasePage,
+  Card,
   CardBook,
   Loader,
+  NextArticleLink,
   Paginate,
-  PopupBook,
   TagsList,
   TitleH1,
 } from './index';
@@ -34,22 +40,19 @@ const MAX_SCREEN_WIDTH = {
 const { headTitle, headDescription, title, textStubNoData } = booksPageTexts;
 
 function Books() {
-  const { state } = useLocation();
-  const searchBookId = state?.id;
-  const [searchedBook, setSearchedBook] = useState({});
+  const { bookId } = useParams();
 
   // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
   const { pageSize } = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
-  const [isBookPopupOpen, setIsBookPopupOpen] = useState(false);
 
-  const openPopupBook = () => {
-    setIsBookPopupOpen(true);
-  };
-
-  const closePopupBook = () => {
-    setIsBookPopupOpen(false);
-  };
+  // одиночная карточка при переходе по динамическому маршруту
+  const { singleCard, isSingleCardShown } = useSingleCardAtDynamicRoute({
+    apiCallback: getBookById,
+    dynamicParam: bookId,
+    setIsPageError,
+  });
 
   // фильтрация и пагинация
   const filtersAndPaginationSettings = {
@@ -60,6 +63,7 @@ function Books() {
     },
     pageSize,
     setIsPageError,
+    dontStartWhileTrue: !!bookId, // скрипты выполнятся, только если нет запроса книги по id
   };
 
   const {
@@ -74,49 +78,35 @@ function Books() {
     changeFilter,
   } = useFiltrationAndPagination(filtersAndPaginationSettings);
 
-  // Откртие попапа при переходе из поиска
-  useEffect(() => {
-    if (state) {
-      getBook(searchBookId)
-        .then((book) => {
-          setSearchedBook(book);
-          openPopupBook();
-        })
-        .catch(() => setIsPageError(true));
-    }
-  }, [state]);
-
-  // глобальный лоадер
-  if (isPageLoading) {
+  // обычная загрузка или есть переход по id, но книга ещё не загружена
+  if (isPageLoading || (bookId && !isSingleCardShown)) {
     return <Loader isCentered />;
   }
 
   return (
     <>
-      <BasePage headTitle={headTitle} headDescription={headDescription}>
+      <BasePage
+        headTitle={headTitle}
+        headDescription={headDescription}
+        scrollUpDeps={[bookId]}
+      >
         <section className="books page__section fade-in">
           {renderPageContent()}
         </section>
       </BasePage>
-      <PopupBook
-        isOpen={isBookPopupOpen}
-        onClose={closePopupBook}
-        book={searchedBook}
-      />
     </>
   );
 
   function renderPageContent() {
-    if (isPageError || !dataToRender.length) {
+    // ошибка или (нет данных и при этом это не динамический роут)
+    if (isPageError || (!dataToRender.length && !bookId)) {
       return renderAnimatedContainer();
     }
+
     return (
       <>
         <TitleH1 title={title} sectionClass="books__title" />
-
-        {renderFilters()}
-
-        {isFiltersUsed ? <Loader isPaginate /> : renderBooksContainer()}
+        {renderMainContent()}
       </>
     );
   }
@@ -131,6 +121,32 @@ function Books() {
             : textStubNoData
         }
       />
+    );
+  }
+
+  function renderMainContent() {
+    if (isSingleCardShown) {
+      return (
+        <div className="books__single-book-container scale-in">
+          <CardBook data={singleCard} isOnlyCover sectionClass="scale-in" />
+
+          <Card sectionClass="books__single-book-paragraph">
+            <p className="paragraph">{singleCard.annotation}</p>
+          </Card>
+
+          <NextArticleLink
+            text={`Все ${title.toLowerCase()}`}
+            href={BOOKS_URL}
+          />
+        </div>
+      );
+    }
+
+    return (
+      <>
+        {renderFilters()}
+        {isFiltersUsed ? <Loader isPaginate /> : renderBooksContainer()}
+      </>
     );
   }
 

@@ -14,8 +14,8 @@ import {
 } from '../../hooks/useLocalStorage';
 import {
   getActiveMonthTags,
-  getCalendarItem,
   getCalendarPageData,
+  getEventById,
 } from '../../api/afisha-page';
 import {
   AnimatedPageContainer,
@@ -107,7 +107,7 @@ function Calendar() {
   // Открытие попапа при переходе из поиска
   useEffect(() => {
     if (state) {
-      getCalendarItem(state.id)
+      getEventById(state.id)
         .then((res) => {
           setLocalStorageData(localStAfishaEvent, res);
           openPopupAboutEvent();
@@ -129,8 +129,8 @@ function Calendar() {
     }
   }, [selectedEvent]);
 
-  // глобальный лоадер при первой загрузке страницы
-  if (isPageLoading) {
+  // глобальный лоадер при первой загрузке страницы или пока незалогинен
+  if (isPageLoading || !currentUser) {
     return <Loader isCentered />;
   }
 

@@ -8,7 +8,7 @@ function getMoviesPageData({ limit, offset, tags }) {
       params: { tags, limit, offset },
     })
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 // все активные теги (фильтры)
@@ -16,15 +16,15 @@ function getMoviesPageFilter() {
   return axios
     .get(`${baseURL}${apiUrl}/movies/tags/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 // получение одного видео
-function getMovie(id) {
+function getMovieById(id) {
   return axios
-    .get(`${baseURL}${apiUrl}/movies/${id}`)
+    .get(`${baseURL}${apiUrl}/movies/${id}/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
-export { getMoviesPageData, getMoviesPageFilter, getMovie };
+export { getMoviesPageData, getMoviesPageFilter, getMovieById };

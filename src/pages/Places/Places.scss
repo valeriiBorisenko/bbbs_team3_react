@@ -9,6 +9,15 @@
     padding-top: 80px;
   }
 
+  &__single-card-container {
+    margin: 80px auto 0;
+  }
+
+  &__single-card-paragraph {
+    padding: 30px 15px;
+    display: none;
+  }
+
   &__tags {
     > .tags__list {
       justify-content: center;
@@ -43,6 +52,28 @@
   }
 }
 
+@include atDesktop1199 {
+  .places {
+    &__single-card-container {
+      max-width: 770px;
+      margin: 80px auto 0;
+
+      & .card-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+      }
+
+      & .card-annotation {
+        display: none;
+      }
+    }
+
+    &__single-card-paragraph {
+      display: block;
+    }
+  }
+}
+
 @include atDesktop1024 {
   .places {
     &__title {
@@ -51,6 +82,10 @@
 
     &__main {
       padding-top: 50px;
+    }
+
+    &__single-card-container {
+      margin-top: 50px;
     }
 
     &__cards-grid {
@@ -67,6 +102,10 @@
 
 @include atTablet {
   .places {
+    &__single-card-container {
+      margin-top: 30px;
+    }
+
     &__cards-grid {
       grid-template-columns: 1fr;
       padding-top: 30px;
