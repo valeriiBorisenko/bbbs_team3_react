@@ -43,10 +43,11 @@
 
 .popup__button_type_sign-in {
   align-self: flex-start;
+  margin-top: 15px;
 }
 
 .popup__input {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   &:last-of-type {
     margin-bottom: 0;
   }
@@ -83,7 +84,7 @@
   opacity: 0;
   transform: translateX(100%);
   transition: .5s ease;
-  
+
   &_opened {
     visibility: visible;
     opacity: 1;
@@ -91,23 +92,23 @@
     transition: .5s ease;
   }
 }
-  
+
   .popup__login-container_success-animation {
     max-width: 450px;
     max-height: 190px;
     height: 100%;
     width: 100%;
     margin: 0 auto 30px;
-  
+
     & > svg {
       max-height: 190px;
     }
   }
-  
+
   @include atDesktop1024 {
     .popup__login-container_success-animation {
       max-height: 170px;
-  
+
       & > svg {
         max-height: 170px;
       }
@@ -124,7 +125,7 @@
   }
 
   .popup__input {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     &:last-of-type {
       margin-bottom: 0;
     }

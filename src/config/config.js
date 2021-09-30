@@ -1,4 +1,4 @@
-const isDevevelopment = true;
+const isDevevelopment = false;
 const developmentIP = 'http://178.154.192.53';
 const productionIP = 'http://195.24.66.127';
 export const baseURL = isDevevelopment ? developmentIP : productionIP;

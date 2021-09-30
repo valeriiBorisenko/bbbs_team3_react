@@ -40,6 +40,9 @@ const validationSettings = {
   },
 };
 
+// функционал восстановления пароля отключили
+// остается в коде на всякий случай
+
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
   const { serverError, clearError, setError } = useContext(ErrorsContext);
@@ -52,6 +55,7 @@ function PopupLogin({ isOpen, onClose }) {
   const [successMessage, setSuccessMessage] = useState('');
 
   const animationContainer = useRef(null);
+  const disableRecoverPassword = true;
 
   useEffect(() => {
     Lottie.loadAnimation({
@@ -170,8 +174,8 @@ function PopupLogin({ isOpen, onClose }) {
       onClose={closePopup}
     >
       {renderFormAuth()}
-      {renderFormForgotPassword()}
-      {renderSuccessLoginContainer()}
+      {!disableRecoverPassword && renderFormForgotPassword()}
+      {!disableRecoverPassword && renderSuccessLoginContainer()}
     </Popup>
   );
 
@@ -212,13 +216,15 @@ function PopupLogin({ isOpen, onClose }) {
           required
         />
 
-        <button
-          className="popup__forgot-password"
-          type="button"
-          onClick={handleClickForgotPassword}
-        >
-          {forgotButtonText}
-        </button>
+        {!disableRecoverPassword && (
+          <button
+            className="popup__forgot-password"
+            type="button"
+            onClick={handleClickForgotPassword}
+          >
+            {forgotButtonText}
+          </button>
+        )}
         <span className="form-error-message">{errorsString}</span>
         <Button
           sectionClass="popup__button_type_sign-in"
