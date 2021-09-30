@@ -121,7 +121,7 @@ function MainPage() {
       return (
         <CardCalendar
           sectionClass="scale-in"
-          key={mainPageData.event.id}
+          key={`event-${mainPageData.event.id}`}
           cardData={mainPageData.event}
           onEventSignUpClick={handleEventBooking}
           onEventDescriptionClick={openPopupAboutEvent}
@@ -142,7 +142,10 @@ function MainPage() {
   function renderHistoryBlock() {
     if (mainPageData.history) {
       return (
-        <Card sectionClass="lead__media scale-in" key={mainPageData.history.id}>
+        <Card
+          sectionClass="lead__media scale-in"
+          key={`story-${mainPageData.history.id}`}
+        >
           <Link
             to={`${STORIES_URL}/${mainPageData.history.id}`}
             className="lead__link"
@@ -170,7 +173,7 @@ function MainPage() {
     return (
       <section className="place main-section page__section">
         <CardPlace
-          key={mainPageData.place.id}
+          key={`place-${mainPageData.place.id}`}
           data={mainPageData.place}
           sectionClass="card-container_type_main-article scale-in"
           activityTypesSimplified={activityTypesSimplified}
@@ -185,7 +188,7 @@ function MainPage() {
     return (
       <section className="articles main-section page__section scale-in">
         <CardArticleBig
-          key={article.id}
+          key={`article-${article.id}`}
           title={article.title}
           color={color}
           articleUrl={article.articleUrl}
@@ -205,7 +208,7 @@ function MainPage() {
         {randomMovies.map((movie) => (
           <CardFilm
             data={movie}
-            key={movie.id}
+            key={`movie-${movie.id}`}
             sectionClass={additionalMoviesClasses}
             isMobile={isSmallQuery}
           />
@@ -218,7 +221,7 @@ function MainPage() {
     return (
       <section className="video main-section page__section scale-in">
         <CardVideoMain
-          key={mainPageData.video.id}
+          key={`video-${mainPageData.video.id}`}
           data={mainPageData.video}
           isMobile={isSmallQuery}
         />
@@ -231,7 +234,7 @@ function MainPage() {
       <div className="main-questions__container">
         {randomQuestions.map((item) => (
           <CardQuestion
-            key={item.id}
+            key={`question-${item.id}`}
             data={item}
             href={{
               pathname: QUESTIONS_URL,
