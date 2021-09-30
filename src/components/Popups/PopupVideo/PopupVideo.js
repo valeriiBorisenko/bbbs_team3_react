@@ -27,11 +27,13 @@ const PopupVideo = ({ isOpen, onClose }) => {
       onClose={closePopup}
     >
       <div className="popup__video-iframe-container">
-        <img
-          className="popup__video-preview"
-          src={`${staticImageUrl}/${data?.image}`}
-          alt={data?.title}
-        />
+        {data?.image && (
+          <img
+            className="popup__video-preview"
+            src={`${staticImageUrl}/${data.image}`}
+            alt={data.title}
+          />
+        )}
         {isOpen && (
           <iframe
             title={data?.title}
