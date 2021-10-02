@@ -2,16 +2,6 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import texts from './locales/RU';
-import { Loader, SearchButton } from '../utils';
-import { useDebounce, useFormWithValidation } from '../../hooks';
-import { getLocalStorageData } from '../../hooks/useLocalStorage';
-import search from '../../api/search';
-import {
-  AFISHA_URL,
-  MOVIES_URL,
-  QUESTIONS_URL,
-  VIDEO_URL,
-} from '../../config/routes';
 import {
   CurrentUserContext,
   ErrorsContext,
@@ -22,9 +12,18 @@ import {
   ERROR_MESSAGES,
   localStUserCity,
 } from '../../config/constants';
+import {
+  AFISHA_URL,
+  MOVIES_URL,
+  QUESTIONS_URL,
+  VIDEO_URL,
+} from '../../config/routes';
+import { searchValidationSettings } from '../../config/validation-settings';
+import { useDebounce, useFormWithValidation } from '../../hooks';
+import { getLocalStorageData } from '../../hooks/useLocalStorage';
+import search from '../../api/search';
+import { Loader, SearchButton } from '../utils';
 import './Search.scss';
-
-const SearchMaxLength = 200;
 
 function Search({
   isOpenSearch,
@@ -140,7 +139,7 @@ function Search({
               type="text"
               name="search"
               placeholder=""
-              maxLength={SearchMaxLength}
+              maxLength={searchValidationSettings.search.maxLength}
               className="search__input paragraph"
               autoComplete="off"
               onChange={handleChange}

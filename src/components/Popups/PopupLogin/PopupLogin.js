@@ -4,10 +4,11 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Lottie from 'lottie-web';
 import texts from './locales/RU';
 import { CurrentUserContext, ErrorsContext } from '../../../contexts';
-import { useAuth, useFormWithValidation } from '../../../hooks';
-import getServerErrors from '../../../utils/form-errors';
 import { AFISHA_URL } from '../../../config/routes';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../../config/constants';
+import { popupLoginValidationSettings } from '../../../config/validation-settings';
+import { useAuth, useFormWithValidation } from '../../../hooks';
+import getServerErrors from '../../../utils/form-errors';
 import { recoverPassword } from '../../../api/user';
 import Popup from '../Popup/Popup';
 import { Button, Input, TitleH2 } from '../../utils';
@@ -32,15 +33,6 @@ const {
   showPasswordButton,
   hidePasswordButton,
 } = texts;
-
-const validationSettings = {
-  username: {
-    maxLength: 150,
-  },
-  password: {
-    minLength: 8,
-  },
-};
 
 // функционал восстановления пароля отключили
 // остается в коде на всякий случай
@@ -207,7 +199,7 @@ function PopupLogin({ isOpen, onClose }) {
           onChange={handleChange}
           value={values?.username}
           error={errors?.username}
-          maxLength={validationSettings.username.maxLength}
+          maxLength={popupLoginValidationSettings.username.maxLength}
           required
         />
 
@@ -220,7 +212,7 @@ function PopupLogin({ isOpen, onClose }) {
           onChange={handleChange}
           value={values?.password}
           error={errors?.password}
-          minLength={validationSettings.password.minLength}
+          minLength={popupLoginValidationSettings.password.minLength}
           required
         />
 
