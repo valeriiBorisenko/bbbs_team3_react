@@ -43,43 +43,19 @@
 
 .popup__button_type_sign-in {
   align-self: flex-start;
-  margin-top: 15px;
 }
 
-.popup__password-input-container {
-  position: relative;
-  margin-top: 15px;
-}
-
-.popup__show-password-btn {
-  position: absolute;
-  top: 9px;
-  right: 15px;
-  display: block;
-  width: 30px;
-  height: 30px;
-  background-color: rgba($white, 0);
-  padding: 0;
-  border: none;
-  outline: none;
-  transition: .3s ease;
-
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.1);
+.popup__input {
+  margin-bottom: 15px;
+  &:last-of-type {
+    margin-bottom: 0;
   }
-}
-
-.popup__icon-eye {
-  display: block;
-  width: 30px;
-  height: 30px;
 }
 
 .popup__forgot-password {
   margin: 0;
-  margin-bottom: 30px;
-  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-top: 15px;
   font-size: 14px;
   line-height: 1.5;
   color: $darkGray;
@@ -93,7 +69,6 @@
   &:hover {
     cursor: pointer;
     color: $blue;
-    text-decoration: underline;
   }
 }
 
@@ -147,11 +122,7 @@
     }
   }
 
-  .popup__password-input-container {
-    margin-top: 5px;
-  }
-
-  .popup__show-password-btn {
-    top: 5px;
+  .popup__input {
+    margin-bottom: 5px;
   }
 }
