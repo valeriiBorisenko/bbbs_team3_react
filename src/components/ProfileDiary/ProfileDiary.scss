@@ -47,6 +47,10 @@
 
   &__card-text {
     height: calc(100% - 65px);
+
+    > div {
+      height: 100%;
+    }
   }
 
   &__card-title {
