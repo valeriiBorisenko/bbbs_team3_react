@@ -25,6 +25,7 @@ import {
   TitleH2,
 } from './index';
 import './Questions.scss';
+import { questionFormValidationSettings } from '../../config/validation-settings';
 
 const {
   headTitle,
@@ -35,13 +36,6 @@ const {
   formSubmitButton,
   formSubmitButtonLoading,
 } = questionsPageTexts;
-
-const validationSettings = {
-  question: {
-    minLength: 10,
-    maxLength: 500,
-  },
-};
 
 const pageSize = 10;
 
@@ -301,8 +295,8 @@ function Questions() {
                 placeholder={formPlaceholder}
                 onChange={handleChange}
                 value={values?.question}
-                minLength={validationSettings.question.minLength}
-                maxLength={validationSettings.question.maxLength}
+                minLength={questionFormValidationSettings.question.minLength}
+                maxLength={questionFormValidationSettings.question.maxLength}
                 required
                 error={errors?.question}
                 sectionClass="input__question-form"

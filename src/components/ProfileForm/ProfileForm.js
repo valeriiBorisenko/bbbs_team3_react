@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { ErrorsContext } from '../../contexts';
+import { diaryFormValidationSettings } from '../../config/validation-settings';
 import { useFormWithValidation } from '../../hooks';
 import captions from '../../utils/rating-captions';
 import getServerErrors from '../../utils/form-errors';
@@ -22,16 +23,6 @@ const {
   buttonSaveText,
   buttonLoadingText,
 } = texts;
-
-const validationSettings = {
-  place: {
-    minLength: 5,
-    maxLength: 128,
-  },
-  description: {
-    maxLength: 1024,
-  },
-};
 
 function ProfileForm({
   data,
@@ -176,8 +167,8 @@ function ProfileForm({
             onChange={handleChange}
             value={values.place}
             required
-            minLength={validationSettings.place.minLength}
-            maxLength={validationSettings.place.maxLength}
+            minLength={diaryFormValidationSettings.place.minLength}
+            maxLength={diaryFormValidationSettings.place.maxLength}
             error={errors?.place}
           />
 
@@ -202,7 +193,7 @@ function ProfileForm({
             onChange={handleChange}
             value={values.description}
             required
-            maxLength={validationSettings.description.maxLength}
+            maxLength={diaryFormValidationSettings.description.maxLength}
             error={errors?.description}
             isTextarea
           />

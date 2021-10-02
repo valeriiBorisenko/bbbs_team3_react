@@ -4,6 +4,7 @@ import texts from './locales/RU';
 import { CitiesContext, ErrorsContext } from '../../contexts';
 import { regExpImages } from '../../config/constants';
 import { useFormWithValidation } from '../../hooks';
+import { placesValidationSettings } from '../../config/validation-settings';
 import getServerErrors from '../../utils/form-errors';
 import { Button, ButtonRound, DropDownSelect, Input } from '../utils';
 import './FormRecommendation.scss';
@@ -25,21 +26,6 @@ const {
   addPhotoAdded,
   buttonTextLoading,
 } = texts;
-
-const validationSettings = {
-  title: {
-    minLength: 5,
-    maxLength: 50,
-  },
-  address: {
-    minLength: 5,
-    maxLength: 50,
-  },
-  age: {
-    min: 8,
-    max: 25,
-  },
-};
 
 const animationDelay = 600;
 const maxTabletWidth = 900;
@@ -128,8 +114,8 @@ function FormRecommendation({
               onChange={handleChange}
               value={values.title}
               required
-              minLength={validationSettings.title.minLength}
-              maxLength={validationSettings.title.maxLength}
+              minLength={placesValidationSettings.title.minLength}
+              maxLength={placesValidationSettings.title.maxLength}
               error={errors?.title}
             />
 
@@ -154,8 +140,8 @@ function FormRecommendation({
             onChange={handleChange}
             value={values.address}
             required
-            minLength={validationSettings.address.minLength}
-            maxLength={validationSettings.address.maxLength}
+            minLength={placesValidationSettings.address.minLength}
+            maxLength={placesValidationSettings.address.maxLength}
             error={errors?.address}
           />
 
@@ -212,8 +198,8 @@ function FormRecommendation({
               onChange={handleChange}
               value={values.age}
               required
-              max={validationSettings.age.max}
-              min={validationSettings.age.min}
+              max={placesValidationSettings.age.max}
+              min={placesValidationSettings.age.min}
               error={errors?.age}
             />
           </div>

@@ -15,6 +15,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+    aspect-ratio: 1;
   }
 
   &__input-wrap {
@@ -43,7 +44,7 @@
     &_hidden {
       opacity: 0;
       transition: .3s ease;
-  
+
       &:hover {
         opacity: 1;
       }
@@ -119,9 +120,9 @@
 
     &_error {
       color: $error;
-	    -webkit-text-shadow: 1px 1px 0 $black; 
+	    -webkit-text-shadow: 1px 1px 0 $black;
 	    -moz-text-shadow: 1px 1px 0 $black;
-      text-shadow: 1px 1px 0 $black; 
+      text-shadow: 1px 1px 0 $black;
     }
   }
 
@@ -147,15 +148,15 @@
   &__ratings-text {
     margin-left: 15px;
     color: $lightGray;
-    
+
     &_type_good {
       color: $green;
     }
-  
+
     &_type_neutral {
       color: $lightGray;
     }
-  
+
     &_type_bad {
       color: $error;
     }
@@ -164,7 +165,7 @@
   &__rating {
     margin-right: 15px;
     transition: .3s ease;
-  
+
     &:last-of-type {
       margin-right: 0;
     }
