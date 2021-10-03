@@ -2,11 +2,12 @@
 
 .popup {
   &__container_type_video {
+    box-sizing: border-box;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     max-width: 1770px;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 30px);
     width: 100%;
     padding: 60px 30px 50px;
     transform: rotateX(80deg) scale(1);
@@ -17,6 +18,7 @@
   &__video-iframe-container {
     position: relative;
     width: 100%;
+    max-width: 1710px;
     border-radius: 30px;
     aspect-ratio: 16 / 9;
     overflow: hidden;
@@ -35,7 +37,7 @@
   &__video-iframe {
     width: inherit;
     height: 100%;
-    max-height: calc(100vh - 295px);
+    max-height: calc(100vh - 225px);
     border: 0;
     border-radius: inherit;
     aspect-ratio: inherit;
