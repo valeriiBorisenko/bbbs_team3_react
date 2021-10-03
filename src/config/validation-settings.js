@@ -43,7 +43,7 @@ export const questionFormValidationSettings = {
 export const diaryFormValidationSettings = {
   place: {
     minLength: 1,
-    maxLength: 128,
+    maxLength: 50,
   },
   description: {
     maxLength: 1024,
