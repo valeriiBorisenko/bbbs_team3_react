@@ -95,10 +95,6 @@
     margin-top: 30px;
     max-height: 175px;
     height: 100%;
-
-    > div {
-      min-height: 175px;
-    }
   }
 
   &__desc-paragraph {
@@ -267,9 +263,7 @@
     }
 
     &__description {
-      > div {
-        min-height: 170px;
-      }
+      max-height: 170px;
     }
 
     &__submit {
@@ -290,9 +284,7 @@
     }
 
     &__description {
-      > div {
-        min-height: 100px;
-      }
+      max-height: 164px;
     }
   }
 }

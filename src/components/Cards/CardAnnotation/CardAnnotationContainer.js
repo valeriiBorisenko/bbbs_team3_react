@@ -10,7 +10,7 @@ function CardAnnotationContainer({ caption, children }) {
     .trim();
 
   return (
-    <ModificatedScrollbars horizontalScrollClass="scroll-thumb">
+    <ModificatedScrollbars>
       {caption && (
         <Caption sectionClass="card-annotation__caption" title={caption} />
       )}

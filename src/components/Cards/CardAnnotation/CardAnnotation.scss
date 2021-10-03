@@ -3,7 +3,6 @@
 .card-annotation {
   padding: 33px;
   padding-right: 10px;
-  overflow: hidden;
   height: 153px;
   box-sizing: content-box;
 
@@ -21,7 +20,7 @@
         max-height: 428px;
       }
 
-      > div > div > .card-annotation__desc {
+      & .card-annotation__desc {
         margin-top: 0;
       }
     }
@@ -35,7 +34,7 @@
 
   &__desc {
     box-sizing: border-box;
-    padding-right: 18px;
+    padding-right: 15px;
     margin-top: 95px;
 
     &_center {
@@ -70,10 +69,6 @@
 
     &__caption {
       padding-bottom: 5px;
-    }
-
-    &__desc {
-      padding-right: 15px;
     }
   }
 }
