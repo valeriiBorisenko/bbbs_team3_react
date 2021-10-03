@@ -5,7 +5,7 @@ import { ERROR_MESSAGES, localStChosenVideo } from '../../config/constants';
 import { PopupsContext } from '../../contexts';
 import { useFiltrationWithMainCard, usePageWidth } from '../../hooks';
 import {
-  getVideo,
+  getVideoById,
   getVideoPageData,
   getVideoPageTags,
 } from '../../api/video-page';
@@ -25,13 +25,15 @@ import './Video.scss';
 
 const PAGE_SIZE_PAGINATE = {
   small: 8,
-  medium: 12,
+  medium: 8,
+  big: 12,
   default: 16,
 };
 
 const MAX_SCREEN_WIDTH = {
-  small: 1023,
-  medium: 1450,
+  small: 767,
+  medium: 1023,
+  big: 1450,
 };
 
 const {
@@ -47,7 +49,10 @@ const Video = () => {
   const { state } = useLocation();
   const { openPopupVideo } = useContext(PopupsContext);
   // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
-  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  const { pageSize, isSmallQuery } = usePageWidth(
+    MAX_SCREEN_WIDTH,
+    PAGE_SIZE_PAGINATE
+  );
   // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
@@ -83,7 +88,7 @@ const Video = () => {
   // Откртие попапа при переходе из поиска
   useEffect(() => {
     if (state) {
-      getVideo(state.id)
+      getVideoById(state.id)
         .then((res) => {
           setLocalStorageData(localStChosenVideo, res);
           openPopupVideo();
@@ -174,7 +179,7 @@ const Video = () => {
       <>
         {isMainCardShown && (
           <section className="video__main-card page__section scale-in">
-            <CardVideoMain data={mainCard} />
+            <CardVideoMain data={mainCard} isMobile={isSmallQuery} />
           </section>
         )}
 
@@ -184,6 +189,7 @@ const Video = () => {
               key={item?.id}
               data={item}
               sectionClass="scale-in"
+              isMobile={isSmallQuery}
               isVideo
             />
           ))}

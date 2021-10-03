@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import placesPageTexts from './locales/RU';
 import { CurrentUserContext, PopupsContext } from '../../contexts';
 import {
@@ -13,10 +13,11 @@ import {
   useFiltrationForPlaces,
   useLocalStorage,
   usePageWidth,
+  useSingleCardAtDynamicRoute,
 } from '../../hooks';
 import {
   getChosenPlace,
-  getPlace,
+  getPlaceById,
   getPlaces,
   getPlacesTags,
 } from '../../api/places-page';
@@ -25,15 +26,17 @@ import {
   BasePage,
   CardPlace,
   Loader,
+  NextArticleLink,
   NoDataNotificationBox,
   Paginate,
   PlacesRecommend,
-  PopupPlace,
   PopupRecommendSuccess,
   TagsList,
   TitleH1,
 } from './index';
 import './Places.scss';
+import { Card } from '../Articles';
+import { PLACES_URL } from '../../config/routes';
 
 const {
   headTitle,
@@ -41,6 +44,7 @@ const {
   title,
   textStubNoData,
   paragraphNoContent,
+  toMainPageLinkTitle,
 } = placesPageTexts;
 
 const PAGE_SIZE_PAGINATE = {
@@ -53,17 +57,13 @@ const MAX_SCREEN_WIDTH = {
 };
 
 function Places() {
-  const { state } = useLocation();
-  const searchPlaceId = state?.id;
-  const [searchedPlace, setSearchedPlace] = useState({});
-
+  const { placeId } = useParams();
   const { activityTypes, activityTypesSimplified } = useActivityTypes();
 
   const { currentUser } = useContext(CurrentUserContext);
   const { openPopupCities } = useContext(PopupsContext);
 
   const getLocalStorageItem = useLocalStorage(localStUserCity);
-
   // сохранённый в localStorage город анонимуса
   const currentAnonymousCity = getLocalStorageItem();
   const userCity = currentUser?.city ?? currentAnonymousCity;
@@ -71,21 +71,12 @@ function Places() {
   const [isCityChanged, setIsCityChanged] = useState(false);
 
   // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
-  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  const { pageSize } = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
-  // попапы страницы
-  const [isPlacePopupOpen, setIsPlacePopupOpen] = useState(false);
+  // попап страницы
   const [isPopupRecommendSuccessOpen, setIsPopupRecommendSuccessOpen] =
     useState(false);
-
-  const openPopupPlace = () => {
-    setIsPlacePopupOpen(true);
-  };
-
-  const closePopupPlace = () => {
-    setIsPlacePopupOpen(false);
-  };
 
   const openPopupRecommendSuccess = () => {
     setIsPopupRecommendSuccessOpen(true);
@@ -94,6 +85,13 @@ function Places() {
   const closePopupRecommendSuccess = () => {
     setIsPopupRecommendSuccessOpen(false);
   };
+
+  // одиночная карточка при переходе по динамическому маршруту
+  const { singleCard, isSingleCardShown } = useSingleCardAtDynamicRoute({
+    apiCallback: getPlaceById,
+    dynamicParam: placeId,
+    setIsPageError,
+  });
 
   // фильтрация и пагинация
   const filtersAndPaginationSettings = {
@@ -108,6 +106,7 @@ function Places() {
     userCity,
     pageSize,
     setIsPageError,
+    dontStartWhileTrue: !!placeId, // скрипты выполнятся, только если нет запроса по id
   };
 
   const {
@@ -136,20 +135,11 @@ function Places() {
         openPopupCities();
       }, DELAY_RENDER);
     }
-
-    if (state && userCity) {
-      getPlace(searchPlaceId)
-        .then((place) => {
-          setSearchedPlace(place);
-          openPopupPlace();
-        })
-        .catch(() => setIsPageError(true));
-    }
-  }, [state]);
+  }, []);
 
   // повторная загрузка при смене города
   useEffect(() => {
-    if (!isPageLoading) {
+    if (!isPageLoading && !placeId) {
       setIsCityChanged(true);
       resetStatesAndGetNewData();
     }
@@ -157,10 +147,10 @@ function Places() {
 
   // следит за изменением данных, если это было вызвано сменой города
   useEffect(() => {
-    if (isCityChanged) setIsCityChanged(false);
+    if (isCityChanged && !placeId) setIsCityChanged(false);
   }, [dataToRender]);
 
-  if (isPageLoading) {
+  if (isPageLoading || (placeId && !isSingleCardShown)) {
     return <Loader isCentered />;
   }
 
@@ -171,12 +161,6 @@ function Places() {
           {renderPageContent()}
         </section>
       </BasePage>
-      <PopupPlace
-        isOpen={isPlacePopupOpen}
-        onClose={closePopupPlace}
-        place={searchedPlace}
-        activityTypesSimplified={activityTypesSimplified}
-      />
       <PopupRecommendSuccess
         isOpen={isPopupRecommendSuccessOpen}
         onClose={closePopupRecommendSuccess}
@@ -188,7 +172,7 @@ function Places() {
     // ошибка или нет ивентов для города вообще и не фильтровали
     if (
       isPageError ||
-      (!isMainCard && !dataToRender.length && !isNoFilteredResults)
+      (!isMainCard && !dataToRender.length && !placeId && !isNoFilteredResults)
     ) {
       return renderAnimatedContainer();
     }
@@ -219,6 +203,25 @@ function Places() {
   }
 
   function renderFiltersAndCards() {
+    if (isSingleCardShown) {
+      return (
+        <div className="places__single-card-container scale-in">
+          <CardPlace
+            data={singleCard}
+            activityTypesSimplified={activityTypesSimplified}
+            sectionClass="card-container_type_main-article"
+            isBig
+          />
+
+          <Card sectionClass="places__single-card-paragraph">
+            <p className="paragraph">{singleCard.description}</p>
+          </Card>
+
+          <NextArticleLink text={toMainPageLinkTitle} href={PLACES_URL} />
+        </div>
+      );
+    }
+
     if (isCityChanged) {
       return <Loader isPaginate />;
     }
@@ -316,14 +319,17 @@ function Places() {
   }
 
   function renderAgeFilters() {
-    return (
-      <TagsList
-        filterList={ageFilters}
-        name="ages"
-        handleClick={changeAgeFilter}
-        sectionClass="places__tags fade-in"
-      />
-    );
+    if (!placeId) {
+      return (
+        <TagsList
+          filterList={ageFilters}
+          name="ages"
+          handleClick={changeAgeFilter}
+          sectionClass="places__tags fade-in"
+        />
+      );
+    }
+    return null;
   }
 }
 

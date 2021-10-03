@@ -8,6 +8,7 @@ import {
 } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
 import './PopupVideo.scss';
+import { staticImageUrl } from '../../../config/config';
 
 const PopupVideo = ({ isOpen, onClose }) => {
   const data = getLocalStorageData(localStChosenVideo);
@@ -25,20 +26,29 @@ const PopupVideo = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onClose={closePopup}
     >
-      <>
-        <iframe
-          title="youTubePlayer"
-          id="playeryt"
-          className="popup__video-iframe"
-          src={frameSrc}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          seamless
-        />
-        <TitleH2 sectionClass="popup__video-title" title={data?.title} />
-        <Caption sectionClass="popup__video-caption" title={data?.info} />
-      </>
+      <div className="popup__video-iframe-container">
+        {data?.image && (
+          <img
+            className="popup__video-preview"
+            src={`${staticImageUrl}/${data.image}`}
+            alt={data.title}
+          />
+        )}
+        {isOpen && (
+          <iframe
+            title={data?.title}
+            id="playeryt"
+            className="popup__video-iframe"
+            src={`${frameSrc}?autoplay=1`}
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            seamless
+          />
+        )}
+      </div>
+      <TitleH2 sectionClass="popup__video-title" title={data?.title} />
+      <Caption sectionClass="popup__video-caption" title={data?.info} />
     </Popup>
   );
 };

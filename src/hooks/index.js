@@ -14,6 +14,7 @@ import useFiltrationAndPagination from './useFiltrationAndPagination';
 import useFiltrationWithMainCard from './useFiltrationWithMainCard';
 import useFiltrationForPlaces from './useFiltrationForPlaces';
 import usePageWidth from './usePageWidth';
+import useSingleCardAtDynamicRoute from './useSingleCardAtDynamicRoute';
 
 export {
   useClickOutside,
@@ -32,4 +33,5 @@ export {
   useFiltrationWithMainCard,
   useFiltrationForPlaces,
   usePageWidth,
+  useSingleCardAtDynamicRoute,
 };

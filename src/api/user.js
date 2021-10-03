@@ -14,7 +14,7 @@ function updateUserProfile(dataToUpdate) {
   return axios
     .patch(`${baseURL}${apiUrl}/profile/`, dataToUpdate)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 // восстановить пароль

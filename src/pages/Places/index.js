@@ -3,9 +3,10 @@ import CardPlace from '../../components/Cards/CardPlace/CardPlace';
 import PlacesRecommend from '../../components/PlacesRecommend/PlacesRecommend';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import TagsList from '../../components/TagsList/TagsList';
-import { PopupPlace, PopupRecommendSuccess } from '../../components/Popups';
+import { PopupRecommendSuccess } from '../../components/Popups';
 import {
   Loader,
+  NextArticleLink,
   NoDataNotificationBox,
   Paginate,
   TitleH1,
@@ -21,6 +22,6 @@ export {
   TagsList,
   NoDataNotificationBox,
   Paginate,
-  PopupPlace,
   PopupRecommendSuccess,
+  NextArticleLink,
 };

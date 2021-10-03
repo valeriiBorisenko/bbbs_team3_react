@@ -6,7 +6,7 @@ import { ERROR_MESSAGES, localStChosenVideo } from '../../config/constants';
 import { useFiltrationAndPagination, usePageWidth } from '../../hooks';
 import { setLocalStorageData } from '../../hooks/useLocalStorage';
 import {
-  getMovie,
+  getMovieById,
   getMoviesPageData,
   getMoviesPageFilter,
 } from '../../api/movies-page';
@@ -24,13 +24,15 @@ import './Movies.scss';
 
 const PAGE_SIZE_PAGINATE = {
   small: 8,
-  medium: 12,
+  medium: 8,
+  big: 12,
   default: 16,
 };
 
 const MAX_SCREEN_WIDTH = {
-  small: 1216,
-  medium: 1451,
+  small: 767,
+  medium: 1216,
+  big: 1451,
 };
 
 const { headTitle, headDescription, title, textStubNoData } = moviesPageTexts;
@@ -39,7 +41,12 @@ function Movies() {
   const { state } = useLocation();
   const { openPopupVideo } = useContext(PopupsContext);
 
-  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
+  const { pageSize, isSmallQuery } = usePageWidth(
+    MAX_SCREEN_WIDTH,
+    PAGE_SIZE_PAGINATE
+  );
+  // стейт ошибки
   const [isPageError, setIsPageError] = useState(false);
 
   // фильтрация и пагинация
@@ -68,7 +75,7 @@ function Movies() {
   // Откртие попапа при переходе из поиска
   useEffect(() => {
     if (state) {
-      getMovie(state.id)
+      getMovieById(state.id)
         .then((res) => {
           setLocalStorageData(localStChosenVideo, res);
           openPopupVideo();
@@ -143,7 +150,7 @@ function Movies() {
           <ul className="movies__cards cards-grid cards-grid_content_small-cards fade-in">
             {dataToRender.map((movie) => (
               <li className="card-container scale-in" key={movie.id}>
-                <CardFilm data={movie} />
+                <CardFilm data={movie} isMobile={isSmallQuery} />
                 <CardAnnotation description={movie.annotation} />
               </li>
             ))}

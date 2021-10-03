@@ -7,15 +7,14 @@ function getArticlesPageData({ limit, offset }) {
       params: { limit, offset },
     })
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
-// получение одного книги
-function getArticle(id) {
+function getArticleById(id) {
   return axios
-    .get(`${baseURL}${apiUrl}/articles/${id}`)
+    .get(`${baseURL}${apiUrl}/articles/${id}/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
-export { getArticlesPageData, getArticle };
+export { getArticlesPageData, getArticleById };

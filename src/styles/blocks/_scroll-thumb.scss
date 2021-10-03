@@ -1,11 +1,11 @@
 .scroll-thumb {
-  background-color: $background;
+  background-color: $scrollThumb;
   border-radius: 5px;
   width: 5px;
 }
 
 @include atDesktop1024 {
-  .scroll-thumb { 
+  .scroll-thumb {
     width: 3px;
   }
 }

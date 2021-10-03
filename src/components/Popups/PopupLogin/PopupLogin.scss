@@ -46,7 +46,7 @@
 }
 
 .popup__input {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   &:last-of-type {
     margin-bottom: 0;
   }
@@ -54,8 +54,8 @@
 
 .popup__forgot-password {
   margin: 0;
-  margin-bottom: 30px;
-  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-top: 15px;
   font-size: 14px;
   line-height: 1.5;
   color: $darkGray;
@@ -69,7 +69,6 @@
   &:hover {
     cursor: pointer;
     color: $blue;
-    text-decoration: underline;
   }
 }
 
@@ -83,7 +82,7 @@
   opacity: 0;
   transform: translateX(100%);
   transition: .5s ease;
-  
+
   &_opened {
     visibility: visible;
     opacity: 1;
@@ -91,23 +90,23 @@
     transition: .5s ease;
   }
 }
-  
+
   .popup__login-container_success-animation {
     max-width: 450px;
     max-height: 190px;
     height: 100%;
     width: 100%;
     margin: 0 auto 30px;
-  
+
     & > svg {
       max-height: 190px;
     }
   }
-  
+
   @include atDesktop1024 {
     .popup__login-container_success-animation {
       max-height: 170px;
-  
+
       & > svg {
         max-height: 170px;
       }
@@ -124,9 +123,6 @@
   }
 
   .popup__input {
-    margin-bottom: 10px;
-    &:last-of-type {
-      margin-bottom: 0;
-    }
+    margin-bottom: 5px;
   }
 }

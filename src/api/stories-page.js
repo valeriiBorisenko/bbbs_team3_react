@@ -8,7 +8,7 @@ function getStoriesPageTags({ limit, offset }) {
       params: { limit, offset },
     })
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 function getStoryById(id) {

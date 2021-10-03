@@ -8,7 +8,7 @@ function getBooksPageData({ limit, offset, types }) {
       params: { types, limit, offset },
     })
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
 // все активные теги (фильтры)
@@ -16,15 +16,15 @@ function getBooksPageFilter() {
   return axios
     .get(`${baseURL}${apiUrl}/books/types/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
-// получение одного книги
-function getBook(id) {
+// получение одной книги
+function getBookById(id) {
   return axios
-    .get(`${baseURL}${apiUrl}/books/${id}`)
+    .get(`${baseURL}${apiUrl}/books/${id}/`)
     .then((response) => response.data)
-    .catch((err) => Promise.reject(new Error(`${err.message}`)));
+    .catch((err) => Promise.reject(err?.response));
 }
 
-export { getBooksPageData, getBooksPageFilter, getBook };
+export { getBooksPageData, getBooksPageFilter, getBookById };

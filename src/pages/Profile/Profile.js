@@ -128,7 +128,7 @@ function Profile() {
     if (isFormOpen) closeForm();
   }, [pageIndex]);
 
-  if (!events.length && !diaries.length) {
+  if (isPageLoading) {
     return <Loader isCentered />;
   }
 

@@ -10,6 +10,55 @@
     margin: 0;
     list-style-type: none;
   }
+
+  &__single-book-container {
+    max-width: 1170px;
+    margin: 80px auto 0;
+
+    & .card-container {
+      grid-template-columns: minmax(370px, 420px) 1fr;
+    }
+
+    & .card-book {
+      padding-top: 37px;
+      padding-bottom: 37px;
+    }
+
+    & .card-annotation {
+      height: auto;
+    }
+  }
+
+  &__single-book-paragraph {
+    display: none;
+    padding: 30px 15px;
+  }
+}
+
+@include atDesktop1199 {
+  .books {
+    &__single-book-container {
+      max-width: 770px;
+      margin: 80px auto 0;
+
+      & .card-container {
+        grid-template-columns: 1fr;
+      }
+
+      & .card-book {
+        padding-top: 30px;
+        padding-bottom: 30px;
+      }
+
+      & .card-annotation {
+        display: none;
+      }
+    }
+
+    &__single-book-paragraph {
+      display: block;
+    }
+  }
 }
 
 @include atDesktop1024 {
@@ -21,6 +70,10 @@
     &__cards {
       padding-top: 50px;
     }
+
+    &__single-book-container {
+      margin-top: 50px;
+    }
   }
 }
 
@@ -28,6 +81,10 @@
   .books {
     &__cards {
       padding-top: 30px;
+    }
+
+    &__single-book-container {
+      margin-top: 30px;
     }
   }
 }

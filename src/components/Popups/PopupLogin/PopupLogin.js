@@ -4,10 +4,11 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Lottie from 'lottie-web';
 import texts from './locales/RU';
 import { CurrentUserContext, ErrorsContext } from '../../../contexts';
-import { useAuth, useFormWithValidation } from '../../../hooks';
-import getServerErrors from '../../../utils/form-errors';
 import { AFISHA_URL } from '../../../config/routes';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../../config/constants';
+import { popupLoginValidationSettings } from '../../../config/validation-settings';
+import { useAuth, useFormWithValidation } from '../../../hooks';
+import getServerErrors from '../../../utils/form-errors';
 import { recoverPassword } from '../../../api/user';
 import Popup from '../Popup/Popup';
 import { Button, Input, TitleH2 } from '../../utils';
@@ -29,16 +30,12 @@ const {
   submitButtonTextForgot,
   loadingButtonTextLogin,
   loadingButtonTextForgot,
+  showPasswordButton,
+  hidePasswordButton,
 } = texts;
 
-const validationSettings = {
-  username: {
-    maxLength: 150,
-  },
-  password: {
-    minLength: 8,
-  },
-};
+// функционал восстановления пароля отключили
+// остается в коде на всякий случай
 
 function PopupLogin({ isOpen, onClose }) {
   const { updateUser } = useContext(CurrentUserContext);
@@ -46,12 +43,14 @@ function PopupLogin({ isOpen, onClose }) {
   const { generalErrorMessage } = ERROR_MESSAGES;
   const { badRequest } = ERROR_CODES;
 
+  const [isShownPassword, setIsShownPassword] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isRecoveringPassword, setIsRecoveringPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
   const animationContainer = useRef(null);
+  const disableRecoverPassword = true;
 
   useEffect(() => {
     Lottie.loadAnimation({
@@ -67,15 +66,6 @@ function PopupLogin({ isOpen, onClose }) {
 
   const { handleLogin, isWaitingResponse } = useAuth(updateUser);
 
-  function handleClickForgotPassword() {
-    setIsForgotPassword(!isForgotPassword);
-  }
-
-  function successForgotPassword() {
-    setIsSuccess(false);
-    setIsForgotPassword(false);
-  }
-
   const { values, handleChange, errors, isValid, resetForm } =
     useFormWithValidation();
 
@@ -87,6 +77,10 @@ function PopupLogin({ isOpen, onClose }) {
   function handleError(err) {
     if (err?.status === badRequest) setError(err?.data);
     else setError({ message: generalErrorMessage.title });
+  }
+
+  function showPassword() {
+    setIsShownPassword(!isShownPassword);
   }
 
   function handleSubmitForgotPassword(evt) {
@@ -104,6 +98,15 @@ function PopupLogin({ isOpen, onClose }) {
       .finally(() => setIsRecoveringPassword(false));
   }
 
+  function handleClickForgotPassword() {
+    setIsForgotPassword(!isForgotPassword);
+  }
+
+  function successForgotPassword() {
+    setIsSuccess(false);
+    setIsForgotPassword(false);
+  }
+
   //! аварийный перевод на главную, если не хочешь логиниться
   const history = useHistory();
   const { pathname } = useLocation();
@@ -114,6 +117,7 @@ function PopupLogin({ isOpen, onClose }) {
     }
     setSuccessMessage('');
     onClose();
+    setIsShownPassword(false);
   }
 
   function closePopupOnEsc(evt) {
@@ -170,8 +174,8 @@ function PopupLogin({ isOpen, onClose }) {
       onClose={closePopup}
     >
       {renderFormAuth()}
-      {renderFormForgotPassword()}
-      {renderSuccessLoginContainer()}
+      {!disableRecoverPassword && renderFormForgotPassword()}
+      {!disableRecoverPassword && renderSuccessLoginContainer()}
     </Popup>
   );
 
@@ -195,30 +199,41 @@ function PopupLogin({ isOpen, onClose }) {
           onChange={handleChange}
           value={values?.username}
           error={errors?.username}
-          maxLength={validationSettings.username.maxLength}
+          maxLength={popupLoginValidationSettings.username.maxLength}
           required
         />
 
         <Input
           id="loginPasswordInput"
           sectionClass="popup__input"
-          type="password"
+          type={isShownPassword ? 'text' : 'password'}
           name="password"
           placeholder={passwordPlaceholder}
           onChange={handleChange}
           value={values?.password}
           error={errors?.password}
-          minLength={validationSettings.password.minLength}
+          minLength={popupLoginValidationSettings.password.minLength}
           required
         />
 
         <button
           className="popup__forgot-password"
           type="button"
-          onClick={handleClickForgotPassword}
+          onClick={showPassword}
         >
-          {forgotButtonText}
+          {isShownPassword ? hidePasswordButton : showPasswordButton}
         </button>
+
+        {!disableRecoverPassword && (
+          <button
+            className="popup__forgot-password"
+            type="button"
+            onClick={handleClickForgotPassword}
+          >
+            {forgotButtonText}
+          </button>
+        )}
+
         <span className="form-error-message">{errorsString}</span>
         <Button
           sectionClass="popup__button_type_sign-in"

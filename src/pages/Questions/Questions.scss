@@ -2,6 +2,7 @@
 
 .questions {
   max-width: 970px;
+  width: 100%;
   margin: 0 auto;
   padding: 0;
   padding-top: 80px;
@@ -12,7 +13,9 @@
   }
 
   &__list-item {
+    max-width: 870px;
     margin-bottom: 30px;
+    margin-right: 100px;
     &:last-of-type {
       margin-bottom: 0;
     }
@@ -77,10 +80,15 @@
 
 @include atDesktop1024 {
   .questions {
+    max-width: 770px;
     padding-top: 50px;
 
     &__title {
       margin-bottom: 10px;
+    }
+
+    &__list-item {
+      margin-right: 0;
     }
   }
 
@@ -107,6 +115,7 @@
   }
 
   .add-question {
+    max-width: 770px;
     margin: 50px auto 0;
   }
 }

@@ -8,6 +8,7 @@ const placesPageTexts = {
     'Рекомендуемых мест для выбранного города ещё нет, но они обязательно появятся!',
   paragraphNoContent: 'По вашему запросу ничего не нашлось.',
   mentorTag: 'Выбор наставников',
+  toMainPageLinkTitle: 'Все места',
   ageFilterNames: [
     { filter: '8-10', name: '8-10 лет' },
     { filter: '11-13', name: '11-13 лет' },

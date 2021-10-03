@@ -14,8 +14,8 @@ import {
 } from '../../hooks/useLocalStorage';
 import {
   getActiveMonthTags,
-  getCalendarItem,
   getCalendarPageData,
+  getEventById,
 } from '../../api/afisha-page';
 import {
   AnimatedPageContainer,
@@ -47,7 +47,7 @@ function Calendar() {
   const { state } = useLocation();
 
   // определяет, сколько карточек показывать на странице в зависимости от ширины экрана
-  const pageSize = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
+  const { pageSize } = usePageWidth(MAX_SCREEN_WIDTH, PAGE_SIZE_PAGINATE);
   // стейт для работы с мероприятиями
   const [calendarPageData, setCalendarPageData] = useState(null);
   // флаг смены города - нужно снова загружать данные
@@ -107,7 +107,7 @@ function Calendar() {
   // Открытие попапа при переходе из поиска
   useEffect(() => {
     if (state) {
-      getCalendarItem(state.id)
+      getEventById(state.id)
         .then((res) => {
           setLocalStorageData(localStAfishaEvent, res);
           openPopupAboutEvent();
@@ -129,8 +129,8 @@ function Calendar() {
     }
   }, [selectedEvent]);
 
-  // глобальный лоадер при первой загрузке страницы
-  if (isPageLoading) {
+  // глобальный лоадер при первой загрузке страницы или пока незалогинен
+  if (isPageLoading || !currentUser) {
     return <Loader isCentered />;
   }
 

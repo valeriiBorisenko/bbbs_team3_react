@@ -46,19 +46,10 @@ function shareDiary(diaryId) {
     .catch((err) => Promise.reject(err?.response));
 }
 
-// получить дневник по id
-function getDiaryById(diaryId) {
-  return axios
-    .get(`${baseURL}${apiUrl}/profile/diaries/${diaryId}/`)
-    .then((response) => response.data)
-    .catch((err) => Promise.reject(err?.response));
-}
-
 export {
   getProfileDiariesData,
   createDiary,
   editDiary,
   deleteDiary,
   shareDiary,
-  getDiaryById,
 };

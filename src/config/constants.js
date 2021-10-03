@@ -55,7 +55,7 @@ export const RESOURCE_GROUP_TAG = 'Ресурсная группа';
 export const CHOSEN_BY_MENTOR_TAG = 'Выбор наставников';
 export const DEFAULT_CITY = 'Москва';
 
-export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|jfif|bmp)$/i;
+export const regExpImages = /^[\W\w\S\s]+\.(jpe?g|png|webp|bmp)$/i;
 
 export const DELAY_DEBOUNCE = 300;
 export const DELAY_RENDER = 100;

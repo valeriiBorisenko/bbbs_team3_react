@@ -9,6 +9,18 @@
   line-height: 1.08;
   color: $black;
   text-align: center;
+  transition: .3s ease;
+}
+
+.linkable {
+  display: block;
+  text-decoration: none;
+  width: fit-content;
+  margin: 0 auto;
+
+  &:hover .main-title {
+    color: $blue;
+  }
 }
 
 @include atDesktop1024 {
