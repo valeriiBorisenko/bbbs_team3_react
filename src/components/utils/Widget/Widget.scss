@@ -58,8 +58,11 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 450px) {
   .widget {
+    max-width: 373px;
+    width: 100%;
+
     &__iframe {
       width: 100%;
     }
