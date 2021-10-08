@@ -258,7 +258,7 @@ function Places() {
           {isMainCard && isMainCardShown && (
             <section className="places__main">
               <CardPlace
-                key={mainCard?.id}
+                key={mainCard.id}
                 data={mainCard}
                 activityTypesSimplified={activityTypesSimplified}
                 sectionClass="card-container_type_main-article scale-in"
@@ -271,7 +271,7 @@ function Places() {
             <section className="places__cards-grid">
               {dataToRender.map((place, i) => (
                 <CardPlace
-                  key={place?.id}
+                  key={place.id}
                   data={place}
                   activityTypesSimplified={activityTypesSimplified}
                   color={COLORS[(i + 1) % COLORS.length]}

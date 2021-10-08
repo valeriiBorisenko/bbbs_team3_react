@@ -7,17 +7,7 @@ import CardAnnotation from '../CardAnnotation/CardAnnotation';
 import './CardPlace.scss';
 
 function CardPlace({
-  data: {
-    image,
-    title,
-    description,
-    link,
-    chosen,
-    address,
-    gender,
-    age,
-    activityType,
-  },
+  data,
   activityTypesSimplified,
   color,
   sectionClass,
@@ -34,64 +24,70 @@ function CardPlace({
 
   const cardColor = isBig ? 'yellow' : color;
   const cardSize = isBig ? 'card-place_main' : '';
-  const sexType = gender === 'male' ? genderMale : genderFemale;
+  const sexType = data?.gender === 'male' ? genderMale : genderFemale;
 
   const imageClassNames = [
     'card-place__image',
     'card-place__image_type_article',
-    link ? '' : 'card-place__image_big',
+    data?.link ? '' : 'card-place__image_big',
   ]
     .join(' ')
     .trim();
 
-  const info = chosen
-    ? `${sexType}, ${age} лет, ${
-        activityTypesSimplified
-          ? activityTypesSimplified[activityType]
+  const info = data?.chosen
+    ? `${sexType}, ${data.age} лет, ${
+        activityTypesSimplified && data.activityType
+          ? activityTypesSimplified[data.activityType]
           : activityTypeDefault
       } отдых`
     : '';
 
   return (
-    <article className={`card-container ${sectionClass}`}>
-      <Card sectionClass={`card-place ${cardSize}`} color={cardColor}>
-        {isMainPage && (
-          <Rubric title={PLACES_TITLE} sectionClass="card-place__rubric" />
-        )}
+    data && (
+      <article className={`card-container ${sectionClass}`}>
+        <Card sectionClass={`card-place ${cardSize}`} color={cardColor}>
+          {isMainPage && (
+            <Rubric title={PLACES_TITLE} sectionClass="card-place__rubric" />
+          )}
 
-        {chosen && !isMainPage && (
-          <Rubric title={chosenTagText} sectionClass="card-place__rubric" />
-        )}
+          {data.chosen && !isMainPage && (
+            <Rubric title={chosenTagText} sectionClass="card-place__rubric" />
+          )}
 
-        <div className="card-place__title-wrap">
-          <TitleH2 sectionClass="card-place__title" title={title} />
-          <Caption sectionClass="card-place__address" title={address} />
-        </div>
+          <div className="card-place__title-wrap">
+            <TitleH2 sectionClass="card-place__title" title={data.title} />
+            <Caption sectionClass="card-place__address" title={data.address} />
+          </div>
 
-        {renderImage()}
+          {renderImage()}
 
-        {link && (
-          <a
-            href={link}
-            className="link card-place__link"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {linkText}
-          </a>
-        )}
-      </Card>
+          {data.link && (
+            <a
+              href={data.link}
+              className="link card-place__link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {linkText}
+            </a>
+          )}
+        </Card>
 
-      <CardAnnotation info={info} description={description} isMain={isBig} />
-    </article>
+        <CardAnnotation
+          info={info}
+          description={data.description}
+          isMain={isBig}
+        />
+      </article>
+    )
   );
 
   function renderImage() {
-    if ((chosen && isBig) || isMainPage) {
+    if ((data?.chosen && isBig) || isMainPage) {
       return (
         <img
-          src={`${staticImageUrl}/${image}`}
-          alt={title}
+          src={`${staticImageUrl}/${data.image}`}
+          alt={data.title}
           className={imageClassNames}
         />
       );
