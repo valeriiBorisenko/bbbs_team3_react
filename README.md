@@ -4,7 +4,7 @@
 ![Pull requests](https://img.shields.io/github/issues-pr-closed-raw/valeriiBorisenko/bbbs_team3_react?color=blue&style=flat-square)
 ![Repo size](https://img.shields.io/github/repo-size/valeriiBorisenko/bbbs_team3_react?style=flat-square)
 
-## Ссылка на проект: http://195.24.66.127/
+## Ссылка на проект: http://nastavnikipro.ru/
 
 ##### «Старшие Братья Старшие Сестры» — межрегиональная общественная организация содействия воспитанию подрастающего поколения. НКО поддерживает детей, которым требуется внимание: оставшихся без попечения родителей, приемных, детей из неполных, многодетных или неблагополучных семей, детей с ограниченными возможностями.
 
