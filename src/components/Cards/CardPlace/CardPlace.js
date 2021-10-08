@@ -34,13 +34,14 @@ function CardPlace({
     .join(' ')
     .trim();
 
-  const info = data?.chosen
-    ? `${sexType}, ${data.age} лет, ${
-        activityTypesSimplified && data.activityType
-          ? activityTypesSimplified[data.activityType]
-          : activityTypeDefault
-      } отдых`
-    : '';
+  const info =
+    data?.chosen && data?.age && data?.activityType
+      ? `${sexType}, ${data.age} лет, ${
+          activityTypesSimplified
+            ? activityTypesSimplified[data.activityType]
+            : activityTypeDefault
+        } отдых`
+      : '';
 
   return (
     data && (
