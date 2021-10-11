@@ -16,12 +16,14 @@ function CardCatalog({ data: { id, title, image }, shape, sectionClass }) {
             shape={shape}
             color="white"
           >
-            <img
-              draggable="false"
-              className="card-catalog__image"
-              src={`${staticImageUrl}/${image}`}
-              alt={title}
-            />
+            {image && (
+              <img
+                draggable="false"
+                className="card-catalog__image"
+                src={`${staticImageUrl}/${image}`}
+                alt={title}
+              />
+            )}
           </CardFigure>
         </div>
         <TitleH2 sectionClass="card-catalog__title" title={title} />
