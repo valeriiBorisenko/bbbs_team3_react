@@ -40,20 +40,12 @@
 @include atDesktop1440 {
   .stub__upper-element {
     width: 70%;
+    min-width: 325px;
     padding-top: 35px;
   }
 
   .stub__text {
     max-width: 510px;
-  }
-}
-
-@include atDesktop1279 {
-  .stub__upper-element {
-    min-width: 325px;
-  }
-
-  .stub__text {
     font-size: 19px;
   }
 }
