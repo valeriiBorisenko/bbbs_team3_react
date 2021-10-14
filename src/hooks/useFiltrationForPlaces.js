@@ -422,7 +422,7 @@ const useFiltrationForPlaces = ({
       }
 
       if (activeAges) {
-        params[apiFilterNames.ageRestriction] = activeAges;
+        params[apiFilterNames.ageRestriction] = `${activeAges},any`;
       }
 
       if (isChosenByMentorFlag) {
