@@ -5,6 +5,7 @@
 }
 
 .stub__upper-element {
+  box-sizing: border-box;
   width: 60%;
   height: 30%;
   padding-top: 40px;
@@ -39,17 +40,20 @@
 @include atDesktop1440 {
   .stub__upper-element {
     width: 70%;
+    min-width: 325px;
     padding-top: 35px;
   }
 
   .stub__text {
     max-width: 510px;
+    font-size: 19px;
   }
 }
 
 @include atDesktop1024 {
   .stub__upper-element {
-    min-height: 90px;
+    min-width: 229px;
+    height: 90px;
     padding-top: 27px;
     padding-left: 15px;
   }
@@ -68,5 +72,10 @@
 @include atMobile {
   .stub__upper-element {
     padding-top: 22px;
+    height: 78px;
+  }
+
+  .stub__content {
+    height: auto;
   }
 }
