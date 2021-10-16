@@ -1,0 +1,35 @@
+@import './styles/utils.scss';
+
+.blockquote {
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 60px 0;
+  width: 100%;
+  border-top: 1px solid $lightGray;
+  border-bottom: 1px solid $lightGray;
+
+  @include atDesktop1024 {
+    padding: 30px 0;
+  }
+
+  &__text {
+    max-width: 1170px;
+    margin: 0 auto;
+    font-family: $protoGrotesk;
+    font-weight: 300;
+    font-size: 44px;
+    line-height: 1.1;
+    text-align: center;
+    color: $lightBlack;
+
+    @include atDesktop1440 {
+      max-width: 964px;
+    }
+
+    @include atDesktop1024 {
+      max-width: 770px;
+      font-size: 23px;
+      line-height: 1.3;
+    }
+  }
+}

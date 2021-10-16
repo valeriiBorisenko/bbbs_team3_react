@@ -1,3 +1,5 @@
+@import './styles/utils.scss';
+
 .caption {
   margin: 0 auto;
   font-family: $ptRootUI;
@@ -6,10 +8,6 @@
   line-height: 1.4;
   letter-spacing: 0.2px;
   color: $darkGray;
-}
-
-.caption_type_test {
-  margin-top: 20px;
 }
 
 @include atDesktop1024 {

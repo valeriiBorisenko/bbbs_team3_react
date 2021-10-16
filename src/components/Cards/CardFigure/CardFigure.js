@@ -1,12 +1,13 @@
-import './CardFigure.scss';
 import PropTypes from 'prop-types';
+import { Heading } from '../../utils';
+import './CardFigure.scss';
 
 function CardFigure({ title, shape, color, children, sectionClass }) {
   return (
     <div
       className={`card-figure card-figure_color_${color} card-figure_form_${shape} ${sectionClass}`}
     >
-      {title && <h2 className="section-title">{title}</h2>}
+      {title && <Heading level={2} type="small" content={title} />}
       {children}
     </div>
   );

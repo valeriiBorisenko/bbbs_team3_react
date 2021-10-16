@@ -69,7 +69,7 @@ function Catalog() {
         <Heading
           level={1}
           type="big"
-          sectionClass="catalog__title"
+          sectionClass="page__title"
           content={title}
         />
         <Heading

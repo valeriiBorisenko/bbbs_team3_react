@@ -15,11 +15,13 @@ import NavItem from './NavItem/NavItem';
 import ModificatedScrollbars from './ModificatedScrollbars/ModificatedScrollbars';
 import NoDataNotificationBox from './NoDataNotificationBox/NoDataNotificationBox';
 import Paginate from './Paginate/Paginate';
+import Paragraph from './Paragraph/Paragraph';
 import PseudoButtonTag from './PseudoButtonTag/PseudoButtonTag';
 import Rating from './Rating/Rating';
 import Rubric from './Rubric/Rubric';
 import ScrollableContainer from './ScrollableContainer/ScrollableContainer';
 import SearchButton from './SearchButton/SearchButton';
+import StyledLink from './StyledLink/StyledLink';
 import UserIconButton from './UserIconButton/UserIconButton';
 import UserMenuButton from './UserMenuButton/UserMenuButton';
 import Widget from './Widget/Widget';
@@ -43,11 +45,13 @@ export {
   ModificatedScrollbars,
   NoDataNotificationBox,
   Paginate,
+  Paragraph,
   PseudoButtonTag,
   Rating,
   Rubric,
   ScrollableContainer,
   SearchButton,
+  StyledLink,
   UserIconButton,
   UserMenuButton,
   Widget,

@@ -7,7 +7,9 @@ import {
   CardAbout,
   CardFigure,
   Heading,
+  LinkableComponent,
   Logo,
+  Paragraph,
 } from './index';
 import './AboutUs.scss';
 
@@ -32,14 +34,12 @@ function AboutUs() {
           level={1}
           type="medium"
         />
-        <a
-          className="about__logo"
-          href={logoLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Logo />
-        </a>
+        <LinkableComponent
+          Component={Logo}
+          linkSectionClass="about__logo"
+          path={logoLink}
+          isExternal
+        />
 
         <div className="about__us">
           <CardFigure title={aboutTitle} color="yellow" shape="circle" />
@@ -47,17 +47,16 @@ function AboutUs() {
           <Card sectionClass="about__annotation" color="white">
             {React.Children.toArray(
               aboutParagraphs.map((item) => (
-                <p className="paragraph about__paragraph">{item?.text}</p>
+                <Paragraph
+                  sectionClass="about__paragraph"
+                  content={item.text}
+                />
               ))
             )}
           </Card>
         </div>
 
-        <Blockquote
-          sectionWrapperClass="about__quote"
-          sectionTitleClass="about__quote-text"
-          text={blockquote}
-        />
+        <Blockquote sectionClass="about__quote" text={blockquote} />
 
         <div className="about__cards">
           {React.Children.toArray(cards.map((item) => <CardAbout {...item} />))}

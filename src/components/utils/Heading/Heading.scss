@@ -1,12 +1,10 @@
 @import './styles/utils.scss';
 
 .heading {
-  margin: 0 auto;
   width: fit-content;
   font-family: $protoGrotesk;
   font-weight: 300;
   color: $black;
-  text-align: center;
   transition: .3s ease;
 
   &_large {

@@ -1,23 +1,24 @@
 import PropTypes from 'prop-types';
+import './Blockquote.scss';
 
-function Blockquote({ sectionWrapperClass, sectionTitleClass, text }) {
+function Blockquote({ sectionClass, text }) {
+  const classNames = ['blockquote', sectionClass].join(' ').trim();
+
   return (
-    <blockquote className={sectionWrapperClass}>
-      <h3 className={`chapter-title ${sectionTitleClass}`}>{text}</h3>
-    </blockquote>
+    <div className={classNames}>
+      <blockquote className="blockquote__text">{text}</blockquote>
+    </div>
   );
 }
 
 Blockquote.propTypes = {
-  sectionWrapperClass: PropTypes.string,
-  sectionTitleClass: PropTypes.string,
+  sectionClass: PropTypes.string,
   text: PropTypes.string,
 };
 
 Blockquote.defaultProps = {
-  sectionWrapperClass: '',
-  sectionTitleClass: '',
-  text: '',
+  sectionClass: '',
+  text: 'Blockquote',
 };
 
 export default Blockquote;

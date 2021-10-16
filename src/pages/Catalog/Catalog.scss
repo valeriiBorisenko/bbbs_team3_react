@@ -1,19 +1,13 @@
 @import './styles/utils.scss';
 
 .catalog__subtitle {
-    margin: 40px auto 0;
+    margin: 0 auto;
     max-width: 1170px;
     text-align: center;
   }
-  
+
   @include atDesktop1440 {
     .catalog__subtitle {
       max-width: 970px;
-    }
-  }
-  
-  @include atDesktop1024 {
-    .catalog__subtitle {
-      margin: 20px auto 0;
     }
   }

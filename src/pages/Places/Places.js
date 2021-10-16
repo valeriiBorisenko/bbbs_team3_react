@@ -183,7 +183,7 @@ function Places() {
           level={1}
           type="big"
           content={title}
-          sectionClass="places__title fade-in"
+          sectionClass="page__title fade-in"
         />
         {renderFiltersAndCards()}
       </>
@@ -261,7 +261,7 @@ function Places() {
       return (
         <>
           {isMainCard && isMainCardShown && (
-            <section className="places__main">
+            <section className="places__main page__grid">
               <CardPlace
                 key={mainCard.id}
                 data={mainCard}
@@ -273,7 +273,7 @@ function Places() {
           )}
 
           {!isPaginationUsed ? (
-            <section className="places__cards-grid">
+            <section className="places__cards-grid cards-grid page__grid">
               {dataToRender.map((place, i) => (
                 <CardPlace
                   key={place.id}

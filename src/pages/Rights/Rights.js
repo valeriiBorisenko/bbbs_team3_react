@@ -73,7 +73,7 @@ const Rights = () => {
               level={1}
               type="big"
               content={title}
-              sectionClass="rights__title"
+              sectionClass="page__title"
             />
             {renderFilters()}
             {renderCards()}

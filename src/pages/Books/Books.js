@@ -109,7 +109,7 @@ function Books() {
           level={1}
           type="big"
           content={title}
-          sectionClass="books__title"
+          sectionClass="page__title"
         />
         {renderMainContent()}
       </>

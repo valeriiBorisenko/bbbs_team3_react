@@ -1,10 +1,6 @@
 @import './styles/utils.scss';
 
 .calendar-page {
-  &__title {
-    margin-bottom: 25px;
-  }
-
   &__grid {
     display: grid;
     justify-content: center;
@@ -12,7 +8,6 @@
     grid-template-rows: 414px;
     grid-auto-rows: 414px;
     gap: 30px;
-    padding-top: 50px;
   }
 }
 
@@ -26,10 +21,6 @@
 
 @include atDesktop1024 {
   .calendar-page {
-    &__title {
-      margin-bottom: 10px;
-    }
-
     &__grid {
       grid-template-columns: repeat(2, minmax(290px, 1fr));
     }
@@ -40,15 +31,6 @@
   .calendar-page {
     &__grid {
       grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    }
-  }
-}
-
-
-@include atMobile {
-  .calendar-page {
-    &__grid {
-      padding-top: 30px;
     }
   }
 }

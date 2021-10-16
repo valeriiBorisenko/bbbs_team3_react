@@ -156,7 +156,7 @@ function Calendar() {
             level={1}
             type="big"
             content={title}
-            sectionClass="calendar-page__title"
+            sectionClass="page__title"
           />
           <div className="calendar-page__container">
             {isCityChanged ? <Loader isPaginate /> : renderFiltersAndCards()}
@@ -219,7 +219,7 @@ function Calendar() {
     }
 
     return (
-      <div className="calendar-page__grid">
+      <div className="calendar-page__grid page__grid">
         {calendarPageData.map((cardData) => (
           <CardCalendar
             key={cardData.id}

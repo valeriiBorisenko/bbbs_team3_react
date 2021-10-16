@@ -182,7 +182,7 @@ function Questions() {
           level={1}
           type="big"
           content={title}
-          sectionClass="questions__title"
+          sectionClass="page__title"
         />
 
         {renderFilters()}
@@ -241,7 +241,7 @@ function Questions() {
   function renderQuestionsContainer() {
     return (
       <>
-        <ul className="questions">
+        <ul className="questions page__grid">
           {renderMainQuestion()}
           {filteredDataToRender.map((question) => (
             <li

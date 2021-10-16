@@ -123,7 +123,7 @@ const Video = () => {
             level={1}
             type="big"
             content={title}
-            sectionClass="video__title"
+            sectionClass="page__title"
           />
           {renderFilters()}
         </section>
@@ -183,12 +183,12 @@ const Video = () => {
     return (
       <>
         {isMainCardShown && (
-          <section className="video__main-card page__section scale-in">
+          <section className="video__main-card page__grid page__section scale-in">
             <CardVideoMain data={mainCard} isMobile={isSmallQuery} />
           </section>
         )}
 
-        <section className="video__cards-grid page__section">
+        <section className="video__cards-grid cards-grid cards-grid_content_small-cards page__section">
           {dataToRender.map((item) => (
             <CardFilm
               key={item?.id}

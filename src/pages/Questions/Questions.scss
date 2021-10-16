@@ -3,14 +3,9 @@
 .questions {
   max-width: 970px;
   width: 100%;
+  padding-left: 0;
   margin: 0 auto;
-  padding: 0;
-  padding-top: 80px;
   list-style: none;
-
-  &__title {
-    margin-bottom: 25px;
-  }
 
   &__list-item {
     max-width: 870px;
@@ -70,22 +65,9 @@
   }
 }
 
-.load-more-button {
-  width: 250px;
-  margin: 0 auto;
-  margin-top: 70px;
-  position: relative;
-  z-index: 3;
-}
-
 @include atDesktop1024 {
   .questions {
     max-width: 770px;
-    padding-top: 50px;
-
-    &__title {
-      margin-bottom: 10px;
-    }
 
     &__list-item {
       margin-right: 0;
@@ -93,7 +75,7 @@
   }
 
   .card__questions_type_questions-page {
-    margin-right: 0px;
+    margin-right: 0;
   }
 
   .question__answer {
@@ -121,9 +103,6 @@
 }
 
 @include atMobile {
-  .questions {
-    padding-top: 30px;
-  }
   .question-form__add-question {
     flex-direction: column;
   }

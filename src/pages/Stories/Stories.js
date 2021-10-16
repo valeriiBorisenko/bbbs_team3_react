@@ -202,7 +202,7 @@ function Stories() {
           level={1}
           type="big"
           content={title}
-          sectionClass="stories__title"
+          sectionClass="page__title"
         />
         <p className="stories__subtitle">{subtitle}</p>
 

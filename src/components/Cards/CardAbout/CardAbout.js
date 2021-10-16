@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Heading } from '../../utils';
+import { Heading, Paragraph } from '../../utils';
 import './CardAbout.scss';
 
 function CardAbout({ title, text, color, linkText, href }) {
@@ -9,7 +9,7 @@ function CardAbout({ title, text, color, linkText, href }) {
         <Heading level={2} type="small" content={title} />
       </div>
       <div className="card-about__container">
-        <p className="paragraph card-about__paragraph">{text}</p>
+        <Paragraph sectionClass="card-about__paragraph" content={text} />
         <a
           className="link card-about__card-link"
           href={href}

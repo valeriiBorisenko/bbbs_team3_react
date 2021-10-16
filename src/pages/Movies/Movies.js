@@ -109,7 +109,7 @@ function Movies() {
           level={1}
           type="big"
           content={title}
-          sectionClass="movies__title"
+          sectionClass="page__title"
         />
 
         {renderFilters()}

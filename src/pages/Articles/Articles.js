@@ -88,7 +88,12 @@ function Articles() {
 
     return (
       <section className="articles page__section">
-        <Heading level={1} type="big" content={title} sectionClass="fade-in" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="articles__title fade-in"
+        />
 
         {renderCardsContainer()}
       </section>
@@ -142,12 +147,12 @@ function Articles() {
     return (
       <>
         {isMainCardShown && (
-          <section className="articles__main scale-in">
+          <section className="articles__main page__grid scale-in">
             <CardArticle data={mainCard} isMain />
           </section>
         )}
 
-        <section className="articles__cards-grid">
+        <section className="articles__cards-grid cards-grid page__grid">
           {dataToRender.map((item, i) => (
             <CardArticle
               key={item?.id}

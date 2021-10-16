@@ -1,50 +1,8 @@
 @import './styles/utils.scss';
 
 .video {
-  &__title {
-    margin-bottom: 25px;
-  }
-
-  &__main-card {
-    padding-top: 80px;
-  }
-
   &__cards-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(290px, 1fr));
     grid-auto-rows: -webkit-min-content;
-    gap: 80px 30px;
-    padding: 80px 0 0;
-  }
-  
-  @include atDesktop1440 {
-    &__cards-grid {
-      grid-template-columns: repeat(3, minmax(290px, 1fr));
-    }
-  }
-  
-  @include atDesktop1217 {
-    &__cards-grid {
-      grid-template-columns: repeat(2, minmax(290px, 1fr));
-      padding-top: 30px;
-      row-gap: 30px;
-    }
-
-    &__main-card {
-      padding-top: 30px;
-    }
-  }
-
-  @include atDesktop1024 {
-    &__title {
-      margin-bottom: 10px;
-    }
-  }
-  
-  @include atTabletL {
-    &__cards-grid {
-      grid-template-columns: 1fr;
-    }
   }
 }
 
