@@ -6,8 +6,8 @@ import {
   Card,
   CardAbout,
   CardFigure,
+  Heading,
   Logo,
-  TitleH3,
 } from './index';
 import './AboutUs.scss';
 
@@ -26,7 +26,12 @@ function AboutUs() {
   return (
     <BasePage headTitle={headTitle} headDescription={headDescription}>
       <section className="about page__section fade-in">
-        <TitleH3 sectionClass="about__title" title={title} />
+        <Heading
+          sectionClass="about__title"
+          content={title}
+          level={1}
+          type="medium"
+        />
         <a
           className="about__logo"
           href={logoLink}

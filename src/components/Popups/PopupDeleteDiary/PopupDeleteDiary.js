@@ -3,7 +3,7 @@ import texts from './locales/RU';
 import { useCloseOnEscape } from '../../../hooks';
 import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import Popup from '../Popup/Popup';
-import { Button, TitleH2 } from '../../utils';
+import { Button, Heading } from '../../utils';
 import './PopupDeleteDiary.scss';
 
 function PopupDeleteDiary({
@@ -34,8 +34,10 @@ function PopupDeleteDiary({
       sectionClass="popup-diary"
     >
       <form className="popup__form" onSubmit={handleSubmit}>
-        <TitleH2
-          title={`${texts.title} ${place} ${parseInt(day.day, 10)} ${month} ${
+        <Heading
+          level={2}
+          type="small"
+          content={`${texts.title} ${place} ${parseInt(day.day, 10)} ${month} ${
             day.year
           }?`}
           sectionClass="popup-diary__title"

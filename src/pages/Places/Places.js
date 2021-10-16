@@ -25,6 +25,7 @@ import {
   AnimatedPageContainer,
   BasePage,
   CardPlace,
+  Heading,
   Loader,
   NextArticleLink,
   NoDataNotificationBox,
@@ -32,7 +33,6 @@ import {
   PlacesRecommend,
   PopupRecommendSuccess,
   TagsList,
-  TitleH1,
 } from './index';
 import './Places.scss';
 import { Card } from '../Articles';
@@ -179,7 +179,12 @@ function Places() {
 
     return (
       <>
-        <TitleH1 title={title} sectionClass="places__title fade-in" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="places__title fade-in"
+        />
         {renderFiltersAndCards()}
       </>
     );

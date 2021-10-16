@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { Card, TitleH3 } from '../../utils';
+import { Card, Heading } from '../../utils';
 import './CardArticleBig.scss';
 
 function CardArticleBig({ title, color, articleUrl }) {
@@ -12,7 +12,12 @@ function CardArticleBig({ title, color, articleUrl }) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <TitleH3 sectionClass="card-article__title" title={title} />
+        <Heading
+          level={2}
+          type="medium"
+          sectionClass="card-article__title"
+          content={title}
+        />
       </a>
       <a
         className="link card-article__link"

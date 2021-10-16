@@ -11,7 +11,7 @@ import { useAuth, useFormWithValidation } from '../../../hooks';
 import getServerErrors from '../../../utils/form-errors';
 import { recoverPassword } from '../../../api/user';
 import Popup from '../Popup/Popup';
-import { Button, Input, TitleH2 } from '../../utils';
+import { Button, Heading, Input } from '../../utils';
 import animationSuccess from '../../../assets/animation/ill_popup_recommend-success.json';
 import './PopupLogin.scss';
 
@@ -186,7 +186,12 @@ function PopupLogin({ isOpen, onClose }) {
         onSubmit={(evt) => handleSubmit(evt)}
         noValidate
       >
-        <TitleH2 sectionClass="popup__title_type_sign-in" title={title} />
+        <Heading
+          level={2}
+          type="small"
+          sectionClass="popup__title_type_sign-in"
+          content={title}
+        />
         <p className="paragraph popup__sign-in">{firstParagraph}</p>
         <p className="paragraph popup__sign-in">{secondParagraph}</p>
 
@@ -253,9 +258,11 @@ function PopupLogin({ isOpen, onClose }) {
         onSubmit={(evt) => handleSubmitForgotPassword(evt)}
         noValidate
       >
-        <TitleH2
+        <Heading
+          level={2}
+          type="small"
           sectionClass="popup__title_type_sign-in"
-          title={titleForgotForm}
+          content={titleForgotForm}
         />
         <p className="paragraph popup__sign-in">{paragraphForgotForm}</p>
 
@@ -300,7 +307,7 @@ function PopupLogin({ isOpen, onClose }) {
           ref={animationContainer}
           className="popup__login-container_success-animation"
         />
-        <TitleH2 title={successMessage} />
+        <Heading level={2} type="small" content={successMessage} />
       </div>
     );
   }

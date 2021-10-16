@@ -3,12 +3,12 @@ import CardRights from '../../components/Cards/CardRights/CardRights';
 import CardsSectionWithLines from '../../components/CardsSectionWithLines/CardsSectionWithLines';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import TagsList from '../../components/TagsList/TagsList';
-import { Loader, TitleH1 } from '../../components/utils';
+import { Heading, Loader } from '../../components/utils';
 
 export {
   BasePage,
   Loader,
-  TitleH1,
+  Heading,
   CardRights,
   CardsSectionWithLines,
   AnimatedPageContainer,

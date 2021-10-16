@@ -15,11 +15,11 @@ import {
   BasePage,
   CardFilm,
   CardVideoMain,
+  Heading,
   Loader,
   NoDataNotificationBox,
   Paginate,
   TagsList,
-  TitleH1,
 } from './index';
 import './Video.scss';
 
@@ -119,7 +119,12 @@ const Video = () => {
     return (
       <>
         <section className="lead page__section">
-          <TitleH1 title={title} sectionClass="video__title" />
+          <Heading
+            level={1}
+            type="big"
+            content={title}
+            sectionClass="video__title"
+          />
           {renderFilters()}
         </section>
 

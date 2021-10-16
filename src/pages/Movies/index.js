@@ -4,15 +4,15 @@ import CardAnnotation from '../../components/Cards/CardAnnotation/CardAnnotation
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import TagsList from '../../components/TagsList/TagsList';
 import {
+  Heading,
   Loader,
   Paginate,
   PseudoButtonTag,
-  TitleH1,
 } from '../../components/utils';
 
 export {
   BasePage,
-  TitleH1,
+  Heading,
   CardFilm,
   PseudoButtonTag,
   CardAnnotation,

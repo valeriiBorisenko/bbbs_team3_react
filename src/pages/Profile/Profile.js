@@ -18,10 +18,12 @@ import {
   getArchiveOfBookedEvents,
   getBookedEvents,
 } from '../../api/event-participants';
+import './Profile.scss';
 import {
   AnimatedPageContainer,
   BasePage,
   ButtonRound,
+  Heading,
   Loader,
   Paginate,
   PopupDeleteDiary,
@@ -29,10 +31,8 @@ import {
   ProfileEventCard,
   ProfileForm,
   ScrollableContainer,
-  TitleH2,
   UserMenuButton,
 } from './index';
-import './Profile.scss';
 
 const {
   headTitle,
@@ -373,7 +373,12 @@ function Profile() {
       return (
         <div className="profile__form-container">
           {!isEditMode && (
-            <TitleH2 sectionClass="profile__title fade-in" title={formTitle} />
+            <Heading
+              level={2}
+              type="small"
+              sectionClass="profile__title fade-in"
+              content={formTitle}
+            />
           )}
           <ProfileForm
             sectionClass="profile__diary-form scale-in"
@@ -437,9 +442,11 @@ function Profile() {
                     isArchiveOpen ? openCurrentEvents : openArchiveOfEvents
                   }
                 />
-                <TitleH2
+                <Heading
+                  level={2}
+                  type="small"
                   sectionClass="profile__title profile__title_shifted"
-                  title={isArchiveOpen ? titleH1Archive : titleH1Current}
+                  content={isArchiveOpen ? titleH1Archive : titleH1Current}
                 />
               </div>
               {(events.length > 0 || archivedEvents.length > 0) && (

@@ -16,13 +16,12 @@ import {
   AnimatedPageContainer,
   BasePage,
   Caption,
+  Heading,
   Loader,
   NextArticleLink,
   PopupPhoto,
   PseudoButtonTag,
   ScrollableContainer,
-  TitleH1,
-  TitleH2,
 } from './index';
 import './Stories.scss';
 
@@ -199,7 +198,12 @@ function Stories() {
 
     return (
       <div className="stories page__section fade-in">
-        <TitleH1 title={title} sectionClass="stories__title" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="stories__title"
+        />
         <p className="stories__subtitle">{subtitle}</p>
 
         {renderTags()}
@@ -248,7 +252,12 @@ function Stories() {
           src={`${staticImageUrl}/${currentStory.image}`}
           alt={pairTitle}
         />
-        <TitleH2 title={pairTitle} sectionClass="stories__pair-title fade-in" />
+        <Heading
+          level={2}
+          type="medium"
+          content={pairTitle}
+          sectionClass="stories__pair-title fade-in"
+        />
         <Caption
           title={togetherSinceText}
           sectionClass="stories__caption fade-in"

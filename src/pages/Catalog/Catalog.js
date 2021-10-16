@@ -8,9 +8,8 @@ import {
   BasePage,
   CardCatalog,
   CardsSectionWithLines,
+  Heading,
   Loader,
-  TitleH1,
-  TitleH2,
 } from './index';
 import './Catalog.scss';
 
@@ -67,8 +66,18 @@ function Catalog() {
 
     return (
       <section className="catalog page__section fade-in">
-        <TitleH1 sectionClass="catalog__title" title={title} />
-        <TitleH2 sectionClass="catalog__subtitle" title={subtitle} />
+        <Heading
+          level={1}
+          type="big"
+          sectionClass="catalog__title"
+          content={title}
+        />
+        <Heading
+          level={2}
+          type="small"
+          sectionClass="catalog__subtitle"
+          content={subtitle}
+        />
         {renderCards()}
       </section>
     );

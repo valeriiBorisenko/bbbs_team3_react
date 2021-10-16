@@ -18,11 +18,11 @@ import {
   BasePage,
   Card,
   CardBook,
+  Heading,
   Loader,
   NextArticleLink,
   Paginate,
   TagsList,
-  TitleH1,
 } from './index';
 import './Books.scss';
 
@@ -105,7 +105,12 @@ function Books() {
 
     return (
       <>
-        <TitleH1 title={title} sectionClass="books__title" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="books__title"
+        />
         {renderMainContent()}
       </>
     );

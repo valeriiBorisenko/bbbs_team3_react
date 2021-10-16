@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import { PLACES_TITLE } from '../../../config/routes';
-import { Caption, Card, Rubric, TitleH2 } from '../../utils';
+import { Caption, Card, Heading, Rubric } from '../../utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
 import './CardPlace.scss';
 
@@ -56,7 +56,12 @@ function CardPlace({
           )}
 
           <div className="card-place__title-wrap">
-            <TitleH2 sectionClass="card-place__title" title={data.title} />
+            <Heading
+              level={2}
+              type="small"
+              sectionClass="card-place__title"
+              content={data.title}
+            />
             <Caption sectionClass="card-place__address" title={data.address} />
           </div>
 

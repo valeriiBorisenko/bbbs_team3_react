@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import { TitleH2 } from '../../utils';
+import { Heading } from '../../utils';
 import './CardAbout.scss';
 
 function CardAbout({ title, text, color, linkText, href }) {
   return (
     <article className="card-container card-about">
       <div className={`card-about__heading card-about__heading_color_${color}`}>
-        <TitleH2 title={title} />
+        <Heading level={2} type="small" content={title} />
       </div>
       <div className="card-about__container">
         <p className="paragraph card-about__paragraph">{text}</p>

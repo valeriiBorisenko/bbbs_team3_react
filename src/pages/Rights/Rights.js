@@ -8,9 +8,9 @@ import {
   BasePage,
   CardRights,
   CardsSectionWithLines,
+  Heading,
   Loader,
   TagsList,
-  TitleH1,
 } from './index';
 import './Rights.scss';
 
@@ -69,7 +69,12 @@ const Rights = () => {
           renderAnimatedContainer()
         ) : (
           <>
-            <TitleH1 title={title} sectionClass="rights__title" />
+            <Heading
+              level={1}
+              type="big"
+              content={title}
+              sectionClass="rights__title"
+            />
             {renderFilters()}
             {renderCards()}
           </>

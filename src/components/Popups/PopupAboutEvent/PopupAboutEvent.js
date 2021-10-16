@@ -8,7 +8,7 @@ import {
 } from '../../../utils/utils';
 import '../../Cards/CardCalendar/CardCalendar.scss';
 import Popup from '../Popup/Popup';
-import { Button, ModificatedScrollbars, TitleH2 } from '../../utils';
+import { Button, Heading, ModificatedScrollbars } from '../../utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks';
 import { localStAfishaEvent } from '../../../config/constants';
@@ -57,8 +57,10 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
               </p>
             </div>
             <div className="calendar__about calendar__about_modal">
-              <TitleH2
-                title={card?.title}
+              <Heading
+                level={2}
+                type="small"
+                content={card?.title}
                 sectionClass="calendar__title calendar__title_type_popup"
               />
               <p className="calendar__date">{startDateParts?.day}</p>

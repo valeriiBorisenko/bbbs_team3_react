@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
-import { Caption, Card, TitleH2 } from '../../utils';
+import { Caption, Card, Heading } from '../../utils';
 import './CardArticle.scss';
 
 function CardArticle({
@@ -36,7 +36,12 @@ function CardArticle({
             target="_blank"
             rel="noopener noreferrer"
           >
-            <TitleH2 sectionClass="article-card__title" title={title} />
+            <Heading
+              level={2}
+              type="small"
+              sectionClass="article-card__title"
+              content={title}
+            />
           </a>
           <Caption sectionClass="article-card__info" title={info} />
         </div>

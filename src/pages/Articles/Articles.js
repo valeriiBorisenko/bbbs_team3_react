@@ -14,10 +14,10 @@ import {
   BasePage,
   Card,
   CardArticle,
+  Heading,
   Loader,
   NextArticleLink,
   Paginate,
-  TitleH1,
 } from './index';
 import './Articles.scss';
 
@@ -88,7 +88,7 @@ function Articles() {
 
     return (
       <section className="articles page__section">
-        <TitleH1 title={title} sectionClass="fade-in" />
+        <Heading level={1} type="big" content={title} sectionClass="fade-in" />
 
         {renderCardsContainer()}
       </section>

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useState } from 'react';
 import { PopupsContext } from '../../../contexts';
-import { Caption, Card, Rubric, TitleH2 } from '../../utils';
+import { Caption, Card, Heading, Rubric } from '../../utils';
 import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
@@ -48,9 +48,11 @@ function CardFilm({
 
       <div className="card-film__video-info">
         <div className="card-film__title-wrap">
-          <TitleH2
+          <Heading
+            level={2}
+            type="small"
             sectionClass="card-film__title"
-            title={changeCaseOfFirstLetter(title)}
+            content={changeCaseOfFirstLetter(title)}
           />
           <Caption
             sectionClass="card-film__info"

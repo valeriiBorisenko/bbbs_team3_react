@@ -6,7 +6,7 @@ import captions from '../../utils/rating-captions';
 import { staticImageUrl } from '../../config/config';
 import defaultImage from '../../assets/icon-logo-no-text.svg';
 import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationContainer';
-import { Button, Caption, Card, Rating, TitleH2 } from '../utils';
+import { Button, Caption, Card, Heading, Rating } from '../utils';
 import './ProfileDiary.scss';
 
 function ProfileDiary({
@@ -64,7 +64,12 @@ function ProfileDiary({
       </Card>
       <Card sectionClass="profile-diary__date-container">
         <div className="profile-diary__text-wrap">
-          <TitleH2 sectionClass="profile-diary__card-title" title={place} />
+          <Heading
+            level={2}
+            type="small"
+            sectionClass="profile-diary__card-title"
+            content={place}
+          />
           <div className="profile-diary__card-text">
             <CardAnnotationContainer>
               <p className="profile-diary__paragraph">{description}</p>

@@ -19,7 +19,7 @@ import {
 } from '../../../hooks/useLocalStorage';
 import { useDebounce } from '../../../hooks';
 import Popup from '../Popup/Popup';
-import { ModificatedScrollbars, TitleH2 } from '../../utils';
+import { Heading, ModificatedScrollbars } from '../../utils';
 import './PopupCities.scss';
 
 function PopupCities({ isOpen, onClose }) {
@@ -81,7 +81,12 @@ function PopupCities({ isOpen, onClose }) {
       withoutCloseButton
     >
       <div className="popup__form">
-        <TitleH2 title={texts.title} sectionClass="cities__title" />
+        <Heading
+          level={2}
+          type="small"
+          content={texts.title}
+          sectionClass="cities__title"
+        />
         <div className="cities__container">
           <ul className="cities__list cities__list_type_primary">
             {cities &&

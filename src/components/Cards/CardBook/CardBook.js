@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Card, TitleH2 } from '../../utils';
+import { Card, Heading } from '../../utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
 import './CardBook.scss';
 
@@ -13,7 +13,12 @@ function CardBook({
     <article className={`card-container ${sectionClass}`}>
       <Card sectionClass="card-book">
         <div className="card-book__cover" style={backgroundColor || ''}>
-          <TitleH2 sectionClass="card-book__title" title={title} />
+          <Heading
+            level={2}
+            type="small"
+            sectionClass="card-book__title"
+            content={title}
+          />
           <div className="card-book__info">
             <div className="card-book__border" />
             <p className="caption card-book__text">{author}</p>

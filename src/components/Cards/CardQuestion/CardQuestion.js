@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { QUESTIONS_URL } from '../../../config/routes';
-import { ButtonRound, Card, Rubric, TitleH2 } from '../../utils';
+import { ButtonRound, Card, Heading, Rubric } from '../../utils';
 import './CardQuestion.scss';
 
 const animationTransition = 300;
@@ -82,9 +82,11 @@ function CardQuestion({
         )}
 
         {renderTitleWrap(
-          <TitleH2
+          <Heading
+            level={2}
+            type="small"
             sectionClass="card-question__title clickable"
-            title={title}
+            content={title}
           />
         )}
 

@@ -7,10 +7,10 @@ import {
   PAGES_TO_LOAD,
 } from './constants';
 import {
-  LinkableHeading,
+  Heading,
+  LinkableComponent,
   Loader,
   NoDataNotificationBox,
-  TitleH3,
 } from '../utils';
 import { COLORS, ERROR_MESSAGES, FIGURES } from '../../config/constants';
 import './ReadAndWatchSection.scss';
@@ -100,12 +100,12 @@ function ReadAndWatchSection({
   return (
     <section className="readwatch__section">
       <div className="readwatch__container">
-        <LinkableHeading
-          title={sectionTitle}
+        <LinkableComponent
+          content={sectionTitle}
           path={path}
-          titleSectionClass="readwatch__heading"
+          sectionClass="readwatch__heading"
           linkSectionClass="readwatch__heading-link"
-          Component={TitleH3}
+          Component={Heading}
         />
       </div>
       <div className={`readwatch__slider-container ${sectionClass}`}>

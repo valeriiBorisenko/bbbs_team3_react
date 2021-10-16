@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { Card, Logo, TitleH2 } from '../../utils';
+import { Card, Heading, Logo } from '../../utils';
 import './CardStub.scss';
 
 function CardStub({ sectionClass }) {
@@ -17,7 +17,12 @@ function CardStub({ sectionClass }) {
         </a>
       </div>
       <div className="stub__content">
-        <TitleH2 sectionClass="stub__text" title={texts.title} />
+        <Heading
+          level={2}
+          type="small"
+          sectionClass="stub__text"
+          content={texts.title}
+        />
       </div>
     </Card>
   );

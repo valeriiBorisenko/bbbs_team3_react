@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { PopupsContext } from '../../../contexts';
-import { Caption, Card, TitleH2 } from '../../utils';
+import { Caption, Card, Heading } from '../../utils';
 import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
 import { staticImageUrl } from '../../../config/config';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
@@ -44,9 +44,11 @@ function CardVideoMain({
     <div className="card-container card-container_type_main-video">
       <Card sectionClass="card-video-main" color="yellow">
         <div className="card-video-main__title-wrap">
-          <TitleH2
+          <Heading
+            level={2}
+            type="small"
             sectionClass="card-video-main__title"
-            title={changeCaseOfFirstLetter(title)}
+            content={changeCaseOfFirstLetter(title)}
           />
           <Caption
             sectionClass="card-video-main__info"

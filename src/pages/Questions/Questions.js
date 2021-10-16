@@ -17,12 +17,11 @@ import {
   BasePage,
   Button,
   CardQuestion,
+  Heading,
   Input,
   Loader,
   Paginate,
   TagsList,
-  TitleH1,
-  TitleH2,
 } from './index';
 import './Questions.scss';
 import { questionFormValidationSettings } from '../../config/validation-settings';
@@ -179,7 +178,12 @@ function Questions() {
 
     return (
       <>
-        <TitleH1 title={title} sectionClass="questions__title" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="questions__title"
+        />
 
         {renderFilters()}
 
@@ -278,9 +282,11 @@ function Questions() {
     return (
       <>
         <section className="add-question fade-in">
-          <TitleH2
+          <Heading
+            level={2}
+            type="small"
             sectionClass={`add-question__title ${questionFormState.titleClass}`}
-            title={questionFormState.title}
+            content={questionFormState.title}
           />
           <form
             className={`question-form ${questionFormState.formVisibilityClass}`}

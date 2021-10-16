@@ -9,7 +9,7 @@ import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 import Popup from '../Popup/Popup';
-import { Button, TitleH2 } from '../../utils';
+import { Button, Heading } from '../../utils';
 import './PopupSuccessfully.scss';
 
 const { popupTitle, paragraph, buttonTextCalendarPage, buttonTextDefault } =
@@ -56,13 +56,17 @@ function PopupSuccessfully({ isOpen, onClose }) {
     >
       <div ref={animationContainer} className="popup__animation-success" />
       <p className="section-title popup__title_type_calendar">{popupTitle}</p>
-      <TitleH2
+      <Heading
+        level={2}
+        type="small"
         sectionClass="popup__title_type_calendar"
-        title={`«${card?.title}»`}
+        content={`«${card?.title}»`}
       />
-      <TitleH2
+      <Heading
+        level={2}
+        type="small"
         sectionClass="popup__title_type_calendar"
-        title={`${parseInt(startDay?.day, 10)} ${month} с ${startDay?.hour}:${
+        content={`${parseInt(startDay?.day, 10)} ${month} с ${startDay?.hour}:${
           startDay?.minutes
         }—${endDay?.hour}:${endDay?.minutes}`}
       />

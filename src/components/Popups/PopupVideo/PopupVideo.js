@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Popup from '../Popup/Popup';
-import { Caption, TitleH2 } from '../../utils/index';
+import { Caption, Heading } from '../../utils/index';
 import parserLinkYoutube from '../../../utils/parser-link-youtube';
 import {
   getLocalStorageData,
@@ -47,7 +47,12 @@ const PopupVideo = ({ isOpen, onClose }) => {
           />
         )}
       </div>
-      <TitleH2 sectionClass="popup__video-title" title={data?.title} />
+      <Heading
+        level={2}
+        type="small"
+        sectionClass="popup__video-title"
+        content={data?.title}
+      />
       <Caption sectionClass="popup__video-caption" title={data?.info} />
     </Popup>
   );

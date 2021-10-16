@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { TitleH2 } from '../../utils';
+import { Heading } from '../../utils';
 import CardFigure from '../CardFigure/CardFigure';
 import { staticImageUrl } from '../../../config/config';
 import './CardCatalog.scss';
@@ -26,7 +26,12 @@ function CardCatalog({ data: { id, title, image }, shape, sectionClass }) {
             )}
           </CardFigure>
         </div>
-        <TitleH2 sectionClass="card-catalog__title" title={title} />
+        <Heading
+          level={2}
+          type="small"
+          sectionClass="card-catalog__title"
+          content={title}
+        />
       </Link>
     </div>
   );
