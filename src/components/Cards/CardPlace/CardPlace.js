@@ -93,6 +93,7 @@ function CardPlace({
           src={`${staticImageUrl}/${data.image}`}
           alt={data.title}
           className={imageClassNames}
+          loading="lazy"
         />
       );
     }

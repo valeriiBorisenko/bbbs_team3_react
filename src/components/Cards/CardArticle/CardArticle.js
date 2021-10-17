@@ -56,6 +56,7 @@ function CardArticle({
                 src={`${staticImageUrl}/${image}`}
                 alt={title}
                 className="article-card__image"
+                loading="lazy"
               />
             )}
           </div>

@@ -85,6 +85,7 @@ function CardVideoMain({
           className={`card-video-main__image ${
             isPlayingVideo ? 'card-video-main__image_at-back' : ''
           } image-scale`}
+          loading="lazy"
         />
 
         {!isPlayingVideo && (

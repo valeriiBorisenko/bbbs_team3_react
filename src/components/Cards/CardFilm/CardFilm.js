@@ -89,6 +89,7 @@ function CardFilm({
           className={`card-film__preview ${
             isPlayingVideo ? 'card-film__preview_at-back' : ''
           } image-scale`}
+          loading="lazy"
         />
         {renderDurationOrTags(durationString)}
       </>

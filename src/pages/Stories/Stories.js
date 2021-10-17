@@ -252,6 +252,7 @@ function Stories() {
           className="stories__main-photo scale-in"
           src={`${staticImageUrl}/${currentStory.image}`}
           alt={pairTitle}
+          loading="lazy"
         />
         <Heading
           level={2}
@@ -366,6 +367,7 @@ function Stories() {
                   draggable={false}
                   src={`${staticImageUrl}/${image.image}`}
                   alt={image.imageCaption}
+                  loading="lazy"
                 />
               </div>
             ))}

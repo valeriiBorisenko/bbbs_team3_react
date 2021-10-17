@@ -85,6 +85,7 @@ function CatalogArticle() {
             src={`${staticImageUrl}/${catalogArticlePageData.image}`}
             alt={catalogArticlePageData.title}
             className="article__image scale-in"
+            loading="lazy"
           />
           {catalogArticlePageData.imageCaption && (
             <figcaption className="caption article__figcaption">

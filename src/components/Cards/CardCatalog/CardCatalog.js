@@ -22,6 +22,7 @@ function CardCatalog({ data: { id, title, image }, shape, sectionClass }) {
                 className="card-catalog__image"
                 src={`${staticImageUrl}/${image}`}
                 alt={title}
+                loading="lazy"
               />
             )}
           </CardFigure>

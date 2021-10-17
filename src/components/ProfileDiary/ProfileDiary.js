@@ -60,6 +60,7 @@ function ProfileDiary({
           }
           src={image ? `${staticImageUrl}/${image}` : defaultImage}
           alt={place}
+          loading="lazy"
         />
       </Card>
       <Card sectionClass="profile-diary__date-container">
