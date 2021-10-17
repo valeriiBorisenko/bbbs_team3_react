@@ -12,6 +12,7 @@ import {
   Heading,
   Loader,
   NextArticleLink,
+  Paragraph,
 } from './index';
 import './CatalogArticle.scss';
 
@@ -70,13 +71,15 @@ function CatalogArticle() {
       <div className="article page__section fade-in">
         <Heading
           level={1}
-          type="big"
+          type="medium"
           content={catalogArticlePageData.title}
           sectionClass="article__main-title"
         />
-        <p className="article__description section-title">
-          {catalogArticlePageData.description}
-        </p>
+        <Paragraph
+          size="big"
+          content={catalogArticlePageData.description}
+          sectionClass="article__description"
+        />
         <figure className="article__figure">
           <img
             src={`${staticImageUrl}/${catalogArticlePageData.image}`}

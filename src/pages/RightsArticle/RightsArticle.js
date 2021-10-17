@@ -9,8 +9,10 @@ import { getRightsArticle } from '../../api/rights-page';
 import {
   AnimatedPageContainer,
   BasePage,
+  Heading,
   Loader,
   NextArticleLink,
+  Paragraph,
 } from './index';
 import './RightsArticle.scss';
 
@@ -93,12 +95,17 @@ function RightsArticle() {
     return (
       <section className="article-lead fade-in">
         <div className="article-lead__content">
-          <h1 className="chapter-title article-lead__title">
-            {articleData.title}
-          </h1>
-          <p className="section-title article-lead__text">
-            {articleData.description}
-          </p>
+          <Heading
+            level={1}
+            type="medium"
+            content={articleData.title}
+            sectionClass="article-lead__title"
+          />
+          <Paragraph
+            size="big"
+            content={articleData.description}
+            sectionClass="article-lead__text"
+          />
         </div>
       </section>
     );

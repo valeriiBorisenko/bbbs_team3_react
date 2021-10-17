@@ -1,5 +1,17 @@
 import BasePage from '../../layout/BasePage';
-import { Loader, NextArticleLink } from '../../components/utils';
+import {
+  Heading,
+  Loader,
+  NextArticleLink,
+  Paragraph,
+} from '../../components/utils';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 
-export { BasePage, Loader, AnimatedPageContainer, NextArticleLink };
+export {
+  BasePage,
+  Loader,
+  AnimatedPageContainer,
+  NextArticleLink,
+  Heading,
+  Paragraph,
+};
