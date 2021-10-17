@@ -1,0 +1,17 @@
+@import './styles/utils.scss';
+
+.close-button {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: rgba($white, 0);
+  outline: none;
+  border: none;
+  padding: 0;
+  transition: .3s ease;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+}

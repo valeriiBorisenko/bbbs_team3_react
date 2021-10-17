@@ -22,7 +22,7 @@ import { searchValidationSettings } from '../../config/validation-settings';
 import { useDebounce, useFormWithValidation } from '../../hooks';
 import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import search from '../../api/search';
-import { Loader, Paragraph, SearchButton } from '../utils';
+import { CloseButton, Loader, Paragraph, SearchButton } from '../utils';
 import './Search.scss';
 
 function Search({
@@ -145,10 +145,8 @@ function Search({
               onChange={handleChange}
               value={values.search || ''}
             />
-            <button
-              type="button"
-              aria-label={texts.ariaLabelCloseButton}
-              className="search__close-button"
+            <CloseButton
+              sectionClass="search__close-button"
               onClick={handleClickButton}
             />
           </div>

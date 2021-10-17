@@ -42,18 +42,6 @@
   }
 
   &__close-button {
-    background-image: url('../../assets/popup_close.svg');
-    width: 20px;
-    height: 20px;
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-color: transparent;
-    background-position: center;
-    outline: none;
-    border: none;
-    color: $blue;
-    cursor: pointer;
-    padding: 0;
     opacity: 0;
     animation: fade-in .5s ease-out .4s forwards;
   }

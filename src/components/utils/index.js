@@ -4,6 +4,7 @@ import ButtonDots from './ButtonDots/ButtonDots';
 import ButtonRound from './ButtonRound/ButtonRound';
 import Caption from './Caption/Caption';
 import Card from './Card/Card';
+import CloseButton from './CloseButton/CloseButton';
 import DropDownMenu from './DropDownMenu/DropDownMenu';
 import DropDownSelect from './DropDownSelect/DropDownSelect';
 import Heading from './Heading/Heading';
@@ -34,6 +35,7 @@ export {
   ButtonRound,
   Caption,
   Card,
+  CloseButton,
   DropDownMenu,
   DropDownSelect,
   Heading,

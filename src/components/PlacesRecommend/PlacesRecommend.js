@@ -6,7 +6,7 @@ import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
 import './PlacesRecommend.scss';
-import { Paragraph } from '../utils';
+import { CloseButton, Paragraph } from '../utils';
 
 function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
   const { setError } = useContext(ErrorsContext);
@@ -90,10 +90,8 @@ function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
       <section className={classNames} ref={scrollAnchorRef}>
         <div className="recommendation__container">
           {isFormOpen && (
-            <button
-              className="recommendation__close-button"
-              type="button"
-              aria-label={texts.closeButtonlabel}
+            <CloseButton
+              sectionClass="recommendation__close-button"
               onClick={closeForm}
             />
           )}

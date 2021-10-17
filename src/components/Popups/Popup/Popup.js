@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import './Popup.scss';
 import PropTypes from 'prop-types';
-import texts from './locales/RU';
+import { CloseButton } from '../../utils';
 
 function Popup({
   children,
@@ -28,10 +28,8 @@ function Popup({
         className={`popup__container popup__container_type_${typeContainer} ${sectionClass}`}
       >
         {!withoutCloseButton && (
-          <button
-            className={`popup__close popup__close_type_${typeContainer}`}
-            type="button"
-            aria-label={texts.closeButtonLabel}
+          <CloseButton
+            sectionClass={`popup__close popup__close_type_${typeContainer}`}
             onClick={onClose}
           />
         )}

@@ -23,18 +23,6 @@
 
   &__close-button {
     align-self: flex-end;
-    padding: 0;
-    background-image: url('../../assets/popup_close.svg');
-    width: 20px;
-    height: 20px;
-    background-size: 40px 40px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: transparent;
-    outline: none;
-    border: none;
-    color: $blue;
-    cursor: pointer;
   }
 
   &__text {
@@ -62,20 +50,20 @@
 }
 
 @include atTablet {
-  .recommendation{
+  .recommendation {
     &__container {
-      padding-top: 15px;
+      padding-top: 25px;
       padding-bottom: 30px;
     }
 
     &__close-button {
-      margin-top: 10px;
+      margin-bottom: 10px;
     }
 
     &__text {
       font-size: 19px;
       line-height: 1.21;
-      margin-top: 15px;
+      margin-top: 5px;
     }
   }
 }
@@ -85,11 +73,11 @@
     max-width: 450px;
 
     &__close-button {
-      margin-right: 15px;
+      margin-right: 10px;
     }
 
     &__container {
-      padding: 30px 15px;
+      padding: 25px 15px 30px;
     }
   }
 }
