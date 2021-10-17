@@ -1,20 +1,18 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { Card, Heading, Logo } from '../../utils';
+import { Card, Heading, LinkableComponent, Logo } from '../../utils';
 import './CardStub.scss';
 
 function CardStub({ sectionClass }) {
   return (
     <Card sectionClass={`stub ${sectionClass}`} color="green">
       <div className="stub__upper-element">
-        <a
-          className="stub__logo"
-          href={texts.link}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Logo />
-        </a>
+        <LinkableComponent
+          Component={Logo}
+          linkSectionClass="stub__logo"
+          path={texts.link}
+          isExternal
+        />
       </div>
       <div className="stub__content">
         <Heading

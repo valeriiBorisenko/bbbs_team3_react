@@ -1,24 +1,21 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { Card, Heading, StyledLink } from '../../utils';
+import { Card, Heading, LinkableComponent, StyledLink } from '../../utils';
 import './CardArticleBig.scss';
 
 function CardArticleBig({ title, color, articleUrl }) {
   return (
     <Card sectionClass="card-article" color={color}>
-      <a
-        href={articleUrl}
-        className="card-article__link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Heading
-          level={2}
-          type="medium"
-          sectionClass="card-article__title"
-          content={title}
-        />
-      </a>
+      <LinkableComponent
+        Component={Heading}
+        path={articleUrl}
+        linkSectionClass="card-article__link"
+        isExternal
+        level={2}
+        type="medium"
+        sectionClass="card-article__title"
+        content={title}
+      />
       <StyledLink
         sectionClass="card-article__link"
         path={articleUrl}

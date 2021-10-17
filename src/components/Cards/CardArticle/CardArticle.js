@@ -2,7 +2,13 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
-import { Caption, Card, Heading, StyledLink } from '../../utils';
+import {
+  Caption,
+  Card,
+  Heading,
+  LinkableComponent,
+  StyledLink,
+} from '../../utils';
 import './CardArticle.scss';
 
 function CardArticle({
@@ -29,20 +35,16 @@ function CardArticle({
         color={cardColor}
       >
         <div className="article-card__title-wrap">
-          <a
-            draggable="false"
-            href={articleUrl}
-            className="article-card__link-wrap"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Heading
-              level={2}
-              type="small"
-              sectionClass="article-card__title"
-              content={title}
-            />
-          </a>
+          <LinkableComponent
+            Component={Heading}
+            path={articleUrl}
+            linkSectionClass="article-card__link-wrap"
+            isExternal
+            level={2}
+            type="small"
+            sectionClass="article-card__title"
+            content={title}
+          />
           <Caption sectionClass="article-card__info" title={info} />
         </div>
 
