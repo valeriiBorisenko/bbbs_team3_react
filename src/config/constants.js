@@ -97,3 +97,4 @@ export const ERROR_CODES = {
 };
 
 export const COLOR_BLUE = '#224CFF';
+export const COLOR_BLACK = '#000';
