@@ -2,7 +2,11 @@ import PropTypes from 'prop-types';
 import { useContext, useEffect, useState } from 'react';
 import { PopupsContext } from '../../../contexts';
 import { Caption, Card, Heading, Rubric, StyledLink } from '../../utils';
-import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
+import {
+  changeCaseOfFirstLetter,
+  formatDuration,
+  refineClassNames,
+} from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
@@ -42,8 +46,17 @@ function CardFilm({
     }
   }, [isMobile]);
 
+  const classNames = {
+    main: refineClassNames(['card-film', sectionClass]),
+    preview: refineClassNames([
+      'card-film__preview',
+      isPlayingVideo ? 'card-film__preview_at-back' : '',
+      'image-scale',
+    ]),
+  };
+
   return (
-    <Card sectionClass={`card-film ${sectionClass}`}>
+    <Card sectionClass={classNames.main}>
       <div className="card-film__video">{renderVideoPlayback()}</div>
 
       <div className="card-film__video-info">
@@ -86,9 +99,7 @@ function CardFilm({
           draggable="false"
           src={`${staticImageUrl}/${image}`}
           alt={`${texts.altText} ${title}`}
-          className={`card-film__preview ${
-            isPlayingVideo ? 'card-film__preview_at-back' : ''
-          } image-scale`}
+          className={classNames.preview}
           loading="lazy"
         />
         {renderDurationOrTags(durationString)}

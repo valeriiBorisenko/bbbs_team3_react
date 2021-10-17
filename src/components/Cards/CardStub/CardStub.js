@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { refineClassNames } from '../../../utils/utils';
 import { Card, Heading, LinkableComponent, Logo } from '../../utils';
 import './CardStub.scss';
 
 function CardStub({ sectionClass }) {
+  const classNames = {
+    main: refineClassNames(['stub', sectionClass]),
+  };
+
   return (
-    <Card sectionClass={`stub ${sectionClass}`} color="green">
+    <Card sectionClass={classNames.main} color="green">
       <div className="stub__upper-element">
         <LinkableComponent
           Component={Logo}

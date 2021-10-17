@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
+import { refineClassNames } from '../../../utils/utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
 import {
   Caption,
@@ -17,23 +18,25 @@ function CardArticle({
   color,
   sectionClass,
 }) {
-  const classNames = [
-    'card-container',
-    isMain
-      ? 'card-container_type_main-article'
-      : 'card-container_type_article fade-in',
-    sectionClass,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'card-container',
+      isMain
+        ? 'card-container_type_main-article'
+        : 'card-container_type_article fade-in',
+      sectionClass,
+    ]),
+    articleCard: refineClassNames([
+      'article-card',
+      isMain ? 'article-card_main' : '',
+    ]),
+  };
+
   const cardColor = isMain ? 'yellow' : color;
 
   return (
-    <article className={classNames}>
-      <Card
-        sectionClass={`article-card ${isMain ? 'article-card_main' : ''}`}
-        color={cardColor}
-      >
+    <article className={classNames.main}>
+      <Card sectionClass={classNames.articleCard} color={cardColor}>
         <div className="article-card__title-wrap">
           <LinkableComponent
             Component={Heading}

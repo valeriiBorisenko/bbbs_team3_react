@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { refineClassNames } from '../../../utils/utils';
 import { Rubric } from '../../utils';
 import CardFigure from '../CardFigure/CardFigure';
 import './CardRights.scss';
@@ -13,8 +14,12 @@ function CardRights({
   id,
   getActiveTags,
 }) {
+  const classNames = {
+    main: refineClassNames(['rights-card', sectionClass]),
+  };
+
   return (
-    <div className={`rights-card ${sectionClass}`}>
+    <div className={classNames.main}>
       <Link
         to={{
           pathname: `/rights/${id}`,

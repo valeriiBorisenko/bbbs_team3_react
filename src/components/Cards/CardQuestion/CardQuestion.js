@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { QUESTIONS_URL } from '../../../config/routes';
+import { refineClassNames } from '../../../utils/utils';
 import { ButtonRound, Card, Heading, Paragraph, Rubric } from '../../utils';
 import './CardQuestion.scss';
 
@@ -47,19 +48,22 @@ function CardQuestion({
     return { height: 0 };
   };
 
-  const tagsClassNames = [
-    'card-question__tags',
-    isQuestionsPage ? 'card-question__tags_questions-page' : '',
-  ]
-    .join(' ')
-    .trim();
-
-  const answerWrapperClassNames = [
-    'card-question__answer',
-    isOpened ? 'card-question__answer_opened' : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames(['card-question', sectionClass]),
+    tags: refineClassNames([
+      'card-question__tags',
+      isQuestionsPage ? 'card-question__tags_questions-page' : '',
+    ]),
+    answerWrapper: refineClassNames([
+      'card-question__answer',
+      isOpened ? 'card-question__answer_opened' : '',
+    ]),
+    answerParagraph: refineClassNames([
+      'card-question__paragraph',
+      'card-question__answer_text-hidden',
+      isAnimated ? 'card-question__answer_text-active' : '',
+    ]),
+  };
 
   useEffect(() => {
     if (ref && ref.current && isOpenByDefault) {
@@ -69,7 +73,7 @@ function CardQuestion({
   }, [ref.current]);
 
   return (
-    <Card sectionClass={`card-question ${sectionClass}`}>
+    <Card sectionClass={classNames.main}>
       <div className="card-question__wrap">
         {isQuestionsPage && (
           <ButtonRound
@@ -90,7 +94,7 @@ function CardQuestion({
           />
         )}
 
-        <ul className={tagsClassNames}>
+        <ul className={classNames.tags}>
           {tags?.map((tag) => (
             <li className="card-question__tag" key={tag?.id}>
               <Rubric title={tag?.name} sectionClass="card-question__rubric" />
@@ -99,13 +103,11 @@ function CardQuestion({
         </ul>
       </div>
       {isQuestionsPage && (
-        <div className={answerWrapperClassNames} style={getDynamicStyle()}>
+        <div className={classNames.answerWrapper} style={getDynamicStyle()}>
           <Paragraph
             reference={ref}
             content={answer}
-            sectionClass={`card-question__paragraph card-question__answer_text-hidden ${
-              isAnimated ? 'card-question__answer_text-active' : ''
-            }`}
+            sectionClass={classNames.answerParagraph}
           />
         </div>
       )}

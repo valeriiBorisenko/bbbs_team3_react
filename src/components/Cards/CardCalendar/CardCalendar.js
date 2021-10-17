@@ -5,6 +5,7 @@ import {
   formatDate,
   formatPhoneNumber,
   formatWordCase,
+  refineClassNames,
 } from '../../../utils/utils';
 import { Button, ButtonDots, Heading, Paragraph } from '../../utils';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
@@ -61,38 +62,44 @@ function CardCalendar({
   }
 
   const classNames = {
-    main: [
+    main: refineClassNames([
       'calendar',
       booked ? 'calendar_selected' : '',
       canceled ? 'calendar_canceled' : '',
       sectionClass,
-    ]
-      .join(' ')
-      .trim(),
-    tags: ['calendar__type', canceled ? 'calendar__type_canceled' : '']
-      .join(' ')
-      .trim(),
-    weekday: ['calendar__weekday', canceled ? 'calendar__weekday_canceled' : '']
-      .join(' ')
-      .trim(),
-    title: ['calendar__title', canceled ? 'calendar__title_canceled' : '']
-      .join(' ')
-      .trim(),
-    date: ['calendar__date', canceled ? 'calendar__date_canceled' : '']
-      .join(' ')
-      .trim(),
-    time: ['calendar__time', canceled ? 'calendar__time_canceled' : '']
-      .join(' ')
-      .trim(),
-    place: ['calendar__place', canceled ? 'calendar__place_canceled' : '']
-      .join(' ')
-      .trim(),
-    contact: ['calendar__contact', canceled ? 'calendar__contact_canceled' : '']
-      .join(' ')
-      .trim(),
-    phone: ['calendar__phone', canceled ? 'calendar__phone_canceled' : '']
-      .join(' ')
-      .trim(),
+    ]),
+    tags: refineClassNames([
+      'calendar__type',
+      canceled ? 'calendar__type_canceled' : '',
+    ]),
+    weekday: refineClassNames([
+      'calendar__weekday',
+      canceled ? 'calendar__weekday_canceled' : '',
+    ]),
+    title: refineClassNames([
+      'calendar__title',
+      canceled ? 'calendar__title_canceled' : '',
+    ]),
+    date: refineClassNames([
+      'calendar__date',
+      canceled ? 'calendar__date_canceled' : '',
+    ]),
+    time: refineClassNames([
+      'calendar__time',
+      canceled ? 'calendar__time_canceled' : '',
+    ]),
+    place: refineClassNames([
+      'calendar__place',
+      canceled ? 'calendar__place_canceled' : '',
+    ]),
+    contact: refineClassNames([
+      'calendar__contact',
+      canceled ? 'calendar__contact_canceled' : '',
+    ]),
+    phone: refineClassNames([
+      'calendar__phone',
+      canceled ? 'calendar__phone_canceled' : '',
+    ]),
   };
 
   return (

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { ErrorsContext } from '../../contexts';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
+import { refineClassNames } from '../../utils/utils';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
+import { CloseButton, Paragraph } from '../utils';
 import { postPlace } from '../../api/places-page';
 import './PlacesRecommend.scss';
-import { CloseButton, Paragraph } from '../utils';
 
 function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
   const { setError } = useContext(ErrorsContext);
@@ -76,18 +77,18 @@ function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
     </>
   );
 
-  const classNames = [
-    'recommendation',
-    'recommendation_place_page',
-    'fade-in',
-    sectionClass,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'recommendation',
+      'recommendation_place_page',
+      'fade-in',
+      sectionClass,
+    ]),
+  };
 
   return (
     <>
-      <section className={classNames} ref={scrollAnchorRef}>
+      <section className={classNames.main} ref={scrollAnchorRef}>
         <div className="recommendation__container">
           {isFormOpen && (
             <CloseButton

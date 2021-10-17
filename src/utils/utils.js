@@ -108,3 +108,10 @@ export const formatPhoneNumber = (phoneNum) => {
   }
   return phoneNum;
 };
+
+export const refineClassNames = (array) => {
+  if (Array.isArray(array)) {
+    return array.join(' ').trim();
+  }
+  return array;
+};

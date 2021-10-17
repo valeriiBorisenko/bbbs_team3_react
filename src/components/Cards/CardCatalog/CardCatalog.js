@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { refineClassNames } from '../../../utils/utils';
 import { Heading } from '../../utils';
 import CardFigure from '../CardFigure/CardFigure';
 import { staticImageUrl } from '../../../config/config';
@@ -7,8 +8,12 @@ import './CardCatalog.scss';
 
 function CardCatalog({ data: { id, title, image }, shape, sectionClass }) {
   const link = `/catalog/${id}`;
+  const classNames = {
+    main: refineClassNames(['card-catalog', sectionClass]),
+  };
+
   return (
-    <div className={`card-catalog ${sectionClass}`}>
+    <div className={classNames.main}>
       <Link to={link} className="card-catalog__link-wrap">
         <div className="card-catalog__image-wrap">
           <CardFigure

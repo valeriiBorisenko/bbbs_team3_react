@@ -10,6 +10,7 @@ import {
 import { useAuth, useClickOutside, useLocalStorage } from '../../hooks';
 import { AFISHA_URL, PLACES_URL, PROFILE_URL } from '../../config/routes';
 import { localStUserCity } from '../../config/constants';
+import { refineClassNames } from '../../utils/utils';
 import NavBar from '../NavBar/NavBar';
 import { UserMenuButton } from '../utils';
 import './Header.scss';
@@ -110,21 +111,21 @@ function Header({ isTransparentOnTop }) {
     return () => window.removeEventListener('scroll', debouncedScrollUp);
   }, []);
 
-  const classNamesHeader = [
-    'header',
-    isTransparentOnTop && isHeaderOnTop && !isOpenSearch
-      ? 'header_transparent'
-      : '',
-    isMobileMenuOpen ? 'header_displayed' : '',
-    !isHeaderActive && !isOpenSearch ? 'header__on-scroll-up' : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'header',
+      isTransparentOnTop && isHeaderOnTop && !isOpenSearch
+        ? 'header_transparent'
+        : '',
+      isMobileMenuOpen ? 'header_displayed' : '',
+      !isHeaderActive && !isOpenSearch ? 'header__on-scroll-up' : '',
+    ]),
+  };
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <header
-      className={classNamesHeader}
+      className={classNames.main}
       ref={headerRef}
       onClick={handleCloseMobileMenu}
       onKeyPress={handleCloseMobileMenu}

@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { PopupsContext } from '../../../contexts';
 import { Caption, Card, Heading, StyledLink } from '../../utils';
-import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
+import {
+  changeCaseOfFirstLetter,
+  formatDuration,
+  refineClassNames,
+} from '../../../utils/utils';
 import { staticImageUrl } from '../../../config/config';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
@@ -39,6 +43,14 @@ function CardVideoMain({
       if (isPlayingVideo) setIsPlayingVideo(false);
     }
   }, [isMobile]);
+
+  const classNames = {
+    preview: refineClassNames([
+      'card-video-main__image',
+      isPlayingVideo ? 'card-video-main__image_at-back' : '',
+      'image-scale',
+    ]),
+  };
 
   return (
     <div className="card-container card-container_type_main-video">
@@ -82,9 +94,7 @@ function CardVideoMain({
         <img
           src={`${staticImageUrl}/${image}`}
           alt={`${texts.imageAlt}: ${title}`}
-          className={`card-video-main__image ${
-            isPlayingVideo ? 'card-video-main__image_at-back' : ''
-          } image-scale`}
+          className={classNames.preview}
           loading="lazy"
         />
 

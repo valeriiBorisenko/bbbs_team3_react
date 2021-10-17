@@ -21,6 +21,7 @@ import {
   STORIES_URL,
 } from '../../config/routes';
 import { socialLinks } from '../../utils/external-links';
+import { refineClassNames } from '../../utils/utils';
 import NavItemWithDropdown from '../NavItemWithDropdown/NavItemWithDropdown';
 import Search from '../Search/Search';
 import { NavItem, UserIconButton, UserMenuButton } from '../utils';
@@ -44,8 +45,33 @@ function NavBar({
     setIsOpenSearch(false);
   };
 
+  const classNames = {
+    main: refineClassNames(['menu', isOpenSearch ? 'menu_state_search' : '']),
+    menuListsWrap: refineClassNames([
+      'menu__lists-wrap',
+      !isMobileMenuOpen ? 'menu__lists-wrap_hidden' : '',
+    ]),
+    menuSocial: refineClassNames([
+      'menu__list',
+      'menu__list_type_social',
+      !isMobileMenuOpen ? 'menu__list_hidden' : '',
+    ]),
+    menuBurger: refineClassNames([
+      'menu__burger',
+      isMobileMenuOpen ? 'menu__burger_active' : '',
+    ]),
+    menuUser: refineClassNames([
+      'menu__user-info',
+      !isMobileMenuOpen ? 'menu__user-info_hidden' : '',
+    ]),
+    cityButton: refineClassNames([
+      'mobile-link',
+      !currentUser ? 'menu__user-info_center' : '',
+    ]),
+  };
+
   return (
-    <nav className={`menu ${isOpenSearch ? 'menu_state_search' : ''}`}>
+    <nav className={classNames.main}>
       {/* логотип */}
       <Link
         to="/"
@@ -56,11 +82,7 @@ function NavBar({
         {MAIN_PAGE_TITLE}
       </Link>
       {/* обычное меню */}
-      <div
-        className={`menu__lists-wrap ${
-          !isMobileMenuOpen ? 'menu__lists-wrap_hidden' : ''
-        }`}
-      >
+      <div className={classNames.menuListsWrap}>
         <ul className="menu__list">
           {/* О проекте, скрытый */}
           <NavItem
@@ -112,11 +134,7 @@ function NavBar({
           />
         </ul>
 
-        <ul
-          className={`menu__list menu__list_type_social ${
-            !isMobileMenuOpen ? 'menu__list_hidden' : ''
-          }`}
-        >
+        <ul className={classNames.menuSocial}>
           {React.Children.toArray(
             socialLinks.map((link) => (
               <li className="menu__list-item">
@@ -138,9 +156,7 @@ function NavBar({
 
       <button
         onClick={onBurgerButtonClick}
-        className={`menu__burger ${
-          isMobileMenuOpen ? 'menu__burger_active' : ''
-        }`}
+        className={classNames.menuBurger}
         type="button"
       >
         <span className="menu__burger-line" />
@@ -181,11 +197,7 @@ function NavBar({
   function renderUserMenuButtons() {
     if (currentUser || pathname === PLACES_URL) {
       return (
-        <div
-          className={`menu__user-info ${
-            !isMobileMenuOpen ? 'menu__user-info_hidden' : ''
-          }`}
-        >
+        <div className={classNames.menuUser}>
           <UserMenuButton
             title={
               userCityName
@@ -193,9 +205,7 @@ function NavBar({
                 : texts.changeCityDefault
             }
             handleClick={onCityChangeClick}
-            sectionClass={`mobile-link ${
-              !currentUser ? 'menu__user-info_center' : ''
-            }`}
+            sectionClass={classNames.cityButton}
           />
           {currentUser && renderLogoutButton()}
         </div>

@@ -1,20 +1,21 @@
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
 import { Card, Paragraph } from '../../utils';
 import CardAnnotationContainer from './CardAnnotationContainer';
 import './CardAnnotation.scss';
 
 function CardAnnotation({ info, description, isMain, sectionClass }) {
-  const classNames = [
-    'card-annotation',
-    isMain ? 'card-annotation_main' : '',
-    info && isMain ? '' : 'card-annotation_main_center',
-    sectionClass,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'card-annotation',
+      isMain ? 'card-annotation_main' : '',
+      info && isMain ? '' : 'card-annotation_main_center',
+      sectionClass,
+    ]),
+  };
 
   return (
-    <Card sectionClass={classNames}>
+    <Card sectionClass={classNames.main}>
       <CardAnnotationContainer caption={info}>
         <Paragraph content={description} />
       </CardAnnotationContainer>

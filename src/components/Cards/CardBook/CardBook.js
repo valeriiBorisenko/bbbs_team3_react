@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
 import { Card, Heading } from '../../utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
 import './CardBook.scss';
@@ -9,8 +10,12 @@ function CardBook({
 }) {
   const backgroundColor = { backgroundColor: type?.color };
 
+  const classNames = {
+    main: refineClassNames(['card-container', sectionClass]),
+  };
+
   return (
-    <article className={`card-container ${sectionClass}`}>
+    <article className={classNames.main}>
       <Card sectionClass="card-book">
         <div className="card-book__cover" style={backgroundColor || ''}>
           <Heading
@@ -30,6 +35,7 @@ function CardBook({
     </article>
   );
 }
+
 CardBook.propTypes = {
   data: PropTypes.objectOf(PropTypes.any),
   type: PropTypes.objectOf(PropTypes.any),

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { refineClassNames } from '../../utils/utils';
 import { Loader, Paginate } from '../utils';
 import renderThoseDamnedLines from '../../utils/render-lines';
 import './CardsSectionWithLines.scss';
@@ -34,13 +35,17 @@ function CardsSectionWithLines({
     };
   }, []);
 
+  const classNames = {
+    main: refineClassNames(['cards-section', sectionClass]),
+  };
+
   return (
     <>
       {isLoading ? (
         <Loader isPaginate />
       ) : (
         <>
-          <section className={`cards-section ${sectionClass}`}>
+          <section className={classNames.main}>
             {renderThoseDamnedLines(dataLength, pageSize, isTablet)}
             {children}
           </section>
