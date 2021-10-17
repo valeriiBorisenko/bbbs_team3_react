@@ -5,14 +5,17 @@ import AnimatedPageContainer from '../../components/AnimatedPageContainer/Animat
 import TagsList from '../../components/TagsList/TagsList';
 import { PopupRecommendSuccess } from '../../components/Popups';
 import {
+  Card,
   Heading,
   Loader,
   NextArticleLink,
   NoDataNotificationBox,
   Paginate,
+  Paragraph,
 } from '../../components/utils';
 
 export {
+  Card,
   BasePage,
   Heading,
   CardPlace,
@@ -24,4 +27,5 @@ export {
   Paginate,
   PopupRecommendSuccess,
   NextArticleLink,
+  Paragraph,
 };

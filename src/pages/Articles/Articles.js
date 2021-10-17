@@ -18,6 +18,7 @@ import {
   Loader,
   NextArticleLink,
   Paginate,
+  Paragraph,
 } from './index';
 import './Articles.scss';
 
@@ -120,7 +121,7 @@ function Articles() {
           <CardArticle data={singleCard} isMain />
 
           <Card sectionClass="articles__single-card-paragraph">
-            <p className="paragraph">{singleCard.annotation}</p>
+            <Paragraph content={singleCard.annotation} />
           </Card>
 
           <NextArticleLink

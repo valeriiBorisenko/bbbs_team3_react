@@ -22,6 +22,7 @@ import {
   Loader,
   NextArticleLink,
   Paginate,
+  Paragraph,
   TagsList,
 } from './index';
 import './Books.scss';
@@ -136,7 +137,7 @@ function Books() {
           <CardBook data={singleCard} isOnlyCover sectionClass="scale-in" />
 
           <Card sectionClass="books__single-book-paragraph">
-            <p className="paragraph">{singleCard.annotation}</p>
+            <Paragraph content={singleCard.annotation} />
           </Card>
 
           <NextArticleLink

@@ -8,6 +8,7 @@ import {
   Loader,
   NextArticleLink,
   Paginate,
+  Paragraph,
 } from '../../components/utils';
 
 export {
@@ -20,4 +21,5 @@ export {
   Paginate,
   Card,
   NextArticleLink,
+  Paragraph,
 };

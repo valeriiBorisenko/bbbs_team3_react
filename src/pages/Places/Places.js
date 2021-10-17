@@ -8,6 +8,7 @@ import {
   ERROR_MESSAGES,
   localStUserCity,
 } from '../../config/constants';
+import { PLACES_URL } from '../../config/routes';
 import {
   useActivityTypes,
   useFiltrationForPlaces,
@@ -24,19 +25,19 @@ import {
 import {
   AnimatedPageContainer,
   BasePage,
+  Card,
   CardPlace,
   Heading,
   Loader,
   NextArticleLink,
   NoDataNotificationBox,
   Paginate,
+  Paragraph,
   PlacesRecommend,
   PopupRecommendSuccess,
   TagsList,
 } from './index';
 import './Places.scss';
-import { Card } from '../Articles';
-import { PLACES_URL } from '../../config/routes';
 
 const {
   headTitle,
@@ -219,7 +220,7 @@ function Places() {
           />
 
           <Card sectionClass="places__single-card-paragraph">
-            <p className="paragraph">{singleCard.description}</p>
+            <Paragraph content={singleCard.description} />
           </Card>
 
           <NextArticleLink text={toMainPageLinkTitle} href={PLACES_URL} />
