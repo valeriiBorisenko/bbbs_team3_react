@@ -8,6 +8,7 @@ import {
   NextArticleLink,
   PseudoButtonTag,
   ScrollableContainer,
+  StyledLink,
 } from '../../components/utils';
 
 export {
@@ -20,4 +21,5 @@ export {
   ScrollableContainer,
   Loader,
   PopupPhoto,
+  StyledLink,
 };

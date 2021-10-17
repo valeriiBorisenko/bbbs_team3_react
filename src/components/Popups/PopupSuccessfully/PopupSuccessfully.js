@@ -9,7 +9,7 @@ import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 import Popup from '../Popup/Popup';
-import { Button, Heading } from '../../utils';
+import { Button, Heading, Paragraph } from '../../utils';
 import './PopupSuccessfully.scss';
 
 const { popupTitle, paragraph, buttonTextCalendarPage, buttonTextDefault } =
@@ -55,24 +55,29 @@ function PopupSuccessfully({ isOpen, onClose }) {
       sectionClass="popup__container_success"
     >
       <div ref={animationContainer} className="popup__animation-success" />
-      <p className="section-title popup__title_type_calendar">{popupTitle}</p>
       <Heading
         level={2}
         type="small"
+        content={popupTitle}
+        sectionClass="popup__title_type_calendar"
+      />
+      <Paragraph
+        size="big"
         sectionClass="popup__title_type_calendar"
         content={`«${card?.title}»`}
       />
-      <Heading
-        level={2}
-        type="small"
+      <Paragraph
+        size="big"
         sectionClass="popup__title_type_calendar"
         content={`${parseInt(startDay?.day, 10)} ${month} с ${startDay?.hour}:${
           startDay?.minutes
         }—${endDay?.hour}:${endDay?.minutes}`}
       />
-      <p className="section-title popup__title_type_calendar popup__title_type_successfully">
-        {paragraph}
-      </p>
+      <Paragraph
+        size="big"
+        content={paragraph}
+        sectionClass="popup__title_type_calendar popup__title_type_successfully"
+      />
       <div className="popup__buttons_type_calendar">
         <Button
           color="black"

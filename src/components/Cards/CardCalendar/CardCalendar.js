@@ -6,7 +6,7 @@ import {
   formatPhoneNumber,
   formatWordCase,
 } from '../../../utils/utils';
-import { Button, ButtonDots } from '../../utils';
+import { Button, ButtonDots, Heading, Paragraph } from '../../utils';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 import './CardCalendar.scss';
@@ -60,77 +60,74 @@ function CardCalendar({
     onEventDescriptionClick();
   }
 
-  const classNames = [
-    'calendar',
-    booked ? 'calendar_selected' : '',
-    canceled ? 'calendar_canceled' : '',
-    sectionClass,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: [
+      'calendar',
+      booked ? 'calendar_selected' : '',
+      canceled ? 'calendar_canceled' : '',
+      sectionClass,
+    ]
+      .join(' ')
+      .trim(),
+    tags: ['calendar__type', canceled ? 'calendar__type_canceled' : '']
+      .join(' ')
+      .trim(),
+    weekday: ['calendar__weekday', canceled ? 'calendar__weekday_canceled' : '']
+      .join(' ')
+      .trim(),
+    title: ['calendar__title', canceled ? 'calendar__title_canceled' : '']
+      .join(' ')
+      .trim(),
+    date: ['calendar__date', canceled ? 'calendar__date_canceled' : '']
+      .join(' ')
+      .trim(),
+    time: ['calendar__time', canceled ? 'calendar__time_canceled' : '']
+      .join(' ')
+      .trim(),
+    place: ['calendar__place', canceled ? 'calendar__place_canceled' : '']
+      .join(' ')
+      .trim(),
+    contact: ['calendar__contact', canceled ? 'calendar__contact_canceled' : '']
+      .join(' ')
+      .trim(),
+    phone: ['calendar__phone', canceled ? 'calendar__phone_canceled' : '']
+      .join(' ')
+      .trim(),
+  };
 
   return (
-    <article className={classNames}>
+    <article className={classNames.main}>
       <div className="calendar__caption">
         <div className="calendar__info">
-          <p
-            className={`calendar__type ${
-              canceled ? 'calendar__type_canceled' : ''
-            }`}
-          >
+          <p className={classNames.tags}>
             {changeCaseOfFirstLetter(tags?.name)}
           </p>
-          <p
-            className={`calendar__weekday ${
-              canceled ? 'calendar__weekday_canceled' : ''
-            }`}
-          >
+          <p className={classNames.weekday}>
             {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
           </p>
         </div>
         <div className="calendar__about">
-          <h2
-            className={`section-title calendar__title ${
-              canceled ? 'calendar__title_canceled' : ''
-            }`}
-          >
-            {title}
-          </h2>
-          <p
-            className={`calendar__date ${
-              canceled ? 'calendar__date_canceled' : ''
-            }`}
-          >
-            {startDateParts.day}
-          </p>
+          <Heading
+            level={2}
+            type="small"
+            content={title}
+            sectionClass={classNames.title}
+          />
+          <p className={classNames.date}>{startDateParts.day}</p>
         </div>
       </div>
       <div className="calendar__meetup">
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
-            <p
-              className={`calendar__time ${
-                canceled ? 'calendar__time_canceled' : ''
-              }`}
-            >
+            <p className={classNames.time}>
               {`${startDateParts.hour}:${startDateParts.minutes}–${endDayParts.hour}:${endDayParts.minutes}`}
             </p>
           </li>
           <li className="calendar__info-item">
-            <p
-              className={`calendar__place ${
-                canceled ? 'calendar__place_canceled' : ''
-              }`}
-            >
-              {address}
-            </p>
+            <p className={classNames.place}>{address}</p>
           </li>
           <li className="calendar__info-item">
-            <p
-              className={`calendar__contact ${
-                canceled ? 'calendar__contact_canceled' : ''
-              }`}
-            >
+            <p className={classNames.contact}>
               {`${contact}, `}
               {renderPhone()}
             </p>
@@ -138,9 +135,10 @@ function CardCalendar({
         </ul>
         {isDescription && (
           <div className="calendar__description">
-            <p className="paragraph calendar__desc-paragraph">
-              {cardData?.description}
-            </p>
+            <Paragraph
+              content={cardData?.description}
+              sectionClass="calendar__desc-paragraph"
+            />
           </div>
         )}
         <div className="calendar__submit">{renderSubmitZone()}</div>
@@ -150,12 +148,7 @@ function CardCalendar({
 
   function renderPhone() {
     return (
-      <a
-        className={`calendar__phone ${
-          canceled ? 'calendar__phone_canceled' : ''
-        }`}
-        href={`tel:${phoneNumber}`}
-      >
+      <a className={classNames.phone} href={`tel:${phoneNumber}`}>
         {formatPhoneNumber(phoneNumber)}
       </a>
     );

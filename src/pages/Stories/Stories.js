@@ -22,6 +22,7 @@ import {
   PopupPhoto,
   PseudoButtonTag,
   ScrollableContainer,
+  StyledLink,
 } from './index';
 import './Stories.scss';
 
@@ -273,14 +274,12 @@ function Stories() {
     return (
       <div className="stories__links fade-in">
         {currentUser && currentStory.mentor?.email && (
-          <a
-            className="link stories__link"
-            href={`mailto:${currentStory.mentor.email}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {emailText}
-          </a>
+          <StyledLink
+            className="stories__link"
+            path={`mailto:${currentStory.mentor.email}`}
+            text={emailText}
+            isExternal
+          />
         )}
 
         {currentStory.nextArticle && (

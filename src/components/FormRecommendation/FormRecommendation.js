@@ -98,7 +98,7 @@ function FormRecommendation({
   return (
     <form
       className={formClassNames}
-      name="formRecomendation"
+      name="formRecommendation"
       onSubmit={handleSubmit}
       noValidate
     >

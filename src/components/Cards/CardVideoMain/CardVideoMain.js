@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { PopupsContext } from '../../../contexts';
-import { Caption, Card, Heading } from '../../utils';
+import { Caption, Card, Heading, StyledLink } from '../../utils';
 import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
 import { staticImageUrl } from '../../../config/config';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
@@ -56,13 +56,11 @@ function CardVideoMain({
           />
         </div>
         {link && (
-          <button
-            className="link"
-            type="button"
+          <StyledLink
+            text={texts.linkText}
             onClick={isMobile ? playVideoOnClick : openPopupVideoOnClick}
-          >
-            {texts.linkText}
-          </button>
+            isButton
+          />
         )}
       </Card>
 

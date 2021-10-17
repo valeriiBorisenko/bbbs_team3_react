@@ -8,7 +8,7 @@ import {
 } from '../../../utils/utils';
 import '../../Cards/CardCalendar/CardCalendar.scss';
 import Popup from '../Popup/Popup';
-import { Button, Heading, ModificatedScrollbars } from '../../utils';
+import { Button, Heading, ModificatedScrollbars, Paragraph } from '../../utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks';
 import { localStAfishaEvent } from '../../../config/constants';
@@ -85,9 +85,10 @@ function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
             </ul>
             <div className="calendar__description">
               <ModificatedScrollbars horizontalScrollClass="scroll-thumb">
-                <p className="paragraph calendar__desc-paragraph">
-                  {card?.description}
-                </p>
+                <Paragraph
+                  content={card?.description}
+                  sectionClass="calendar__desc-paragraph"
+                />
               </ModificatedScrollbars>
             </div>
 

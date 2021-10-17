@@ -7,7 +7,14 @@ function CardFigure({ title, shape, color, children, sectionClass }) {
     <div
       className={`card-figure card-figure_color_${color} card-figure_form_${shape} ${sectionClass}`}
     >
-      {title && <Heading level={2} type="small" content={title} />}
+      {title && (
+        <Heading
+          level={2}
+          type="small"
+          content={title}
+          sectionClass="card-figure__title"
+        />
+      )}
       {children}
     </div>
   );

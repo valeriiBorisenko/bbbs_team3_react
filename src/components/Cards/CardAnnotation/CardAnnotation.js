@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Card } from '../../utils';
+import { Card, Paragraph } from '../../utils';
 import CardAnnotationContainer from './CardAnnotationContainer';
 import './CardAnnotation.scss';
 
@@ -16,7 +16,7 @@ function CardAnnotation({ info, description, isMain, sectionClass }) {
   return (
     <Card sectionClass={classNames}>
       <CardAnnotationContainer caption={info}>
-        <p className="paragraph card-annotation__paragraph">{description}</p>
+        <Paragraph content={description} />
       </CardAnnotationContainer>
     </Card>
   );

@@ -10,7 +10,7 @@ function DropDownMenu({ sectionWrapperClass }) {
         <NavItem
           key={item.title}
           sectionWrapperClass="menu__dropdown-list-item"
-          sectionLinkClass="link menu__dropdown-link"
+          sectionLinkClass="menu__dropdown-link"
           href={item.url}
           linkText={item.title}
         />

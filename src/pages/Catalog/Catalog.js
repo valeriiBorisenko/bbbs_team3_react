@@ -10,6 +10,7 @@ import {
   CardsSectionWithLines,
   Heading,
   Loader,
+  Paragraph,
 } from './index';
 import './Catalog.scss';
 
@@ -72,9 +73,8 @@ function Catalog() {
           sectionClass="page__title"
           content={title}
         />
-        <Heading
-          level={2}
-          type="small"
+        <Paragraph
+          size="big"
           sectionClass="catalog__subtitle"
           content={subtitle}
         />

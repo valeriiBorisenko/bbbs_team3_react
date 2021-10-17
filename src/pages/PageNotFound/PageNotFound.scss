@@ -5,22 +5,8 @@
 }
 
 .page-not-found-title {
-  margin: 0;
-  margin-bottom: 30px;
-  font-family: 'Proto Grotesk Web Light';
-  font-style: normal;
-  font-weight: 300;
-  font-size: 100px;
-  line-height: 1;
+  margin: 0 auto 30px;
   text-align: center;
-  letter-spacing: -2px;
-  color: #000000;
-}
-
-@include atTabletL {
-  .page-not-found-title {
-    font-size: 60px;
-  }
 }
 
 @include atMobile {

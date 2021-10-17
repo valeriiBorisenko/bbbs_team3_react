@@ -104,13 +104,13 @@
 
 .popup__title {
   &_type_sign-in {
-    margin-bottom: 15px;
+    margin: 0 auto 15px;
     text-align: center;
   }
 
   &_type_calendar {
     max-width: 570px;
-    margin-bottom: 5px;
+    margin: 0 auto 5px;
     text-align: center;
   }
 }

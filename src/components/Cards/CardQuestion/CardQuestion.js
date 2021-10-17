@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { QUESTIONS_URL } from '../../../config/routes';
-import { ButtonRound, Card, Heading, Rubric } from '../../utils';
+import { ButtonRound, Card, Heading, Paragraph, Rubric } from '../../utils';
 import './CardQuestion.scss';
 
 const animationTransition = 300;
@@ -100,14 +100,13 @@ function CardQuestion({
       </div>
       {isQuestionsPage && (
         <div className={answerWrapperClassNames} style={getDynamicStyle()}>
-          <p
-            ref={ref}
-            className={`paragraph card-question__paragraph card-question__answer_text-hidden ${
+          <Paragraph
+            reference={ref}
+            content={answer}
+            sectionClass={`card-question__paragraph card-question__answer_text-hidden ${
               isAnimated ? 'card-question__answer_text-active' : ''
             }`}
-          >
-            {answer}
-          </p>
+          />
         </div>
       )}
     </Card>

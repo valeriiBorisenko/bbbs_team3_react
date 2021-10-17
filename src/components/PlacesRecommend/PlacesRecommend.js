@@ -6,6 +6,7 @@ import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
 import { postPlace } from '../../api/places-page';
 import './PlacesRecommend.scss';
+import { Paragraph } from '../utils';
 
 function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
   const { setError } = useContext(ErrorsContext);
@@ -61,6 +62,20 @@ function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
       .finally(() => setIsWaitingResponse(false));
   };
 
+  const renderText = () => (
+    <>
+      {texts.recommendadionTextPart1}
+      <button
+        className="recommendation__text-link"
+        type="button"
+        onClick={openForm}
+      >
+        {texts.recommendadionButton}
+      </button>
+      {texts.recommendadionTextPart2}
+    </>
+  );
+
   const classNames = [
     'recommendation',
     'recommendation_place_page',
@@ -82,17 +97,11 @@ function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
               onClick={closeForm}
             />
           )}
-          <p className="section-title recommendation__text">
-            {texts.recommendadionTextPart1}
-            <button
-              className="recommendation__text-link"
-              type="button"
-              onClick={openForm}
-            >
-              {texts.recommendadionButton}
-            </button>
-            {texts.recommendadionTextPart2}
-          </p>
+          <Paragraph
+            content={renderText()}
+            size="big"
+            sectionClass="recommendation__text"
+          />
           <FormRecommendation
             isOpen={isFormOpen}
             onSubmit={handleFormSubmit}

@@ -10,9 +10,13 @@
   text-decoration: none;
   letter-spacing: 0.2px;
   color: $blue;
+  background-color: rgba($white, 0);
+  padding: 0;
+  border: none;
+  outline: none;
   transition: .3s ease;
 
-  &:hover{
+  &:hover {
     color: $darkBlue;
     cursor: pointer;
   }

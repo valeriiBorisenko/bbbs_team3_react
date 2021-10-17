@@ -14,7 +14,8 @@
 
   &__title {
     color: $lightBlack;
-
+    margin: 0 auto;
+    text-align: center;
 
     &_shifted {
       transform: translateX(-100px);

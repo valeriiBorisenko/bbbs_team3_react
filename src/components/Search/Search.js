@@ -22,7 +22,7 @@ import { searchValidationSettings } from '../../config/validation-settings';
 import { useDebounce, useFormWithValidation } from '../../hooks';
 import { getLocalStorageData } from '../../hooks/useLocalStorage';
 import search from '../../api/search';
-import { Loader, SearchButton } from '../utils';
+import { Loader, Paragraph, SearchButton } from '../utils';
 import './Search.scss';
 
 function Search({
@@ -179,14 +179,18 @@ function Search({
                   pathname: getPathName(item.page, item.id),
                   state: { id: item.id },
                 }}
-                className="section-title section-title_clickable search__title-link"
+                className="search__title-link"
                 style={animateLink(idx)}
               >
-                {item.title}
+                <Paragraph
+                  sectionClass="search__title"
+                  size="big"
+                  content={item.title}
+                />
               </Link>
               <Link
                 to={`/${item.page}`}
-                className="link search__link"
+                className="search__link"
                 style={animateLink(idx)}
                 onClick={handleClickLink}
               >

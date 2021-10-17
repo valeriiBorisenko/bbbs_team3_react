@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import { PLACES_TITLE } from '../../../config/routes';
-import { Caption, Card, Heading, Rubric } from '../../utils';
+import { Caption, Card, Heading, Rubric, StyledLink } from '../../utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
 import './CardPlace.scss';
 
@@ -68,14 +68,12 @@ function CardPlace({
           {renderImage()}
 
           {data.link && (
-            <a
-              href={data.link}
-              className="link card-place__link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {linkText}
-            </a>
+            <StyledLink
+              path={data.link}
+              sectionClass="card-place__link"
+              text={linkText}
+              isExternal
+            />
           )}
         </Card>
 

@@ -5,7 +5,7 @@ import { getLocalStorageData } from '../../../hooks/useLocalStorage';
 import { useEventBooking } from '../../../hooks';
 import { localStAfishaEvent } from '../../../config/constants';
 import Popup from '../Popup/Popup';
-import { Button, Heading } from '../../utils';
+import { Button, Heading, Paragraph } from '../../utils';
 import './PopupConfirmation.scss';
 
 function PopupConfirmation({ isOpen, onClose }) {
@@ -29,18 +29,21 @@ function PopupConfirmation({ isOpen, onClose }) {
       onClose={onClose}
     >
       <form className="popup__form" onSubmit={handleSubmit}>
-        <p className="section-title popup__title_type_calendar">
-          {texts.title}
-        </p>
         <Heading
           level={2}
           type="small"
+          content={texts.title}
+          sectionClass="popup__title_type_calendar"
+        >
+          {texts.title}
+        </Heading>
+        <Paragraph
+          size="big"
           sectionClass="popup__title_type_calendar"
           content={`«${card?.title}»`}
         />
-        <Heading
-          level={2}
-          type="small"
+        <Paragraph
+          size="big"
           sectionClass="popup__title_type_calendar"
           content={`${parseInt(startDay?.day, 10)} ${month} с ${
             startDay?.hour

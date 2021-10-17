@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useState } from 'react';
 import { PopupsContext } from '../../../contexts';
-import { Caption, Card, Heading, Rubric } from '../../utils';
+import { Caption, Card, Heading, Rubric, StyledLink } from '../../utils';
 import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
@@ -60,14 +60,11 @@ function CardFilm({
           />
         </div>
         {link && (
-          <button
-            className="link"
-            type="button"
+          <StyledLink
+            text={isVideo ? texts.linkTextVideo : texts.linkTextMovie}
             onClick={isMobile ? playVideoOnClick : openPopupVideoOnClick}
-            draggable="false"
-          >
-            {isVideo ? texts.linkTextVideo : texts.linkTextMovie}
-          </button>
+            isButton
+          />
         )}
       </div>
     </Card>

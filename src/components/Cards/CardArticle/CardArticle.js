@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
-import { Caption, Card, Heading } from '../../utils';
+import { Caption, Card, Heading, StyledLink } from '../../utils';
 import './CardArticle.scss';
 
 function CardArticle({
@@ -59,15 +59,12 @@ function CardArticle({
           </div>
         )}
 
-        <a
-          draggable="false"
-          href={articleUrl}
-          className="link article-card__link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {texts.linkText}
-        </a>
+        <StyledLink
+          path={articleUrl}
+          text={texts.linkText}
+          sectionClass="article-card__link"
+          isExternal
+        />
       </Card>
       <CardAnnotation description={annotation} isMain={isMain} />
     </article>

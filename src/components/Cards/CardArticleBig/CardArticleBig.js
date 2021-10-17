@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { Card, Heading } from '../../utils';
+import { Card, Heading, StyledLink } from '../../utils';
 import './CardArticleBig.scss';
 
 function CardArticleBig({ title, color, articleUrl }) {
@@ -19,14 +19,12 @@ function CardArticleBig({ title, color, articleUrl }) {
           content={title}
         />
       </a>
-      <a
-        className="link card-article__link"
-        href={articleUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {texts.linkText}
-      </a>
+      <StyledLink
+        sectionClass="card-article__link"
+        path={articleUrl}
+        text={texts.linkText}
+        isExternal
+      />
     </Card>
   );
 }
