@@ -35,6 +35,7 @@
 .stub__text {
   max-width: 570px;
   text-align: center;
+  margin: 0 auto;
 }
 
 @include atDesktop1440 {
