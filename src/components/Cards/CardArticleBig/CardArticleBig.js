@@ -1,27 +1,27 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { Card, TitleH3 } from '../../utils';
+import { Card, Heading, LinkableComponent, StyledLink } from '../../utils';
 import './CardArticleBig.scss';
 
 function CardArticleBig({ title, color, articleUrl }) {
   return (
     <Card sectionClass="card-article" color={color}>
-      <a
-        href={articleUrl}
-        className="card-article__link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <TitleH3 sectionClass="card-article__title" title={title} />
-      </a>
-      <a
-        className="link card-article__link"
-        href={articleUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {texts.linkText}
-      </a>
+      <LinkableComponent
+        Component={Heading}
+        path={articleUrl}
+        linkSectionClass="card-article__link"
+        isExternal
+        level={2}
+        type="medium"
+        sectionClass="card-article__title"
+        content={title}
+      />
+      <StyledLink
+        sectionClass="card-article__link"
+        path={articleUrl}
+        text={texts.linkText}
+        isExternal
+      />
     </Card>
   );
 }

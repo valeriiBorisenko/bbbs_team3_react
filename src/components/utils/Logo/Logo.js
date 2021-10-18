@@ -3,15 +3,18 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import blueLogo from '../../../assets/logo.svg';
 import whiteLogo from '../../../assets/footer-logo.svg';
+import { refineClassNames } from '../../../utils/utils';
 
 function Logo({ isWhite, sectionClass }) {
-  const classNames = ['logo', sectionClass].join(' ').trim();
+  const classNames = {
+    main: refineClassNames(['logo', sectionClass]),
+  };
 
   return (
     <img
       src={isWhite ? whiteLogo : blueLogo}
       alt={texts.altText}
-      className={classNames}
+      className={classNames.main}
     />
   );
 }

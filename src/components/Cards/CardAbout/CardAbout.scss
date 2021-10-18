@@ -2,6 +2,10 @@
 
 .card-about {
   grid-template-rows: 120px minmax(265px, 1fr);
+
+  &__title {
+    margin: 0 auto;
+  }
 }
 
 .card-about__heading {

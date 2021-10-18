@@ -1,8 +1,15 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
+import { refineClassNames } from '../../../utils/utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
-import { Caption, Card, TitleH2 } from '../../utils';
+import {
+  Caption,
+  Card,
+  Heading,
+  LinkableComponent,
+  StyledLink,
+} from '../../utils';
 import './CardArticle.scss';
 
 function CardArticle({
@@ -11,33 +18,36 @@ function CardArticle({
   color,
   sectionClass,
 }) {
-  const classNames = [
-    'card-container',
-    isMain
-      ? 'card-container_type_main-article'
-      : 'card-container_type_article fade-in',
-    sectionClass,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'card-container',
+      isMain
+        ? 'card-container_type_main-article'
+        : 'card-container_type_article fade-in',
+      sectionClass,
+    ]),
+    articleCard: refineClassNames([
+      'article-card',
+      isMain ? 'article-card_main' : '',
+    ]),
+  };
+
   const cardColor = isMain ? 'yellow' : color;
 
   return (
-    <article className={classNames}>
-      <Card
-        sectionClass={`article-card ${isMain ? 'article-card_main' : ''}`}
-        color={cardColor}
-      >
+    <article className={classNames.main}>
+      <Card sectionClass={classNames.articleCard} color={cardColor}>
         <div className="article-card__title-wrap">
-          <a
-            draggable="false"
-            href={articleUrl}
-            className="article-card__link-wrap"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <TitleH2 sectionClass="article-card__title" title={title} />
-          </a>
+          <LinkableComponent
+            Component={Heading}
+            path={articleUrl}
+            linkSectionClass="article-card__link-wrap"
+            isExternal
+            level={2}
+            type="small"
+            sectionClass="article-card__title"
+            content={title}
+          />
           <Caption sectionClass="article-card__info" title={info} />
         </div>
 
@@ -49,20 +59,18 @@ function CardArticle({
                 src={`${staticImageUrl}/${image}`}
                 alt={title}
                 className="article-card__image"
+                loading="lazy"
               />
             )}
           </div>
         )}
 
-        <a
-          draggable="false"
-          href={articleUrl}
-          className="link article-card__link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {texts.linkText}
-        </a>
+        <StyledLink
+          path={articleUrl}
+          text={texts.linkText}
+          sectionClass="article-card__link"
+          isExternal
+        />
       </Card>
       <CardAnnotation description={annotation} isMain={isMain} />
     </article>

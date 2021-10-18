@@ -9,9 +9,10 @@ import { getCatalogArticlePageData } from '../../api/catalog-page';
 import {
   AnimatedPageContainer,
   BasePage,
+  Heading,
   Loader,
   NextArticleLink,
-  TitleH1,
+  Paragraph,
 } from './index';
 import './CatalogArticle.scss';
 
@@ -68,18 +69,23 @@ function CatalogArticle() {
     }
     return (
       <div className="article page__section fade-in">
-        <TitleH1
-          title={catalogArticlePageData.title}
+        <Heading
+          level={1}
+          type="medium"
+          content={catalogArticlePageData.title}
           sectionClass="article__main-title"
         />
-        <p className="article__description section-title">
-          {catalogArticlePageData.description}
-        </p>
+        <Paragraph
+          size="big"
+          content={catalogArticlePageData.description}
+          sectionClass="article__description"
+        />
         <figure className="article__figure">
           <img
             src={`${staticImageUrl}/${catalogArticlePageData.image}`}
             alt={catalogArticlePageData.title}
             className="article__image scale-in"
+            loading="lazy"
           />
           {catalogArticlePageData.imageCaption && (
             <figcaption className="caption article__figcaption">

@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { staticImageUrl } from '../../../config/config';
 import { PLACES_TITLE } from '../../../config/routes';
-import { Caption, Card, Rubric, TitleH2 } from '../../utils';
+import { refineClassNames } from '../../../utils/utils';
+import { Caption, Card, Heading, Rubric, StyledLink } from '../../utils';
 import CardAnnotation from '../CardAnnotation/CardAnnotation';
 import './CardPlace.scss';
 
@@ -23,16 +24,7 @@ function CardPlace({
   } = texts;
 
   const cardColor = isBig ? 'yellow' : color;
-  const cardSize = isBig ? 'card-place_main' : '';
   const sexType = data?.gender === 'male' ? genderMale : genderFemale;
-
-  const imageClassNames = [
-    'card-place__image',
-    'card-place__image_type_article',
-    data?.link ? '' : 'card-place__image_big',
-  ]
-    .join(' ')
-    .trim();
 
   const info =
     data?.chosen && data?.age && data?.activityType
@@ -43,10 +35,20 @@ function CardPlace({
         } отдых`
       : '';
 
+  const classNames = {
+    main: refineClassNames(['card-container', sectionClass]),
+    cardPlace: refineClassNames(['card-place', isBig ? 'card-place_main' : '']),
+    image: refineClassNames([
+      'card-place__image',
+      'card-place__image_type_article',
+      data?.link ? '' : 'card-place__image_big',
+    ]),
+  };
+
   return (
     data && (
-      <article className={`card-container ${sectionClass}`}>
-        <Card sectionClass={`card-place ${cardSize}`} color={cardColor}>
+      <article className={classNames.main}>
+        <Card sectionClass={classNames.cardPlace} color={cardColor}>
           {isMainPage && (
             <Rubric title={PLACES_TITLE} sectionClass="card-place__rubric" />
           )}
@@ -56,21 +58,24 @@ function CardPlace({
           )}
 
           <div className="card-place__title-wrap">
-            <TitleH2 sectionClass="card-place__title" title={data.title} />
+            <Heading
+              level={2}
+              type="small"
+              sectionClass="card-place__title"
+              content={data.title}
+            />
             <Caption sectionClass="card-place__address" title={data.address} />
           </div>
 
           {renderImage()}
 
           {data.link && (
-            <a
-              href={data.link}
-              className="link card-place__link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {linkText}
-            </a>
+            <StyledLink
+              path={data.link}
+              sectionClass="card-place__link"
+              text={linkText}
+              isExternal
+            />
           )}
         </Card>
 
@@ -89,7 +94,8 @@ function CardPlace({
         <img
           src={`${staticImageUrl}/${data.image}`}
           alt={data.title}
-          className={imageClassNames}
+          className={classNames.image}
+          loading="lazy"
         />
       );
     }

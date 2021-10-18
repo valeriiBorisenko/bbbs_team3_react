@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import {
@@ -7,7 +7,6 @@ import {
   ErrorsContext,
   PopupsContext,
 } from '../../../contexts';
-import { updateUserProfile } from '../../../api/user';
 import {
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
@@ -18,8 +17,10 @@ import {
   getLocalStorageData,
 } from '../../../hooks/useLocalStorage';
 import { useDebounce } from '../../../hooks';
+import { refineClassNames } from '../../../utils/utils';
+import { updateUserProfile } from '../../../api/user';
 import Popup from '../Popup/Popup';
-import { ModificatedScrollbars, TitleH2 } from '../../utils';
+import { Heading, ModificatedScrollbars } from '../../utils';
 import './PopupCities.scss';
 
 function PopupCities({ isOpen, onClose }) {
@@ -31,12 +32,12 @@ function PopupCities({ isOpen, onClose }) {
   const currentUserCity =
     currentUser?.city || getLocalStorageData(localStUserCity);
 
-  function closePopup() {
+  const closePopup = useCallback(() => {
     if (!currentUser && !getLocalStorageData(localStUserCity)) {
       dispatchLocalStorageEvent(localStUserCity, defaultCity?.id);
     }
     onClose();
-  }
+  }, [defaultCity?.id]);
 
   const closePopupOnEsc = (evt) => {
     if (evt.key === 'Escape') {
@@ -81,7 +82,12 @@ function PopupCities({ isOpen, onClose }) {
       withoutCloseButton
     >
       <div className="popup__form">
-        <TitleH2 title={texts.title} sectionClass="cities__title" />
+        <Heading
+          level={2}
+          type="small"
+          content={texts.title}
+          sectionClass="cities__title"
+        />
         <div className="cities__container">
           <ul className="cities__list cities__list_type_primary">
             {cities &&
@@ -106,9 +112,10 @@ function PopupCities({ isOpen, onClose }) {
     return (
       <li className="cities__list-item" key={city?.id}>
         <button
-          className={`cities__city ${
-            currentUserCity === city?.id ? 'cities__city_current' : ''
-          }`}
+          className={refineClassNames([
+            'cities__city',
+            currentUserCity === city?.id ? 'cities__city_current' : '',
+          ])}
           type="button"
           value={city?.id}
           onClick={(evt) => debounceSubmitCity(evt)}
@@ -128,7 +135,7 @@ PopupCities.propTypes = {
 
 PopupCities.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
 };
 
 export default PopupCities;

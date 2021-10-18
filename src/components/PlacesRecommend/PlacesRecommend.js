@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { ErrorsContext } from '../../contexts';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
+import { refineClassNames } from '../../utils/utils';
 import FormRecommendation from '../FormRecommendation/FormRecommendation';
+import { CloseButton, Paragraph } from '../utils';
 import { postPlace } from '../../api/places-page';
 import './PlacesRecommend.scss';
 
@@ -61,38 +63,44 @@ function PlacesRecommend({ sectionClass, activityTypes, openSuccessPopup }) {
       .finally(() => setIsWaitingResponse(false));
   };
 
-  const classNames = [
-    'recommendation',
-    'recommendation_place_page',
-    'fade-in',
-    sectionClass,
-  ]
-    .join(' ')
-    .trim();
+  const renderText = () => (
+    <>
+      {texts.recommendadionTextPart1}
+      <button
+        className="recommendation__text-link"
+        type="button"
+        onClick={openForm}
+      >
+        {texts.recommendadionButton}
+      </button>
+      {texts.recommendadionTextPart2}
+    </>
+  );
+
+  const classNames = {
+    main: refineClassNames([
+      'recommendation',
+      'recommendation_place_page',
+      'fade-in',
+      sectionClass,
+    ]),
+  };
 
   return (
     <>
-      <section className={classNames} ref={scrollAnchorRef}>
+      <section className={classNames.main} ref={scrollAnchorRef}>
         <div className="recommendation__container">
           {isFormOpen && (
-            <button
-              className="recommendation__close-button"
-              type="button"
-              aria-label={texts.closeButtonlabel}
+            <CloseButton
+              sectionClass="recommendation__close-button"
               onClick={closeForm}
             />
           )}
-          <p className="section-title recommendation__text">
-            {texts.recommendadionTextPart1}
-            <button
-              className="recommendation__text-link"
-              type="button"
-              onClick={openForm}
-            >
-              {texts.recommendadionButton}
-            </button>
-            {texts.recommendadionTextPart2}
-          </p>
+          <Paragraph
+            content={renderText()}
+            size="big"
+            sectionClass="recommendation__text"
+          />
           <FormRecommendation
             isOpen={isFormOpen}
             onSubmit={handleFormSubmit}
@@ -114,7 +122,7 @@ PlacesRecommend.propTypes = {
 PlacesRecommend.defaultProps = {
   activityTypes: [],
   sectionClass: '',
-  openSuccessPopup: () => {},
+  openSuccessPopup: undefined,
 };
 
 export default PlacesRecommend;

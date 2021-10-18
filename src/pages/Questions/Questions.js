@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import questionsPageTexts from './locales/RU';
 import { CurrentUserContext, ErrorsContext } from '../../contexts';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
+import { questionFormValidationSettings } from '../../config/validation-settings';
 import { useFiltrationAndPagination, useFormWithValidation } from '../../hooks';
 import questionForm from '../../utils/question-form';
 import getServerErrors from '../../utils/form-errors';
@@ -17,15 +18,13 @@ import {
   BasePage,
   Button,
   CardQuestion,
+  Heading,
   Input,
   Loader,
   Paginate,
   TagsList,
-  TitleH1,
-  TitleH2,
 } from './index';
 import './Questions.scss';
-import { questionFormValidationSettings } from '../../config/validation-settings';
 
 const {
   headTitle,
@@ -179,7 +178,12 @@ function Questions() {
 
     return (
       <>
-        <TitleH1 title={title} sectionClass="questions__title" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="page__title"
+        />
 
         {renderFilters()}
 
@@ -237,7 +241,7 @@ function Questions() {
   function renderQuestionsContainer() {
     return (
       <>
-        <ul className="questions">
+        <ul className="questions page__grid">
           {renderMainQuestion()}
           {filteredDataToRender.map((question) => (
             <li
@@ -278,9 +282,11 @@ function Questions() {
     return (
       <>
         <section className="add-question fade-in">
-          <TitleH2
+          <Heading
+            level={2}
+            type="small"
             sectionClass={`add-question__title ${questionFormState.titleClass}`}
-            title={questionFormState.title}
+            content={questionFormState.title}
           />
           <form
             className={`question-form ${questionFormState.formVisibilityClass}`}

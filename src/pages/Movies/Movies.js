@@ -15,10 +15,10 @@ import {
   BasePage,
   CardAnnotation,
   CardFilm,
+  Heading,
   Loader,
   Paginate,
   TagsList,
-  TitleH1,
 } from './index';
 import './Movies.scss';
 
@@ -105,7 +105,12 @@ function Movies() {
 
     return (
       <>
-        <TitleH1 title={title} sectionClass="movies__title" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="page__title"
+        />
 
         {renderFilters()}
 

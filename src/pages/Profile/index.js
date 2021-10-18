@@ -6,17 +6,17 @@ import PopupDeleteDiary from '../../components/Popups/PopupDeleteDiary/PopupDele
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import {
   ButtonRound,
+  Heading,
   Loader,
   Paginate,
   ScrollableContainer,
-  TitleH2,
   UserMenuButton,
 } from '../../components/utils';
 
 export {
   BasePage,
   ProfileEventCard,
-  TitleH2,
+  Heading,
   ProfileForm,
   ProfileDiary,
   PopupDeleteDiary,

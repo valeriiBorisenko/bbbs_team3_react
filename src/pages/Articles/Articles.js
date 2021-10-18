@@ -14,10 +14,11 @@ import {
   BasePage,
   Card,
   CardArticle,
+  Heading,
   Loader,
   NextArticleLink,
   Paginate,
-  TitleH1,
+  Paragraph,
 } from './index';
 import './Articles.scss';
 
@@ -88,7 +89,12 @@ function Articles() {
 
     return (
       <section className="articles page__section">
-        <TitleH1 title={title} sectionClass="fade-in" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="articles__title fade-in"
+        />
 
         {renderCardsContainer()}
       </section>
@@ -115,7 +121,7 @@ function Articles() {
           <CardArticle data={singleCard} isMain />
 
           <Card sectionClass="articles__single-card-paragraph">
-            <p className="paragraph">{singleCard.annotation}</p>
+            <Paragraph content={singleCard.annotation} />
           </Card>
 
           <NextArticleLink
@@ -142,12 +148,12 @@ function Articles() {
     return (
       <>
         {isMainCardShown && (
-          <section className="articles__main scale-in">
+          <section className="articles__main page__grid scale-in">
             <CardArticle data={mainCard} isMain />
           </section>
         )}
 
-        <section className="articles__cards-grid">
+        <section className="articles__cards-grid cards-grid page__grid">
           {dataToRender.map((item, i) => (
             <CardArticle
               key={item?.id}

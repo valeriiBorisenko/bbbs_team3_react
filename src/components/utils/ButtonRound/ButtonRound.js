@@ -1,5 +1,6 @@
-import './ButtonRound.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './ButtonRound.scss';
 
 function ButtonRound({
   label,
@@ -11,23 +12,23 @@ function ButtonRound({
   onClick,
   isClick,
 }) {
-  const classNames = [
-    'button-round',
-    `button-round_color_${color}`,
-    isSmall ? 'button-round_small' : '',
-    sectionClass,
-    isClick ? 'button-round_active' : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'button-round',
+      `button-round_color_${color}`,
+      isSmall ? 'button-round_small' : '',
+      sectionClass,
+      isClick ? 'button-round_active' : '',
+    ]),
+  };
 
   if (isSpan) {
-    return <span className={classNames} />;
+    return <span className={classNames.main} />;
   }
 
   return (
     <button
-      className={classNames}
+      className={classNames.main}
       type="button"
       onClick={onClick}
       disabled={isDisabled}

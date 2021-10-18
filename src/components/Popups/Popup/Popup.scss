@@ -81,36 +81,23 @@
 .popup__close {
   padding: 0;
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background-image: url('../../../assets/popup_close.svg');
-  width: 40px;
-  height: 40px;
-  background-size: 40px 40px;
-  background-repeat: no-repeat;
-  background-color: transparent;
-  outline: none;
-  border: none;
-  color: $blue;
-
-  &:hover {
-    cursor: pointer;
-  }
+  top: 30px;
+  right: 30px;
 
   &_type_video {
-    top: 10px;
+    top: 20px;
   }
 }
 
 .popup__title {
   &_type_sign-in {
-    margin-bottom: 15px;
+    margin: 0 auto 15px;
     text-align: center;
   }
 
   &_type_calendar {
     max-width: 570px;
-    margin-bottom: 5px;
+    margin: 0 auto 5px;
     text-align: center;
   }
 }
@@ -146,19 +133,19 @@
 @include atTabletL {
   .popup__close {
     &_type_video {
-      right: 5px;
+      right: 15px;
     }
   }
 }
 
 @include atMobileL {
   .popup__close {
-    top: 15px;
-    right: 15px;
+    top: 25px;
+    right: 25px;
 
     &_type_video {
-      top: 5px;
-      right: 5px;
+      top: 15px;
+      right: 15px;
     }
   }
 

@@ -5,11 +5,11 @@ import Lottie from 'lottie-web';
 import animationSuccess from '../../../assets/animation/ill_popup_success.json';
 import texts from './locales/RU';
 import { AFISHA_URL } from '../../../config/routes';
+import { localStAfishaEvent } from '../../../config/constants';
 import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
-import { localStAfishaEvent } from '../../../config/constants';
 import Popup from '../Popup/Popup';
-import { Button, TitleH2 } from '../../utils';
+import { Button, Heading, Paragraph } from '../../utils';
 import './PopupSuccessfully.scss';
 
 const { popupTitle, paragraph, buttonTextCalendarPage, buttonTextDefault } =
@@ -55,20 +55,29 @@ function PopupSuccessfully({ isOpen, onClose }) {
       sectionClass="popup__container_success"
     >
       <div ref={animationContainer} className="popup__animation-success" />
-      <p className="section-title popup__title_type_calendar">{popupTitle}</p>
-      <TitleH2
+      <Heading
+        level={2}
+        type="small"
+        content={popupTitle}
         sectionClass="popup__title_type_calendar"
-        title={`«${card?.title}»`}
       />
-      <TitleH2
+      <Paragraph
+        size="big"
         sectionClass="popup__title_type_calendar"
-        title={`${parseInt(startDay?.day, 10)} ${month} с ${startDay?.hour}:${
+        content={`«${card?.title}»`}
+      />
+      <Paragraph
+        size="big"
+        sectionClass="popup__title_type_calendar"
+        content={`${parseInt(startDay?.day, 10)} ${month} с ${startDay?.hour}:${
           startDay?.minutes
         }—${endDay?.hour}:${endDay?.minutes}`}
       />
-      <p className="section-title popup__title_type_calendar popup__title_type_successfully">
-        {paragraph}
-      </p>
+      <Paragraph
+        size="big"
+        content={paragraph}
+        sectionClass="popup__title_type_calendar popup__title_type_successfully"
+      />
       <div className="popup__buttons_type_calendar">
         <Button
           color="black"
@@ -88,7 +97,7 @@ PopupSuccessfully.propTypes = {
 
 PopupSuccessfully.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
 };
 
 export default PopupSuccessfully;

@@ -1,4 +1,6 @@
-.link {
+@import './styles/utils.scss';
+
+.styled-link {
   display: block;
   margin: 0 auto;
   font-family: $protoGrotesk;
@@ -8,20 +10,18 @@
   text-decoration: none;
   letter-spacing: 0.2px;
   color: $blue;
+  background-color: rgba($white, 0);
+  padding: 0;
+  border: none;
+  outline: none;
   transition: .3s ease;
 
-  &:hover{
+  &:hover {
     color: $darkBlue;
     cursor: pointer;
   }
-}
 
-.link_type_test {
-  margin-top: 40px;
-}
-
-@include atDesktop1024 {
-  .link {
+  @include atDesktop1024 {
     font-size: 12px;
     line-height: 1.4;
   }

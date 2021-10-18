@@ -21,8 +21,9 @@ import {
 import { searchValidationSettings } from '../../config/validation-settings';
 import { useDebounce, useFormWithValidation } from '../../hooks';
 import { getLocalStorageData } from '../../hooks/useLocalStorage';
+import { refineClassNames } from '../../utils/utils';
 import search from '../../api/search';
-import { Loader, SearchButton } from '../utils';
+import { CloseButton, Loader, Paragraph, SearchButton } from '../utils';
 import './Search.scss';
 
 function Search({
@@ -117,6 +118,14 @@ function Search({
     if (isOpenSearch && inputRef && inputRef.current) inputRef.current.focus();
   }, [isOpenSearch]);
 
+  const classNames = {
+    searchOptions: refineClassNames([
+      'search__options',
+      'menu__search-options',
+      isOpenSearch ? 'search__options_visible' : '',
+    ]),
+  };
+
   return (
     <form
       className="search"
@@ -127,11 +136,7 @@ function Search({
         isOpenSearch={isOpenSearch}
         handleClickButton={handleClickButton}
       />
-      <div
-        className={`search__options menu__search-options ${
-          isOpenSearch ? 'search__options_visible' : ''
-        }`}
-      >
+      <div className={classNames.searchOptions}>
         <div className="search__container-input">
           <div className="search__input-wrap">
             <input
@@ -145,10 +150,8 @@ function Search({
               onChange={handleChange}
               value={values.search || ''}
             />
-            <button
-              type="button"
-              aria-label={texts.ariaLabelCloseButton}
-              className="search__close-button"
+            <CloseButton
+              sectionClass="search__close-button"
               onClick={handleClickButton}
             />
           </div>
@@ -179,14 +182,18 @@ function Search({
                   pathname: getPathName(item.page, item.id),
                   state: { id: item.id },
                 }}
-                className="section-title section-title_clickable search__title-link"
+                className="search__title-link"
                 style={animateLink(idx)}
               >
-                {item.title}
+                <Paragraph
+                  sectionClass="search__title"
+                  size="big"
+                  content={item.title}
+                />
               </Link>
               <Link
                 to={`/${item.page}`}
-                className="link search__link"
+                className="search__link"
                 style={animateLink(idx)}
                 onClick={handleClickLink}
               >
@@ -215,9 +222,9 @@ Search.propTypes = {
 
 Search.defaultProps = {
   isOpenSearch: false,
-  setIsOpenSearch: () => {},
+  setIsOpenSearch: undefined,
   isMobileMenuOpen: false,
-  setIsMobileMenuOpen: () => {},
+  setIsMobileMenuOpen: undefined,
 };
 
 export default Search;

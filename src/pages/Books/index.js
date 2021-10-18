@@ -4,15 +4,16 @@ import AnimatedPageContainer from '../../components/AnimatedPageContainer/Animat
 import TagsList from '../../components/TagsList/TagsList';
 import {
   Card,
+  Heading,
   Loader,
   NextArticleLink,
   Paginate,
-  TitleH1,
+  Paragraph,
 } from '../../components/utils';
 
 export {
   BasePage,
-  TitleH1,
+  Heading,
   CardBook,
   Loader,
   AnimatedPageContainer,
@@ -20,4 +21,5 @@ export {
   Paginate,
   Card,
   NextArticleLink,
+  Paragraph,
 };

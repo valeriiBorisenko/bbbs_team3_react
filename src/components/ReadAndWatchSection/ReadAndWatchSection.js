@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
 import {
@@ -6,11 +6,12 @@ import {
   INDEX_ERROR_FOR_PENULTIMATE_PAGE,
   PAGES_TO_LOAD,
 } from './constants';
+import { refineClassNames } from '../../utils/utils';
 import {
-  LinkableHeading,
+  Heading,
+  LinkableComponent,
   Loader,
   NoDataNotificationBox,
-  TitleH3,
 } from '../utils';
 import { COLORS, ERROR_MESSAGES, FIGURES } from '../../config/constants';
 import './ReadAndWatchSection.scss';
@@ -68,49 +69,57 @@ function ReadAndWatchSection({
       .catch(() => setIsSectionError(true));
   }, [pageSize]);
 
-  function slideBackHandler() {
+  const slideBackHandler = useCallback(() => {
     setPageIndex((prevIndex) => prevIndex - 1);
-  }
+  }, []);
 
-  function slideNextHandler(currentItem, newPageIndex) {
-    const pagesLoadedNow = ref.current.getNumOfPages();
-    const isPenultimatePage =
-      pagesLoadedNow - INDEX_ERROR_FOR_PENULTIMATE_PAGE === newPageIndex;
-    const isLastPage =
-      pagesLoadedNow - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX === newPageIndex;
+  const slideNextHandler = useCallback(
+    (currentItem, newPageIndex) => {
+      const pagesLoadedNow = ref.current.getNumOfPages();
+      const isPenultimatePage =
+        pagesLoadedNow - INDEX_ERROR_FOR_PENULTIMATE_PAGE === newPageIndex;
+      const isLastPage =
+        pagesLoadedNow - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX === newPageIndex;
 
-    const isNoMoreDataToLoad = pagesLoadedNow === totalPages;
-    if (isNoMoreDataToLoad) {
-      return;
-    }
+      const isNoMoreDataToLoad = pagesLoadedNow === totalPages;
+      if (isNoMoreDataToLoad) {
+        return;
+      }
 
-    // значит произошел скрол вперед + это предпоследняя страница
-    if (isPenultimatePage || isLastPage) {
-      addNewData()
-        .then(({ results }) => {
-          setSectionData((previousData) => [...previousData, ...results]);
-          setPageIndex((prevIndex) => prevIndex + 1);
-        })
-        .catch(() => setIsSectionError(true));
-    } else {
-      setPageIndex((prevIndex) => prevIndex + 1);
-    }
-  }
+      // значит произошел скрол вперед + это предпоследняя страница
+      if (isPenultimatePage || isLastPage) {
+        addNewData()
+          .then(({ results }) => {
+            setSectionData((previousData) => [...previousData, ...results]);
+            setPageIndex((prevIndex) => prevIndex + 1);
+          })
+          .catch(() => setIsSectionError(true));
+      } else {
+        setPageIndex((prevIndex) => prevIndex + 1);
+      }
+    },
+    [sectionData]
+  );
+
+  const classNames = {
+    sliderContainer: refineClassNames([
+      'readwatch__slider-container',
+      sectionClass,
+    ]),
+  };
 
   return (
     <section className="readwatch__section">
       <div className="readwatch__container">
-        <LinkableHeading
-          title={sectionTitle}
+        <LinkableComponent
+          content={sectionTitle}
           path={path}
-          titleSectionClass="readwatch__heading"
+          sectionClass="readwatch__heading"
           linkSectionClass="readwatch__heading-link"
-          Component={TitleH3}
+          Component={Heading}
         />
       </div>
-      <div className={`readwatch__slider-container ${sectionClass}`}>
-        {renderSliderSection()}
-      </div>
+      <div className={classNames.sliderContainer}>{renderSliderSection()}</div>
     </section>
   );
 

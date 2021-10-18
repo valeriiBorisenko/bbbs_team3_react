@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import {
@@ -5,8 +6,9 @@ import {
   formatDate,
   formatPhoneNumber,
   formatWordCase,
+  refineClassNames,
 } from '../../../utils/utils';
-import { Button, ButtonDots } from '../../utils';
+import { Button, ButtonDots, Heading, Paragraph } from '../../utils';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStAfishaEvent } from '../../../config/constants';
 import './CardCalendar.scss';
@@ -50,87 +52,90 @@ function CardCalendar({
   const isDisabled = (remainSeats < 1 && !booked) || canceled;
   const isCanceling = isWaitingResponse && booked && loadingEventId === id;
 
-  function changeStateOfEvent() {
+  const changeStateOfEvent = useCallback(() => {
     setLocalStorageData(localStAfishaEvent, cardData);
     onEventSignUpClick(cardData);
-  }
+  }, [cardData]);
 
-  function prepareDataForAboutEventPopup() {
+  const prepareDataForAboutEventPopup = useCallback(() => {
     setLocalStorageData(localStAfishaEvent, cardData);
     onEventDescriptionClick();
-  }
+  }, [cardData]);
 
-  const classNames = [
-    'calendar',
-    booked ? 'calendar_selected' : '',
-    canceled ? 'calendar_canceled' : '',
-    sectionClass,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'calendar',
+      booked ? 'calendar_selected' : '',
+      canceled ? 'calendar_canceled' : '',
+      sectionClass,
+    ]),
+    tags: refineClassNames([
+      'calendar__type',
+      canceled ? 'calendar__type_canceled' : '',
+    ]),
+    weekday: refineClassNames([
+      'calendar__weekday',
+      canceled ? 'calendar__weekday_canceled' : '',
+    ]),
+    title: refineClassNames([
+      'calendar__title',
+      canceled ? 'calendar__title_canceled' : '',
+    ]),
+    date: refineClassNames([
+      'calendar__date',
+      canceled ? 'calendar__date_canceled' : '',
+    ]),
+    time: refineClassNames([
+      'calendar__time',
+      canceled ? 'calendar__time_canceled' : '',
+    ]),
+    place: refineClassNames([
+      'calendar__place',
+      canceled ? 'calendar__place_canceled' : '',
+    ]),
+    contact: refineClassNames([
+      'calendar__contact',
+      canceled ? 'calendar__contact_canceled' : '',
+    ]),
+    phone: refineClassNames([
+      'calendar__phone',
+      canceled ? 'calendar__phone_canceled' : '',
+    ]),
+  };
 
   return (
-    <article className={classNames}>
+    <article className={classNames.main}>
       <div className="calendar__caption">
         <div className="calendar__info">
-          <p
-            className={`calendar__type ${
-              canceled ? 'calendar__type_canceled' : ''
-            }`}
-          >
+          <p className={classNames.tags}>
             {changeCaseOfFirstLetter(tags?.name)}
           </p>
-          <p
-            className={`calendar__weekday ${
-              canceled ? 'calendar__weekday_canceled' : ''
-            }`}
-          >
+          <p className={classNames.weekday}>
             {`${startDateParts.monthName} / ${startDateParts.weekdayName}`}
           </p>
         </div>
         <div className="calendar__about">
-          <h2
-            className={`section-title calendar__title ${
-              canceled ? 'calendar__title_canceled' : ''
-            }`}
-          >
-            {title}
-          </h2>
-          <p
-            className={`calendar__date ${
-              canceled ? 'calendar__date_canceled' : ''
-            }`}
-          >
-            {startDateParts.day}
-          </p>
+          <Heading
+            level={2}
+            type="small"
+            content={title}
+            sectionClass={classNames.title}
+          />
+          <p className={classNames.date}>{startDateParts.day}</p>
         </div>
       </div>
       <div className="calendar__meetup">
         <ul className="calendar__info-list">
           <li className="calendar__info-item">
-            <p
-              className={`calendar__time ${
-                canceled ? 'calendar__time_canceled' : ''
-              }`}
-            >
+            <p className={classNames.time}>
               {`${startDateParts.hour}:${startDateParts.minutes}–${endDayParts.hour}:${endDayParts.minutes}`}
             </p>
           </li>
           <li className="calendar__info-item">
-            <p
-              className={`calendar__place ${
-                canceled ? 'calendar__place_canceled' : ''
-              }`}
-            >
-              {address}
-            </p>
+            <p className={classNames.place}>{address}</p>
           </li>
           <li className="calendar__info-item">
-            <p
-              className={`calendar__contact ${
-                canceled ? 'calendar__contact_canceled' : ''
-              }`}
-            >
+            <p className={classNames.contact}>
               {`${contact}, `}
               {renderPhone()}
             </p>
@@ -138,9 +143,10 @@ function CardCalendar({
         </ul>
         {isDescription && (
           <div className="calendar__description">
-            <p className="paragraph calendar__desc-paragraph">
-              {cardData?.description}
-            </p>
+            <Paragraph
+              content={cardData?.description}
+              sectionClass="calendar__desc-paragraph"
+            />
           </div>
         )}
         <div className="calendar__submit">{renderSubmitZone()}</div>
@@ -150,12 +156,7 @@ function CardCalendar({
 
   function renderPhone() {
     return (
-      <a
-        className={`calendar__phone ${
-          canceled ? 'calendar__phone_canceled' : ''
-        }`}
-        href={`tel:${phoneNumber}`}
-      >
+      <a className={classNames.phone} href={`tel:${phoneNumber}`}>
         {formatPhoneNumber(phoneNumber)}
       </a>
     );
@@ -203,8 +204,8 @@ CardCalendar.propTypes = {
 
 CardCalendar.defaultProps = {
   cardData: {},
-  onEventSignUpClick: () => {},
-  onEventDescriptionClick: () => {},
+  onEventSignUpClick: undefined,
+  onEventDescriptionClick: undefined,
   sectionClass: '',
   isWaitingResponse: false,
   loadingEventId: undefined,

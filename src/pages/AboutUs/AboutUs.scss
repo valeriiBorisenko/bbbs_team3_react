@@ -2,9 +2,9 @@
 
 //блок заголовка
 .about__title {
-  margin-bottom: 50px;
-  max-width: 1170px;
+  margin: 0 auto 50px;
   text-align: center;
+  max-width: 1170px;
 }
 
 .about__logo {
@@ -38,18 +38,7 @@
 
 //блок цитаты
 .about__quote {
-  margin: 0 auto 80px;
-  padding: 60px 0;
-  width: 100%;
-  text-align: center;
-  border-top: 1px solid $lightGray;
-  border-bottom: 1px solid $lightGray;
-}
-
-.about__quote-text {
-  display: inline-block;
-  max-width: 1170px;
-  color: $lightBlack;
+  margin-bottom: 80px;
 }
 
 // блок карточек
@@ -63,10 +52,6 @@
 @include atDesktop1440 {
   .about__title {
     max-width: 1030px;
-  }
-
-  .about__quote-text {
-    max-width: 964px;
   }
 }
 
@@ -104,14 +89,6 @@
 
   .about__us {
     margin-bottom: 50px;
-  }
-
-  .about__quote {
-    padding: 30px 0;
-  }
-
-  .about__quote-text {
-    max-width: 770px;
   }
 
   .about__quote {

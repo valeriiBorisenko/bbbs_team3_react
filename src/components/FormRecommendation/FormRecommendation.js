@@ -5,6 +5,7 @@ import { CitiesContext, ErrorsContext } from '../../contexts';
 import { regExpImages } from '../../config/constants';
 import { useFormWithValidation } from '../../hooks';
 import { placesValidationSettings } from '../../config/validation-settings';
+import { refineClassNames } from '../../utils/utils';
 import getServerErrors from '../../utils/form-errors';
 import { Button, ButtonRound, DropDownSelect, Input } from '../utils';
 import './FormRecommendation.scss';
@@ -87,18 +88,30 @@ function FormRecommendation({
     clearError();
   }, [isOpen]);
 
-  const formClassNames = [
-    'form-recom',
-    isOpen ? 'form-recom_opened' : '',
-    isAnimated ? 'form-recom_animated' : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'form-recom',
+      isOpen ? 'form-recom_opened' : '',
+      isAnimated ? 'form-recom_animated' : '',
+    ]),
+    genderError: refineClassNames([
+      'form-recom__pseudo-radio',
+      errors?.gender ? 'form-recom__pseudo-radio_error' : '',
+    ]),
+    photoButton: refineClassNames([
+      'form-recom__add-photo-btn',
+      errors?.image ? 'form-recom__add-photo-btn_error' : '',
+    ]),
+    imageError: refineClassNames([
+      'form-recom__add-photo-span',
+      errors?.image ? 'form-recom__add-photo-span_error' : '',
+    ]),
+  };
 
   return (
     <form
-      className={formClassNames}
-      name="formRecomendation"
+      className={classNames.main}
+      name="formRecommendation"
       onSubmit={handleSubmit}
       noValidate
     >
@@ -159,13 +172,7 @@ function FormRecommendation({
                 value="male"
                 required
               />
-              <span
-                className={`form-recom__pseudo-radio ${
-                  errors?.gender ? 'form-recom__pseudo-radio_error' : ''
-                }`}
-              >
-                {genderMale}
-              </span>
+              <span className={classNames.genderError}>{genderMale}</span>
             </label>
             <label
               className="form-recom__label"
@@ -180,13 +187,7 @@ function FormRecommendation({
                 value="female"
                 required
               />
-              <span
-                className={`form-recom__pseudo-radio ${
-                  errors?.gender ? 'form-recom__pseudo-radio_error' : ''
-                }`}
-              >
-                {genderFemale}
-              </span>
+              <span className={classNames.genderError}>{genderFemale}</span>
             </label>
 
             <Input
@@ -265,19 +266,13 @@ function FormRecommendation({
                   />
                   {!values?.image && (
                     <ButtonRound
-                      sectionClass={`form-recom__add-photo-btn ${
-                        errors?.image ? 'form-recom__add-photo-btn_error' : ''
-                      }`}
+                      sectionClass={classNames.photoButton}
                       color={`${errors?.image ? 'error' : 'lightGray'}`}
                       isSmall
                       isSpan
                     />
                   )}
-                  <span
-                    className={`form-recom__add-photo-span ${
-                      errors?.image ? 'form-recom__add-photo-span_error' : ''
-                    }`}
-                  >
+                  <span className={classNames.imageError}>
                     {values?.image ? addPhotoBtnChange : addPhotoBtnDefault}
                   </span>
                 </label>
@@ -307,7 +302,7 @@ FormRecommendation.propTypes = {
 FormRecommendation.defaultProps = {
   activityTypes: [],
   isOpen: false,
-  onSubmit: () => {},
+  onSubmit: undefined,
   isWaitingResponse: false,
 };
 

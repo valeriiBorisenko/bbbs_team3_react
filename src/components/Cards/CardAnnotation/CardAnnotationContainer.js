@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
 import { Caption, ModificatedScrollbars } from '../../utils';
 
 function CardAnnotationContainer({ caption, children }) {
-  const classNamesDesc = [
-    'card-annotation__desc',
-    caption ? '' : 'card-annotation__desc_center',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    description: refineClassNames([
+      'card-annotation__desc',
+      caption ? '' : 'card-annotation__desc_center',
+    ]),
+  };
 
   return (
     <ModificatedScrollbars horizontalScrollClass="scroll-thumb">
@@ -15,7 +16,7 @@ function CardAnnotationContainer({ caption, children }) {
         <Caption sectionClass="card-annotation__caption" title={caption} />
       )}
 
-      <div className={classNamesDesc}>{children}</div>
+      <div className={classNames.description}>{children}</div>
     </ModificatedScrollbars>
   );
 }

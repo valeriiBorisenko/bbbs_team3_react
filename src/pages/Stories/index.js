@@ -3,23 +3,23 @@ import AnimatedPageContainer from '../../components/AnimatedPageContainer/Animat
 import { PopupPhoto } from '../../components/Popups';
 import {
   Caption,
+  Heading,
   Loader,
   NextArticleLink,
   PseudoButtonTag,
   ScrollableContainer,
-  TitleH1,
-  TitleH2,
+  StyledLink,
 } from '../../components/utils';
 
 export {
   BasePage,
   Caption,
-  TitleH1,
-  TitleH2,
+  Heading,
   AnimatedPageContainer,
   NextArticleLink,
   PseudoButtonTag,
   ScrollableContainer,
   Loader,
   PopupPhoto,
+  StyledLink,
 };

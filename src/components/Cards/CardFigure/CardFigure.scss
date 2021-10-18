@@ -11,6 +11,10 @@
   object-fit: cover;
   padding: 0 55px;
 
+  &__title {
+    margin: 0 auto;
+  }
+
   &_color_yellow {
     background-color: $yellow;
   }

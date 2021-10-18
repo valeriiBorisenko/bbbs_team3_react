@@ -3,8 +3,9 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Lottie from 'lottie-web';
 import texts from './locales/RU';
+import { MAIN_PAGE_URL } from '../../config/routes';
 import animation404 from '../../assets/animation/Illustration_404.json';
-import { TitleH2 } from '../utils';
+import { Heading, Paragraph } from '../utils';
 import './AnimatedPageContainer.scss';
 
 function AnimatedPageContainer({
@@ -30,12 +31,23 @@ function AnimatedPageContainer({
   return (
     <div className="animated-section">
       <div ref={animationContainer} className="animated-section__animation" />
-      {is404 && <h1 className="page-not-found-title">{texts.title404}</h1>}
-      <TitleH2 title={titleText} sectionClass="animated-section__subtitle" />
+      {is404 && (
+        <Heading
+          level={1}
+          type="large"
+          content={texts.title404}
+          sectionClass="page-not-found-title"
+        />
+      )}
+      <Paragraph
+        size="big"
+        content={titleText}
+        sectionClass="animated-section__subtitle"
+      />
       {!isNoButton && (
         <Link
           className="button animated-section__link button_color_blue"
-          to={staticPage ? `${urlBack}` : '/'}
+          to={staticPage ? `${urlBack}` : MAIN_PAGE_URL}
         >
           {buttonText}
         </Link>

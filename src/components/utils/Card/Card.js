@@ -1,12 +1,13 @@
-import './Card.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './Card.scss';
 
 function Card({ color, sectionClass, children }) {
-  const classNames = ['card', `card_color_${color}`, sectionClass]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames(['card', `card_color_${color}`, sectionClass]),
+  };
 
-  return <div className={classNames}>{children}</div>;
+  return <div className={classNames.main}>{children}</div>;
 }
 
 Card.propTypes = {

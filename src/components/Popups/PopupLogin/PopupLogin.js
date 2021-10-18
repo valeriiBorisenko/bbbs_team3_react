@@ -1,17 +1,18 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import Lottie from 'lottie-web';
 import texts from './locales/RU';
 import { CurrentUserContext, ErrorsContext } from '../../../contexts';
-import { AFISHA_URL } from '../../../config/routes';
+import { AFISHA_URL, MAIN_PAGE_URL } from '../../../config/routes';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../../config/constants';
 import { popupLoginValidationSettings } from '../../../config/validation-settings';
 import { useAuth, useFormWithValidation } from '../../../hooks';
 import getServerErrors from '../../../utils/form-errors';
+import { refineClassNames } from '../../../utils/utils';
 import { recoverPassword } from '../../../api/user';
 import Popup from '../Popup/Popup';
-import { Button, Input, TitleH2 } from '../../utils';
+import { Button, Heading, Input, Paragraph } from '../../utils';
 import animationSuccess from '../../../assets/animation/ill_popup_recommend-success.json';
 import './PopupLogin.scss';
 
@@ -111,14 +112,14 @@ function PopupLogin({ isOpen, onClose }) {
   const history = useHistory();
   const { pathname } = useLocation();
 
-  function closePopup() {
+  const closePopup = useCallback(() => {
     if (pathname === AFISHA_URL) {
-      history.push('/');
+      history.push(MAIN_PAGE_URL);
     }
     setSuccessMessage('');
     onClose();
     setIsShownPassword(false);
-  }
+  }, [pathname]);
 
   function closePopupOnEsc(evt) {
     if (evt.key === 'Escape') {
@@ -143,28 +144,22 @@ function PopupLogin({ isOpen, onClose }) {
     setIsForgotPassword(false);
   }, [isOpen]);
 
-  const classNameAuth = [
-    'popup__form',
-    'popup__form_type_sign-in',
-    `${isOpen && !isForgotPassword ? 'popup__form_type_sign-in_opened' : ''}`,
-  ]
-    .join(' ')
-    .trim();
-
-  const classForgotPassword = [
-    'popup__form',
-    'popup__form_type_email',
-    `${isForgotPassword && !isSuccess ? 'popup__form_type_email_opened' : ''}`,
-  ]
-    .join(' ')
-    .trim();
-
-  const classNameSuccess = [
-    'popup__login-container_success',
-    `${isSuccess ? 'popup__login-container_success_opened' : ''}`,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    mainAuth: refineClassNames([
+      'popup__form',
+      'popup__form_type_sign-in',
+      isOpen && !isForgotPassword ? 'popup__form_type_sign-in_opened' : '',
+    ]),
+    mainForgot: refineClassNames([
+      'popup__form',
+      'popup__form_type_email',
+      isForgotPassword && !isSuccess ? 'popup__form_type_email_opened' : '',
+    ]),
+    mainSuccess: refineClassNames([
+      'popup__login-container_success',
+      isSuccess ? 'popup__login-container_success_opened' : '',
+    ]),
+  };
 
   return (
     <Popup
@@ -182,13 +177,18 @@ function PopupLogin({ isOpen, onClose }) {
   function renderFormAuth() {
     return (
       <form
-        className={classNameAuth}
+        className={classNames.mainAuth}
         onSubmit={(evt) => handleSubmit(evt)}
         noValidate
       >
-        <TitleH2 sectionClass="popup__title_type_sign-in" title={title} />
-        <p className="paragraph popup__sign-in">{firstParagraph}</p>
-        <p className="paragraph popup__sign-in">{secondParagraph}</p>
+        <Heading
+          level={2}
+          type="small"
+          sectionClass="popup__title_type_sign-in"
+          content={title}
+        />
+        <Paragraph content={firstParagraph} sectionClass="popup__sign-in" />
+        <Paragraph content={secondParagraph} sectionClass="popup__sign-in" />
 
         <Input
           id="loginUsernameInput"
@@ -249,18 +249,23 @@ function PopupLogin({ isOpen, onClose }) {
   function renderFormForgotPassword() {
     return (
       <form
-        className={classForgotPassword}
+        className={classNames.mainForgot}
         onSubmit={(evt) => handleSubmitForgotPassword(evt)}
         noValidate
       >
-        <TitleH2
+        <Heading
+          level={2}
+          type="small"
           sectionClass="popup__title_type_sign-in"
-          title={titleForgotForm}
+          content={titleForgotForm}
         />
-        <p className="paragraph popup__sign-in">{paragraphForgotForm}</p>
+        <Paragraph
+          content={paragraphForgotForm}
+          sectionClass="popup__sign-in"
+        />
 
         <Input
-          id="loginUseremailInput"
+          id="loginUserEmailInput"
           sectionClass="popup__input"
           type="email"
           name="email"
@@ -295,12 +300,12 @@ function PopupLogin({ isOpen, onClose }) {
 
   function renderSuccessLoginContainer() {
     return (
-      <div className={classNameSuccess}>
+      <div className={classNames.mainSuccess}>
         <div
           ref={animationContainer}
           className="popup__login-container_success-animation"
         />
-        <TitleH2 title={successMessage} />
+        <Heading level={2} type="small" content={successMessage} />
       </div>
     );
   }

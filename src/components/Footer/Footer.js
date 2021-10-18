@@ -17,20 +17,20 @@ import {
   STORIES_URL,
 } from '../../config/routes';
 import { socialLinks } from '../../utils/external-links';
-import { Logo, NavItem } from '../utils';
+import { LinkableComponent, Logo, NavItem } from '../utils';
 import './Footer.scss';
 
 function Footer() {
   return (
     <footer className="footer">
-      <a
-        href={texts.logoLink}
-        className="footer__logo"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Logo isWhite sectionClass="footer__logo-image" />
-      </a>
+      <LinkableComponent
+        Component={Logo}
+        path={texts.logoLink}
+        linkSectionClass="footer__logo"
+        isExternal
+        isWhite
+        sectionClass="footer__logo-image"
+      />
       <a
         className="button footer__button"
         href={texts.helpButtonLink}

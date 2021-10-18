@@ -155,6 +155,7 @@ function MainPage() {
           <img
             src={`${staticImageUrl}/${mainPageData.history.image}`}
             alt={mainPageData.history.title}
+            loading="lazy"
             className="lead__media-img"
           />
         </Card>

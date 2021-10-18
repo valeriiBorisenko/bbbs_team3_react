@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useScrollToTop } from '../hooks/index';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
+import './BasePage.scss';
 
 function BasePage({
   children,

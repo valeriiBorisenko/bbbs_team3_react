@@ -21,10 +21,10 @@ import {
   AnimatedPageContainer,
   BasePage,
   CardCalendar,
+  Heading,
   Loader,
   Paginate,
   TagsList,
-  TitleH1,
 } from './index';
 import './Calendar.scss';
 
@@ -152,7 +152,12 @@ function Calendar() {
     if (currentUser) {
       return (
         <>
-          <TitleH1 title={title} sectionClass="calendar-page__title" />
+          <Heading
+            level={1}
+            type="big"
+            content={title}
+            sectionClass="page__title"
+          />
           <div className="calendar-page__container">
             {isCityChanged ? <Loader isPaginate /> : renderFiltersAndCards()}
           </div>
@@ -214,7 +219,7 @@ function Calendar() {
     }
 
     return (
-      <div className="calendar-page__grid">
+      <div className="calendar-page__grid page__grid">
         {calendarPageData.map((cardData) => (
           <CardCalendar
             key={cardData.id}

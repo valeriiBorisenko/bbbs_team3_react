@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { useContext, useEffect } from 'react';
-import Popup from '../Popup/Popup';
-import { Button, TitleH2 } from '../../utils';
 import { ErrorsContext } from '../../../contexts';
+import { Button, Heading } from '../../utils';
+import Popup from '../Popup/Popup';
 import './PopupError.scss';
 
 function PopupError({ isOpen, onClose }) {
@@ -27,9 +27,11 @@ function PopupError({ isOpen, onClose }) {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <TitleH2
+      <Heading
+        level={2}
+        type="small"
         sectionClass="popup__title_type_calendar popup__title_type_error"
-        title={serverError?.title}
+        content={serverError?.title}
       />
       <div className="popup__buttons_type_calendar">
         <Button
@@ -50,7 +52,7 @@ PopupError.propTypes = {
 
 PopupError.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
 };
 
 export default PopupError;

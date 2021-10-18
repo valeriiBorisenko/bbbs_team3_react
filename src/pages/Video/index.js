@@ -4,16 +4,16 @@ import CardFilm from '../../components/Cards/CardFilm/CardFilm';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import TagsList from '../../components/TagsList/TagsList';
 import {
+  Heading,
   Loader,
   NoDataNotificationBox,
   Paginate,
-  TitleH1,
 } from '../../components/utils/index';
 
 export {
   BasePage,
   Loader,
-  TitleH1,
+  Heading,
   Paginate,
   CardVideoMain,
   CardFilm,

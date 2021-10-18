@@ -1,12 +1,28 @@
-import './CardFigure.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import { Heading } from '../../utils';
+import './CardFigure.scss';
 
 function CardFigure({ title, shape, color, children, sectionClass }) {
+  const classNames = {
+    main: refineClassNames([
+      'card-figure',
+      `card-figure_color_${color}`,
+      `card-figure_form_${shape}`,
+      sectionClass,
+    ]),
+  };
+
   return (
-    <div
-      className={`card-figure card-figure_color_${color} card-figure_form_${shape} ${sectionClass}`}
-    >
-      {title && <h2 className="section-title">{title}</h2>}
+    <div className={classNames.main}>
+      {title && (
+        <Heading
+          level={2}
+          type="small"
+          content={title}
+          sectionClass="card-figure__title"
+        />
+      )}
       {children}
     </div>
   );

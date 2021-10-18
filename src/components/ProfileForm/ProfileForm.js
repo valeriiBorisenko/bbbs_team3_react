@@ -10,6 +10,7 @@ import { staticImageUrl } from '../../config/config';
 import { regExpImages } from '../../config/constants';
 import { Button, ButtonRound, Caption, Card, Input, Rating } from '../utils';
 import './ProfileForm.scss';
+import { refineClassNames } from '../../utils/utils';
 
 const {
   rateCaptionText,
@@ -33,10 +34,6 @@ function ProfileForm({
   onSubmit,
   isWaitingResponse,
 }) {
-  const classNames = ['card-container', 'profile-form', sectionClass]
-    .join(' ')
-    .trim();
-
   const { serverError, clearError } = useContext(ErrorsContext);
 
   const errorsString = serverError ? getServerErrors(serverError) : '';
@@ -107,11 +104,30 @@ function ProfileForm({
     }
   }, [isOpen, data]);
 
+  const classNames = {
+    main: refineClassNames(['card-container', 'profile-form', sectionClass]),
+    inputUploadWrap: refineClassNames([
+      'profile-form__input-upload',
+      (userImage?.imageUrl || userImage?.image) && !errors?.image
+        ? 'profile-form__input-upload_hidden'
+        : '',
+      errors?.image ? 'profile-form__input-upload_error' : '',
+    ]),
+    uploadButton: refineClassNames([
+      'profile-form__pseudo-button',
+      errors?.image ? 'profile-form__pseudo-button_error' : '',
+    ]),
+    uploadCaption: refineClassNames([
+      'profile-form__caption',
+      errors?.image ? 'profile-form__caption_error' : '',
+    ]),
+  };
+
   return (
     <form
       name="addStoryForm"
       onSubmit={(evt) => handleSubmit(evt)}
-      className={classNames}
+      className={classNames.main}
       noValidate
     >
       <Card sectionClass="profile-form__photo-upload">
@@ -123,14 +139,7 @@ function ProfileForm({
           />
         )}
 
-        <div
-          className={`profile-form__input-upload ${
-            (userImage?.imageUrl || userImage?.image) && !errors?.image
-              ? 'profile-form__input-upload_hidden'
-              : ''
-          } ${errors?.image ? 'profile-form__input-upload_error' : ''}
-          `}
-        >
+        <div className={classNames.inputUploadWrap}>
           <label htmlFor="input-upload" className="profile-form__label-file">
             <input
               id="input-upload"
@@ -141,17 +150,13 @@ function ProfileForm({
               onChange={(evt) => handleChangeFiles(evt, regExpImages)}
             />
             <ButtonRound
-              sectionClass={`profile-form__pseudo-button ${
-                errors?.image ? 'profile-form__pseudo-button_error' : ''
-              }`}
+              sectionClass={classNames.uploadButton}
               color={`${errors?.image ? 'error' : 'lightGray'}`}
               isSpan
             />
             <Caption
               title={errors?.image || uploadCaptionText}
-              sectionClass={`profile-form__caption ${
-                errors?.image ? 'profile-form__caption_error' : ''
-              }`}
+              sectionClass={classNames.uploadCaption}
             />
           </label>
         </div>
@@ -273,10 +278,10 @@ ProfileForm.propTypes = {
 ProfileForm.defaultProps = {
   data: {},
   sectionClass: '',
-  onClose: () => {},
+  onClose: undefined,
   isOpen: false,
   isEditMode: false,
-  onSubmit: () => {},
+  onSubmit: undefined,
   isWaitingResponse: false,
 };
 

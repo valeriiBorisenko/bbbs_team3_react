@@ -1,8 +1,9 @@
-import './ScrollableContainer.scss';
 import PropTypes from 'prop-types';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import texts from './locales/RU';
 import { useInfiniteScroll } from '../../../hooks';
+import { refineClassNames } from '../../../utils/utils';
+import './ScrollableContainer.scss';
 
 const DELAY_NO_POINTER_EVENTS = 150;
 const DEFAULT_DELTA_Y = 100;
@@ -170,15 +171,15 @@ function ScrollableContainer({
     });
   };
 
-  const classNames = [
-    'scrollable-container',
-    state.isScrolling && !disableMouseDrag
-      ? 'scrollable-container_scrolling'
-      : '',
-    sectionClass,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'scrollable-container',
+      state.isScrolling && !disableMouseDrag
+        ? 'scrollable-container_scrolling'
+        : '',
+      sectionClass,
+    ]),
+  };
 
   return (
     <>
@@ -186,7 +187,7 @@ function ScrollableContainer({
 
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
       <div
-        className={classNames}
+        className={classNames.main}
         onMouseDown={disableMouseDrag ? undefined : onMouseDown}
         onMouseMove={disableMouseDrag ? undefined : onMouseMove}
         onMouseUp={disableMouseDrag ? undefined : onMouseUp}

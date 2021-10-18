@@ -1,10 +1,15 @@
-import './Paginate.scss';
 import ReactPaginate from 'react-paginate';
 import PropTypes from 'prop-types';
 import { useScrollToTop } from '../../../hooks';
+import { refineClassNames } from '../../../utils/utils';
+import './Paginate.scss';
 
 const Paginate = (props) => {
   const { pageCount, sectionClass, value, onChange, dontUseScrollUp } = props;
+
+  const classNames = {
+    main: refineClassNames(['pagination', sectionClass]),
+  };
 
   if (!dontUseScrollUp) {
     useScrollToTop(value);
@@ -12,7 +17,7 @@ const Paginate = (props) => {
 
   return (
     <ReactPaginate
-      containerClassName={`pagination ${sectionClass}`}
+      containerClassName={classNames.main}
       pageClassName="pagination__element"
       pageLinkClassName="pagination__element-link"
       activeLinkClassName="pagination__element-link_type_active"
@@ -39,7 +44,7 @@ Paginate.propTypes = {
 };
 
 Paginate.defaultProps = {
-  onChange: () => {},
+  onChange: undefined,
   sectionClass: '',
   dontUseScrollUp: false,
 };

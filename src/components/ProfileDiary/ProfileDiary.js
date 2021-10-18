@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { formatDate } from '../../utils/utils';
+import { formatDate, refineClassNames } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { staticImageUrl } from '../../config/config';
 import defaultImage from '../../assets/icon-logo-no-text.svg';
 import CardAnnotationContainer from '../Cards/CardAnnotation/CardAnnotationContainer';
-import { Button, Caption, Card, Rating, TitleH2 } from '../utils';
+import { Button, Caption, Card, Heading, Paragraph, Rating } from '../utils';
 import './ProfileDiary.scss';
 
 function ProfileDiary({
@@ -43,16 +43,17 @@ function ProfileDiary({
     }
   };
 
-  const classNamesSendToCuratorButton = [
-    'profile-diary__button',
-    'profile-diary__button_curator',
-    sentToCurator ? 'profile-diary__button_curator-shared' : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames(['card-container', 'profile-diary', sectionClass]),
+    curatorButton: refineClassNames([
+      'profile-diary__button',
+      'profile-diary__button_curator',
+      sentToCurator ? 'profile-diary__button_curator-shared' : '',
+    ]),
+  };
 
   return (
-    <div className={`card-container profile-diary ${sectionClass}`}>
+    <div className={classNames.main}>
       <Card sectionClass="profile-diary__image-container">
         <img
           className={
@@ -60,14 +61,23 @@ function ProfileDiary({
           }
           src={image ? `${staticImageUrl}/${image}` : defaultImage}
           alt={place}
+          loading="lazy"
         />
       </Card>
       <Card sectionClass="profile-diary__date-container">
         <div className="profile-diary__text-wrap">
-          <TitleH2 sectionClass="profile-diary__card-title" title={place} />
+          <Heading
+            level={2}
+            type="small"
+            sectionClass="profile-diary__card-title"
+            content={place}
+          />
           <div className="profile-diary__card-text">
             <CardAnnotationContainer>
-              <p className="profile-diary__paragraph">{description}</p>
+              <Paragraph
+                content={description}
+                sectionClass="profile-diary__paragraph"
+              />
             </CardAnnotationContainer>
           </div>
         </div>
@@ -104,7 +114,7 @@ function ProfileDiary({
                       }`
                 }
                 color="gray-borderless"
-                sectionClass={classNamesSendToCuratorButton}
+                sectionClass={classNames.curatorButton}
                 onClick={handleShareButtonClick}
                 isDisabled={isSendingToCurator}
               />
@@ -140,9 +150,9 @@ ProfileDiary.propTypes = {
 
 ProfileDiary.defaultProps = {
   data: {},
-  onEdit: () => {},
-  onDelete: () => {},
-  onShare: () => {},
+  onEdit: undefined,
+  onDelete: undefined,
+  onShare: undefined,
   sectionClass: '',
   selectedDiaryId: undefined,
   isWaitingResponse: false,

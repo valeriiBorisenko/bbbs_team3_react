@@ -3,19 +3,21 @@ import CardArticle from '../../components/Cards/CardArticle/CardArticle';
 import AnimatedPageContainer from '../../components/AnimatedPageContainer/AnimatedPageContainer';
 import {
   Card,
+  Heading,
   Loader,
   NextArticleLink,
   Paginate,
-  TitleH1,
+  Paragraph,
 } from '../../components/utils';
 
 export {
   BasePage,
-  TitleH1,
+  Heading,
   CardArticle,
   Paginate,
   AnimatedPageContainer,
   Loader,
   NextArticleLink,
   Card,
+  Paragraph,
 };

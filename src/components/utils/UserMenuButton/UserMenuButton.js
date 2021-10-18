@@ -1,11 +1,14 @@
-import './UserMenuButton.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './UserMenuButton.scss';
 
 function UserMenuButton({ title, handleClick, sectionClass }) {
-  const classNames = ['user-menu-button', sectionClass].join(' ').trim();
+  const classNames = {
+    main: refineClassNames(['user-menu-button', sectionClass]),
+  };
 
   return (
-    <button className={classNames} type="button" onClick={handleClick}>
+    <button className={classNames.main} type="button" onClick={handleClick}>
       {title}
     </button>
   );
@@ -19,7 +22,7 @@ UserMenuButton.propTypes = {
 
 UserMenuButton.defaultProps = {
   title: '',
-  handleClick: () => {},
+  handleClick: undefined,
   sectionClass: '',
 };
 

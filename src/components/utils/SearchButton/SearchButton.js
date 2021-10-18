@@ -1,6 +1,7 @@
-import './SearchButton.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { COLOR_BLACK } from '../../../config/constants';
+import './SearchButton.scss';
 
 function SearchButton({ handleClickButton }) {
   return (
@@ -17,10 +18,10 @@ function SearchButton({ handleClickButton }) {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <circle cx="9" cy="9.364" r="8" stroke="#000" />
+        <circle cx="9" cy="9.364" r="8" stroke={COLOR_BLACK} />
         <path
           d="m14.999 15.364 5.333 5.333"
-          stroke="#000"
+          stroke={COLOR_BLACK}
           strokeLinecap="square"
         />
       </svg>
@@ -33,7 +34,7 @@ SearchButton.propTypes = {
 };
 
 SearchButton.defaultProps = {
-  handleClickButton: () => {},
+  handleClickButton: undefined,
 };
 
 export default SearchButton;

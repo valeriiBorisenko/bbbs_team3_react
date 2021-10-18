@@ -8,6 +8,7 @@ import {
   ERROR_MESSAGES,
   localStUserCity,
 } from '../../config/constants';
+import { PLACES_URL } from '../../config/routes';
 import {
   useActivityTypes,
   useFiltrationForPlaces,
@@ -24,19 +25,19 @@ import {
 import {
   AnimatedPageContainer,
   BasePage,
+  Card,
   CardPlace,
+  Heading,
   Loader,
   NextArticleLink,
   NoDataNotificationBox,
   Paginate,
+  Paragraph,
   PlacesRecommend,
   PopupRecommendSuccess,
   TagsList,
-  TitleH1,
 } from './index';
 import './Places.scss';
-import { Card } from '../Articles';
-import { PLACES_URL } from '../../config/routes';
 
 const {
   headTitle,
@@ -179,7 +180,12 @@ function Places() {
 
     return (
       <>
-        <TitleH1 title={title} sectionClass="places__title fade-in" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="page__title fade-in"
+        />
         {renderFiltersAndCards()}
       </>
     );
@@ -214,7 +220,7 @@ function Places() {
           />
 
           <Card sectionClass="places__single-card-paragraph">
-            <p className="paragraph">{singleCard.description}</p>
+            <Paragraph content={singleCard.description} />
           </Card>
 
           <NextArticleLink text={toMainPageLinkTitle} href={PLACES_URL} />
@@ -256,7 +262,7 @@ function Places() {
       return (
         <>
           {isMainCard && isMainCardShown && (
-            <section className="places__main">
+            <section className="places__main page__grid">
               <CardPlace
                 key={mainCard.id}
                 data={mainCard}
@@ -268,7 +274,7 @@ function Places() {
           )}
 
           {!isPaginationUsed ? (
-            <section className="places__cards-grid">
+            <section className="places__cards-grid cards-grid page__grid">
               {dataToRender.map((place, i) => (
                 <CardPlace
                   key={place.id}

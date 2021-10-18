@@ -17,10 +17,8 @@
   }
 
   &__title {
-    width: fit-content;
     max-width: 770px;
     margin: 0 0 15px;
-    transition: .3s ease;
 
     &:hover {
       cursor: pointer;

@@ -15,6 +15,8 @@ import useFiltrationWithMainCard from './useFiltrationWithMainCard';
 import useFiltrationForPlaces from './useFiltrationForPlaces';
 import usePageWidth from './usePageWidth';
 import useSingleCardAtDynamicRoute from './useSingleCardAtDynamicRoute';
+import useProfileEvents from './useProfileEvents';
+import useProfileDiaries from './useProfileDiaries';
 
 export {
   useClickOutside,
@@ -34,4 +36,6 @@ export {
   useFiltrationForPlaces,
   usePageWidth,
   useSingleCardAtDynamicRoute,
+  useProfileEvents,
+  useProfileDiaries,
 };

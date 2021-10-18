@@ -16,13 +16,13 @@ import {
   AnimatedPageContainer,
   BasePage,
   Caption,
+  Heading,
   Loader,
   NextArticleLink,
   PopupPhoto,
   PseudoButtonTag,
   ScrollableContainer,
-  TitleH1,
-  TitleH2,
+  StyledLink,
 } from './index';
 import './Stories.scss';
 
@@ -199,7 +199,12 @@ function Stories() {
 
     return (
       <div className="stories page__section fade-in">
-        <TitleH1 title={title} sectionClass="stories__title" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="page__title"
+        />
         <p className="stories__subtitle">{subtitle}</p>
 
         {renderTags()}
@@ -247,8 +252,14 @@ function Stories() {
           className="stories__main-photo scale-in"
           src={`${staticImageUrl}/${currentStory.image}`}
           alt={pairTitle}
+          loading="lazy"
         />
-        <TitleH2 title={pairTitle} sectionClass="stories__pair-title fade-in" />
+        <Heading
+          level={2}
+          type="medium"
+          content={pairTitle}
+          sectionClass="stories__pair-title fade-in"
+        />
         <Caption
           title={togetherSinceText}
           sectionClass="stories__caption fade-in"
@@ -264,14 +275,12 @@ function Stories() {
     return (
       <div className="stories__links fade-in">
         {currentUser && currentStory.mentor?.email && (
-          <a
-            className="link stories__link"
-            href={`mailto:${currentStory.mentor.email}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {emailText}
-          </a>
+          <StyledLink
+            className="stories__link"
+            path={`mailto:${currentStory.mentor.email}`}
+            text={emailText}
+            isExternal
+          />
         )}
 
         {currentStory.nextArticle && (
@@ -358,6 +367,7 @@ function Stories() {
                   draggable={false}
                   src={`${staticImageUrl}/${image.image}`}
                   alt={image.imageCaption}
+                  loading="lazy"
                 />
               </div>
             ))}

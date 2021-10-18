@@ -8,23 +8,19 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
 
-.main {
-  box-sizing: border-box;
-  max-width: 1920px;
-  min-width: 320px;
-  width: 100%;
-  margin: 0 auto;
-  padding-top: 150px;
-  padding-bottom: 120px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
+  &__section {
+    margin: 0 75px;
+  }
 
-.page__section {
-  margin: 0 75px;
+  &__title {
+    margin: 0 auto 40px;
+    text-align: center;
+  }
+
+  &__grid {
+    padding-top: 80px;
+  }
 }
 
 .form-error-message {
@@ -36,39 +32,46 @@
 }
 
 @include atDesktop1440 {
-  .page__section {
-    margin: 0 135px;
+  .page {
+    &__section {
+      margin: 0 135px;
+    }
   }
 }
 
 @include atDesktop1024 {
-  .page__section {
-    margin: 0 127px;
-  }
+  .page {
+    &__section {
+      margin: 0 127px;
+    }
 
-  .main {
-    padding-top: 110px;
-    padding-bottom: 100px;
-  }
-}
+    &__title {
+      margin-bottom: 20px;
+    }
 
-@include atTabletL {
-  .main {
-    padding-top: 60px;
-    padding-bottom: 50px;
+    &__grid {
+      padding-top: 50px;
+    }
   }
 }
-
 
 @include atTablet {
-  .page__section {
-    margin: 0 60px;
+  .page {
+    &__section {
+      margin: 0 60px;
+    }
+
+    &__grid {
+      padding-top: 30px;
+    }
   }
 }
 
 @include atMobile {
-  .page__section {
-    margin: 0 15px;
+  .page {
+    &__section {
+      margin: 0 15px;
+    }
   }
 
   .form-error-message {

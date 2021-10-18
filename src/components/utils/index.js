@@ -4,24 +4,25 @@ import ButtonDots from './ButtonDots/ButtonDots';
 import ButtonRound from './ButtonRound/ButtonRound';
 import Caption from './Caption/Caption';
 import Card from './Card/Card';
+import CloseButton from './CloseButton/CloseButton';
 import DropDownMenu from './DropDownMenu/DropDownMenu';
 import DropDownSelect from './DropDownSelect/DropDownSelect';
+import Heading from './Heading/Heading';
 import Input from './Input/Input';
-import LinkableHeading from './LinkableHeading/LinkableHeading';
+import LinkableComponent from './LinkableComponent/LinkableComponent';
 import Loader from './Loader/Loader';
 import Logo from './Logo/Logo';
 import NavItem from './NavItem/NavItem';
 import ModificatedScrollbars from './ModificatedScrollbars/ModificatedScrollbars';
 import NoDataNotificationBox from './NoDataNotificationBox/NoDataNotificationBox';
 import Paginate from './Paginate/Paginate';
+import Paragraph from './Paragraph/Paragraph';
 import PseudoButtonTag from './PseudoButtonTag/PseudoButtonTag';
 import Rating from './Rating/Rating';
 import Rubric from './Rubric/Rubric';
 import ScrollableContainer from './ScrollableContainer/ScrollableContainer';
 import SearchButton from './SearchButton/SearchButton';
-import TitleH1 from './TitleH1/TitleH1';
-import TitleH2 from './TitleH2/TitleH2';
-import TitleH3 from './TitleH3/TitleH3';
+import StyledLink from './StyledLink/StyledLink';
 import UserIconButton from './UserIconButton/UserIconButton';
 import UserMenuButton from './UserMenuButton/UserMenuButton';
 import Widget from './Widget/Widget';
@@ -34,24 +35,25 @@ export {
   ButtonRound,
   Caption,
   Card,
+  CloseButton,
   DropDownMenu,
   DropDownSelect,
+  Heading,
   Input,
-  LinkableHeading,
+  LinkableComponent,
   Loader,
   Logo,
   NavItem,
   ModificatedScrollbars,
   NoDataNotificationBox,
   Paginate,
+  Paragraph,
   PseudoButtonTag,
   Rating,
   Rubric,
   ScrollableContainer,
   SearchButton,
-  TitleH1,
-  TitleH2,
-  TitleH3,
+  StyledLink,
   UserIconButton,
   UserMenuButton,
   Widget,

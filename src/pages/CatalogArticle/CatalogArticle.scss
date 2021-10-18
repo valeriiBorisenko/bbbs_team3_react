@@ -8,14 +8,12 @@
 
 .article__main-title {
   max-width: 1170px;
+  margin: 0 auto 40px;
   text-align: center;
-  font-size: 44px;
-  line-height: 1.14;
 }
 
 .article__description {
   max-width: 1170px;
-  margin-top: 40px;
   text-align: center;
 }
 
@@ -70,11 +68,11 @@
   .article__main-title {
     max-width: 650px;
     font-size: 37px;
+    margin-bottom: 20px;
   }
 
   .article__description {
     max-width: 770px;
-    margin-top: 20px;
   }
 
   .article__figure {
@@ -103,10 +101,7 @@
 
   .article__main-title {
     font-size: 23px;
-  }
-
-  .article__description {
-    margin-top: 30px;
+    margin-bottom: 30px;
   }
 
   .article__figure {

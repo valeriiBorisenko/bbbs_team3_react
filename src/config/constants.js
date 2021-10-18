@@ -95,3 +95,6 @@ export const ERROR_CODES = {
   unauthorized: 401,
   notFound: 404,
 };
+
+export const COLOR_BLUE = '#224CFF';
+export const COLOR_BLACK = '#000';

@@ -20,7 +20,7 @@
 
 .cities {
   &__title {
-    margin-bottom: 30px;
+    margin: 0 auto 30px;
     font-size: 23px;
     text-align: center;
   }
@@ -48,6 +48,7 @@
       display: block;
       border-bottom: 1px solid $lightGray;
       width: 370px;
+      margin-top: 15px;
       margin-bottom: 15px;
     }
   }
@@ -57,7 +58,7 @@
     text-align: center;
 
     &:last-of-type {
-      margin-bottom: 15px;
+      margin-bottom: 0;
     }
   }
 

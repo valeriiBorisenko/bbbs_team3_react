@@ -2,8 +2,12 @@ import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { PopupsContext } from '../../../contexts';
-import { Caption, Card, TitleH2 } from '../../utils';
-import { changeCaseOfFirstLetter, formatDuration } from '../../../utils/utils';
+import { Caption, Card, Heading, StyledLink } from '../../utils';
+import {
+  changeCaseOfFirstLetter,
+  formatDuration,
+  refineClassNames,
+} from '../../../utils/utils';
 import { staticImageUrl } from '../../../config/config';
 import { setLocalStorageData } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
@@ -40,13 +44,23 @@ function CardVideoMain({
     }
   }, [isMobile]);
 
+  const classNames = {
+    preview: refineClassNames([
+      'card-video-main__image',
+      isPlayingVideo ? 'card-video-main__image_at-back' : '',
+      'image-scale',
+    ]),
+  };
+
   return (
     <div className="card-container card-container_type_main-video">
       <Card sectionClass="card-video-main" color="yellow">
         <div className="card-video-main__title-wrap">
-          <TitleH2
+          <Heading
+            level={2}
+            type="small"
             sectionClass="card-video-main__title"
-            title={changeCaseOfFirstLetter(title)}
+            content={changeCaseOfFirstLetter(title)}
           />
           <Caption
             sectionClass="card-video-main__info"
@@ -54,13 +68,11 @@ function CardVideoMain({
           />
         </div>
         {link && (
-          <button
-            className="link"
-            type="button"
+          <StyledLink
+            text={texts.linkText}
             onClick={isMobile ? playVideoOnClick : openPopupVideoOnClick}
-          >
-            {texts.linkText}
-          </button>
+            isButton
+          />
         )}
       </Card>
 
@@ -82,9 +94,8 @@ function CardVideoMain({
         <img
           src={`${staticImageUrl}/${image}`}
           alt={`${texts.imageAlt}: ${title}`}
-          className={`card-video-main__image ${
-            isPlayingVideo ? 'card-video-main__image_at-back' : ''
-          } image-scale`}
+          className={classNames.preview}
+          loading="lazy"
         />
 
         {!isPlayingVideo && (

@@ -1,12 +1,8 @@
 @import './styles/utils.scss';
 
 .books {
-  &__title {
-    margin-bottom: 25px;
-  }
-
   &__cards {
-    padding: 80px 0 0;
+    padding-left: 0;
     margin: 0;
     list-style-type: none;
   }
@@ -63,14 +59,6 @@
 
 @include atDesktop1024 {
   .books {
-    &__title {
-      margin-bottom: 10px;
-    }
-
-    &__cards {
-      padding-top: 50px;
-    }
-
     &__single-book-container {
       margin-top: 50px;
     }
@@ -79,10 +67,6 @@
 
 @include atTablet {
   .books {
-    &__cards {
-      padding-top: 30px;
-    }
-
     &__single-book-container {
       margin-top: 30px;
     }

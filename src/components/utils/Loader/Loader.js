@@ -1,19 +1,20 @@
-import './Loader.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './Loader.scss';
 
 function Loader({ isNested, isCentered, isSmallGrid, isPaginate }) {
-  const classNames = [
-    'spinner',
-    isNested ? 'spinner_nested' : '',
-    isCentered ? 'spinner_centered' : '',
-    isSmallGrid ? 'spinner_small-grid' : '',
-    isPaginate ? 'spinner_paginate' : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'spinner',
+      isNested ? 'spinner_nested' : '',
+      isCentered ? 'spinner_centered' : '',
+      isSmallGrid ? 'spinner_small-grid' : '',
+      isPaginate ? 'spinner_paginate' : '',
+    ]),
+  };
 
   return (
-    <div className={classNames}>
+    <div className={classNames.main}>
       <div className="spinner__container">
         <div className="spinner__circle spinner__circle_1" />
         <div className="spinner__circle spinner__circle_2" />

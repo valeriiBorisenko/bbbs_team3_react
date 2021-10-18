@@ -18,11 +18,12 @@ import {
   BasePage,
   Card,
   CardBook,
+  Heading,
   Loader,
   NextArticleLink,
   Paginate,
+  Paragraph,
   TagsList,
-  TitleH1,
 } from './index';
 import './Books.scss';
 
@@ -105,7 +106,12 @@ function Books() {
 
     return (
       <>
-        <TitleH1 title={title} sectionClass="books__title" />
+        <Heading
+          level={1}
+          type="big"
+          content={title}
+          sectionClass="page__title"
+        />
         {renderMainContent()}
       </>
     );
@@ -131,7 +137,7 @@ function Books() {
           <CardBook data={singleCard} isOnlyCover sectionClass="scale-in" />
 
           <Card sectionClass="books__single-book-paragraph">
-            <p className="paragraph">{singleCard.annotation}</p>
+            <Paragraph content={singleCard.annotation} />
           </Card>
 
           <NextArticleLink
