@@ -4,11 +4,12 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Lottie from 'lottie-web';
 import texts from './locales/RU';
 import { CurrentUserContext, ErrorsContext } from '../../../contexts';
-import { AFISHA_URL } from '../../../config/routes';
+import { AFISHA_URL, MAIN_PAGE_URL } from '../../../config/routes';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../../config/constants';
 import { popupLoginValidationSettings } from '../../../config/validation-settings';
 import { useAuth, useFormWithValidation } from '../../../hooks';
 import getServerErrors from '../../../utils/form-errors';
+import { refineClassNames } from '../../../utils/utils';
 import { recoverPassword } from '../../../api/user';
 import Popup from '../Popup/Popup';
 import { Button, Heading, Input, Paragraph } from '../../utils';
@@ -113,7 +114,7 @@ function PopupLogin({ isOpen, onClose }) {
 
   function closePopup() {
     if (pathname === AFISHA_URL) {
-      history.push('/');
+      history.push(MAIN_PAGE_URL);
     }
     setSuccessMessage('');
     onClose();
@@ -143,28 +144,22 @@ function PopupLogin({ isOpen, onClose }) {
     setIsForgotPassword(false);
   }, [isOpen]);
 
-  const classNameAuth = [
-    'popup__form',
-    'popup__form_type_sign-in',
-    `${isOpen && !isForgotPassword ? 'popup__form_type_sign-in_opened' : ''}`,
-  ]
-    .join(' ')
-    .trim();
-
-  const classForgotPassword = [
-    'popup__form',
-    'popup__form_type_email',
-    `${isForgotPassword && !isSuccess ? 'popup__form_type_email_opened' : ''}`,
-  ]
-    .join(' ')
-    .trim();
-
-  const classNameSuccess = [
-    'popup__login-container_success',
-    `${isSuccess ? 'popup__login-container_success_opened' : ''}`,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    mainAuth: refineClassNames([
+      'popup__form',
+      'popup__form_type_sign-in',
+      isOpen && !isForgotPassword ? 'popup__form_type_sign-in_opened' : '',
+    ]),
+    mainForgot: refineClassNames([
+      'popup__form',
+      'popup__form_type_email',
+      isForgotPassword && !isSuccess ? 'popup__form_type_email_opened' : '',
+    ]),
+    mainSuccess: refineClassNames([
+      'popup__login-container_success',
+      isSuccess ? 'popup__login-container_success_opened' : '',
+    ]),
+  };
 
   return (
     <Popup
@@ -182,7 +177,7 @@ function PopupLogin({ isOpen, onClose }) {
   function renderFormAuth() {
     return (
       <form
-        className={classNameAuth}
+        className={classNames.mainAuth}
         onSubmit={(evt) => handleSubmit(evt)}
         noValidate
       >
@@ -254,7 +249,7 @@ function PopupLogin({ isOpen, onClose }) {
   function renderFormForgotPassword() {
     return (
       <form
-        className={classForgotPassword}
+        className={classNames.mainForgot}
         onSubmit={(evt) => handleSubmitForgotPassword(evt)}
         noValidate
       >
@@ -270,7 +265,7 @@ function PopupLogin({ isOpen, onClose }) {
         />
 
         <Input
-          id="loginUseremailInput"
+          id="loginUserEmailInput"
           sectionClass="popup__input"
           type="email"
           name="email"
@@ -305,7 +300,7 @@ function PopupLogin({ isOpen, onClose }) {
 
   function renderSuccessLoginContainer() {
     return (
-      <div className={classNameSuccess}>
+      <div className={classNames.mainSuccess}>
         <div
           ref={animationContainer}
           className="popup__login-container_success-animation"

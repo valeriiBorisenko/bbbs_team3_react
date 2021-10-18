@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
-import { formatDate } from '../../utils/utils';
+import { formatDate, refineClassNames } from '../../utils/utils';
 import captions from '../../utils/rating-captions';
 import { staticImageUrl } from '../../config/config';
 import defaultImage from '../../assets/icon-logo-no-text.svg';
@@ -43,16 +43,17 @@ function ProfileDiary({
     }
   };
 
-  const classNamesSendToCuratorButton = [
-    'profile-diary__button',
-    'profile-diary__button_curator',
-    sentToCurator ? 'profile-diary__button_curator-shared' : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames(['card-container', 'profile-diary', sectionClass]),
+    curatorButton: refineClassNames([
+      'profile-diary__button',
+      'profile-diary__button_curator',
+      sentToCurator ? 'profile-diary__button_curator-shared' : '',
+    ]),
+  };
 
   return (
-    <div className={`card-container profile-diary ${sectionClass}`}>
+    <div className={classNames.main}>
       <Card sectionClass="profile-diary__image-container">
         <img
           className={
@@ -113,7 +114,7 @@ function ProfileDiary({
                       }`
                 }
                 color="gray-borderless"
-                sectionClass={classNamesSendToCuratorButton}
+                sectionClass={classNames.curatorButton}
                 onClick={handleShareButtonClick}
                 isDisabled={isSendingToCurator}
               />
@@ -149,9 +150,9 @@ ProfileDiary.propTypes = {
 
 ProfileDiary.defaultProps = {
   data: {},
-  onEdit: () => {},
-  onDelete: () => {},
-  onShare: () => {},
+  onEdit: undefined,
+  onDelete: undefined,
+  onShare: undefined,
   sectionClass: '',
   selectedDiaryId: undefined,
   isWaitingResponse: false,

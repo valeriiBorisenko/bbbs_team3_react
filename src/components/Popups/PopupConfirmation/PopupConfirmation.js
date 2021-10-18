@@ -79,7 +79,7 @@ PopupConfirmation.propTypes = {
 
 PopupConfirmation.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
 };
 
 export default PopupConfirmation;

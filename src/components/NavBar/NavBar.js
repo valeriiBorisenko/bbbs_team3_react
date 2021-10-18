@@ -228,15 +228,15 @@ NavBar.propTypes = {
 };
 
 NavBar.defaultProps = {
-  onUserButtonClick: () => {},
-  onBurgerButtonClick: () => {},
-  onCityChangeClick: () => {},
-  onLogout: () => {},
+  onUserButtonClick: undefined,
+  onBurgerButtonClick: undefined,
+  onCityChangeClick: undefined,
+  onLogout: undefined,
   isMobileMenuOpen: false,
   userCityName: '',
-  setIsMobileMenuOpen: () => {},
+  setIsMobileMenuOpen: undefined,
   isOpenSearch: false,
-  setIsOpenSearch: () => {},
+  setIsOpenSearch: undefined,
 };
 
 export default NavBar;

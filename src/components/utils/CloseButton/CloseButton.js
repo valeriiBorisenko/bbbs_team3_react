@@ -2,13 +2,16 @@ import './CloseButton.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { COLOR_BLUE } from '../../../config/constants';
+import { refineClassNames } from '../../../utils/utils';
 
 function CloseButton({ onClick, sectionClass }) {
-  const classNames = ['close-button', sectionClass].join(' ').trim();
+  const classNames = {
+    main: refineClassNames(['close-button', sectionClass]),
+  };
 
   return (
     <button
-      className={classNames}
+      className={classNames.main}
       type="button"
       aria-label={texts.ariaLabel}
       onClick={onClick}

@@ -56,7 +56,7 @@ PopupRecommendSuccess.propTypes = {
 
 PopupRecommendSuccess.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
 };
 
 export default PopupRecommendSuccess;

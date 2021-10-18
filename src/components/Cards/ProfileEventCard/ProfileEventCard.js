@@ -59,7 +59,7 @@ ProfileEventCard.propTypes = {
 };
 
 ProfileEventCard.defaultProps = {
-  onOpen: () => {},
+  onOpen: undefined,
   sectionClass: '',
 };
 

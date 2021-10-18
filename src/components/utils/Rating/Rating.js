@@ -1,5 +1,6 @@
-import './Rating.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './Rating.scss';
 
 function Rating({
   type,
@@ -10,17 +11,16 @@ function Rating({
   checked,
   onChange,
 }) {
-  const classNames = ['rating', sectionClass].join(' ').trim();
-
-  const pseudoButtonClassNames = [
-    'rating__pseudo-button',
-    `rating__pseudo-button_type_${ratingType}_default`,
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames(['rating', sectionClass]),
+    button: refineClassNames([
+      'rating__pseudo-button',
+      `rating__pseudo-button_type_${ratingType}_default`,
+    ]),
+  };
 
   return (
-    <label className={classNames} htmlFor={`rating-${name}-${value}`}>
+    <label className={classNames.main} htmlFor={`rating-${name}-${value}`}>
       <input
         id={`rating-${name}-${value}`}
         className="rating__checkbox"
@@ -30,7 +30,7 @@ function Rating({
         defaultChecked={checked}
         onChange={onChange}
       />
-      <span className={pseudoButtonClassNames} />
+      <span className={classNames.button} />
     </label>
   );
 }
@@ -51,7 +51,7 @@ Rating.defaultProps = {
   ratingType: 'neutral',
   sectionClass: '',
   checked: false,
-  onChange: () => {},
+  onChange: undefined,
 };
 
 export default Rating;

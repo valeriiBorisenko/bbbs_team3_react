@@ -7,7 +7,6 @@ import {
   ErrorsContext,
   PopupsContext,
 } from '../../../contexts';
-import { updateUserProfile } from '../../../api/user';
 import {
   DELAY_DEBOUNCE,
   ERROR_MESSAGES,
@@ -18,6 +17,8 @@ import {
   getLocalStorageData,
 } from '../../../hooks/useLocalStorage';
 import { useDebounce } from '../../../hooks';
+import { refineClassNames } from '../../../utils/utils';
+import { updateUserProfile } from '../../../api/user';
 import Popup from '../Popup/Popup';
 import { Heading, ModificatedScrollbars } from '../../utils';
 import './PopupCities.scss';
@@ -111,9 +112,10 @@ function PopupCities({ isOpen, onClose }) {
     return (
       <li className="cities__list-item" key={city?.id}>
         <button
-          className={`cities__city ${
-            currentUserCity === city?.id ? 'cities__city_current' : ''
-          }`}
+          className={refineClassNames([
+            'cities__city',
+            currentUserCity === city?.id ? 'cities__city_current' : '',
+          ])}
           type="button"
           value={city?.id}
           onClick={(evt) => debounceSubmitCity(evt)}
@@ -133,7 +135,7 @@ PopupCities.propTypes = {
 
 PopupCities.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
 };
 
 export default PopupCities;

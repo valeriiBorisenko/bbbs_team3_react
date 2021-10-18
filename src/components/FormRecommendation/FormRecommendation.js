@@ -302,7 +302,7 @@ FormRecommendation.propTypes = {
 FormRecommendation.defaultProps = {
   activityTypes: [],
   isOpen: false,
-  onSubmit: () => {},
+  onSubmit: undefined,
   isWaitingResponse: false,
 };
 

@@ -1,12 +1,16 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
 import './NextArticleLink.scss';
+import { COLOR_BLUE } from '../../../config/constants';
 
 function NextArticleLink({ text, href, sectionClass, onClick }) {
-  const classNames = ['next-article-link', sectionClass].join(' ').trim();
+  const classNames = {
+    main: refineClassNames(['next-article-link', sectionClass]),
+  };
 
   return (
-    <Link className={classNames} to={href} onClick={onClick}>
+    <Link className={classNames.main} to={href} onClick={onClick}>
       <span className="next-article-link__text">{text}</span>
       <svg
         className="next-article-link__arrow"
@@ -20,7 +24,7 @@ function NextArticleLink({ text, href, sectionClass, onClick }) {
           fillRule="evenodd"
           clipRule="evenodd"
           d="M16.5916 0L30 14.3793L15.5318 30H13.4987L23.3441 19.3448C25.5145 17.1724 24.9357 15.3103 22.1865 15.1552H0V13.6034H22.0418C24.791 13.4483 25.3698 11.8966 23.6334 9.72414L14.5659 0H16.5916Z"
-          fill="#224CFF"
+          fill={COLOR_BLUE}
         />
       </svg>
     </Link>
@@ -38,7 +42,7 @@ NextArticleLink.defaultProps = {
   text: 'Link',
   href: '/',
   sectionClass: '',
-  onClick: () => {},
+  onClick: undefined,
 };
 
 export default NextArticleLink;

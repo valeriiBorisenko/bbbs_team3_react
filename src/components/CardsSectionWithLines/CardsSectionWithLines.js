@@ -79,7 +79,7 @@ CardsSectionWithLines.defaultProps = {
   pageCount: 0,
   children: null,
   pageNumber: 0,
-  setPageNumber: () => {},
+  setPageNumber: undefined,
   sectionClass: '',
   isLoading: false,
 };

@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { useContext, useEffect } from 'react';
-import Popup from '../Popup/Popup';
-import { Button, Heading } from '../../utils';
 import { ErrorsContext } from '../../../contexts';
+import { Button, Heading } from '../../utils';
+import Popup from '../Popup/Popup';
 import './PopupError.scss';
 
 function PopupError({ isOpen, onClose }) {
@@ -52,7 +52,7 @@ PopupError.propTypes = {
 
 PopupError.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
 };
 
 export default PopupError;

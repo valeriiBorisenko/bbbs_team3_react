@@ -5,9 +5,9 @@ import Lottie from 'lottie-web';
 import animationSuccess from '../../../assets/animation/ill_popup_success.json';
 import texts from './locales/RU';
 import { AFISHA_URL } from '../../../config/routes';
+import { localStAfishaEvent } from '../../../config/constants';
 import { formatDate, formatMonthsGenitiveCase } from '../../../utils/utils';
 import { getLocalStorageData } from '../../../hooks/useLocalStorage';
-import { localStAfishaEvent } from '../../../config/constants';
 import Popup from '../Popup/Popup';
 import { Button, Heading, Paragraph } from '../../utils';
 import './PopupSuccessfully.scss';
@@ -97,7 +97,7 @@ PopupSuccessfully.propTypes = {
 
 PopupSuccessfully.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
 };
 
 export default PopupSuccessfully;

@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import Popup from '../Popup/Popup';
-import { Caption, Heading } from '../../utils/index';
-import parserLinkYoutube from '../../../utils/parser-link-youtube';
 import {
   getLocalStorageData,
   removeLocalStorageData,
 } from '../../../hooks/useLocalStorage';
 import { localStChosenVideo } from '../../../config/constants';
-import './PopupVideo.scss';
 import { staticImageUrl } from '../../../config/config';
+import parserLinkYoutube from '../../../utils/parser-link-youtube';
+import Popup from '../Popup/Popup';
+import { Caption, Heading } from '../../utils/index';
+import './PopupVideo.scss';
 
 const PopupVideo = ({ isOpen, onClose }) => {
   const data = getLocalStorageData(localStChosenVideo);
@@ -65,7 +65,7 @@ PopupVideo.propTypes = {
 
 PopupVideo.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
 };
 
 export default PopupVideo;

@@ -1,13 +1,14 @@
-import './Paragraph.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './Paragraph.scss';
 
 function Paragraph({ size, content, reference, sectionClass }) {
-  const classNames = ['paragraph', `paragraph_${size}`, sectionClass]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames(['paragraph', `paragraph_${size}`, sectionClass]),
+  };
 
   return (
-    <p ref={reference} className={classNames}>
+    <p ref={reference} className={classNames.main}>
       {content}
     </p>
   );

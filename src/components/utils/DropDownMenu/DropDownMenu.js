@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import NavItem from '../NavItem/NavItem';
-import './DropDownMenu.scss';
 import dropDownMenuLink from '../../../utils/drop-down-menu-link';
+import './DropDownMenu.scss';
 
 function DropDownMenu({ sectionWrapperClass }) {
   return (

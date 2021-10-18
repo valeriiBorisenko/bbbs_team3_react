@@ -1,13 +1,13 @@
 @import './styles/utils.scss';
 
 .popup {
- &__container_type_photo {
+  &__container_type_photo {
     max-width: fit-content;
     padding: 50px 30px 30px;
   }
 
   &__close_type_photo {
-    top: 10px;
+    top: 20px;
   }
 
   &__photo-figure {
@@ -42,8 +42,8 @@
     }
 
     &__close_type_photo {
-      top: 3px;
-      right: 5px;
+      top: 13px;
+      right: 15px;
     }
 
     &__full-image {

@@ -1,6 +1,7 @@
-import './StyledLink.scss';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import './StyledLink.scss';
+import { refineClassNames } from '../../../utils/utils';
 
 function StyledLink({
   path,
@@ -11,12 +12,14 @@ function StyledLink({
   onClick,
   sectionClass,
 }) {
-  const classNames = ['styled-link', sectionClass].join(' ').trim();
+  const classNames = {
+    main: refineClassNames(['styled-link', sectionClass]),
+  };
 
   if (isExternal) {
     return (
       <a
-        className={classNames}
+        className={classNames.main}
         href={path}
         style={style}
         target="_blank"
@@ -31,7 +34,7 @@ function StyledLink({
   if (isButton) {
     return (
       <button
-        className={classNames}
+        className={classNames.main}
         type="button"
         onClick={onClick}
         style={style}
@@ -42,7 +45,7 @@ function StyledLink({
   }
 
   return (
-    <Link className={classNames} to={path}>
+    <Link className={classNames.main} to={path}>
       {text}
     </Link>
   );

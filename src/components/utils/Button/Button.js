@@ -1,5 +1,6 @@
-import './Button.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './Button.scss';
 
 function Button({
   title,
@@ -11,18 +12,18 @@ function Button({
   isBooked,
   sectionClass,
 }) {
-  const classNames = [
-    'button',
-    `button_color_${color}`,
-    sectionClass,
-    isBooked ? `button_color_${color}_selected` : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames([
+      'button',
+      `button_color_${color}`,
+      sectionClass,
+      isBooked ? `button_color_${color}_selected` : '',
+    ]),
+  };
 
   return (
     <button
-      className={classNames}
+      className={classNames.main}
       type={isSubmittable ? 'submit' : 'button'}
       disabled={isDisabled}
       onClick={onClick}
@@ -48,7 +49,7 @@ Button.defaultProps = {
   color: 'blue',
   isSubmittable: false,
   titleSelected: undefined,
-  onClick: () => {},
+  onClick: undefined,
   isDisabled: false,
   isBooked: false,
   sectionClass: '',

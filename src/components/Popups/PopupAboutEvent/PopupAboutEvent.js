@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
+import { localStAfishaEvent } from '../../../config/constants';
+import { getLocalStorageData } from '../../../hooks/useLocalStorage';
+import { useEventBooking } from '../../../hooks';
 import {
   changeCaseOfFirstLetter,
   formatDate,
   formatPhoneNumber,
   formatWordCase,
 } from '../../../utils/utils';
+import { Button, Heading, ModificatedScrollbars, Paragraph } from '../../utils';
 import '../../Cards/CardCalendar/CardCalendar.scss';
 import Popup from '../Popup/Popup';
-import { Button, Heading, ModificatedScrollbars, Paragraph } from '../../utils';
-import { getLocalStorageData } from '../../../hooks/useLocalStorage';
-import { useEventBooking } from '../../../hooks';
-import { localStAfishaEvent } from '../../../config/constants';
 
 function PopupAboutEvent({ isWithoutRegister, isOpen, onClose }) {
   const {
@@ -137,7 +137,7 @@ PopupAboutEvent.propTypes = {
 
 PopupAboutEvent.defaultProps = {
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
   isWithoutRegister: false,
 };
 

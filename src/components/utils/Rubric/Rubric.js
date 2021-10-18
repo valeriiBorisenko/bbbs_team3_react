@@ -1,8 +1,13 @@
-import './Rubric.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './Rubric.scss';
 
 function Rubric({ title, sectionClass }) {
-  return <span className={`rubric ${sectionClass}`}>{title}</span>;
+  const classNames = {
+    main: refineClassNames(['rubric', sectionClass]),
+  };
+
+  return <span className={classNames.main}>{title}</span>;
 }
 
 Rubric.propTypes = {

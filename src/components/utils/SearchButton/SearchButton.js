@@ -1,7 +1,7 @@
-import './SearchButton.scss';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { COLOR_BLACK } from '../../../config/constants';
+import './SearchButton.scss';
 
 function SearchButton({ handleClickButton }) {
   return (
@@ -34,7 +34,7 @@ SearchButton.propTypes = {
 };
 
 SearchButton.defaultProps = {
-  handleClickButton: () => {},
+  handleClickButton: undefined,
 };
 
 export default SearchButton;

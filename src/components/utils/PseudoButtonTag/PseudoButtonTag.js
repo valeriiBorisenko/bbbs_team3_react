@@ -1,5 +1,6 @@
-import './PseudoButtonTag.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './PseudoButtonTag.scss';
 
 function PseudoButtonTag({
   name,
@@ -11,14 +12,16 @@ function PseudoButtonTag({
 }) {
   const id = `filter-button-${value}`;
 
-  const classNames = ['pseudo-button-label', sectionClass].join(' ').trim();
+  const classNames = {
+    main: refineClassNames(['pseudo-button-label', sectionClass]),
+  };
 
   function handleClick(event) {
     onClick(value, event.target.checked);
   }
 
   return (
-    <label className={classNames} htmlFor={id}>
+    <label className={classNames.main} htmlFor={id}>
       <input
         id={id}
         className="pseudo-button-checkbox"
@@ -48,7 +51,7 @@ PseudoButtonTag.defaultProps = {
   value: '',
   title: '',
   isActive: false,
-  onClick: () => {},
+  onClick: undefined,
   sectionClass: '',
 };
 

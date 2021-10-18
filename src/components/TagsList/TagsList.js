@@ -1,21 +1,22 @@
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../utils/utils';
 import { PseudoButtonTag } from '../utils';
 import './TagsList.scss';
 
 const centeringFiltersMaxLength = 3;
 
 function TagsList({ filterList, name, handleClick, sectionClass }) {
-  const classNames = ['tags', sectionClass].join(' ').trim();
-  const classNamesList = [
-    'tags__list',
-    filterList.length > centeringFiltersMaxLength ? 'tags__list_mobile' : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames(['tags', sectionClass]),
+    list: refineClassNames([
+      'tags__list',
+      filterList.length > centeringFiltersMaxLength ? 'tags__list_mobile' : '',
+    ]),
+  };
 
   return (
-    <div className={classNames}>
-      <ul className={classNamesList}>
+    <div className={classNames.main}>
+      <ul className={classNames.list}>
         {filterList.map((item) => (
           <li className="tags__list-item" key={item?.name}>
             <PseudoButtonTag
@@ -43,7 +44,7 @@ TagsList.defaultProps = {
   filterList: [],
   sectionClass: '',
   name: '',
-  handleClick: () => {},
+  handleClick: undefined,
 };
 
 export default TagsList;

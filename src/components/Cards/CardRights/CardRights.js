@@ -58,7 +58,7 @@ CardRights.defaultProps = {
   tags: [],
   color: '',
   sectionClass: '',
-  getActiveTags: () => {},
+  getActiveTags: undefined,
 };
 
 export default CardRights;

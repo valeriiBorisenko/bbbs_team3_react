@@ -1,8 +1,7 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import './Popup.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
 import { CloseButton } from '../../utils';
+import './Popup.scss';
 
 function Popup({
   children,
@@ -13,23 +12,36 @@ function Popup({
   withoutCloseButton,
   sectionClass,
 }) {
-  const closeAllPopupsOnOverlay = (evt) => {
+  const closePopupOnOverlay = (evt) => {
     if (evt.target === evt.currentTarget) {
       onClose();
     }
   };
 
+  const classNames = {
+    main: refineClassNames([
+      'popup',
+      `popup_type_${type}`,
+      isOpen ? 'popup_opened' : '',
+    ]),
+    popupContainer: refineClassNames([
+      'popup__container',
+      `popup__container_type_${typeContainer}`,
+      sectionClass,
+    ]),
+    closeButton: refineClassNames([
+      'popup__close',
+      `popup__close_type_${typeContainer}`,
+    ]),
+  };
+
   return (
-    <div
-      className={`popup popup_type_${type} ${isOpen ? 'popup_opened' : ''} `}
-      onClick={closeAllPopupsOnOverlay}
-    >
-      <div
-        className={`popup__container popup__container_type_${typeContainer} ${sectionClass}`}
-      >
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+    <div className={classNames.main} onClick={closePopupOnOverlay}>
+      <div className={classNames.popupContainer}>
         {!withoutCloseButton && (
           <CloseButton
-            sectionClass={`popup__close popup__close_type_${typeContainer}`}
+            sectionClass={classNames.closeButton}
             onClick={onClose}
           />
         )}
@@ -54,7 +66,7 @@ Popup.defaultProps = {
   type: '',
   typeContainer: '',
   isOpen: false,
-  onClose: () => {},
+  onClose: undefined,
   sectionClass: '',
   withoutCloseButton: false,
 };

@@ -6,6 +6,7 @@ import {
   INDEX_ERROR_FOR_PENULTIMATE_PAGE,
   PAGES_TO_LOAD,
 } from './constants';
+import { refineClassNames } from '../../utils/utils';
 import {
   Heading,
   LinkableComponent,
@@ -97,6 +98,13 @@ function ReadAndWatchSection({
     }
   }
 
+  const classNames = {
+    sliderContainer: refineClassNames([
+      'readwatch__slider-container',
+      sectionClass,
+    ]),
+  };
+
   return (
     <section className="readwatch__section">
       <div className="readwatch__container">
@@ -108,9 +116,7 @@ function ReadAndWatchSection({
           Component={Heading}
         />
       </div>
-      <div className={`readwatch__slider-container ${sectionClass}`}>
-        {renderSliderSection()}
-      </div>
+      <div className={classNames.sliderContainer}>{renderSliderSection()}</div>
     </section>
   );
 

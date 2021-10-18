@@ -1,14 +1,17 @@
-import './UserIconButton.scss';
 import PropTypes from 'prop-types';
 import { PROFILE_TITLE } from '../../../config/routes';
 import { COLOR_BLACK, COLOR_BLUE } from '../../../config/constants';
+import { refineClassNames } from '../../../utils/utils';
+import './UserIconButton.scss';
 
 function UserIconButton({ sectionClass, isAuthorized, handleClick }) {
-  const classNames = ['user-button', sectionClass].join(' ').trim();
+  const classNames = {
+    main: refineClassNames(['user-button', sectionClass]),
+  };
 
   return (
     <button
-      className={classNames}
+      className={classNames.main}
       type="button"
       aria-label={PROFILE_TITLE}
       title={PROFILE_TITLE}
@@ -39,7 +42,7 @@ UserIconButton.propTypes = {
 UserIconButton.defaultProps = {
   sectionClass: '',
   isAuthorized: false,
-  handleClick: () => {},
+  handleClick: undefined,
 };
 
 export default UserIconButton;

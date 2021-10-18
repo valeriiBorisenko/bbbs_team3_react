@@ -1,8 +1,9 @@
-import './DropDownSelect.scss';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import { useClickOutside } from '../../../hooks';
+import { refineClassNames } from '../../../utils/utils';
+import './DropDownSelect.scss';
 
 function DropDownSelect({
   placeholder,
@@ -16,28 +17,24 @@ function DropDownSelect({
   const [isOpen, setIsOpen] = useState(false);
   const [optionSelected, setOptionSelected] = useState(null);
 
-  const classNames = ['select', sectionClass].join(' ').trim();
-  const classNamesButton = [
-    'select__button',
-    isOpen ? 'select__button_pressed' : '',
-    optionSelected ? 'select__button_selected' : '',
-    error ? 'select__button_error' : '',
-  ]
-    .join(' ')
-    .trim();
-  const classNamesDropDown = [
-    'select__dropdown',
-    isOpen ? 'select__dropdown_opened' : '',
-  ]
-    .join(' ')
-    .trim();
-  const classNamesArrow = [
-    'select__arrow',
-    isOpen ? 'select__arrow_pressed' : '',
-    error ? 'select__arrow_error' : '',
-  ]
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames(['select', sectionClass]),
+    button: refineClassNames([
+      'select__button',
+      isOpen ? 'select__button_pressed' : '',
+      optionSelected ? 'select__button_selected' : '',
+      error ? 'select__button_error' : '',
+    ]),
+    dropDown: refineClassNames([
+      'select__dropdown',
+      isOpen ? 'select__dropdown_opened' : '',
+    ]),
+    arrow: refineClassNames([
+      'select__arrow',
+      isOpen ? 'select__arrow_pressed' : '',
+      error ? 'select__arrow_error' : '',
+    ]),
+  };
 
   const dropdownRef = useClickOutside(() => setIsOpen(false));
 
@@ -49,10 +46,10 @@ function DropDownSelect({
   }, [isFormOpen]);
 
   return (
-    <div className={classNames}>
+    <div className={classNames.main}>
       <button
         aria-label={`${texts.buttonAriaLabel} ${placeholder}`}
-        className={classNamesButton}
+        className={classNames.button}
         type="button"
         onClick={() => setIsOpen(true)}
       >
@@ -60,13 +57,13 @@ function DropDownSelect({
         <svg
           viewBox="0 0 24 19"
           fill="none"
-          className={classNamesArrow}
+          className={classNames.arrow}
           xmlns="http://www.w3.org/2000/svg"
         >
           <path d="M5 7L11.8814 14L19 7" />
         </svg>
       </button>
-      <ul className={classNamesDropDown} ref={dropdownRef}>
+      <ul className={classNames.dropDown} ref={dropdownRef}>
         <li aria-hidden="true">
           <button
             className="select__option_hidden"
@@ -118,7 +115,7 @@ DropDownSelect.defaultProps = {
   placeholder: '',
   options: [],
   inputName: '',
-  onChange: () => {},
+  onChange: undefined,
   error: undefined,
   sectionClass: '',
   isFormOpen: false,

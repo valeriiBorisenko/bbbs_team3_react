@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
 import './Blockquote.scss';
 
 function Blockquote({ sectionClass, text }) {
-  const classNames = ['blockquote', sectionClass].join(' ').trim();
+  const classNames = {
+    main: refineClassNames(['blockquote', sectionClass]),
+  };
 
   return (
-    <div className={classNames}>
+    <div className={classNames.main}>
       <blockquote className="blockquote__text">{text}</blockquote>
     </div>
   );

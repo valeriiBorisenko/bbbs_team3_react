@@ -1,5 +1,6 @@
-import './Input.scss';
 import PropTypes from 'prop-types';
+import { refineClassNames } from '../../../utils/utils';
+import './Input.scss';
 
 function Input({
   id,
@@ -21,21 +22,22 @@ function Input({
 }) {
   const errorMessage = error ? `${placeholder}*` : '';
 
-  const classNamesWrap = ['input-wrap', sectionClass].join(' ').trim();
-
-  const classNamesInput = ['input', error ? 'input__error' : '']
-    .join(' ')
-    .trim();
-  const classNamesTextarea = ['input', error ? 'input__error' : '', 'textarea']
-    .join(' ')
-    .trim();
+  const classNames = {
+    main: refineClassNames(['input-wrap', sectionClass]),
+    input: refineClassNames(['input', error ? 'input__error' : '']),
+    textarea: refineClassNames([
+      'input',
+      error ? 'input__error' : '',
+      'textarea',
+    ]),
+  };
 
   if (isTextarea) {
     return (
-      <label className={classNamesWrap} htmlFor={id}>
+      <label className={classNames.main} htmlFor={id}>
         <textarea
           id={id}
-          className={classNamesTextarea}
+          className={classNames.textarea}
           name={name}
           placeholder={errorMessage || placeholder}
           onFocus={onFocus}
@@ -51,10 +53,10 @@ function Input({
   }
 
   return (
-    <label className={classNamesWrap} htmlFor={id}>
+    <label className={classNames.main} htmlFor={id}>
       <input
         id={id}
-        className={classNamesInput}
+        className={classNames.input}
         type={type}
         name={name}
         placeholder={errorMessage || placeholder}
@@ -97,7 +99,7 @@ Input.defaultProps = {
   value: '',
   sectionClass: '',
   isTextarea: false,
-  onChange: () => {},
+  onChange: undefined,
   required: false,
   max: undefined,
   min: undefined,
@@ -105,7 +107,7 @@ Input.defaultProps = {
   minLength: undefined,
   pattern: undefined,
   error: undefined,
-  onFocus: () => {},
+  onFocus: undefined,
 };
 
 export default Input;

@@ -122,7 +122,7 @@ PlacesRecommend.propTypes = {
 PlacesRecommend.defaultProps = {
   activityTypes: [],
   sectionClass: '',
-  openSuccessPopup: () => {},
+  openSuccessPopup: undefined,
 };
 
 export default PlacesRecommend;

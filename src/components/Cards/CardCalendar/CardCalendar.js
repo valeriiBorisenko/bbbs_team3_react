@@ -203,8 +203,8 @@ CardCalendar.propTypes = {
 
 CardCalendar.defaultProps = {
   cardData: {},
-  onEventSignUpClick: () => {},
-  onEventDescriptionClick: () => {},
+  onEventSignUpClick: undefined,
+  onEventDescriptionClick: undefined,
   sectionClass: '',
   isWaitingResponse: false,
   loadingEventId: undefined,
