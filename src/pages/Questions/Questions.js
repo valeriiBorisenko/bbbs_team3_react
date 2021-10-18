@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import questionsPageTexts from './locales/RU';
 import { CurrentUserContext, ErrorsContext } from '../../contexts';
 import { ERROR_CODES, ERROR_MESSAGES } from '../../config/constants';
+import { questionFormValidationSettings } from '../../config/validation-settings';
 import { useFiltrationAndPagination, useFormWithValidation } from '../../hooks';
 import questionForm from '../../utils/question-form';
 import getServerErrors from '../../utils/form-errors';
@@ -24,7 +25,6 @@ import {
   TagsList,
 } from './index';
 import './Questions.scss';
-import { questionFormValidationSettings } from '../../config/validation-settings';
 
 const {
   headTitle,

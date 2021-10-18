@@ -18,7 +18,6 @@ import {
   getArchiveOfBookedEvents,
   getBookedEvents,
 } from '../../api/event-participants';
-import './Profile.scss';
 import {
   AnimatedPageContainer,
   BasePage,
@@ -33,6 +32,7 @@ import {
   ScrollableContainer,
   UserMenuButton,
 } from './index';
+import './Profile.scss';
 
 const {
   headTitle,
