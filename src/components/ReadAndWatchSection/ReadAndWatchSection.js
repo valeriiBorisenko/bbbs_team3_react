@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'react-elastic-carousel';
 import {
@@ -69,34 +69,37 @@ function ReadAndWatchSection({
       .catch(() => setIsSectionError(true));
   }, [pageSize]);
 
-  function slideBackHandler() {
+  const slideBackHandler = useCallback(() => {
     setPageIndex((prevIndex) => prevIndex - 1);
-  }
+  }, []);
 
-  function slideNextHandler(currentItem, newPageIndex) {
-    const pagesLoadedNow = ref.current.getNumOfPages();
-    const isPenultimatePage =
-      pagesLoadedNow - INDEX_ERROR_FOR_PENULTIMATE_PAGE === newPageIndex;
-    const isLastPage =
-      pagesLoadedNow - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX === newPageIndex;
+  const slideNextHandler = useCallback(
+    (currentItem, newPageIndex) => {
+      const pagesLoadedNow = ref.current.getNumOfPages();
+      const isPenultimatePage =
+        pagesLoadedNow - INDEX_ERROR_FOR_PENULTIMATE_PAGE === newPageIndex;
+      const isLastPage =
+        pagesLoadedNow - INDEX_ERROR_BETWEEN_NUMBER_AND_INDEX === newPageIndex;
 
-    const isNoMoreDataToLoad = pagesLoadedNow === totalPages;
-    if (isNoMoreDataToLoad) {
-      return;
-    }
+      const isNoMoreDataToLoad = pagesLoadedNow === totalPages;
+      if (isNoMoreDataToLoad) {
+        return;
+      }
 
-    // значит произошел скрол вперед + это предпоследняя страница
-    if (isPenultimatePage || isLastPage) {
-      addNewData()
-        .then(({ results }) => {
-          setSectionData((previousData) => [...previousData, ...results]);
-          setPageIndex((prevIndex) => prevIndex + 1);
-        })
-        .catch(() => setIsSectionError(true));
-    } else {
-      setPageIndex((prevIndex) => prevIndex + 1);
-    }
-  }
+      // значит произошел скрол вперед + это предпоследняя страница
+      if (isPenultimatePage || isLastPage) {
+        addNewData()
+          .then(({ results }) => {
+            setSectionData((previousData) => [...previousData, ...results]);
+            setPageIndex((prevIndex) => prevIndex + 1);
+          })
+          .catch(() => setIsSectionError(true));
+      } else {
+        setPageIndex((prevIndex) => prevIndex + 1);
+      }
+    },
+    [sectionData]
+  );
 
   const classNames = {
     sliderContainer: refineClassNames([

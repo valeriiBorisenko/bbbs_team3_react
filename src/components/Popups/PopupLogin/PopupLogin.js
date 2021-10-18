@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import Lottie from 'lottie-web';
@@ -112,14 +112,14 @@ function PopupLogin({ isOpen, onClose }) {
   const history = useHistory();
   const { pathname } = useLocation();
 
-  function closePopup() {
+  const closePopup = useCallback(() => {
     if (pathname === AFISHA_URL) {
       history.push(MAIN_PAGE_URL);
     }
     setSuccessMessage('');
     onClose();
     setIsShownPassword(false);
-  }
+  }, [pathname]);
 
   function closePopupOnEsc(evt) {
     if (evt.key === 'Escape') {

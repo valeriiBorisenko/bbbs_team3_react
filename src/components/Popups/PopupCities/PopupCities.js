@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import {
@@ -32,12 +32,12 @@ function PopupCities({ isOpen, onClose }) {
   const currentUserCity =
     currentUser?.city || getLocalStorageData(localStUserCity);
 
-  function closePopup() {
+  const closePopup = useCallback(() => {
     if (!currentUser && !getLocalStorageData(localStUserCity)) {
       dispatchLocalStorageEvent(localStUserCity, defaultCity?.id);
     }
     onClose();
-  }
+  }, [defaultCity?.id]);
 
   const closePopupOnEsc = (evt) => {
     if (evt.key === 'Escape') {

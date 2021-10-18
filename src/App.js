@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import './App.scss';
 import { HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
@@ -39,58 +39,48 @@ function App() {
   const [isWithoutRegister, setIsWithoutRegister] = useState(false);
 
   // управление общими попапами (открыть/закрыть)
-  function closeAllPopups() {
+  const closeAllPopups = useCallback(() => {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(false);
     setIsPopupAboutDescriptionOpen(false);
     setIsVideoPopupOpen(false);
-  }
+  }, []);
 
-  function openPopupConfirmation() {
-    setIsPopupConfirmationOpen(true);
-  }
+  const openPopupConfirmation = () => setIsPopupConfirmationOpen(true);
 
-  function openPopupSuccessfully() {
+  const openPopupSuccessfully = () => {
     setIsPopupConfirmationOpen(false);
     setIsPopupSuccessfullyOpen(true);
-  }
+  };
 
-  function openPopupAboutEvent(withoutRegister) {
+  const openPopupAboutEvent = (withoutRegister) => {
     if (withoutRegister) {
       setIsWithoutRegister(true);
     } else {
       setIsWithoutRegister(false);
     }
     setIsPopupAboutDescriptionOpen(true);
-  }
+  };
 
-  function openPopupError() {
-    setIsPopupErrorOpen(true);
-  }
+  const openPopupError = () => setIsPopupErrorOpen(true);
 
-  function closePopupError() {
+  const closePopupError = useCallback(() => {
     setIsPopupErrorOpen(false);
-  }
+  }, []);
 
-  function openPopupCities() {
-    setIsPopupCitiesOpen(true);
-  }
+  const openPopupCities = () => setIsPopupCitiesOpen(true);
 
-  function closePopupCities() {
+  const closePopupCities = useCallback(() => {
     setIsPopupCitiesOpen(false);
-  }
+  }, []);
 
-  function openPopupLogin() {
-    setIsPopupLoginOpen(true);
-  }
+  const openPopupLogin = () => setIsPopupLoginOpen(true);
 
-  function closePopupLogin() {
+  const closePopupLogin = useCallback(() => {
     setIsPopupLoginOpen(false);
-  }
+  }, []);
 
-  function openPopupVideo() {
-    setIsVideoPopupOpen(true);
-  }
+  const openPopupVideo = () => setIsVideoPopupOpen(true);
 
   // контекст попапов
   const popupsContextValue = {

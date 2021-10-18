@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import texts from './locales/RU';
 import {
@@ -51,15 +52,15 @@ function CardCalendar({
   const isDisabled = (remainSeats < 1 && !booked) || canceled;
   const isCanceling = isWaitingResponse && booked && loadingEventId === id;
 
-  function changeStateOfEvent() {
+  const changeStateOfEvent = useCallback(() => {
     setLocalStorageData(localStAfishaEvent, cardData);
     onEventSignUpClick(cardData);
-  }
+  }, [cardData]);
 
-  function prepareDataForAboutEventPopup() {
+  const prepareDataForAboutEventPopup = useCallback(() => {
     setLocalStorageData(localStAfishaEvent, cardData);
     onEventDescriptionClick();
-  }
+  }, [cardData]);
 
   const classNames = {
     main: refineClassNames([
