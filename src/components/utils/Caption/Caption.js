@@ -16,7 +16,7 @@ Caption.propTypes = {
 };
 
 Caption.defaultProps = {
-  title: 'Caption',
+  title: '',
   sectionClass: '',
 };
 

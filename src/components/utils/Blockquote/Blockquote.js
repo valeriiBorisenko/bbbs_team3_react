@@ -21,7 +21,7 @@ Blockquote.propTypes = {
 
 Blockquote.defaultProps = {
   sectionClass: '',
-  text: 'Blockquote',
+  text: '',
 };
 
 export default Blockquote;

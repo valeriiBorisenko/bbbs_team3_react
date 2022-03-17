@@ -22,7 +22,7 @@ Heading.propTypes = {
 
 Heading.defaultProps = {
   level: 2,
-  content: 'Heading',
+  content: '',
   type: 'medium',
   sectionClass: '',
 };

@@ -39,7 +39,7 @@ NextArticleLink.propTypes = {
 };
 
 NextArticleLink.defaultProps = {
-  text: 'Link',
+  text: '',
   href: '/',
   sectionClass: '',
   onClick: undefined,

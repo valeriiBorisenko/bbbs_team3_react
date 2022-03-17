@@ -22,7 +22,7 @@ Paragraph.propTypes = {
 };
 
 Paragraph.defaultProps = {
-  content: 'Paragraph',
+  content: '',
   reference: null,
   size: 'default',
   sectionClass: '',
