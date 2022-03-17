@@ -17,6 +17,7 @@ function CardStub({ sectionClass }) {
           linkSectionClass="stub__logo"
           path={texts.link}
           isExternal
+          isWhite
         />
       </div>
       <div className="stub__content">
